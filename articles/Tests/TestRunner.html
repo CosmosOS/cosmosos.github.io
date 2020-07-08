@@ -72,8 +72,12 @@
 <h2 id="description">Description</h2>
 <p>TestRunner is used to run Kernel Tests using the tests at a specified location and can run each kernel in multiple targets to ensure full compatibility and stability accross these targets.</p>
 <p>TestRunner generates a result file upon completion to detail the results of the tests.</p>
+<h2 id="get-started">Get Started</h2>
+<p>To use the TestRunnner open the <code>Test.sln</code> and set the Target Project to <code>Cosmos.TestRunner</code>.</p>
 <h2 id="configuration">Configuration</h2>
-<p>Editing the configuration for TestRunner can be done by editing <a href="https://github.com/CosmosOS/Cosmos/blob/master/Tests/Cosmos.TestRunner.Core/DefaultEngineConfiguration.cs#L6">DefaultEngineConfiguration</a> in ..\Tests\TestRunner\TestRunner.Core</p>
+<p>Editing the configuration for TestRunner can be done by editing <a href="https://github.com/CosmosOS/Cosmos/blob/master/Tests/Cosmos.TestRunner.Core/DefaultEngineConfiguration.cs#L6">DefaultEngineConfiguration</a> in ..\Tests\TestRunner\TestRunner.Core
+This allows one to choose between running it using VMWare or Bochs.</p>
+<p>To select which Test Kernels to run, edit <code>GetStableKernelTypes()</code> in <code>TestKernelSets.cs</code>.</p>
 <h2 id="project-location">Project Location</h2>
 <p>The TestRunner Projects are located in ..\Tests\TestRunner</p>
 </article>
@@ -84,7 +88,7 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/blob/d8d126a417ed28c41017f732095fa701b245aa82/Docs/articles/Tests/TestRunner.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/acd40d0a97b73a9930aa513839230b9bcd8bff99/Docs/articles/Tests/TestRunner.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>
