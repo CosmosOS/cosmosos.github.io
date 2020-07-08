@@ -1,0 +1,584 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class DebugConnectorTestPipeServer
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class DebugConnectorTestPipeServer
+   ">
+    <meta name="generator" content="docfx 2.45.1.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    <meta property="docfx:newtab" content="true">
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Cosmos.Debug.DebugConnectors.DebugConnectorTestPipeServer">
+  
+  
+  <h1 id="Cosmos_Debug_DebugConnectors_DebugConnectorTestPipeServer" data-uid="Cosmos.Debug.DebugConnectors.DebugConnectorTestPipeServer" class="text-break">Class DebugConnectorTestPipeServer
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html">DebugConnector</a></div>
+    <div class="level2"><a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnectorStreamWithoutTimeouts.html">DebugConnectorStreamWithoutTimeouts</a></div>
+    <div class="level3"><span class="xref">DebugConnectorTestPipeServer</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnectorStreamWithoutTimeouts.html#Cosmos_Debug_DebugConnectors_DebugConnectorStreamWithoutTimeouts_mStream">DebugConnectorStreamWithoutTimeouts.mStream</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnectorStreamWithoutTimeouts.html#Cosmos_Debug_DebugConnectors_DebugConnectorStreamWithoutTimeouts_SendRawData_System_Byte___">DebugConnectorStreamWithoutTimeouts.SendRawData(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnectorStreamWithoutTimeouts.html#Cosmos_Debug_DebugConnectors_DebugConnectorStreamWithoutTimeouts_IsConnected">DebugConnectorStreamWithoutTimeouts.IsConnected</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnectorStreamWithoutTimeouts.html#Cosmos_Debug_DebugConnectors_DebugConnectorStreamWithoutTimeouts_Start_Stream_">DebugConnectorStreamWithoutTimeouts.Start(Stream)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnectorStreamWithoutTimeouts.html#Cosmos_Debug_DebugConnectors_DebugConnectorStreamWithoutTimeouts_Dispose_System_Boolean_">DebugConnectorStreamWithoutTimeouts.Dispose(Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_ConnectionLost">DebugConnector.ConnectionLost</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_CmdTrace">DebugConnector.CmdTrace</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_CmdBreak">DebugConnector.CmdBreak</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_CmdMethodContext">DebugConnector.CmdMethodContext</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_CmdText">DebugConnector.CmdText</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_CmdMessageBox">DebugConnector.CmdMessageBox</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_CmdStarted">DebugConnector.CmdStarted</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_OnDebugMsg">DebugConnector.OnDebugMsg</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_CmdRegisters">DebugConnector.CmdRegisters</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_CmdFrame">DebugConnector.CmdFrame</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_CmdStack">DebugConnector.CmdStack</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_CmdPong">DebugConnector.CmdPong</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_CmdChannel">DebugConnector.CmdChannel</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_CmdCoreDump">DebugConnector.CmdCoreDump</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_CmdStackCorruptionOccurred">DebugConnector.CmdStackCorruptionOccurred</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_CmdStackOverflowOccurred">DebugConnector.CmdStackOverflowOccurred</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_CmdInterruptOccurred">DebugConnector.CmdInterruptOccurred</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_CmdNullReferenceOccurred">DebugConnector.CmdNullReferenceOccurred</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_CmdSimpleNumber">DebugConnector.CmdSimpleNumber</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_CmdKernelPanic">DebugConnector.CmdKernelPanic</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_CmdSimpleLongNumber">DebugConnector.CmdSimpleLongNumber</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_CmdComplexNumber">DebugConnector.CmdComplexNumber</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_CmdComplexLongNumber">DebugConnector.CmdComplexLongNumber</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_Error">DebugConnector.Error</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_mCurrentMsgType">DebugConnector.mCurrentMsgType</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_mCmdWait">DebugConnector.mCmdWait</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_HandleError_Exception_">DebugConnector.HandleError(Exception)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_DoConnected">DebugConnector.DoConnected()</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_SetConnectionHandler_Action_">DebugConnector.SetConnectionHandler(Action)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_DebugLog_System_String_">DebugConnector.DebugLog(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_DoDebugMsg_System_String_System_Boolean_">DebugConnector.DoDebugMsg(String, Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_mSigReceived">DebugConnector.mSigReceived</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_SigReceived">DebugConnector.SigReceived</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_DeleteBreakpoint_System_Int32_">DebugConnector.DeleteBreakpoint(Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketMsg_System_Byte___">DebugConnector.PacketMsg(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_Dispose">DebugConnector.Dispose()</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_mSigCheck">DebugConnector.mSigCheck</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_WaitForSignature_System_Byte___">DebugConnector.WaitForSignature(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_SendPacketToConsole_System_Byte___">DebugConnector.SendPacketToConsole(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_SendTextToConsole_System_String_">DebugConnector.SendTextToConsole(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_SendRegisters">DebugConnector.SendRegisters()</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_SendFrame">DebugConnector.SendFrame()</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_SendStack">DebugConnector.SendStack()</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_Ping">DebugConnector.Ping()</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_SetBreakpoint_System_Int32_System_UInt32_">DebugConnector.SetBreakpoint(Int32, UInt32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_SetAsmBreakpoint_System_UInt32_">DebugConnector.SetAsmBreakpoint(UInt32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_SetINT3_System_UInt32_">DebugConnector.SetINT3(UInt32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_ClearINT3_System_UInt32_">DebugConnector.ClearINT3(UInt32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_Continue">DebugConnector.Continue()</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_GetMemoryData_System_UInt32_System_UInt32_System_Int32_">DebugConnector.GetMemoryData(UInt32, UInt32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_GetStackData_System_Int32_System_UInt32_">DebugConnector.GetStackData(Int32, UInt32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_GetUInt16_System_Byte___System_Int32_">DebugConnector.GetUInt16(Byte[], Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_GetUInt32_System_Byte___System_Int32_">DebugConnector.GetUInt32(Byte[], Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_GetUInt64_System_Byte___System_Int32_">DebugConnector.GetUInt64(Byte[], Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_GetSingle_System_Byte___System_Int32_">DebugConnector.GetSingle(Byte[], Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_GetDouble_System_Byte___System_Int32_">DebugConnector.GetDouble(Byte[], Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_BytesToString_System_Byte___System_Int32_System_Int32_">DebugConnector.BytesToString(Byte[], Int32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_WaitForMessage">DebugConnector.WaitForMessage()</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketTextSize_System_Byte___">DebugConnector.PacketTextSize(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketOtherChannelCommand_System_Byte_System_Byte___">DebugConnector.PacketOtherChannelCommand(Byte, Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketOtherChannelSize_System_Byte_System_Byte_System_Byte___">DebugConnector.PacketOtherChannelSize(Byte, Byte, Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketMessageBoxTextSize_System_Byte___">DebugConnector.PacketMessageBoxTextSize(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketMethodContext_System_Byte___">DebugConnector.PacketMethodContext(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketMemoryData_System_Byte___">DebugConnector.PacketMemoryData(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketRegisters_System_Byte___">DebugConnector.PacketRegisters(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketFrame_System_Byte___">DebugConnector.PacketFrame(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketPong_System_Byte___">DebugConnector.PacketPong(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketChannel_System_Byte_System_Byte_System_Byte___">DebugConnector.PacketChannel(Byte, Byte, Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketNullReferenceOccurred_System_Byte___">DebugConnector.PacketNullReferenceOccurred(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketSimpleNumber_System_Byte___">DebugConnector.PacketSimpleNumber(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketKernelPanic_System_Byte___">DebugConnector.PacketKernelPanic(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketSimpleLongNumber_System_Byte___">DebugConnector.PacketSimpleLongNumber(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketComplexNumber_System_Byte___">DebugConnector.PacketComplexNumber(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketComplexLongNumber_System_Byte___">DebugConnector.PacketComplexLongNumber(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketStackCorruptionOccurred_System_Byte___">DebugConnector.PacketStackCorruptionOccurred(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketStackOverflowOccurred_System_Byte___">DebugConnector.PacketStackOverflowOccurred(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketInterruptOccurred_System_Byte___">DebugConnector.PacketInterruptOccurred(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketStack_System_Byte___">DebugConnector.PacketStack(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketCmdCompleted_System_Byte___">DebugConnector.PacketCmdCompleted(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketTracePoint_System_Byte___">DebugConnector.PacketTracePoint(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketBreakPoint_System_Byte___">DebugConnector.PacketBreakPoint(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketText_System_Byte___">DebugConnector.PacketText(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketMessageBoxText_System_Byte___">DebugConnector.PacketMessageBoxText(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_PacketCoreDump_System_Byte___">DebugConnector.PacketCoreDump(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_SizePacket_System_Byte___">DebugConnector.SizePacket(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_SendCmd_System_Byte_System_Byte___">DebugConnector.SendCmd(Byte, Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_BeforeSendCmd">DebugConnector.BeforeSendCmd()</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_SendCmd_System_Byte_System_Byte___System_Boolean_">DebugConnector.SendCmd(Byte, Byte[], Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_mCommandID">DebugConnector.mCommandID</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_mCurrCmdID">DebugConnector.mCurrCmdID</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_SendRawData_System_String_Encoding_">DebugConnector.SendRawData(String, Encoding)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_mSendCmdLock">DebugConnector.mSendCmdLock</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_SendCmd_System_Byte_">DebugConnector.SendCmd(Byte)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_Start">DebugConnector.Start()</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_Next_System_Int32_Action_System_Byte____">DebugConnector.Next(Int32, Action&lt;Byte[]&gt;)</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Cosmos.Debug.DebugConnectors.html">Cosmos.Debug.DebugConnectors</a></h6>
+  <h6><strong>Assembly</strong>: Cosmos.Debug.DebugConnectors.dll</h6>
+  <h5 id="Cosmos_Debug_DebugConnectors_DebugConnectorTestPipeServer_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class DebugConnectorTestPipeServer : DebugConnectorStreamWithoutTimeouts</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_Debug_DebugConnectors_DebugConnectorTestPipeServer__ctor_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.DebugConnectors.DebugConnectorTestPipeServer.%23ctor(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.Debug.DebugConnectors/DebugConnectorTestPipeServer.cs/#L14">View Source</a>
+  </span>
+  <a id="Cosmos_Debug_DebugConnectors_DebugConnectorTestPipeServer__ctor_" data-uid="Cosmos.Debug.DebugConnectors.DebugConnectorTestPipeServer.#ctor*"></a>
+  <h4 id="Cosmos_Debug_DebugConnectors_DebugConnectorTestPipeServer__ctor_System_String_" data-uid="Cosmos.Debug.DebugConnectors.DebugConnectorTestPipeServer.#ctor(System.String)">DebugConnectorTestPipeServer(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DebugConnectorTestPipeServer(string aName)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">aName</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_Debug_DebugConnectors_DebugConnectorTestPipeServer_GetIsConnectedToDebugStub.md&amp;value=---%0Auid%3A%20Cosmos.Debug.DebugConnectors.DebugConnectorTestPipeServer.GetIsConnectedToDebugStub%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.Debug.DebugConnectors/DebugConnectorTestPipeServer.cs/#L54">View Source</a>
+  </span>
+  <a id="Cosmos_Debug_DebugConnectors_DebugConnectorTestPipeServer_GetIsConnectedToDebugStub_" data-uid="Cosmos.Debug.DebugConnectors.DebugConnectorTestPipeServer.GetIsConnectedToDebugStub*"></a>
+  <h4 id="Cosmos_Debug_DebugConnectors_DebugConnectorTestPipeServer_GetIsConnectedToDebugStub" data-uid="Cosmos.Debug.DebugConnectors.DebugConnectorTestPipeServer.GetIsConnectedToDebugStub">GetIsConnectedToDebugStub()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override bool GetIsConnectedToDebugStub()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_GetIsConnectedToDebugStub">DebugConnector.GetIsConnectedToDebugStub()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_Debug_DebugConnectors_DebugConnectorTestPipeServer_InitializeBackground.md&amp;value=---%0Auid%3A%20Cosmos.Debug.DebugConnectors.DebugConnectorTestPipeServer.InitializeBackground%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.Debug.DebugConnectors/DebugConnectorTestPipeServer.cs/#L40">View Source</a>
+  </span>
+  <a id="Cosmos_Debug_DebugConnectors_DebugConnectorTestPipeServer_InitializeBackground_" data-uid="Cosmos.Debug.DebugConnectors.DebugConnectorTestPipeServer.InitializeBackground*"></a>
+  <h4 id="Cosmos_Debug_DebugConnectors_DebugConnectorTestPipeServer_InitializeBackground" data-uid="Cosmos.Debug.DebugConnectors.DebugConnectorTestPipeServer.InitializeBackground">InitializeBackground()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void InitializeBackground()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_InitializeBackground">DebugConnector.InitializeBackground()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_Debug_DebugConnectors_DebugConnectorTestPipeServer_TryRead_System_Byte___System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.DebugConnectors.DebugConnectorTestPipeServer.TryRead(System.Byte%5B%5D%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.Debug.DebugConnectors/DebugConnectorTestPipeServer.cs/#L27">View Source</a>
+  </span>
+  <a id="Cosmos_Debug_DebugConnectors_DebugConnectorTestPipeServer_TryRead_" data-uid="Cosmos.Debug.DebugConnectors.DebugConnectorTestPipeServer.TryRead*"></a>
+  <h4 id="Cosmos_Debug_DebugConnectors_DebugConnectorTestPipeServer_TryRead_System_Byte___System_Int32_System_Int32_System_Int32_" data-uid="Cosmos.Debug.DebugConnectors.DebugConnectorTestPipeServer.TryRead(System.Byte[],System.Int32,System.Int32,System.Int32)">TryRead(Byte[], Int32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override int TryRead(byte[] buffer, int offset, int count, int timeout)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">buffer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">offset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">count</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">timeout</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.Debug.DebugConnectors.DebugConnector.html#Cosmos_Debug_DebugConnectors_DebugConnector_TryRead_System_Byte___System_Int32_System_Int32_System_Int32_">DebugConnector.TryRead(Byte[], Int32, Int32, Int32)</a></div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_Debug_DebugConnectors_DebugConnectorTestPipeServer.md&amp;value=---%0Auid%3A%20Cosmos.Debug.DebugConnectors.DebugConnectorTestPipeServer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.Debug.DebugConnectors/DebugConnectorTestPipeServer.cs/#L8" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

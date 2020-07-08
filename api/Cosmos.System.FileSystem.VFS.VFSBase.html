@@ -1,0 +1,1237 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class VFSBase
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class VFSBase
+   ">
+    <meta name="generator" content="docfx 2.45.1.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    <meta property="docfx:newtab" content="true">
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Cosmos.System.FileSystem.VFS.VFSBase">
+  
+  
+  <h1 id="Cosmos_System_FileSystem_VFS_VFSBase" data-uid="Cosmos.System.FileSystem.VFS.VFSBase" class="text-break">Class VFSBase
+  </h1>
+  <div class="markdown level0 summary"><p>Virtual file system base abstract class.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">VFSBase</span></div>
+      <div class="level2"><a class="xref" href="Cosmos.System.FileSystem.CosmosVFS.html">CosmosVFS</a></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Cosmos.System.FileSystem.VFS.html">Cosmos.System.FileSystem.VFS</a></h6>
+  <h6><strong>Assembly</strong>: Cosmos.System2.dll</h6>
+  <h5 id="Cosmos_System_FileSystem_VFS_VFSBase_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class VFSBase : object</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_AltDirectorySeparatorChar.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.AltDirectorySeparatorChar%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L114">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_AltDirectorySeparatorChar_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.AltDirectorySeparatorChar*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_AltDirectorySeparatorChar" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.AltDirectorySeparatorChar">AltDirectorySeparatorChar</h4>
+  <div class="markdown level1 summary"><p>Get the alt. directory separator char.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static char AltDirectorySeparatorChar { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_DirectorySeparatorChar.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.DirectorySeparatorChar%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L109">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_DirectorySeparatorChar_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.DirectorySeparatorChar*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_DirectorySeparatorChar" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.DirectorySeparatorChar">DirectorySeparatorChar</h4>
+  <div class="markdown level1 summary"><p>Get the directory separator char.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static char DirectorySeparatorChar { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_VolumeSeparatorChar.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.VolumeSeparatorChar%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L119">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_VolumeSeparatorChar_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.VolumeSeparatorChar*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_VolumeSeparatorChar" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.VolumeSeparatorChar">VolumeSeparatorChar</h4>
+  <div class="markdown level1 summary"><p>Get the volume separator char.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static char VolumeSeparatorChar { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_CreateDirectory_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.CreateDirectory(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L35">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_CreateDirectory_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.CreateDirectory*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_CreateDirectory_System_String_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.CreateDirectory(System.String)">CreateDirectory(String)</h4>
+  <div class="markdown level1 summary"><p>Create directory.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract DirectoryEntry CreateDirectory(string aPath)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">aPath</span></td>
+        <td><p>A path to the directory.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.FileSystem.Listing.DirectoryEntry.html">DirectoryEntry</a></td>
+        <td><p>DirectoryEntry value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_CreateFile_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.CreateFile(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L28">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_CreateFile_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.CreateFile*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_CreateFile_System_String_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.CreateFile(System.String)">CreateFile(String)</h4>
+  <div class="markdown level1 summary"><p>Create File.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract DirectoryEntry CreateFile(string aPath)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">aPath</span></td>
+        <td><p>A path to the file.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.FileSystem.Listing.DirectoryEntry.html">DirectoryEntry</a></td>
+        <td><p>DirectoryEntry value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_DeleteDirectory_Cosmos_System_FileSystem_Listing_DirectoryEntry_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.DeleteDirectory(Cosmos.System.FileSystem.Listing.DirectoryEntry)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L49">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_DeleteDirectory_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.DeleteDirectory*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_DeleteDirectory_Cosmos_System_FileSystem_Listing_DirectoryEntry_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.DeleteDirectory(Cosmos.System.FileSystem.Listing.DirectoryEntry)">DeleteDirectory(DirectoryEntry)</h4>
+  <div class="markdown level1 summary"><p>Delete directory.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract bool DeleteDirectory(DirectoryEntry aPath)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.FileSystem.Listing.DirectoryEntry.html">DirectoryEntry</a></td>
+        <td><span class="parametername">aPath</span></td>
+        <td><p>A path to the directory.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>bool value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_DeleteFile_Cosmos_System_FileSystem_Listing_DirectoryEntry_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.DeleteFile(Cosmos.System.FileSystem.Listing.DirectoryEntry)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L42">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_DeleteFile_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.DeleteFile*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_DeleteFile_Cosmos_System_FileSystem_Listing_DirectoryEntry_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.DeleteFile(Cosmos.System.FileSystem.Listing.DirectoryEntry)">DeleteFile(DirectoryEntry)</h4>
+  <div class="markdown level1 summary"><p>Delete File.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract bool DeleteFile(DirectoryEntry aPath)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.FileSystem.Listing.DirectoryEntry.html">DirectoryEntry</a></td>
+        <td><span class="parametername">aPath</span></td>
+        <td><p>A path to the file.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>bool value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_Format_System_String_System_String_System_Boolean_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.Format(System.String%2CSystem.String%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L176">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_Format_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.Format*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_Format_System_String_System_String_System_Boolean_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.Format(System.String,System.String,System.Boolean)">Format(String, String, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Format partition.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void Format(string aDriveId, string aDriveFormat, bool aQuick)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">aDriveId</span></td>
+        <td><p>A drive id.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">aDriveFormat</span></td>
+        <td><p>A drive format.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">aQuick</span></td>
+        <td><p>Quick format.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_GetAvailableFreeSpace_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.GetAvailableFreeSpace(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L140">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_GetAvailableFreeSpace_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.GetAvailableFreeSpace*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_GetAvailableFreeSpace_System_String_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.GetAvailableFreeSpace(System.String)">GetAvailableFreeSpace(String)</h4>
+  <div class="markdown level1 summary"><p>Get avilable free space in the partition.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract long GetAvailableFreeSpace(string aDriveId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">aDriveId</span></td>
+        <td><p>A drive id.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><p>long value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_GetDirectory_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.GetDirectory(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L56">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_GetDirectory_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.GetDirectory*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_GetDirectory_System_String_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.GetDirectory(System.String)">GetDirectory(String)</h4>
+  <div class="markdown level1 summary"><p>Get directory.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract DirectoryEntry GetDirectory(string aPath)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">aPath</span></td>
+        <td><p>A path to the directory.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.FileSystem.Listing.DirectoryEntry.html">DirectoryEntry</a></td>
+        <td><p>DirectoryEntry value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_GetDirectoryListing_Cosmos_System_FileSystem_Listing_DirectoryEntry_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.GetDirectoryListing(Cosmos.System.FileSystem.Listing.DirectoryEntry)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L77">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_GetDirectoryListing_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.GetDirectoryListing*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_GetDirectoryListing_Cosmos_System_FileSystem_Listing_DirectoryEntry_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.GetDirectoryListing(Cosmos.System.FileSystem.Listing.DirectoryEntry)">GetDirectoryListing(DirectoryEntry)</h4>
+  <div class="markdown level1 summary"><p>Get directory listing.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract List&lt;DirectoryEntry&gt; GetDirectoryListing(DirectoryEntry aEntry)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.FileSystem.Listing.DirectoryEntry.html">DirectoryEntry</a></td>
+        <td><span class="parametername">aEntry</span></td>
+        <td><p>A entry.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">List</span>&lt;<a class="xref" href="Cosmos.System.FileSystem.Listing.DirectoryEntry.html">DirectoryEntry</a>&gt;</td>
+        <td><p>DirectoryEntry list value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_GetDirectoryListing_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.GetDirectoryListing(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L70">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_GetDirectoryListing_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.GetDirectoryListing*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_GetDirectoryListing_System_String_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.GetDirectoryListing(System.String)">GetDirectoryListing(String)</h4>
+  <div class="markdown level1 summary"><p>Get directory listing.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract List&lt;DirectoryEntry&gt; GetDirectoryListing(string aPath)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">aPath</span></td>
+        <td><p>A path to the entry.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">List</span>&lt;<a class="xref" href="Cosmos.System.FileSystem.Listing.DirectoryEntry.html">DirectoryEntry</a>&gt;</td>
+        <td><p>DirectoryEntry list value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_GetFile_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.GetFile(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L63">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_GetFile_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.GetFile*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_GetFile_System_String_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.GetFile(System.String)">GetFile(String)</h4>
+  <div class="markdown level1 summary"><p>Get file.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract DirectoryEntry GetFile(string aPath)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">aPath</span></td>
+        <td><p>A path to the file.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.FileSystem.Listing.DirectoryEntry.html">DirectoryEntry</a></td>
+        <td><p>DirectoryEntry value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_GetFileAttributes_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.GetFileAttributes(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L97">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_GetFileAttributes_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.GetFileAttributes*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_GetFileAttributes_System_String_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.GetFileAttributes(System.String)">GetFileAttributes(String)</h4>
+  <div class="markdown level1 summary"><p>Gets the attributes for a File / Directory.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract FileAttributes GetFileAttributes(string aPath)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">aPath</span></td>
+        <td><p>The path of the File / Directory.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">FileAttributes</span></td>
+        <td><p>FileAttributes value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_GetFileSystemLabel_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.GetFileSystemLabel(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L161">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_GetFileSystemLabel_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.GetFileSystemLabel*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_GetFileSystemLabel_System_String_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.GetFileSystemLabel(System.String)">GetFileSystemLabel(String)</h4>
+  <div class="markdown level1 summary"><p>Get file system label.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract string GetFileSystemLabel(string aDriveId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">aDriveId</span></td>
+        <td><p>A drive id.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><p>string value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_GetFileSystemType_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.GetFileSystemType(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L154">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_GetFileSystemType_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.GetFileSystemType*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_GetFileSystemType_System_String_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.GetFileSystemType(System.String)">GetFileSystemType(String)</h4>
+  <div class="markdown level1 summary"><p>Get file system type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract string GetFileSystemType(string aDriveId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">aDriveId</span></td>
+        <td><p>A drive id.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><p>string value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_GetTotalFreeSpace_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.GetTotalFreeSpace(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L147">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_GetTotalFreeSpace_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.GetTotalFreeSpace*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_GetTotalFreeSpace_System_String_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.GetTotalFreeSpace(System.String)">GetTotalFreeSpace(String)</h4>
+  <div class="markdown level1 summary"><p>Get total free space in the partition.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract long GetTotalFreeSpace(string aDriveId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">aDriveId</span></td>
+        <td><p>A drive id.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><p>long value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_GetTotalSize_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.GetTotalSize(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L133">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_GetTotalSize_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.GetTotalSize*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_GetTotalSize_System_String_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.GetTotalSize(System.String)">GetTotalSize(String)</h4>
+  <div class="markdown level1 summary"><p>Get the total size of the partition.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract long GetTotalSize(string aDriveId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">aDriveId</span></td>
+        <td><p>A drive id.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><p>long value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_GetVolume_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.GetVolume(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L84">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_GetVolume_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.GetVolume*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_GetVolume_System_String_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.GetVolume(System.String)">GetVolume(String)</h4>
+  <div class="markdown level1 summary"><p>Get volume.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract DirectoryEntry GetVolume(string aVolume)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">aVolume</span></td>
+        <td><p>A volume root path.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.FileSystem.Listing.DirectoryEntry.html">DirectoryEntry</a></td>
+        <td><p>DirectoryEntry value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_GetVolumes.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.GetVolumes%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L90">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_GetVolumes_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.GetVolumes*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_GetVolumes" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.GetVolumes">GetVolumes()</h4>
+  <div class="markdown level1 summary"><p>Get list of directory entrys for all volumes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract List&lt;DirectoryEntry&gt; GetVolumes()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">List</span>&lt;<a class="xref" href="Cosmos.System.FileSystem.Listing.DirectoryEntry.html">DirectoryEntry</a>&gt;</td>
+        <td><p>DirectoryEntry list value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_Initialize.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.Initialize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L15">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_Initialize_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.Initialize*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_Initialize" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.Initialize">Initialize()</h4>
+  <div class="markdown level1 summary"><p>Initializes the <a class="xref" href="Cosmos.System.FileSystem.VFS.VFSBase.html">VFSBase</a> system.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void Initialize()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_IsValidDriveId_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.IsValidDriveId(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L126">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_IsValidDriveId_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.IsValidDriveId*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_IsValidDriveId_System_String_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.IsValidDriveId(System.String)">IsValidDriveId(String)</h4>
+  <div class="markdown level1 summary"><p>Check if drive id is valid.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract bool IsValidDriveId(string driveId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">driveId</span></td>
+        <td><p>Drive id to check.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>bool value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_RegisterFileSystem_Cosmos_System_FileSystem_FileSystemFactory_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.RegisterFileSystem(Cosmos.System.FileSystem.FileSystemFactory)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L21">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_RegisterFileSystem_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.RegisterFileSystem*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_RegisterFileSystem_Cosmos_System_FileSystem_FileSystemFactory_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.RegisterFileSystem(Cosmos.System.FileSystem.FileSystemFactory)">RegisterFileSystem(FileSystemFactory)</h4>
+  <div class="markdown level1 summary"><p>Register file system.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void RegisterFileSystem(FileSystemFactory aFileSystemFactory)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.FileSystem.FileSystemFactory.html">FileSystemFactory</a></td>
+        <td><span class="parametername">aFileSystemFactory</span></td>
+        <td><p>A file system to register.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_SetFileAttributes_System_String_FileAttributes_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.SetFileAttributes(System.String%2CFileAttributes)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L104">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_SetFileAttributes_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.SetFileAttributes*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_SetFileAttributes_System_String_FileAttributes_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.SetFileAttributes(System.String,FileAttributes)">SetFileAttributes(String, FileAttributes)</h4>
+  <div class="markdown level1 summary"><p>Sets the attributes for a File / Directory.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void SetFileAttributes(string aPath, FileAttributes fileAttributes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">aPath</span></td>
+        <td><p>The path of the File / Directory.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">FileAttributes</span></td>
+        <td><span class="parametername">fileAttributes</span></td>
+        <td><p>The attributes of the File / Directory.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase_SetFileSystemLabel_System_String_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase.SetFileSystemLabel(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L168">View Source</a>
+  </span>
+  <a id="Cosmos_System_FileSystem_VFS_VFSBase_SetFileSystemLabel_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.SetFileSystemLabel*"></a>
+  <h4 id="Cosmos_System_FileSystem_VFS_VFSBase_SetFileSystemLabel_System_String_System_String_" data-uid="Cosmos.System.FileSystem.VFS.VFSBase.SetFileSystemLabel(System.String,System.String)">SetFileSystemLabel(String, String)</h4>
+  <div class="markdown level1 summary"><p>Set file system type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void SetFileSystemLabel(string aDriveId, string aLabel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">aDriveId</span></td>
+        <td><p>A drive id.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">aLabel</span></td>
+        <td><p>A label to be set.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_FileSystem_VFS_VFSBase.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.VFS.VFSBase%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/FileSystem/VFS/VFSBase.cs/#L10" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

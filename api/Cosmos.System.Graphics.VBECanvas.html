@@ -1,0 +1,785 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class VBECanvas
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class VBECanvas
+   ">
+    <meta name="generator" content="docfx 2.45.1.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    <meta property="docfx:newtab" content="true">
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Cosmos.System.Graphics.VBECanvas">
+  
+  
+  <h1 id="Cosmos_System_Graphics_VBECanvas" data-uid="Cosmos.System.Graphics.VBECanvas" class="text-break">Class VBECanvas
+  </h1>
+  <div class="markdown level0 summary"><p>VBECanvas class. Used to control screen, by VBE (VESA BIOS Extensions) standard. See also: <a class="xref" href="Cosmos.System.Graphics.Canvas.html">Canvas</a>.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Cosmos.System.Graphics.Canvas.html">Canvas</a></div>
+    <div class="level2"><span class="xref">VBECanvas</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_Clear">Canvas.Clear()</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawPoint_Cosmos_System_Graphics_Pen_Cosmos_System_Graphics_Point_">Canvas.DrawPoint(Pen, Point)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawArray_Color___Cosmos_System_Graphics_Point_System_Int32_System_Int32_">Canvas.DrawArray(Color[], Point, Int32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawLine_Cosmos_System_Graphics_Pen_System_Int32_System_Int32_System_Int32_System_Int32_">Canvas.DrawLine(Pen, Int32, Int32, Int32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawLine_Cosmos_System_Graphics_Pen_Cosmos_System_Graphics_Point_Cosmos_System_Graphics_Point_">Canvas.DrawLine(Pen, Point, Point)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawLine_Cosmos_System_Graphics_Pen_System_Single_System_Single_System_Single_System_Single_">Canvas.DrawLine(Pen, Single, Single, Single, Single)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawCircle_Cosmos_System_Graphics_Pen_System_Int32_System_Int32_System_Int32_">Canvas.DrawCircle(Pen, Int32, Int32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawCircle_Cosmos_System_Graphics_Pen_Cosmos_System_Graphics_Point_System_Int32_">Canvas.DrawCircle(Pen, Point, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawFilledCircle_Cosmos_System_Graphics_Pen_System_Int32_System_Int32_System_Int32_">Canvas.DrawFilledCircle(Pen, Int32, Int32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawFilledCircle_Cosmos_System_Graphics_Pen_Cosmos_System_Graphics_Point_System_Int32_">Canvas.DrawFilledCircle(Pen, Point, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawEllipse_Cosmos_System_Graphics_Pen_System_Int32_System_Int32_System_Int32_System_Int32_">Canvas.DrawEllipse(Pen, Int32, Int32, Int32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawEllipse_Cosmos_System_Graphics_Pen_Cosmos_System_Graphics_Point_System_Int32_System_Int32_">Canvas.DrawEllipse(Pen, Point, Int32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawFilledEllipse_Cosmos_System_Graphics_Pen_Cosmos_System_Graphics_Point_System_Int32_System_Int32_">Canvas.DrawFilledEllipse(Pen, Point, Int32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawFilledEllipse_Cosmos_System_Graphics_Pen_System_Int32_System_Int32_System_Int32_System_Int32_">Canvas.DrawFilledEllipse(Pen, Int32, Int32, Int32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawPolygon_Cosmos_System_Graphics_Pen_Cosmos_System_Graphics_Point___">Canvas.DrawPolygon(Pen, Point[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawSquare_Cosmos_System_Graphics_Pen_Cosmos_System_Graphics_Point_System_Int32_">Canvas.DrawSquare(Pen, Point, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawSquare_Cosmos_System_Graphics_Pen_System_Int32_System_Int32_System_Int32_">Canvas.DrawSquare(Pen, Int32, Int32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawRectangle_Cosmos_System_Graphics_Pen_Cosmos_System_Graphics_Point_System_Int32_System_Int32_">Canvas.DrawRectangle(Pen, Point, Int32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawRectangle_Cosmos_System_Graphics_Pen_System_Int32_System_Int32_System_Int32_System_Int32_">Canvas.DrawRectangle(Pen, Int32, Int32, Int32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawFilledRectangle_Cosmos_System_Graphics_Pen_Cosmos_System_Graphics_Point_System_Int32_System_Int32_">Canvas.DrawFilledRectangle(Pen, Point, Int32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawTriangle_Cosmos_System_Graphics_Pen_Cosmos_System_Graphics_Point_Cosmos_System_Graphics_Point_Cosmos_System_Graphics_Point_">Canvas.DrawTriangle(Pen, Point, Point, Point)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawTriangle_Cosmos_System_Graphics_Pen_System_Int32_System_Int32_System_Int32_System_Int32_System_Int32_System_Int32_">Canvas.DrawTriangle(Pen, Int32, Int32, Int32, Int32, Int32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawRectangle_Cosmos_System_Graphics_Pen_System_Single_System_Single_System_Single_System_Single_">Canvas.DrawRectangle(Pen, Single, Single, Single, Single)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawImage_Cosmos_System_Graphics_Image_Cosmos_System_Graphics_Point_">Canvas.DrawImage(Image, Point)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_CheckIfModeIsValid_Cosmos_System_Graphics_Mode_">Canvas.CheckIfModeIsValid(Mode)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_ThrowIfModeIsNotValid_Cosmos_System_Graphics_Mode_">Canvas.ThrowIfModeIsNotValid(Mode)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_ThrowIfCoordNotValid_Cosmos_System_Graphics_Point_">Canvas.ThrowIfCoordNotValid(Point)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_ThrowIfCoordNotValid_System_Int32_System_Int32_">Canvas.ThrowIfCoordNotValid(Int32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_TrimLine_System_Int32__System_Int32__System_Int32__System_Int32__">Canvas.TrimLine(Int32, Int32, Int32, Int32)</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Cosmos.System.Graphics.html">Cosmos.System.Graphics</a></h6>
+  <h6><strong>Assembly</strong>: Cosmos.System2.dll</h6>
+  <h5 id="Cosmos_System_Graphics_VBECanvas_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class VBECanvas : Canvas</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas__ctor.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/Graphics/VBECanvas.cs/#L34">View Source</a>
+  </span>
+  <a id="Cosmos_System_Graphics_VBECanvas__ctor_" data-uid="Cosmos.System.Graphics.VBECanvas.#ctor*"></a>
+  <h4 id="Cosmos_System_Graphics_VBECanvas__ctor" data-uid="Cosmos.System.Graphics.VBECanvas.#ctor">VBECanvas()</h4>
+  <div class="markdown level1 summary"><p>Create new instance of the <see cref="!:VBEScreen"></see> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public VBECanvas()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas__ctor_Cosmos_System_Graphics_Mode_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.%23ctor(Cosmos.System.Graphics.Mode)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/Graphics/VBECanvas.cs/#L43">View Source</a>
+  </span>
+  <a id="Cosmos_System_Graphics_VBECanvas__ctor_" data-uid="Cosmos.System.Graphics.VBECanvas.#ctor*"></a>
+  <h4 id="Cosmos_System_Graphics_VBECanvas__ctor_Cosmos_System_Graphics_Mode_" data-uid="Cosmos.System.Graphics.VBECanvas.#ctor(Cosmos.System.Graphics.Mode)">VBECanvas(Mode)</h4>
+  <div class="markdown level1 summary"><p>Create new instance of the <see cref="!:VBEScreen"></see> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public VBECanvas(Mode aMode)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Graphics.Mode.html">Mode</a></td>
+        <td><span class="parametername">aMode</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_AvailableModes.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.AvailableModes%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/Graphics/VBECanvas.cs/#L124">View Source</a>
+  </span>
+  <a id="Cosmos_System_Graphics_VBECanvas_AvailableModes_" data-uid="Cosmos.System.Graphics.VBECanvas.AvailableModes*"></a>
+  <h4 id="Cosmos_System_Graphics_VBECanvas_AvailableModes" data-uid="Cosmos.System.Graphics.VBECanvas.AvailableModes">AvailableModes</h4>
+  <div class="markdown level1 summary"><p>Available VBE supported video modes.</p>
+<p>
+Low res:
+<ul><li></li><li></li><li></li><li></li></ul>
+</p>
+<p>
+HD:
+<ul><li></li><li></li></ul>
+</p>
+<p>
+HDR:
+<ul><li></li><li></li></ul>
+</p>
+<p>
+HDTV:
+<ul><li></li><li></li></ul>
+</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override List&lt;Mode&gt; AvailableModes { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">List</span>&lt;<a class="xref" href="Cosmos.System.Graphics.Mode.html">Mode</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_AvailableModes">Canvas.AvailableModes</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_DefaultGraphicMode.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.DefaultGraphicMode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/Graphics/VBECanvas.cs/#L146">View Source</a>
+  </span>
+  <a id="Cosmos_System_Graphics_VBECanvas_DefaultGraphicMode_" data-uid="Cosmos.System.Graphics.VBECanvas.DefaultGraphicMode*"></a>
+  <h4 id="Cosmos_System_Graphics_VBECanvas_DefaultGraphicMode" data-uid="Cosmos.System.Graphics.VBECanvas.DefaultGraphicMode">DefaultGraphicMode</h4>
+  <div class="markdown level1 summary"><p>Override Canvas default graphics mode.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Mode DefaultGraphicMode { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Graphics.Mode.html">Mode</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DefaultGraphicMode">Canvas.DefaultGraphicMode</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_Mode.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.Mode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/Graphics/VBECanvas.cs/#L72">View Source</a>
+  </span>
+  <a id="Cosmos_System_Graphics_VBECanvas_Mode_" data-uid="Cosmos.System.Graphics.VBECanvas.Mode*"></a>
+  <h4 id="Cosmos_System_Graphics_VBECanvas_Mode" data-uid="Cosmos.System.Graphics.VBECanvas.Mode">Mode</h4>
+  <div class="markdown level1 summary"><p>Get and set video mode.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Mode Mode { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Graphics.Mode.html">Mode</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_Mode">Canvas.Mode</a></div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_Clear_Color_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.Clear(Color)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/Graphics/VBECanvas.cs/#L172">View Source</a>
+  </span>
+  <a id="Cosmos_System_Graphics_VBECanvas_Clear_" data-uid="Cosmos.System.Graphics.VBECanvas.Clear*"></a>
+  <h4 id="Cosmos_System_Graphics_VBECanvas_Clear_Color_" data-uid="Cosmos.System.Graphics.VBECanvas.Clear(Color)">Clear(Color)</h4>
+  <div class="markdown level1 summary"><p>Clear screen to specified color.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Clear(Color aColor)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Color</span></td>
+        <td><span class="parametername">aColor</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_Clear_Color_">Canvas.Clear(Color)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_Disable.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.Disable%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/Graphics/VBECanvas.cs/#L63">View Source</a>
+  </span>
+  <a id="Cosmos_System_Graphics_VBECanvas_Disable_" data-uid="Cosmos.System.Graphics.VBECanvas.Disable*"></a>
+  <h4 id="Cosmos_System_Graphics_VBECanvas_Disable" data-uid="Cosmos.System.Graphics.VBECanvas.Disable">Disable()</h4>
+  <div class="markdown level1 summary"><p>Disables VBE Graphics mode, parent method returns to VGA text mode (80x25)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Disable()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_Disable">Canvas.Disable()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_Display.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.Display%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/Graphics/VBECanvas.cs/#L359">View Source</a>
+  </span>
+  <a id="Cosmos_System_Graphics_VBECanvas_Display_" data-uid="Cosmos.System.Graphics.VBECanvas.Display*"></a>
+  <h4 id="Cosmos_System_Graphics_VBECanvas_Display" data-uid="Cosmos.System.Graphics.VBECanvas.Display">Display()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Display()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_Display">Canvas.Display()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_DrawArray_Color___System_Int32_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.DrawArray(Color%5B%5D%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/Graphics/VBECanvas.cs/#L280">View Source</a>
+  </span>
+  <a id="Cosmos_System_Graphics_VBECanvas_DrawArray_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawArray*"></a>
+  <h4 id="Cosmos_System_Graphics_VBECanvas_DrawArray_Color___System_Int32_System_Int32_System_Int32_System_Int32_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawArray(Color[],System.Int32,System.Int32,System.Int32,System.Int32)">DrawArray(Color[], Int32, Int32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Draw array of colors.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void DrawArray(Color[] aColors, int aX, int aY, int aWidth, int aHeight)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Color</span>[]</td>
+        <td><span class="parametername">aColors</span></td>
+        <td><p>Colors array.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aX</span></td>
+        <td><p>X coordinate.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aY</span></td>
+        <td><p>Y coordinate.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aWidth</span></td>
+        <td><p>Width.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aHeight</span></td>
+        <td><p>unused.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawArray_Color___System_Int32_System_Int32_System_Int32_System_Int32_">Canvas.DrawArray(Color[], Int32, Int32, Int32, Int32)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_DrawFilledRectangle_Cosmos_System_Graphics_Pen_System_Int32_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.DrawFilledRectangle(Cosmos.System.Graphics.Pen%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/Graphics/VBECanvas.cs/#L322">View Source</a>
+  </span>
+  <a id="Cosmos_System_Graphics_VBECanvas_DrawFilledRectangle_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawFilledRectangle*"></a>
+  <h4 id="Cosmos_System_Graphics_VBECanvas_DrawFilledRectangle_Cosmos_System_Graphics_Pen_System_Int32_System_Int32_System_Int32_System_Int32_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawFilledRectangle(Cosmos.System.Graphics.Pen,System.Int32,System.Int32,System.Int32,System.Int32)">DrawFilledRectangle(Pen, Int32, Int32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Draw filled rectangle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void DrawFilledRectangle(Pen aPen, int aX, int aY, int aWidth, int aHeight)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Graphics.Pen.html">Pen</a></td>
+        <td><span class="parametername">aPen</span></td>
+        <td><p>Pen to draw with.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aX</span></td>
+        <td><p>X coordinate.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aY</span></td>
+        <td><p>Y coordinate.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aWidth</span></td>
+        <td><p>Width.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aHeight</span></td>
+        <td><p>Height.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawFilledRectangle_Cosmos_System_Graphics_Pen_System_Int32_System_Int32_System_Int32_System_Int32_">Canvas.DrawFilledRectangle(Pen, Int32, Int32, Int32, Int32)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_DrawImage_Cosmos_System_Graphics_Image_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.DrawImage(Cosmos.System.Graphics.Image%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/Graphics/VBECanvas.cs/#L340">View Source</a>
+  </span>
+  <a id="Cosmos_System_Graphics_VBECanvas_DrawImage_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawImage*"></a>
+  <h4 id="Cosmos_System_Graphics_VBECanvas_DrawImage_Cosmos_System_Graphics_Image_System_Int32_System_Int32_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32)">DrawImage(Image, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Draw image.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void DrawImage(Image aImage, int aX, int aY)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Graphics.Image.html">Image</a></td>
+        <td><span class="parametername">aImage</span></td>
+        <td><p>Image.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aX</span></td>
+        <td><p>X coordinate.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aY</span></td>
+        <td><p>Y coordinate.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawImage_Cosmos_System_Graphics_Image_System_Int32_System_Int32_">Canvas.DrawImage(Image, Int32, Int32)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_DrawPoint_Cosmos_System_Graphics_Pen_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.DrawPoint(Cosmos.System.Graphics.Pen%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/Graphics/VBECanvas.cs/#L214">View Source</a>
+  </span>
+  <a id="Cosmos_System_Graphics_VBECanvas_DrawPoint_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawPoint*"></a>
+  <h4 id="Cosmos_System_Graphics_VBECanvas_DrawPoint_Cosmos_System_Graphics_Pen_System_Int32_System_Int32_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawPoint(Cosmos.System.Graphics.Pen,System.Int32,System.Int32)">DrawPoint(Pen, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Draw point to the screen.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void DrawPoint(Pen aPen, int aX, int aY)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Graphics.Pen.html">Pen</a></td>
+        <td><span class="parametername">aPen</span></td>
+        <td><p>Pen to draw the point with.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aX</span></td>
+        <td><p>X coordinate.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aY</span></td>
+        <td><p>Y coordinate.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawPoint_Cosmos_System_Graphics_Pen_System_Int32_System_Int32_">Canvas.DrawPoint(Pen, Int32, Int32)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_DrawPoint_Cosmos_System_Graphics_Pen_System_Single_System_Single_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.DrawPoint(Cosmos.System.Graphics.Pen%2CSystem.Single%2CSystem.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/Graphics/VBECanvas.cs/#L264">View Source</a>
+  </span>
+  <a id="Cosmos_System_Graphics_VBECanvas_DrawPoint_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawPoint*"></a>
+  <h4 id="Cosmos_System_Graphics_VBECanvas_DrawPoint_Cosmos_System_Graphics_Pen_System_Single_System_Single_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawPoint(Cosmos.System.Graphics.Pen,System.Single,System.Single)">DrawPoint(Pen, Single, Single)</h4>
+  <div class="markdown level1 summary"><p>Draw point to the screen.
+Not implemented.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void DrawPoint(Pen aPen, float aX, float aY)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Graphics.Pen.html">Pen</a></td>
+        <td><span class="parametername">aPen</span></td>
+        <td><p>Pen to draw the point with.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">aX</span></td>
+        <td><p>X coordinate.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">aY</span></td>
+        <td><p>Y coordinate.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawPoint_Cosmos_System_Graphics_Pen_System_Single_System_Single_">Canvas.DrawPoint(Pen, Single, Single)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_GetPointColor_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.GetPointColor(System.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/Graphics/VBECanvas.cs/#L372">View Source</a>
+  </span>
+  <a id="Cosmos_System_Graphics_VBECanvas_GetPointColor_" data-uid="Cosmos.System.Graphics.VBECanvas.GetPointColor*"></a>
+  <h4 id="Cosmos_System_Graphics_VBECanvas_GetPointColor_System_Int32_System_Int32_" data-uid="Cosmos.System.Graphics.VBECanvas.GetPointColor(System.Int32,System.Int32)">GetPointColor(Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Get point color.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Color GetPointColor(int aX, int aY)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aX</span></td>
+        <td><p>X coordinate.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aY</span></td>
+        <td><p>Y coordinate.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Color</span></td>
+        <td><p>Color value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_GetPointColor_System_Int32_System_Int32_">Canvas.GetPointColor(Int32, Int32)</a></div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.System2/Graphics/VBECanvas.cs/#L13" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

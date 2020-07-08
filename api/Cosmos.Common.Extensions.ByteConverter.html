@@ -1,0 +1,272 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class ByteConverter
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class ByteConverter
+   ">
+    <meta name="generator" content="docfx 2.45.1.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    <meta property="docfx:newtab" content="true">
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Cosmos.Common.Extensions.ByteConverter">
+  
+  
+  <h1 id="Cosmos_Common_Extensions_ByteConverter" data-uid="Cosmos.Common.Extensions.ByteConverter" class="text-break">Class ByteConverter
+  </h1>
+  <div class="markdown level0 summary"><p>Contains various helper methods to store UInt value into byte array.
+The UInt value would be stored in LittleEndian format.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">ByteConverter</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Cosmos.Common.Extensions.html">Cosmos.Common.Extensions</a></h6>
+  <h6><strong>Assembly</strong>: Cosmos.Common.dll</h6>
+  <h5 id="Cosmos_Common_Extensions_ByteConverter_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class ByteConverter : object</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_Common_Extensions_ByteConverter_SetUInt16_System_Byte___System_UInt64_System_UInt16_.md&amp;value=---%0Auid%3A%20Cosmos.Common.Extensions.ByteConverter.SetUInt16(System.Byte%5B%5D%2CSystem.UInt64%2CSystem.UInt16)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.Common/Extensions/ByteConverter.cs/#L25">View Source</a>
+  </span>
+  <a id="Cosmos_Common_Extensions_ByteConverter_SetUInt16_" data-uid="Cosmos.Common.Extensions.ByteConverter.SetUInt16*"></a>
+  <h4 id="Cosmos_Common_Extensions_ByteConverter_SetUInt16_System_Byte___System_UInt64_System_UInt16_" data-uid="Cosmos.Common.Extensions.ByteConverter.SetUInt16(System.Byte[],System.UInt64,System.UInt16)">SetUInt16(Byte[], UInt64, UInt16)</h4>
+  <div class="markdown level1 summary"><p>Store unsigned 16-bit integer value to a specified byte array, starting from a specified byte offset.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SetUInt16(this byte[] n, ulong aPos, ushort value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">n</span></td>
+        <td><p>A byte array to store the value into.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.UInt64</span></td>
+        <td><span class="parametername">aPos</span></td>
+        <td><p>The offset (in bytes) from the start of the array, to where to store the value.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td><span class="parametername">value</span></td>
+        <td><p>The value to be stored. 16-bit unsigned integer.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_Common_Extensions_ByteConverter_SetUInt32_System_Byte___System_UInt64_System_UInt32_.md&amp;value=---%0Auid%3A%20Cosmos.Common.Extensions.ByteConverter.SetUInt32(System.Byte%5B%5D%2CSystem.UInt64%2CSystem.UInt32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.Common/Extensions/ByteConverter.cs/#L37">View Source</a>
+  </span>
+  <a id="Cosmos_Common_Extensions_ByteConverter_SetUInt32_" data-uid="Cosmos.Common.Extensions.ByteConverter.SetUInt32*"></a>
+  <h4 id="Cosmos_Common_Extensions_ByteConverter_SetUInt32_System_Byte___System_UInt64_System_UInt32_" data-uid="Cosmos.Common.Extensions.ByteConverter.SetUInt32(System.Byte[],System.UInt64,System.UInt32)">SetUInt32(Byte[], UInt64, UInt32)</h4>
+  <div class="markdown level1 summary"><p>Store unsigned 32-bit integer value to a specified byte array, starting from a specified byte offset.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SetUInt32(this byte[] n, ulong aPos, uint value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">n</span></td>
+        <td><p>A byte array to store the value into.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.UInt64</span></td>
+        <td><span class="parametername">aPos</span></td>
+        <td><p>The offset (in bytes) from the start of the array, to where to store the value.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.UInt32</span></td>
+        <td><span class="parametername">value</span></td>
+        <td><p>The value to be stored. 32-bit unsigned integer.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_Common_Extensions_ByteConverter_SetUInt64_System_Byte___System_UInt64_System_UInt64_.md&amp;value=---%0Auid%3A%20Cosmos.Common.Extensions.ByteConverter.SetUInt64(System.Byte%5B%5D%2CSystem.UInt64%2CSystem.UInt64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.Common/Extensions/ByteConverter.cs/#L51">View Source</a>
+  </span>
+  <a id="Cosmos_Common_Extensions_ByteConverter_SetUInt64_" data-uid="Cosmos.Common.Extensions.ByteConverter.SetUInt64*"></a>
+  <h4 id="Cosmos_Common_Extensions_ByteConverter_SetUInt64_System_Byte___System_UInt64_System_UInt64_" data-uid="Cosmos.Common.Extensions.ByteConverter.SetUInt64(System.Byte[],System.UInt64,System.UInt64)">SetUInt64(Byte[], UInt64, UInt64)</h4>
+  <div class="markdown level1 summary"><p>Store unsigned 64-bit integer value to a specified byte array, starting from a specified byte offset.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SetUInt64(this byte[] n, ulong aPos, ulong value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">n</span></td>
+        <td><p>A byte array to store the value into.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.UInt64</span></td>
+        <td><span class="parametername">aPos</span></td>
+        <td><p>The offset (in bytes) from the start of the array, to where to store the value.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.UInt64</span></td>
+        <td><span class="parametername">value</span></td>
+        <td><p>The value to be stored. 64-bit unsigned integer.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_Common_Extensions_ByteConverter.md&amp;value=---%0Auid%3A%20Cosmos.Common.Extensions.ByteConverter%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.Common/Extensions/ByteConverter.cs/#L17" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

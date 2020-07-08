@@ -1,0 +1,338 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Partition
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Partition
+   ">
+    <meta name="generator" content="docfx 2.45.1.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    <meta property="docfx:newtab" content="true">
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Cosmos.HAL.BlockDevice.Partition">
+  
+  
+  <h1 id="Cosmos_HAL_BlockDevice_Partition" data-uid="Cosmos.HAL.BlockDevice.Partition" class="text-break">Class Partition
+  </h1>
+  <div class="markdown level0 summary"><p>Partition class. Used to read and write blocks of data.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Cosmos.HAL.Device.html">Device</a></div>
+    <div class="level2"><a class="xref" href="Cosmos.HAL.BlockDevice.BlockDevice.html">BlockDevice</a></div>
+    <div class="level3"><span class="xref">Partition</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Cosmos.HAL.BlockDevice.BlockDevice.html#Cosmos_HAL_BlockDevice_BlockDevice_Devices">BlockDevice.Devices</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.HAL.BlockDevice.BlockDevice.html#Cosmos_HAL_BlockDevice_BlockDevice_NewBlockArray_UInt32_">BlockDevice.NewBlockArray(UInt32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.HAL.BlockDevice.BlockDevice.html#Cosmos_HAL_BlockDevice_BlockDevice_mBlockCount">BlockDevice.mBlockCount</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.HAL.BlockDevice.BlockDevice.html#Cosmos_HAL_BlockDevice_BlockDevice_BlockCount">BlockDevice.BlockCount</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.HAL.BlockDevice.BlockDevice.html#Cosmos_HAL_BlockDevice_BlockDevice_mBlockSize">BlockDevice.mBlockSize</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.HAL.BlockDevice.BlockDevice.html#Cosmos_HAL_BlockDevice_BlockDevice_BlockSize">BlockDevice.BlockSize</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.HAL.BlockDevice.BlockDevice.html#Cosmos_HAL_BlockDevice_BlockDevice_CheckDataSize_System_Byte___UInt64_">BlockDevice.CheckDataSize(Byte[], UInt64)</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.HAL.BlockDevice.BlockDevice.html#Cosmos_HAL_BlockDevice_BlockDevice_CheckBlockNo_UInt64_UInt64_">BlockDevice.CheckBlockNo(UInt64, UInt64)</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Cosmos.HAL.BlockDevice.html">Cosmos.HAL.BlockDevice</a></h6>
+  <h6><strong>Assembly</strong>: Cosmos.HAL2.dll</h6>
+  <h5 id="Cosmos_HAL_BlockDevice_Partition_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class Partition : BlockDevice</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_HAL_BlockDevice_Partition__ctor_Cosmos_HAL_BlockDevice_BlockDevice_UInt64_UInt64_.md&amp;value=---%0Auid%3A%20Cosmos.HAL.BlockDevice.Partition.%23ctor(Cosmos.HAL.BlockDevice.BlockDevice%2CUInt64%2CUInt64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.HAL2/BlockDevice/Partition.cs/#L25">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_BlockDevice_Partition__ctor_" data-uid="Cosmos.HAL.BlockDevice.Partition.#ctor*"></a>
+  <h4 id="Cosmos_HAL_BlockDevice_Partition__ctor_Cosmos_HAL_BlockDevice_BlockDevice_UInt64_UInt64_" data-uid="Cosmos.HAL.BlockDevice.Partition.#ctor(Cosmos.HAL.BlockDevice.BlockDevice,UInt64,UInt64)">Partition(BlockDevice, UInt64, UInt64)</h4>
+  <div class="markdown level1 summary"><p>Create new inctanse of the <a class="xref" href="Cosmos.HAL.BlockDevice.Partition.html">Partition</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Partition(BlockDevice aHost, UInt64 aStartingSector, UInt64 aSectorCount)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.HAL.BlockDevice.BlockDevice.html">BlockDevice</a></td>
+        <td><span class="parametername">aHost</span></td>
+        <td><p>A hosting device.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">UInt64</span></td>
+        <td><span class="parametername">aStartingSector</span></td>
+        <td><p>A starting sector.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">UInt64</span></td>
+        <td><span class="parametername">aSectorCount</span></td>
+        <td><p>A sector count.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_HAL_BlockDevice_Partition_ReadBlock_UInt64_UInt64_System_Byte____.md&amp;value=---%0Auid%3A%20Cosmos.HAL.BlockDevice.Partition.ReadBlock(UInt64%2CUInt64%2CSystem.Byte%5B%5D%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.HAL2/BlockDevice/Partition.cs/#L41">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_BlockDevice_Partition_ReadBlock_" data-uid="Cosmos.HAL.BlockDevice.Partition.ReadBlock*"></a>
+  <h4 id="Cosmos_HAL_BlockDevice_Partition_ReadBlock_UInt64_UInt64_System_Byte____" data-uid="Cosmos.HAL.BlockDevice.Partition.ReadBlock(UInt64,UInt64,System.Byte[]@)">ReadBlock(UInt64, UInt64, ref Byte[])</h4>
+  <div class="markdown level1 summary"><p>Read block from partition.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void ReadBlock(UInt64 aBlockNo, UInt64 aBlockCount, ref byte[] aData)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">UInt64</span></td>
+        <td><span class="parametername">aBlockNo</span></td>
+        <td><p>A block to read from.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">UInt64</span></td>
+        <td><span class="parametername">aBlockCount</span></td>
+        <td><p>A number of blocks in the partition.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">aData</span></td>
+        <td><p>A data that been read.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.HAL.BlockDevice.BlockDevice.html#Cosmos_HAL_BlockDevice_BlockDevice_ReadBlock_UInt64_UInt64_System_Byte____">BlockDevice.ReadBlock(UInt64, UInt64, ref Byte[])</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_HAL_BlockDevice_Partition_ToString.md&amp;value=---%0Auid%3A%20Cosmos.HAL.BlockDevice.Partition.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.HAL2/BlockDevice/Partition.cs/#L69">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_BlockDevice_Partition_ToString_" data-uid="Cosmos.HAL.BlockDevice.Partition.ToString*"></a>
+  <h4 id="Cosmos_HAL_BlockDevice_Partition_ToString" data-uid="Cosmos.HAL.BlockDevice.Partition.ToString">ToString()</h4>
+  <div class="markdown level1 summary"><p>To string.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><p>string value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_HAL_BlockDevice_Partition_WriteBlock_UInt64_UInt64_System_Byte____.md&amp;value=---%0Auid%3A%20Cosmos.HAL.BlockDevice.Partition.WriteBlock(UInt64%2CUInt64%2CSystem.Byte%5B%5D%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.HAL2/BlockDevice/Partition.cs/#L57">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_BlockDevice_Partition_WriteBlock_" data-uid="Cosmos.HAL.BlockDevice.Partition.WriteBlock*"></a>
+  <h4 id="Cosmos_HAL_BlockDevice_Partition_WriteBlock_UInt64_UInt64_System_Byte____" data-uid="Cosmos.HAL.BlockDevice.Partition.WriteBlock(UInt64,UInt64,System.Byte[]@)">WriteBlock(UInt64, UInt64, ref Byte[])</h4>
+  <div class="markdown level1 summary"><p>Write block to partition.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void WriteBlock(UInt64 aBlockNo, UInt64 aBlockCount, ref byte[] aData)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">UInt64</span></td>
+        <td><span class="parametername">aBlockNo</span></td>
+        <td><p>A block number to write to.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">UInt64</span></td>
+        <td><span class="parametername">aBlockCount</span></td>
+        <td><p>A number of blocks in the partition.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">aData</span></td>
+        <td><p>A data to write.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.HAL.BlockDevice.BlockDevice.html#Cosmos_HAL_BlockDevice_BlockDevice_WriteBlock_UInt64_UInt64_System_Byte____">BlockDevice.WriteBlock(UInt64, UInt64, ref Byte[])</a></div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/CosmosOS/Cosmos/new/06150a06c33e24b6f8af30348be7c8a1e6da16e5/apiSpec/new?filename=Cosmos_HAL_BlockDevice_Partition.md&amp;value=---%0Auid%3A%20Cosmos.HAL.BlockDevice.Partition%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/06150a06c33e24b6f8af30348be7c8a1e6da16e5/source/Cosmos.HAL2/BlockDevice/Partition.cs/#L8" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
