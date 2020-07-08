@@ -1,0 +1,212 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Introduction </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Introduction ">
+    <meta name="generator" content="docfx 2.45.1.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    
+    <meta property="docfx:newtab" content="true">
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="introduction">Introduction</h1>
+
+<p>The Cosmos Graphic Subsystem (CGS from now on) is based on the abstraction of Canvas that is an empty space in which the user of CGS can draw its content. CGS is not a widget toolkit as Winforms or Gnome / GTK but is tough to be more lower level and it will be the basic in which widget toolkits will be implemented. CGS hides the graphics driver (so far VGA and VBE) used and it is tough to be the universal way to draw on the screen in Cosmos.</p>
+<p>While Canvas could be overwritten (for example to create sub windows) the user of CGS does not have to deal with it directly but it must use the static class FullScreenCanvas.</p>
+<p>Let's give a look to its API methods.</p>
+<h1 id="fullscreencanvas">FullScreenCanvas</h1>
+<pre><code>public static Canvas GetFullScreenCanvas(Mode mode) gets the instance of Canvas representing the complete screen (actually the instance of the running VGA driver) using the specified mode
+public static Canvas GetFullScreenCanvas() gets the instance of Canvas representing the complete screen (actually the instance of the running VGA driver) using the VGA driver's preferred mode
+</code></pre>
+<p>To really draw into the screen we need to use the Canvas class. Let's give a look to the API:</p>
+<h1 id="canvas">Canvas</h1>
+<h2 id="list-of-properties-of-the-canvas-class">List of Properties of the Canvas class</h2>
+<pre><code>Mode: get / set the mode of the video card to mode. It throws if the selected mode is not supported by the video card
+DefaultGraphicMode: default graphic mode this will change based on the underlying hardware
+AvailableModes: list of the available modes supported this will change based on the underlying hardware
+</code></pre>
+<h2 id="list-of-methods-of-the-canvas-class">List of Methods of the Canvas class</h2>
+<pre><code>Clear(Color color: black) clear the entire Canvas using the specified color as background
+void DrawPoint(Pen pen, int x, int y) draws a point at the coordinates specified by x and y with the specified pen
+void DrawLine(Pen pen, int x_start, int y_start, int x_end, int y_end) draws a line at the coordinates specified by x_start, y_start and x_end, y_end with the specified pen
+void DrawRectangle(Pen pen, int x_start, int y_start,int width, int height) draws a rectangle specified by a coordinate pair, a width, and a height with the specified pen
+</code></pre>
+<p>Really simple right?</p>
+<h1 id="a-working-example">A working example</h1>
+<pre><code class="lang-CSharp">using System;
+using Sys = Cosmos.System;
+using Cosmos.System.Graphics;
+
+namespace GraphicTest
+{
+    public class Kernel : Sys.Kernel
+    {
+        Canvas canvas;
+
+        protected override void BeforeRun()
+        {
+            /* If all works correctly you should not really see this :-) */
+            Console.WriteLine(&quot;Cosmos booted successfully. Let's go in Graphic Mode&quot;);
+
+            canvas = FullScreenCanvas.GetFullScreenCanvas();
+
+            canvas.Clear(Color.Blue);
+        }
+
+        protected override void Run()
+        {
+            try
+            {
+                /* A red Point */
+                Pen pen = new Pen(Color.Red);
+                canvas.DrawPoint(pen, 69, 69);
+
+                /* A GreenYellow horizontal line */
+                pen.Color = Color.GreenYellow;
+                canvas.DrawLine(pen, 250, 100, 400, 100);
+
+                /* An IndianRed vertical line */
+                pen.Color = Color.IndianRed;
+                canvas.DrawLine(pen, 350, 150, 350, 250);
+
+                /* A MintCream diagonal line */
+                pen.Color = Color.MintCream;
+                canvas.DrawLine(pen, 250, 150, 400, 250);
+
+                /* A PaleVioletRed rectangle */
+                pen.Color = Color.PaleVioletRed;
+                canvas.DrawRectangle(pen, 350, 350, 80, 60);
+
+                Console.ReadKey();
+
+                /* Let's try to change mode...*/
+                canvas.Mode = new Mode(800, 600, ColorDepth.ColorDepth32);
+
+                /* A LimeGreen rectangle */
+                pen.Color = Color.LimeGreen;
+                canvas.DrawRectangle(pen, 450, 450, 80, 60);
+
+                Console.ReadKey();
+
+                Stop();
+            }
+            catch (Exception e)
+            {
+                mDebugger.Send(&quot;Exception occurred: &quot; + e.Message);
+                mDebugger.Send(e.Message);
+                Stop();
+            }
+        }
+    }
+}
+</code></pre>
+<h1 id="limitation-of-the-current-implementation">Limitation of the current implementation</h1>
+<ol>
+<li>Only the Bochs Graphic Adapter is actually supported; this means that CGS will work only on Bochs, QEMU and VirtualBox. CGS does not make any assumption on the underlying hardware, simple a VGA driver should be adapted to use it. No change to user code should be required to use another driver</li>
+<li>Only 32 bit color depth is actually supported, the API provides methods to set a resolution with 24, 16, 8 and 4 bit but the low level Bochs driver has not yet implemented them</li>
+<li>CGS does not permits yet to do basic operations that would permit to fulfill its promise to be the basic block from which a &quot;Widget Toolkit&quot; could be derived for example these methods should be added:
+DrawFilledRectangle((Pen pen, int x_start, int y_start,int width, int height)
+void DrawImage(Image image, int x, int y) Canvas has already defined this method but it is not yet implemented
+void DrawString(String string, Font font, Brush brush, int x, int y) Canvas has already defined this method but it is not yet implemented
+.Net System.Drawing has overload of these methods taking a float to evaluate if they are really needed for CGS, they are defined but for now no implementation is provided
+A double buffering strategy could be implemented to make it faster
+This is more a limitation of the Bochs driver when the Graphic Mode is set there is no more a way to return to text mode
+CGS / Graphic Mode interacts badly with the Kernel.Stop method: Bochs does not exit cleanly. You must use Sys.Power.Shutdown to shut down correctly your computer.</li>
+</ol>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/7528b552252459d6c6741fda45f69f74f8a56373/Docs/articles/Kernel/CGS.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
