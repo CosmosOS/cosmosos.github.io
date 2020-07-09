@@ -1,0 +1,181 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>File System </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="File System ">
+    <meta name="generator" content="docfx 2.45.1.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    
+    <meta property="docfx:newtab" content="true">
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="file-system">File System</h1>
+
+<p>In this articel we will discuss about using Cosmos VFS (virtual file system).
+Cosmos VFS and the VFS manager classes, let you manage your file system.</p>
+<p>First, we should create and initialize an instance of the VFS;</p>
+<pre><code>var fs = new Sys.FileSystem.CosmosVFS();
+fs.Initialize();
+</code></pre>
+<p>What is done here is that the partitions and file systems list is being initialized, and the file system is being registered.
+This is essential for using the VFS.</p>
+<p>Right after this lines is done, an message looking like this will apper on your screen:</p>
+<p><img src="images/File%20System%20Initialize.PNG?raw=true" alt="Alt text" title="Initialize"></p>
+<p>This message is printed by the initialize method and it provide info about the file system.</p>
+<p>After our VFS has been initialized, we can use more interesting functions, lets go over some of them:</p>
+<h2 id="get-available-free-space">Get available free space.</h2>
+<pre><code>long available_space = fs.GetAvailableFreeSpace(&quot;0:/&quot;);
+Console.WriteLine(&quot;Available Free Space: &quot; + available_space);
+</code></pre>
+<p>We use this function to get the size of the available free space in our file system, in bytes.
+You have probably noticed the &quot;0:/&quot; argument passed to this function, this is the id of the drive we want to get available free space of.
+Cosmos using DOS drive naming system and this is why we use &quot;0&quot;.</p>
+<p><img src="images/File%20System%20Free%20Space.PNG?raw=true" alt="Alt text" title="Free Space"></p>
+<h2 id="get-file-system-type">Get file system type.</h2>
+<pre><code>string fs_type = fs.GetFileSystemType(&quot;0:/&quot;);
+Console.WriteLine(&quot;File System Type: &quot; + fs_type);
+</code></pre>
+<p>This will let us know what the file system type.</p>
+<p><img src="images/File%20System%20Type.PNG?raw=true" alt="Alt text" title="Type"></p>
+<h2 id="get-files-list">Get files list.</h2>
+<p>We start by getting the directory entrys list, using:</p>
+<pre><code>var directory_list = fs.GetDirectoryListing(&quot;0:/&quot;);
+</code></pre>
+<p>Once we have it, we can get the names of our files:</p>
+<pre><code>foreach (var directoryEntry in directory_list)
+{
+    Console.WriteLine(directoryEntry.mName);
+}
+</code></pre>
+<p><img src="images/File%20System%20Files%20List.PNG?raw=true" alt="Alt text" title="Files List"></p>
+<h2 id="read-files">Read files.</h2>
+<p>This one is more tricky,
+We need to get a directoryEntryList, find files in the list and print the content to the screen.</p>
+<pre><code>var directory_list = fs.GetDirectoryListing(&quot;0:/&quot;);
+</code></pre>
+<p>Now we can go through our list, and and print the txt file content.</p>
+<pre><code>try
+{
+foreach (var directoryEntry in directory_list)
+{
+    var file_stream = directoryEntry.GetFileStream();
+    var entry_type = directoryEntry.mEntryType;
+    if(entry_type == Sys.FileSystem.Listing.DirectoryEntryTypeEnum.File)
+    {
+        byte[] content = new byte[file_stream.Length];
+        file_stream.Read(content, 0, (int)file_stream.Length);
+        Console.WriteLine(&quot;File name: &quot; + directoryEntry.mName);
+        Console.WriteLine(&quot;File size: &quot; + directoryEntry.mSize);
+        Console.WriteLine(&quot;Content: &quot;);
+        foreach (char ch in content)
+        {
+            Console.Write(ch.ToString());
+        }
+        Console.WriteLine();
+        }
+    }
+}
+catch(Exception e)
+{
+    Console.WriteLine(e.ToString());
+}
+</code></pre>
+<p>You must have noticed the try-catch block have been added here, you can find out more about the exception types each function might throw in the api docs.</p>
+<p><img src="images/File%20System%20Read%20File.PNG?raw=true" alt="Alt text" title="Files List"></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/d89c8b377572728b59cef2daaa9a5c5a0d8b9a03/Docs/articles/System/Virtual File System (VFS).md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
