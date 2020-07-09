@@ -69,67 +69,70 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="file-system">File System</h1>
 
-<p>In this articel we will discuss about using Cosmos VFS (virtual file system).
+<p>In this article we will discuss about using Cosmos VFS (virtual file system).
 Cosmos VFS and the VFS manager classes, let you manage your file system.</p>
-<p>First, we should create and initialize an instance of the VFS;</p>
-<pre><code>var fs = new Sys.FileSystem.CosmosVFS();
-fs.Initialize();
-</code></pre>
-<p>What is done here is that the partitions and file systems list is being initialized, and the file system is being registered.
+<p>First, we should create and initialize an instance of the VFS, this will initialize the partition and files-system lists, as well as register the new VFS.
 This is essential for using the VFS.</p>
-<p>Right after this lines is done, an message looking like this will apper on your screen:</p>
-<p><img src="images/File%20System%20Initialize.PNG?raw=true" alt="Alt text" title="Initialize"></p>
-<p>This message is printed by the initialize method and it provide info about the file system.</p>
+<p>We start with creating global CosmosVFS, this line should appear outside of any function, and before the BeforeRun() function.</p>
+<pre><code class="lang-C#">CosmosVFS fs = new Sys.FileSystem.CosmosVFS();
+</code></pre>
+<p>Next, we register our VFS at the VFS manager, this will initiate the VFS and make it usable, add this to your kernel's BeforeRun():</p>
+<pre><code class="lang-C#">Sys.FileSystem.VFS.VFSManager.RegisterVFS(fs);
+</code></pre>
+<p>After the initialization process is done, a message like this would apper on your screen:
+<img src="https://raw.githubusercontent.com/CosmosOS/Cosmos/master/Docs/articles/Kernel/images/File%20System%20Initialize.PNG" alt="Initialize"></p>
+<p>This message is printed by the register method and it provides info about the file system.</p>
 <p>After our VFS has been initialized, we can use more interesting functions, lets go over some of them:</p>
-<h2 id="get-available-free-space">Get available free space.</h2>
-<pre><code>long available_space = fs.GetAvailableFreeSpace(&quot;0:/&quot;);
+<h2 id="get-available-free-space">Get available free space</h2>
+<p>We use this function to get the size of the available free space in our file system, in bytes.</p>
+<pre><code class="lang-C#">long available_space = fs.GetAvailableFreeSpace(&quot;0:/&quot;);
 Console.WriteLine(&quot;Available Free Space: &quot; + available_space);
 </code></pre>
-<p>We use this function to get the size of the available free space in our file system, in bytes.
-You have probably noticed the &quot;0:/&quot; argument passed to this function, this is the id of the drive we want to get available free space of.
+<p><img src="https://raw.githubusercontent.com/CosmosOS/Cosmos/master/Docs/articles/Kernel/images/File%20System%20Free%20Space.PNG" alt="Free Space"></p>
+<p>You have probably noticed the &quot;0:/&quot; argument passed to this function, this is the id of the drive that we want to get available free space of.
 Cosmos using DOS drive naming system and this is why we use &quot;0&quot;.</p>
-<p><img src="images/File%20System%20Free%20Space.PNG?raw=true" alt="Alt text" title="Free Space"></p>
-<h2 id="get-file-system-type">Get file system type.</h2>
-<pre><code>string fs_type = fs.GetFileSystemType(&quot;0:/&quot;);
+<h2 id="get-file-system-type">Get file system type</h2>
+<p>This will let us know what is the file system type that we are using.</p>
+<p><img src="https://raw.githubusercontent.com/CosmosOS/Cosmos/master/Docs/articles/Kernel/images/File%20System%20Type.PNG" alt="System Type"></p>
+<pre><code class="lang-C#">string fs_type = fs.GetFileSystemType(&quot;0:/&quot;);
 Console.WriteLine(&quot;File System Type: &quot; + fs_type);
 </code></pre>
-<p>This will let us know what the file system type.</p>
-<p><img src="images/File%20System%20Type.PNG?raw=true" alt="Alt text" title="Type"></p>
-<h2 id="get-files-list">Get files list.</h2>
+<h2 id="get-files-list">Get files list</h2>
 <p>We start by getting the directory entrys list, using:</p>
-<pre><code>var directory_list = fs.GetDirectoryListing(&quot;0:/&quot;);
+<pre><code class="lang-C#">var directory_list = fs.GetDirectoryListing(&quot;0:/&quot;);
 </code></pre>
 <p>Once we have it, we can get the names of our files:</p>
-<pre><code>foreach (var directoryEntry in directory_list)
+<pre><code class="lang-C#">foreach (var directoryEntry in directory_list)
 {
     Console.WriteLine(directoryEntry.mName);
 }
 </code></pre>
-<p><img src="images/File%20System%20Files%20List.PNG?raw=true" alt="Alt text" title="Files List"></p>
-<h2 id="read-files">Read files.</h2>
+<p><img src="https://raw.githubusercontent.com/CosmosOS/Cosmos/master/Docs/articles/Kernel/images/File%20System%20Files%20List.PNG" alt="Files List"></p>
+<h2 id="read-all-the-files-in-a-directory">Read all the files in a directory</h2>
 <p>This one is more tricky,
 We need to get a directoryEntryList, find files in the list and print the content to the screen.</p>
-<pre><code>var directory_list = fs.GetDirectoryListing(&quot;0:/&quot;);
+<p>of course, we start with geting the directory listing;</p>
+<pre><code class="lang-C#">var directory_list = fs.GetDirectoryListing(&quot;0:/&quot;);
 </code></pre>
 <p>Now we can go through our list, and and print the txt file content.</p>
-<pre><code>try
+<pre><code class="lang-C#">try
 {
-foreach (var directoryEntry in directory_list)
-{
-    var file_stream = directoryEntry.GetFileStream();
-    var entry_type = directoryEntry.mEntryType;
-    if(entry_type == Sys.FileSystem.Listing.DirectoryEntryTypeEnum.File)
+    foreach (var directoryEntry in directory_list)
     {
-        byte[] content = new byte[file_stream.Length];
-        file_stream.Read(content, 0, (int)file_stream.Length);
-        Console.WriteLine(&quot;File name: &quot; + directoryEntry.mName);
-        Console.WriteLine(&quot;File size: &quot; + directoryEntry.mSize);
-        Console.WriteLine(&quot;Content: &quot;);
-        foreach (char ch in content)
+        var file_stream = directoryEntry.GetFileStream();
+        var entry_type = directoryEntry.mEntryType;
+        if(entry_type == Sys.FileSystem.Listing.DirectoryEntryTypeEnum.File)
         {
-            Console.Write(ch.ToString());
-        }
-        Console.WriteLine();
+            byte[] content = new byte[file_stream.Length];
+            file_stream.Read(content, 0, (int)file_stream.Length);
+            Console.WriteLine(&quot;File name: &quot; + directoryEntry.mName);
+            Console.WriteLine(&quot;File size: &quot; + directoryEntry.mSize);
+            Console.WriteLine(&quot;Content: &quot;);
+            foreach (char ch in content)
+            {
+                Console.Write(ch.ToString());
+            }
+            Console.WriteLine();
         }
     }
 }
@@ -138,8 +141,71 @@ catch(Exception e)
     Console.WriteLine(e.ToString());
 }
 </code></pre>
-<p>You must have noticed the try-catch block have been added here, you can find out more about the exception types each function might throw in the api docs.</p>
-<p><img src="images/File%20System%20Read%20File.PNG?raw=true" alt="Alt text" title="Files List"></p>
+<p><img src="https://raw.githubusercontent.com/CosmosOS/Cosmos/master/Docs/articles/Kernel/images/File%20System%20Read%20File.PNG" alt="Read File"></p>
+<h2 id="read-specific-file">Read specific file</h2>
+<p>Now we will read specific file from a path.<br>
+As usual, we do it in a try catch block.</p>
+<pre><code class="lang-C#">try
+{
+    var hello_file = fs.GetFile(@&quot;0:\hello_from_elia.txt&quot;);
+    var hello_file_stream = hello_file.GetFileStream();
+
+    if (hello_file_stream.CanRead)
+    {
+        byte[] text_to_read = new byte[hello_file_stream.Length];
+        hello_file_stream.Read(text_to_read, 0, (int)hello_file_stream.Length);
+        Console.WriteLine(Encoding.Default.GetString(text_to_read));
+    }
+}
+catch (Exception e)
+{
+    Console.WriteLine(e.ToString());
+}
+</code></pre>
+<p>We use the GetFile() method, which returns a file from a path.<br>
+Next we open a stream to the file and check if we can read it.<br>
+The last thing we do is reading from the stream, we use Read() method, which write the stream to a byte array.</p>
+<p><img src="https://raw.githubusercontent.com/CosmosOS/Cosmos/master/Docs/articles/Kernel/images/File%20System%20Read%20Specified%20File.PNG" alt="Read Specific File"></p>
+<p>Notice that there is no much difference between this and <a href="https://github.com/CosmosOS/Cosmos/wiki/FAT-FileSystem#read-all-the-files-in-a-directory">read all the files in a directory</a>.<br>
+Actually the difference is by using GetFile() instead of GetDirectoryListing(), as the first returns single DirectoryEntry, and the second returns DirectoryEntryList.</p>
+<h2 id="write-to-a-file">Write to a file</h2>
+<p>Now we will write to an existing file.<br>
+Writing to a file is almost the same as reading from a file.<br>
+Always remember, we should use try catch block.</p>
+<pre><code class="lang-C#">try
+{
+    var hello_file = fs.GetFile(@&quot;0:\hello_from_elia.txt&quot;);
+    var hello_file_stream = hello_file.GetFileStream();
+
+    if (hello_file_stream.CanWrite)
+    {
+        byte[] text_to_write = Encoding.ASCII.GetBytes(&quot;Learning how to use VFS!&quot;);
+        hello_file_stream.Write(text_to_write, 0, text_to_write.Length);
+    }
+}
+catch (Exception e)
+{
+    Console.WriteLine(e.ToString());
+}
+</code></pre>
+<p>Again we use the GetFile() method, which returns a file from a path.<br>
+Next we open a stream to the file and check if we can write to it.<br>
+The last thing we do is writing to the stream, we use Write() method, which write a byte array to the stream.</p>
+<h2 id="create-new-file">Create new file</h2>
+<p>Reading and writing is working on existing files, but it's much more useful to write to our own files.
+let's jump right into it:</p>
+<pre><code class="lang-C#">try
+{
+    fs.CreateFile(@&quot;0:\hello_from_elia.txt&quot;);
+}
+catch (Exception e)
+{
+    Console.WriteLine(e.ToString());
+}
+</code></pre>
+<p>This would create new, empty file (its size is 0 bytes), we can write to it by using <a href="https://github.com/CosmosOS/Cosmos/wiki/FAT-FileSystem/_edit#write-to-a-file">this method</a>.<br>
+Now we can <a href="https://github.com/CosmosOS/Cosmos/wiki/FAT-FileSystem#get-files-list">check our files list</a> and see our new file in it:</p>
+<p><img src="https://raw.githubusercontent.com/CosmosOS/Cosmos/master/Docs/articles/Kernel/images/File%20System%20Create%20File.PNG" alt="Create File"></p>
 </article>
           </div>
           
@@ -148,7 +214,7 @@ catch(Exception e)
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/blob/b9f5ccb3700542af8af428537dfa4df3970c5a53/Docs/articles/Kernel/VFS.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/c5ce8a40a69e8666dde0d1e5a67f84344e78df6a/Docs/articles/Kernel/VFS.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>
