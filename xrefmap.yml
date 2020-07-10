@@ -30308,6 +30308,25 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.Canvas.DrawArray
   nameWithType: Canvas.DrawArray
+- uid: Cosmos.System.Graphics.Canvas.DrawChar(System.Char,Cosmos.System.Graphics.Fonts.Font,Cosmos.System.Graphics.Pen,Cosmos.System.Graphics.Point)
+  name: DrawChar(Char, Font, Pen, Point)
+  href: api/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawChar_System_Char_Cosmos_System_Graphics_Fonts_Font_Cosmos_System_Graphics_Pen_Cosmos_System_Graphics_Point_
+  commentId: M:Cosmos.System.Graphics.Canvas.DrawChar(System.Char,Cosmos.System.Graphics.Fonts.Font,Cosmos.System.Graphics.Pen,Cosmos.System.Graphics.Point)
+  fullName: Cosmos.System.Graphics.Canvas.DrawChar(System.Char, Cosmos.System.Graphics.Fonts.Font, Cosmos.System.Graphics.Pen, Cosmos.System.Graphics.Point)
+  nameWithType: Canvas.DrawChar(Char, Font, Pen, Point)
+- uid: Cosmos.System.Graphics.Canvas.DrawChar(System.Char,Cosmos.System.Graphics.Fonts.Font,Cosmos.System.Graphics.Pen,System.Int32,System.Int32)
+  name: DrawChar(Char, Font, Pen, Int32, Int32)
+  href: api/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawChar_System_Char_Cosmos_System_Graphics_Fonts_Font_Cosmos_System_Graphics_Pen_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.Canvas.DrawChar(System.Char,Cosmos.System.Graphics.Fonts.Font,Cosmos.System.Graphics.Pen,System.Int32,System.Int32)
+  fullName: Cosmos.System.Graphics.Canvas.DrawChar(System.Char, Cosmos.System.Graphics.Fonts.Font, Cosmos.System.Graphics.Pen, System.Int32, System.Int32)
+  nameWithType: Canvas.DrawChar(Char, Font, Pen, Int32, Int32)
+- uid: Cosmos.System.Graphics.Canvas.DrawChar*
+  name: DrawChar
+  href: api/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawChar_
+  commentId: Overload:Cosmos.System.Graphics.Canvas.DrawChar
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.Canvas.DrawChar
+  nameWithType: Canvas.DrawChar
 - uid: Cosmos.System.Graphics.Canvas.DrawCircle(Cosmos.System.Graphics.Pen,Cosmos.System.Graphics.Point,System.Int32)
   name: DrawCircle(Pen, Point, Int32)
   href: api/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawCircle_Cosmos_System_Graphics_Pen_Cosmos_System_Graphics_Point_System_Int32_
@@ -30532,6 +30551,25 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.Canvas.DrawSquare
   nameWithType: Canvas.DrawSquare
+- uid: Cosmos.System.Graphics.Canvas.DrawString(System.String,Cosmos.System.Graphics.Fonts.Font,Cosmos.System.Graphics.Pen,Cosmos.System.Graphics.Point)
+  name: DrawString(String, Font, Pen, Point)
+  href: api/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawString_System_String_Cosmos_System_Graphics_Fonts_Font_Cosmos_System_Graphics_Pen_Cosmos_System_Graphics_Point_
+  commentId: M:Cosmos.System.Graphics.Canvas.DrawString(System.String,Cosmos.System.Graphics.Fonts.Font,Cosmos.System.Graphics.Pen,Cosmos.System.Graphics.Point)
+  fullName: Cosmos.System.Graphics.Canvas.DrawString(System.String, Cosmos.System.Graphics.Fonts.Font, Cosmos.System.Graphics.Pen, Cosmos.System.Graphics.Point)
+  nameWithType: Canvas.DrawString(String, Font, Pen, Point)
+- uid: Cosmos.System.Graphics.Canvas.DrawString(System.String,Cosmos.System.Graphics.Fonts.Font,Cosmos.System.Graphics.Pen,System.Int32,System.Int32)
+  name: DrawString(String, Font, Pen, Int32, Int32)
+  href: api/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawString_System_String_Cosmos_System_Graphics_Fonts_Font_Cosmos_System_Graphics_Pen_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.Canvas.DrawString(System.String,Cosmos.System.Graphics.Fonts.Font,Cosmos.System.Graphics.Pen,System.Int32,System.Int32)
+  fullName: Cosmos.System.Graphics.Canvas.DrawString(System.String, Cosmos.System.Graphics.Fonts.Font, Cosmos.System.Graphics.Pen, System.Int32, System.Int32)
+  nameWithType: Canvas.DrawString(String, Font, Pen, Int32, Int32)
+- uid: Cosmos.System.Graphics.Canvas.DrawString*
+  name: DrawString
+  href: api/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawString_
+  commentId: Overload:Cosmos.System.Graphics.Canvas.DrawString
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.Canvas.DrawString
+  nameWithType: Canvas.DrawString
 - uid: Cosmos.System.Graphics.Canvas.DrawTriangle(Cosmos.System.Graphics.Pen,Cosmos.System.Graphics.Point,Cosmos.System.Graphics.Point,Cosmos.System.Graphics.Point)
   name: DrawTriangle(Pen, Point, Point, Point)
   href: api/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawTriangle_Cosmos_System_Graphics_Pen_Cosmos_System_Graphics_Point_Cosmos_System_Graphics_Point_Cosmos_System_Graphics_Point_
@@ -30661,6 +30699,180 @@ references:
   commentId: F:Cosmos.System.Graphics.ColorDepth.ColorDepth8
   fullName: Cosmos.System.Graphics.ColorDepth.ColorDepth8
   nameWithType: ColorDepth.ColorDepth8
+- uid: Cosmos.System.Graphics.Fonts
+  name: Cosmos.System.Graphics.Fonts
+  href: api/Cosmos.System.Graphics.Fonts.html
+  commentId: N:Cosmos.System.Graphics.Fonts
+  fullName: Cosmos.System.Graphics.Fonts
+  nameWithType: Cosmos.System.Graphics.Fonts
+- uid: Cosmos.System.Graphics.Fonts.Font
+  name: Font
+  href: api/Cosmos.System.Graphics.Fonts.Font.html
+  commentId: T:Cosmos.System.Graphics.Fonts.Font
+  fullName: Cosmos.System.Graphics.Fonts.Font
+  nameWithType: Font
+- uid: Cosmos.System.Graphics.Fonts.Font.#ctor(System.Byte,System.Byte,System.Byte[])
+  name: Font(Byte, Byte, Byte[])
+  href: api/Cosmos.System.Graphics.Fonts.Font.html#Cosmos_System_Graphics_Fonts_Font__ctor_System_Byte_System_Byte_System_Byte___
+  commentId: M:Cosmos.System.Graphics.Fonts.Font.#ctor(System.Byte,System.Byte,System.Byte[])
+  name.vb: Font(Byte, Byte, Byte())
+  fullName: Cosmos.System.Graphics.Fonts.Font.Font(System.Byte, System.Byte, System.Byte[])
+  fullName.vb: Cosmos.System.Graphics.Fonts.Font.Font(System.Byte, System.Byte, System.Byte())
+  nameWithType: Font.Font(Byte, Byte, Byte[])
+  nameWithType.vb: Font.Font(Byte, Byte, Byte())
+- uid: Cosmos.System.Graphics.Fonts.Font.#ctor*
+  name: Font
+  href: api/Cosmos.System.Graphics.Fonts.Font.html#Cosmos_System_Graphics_Fonts_Font__ctor_
+  commentId: Overload:Cosmos.System.Graphics.Fonts.Font.#ctor
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.Fonts.Font.Font
+  nameWithType: Font.Font
+- uid: Cosmos.System.Graphics.Fonts.Font.ConvertByteToBitAddres(System.Byte,System.Int32)
+  name: ConvertByteToBitAddres(Byte, Int32)
+  href: api/Cosmos.System.Graphics.Fonts.Font.html#Cosmos_System_Graphics_Fonts_Font_ConvertByteToBitAddres_System_Byte_System_Int32_
+  commentId: M:Cosmos.System.Graphics.Fonts.Font.ConvertByteToBitAddres(System.Byte,System.Int32)
+  fullName: Cosmos.System.Graphics.Fonts.Font.ConvertByteToBitAddres(System.Byte, System.Int32)
+  nameWithType: Font.ConvertByteToBitAddres(Byte, Int32)
+- uid: Cosmos.System.Graphics.Fonts.Font.ConvertByteToBitAddres*
+  name: ConvertByteToBitAddres
+  href: api/Cosmos.System.Graphics.Fonts.Font.html#Cosmos_System_Graphics_Fonts_Font_ConvertByteToBitAddres_
+  commentId: Overload:Cosmos.System.Graphics.Fonts.Font.ConvertByteToBitAddres
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.Fonts.Font.ConvertByteToBitAddres
+  nameWithType: Font.ConvertByteToBitAddres
+- uid: Cosmos.System.Graphics.Fonts.Font.Data
+  name: Data
+  href: api/Cosmos.System.Graphics.Fonts.Font.html#Cosmos_System_Graphics_Fonts_Font_Data
+  commentId: P:Cosmos.System.Graphics.Fonts.Font.Data
+  fullName: Cosmos.System.Graphics.Fonts.Font.Data
+  nameWithType: Font.Data
+- uid: Cosmos.System.Graphics.Fonts.Font.Data*
+  name: Data
+  href: api/Cosmos.System.Graphics.Fonts.Font.html#Cosmos_System_Graphics_Fonts_Font_Data_
+  commentId: Overload:Cosmos.System.Graphics.Fonts.Font.Data
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.Fonts.Font.Data
+  nameWithType: Font.Data
+- uid: Cosmos.System.Graphics.Fonts.Font.Height
+  name: Height
+  href: api/Cosmos.System.Graphics.Fonts.Font.html#Cosmos_System_Graphics_Fonts_Font_Height
+  commentId: P:Cosmos.System.Graphics.Fonts.Font.Height
+  fullName: Cosmos.System.Graphics.Fonts.Font.Height
+  nameWithType: Font.Height
+- uid: Cosmos.System.Graphics.Fonts.Font.Height*
+  name: Height
+  href: api/Cosmos.System.Graphics.Fonts.Font.html#Cosmos_System_Graphics_Fonts_Font_Height_
+  commentId: Overload:Cosmos.System.Graphics.Fonts.Font.Height
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.Fonts.Font.Height
+  nameWithType: Font.Height
+- uid: Cosmos.System.Graphics.Fonts.Font.Width
+  name: Width
+  href: api/Cosmos.System.Graphics.Fonts.Font.html#Cosmos_System_Graphics_Fonts_Font_Width
+  commentId: P:Cosmos.System.Graphics.Fonts.Font.Width
+  fullName: Cosmos.System.Graphics.Fonts.Font.Width
+  nameWithType: Font.Width
+- uid: Cosmos.System.Graphics.Fonts.Font.Width*
+  name: Width
+  href: api/Cosmos.System.Graphics.Fonts.Font.html#Cosmos_System_Graphics_Fonts_Font_Width_
+  commentId: Overload:Cosmos.System.Graphics.Fonts.Font.Width
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.Fonts.Font.Width
+  nameWithType: Font.Width
+- uid: Cosmos.System.Graphics.Fonts.PCScreenFont
+  name: PCScreenFont
+  href: api/Cosmos.System.Graphics.Fonts.PCScreenFont.html
+  commentId: T:Cosmos.System.Graphics.Fonts.PCScreenFont
+  fullName: Cosmos.System.Graphics.Fonts.PCScreenFont
+  nameWithType: PCScreenFont
+- uid: Cosmos.System.Graphics.Fonts.PCScreenFont.#ctor(System.Byte,System.Byte,System.Byte[],List{Cosmos.System.Graphics.Fonts.UnicodeMapping})
+  name: PCScreenFont(Byte, Byte, Byte[], List<UnicodeMapping>)
+  href: api/Cosmos.System.Graphics.Fonts.PCScreenFont.html#Cosmos_System_Graphics_Fonts_PCScreenFont__ctor_System_Byte_System_Byte_System_Byte___List_Cosmos_System_Graphics_Fonts_UnicodeMapping__
+  commentId: M:Cosmos.System.Graphics.Fonts.PCScreenFont.#ctor(System.Byte,System.Byte,System.Byte[],List{Cosmos.System.Graphics.Fonts.UnicodeMapping})
+  name.vb: PCScreenFont(Byte, Byte, Byte(), List(Of UnicodeMapping))
+  fullName: Cosmos.System.Graphics.Fonts.PCScreenFont.PCScreenFont(System.Byte, System.Byte, System.Byte[], List<Cosmos.System.Graphics.Fonts.UnicodeMapping>)
+  fullName.vb: Cosmos.System.Graphics.Fonts.PCScreenFont.PCScreenFont(System.Byte, System.Byte, System.Byte(), List(Of Cosmos.System.Graphics.Fonts.UnicodeMapping))
+  nameWithType: PCScreenFont.PCScreenFont(Byte, Byte, Byte[], List<UnicodeMapping>)
+  nameWithType.vb: PCScreenFont.PCScreenFont(Byte, Byte, Byte(), List(Of UnicodeMapping))
+- uid: Cosmos.System.Graphics.Fonts.PCScreenFont.#ctor*
+  name: PCScreenFont
+  href: api/Cosmos.System.Graphics.Fonts.PCScreenFont.html#Cosmos_System_Graphics_Fonts_PCScreenFont__ctor_
+  commentId: Overload:Cosmos.System.Graphics.Fonts.PCScreenFont.#ctor
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.Fonts.PCScreenFont.PCScreenFont
+  nameWithType: PCScreenFont.PCScreenFont
+- uid: Cosmos.System.Graphics.Fonts.PCScreenFont.CreateVGAFont
+  name: CreateVGAFont()
+  href: api/Cosmos.System.Graphics.Fonts.PCScreenFont.html#Cosmos_System_Graphics_Fonts_PCScreenFont_CreateVGAFont
+  commentId: M:Cosmos.System.Graphics.Fonts.PCScreenFont.CreateVGAFont
+  fullName: Cosmos.System.Graphics.Fonts.PCScreenFont.CreateVGAFont()
+  nameWithType: PCScreenFont.CreateVGAFont()
+- uid: Cosmos.System.Graphics.Fonts.PCScreenFont.CreateVGAFont*
+  name: CreateVGAFont
+  href: api/Cosmos.System.Graphics.Fonts.PCScreenFont.html#Cosmos_System_Graphics_Fonts_PCScreenFont_CreateVGAFont_
+  commentId: Overload:Cosmos.System.Graphics.Fonts.PCScreenFont.CreateVGAFont
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.Fonts.PCScreenFont.CreateVGAFont
+  nameWithType: PCScreenFont.CreateVGAFont
+- uid: Cosmos.System.Graphics.Fonts.PCScreenFont.Default
+  name: Default
+  href: api/Cosmos.System.Graphics.Fonts.PCScreenFont.html#Cosmos_System_Graphics_Fonts_PCScreenFont_Default
+  commentId: P:Cosmos.System.Graphics.Fonts.PCScreenFont.Default
+  fullName: Cosmos.System.Graphics.Fonts.PCScreenFont.Default
+  nameWithType: PCScreenFont.Default
+- uid: Cosmos.System.Graphics.Fonts.PCScreenFont.Default*
+  name: Default
+  href: api/Cosmos.System.Graphics.Fonts.PCScreenFont.html#Cosmos_System_Graphics_Fonts_PCScreenFont_Default_
+  commentId: Overload:Cosmos.System.Graphics.Fonts.PCScreenFont.Default
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.Fonts.PCScreenFont.Default
+  nameWithType: PCScreenFont.Default
+- uid: Cosmos.System.Graphics.Fonts.PCScreenFont.LoadFont(System.Byte[])
+  name: LoadFont(Byte[])
+  href: api/Cosmos.System.Graphics.Fonts.PCScreenFont.html#Cosmos_System_Graphics_Fonts_PCScreenFont_LoadFont_System_Byte___
+  commentId: M:Cosmos.System.Graphics.Fonts.PCScreenFont.LoadFont(System.Byte[])
+  name.vb: LoadFont(Byte())
+  fullName: Cosmos.System.Graphics.Fonts.PCScreenFont.LoadFont(System.Byte[])
+  fullName.vb: Cosmos.System.Graphics.Fonts.PCScreenFont.LoadFont(System.Byte())
+  nameWithType: PCScreenFont.LoadFont(Byte[])
+  nameWithType.vb: PCScreenFont.LoadFont(Byte())
+- uid: Cosmos.System.Graphics.Fonts.PCScreenFont.LoadFont*
+  name: LoadFont
+  href: api/Cosmos.System.Graphics.Fonts.PCScreenFont.html#Cosmos_System_Graphics_Fonts_PCScreenFont_LoadFont_
+  commentId: Overload:Cosmos.System.Graphics.Fonts.PCScreenFont.LoadFont
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.Fonts.PCScreenFont.LoadFont
+  nameWithType: PCScreenFont.LoadFont
+- uid: Cosmos.System.Graphics.Fonts.UnicodeMapping
+  name: UnicodeMapping
+  href: api/Cosmos.System.Graphics.Fonts.UnicodeMapping.html
+  commentId: T:Cosmos.System.Graphics.Fonts.UnicodeMapping
+  fullName: Cosmos.System.Graphics.Fonts.UnicodeMapping
+  nameWithType: UnicodeMapping
+- uid: Cosmos.System.Graphics.Fonts.UnicodeMapping.ASCIICharacters
+  name: ASCIICharacters
+  href: api/Cosmos.System.Graphics.Fonts.UnicodeMapping.html#Cosmos_System_Graphics_Fonts_UnicodeMapping_ASCIICharacters
+  commentId: F:Cosmos.System.Graphics.Fonts.UnicodeMapping.ASCIICharacters
+  fullName: Cosmos.System.Graphics.Fonts.UnicodeMapping.ASCIICharacters
+  nameWithType: UnicodeMapping.ASCIICharacters
+- uid: Cosmos.System.Graphics.Fonts.UnicodeMapping.FontPosition
+  name: FontPosition
+  href: api/Cosmos.System.Graphics.Fonts.UnicodeMapping.html#Cosmos_System_Graphics_Fonts_UnicodeMapping_FontPosition
+  commentId: F:Cosmos.System.Graphics.Fonts.UnicodeMapping.FontPosition
+  fullName: Cosmos.System.Graphics.Fonts.UnicodeMapping.FontPosition
+  nameWithType: UnicodeMapping.FontPosition
+- uid: Cosmos.System.Graphics.Fonts.UnicodeMapping.UnicodeCharacters
+  name: UnicodeCharacters
+  href: api/Cosmos.System.Graphics.Fonts.UnicodeMapping.html#Cosmos_System_Graphics_Fonts_UnicodeMapping_UnicodeCharacters
+  commentId: F:Cosmos.System.Graphics.Fonts.UnicodeMapping.UnicodeCharacters
+  fullName: Cosmos.System.Graphics.Fonts.UnicodeMapping.UnicodeCharacters
+  nameWithType: UnicodeMapping.UnicodeCharacters
+- uid: Cosmos.System.Graphics.Fonts.UnicodeMapping.UnicodeCharactersWithModifiers
+  name: UnicodeCharactersWithModifiers
+  href: api/Cosmos.System.Graphics.Fonts.UnicodeMapping.html#Cosmos_System_Graphics_Fonts_UnicodeMapping_UnicodeCharactersWithModifiers
+  commentId: F:Cosmos.System.Graphics.Fonts.UnicodeMapping.UnicodeCharactersWithModifiers
+  fullName: Cosmos.System.Graphics.Fonts.UnicodeMapping.UnicodeCharactersWithModifiers
+  nameWithType: UnicodeMapping.UnicodeCharactersWithModifiers
 - uid: Cosmos.System.Graphics.FullScreenCanvas
   name: FullScreenCanvas
   href: api/Cosmos.System.Graphics.FullScreenCanvas.html
@@ -30988,59 +31200,6 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.Mode.ToString
   nameWithType: Mode.ToString
-- uid: Cosmos.System.Graphics.PCScreenFont
-  name: PCScreenFont
-  href: api/Cosmos.System.Graphics.PCScreenFont.html
-  commentId: T:Cosmos.System.Graphics.PCScreenFont
-  fullName: Cosmos.System.Graphics.PCScreenFont
-  nameWithType: PCScreenFont
-- uid: Cosmos.System.Graphics.PCScreenFont.#ctor
-  name: PCScreenFont()
-  href: api/Cosmos.System.Graphics.PCScreenFont.html#Cosmos_System_Graphics_PCScreenFont__ctor
-  commentId: M:Cosmos.System.Graphics.PCScreenFont.#ctor
-  fullName: Cosmos.System.Graphics.PCScreenFont.PCScreenFont()
-  nameWithType: PCScreenFont.PCScreenFont()
-- uid: Cosmos.System.Graphics.PCScreenFont.#ctor(System.Byte[])
-  name: PCScreenFont(Byte[])
-  href: api/Cosmos.System.Graphics.PCScreenFont.html#Cosmos_System_Graphics_PCScreenFont__ctor_System_Byte___
-  commentId: M:Cosmos.System.Graphics.PCScreenFont.#ctor(System.Byte[])
-  name.vb: PCScreenFont(Byte())
-  fullName: Cosmos.System.Graphics.PCScreenFont.PCScreenFont(System.Byte[])
-  fullName.vb: Cosmos.System.Graphics.PCScreenFont.PCScreenFont(System.Byte())
-  nameWithType: PCScreenFont.PCScreenFont(Byte[])
-  nameWithType.vb: PCScreenFont.PCScreenFont(Byte())
-- uid: Cosmos.System.Graphics.PCScreenFont.#ctor*
-  name: PCScreenFont
-  href: api/Cosmos.System.Graphics.PCScreenFont.html#Cosmos_System_Graphics_PCScreenFont__ctor_
-  commentId: Overload:Cosmos.System.Graphics.PCScreenFont.#ctor
-  isSpec: "True"
-  fullName: Cosmos.System.Graphics.PCScreenFont.PCScreenFont
-  nameWithType: PCScreenFont.PCScreenFont
-- uid: Cosmos.System.Graphics.PCScreenFont.CharHeight
-  name: CharHeight
-  href: api/Cosmos.System.Graphics.PCScreenFont.html#Cosmos_System_Graphics_PCScreenFont_CharHeight
-  commentId: F:Cosmos.System.Graphics.PCScreenFont.CharHeight
-  fullName: Cosmos.System.Graphics.PCScreenFont.CharHeight
-  nameWithType: PCScreenFont.CharHeight
-- uid: Cosmos.System.Graphics.PCScreenFont.CharWidth
-  name: CharWidth
-  href: api/Cosmos.System.Graphics.PCScreenFont.html#Cosmos_System_Graphics_PCScreenFont_CharWidth
-  commentId: F:Cosmos.System.Graphics.PCScreenFont.CharWidth
-  fullName: Cosmos.System.Graphics.PCScreenFont.CharWidth
-  nameWithType: PCScreenFont.CharWidth
-- uid: Cosmos.System.Graphics.PCScreenFont.CreateVGAFont
-  name: CreateVGAFont()
-  href: api/Cosmos.System.Graphics.PCScreenFont.html#Cosmos_System_Graphics_PCScreenFont_CreateVGAFont
-  commentId: M:Cosmos.System.Graphics.PCScreenFont.CreateVGAFont
-  fullName: Cosmos.System.Graphics.PCScreenFont.CreateVGAFont()
-  nameWithType: PCScreenFont.CreateVGAFont()
-- uid: Cosmos.System.Graphics.PCScreenFont.CreateVGAFont*
-  name: CreateVGAFont
-  href: api/Cosmos.System.Graphics.PCScreenFont.html#Cosmos_System_Graphics_PCScreenFont_CreateVGAFont_
-  commentId: Overload:Cosmos.System.Graphics.PCScreenFont.CreateVGAFont
-  isSpec: "True"
-  fullName: Cosmos.System.Graphics.PCScreenFont.CreateVGAFont
-  nameWithType: PCScreenFont.CreateVGAFont
 - uid: Cosmos.System.Graphics.Pen
   name: Pen
   href: api/Cosmos.System.Graphics.Pen.html
