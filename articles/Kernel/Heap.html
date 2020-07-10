@@ -14,8 +14,8 @@
     <link rel="stylesheet" href="../../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../../styles/docfx.css">
     <link rel="stylesheet" href="../../styles/main.css">
-    <meta property="docfx:navrel" content="../../toc.html">
-    <meta property="docfx:tocrel" content="../toc.html">
+    <meta property="docfx:navrel" content="../../toc">
+    <meta property="docfx:tocrel" content="../toc">
     
     
     <meta property="docfx:newtab" content="true">
@@ -44,7 +44,21 @@
                   <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
                 </div>
               </form>
-            </div>
+                
+                <ul class="nav level1 navbar-nav">
+                      <li>
+                          <a href="../../index.html" title="Home">Home</a>
+                      </li>
+                      <li>
+                          <a href="https://gocosmos.org" title="Cosmos Website">Cosmos Website</a>
+                      </li>
+                      <li>
+                          <a href="../../articles/GettingStarted.html" title="Articles">Articles</a>
+                      </li>
+                      <li>
+                          <a href="../../api/Cosmos.Build.Tasks.html" title="API Documentation">API Documentation</a>
+                      </li>
+                </ul>    </div>
           </div>
         </nav>
         
@@ -57,11 +71,98 @@
         </div>
       </header>
       <div role="main" class="container body-content hide-when-search">
-        
         <div class="sidenav hide-when-search">
           <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
           <div class="sidetoggle collapse" id="sidetoggle">
-            <div id="sidetoc"></div>
+            <div>
+              <div class="sidefilter">
+                <form class="toc-filter">
+                  <span class="glyphicon glyphicon-filter filter-icon"></span>
+                  <input type="text" id="toc_filter_input" placeholder="Enter here to filter..." onkeypress="if(event.keyCode==13) {return false;}">
+                </form>
+              </div>
+              <div class="sidetoc">
+                <div class="toc" id="toc">
+                  
+                  <ul class="nav level1">
+                    <li class="">
+                      <a href="../GettingStarted.html" title="Getting Started" class="">Getting Started</a>
+                    </li>
+                    <li class="">
+                      <a href="../Compiler/il2cpu.html" title="Compiler" class="">Compiler</a>
+                    </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a class="">Debugger</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="../Debugger/DebugCommands.html" title="Debug Commands" class="">Debug Commands</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <a href="../Express/Compile.html" title="Express" class="">Express</a>
+                    </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a class="">Installation</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="../Installation/DevKit.html" title="Dev Kit" class="">Dev Kit</a>
+                          </li>
+                          <li class="">
+                            <a href="../Installation/Running.html" title="Running" class="">Running</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a class="">Kernel</a>
+                        
+                        <ul class="nav level2">
+                          <li class="active">
+                            <a href="../Kernel/Heap.html" title="Heap" class="active">Heap</a>
+                          </li>
+                          <li class="">
+                            <a href="../Kernel/Levels.html" title="Levels" class="">Levels</a>
+                          </li>
+                          <li class="">
+                            <a href="../Kernel/Memory.html" title="Memory" class="">Memory</a>
+                          </li>
+                          <li class="">
+                            <a href="../Kernel/Plugs.html" title="Plugs" class="">Plugs</a>
+                          </li>
+                          <li class="">
+                            <a href="../Kernel/Startup.html" title="Startup" class="">Startup</a>
+                          </li>
+                          <li class="">
+                            <a href="../Kernel/CGS.html" title="Graphics" class="">Graphics</a>
+                          </li>
+                          <li class="">
+                            <a href="../Kernel/VFS.html" title="Virtual File System" class="">Virtual File System</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a class="">Reference</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="../Reference/x86.html" title="x86" class="">x86</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a class="">Tests</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="../Tests/TestRunner.html" title="Test Runner" class="">Test Runner</a>
+                          </li>
+                        </ul>  </li>
+                  </ul>        </div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="article row grid-right">
@@ -78,7 +179,7 @@ required, it initializes itself.</p>
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/blob/e724e3735011bf4266d284ada1c4d0c5d9b60d8c/Docs/articles/Kernel/Heap.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/6dfb1df17a87e01f00d613cf1722a248b58adff2/Docs/articles/Kernel/Heap.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>
