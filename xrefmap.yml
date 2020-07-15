@@ -30199,6 +30199,19 @@ references:
   commentId: T:Cosmos.System.Graphics.Canvas
   fullName: Cosmos.System.Graphics.Canvas
   nameWithType: Canvas
+- uid: Cosmos.System.Graphics.Canvas.AlphaBlend(Color,Color,System.Byte)
+  name: AlphaBlend(Color, Color, Byte)
+  href: api/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_AlphaBlend_Color_Color_System_Byte_
+  commentId: M:Cosmos.System.Graphics.Canvas.AlphaBlend(Color,Color,System.Byte)
+  fullName: Cosmos.System.Graphics.Canvas.AlphaBlend(Color, Color, System.Byte)
+  nameWithType: Canvas.AlphaBlend(Color, Color, Byte)
+- uid: Cosmos.System.Graphics.Canvas.AlphaBlend*
+  name: AlphaBlend
+  href: api/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_AlphaBlend_
+  commentId: Overload:Cosmos.System.Graphics.Canvas.AlphaBlend
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.Canvas.AlphaBlend
+  nameWithType: Canvas.AlphaBlend
 - uid: Cosmos.System.Graphics.Canvas.AvailableModes
   name: AvailableModes
   href: api/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_AvailableModes
@@ -30441,6 +30454,25 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.Canvas.DrawImage
   nameWithType: Canvas.DrawImage
+- uid: Cosmos.System.Graphics.Canvas.DrawImageAlpha(Cosmos.System.Graphics.Image,Cosmos.System.Graphics.Point)
+  name: DrawImageAlpha(Image, Point)
+  href: api/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawImageAlpha_Cosmos_System_Graphics_Image_Cosmos_System_Graphics_Point_
+  commentId: M:Cosmos.System.Graphics.Canvas.DrawImageAlpha(Cosmos.System.Graphics.Image,Cosmos.System.Graphics.Point)
+  fullName: Cosmos.System.Graphics.Canvas.DrawImageAlpha(Cosmos.System.Graphics.Image, Cosmos.System.Graphics.Point)
+  nameWithType: Canvas.DrawImageAlpha(Image, Point)
+- uid: Cosmos.System.Graphics.Canvas.DrawImageAlpha(Cosmos.System.Graphics.Image,System.Int32,System.Int32)
+  name: DrawImageAlpha(Image, Int32, Int32)
+  href: api/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawImageAlpha_Cosmos_System_Graphics_Image_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.Canvas.DrawImageAlpha(Cosmos.System.Graphics.Image,System.Int32,System.Int32)
+  fullName: Cosmos.System.Graphics.Canvas.DrawImageAlpha(Cosmos.System.Graphics.Image, System.Int32, System.Int32)
+  nameWithType: Canvas.DrawImageAlpha(Image, Int32, Int32)
+- uid: Cosmos.System.Graphics.Canvas.DrawImageAlpha*
+  name: DrawImageAlpha
+  href: api/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawImageAlpha_
+  commentId: Overload:Cosmos.System.Graphics.Canvas.DrawImageAlpha
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.Canvas.DrawImageAlpha
+  nameWithType: Canvas.DrawImageAlpha
 - uid: Cosmos.System.Graphics.Canvas.DrawLine(Cosmos.System.Graphics.Pen,Cosmos.System.Graphics.Point,Cosmos.System.Graphics.Point)
   name: DrawLine(Pen, Point, Point)
   href: api/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawLine_Cosmos_System_Graphics_Pen_Cosmos_System_Graphics_Point_Cosmos_System_Graphics_Point_
