@@ -23510,19 +23510,6 @@ references:
   isSpec: "True"
   fullName: Cosmos.HAL.Drivers.VBEDriver.VBEDriver
   nameWithType: VBEDriver.VBEDriver
-- uid: Cosmos.HAL.Drivers.VBEDriver.Available
-  name: Available()
-  href: api/Cosmos.HAL.Drivers.VBEDriver.html#Cosmos_HAL_Drivers_VBEDriver_Available
-  commentId: M:Cosmos.HAL.Drivers.VBEDriver.Available
-  fullName: Cosmos.HAL.Drivers.VBEDriver.Available()
-  nameWithType: VBEDriver.Available()
-- uid: Cosmos.HAL.Drivers.VBEDriver.Available*
-  name: Available
-  href: api/Cosmos.HAL.Drivers.VBEDriver.html#Cosmos_HAL_Drivers_VBEDriver_Available_
-  commentId: Overload:Cosmos.HAL.Drivers.VBEDriver.Available
-  isSpec: "True"
-  fullName: Cosmos.HAL.Drivers.VBEDriver.Available
-  nameWithType: VBEDriver.Available
 - uid: Cosmos.HAL.Drivers.VBEDriver.ClearVRAM(System.Int32,System.Int32,System.Int32)
   name: ClearVRAM(Int32, Int32, Int32)
   href: api/Cosmos.HAL.Drivers.VBEDriver.html#Cosmos_HAL_Drivers_VBEDriver_ClearVRAM_System_Int32_System_Int32_System_Int32_
@@ -23584,6 +23571,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.HAL.Drivers.VBEDriver.GetVRAM
   nameWithType: VBEDriver.GetVRAM
+- uid: Cosmos.HAL.Drivers.VBEDriver.ISAModeAvailable
+  name: ISAModeAvailable()
+  href: api/Cosmos.HAL.Drivers.VBEDriver.html#Cosmos_HAL_Drivers_VBEDriver_ISAModeAvailable
+  commentId: M:Cosmos.HAL.Drivers.VBEDriver.ISAModeAvailable
+  fullName: Cosmos.HAL.Drivers.VBEDriver.ISAModeAvailable()
+  nameWithType: VBEDriver.ISAModeAvailable()
+- uid: Cosmos.HAL.Drivers.VBEDriver.ISAModeAvailable*
+  name: ISAModeAvailable
+  href: api/Cosmos.HAL.Drivers.VBEDriver.html#Cosmos_HAL_Drivers_VBEDriver_ISAModeAvailable_
+  commentId: Overload:Cosmos.HAL.Drivers.VBEDriver.ISAModeAvailable
+  isSpec: "True"
+  fullName: Cosmos.HAL.Drivers.VBEDriver.ISAModeAvailable
+  nameWithType: VBEDriver.ISAModeAvailable
 - uid: Cosmos.HAL.Drivers.VBEDriver.SetVRAM(System.UInt32,System.Byte)
   name: SetVRAM(UInt32, Byte)
   href: api/Cosmos.HAL.Drivers.VBEDriver.html#Cosmos_HAL_Drivers_VBEDriver_SetVRAM_System_UInt32_System_Byte_
@@ -24312,6 +24312,12 @@ references:
   isSpec: "True"
   fullName: Cosmos.HAL.PCIDevice.PCIDevice
   nameWithType: PCIDevice.PCIDevice
+- uid: Cosmos.HAL.PCIDevice.BAR0
+  name: BAR0
+  href: api/Cosmos.HAL.PCIDevice.html#Cosmos_HAL_PCIDevice_BAR0
+  commentId: F:Cosmos.HAL.PCIDevice.BAR0
+  fullName: Cosmos.HAL.PCIDevice.BAR0
+  nameWithType: PCIDevice.BAR0
 - uid: Cosmos.HAL.PCIDevice.BaseAddressBar
   name: BaseAddressBar
   href: api/Cosmos.HAL.PCIDevice.html#Cosmos_HAL_PCIDevice_BaseAddressBar
