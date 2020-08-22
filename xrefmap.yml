@@ -30152,12 +30152,27 @@ references:
   fullName.vb: Cosmos.System.Graphics.Bitmap.Bitmap(System.Byte())
   nameWithType: Bitmap.Bitmap(Byte[])
   nameWithType.vb: Bitmap.Bitmap(Byte())
+- uid: Cosmos.System.Graphics.Bitmap.#ctor(System.Byte[],Cosmos.System.Graphics.ColorOrder)
+  name: Bitmap(Byte[], ColorOrder)
+  href: api/Cosmos.System.Graphics.Bitmap.html#Cosmos_System_Graphics_Bitmap__ctor_System_Byte___Cosmos_System_Graphics_ColorOrder_
+  commentId: M:Cosmos.System.Graphics.Bitmap.#ctor(System.Byte[],Cosmos.System.Graphics.ColorOrder)
+  name.vb: Bitmap(Byte(), ColorOrder)
+  fullName: Cosmos.System.Graphics.Bitmap.Bitmap(System.Byte[], Cosmos.System.Graphics.ColorOrder)
+  fullName.vb: Cosmos.System.Graphics.Bitmap.Bitmap(System.Byte(), Cosmos.System.Graphics.ColorOrder)
+  nameWithType: Bitmap.Bitmap(Byte[], ColorOrder)
+  nameWithType.vb: Bitmap.Bitmap(Byte(), ColorOrder)
 - uid: Cosmos.System.Graphics.Bitmap.#ctor(System.String)
   name: Bitmap(String)
   href: api/Cosmos.System.Graphics.Bitmap.html#Cosmos_System_Graphics_Bitmap__ctor_System_String_
   commentId: M:Cosmos.System.Graphics.Bitmap.#ctor(System.String)
   fullName: Cosmos.System.Graphics.Bitmap.Bitmap(System.String)
   nameWithType: Bitmap.Bitmap(String)
+- uid: Cosmos.System.Graphics.Bitmap.#ctor(System.String,Cosmos.System.Graphics.ColorOrder)
+  name: Bitmap(String, ColorOrder)
+  href: api/Cosmos.System.Graphics.Bitmap.html#Cosmos_System_Graphics_Bitmap__ctor_System_String_Cosmos_System_Graphics_ColorOrder_
+  commentId: M:Cosmos.System.Graphics.Bitmap.#ctor(System.String,Cosmos.System.Graphics.ColorOrder)
+  fullName: Cosmos.System.Graphics.Bitmap.Bitmap(System.String, Cosmos.System.Graphics.ColorOrder)
+  nameWithType: Bitmap.Bitmap(String, ColorOrder)
 - uid: Cosmos.System.Graphics.Bitmap.#ctor(System.UInt32,System.UInt32,Cosmos.System.Graphics.ColorDepth)
   name: Bitmap(UInt32, UInt32, ColorDepth)
   href: api/Cosmos.System.Graphics.Bitmap.html#Cosmos_System_Graphics_Bitmap__ctor_System_UInt32_System_UInt32_Cosmos_System_Graphics_ColorDepth_
@@ -30737,6 +30752,24 @@ references:
   commentId: F:Cosmos.System.Graphics.ColorDepth.ColorDepth8
   fullName: Cosmos.System.Graphics.ColorDepth.ColorDepth8
   nameWithType: ColorDepth.ColorDepth8
+- uid: Cosmos.System.Graphics.ColorOrder
+  name: ColorOrder
+  href: api/Cosmos.System.Graphics.ColorOrder.html
+  commentId: T:Cosmos.System.Graphics.ColorOrder
+  fullName: Cosmos.System.Graphics.ColorOrder
+  nameWithType: ColorOrder
+- uid: Cosmos.System.Graphics.ColorOrder.BGR
+  name: BGR
+  href: api/Cosmos.System.Graphics.ColorOrder.html#Cosmos_System_Graphics_ColorOrder_BGR
+  commentId: F:Cosmos.System.Graphics.ColorOrder.BGR
+  fullName: Cosmos.System.Graphics.ColorOrder.BGR
+  nameWithType: ColorOrder.BGR
+- uid: Cosmos.System.Graphics.ColorOrder.RGB
+  name: RGB
+  href: api/Cosmos.System.Graphics.ColorOrder.html#Cosmos_System_Graphics_ColorOrder_RGB
+  commentId: F:Cosmos.System.Graphics.ColorOrder.RGB
+  fullName: Cosmos.System.Graphics.ColorOrder.RGB
+  nameWithType: ColorOrder.RGB
 - uid: Cosmos.System.Graphics.Fonts
   name: Cosmos.System.Graphics.Fonts
   href: api/Cosmos.System.Graphics.Fonts.html
