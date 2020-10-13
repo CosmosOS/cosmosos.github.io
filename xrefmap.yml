@@ -6337,51 +6337,6 @@ references:
   commentId: F:Cosmos.Core.PIC.Slave
   fullName: Cosmos.Core.PIC.Slave
   nameWithType: PIC.Slave
-- uid: Cosmos.Core.ProcessorInformation
-  name: ProcessorInformation
-  href: api/Cosmos.Core.ProcessorInformation.html
-  commentId: T:Cosmos.Core.ProcessorInformation
-  fullName: Cosmos.Core.ProcessorInformation
-  nameWithType: ProcessorInformation
-- uid: Cosmos.Core.ProcessorInformation.GetCycleCount
-  name: GetCycleCount()
-  href: api/Cosmos.Core.ProcessorInformation.html#Cosmos_Core_ProcessorInformation_GetCycleCount
-  commentId: M:Cosmos.Core.ProcessorInformation.GetCycleCount
-  fullName: Cosmos.Core.ProcessorInformation.GetCycleCount()
-  nameWithType: ProcessorInformation.GetCycleCount()
-- uid: Cosmos.Core.ProcessorInformation.GetCycleCount*
-  name: GetCycleCount
-  href: api/Cosmos.Core.ProcessorInformation.html#Cosmos_Core_ProcessorInformation_GetCycleCount_
-  commentId: Overload:Cosmos.Core.ProcessorInformation.GetCycleCount
-  isSpec: "True"
-  fullName: Cosmos.Core.ProcessorInformation.GetCycleCount
-  nameWithType: ProcessorInformation.GetCycleCount
-- uid: Cosmos.Core.ProcessorInformation.GetCycleRate
-  name: GetCycleRate()
-  href: api/Cosmos.Core.ProcessorInformation.html#Cosmos_Core_ProcessorInformation_GetCycleRate
-  commentId: M:Cosmos.Core.ProcessorInformation.GetCycleRate
-  fullName: Cosmos.Core.ProcessorInformation.GetCycleRate()
-  nameWithType: ProcessorInformation.GetCycleRate()
-- uid: Cosmos.Core.ProcessorInformation.GetCycleRate*
-  name: GetCycleRate
-  href: api/Cosmos.Core.ProcessorInformation.html#Cosmos_Core_ProcessorInformation_GetCycleRate_
-  commentId: Overload:Cosmos.Core.ProcessorInformation.GetCycleRate
-  isSpec: "True"
-  fullName: Cosmos.Core.ProcessorInformation.GetCycleRate
-  nameWithType: ProcessorInformation.GetCycleRate
-- uid: Cosmos.Core.ProcessorInformation.GetVendorName
-  name: GetVendorName()
-  href: api/Cosmos.Core.ProcessorInformation.html#Cosmos_Core_ProcessorInformation_GetVendorName
-  commentId: M:Cosmos.Core.ProcessorInformation.GetVendorName
-  fullName: Cosmos.Core.ProcessorInformation.GetVendorName()
-  nameWithType: ProcessorInformation.GetVendorName()
-- uid: Cosmos.Core.ProcessorInformation.GetVendorName*
-  name: GetVendorName
-  href: api/Cosmos.Core.ProcessorInformation.html#Cosmos_Core_ProcessorInformation_GetVendorName_
-  commentId: Overload:Cosmos.Core.ProcessorInformation.GetVendorName
-  isSpec: "True"
-  fullName: Cosmos.Core.ProcessorInformation.GetVendorName
-  nameWithType: ProcessorInformation.GetVendorName
 - uid: Cosmos.Core.VBE
   name: VBE
   href: api/Cosmos.Core.VBE.html
@@ -7593,38 +7548,6 @@ references:
   isSpec: "True"
   fullName: Cosmos.Core_Asm.MultibootImpl.GetMBIAddress
   nameWithType: MultibootImpl.GetMBIAddress
-- uid: Cosmos.Core_Asm.ProcessorInformationImpl
-  name: ProcessorInformationImpl
-  href: api/Cosmos.Core_Asm.ProcessorInformationImpl.html
-  commentId: T:Cosmos.Core_Asm.ProcessorInformationImpl
-  fullName: Cosmos.Core_Asm.ProcessorInformationImpl
-  nameWithType: ProcessorInformationImpl
-- uid: Cosmos.Core_Asm.ProcessorInformationImpl.GetCycleCount
-  name: GetCycleCount()
-  href: api/Cosmos.Core_Asm.ProcessorInformationImpl.html#Cosmos_Core_Asm_ProcessorInformationImpl_GetCycleCount
-  commentId: M:Cosmos.Core_Asm.ProcessorInformationImpl.GetCycleCount
-  fullName: Cosmos.Core_Asm.ProcessorInformationImpl.GetCycleCount()
-  nameWithType: ProcessorInformationImpl.GetCycleCount()
-- uid: Cosmos.Core_Asm.ProcessorInformationImpl.GetCycleCount*
-  name: GetCycleCount
-  href: api/Cosmos.Core_Asm.ProcessorInformationImpl.html#Cosmos_Core_Asm_ProcessorInformationImpl_GetCycleCount_
-  commentId: Overload:Cosmos.Core_Asm.ProcessorInformationImpl.GetCycleCount
-  isSpec: "True"
-  fullName: Cosmos.Core_Asm.ProcessorInformationImpl.GetCycleCount
-  nameWithType: ProcessorInformationImpl.GetCycleCount
-- uid: Cosmos.Core_Asm.ProcessorInformationImpl.GetCycleRate
-  name: GetCycleRate()
-  href: api/Cosmos.Core_Asm.ProcessorInformationImpl.html#Cosmos_Core_Asm_ProcessorInformationImpl_GetCycleRate
-  commentId: M:Cosmos.Core_Asm.ProcessorInformationImpl.GetCycleRate
-  fullName: Cosmos.Core_Asm.ProcessorInformationImpl.GetCycleRate()
-  nameWithType: ProcessorInformationImpl.GetCycleRate()
-- uid: Cosmos.Core_Asm.ProcessorInformationImpl.GetCycleRate*
-  name: GetCycleRate
-  href: api/Cosmos.Core_Asm.ProcessorInformationImpl.html#Cosmos_Core_Asm_ProcessorInformationImpl_GetCycleRate_
-  commentId: Overload:Cosmos.Core_Asm.ProcessorInformationImpl.GetCycleRate
-  isSpec: "True"
-  fullName: Cosmos.Core_Asm.ProcessorInformationImpl.GetCycleRate
-  nameWithType: ProcessorInformationImpl.GetCycleRate
 - uid: Cosmos.Core_Asm.RuntimeHelpersImpl
   name: RuntimeHelpersImpl
   href: api/Cosmos.Core_Asm.RuntimeHelpersImpl.html
