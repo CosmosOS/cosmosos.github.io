@@ -2504,6 +2504,19 @@ references:
   commentId: T:Cosmos.Core.CPU
   fullName: Cosmos.Core.CPU
   nameWithType: CPU
+- uid: Cosmos.Core.CPU.CanReadCPUID
+  name: CanReadCPUID()
+  href: api/Cosmos.Core.CPU.html#Cosmos_Core_CPU_CanReadCPUID
+  commentId: M:Cosmos.Core.CPU.CanReadCPUID
+  fullName: Cosmos.Core.CPU.CanReadCPUID()
+  nameWithType: CPU.CanReadCPUID()
+- uid: Cosmos.Core.CPU.CanReadCPUID*
+  name: CanReadCPUID
+  href: api/Cosmos.Core.CPU.html#Cosmos_Core_CPU_CanReadCPUID_
+  commentId: Overload:Cosmos.Core.CPU.CanReadCPUID
+  isSpec: "True"
+  fullName: Cosmos.Core.CPU.CanReadCPUID
+  nameWithType: CPU.CanReadCPUID
 - uid: Cosmos.Core.CPU.DisableInterrupts
   name: DisableInterrupts()
   href: api/Cosmos.Core.CPU.html#Cosmos_Core_CPU_DisableInterrupts
@@ -2653,6 +2666,22 @@ references:
   commentId: F:Cosmos.Core.CPU.mInterruptsEnabled
   fullName: Cosmos.Core.CPU.mInterruptsEnabled
   nameWithType: CPU.mInterruptsEnabled
+- uid: Cosmos.Core.CPU.ReadCPUID(System.UInt32,System.Int32@,System.Int32@,System.Int32@,System.Int32@)
+  name: ReadCPUID(UInt32, ref Int32, ref Int32, ref Int32, ref Int32)
+  href: api/Cosmos.Core.CPU.html#Cosmos_Core_CPU_ReadCPUID_System_UInt32_System_Int32__System_Int32__System_Int32__System_Int32__
+  commentId: M:Cosmos.Core.CPU.ReadCPUID(System.UInt32,System.Int32@,System.Int32@,System.Int32@,System.Int32@)
+  name.vb: ReadCPUID(UInt32, ByRef Int32, ByRef Int32, ByRef Int32, ByRef Int32)
+  fullName: Cosmos.Core.CPU.ReadCPUID(System.UInt32, ref System.Int32, ref System.Int32, ref System.Int32, ref System.Int32)
+  fullName.vb: Cosmos.Core.CPU.ReadCPUID(System.UInt32, ByRef System.Int32, ByRef System.Int32, ByRef System.Int32, ByRef System.Int32)
+  nameWithType: CPU.ReadCPUID(UInt32, ref Int32, ref Int32, ref Int32, ref Int32)
+  nameWithType.vb: CPU.ReadCPUID(UInt32, ByRef Int32, ByRef Int32, ByRef Int32, ByRef Int32)
+- uid: Cosmos.Core.CPU.ReadCPUID*
+  name: ReadCPUID
+  href: api/Cosmos.Core.CPU.html#Cosmos_Core_CPU_ReadCPUID_
+  commentId: Overload:Cosmos.Core.CPU.ReadCPUID
+  isSpec: "True"
+  fullName: Cosmos.Core.CPU.ReadCPUID
+  nameWithType: CPU.ReadCPUID
 - uid: Cosmos.Core.CPU.Reboot
   name: Reboot()
   href: api/Cosmos.Core.CPU.html#Cosmos_Core_CPU_Reboot
