@@ -1969,12 +1969,6 @@ references:
   commentId: F:Cosmos.Core.Bootstrap.CPU
   fullName: Cosmos.Core.Bootstrap.CPU
   nameWithType: Bootstrap.CPU
-- uid: Cosmos.Core.Bootstrap.header
-  name: header
-  href: api/Cosmos.Core.Bootstrap.html#Cosmos_Core_Bootstrap_header
-  commentId: F:Cosmos.Core.Bootstrap.header
-  fullName: Cosmos.Core.Bootstrap.header
-  nameWithType: Bootstrap.header
 - uid: Cosmos.Core.Bootstrap.Init
   name: Init()
   href: api/Cosmos.Core.Bootstrap.html#Cosmos_Core_Bootstrap_Init
@@ -1994,6 +1988,12 @@ references:
   commentId: F:Cosmos.Core.Bootstrap.modeinfo
   fullName: Cosmos.Core.Bootstrap.modeinfo
   nameWithType: Bootstrap.modeinfo
+- uid: Cosmos.Core.Bootstrap.MultibootHeader
+  name: MultibootHeader
+  href: api/Cosmos.Core.Bootstrap.html#Cosmos_Core_Bootstrap_MultibootHeader
+  commentId: F:Cosmos.Core.Bootstrap.MultibootHeader
+  fullName: Cosmos.Core.Bootstrap.MultibootHeader
+  nameWithType: Bootstrap.MultibootHeader
 - uid: Cosmos.Core.Bootstrap.PIC
   name: PIC
   href: api/Cosmos.Core.Bootstrap.html#Cosmos_Core_Bootstrap_PIC
@@ -2621,6 +2621,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.Core.CPU.GetEndOfKernel
   nameWithType: CPU.GetEndOfKernel
+- uid: Cosmos.Core.CPU.GetMemoryMap
+  name: GetMemoryMap()
+  href: api/Cosmos.Core.CPU.html#Cosmos_Core_CPU_GetMemoryMap
+  commentId: M:Cosmos.Core.CPU.GetMemoryMap
+  fullName: Cosmos.Core.CPU.GetMemoryMap()
+  nameWithType: CPU.GetMemoryMap()
+- uid: Cosmos.Core.CPU.GetMemoryMap*
+  name: GetMemoryMap
+  href: api/Cosmos.Core.CPU.html#Cosmos_Core_CPU_GetMemoryMap_
+  commentId: Overload:Cosmos.Core.CPU.GetMemoryMap
+  isSpec: "True"
+  fullName: Cosmos.Core.CPU.GetMemoryMap
+  nameWithType: CPU.GetMemoryMap
 - uid: Cosmos.Core.CPU.Halt
   name: Halt()
   href: api/Cosmos.Core.CPU.html#Cosmos_Core_CPU_Halt
@@ -2660,6 +2673,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.Core.CPU.InitSSE
   nameWithType: CPU.InitSSE
+- uid: Cosmos.Core.CPU.MemoryMapExists
+  name: MemoryMapExists()
+  href: api/Cosmos.Core.CPU.html#Cosmos_Core_CPU_MemoryMapExists
+  commentId: M:Cosmos.Core.CPU.MemoryMapExists
+  fullName: Cosmos.Core.CPU.MemoryMapExists()
+  nameWithType: CPU.MemoryMapExists()
+- uid: Cosmos.Core.CPU.MemoryMapExists*
+  name: MemoryMapExists
+  href: api/Cosmos.Core.CPU.html#Cosmos_Core_CPU_MemoryMapExists_
+  commentId: Overload:Cosmos.Core.CPU.MemoryMapExists
+  isSpec: "True"
+  fullName: Cosmos.Core.CPU.MemoryMapExists
+  nameWithType: CPU.MemoryMapExists
 - uid: Cosmos.Core.CPU.mInterruptsEnabled
   name: mInterruptsEnabled
   href: api/Cosmos.Core.CPU.html#Cosmos_Core_CPU_mInterruptsEnabled
@@ -5927,6 +5953,30 @@ references:
   commentId: F:Cosmos.Core.MemoryGroup.AHCI.DataBlock
   fullName: Cosmos.Core.MemoryGroup.AHCI.DataBlock
   nameWithType: AHCI.DataBlock
+- uid: Cosmos.Core.MemoryMap
+  name: MemoryMap
+  href: api/Cosmos.Core.MemoryMap.html
+  commentId: T:Cosmos.Core.MemoryMap
+  fullName: Cosmos.Core.MemoryMap
+  nameWithType: MemoryMap
+- uid: Cosmos.Core.MemoryMap.Address
+  name: Address
+  href: api/Cosmos.Core.MemoryMap.html#Cosmos_Core_MemoryMap_Address
+  commentId: F:Cosmos.Core.MemoryMap.Address
+  fullName: Cosmos.Core.MemoryMap.Address
+  nameWithType: MemoryMap.Address
+- uid: Cosmos.Core.MemoryMap.Length
+  name: Length
+  href: api/Cosmos.Core.MemoryMap.html#Cosmos_Core_MemoryMap_Length
+  commentId: F:Cosmos.Core.MemoryMap.Length
+  fullName: Cosmos.Core.MemoryMap.Length
+  nameWithType: MemoryMap.Length
+- uid: Cosmos.Core.MemoryMap.Type
+  name: Type
+  href: api/Cosmos.Core.MemoryMap.html#Cosmos_Core_MemoryMap_Type
+  commentId: F:Cosmos.Core.MemoryMap.Type
+  fullName: Cosmos.Core.MemoryMap.Type
+  nameWithType: MemoryMap.Type
 - uid: Cosmos.Core.MemoryOperations
   name: MemoryOperations
   href: api/Cosmos.Core.MemoryOperations.html
@@ -6366,6 +6416,48 @@ references:
   commentId: F:Cosmos.Core.PIC.Slave
   fullName: Cosmos.Core.PIC.Slave
   nameWithType: PIC.Slave
+- uid: Cosmos.Core.RawMemoryMap
+  name: RawMemoryMap
+  href: api/Cosmos.Core.RawMemoryMap.html
+  commentId: T:Cosmos.Core.RawMemoryMap
+  fullName: Cosmos.Core.RawMemoryMap
+  nameWithType: RawMemoryMap
+- uid: Cosmos.Core.RawMemoryMap.HighBaseAddr
+  name: HighBaseAddr
+  href: api/Cosmos.Core.RawMemoryMap.html#Cosmos_Core_RawMemoryMap_HighBaseAddr
+  commentId: F:Cosmos.Core.RawMemoryMap.HighBaseAddr
+  fullName: Cosmos.Core.RawMemoryMap.HighBaseAddr
+  nameWithType: RawMemoryMap.HighBaseAddr
+- uid: Cosmos.Core.RawMemoryMap.HighLength
+  name: HighLength
+  href: api/Cosmos.Core.RawMemoryMap.html#Cosmos_Core_RawMemoryMap_HighLength
+  commentId: F:Cosmos.Core.RawMemoryMap.HighLength
+  fullName: Cosmos.Core.RawMemoryMap.HighLength
+  nameWithType: RawMemoryMap.HighLength
+- uid: Cosmos.Core.RawMemoryMap.LowBaseAddr
+  name: LowBaseAddr
+  href: api/Cosmos.Core.RawMemoryMap.html#Cosmos_Core_RawMemoryMap_LowBaseAddr
+  commentId: F:Cosmos.Core.RawMemoryMap.LowBaseAddr
+  fullName: Cosmos.Core.RawMemoryMap.LowBaseAddr
+  nameWithType: RawMemoryMap.LowBaseAddr
+- uid: Cosmos.Core.RawMemoryMap.LowLength
+  name: LowLength
+  href: api/Cosmos.Core.RawMemoryMap.html#Cosmos_Core_RawMemoryMap_LowLength
+  commentId: F:Cosmos.Core.RawMemoryMap.LowLength
+  fullName: Cosmos.Core.RawMemoryMap.LowLength
+  nameWithType: RawMemoryMap.LowLength
+- uid: Cosmos.Core.RawMemoryMap.Size
+  name: Size
+  href: api/Cosmos.Core.RawMemoryMap.html#Cosmos_Core_RawMemoryMap_Size
+  commentId: F:Cosmos.Core.RawMemoryMap.Size
+  fullName: Cosmos.Core.RawMemoryMap.Size
+  nameWithType: RawMemoryMap.Size
+- uid: Cosmos.Core.RawMemoryMap.Type
+  name: Type
+  href: api/Cosmos.Core.RawMemoryMap.html#Cosmos_Core_RawMemoryMap_Type
+  commentId: F:Cosmos.Core.RawMemoryMap.Type
+  fullName: Cosmos.Core.RawMemoryMap.Type
+  nameWithType: RawMemoryMap.Type
 - uid: Cosmos.Core.VBE
   name: VBE
   href: api/Cosmos.Core.VBE.html
