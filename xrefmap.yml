@@ -16724,6 +16724,72 @@ references:
   isSpec: "True"
   fullName: Cosmos.Debug.Hosts.IntelEdison.Stop
   nameWithType: IntelEdison.Stop
+- uid: Cosmos.Debug.Hosts.Qemu
+  name: Qemu
+  href: api/Cosmos.Debug.Hosts.Qemu.html
+  commentId: T:Cosmos.Debug.Hosts.Qemu
+  fullName: Cosmos.Debug.Hosts.Qemu
+  nameWithType: Qemu
+- uid: Cosmos.Debug.Hosts.Qemu.#ctor(Dictionary{System.String,System.String},System.Boolean,System.String)
+  name: Qemu(Dictionary<String, String>, Boolean, String)
+  href: api/Cosmos.Debug.Hosts.Qemu.html#Cosmos_Debug_Hosts_Qemu__ctor_Dictionary_System_String_System_String__System_Boolean_System_String_
+  commentId: M:Cosmos.Debug.Hosts.Qemu.#ctor(Dictionary{System.String,System.String},System.Boolean,System.String)
+  name.vb: Qemu(Dictionary(Of String, String), Boolean, String)
+  fullName: Cosmos.Debug.Hosts.Qemu.Qemu(Dictionary<System.String, System.String>, System.Boolean, System.String)
+  fullName.vb: Cosmos.Debug.Hosts.Qemu.Qemu(Dictionary(Of System.String, System.String), System.Boolean, System.String)
+  nameWithType: Qemu.Qemu(Dictionary<String, String>, Boolean, String)
+  nameWithType.vb: Qemu.Qemu(Dictionary(Of String, String), Boolean, String)
+- uid: Cosmos.Debug.Hosts.Qemu.#ctor*
+  name: Qemu
+  href: api/Cosmos.Debug.Hosts.Qemu.html#Cosmos_Debug_Hosts_Qemu__ctor_
+  commentId: Overload:Cosmos.Debug.Hosts.Qemu.#ctor
+  isSpec: "True"
+  fullName: Cosmos.Debug.Hosts.Qemu.Qemu
+  nameWithType: Qemu.Qemu
+- uid: Cosmos.Debug.Hosts.Qemu.LogError
+  name: LogError
+  href: api/Cosmos.Debug.Hosts.Qemu.html#Cosmos_Debug_Hosts_Qemu_LogError
+  commentId: F:Cosmos.Debug.Hosts.Qemu.LogError
+  fullName: Cosmos.Debug.Hosts.Qemu.LogError
+  nameWithType: Qemu.LogError
+- uid: Cosmos.Debug.Hosts.Qemu.LogOutput
+  name: LogOutput
+  href: api/Cosmos.Debug.Hosts.Qemu.html#Cosmos_Debug_Hosts_Qemu_LogOutput
+  commentId: F:Cosmos.Debug.Hosts.Qemu.LogOutput
+  fullName: Cosmos.Debug.Hosts.Qemu.LogOutput
+  nameWithType: Qemu.LogOutput
+- uid: Cosmos.Debug.Hosts.Qemu.RedirectOutput
+  name: RedirectOutput
+  href: api/Cosmos.Debug.Hosts.Qemu.html#Cosmos_Debug_Hosts_Qemu_RedirectOutput
+  commentId: F:Cosmos.Debug.Hosts.Qemu.RedirectOutput
+  fullName: Cosmos.Debug.Hosts.Qemu.RedirectOutput
+  nameWithType: Qemu.RedirectOutput
+- uid: Cosmos.Debug.Hosts.Qemu.Start
+  name: Start()
+  href: api/Cosmos.Debug.Hosts.Qemu.html#Cosmos_Debug_Hosts_Qemu_Start
+  commentId: M:Cosmos.Debug.Hosts.Qemu.Start
+  fullName: Cosmos.Debug.Hosts.Qemu.Start()
+  nameWithType: Qemu.Start()
+- uid: Cosmos.Debug.Hosts.Qemu.Start*
+  name: Start
+  href: api/Cosmos.Debug.Hosts.Qemu.html#Cosmos_Debug_Hosts_Qemu_Start_
+  commentId: Overload:Cosmos.Debug.Hosts.Qemu.Start
+  isSpec: "True"
+  fullName: Cosmos.Debug.Hosts.Qemu.Start
+  nameWithType: Qemu.Start
+- uid: Cosmos.Debug.Hosts.Qemu.Stop
+  name: Stop()
+  href: api/Cosmos.Debug.Hosts.Qemu.html#Cosmos_Debug_Hosts_Qemu_Stop
+  commentId: M:Cosmos.Debug.Hosts.Qemu.Stop
+  fullName: Cosmos.Debug.Hosts.Qemu.Stop()
+  nameWithType: Qemu.Stop()
+- uid: Cosmos.Debug.Hosts.Qemu.Stop*
+  name: Stop
+  href: api/Cosmos.Debug.Hosts.Qemu.html#Cosmos_Debug_Hosts_Qemu_Stop_
+  commentId: Overload:Cosmos.Debug.Hosts.Qemu.Stop
+  isSpec: "True"
+  fullName: Cosmos.Debug.Hosts.Qemu.Stop
+  nameWithType: Qemu.Stop
 - uid: Cosmos.Debug.Hosts.Slave
   name: Slave
   href: api/Cosmos.Debug.Hosts.Slave.html
