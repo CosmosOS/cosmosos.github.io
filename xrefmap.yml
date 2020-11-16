@@ -2543,6 +2543,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.Core.CPU.EnableInterrupts
   nameWithType: CPU.EnableInterrupts
+- uid: Cosmos.Core.CPU.EstimateCPUSpeedFromName(System.String)
+  name: EstimateCPUSpeedFromName(String)
+  href: api/Cosmos.Core.CPU.html#Cosmos_Core_CPU_EstimateCPUSpeedFromName_System_String_
+  commentId: M:Cosmos.Core.CPU.EstimateCPUSpeedFromName(System.String)
+  fullName: Cosmos.Core.CPU.EstimateCPUSpeedFromName(System.String)
+  nameWithType: CPU.EstimateCPUSpeedFromName(String)
+- uid: Cosmos.Core.CPU.EstimateCPUSpeedFromName*
+  name: EstimateCPUSpeedFromName
+  href: api/Cosmos.Core.CPU.html#Cosmos_Core_CPU_EstimateCPUSpeedFromName_
+  commentId: Overload:Cosmos.Core.CPU.EstimateCPUSpeedFromName
+  isSpec: "True"
+  fullName: Cosmos.Core.CPU.EstimateCPUSpeedFromName
+  nameWithType: CPU.EstimateCPUSpeedFromName
 - uid: Cosmos.Core.CPU.GetAmountOfRAM
   name: GetAmountOfRAM()
   href: api/Cosmos.Core.CPU.html#Cosmos_Core_CPU_GetAmountOfRAM
@@ -17368,6 +17381,31 @@ references:
   isSpec: "True"
   fullName: Cosmos.Debug.Kernel.Debugger.WriteNumber
   nameWithType: Debugger.WriteNumber
+- uid: Cosmos.Debug.Kernel.DebuggerFactory
+  name: DebuggerFactory
+  href: api/Cosmos.Debug.Kernel.DebuggerFactory.html
+  commentId: T:Cosmos.Debug.Kernel.DebuggerFactory
+  fullName: Cosmos.Debug.Kernel.DebuggerFactory
+  nameWithType: DebuggerFactory
+- uid: Cosmos.Debug.Kernel.DebuggerFactory.CreateDebugger(System.String,System.String)
+  name: CreateDebugger(String, String)
+  href: api/Cosmos.Debug.Kernel.DebuggerFactory.html#Cosmos_Debug_Kernel_DebuggerFactory_CreateDebugger_System_String_System_String_
+  commentId: M:Cosmos.Debug.Kernel.DebuggerFactory.CreateDebugger(System.String,System.String)
+  fullName: Cosmos.Debug.Kernel.DebuggerFactory.CreateDebugger(System.String, System.String)
+  nameWithType: DebuggerFactory.CreateDebugger(String, String)
+- uid: Cosmos.Debug.Kernel.DebuggerFactory.CreateDebugger*
+  name: CreateDebugger
+  href: api/Cosmos.Debug.Kernel.DebuggerFactory.html#Cosmos_Debug_Kernel_DebuggerFactory_CreateDebugger_
+  commentId: Overload:Cosmos.Debug.Kernel.DebuggerFactory.CreateDebugger
+  isSpec: "True"
+  fullName: Cosmos.Debug.Kernel.DebuggerFactory.CreateDebugger
+  nameWithType: DebuggerFactory.CreateDebugger
+- uid: Cosmos.Debug.Kernel.DebuggerFactory.WriteToConsole
+  name: WriteToConsole
+  href: api/Cosmos.Debug.Kernel.DebuggerFactory.html#Cosmos_Debug_Kernel_DebuggerFactory_WriteToConsole
+  commentId: F:Cosmos.Debug.Kernel.DebuggerFactory.WriteToConsole
+  fullName: Cosmos.Debug.Kernel.DebuggerFactory.WriteToConsole
+  nameWithType: DebuggerFactory.WriteToConsole
 - uid: Cosmos.Debug.Kernel.Plugs.Asm
   name: Cosmos.Debug.Kernel.Plugs.Asm
   href: api/Cosmos.Debug.Kernel.Plugs.Asm.html
@@ -30093,19 +30131,6 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.FileSystem.VFS.VFSManager.GetVolumeSeparatorChar
   nameWithType: VFSManager.GetVolumeSeparatorChar
-- uid: Cosmos.System.FileSystem.VFS.VFSManager.InternalGetFileDirectoryNames(System.String,System.String,System.String,System.Boolean,System.Boolean,SearchOption)
-  name: InternalGetFileDirectoryNames(String, String, String, Boolean, Boolean, SearchOption)
-  href: api/Cosmos.System.FileSystem.VFS.VFSManager.html#Cosmos_System_FileSystem_VFS_VFSManager_InternalGetFileDirectoryNames_System_String_System_String_System_String_System_Boolean_System_Boolean_SearchOption_
-  commentId: M:Cosmos.System.FileSystem.VFS.VFSManager.InternalGetFileDirectoryNames(System.String,System.String,System.String,System.Boolean,System.Boolean,SearchOption)
-  fullName: Cosmos.System.FileSystem.VFS.VFSManager.InternalGetFileDirectoryNames(System.String, System.String, System.String, System.Boolean, System.Boolean, SearchOption)
-  nameWithType: VFSManager.InternalGetFileDirectoryNames(String, String, String, Boolean, Boolean, SearchOption)
-- uid: Cosmos.System.FileSystem.VFS.VFSManager.InternalGetFileDirectoryNames*
-  name: InternalGetFileDirectoryNames
-  href: api/Cosmos.System.FileSystem.VFS.VFSManager.html#Cosmos_System_FileSystem_VFS_VFSManager_InternalGetFileDirectoryNames_
-  commentId: Overload:Cosmos.System.FileSystem.VFS.VFSManager.InternalGetFileDirectoryNames
-  isSpec: "True"
-  fullName: Cosmos.System.FileSystem.VFS.VFSManager.InternalGetFileDirectoryNames
-  nameWithType: VFSManager.InternalGetFileDirectoryNames
 - uid: Cosmos.System.FileSystem.VFS.VFSManager.IsValidDriveId(System.String)
   name: IsValidDriveId(String)
   href: api/Cosmos.System.FileSystem.VFS.VFSManager.html#Cosmos_System_FileSystem_VFS_VFSManager_IsValidDriveId_System_String_
@@ -30132,12 +30157,12 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.FileSystem.VFS.VFSManager.RegisterFileSystem
   nameWithType: VFSManager.RegisterFileSystem
-- uid: Cosmos.System.FileSystem.VFS.VFSManager.RegisterVFS(Cosmos.System.FileSystem.VFS.VFSBase)
-  name: RegisterVFS(VFSBase)
-  href: api/Cosmos.System.FileSystem.VFS.VFSManager.html#Cosmos_System_FileSystem_VFS_VFSManager_RegisterVFS_Cosmos_System_FileSystem_VFS_VFSBase_
-  commentId: M:Cosmos.System.FileSystem.VFS.VFSManager.RegisterVFS(Cosmos.System.FileSystem.VFS.VFSBase)
-  fullName: Cosmos.System.FileSystem.VFS.VFSManager.RegisterVFS(Cosmos.System.FileSystem.VFS.VFSBase)
-  nameWithType: VFSManager.RegisterVFS(VFSBase)
+- uid: Cosmos.System.FileSystem.VFS.VFSManager.RegisterVFS(Cosmos.System.FileSystem.VFS.VFSBase,System.Boolean)
+  name: RegisterVFS(VFSBase, Boolean)
+  href: api/Cosmos.System.FileSystem.VFS.VFSManager.html#Cosmos_System_FileSystem_VFS_VFSManager_RegisterVFS_Cosmos_System_FileSystem_VFS_VFSBase_System_Boolean_
+  commentId: M:Cosmos.System.FileSystem.VFS.VFSManager.RegisterVFS(Cosmos.System.FileSystem.VFS.VFSBase,System.Boolean)
+  fullName: Cosmos.System.FileSystem.VFS.VFSManager.RegisterVFS(Cosmos.System.FileSystem.VFS.VFSBase, System.Boolean)
+  nameWithType: VFSManager.RegisterVFS(VFSBase, Boolean)
 - uid: Cosmos.System.FileSystem.VFS.VFSManager.RegisterVFS*
   name: RegisterVFS
   href: api/Cosmos.System.FileSystem.VFS.VFSManager.html#Cosmos_System_FileSystem_VFS_VFSManager_RegisterVFS_
