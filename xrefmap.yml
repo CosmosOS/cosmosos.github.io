@@ -10175,6 +10175,22 @@ references:
   isSpec: "True"
   fullName: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Decrement
   nameWithType: InterlockedImpl.Decrement
+- uid: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Increment(System.Int32@)
+  name: Increment(ref Int32)
+  href: api/Cosmos.Core_Plugs.System.Threading.InterlockedImpl.html#Cosmos_Core_Plugs_System_Threading_InterlockedImpl_Increment_System_Int32__
+  commentId: M:Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Increment(System.Int32@)
+  name.vb: Increment(ByRef Int32)
+  fullName: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Increment(ref System.Int32)
+  fullName.vb: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Increment(ByRef System.Int32)
+  nameWithType: InterlockedImpl.Increment(ref Int32)
+  nameWithType.vb: InterlockedImpl.Increment(ByRef Int32)
+- uid: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Increment*
+  name: Increment
+  href: api/Cosmos.Core_Plugs.System.Threading.InterlockedImpl.html#Cosmos_Core_Plugs_System_Threading_InterlockedImpl_Increment_
+  commentId: Overload:Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Increment
+  isSpec: "True"
+  fullName: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Increment
+  nameWithType: InterlockedImpl.Increment
 - uid: Cosmos.Core_Plugs.System.Threading.MonitorImpl
   name: MonitorImpl
   href: api/Cosmos.Core_Plugs.System.Threading.MonitorImpl.html
