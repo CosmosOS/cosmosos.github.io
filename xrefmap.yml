@@ -24405,6 +24405,12 @@ references:
   commentId: M:Cosmos.HAL.PCI.GetDevice(Cosmos.HAL.VendorID,Cosmos.HAL.DeviceID)
   fullName: Cosmos.HAL.PCI.GetDevice(Cosmos.HAL.VendorID, Cosmos.HAL.DeviceID)
   nameWithType: PCI.GetDevice(VendorID, DeviceID)
+- uid: Cosmos.HAL.PCI.GetDevice(System.UInt32,System.UInt32,System.UInt32)
+  name: GetDevice(UInt32, UInt32, UInt32)
+  href: api/Cosmos.HAL.PCI.html#Cosmos_HAL_PCI_GetDevice_System_UInt32_System_UInt32_System_UInt32_
+  commentId: M:Cosmos.HAL.PCI.GetDevice(System.UInt32,System.UInt32,System.UInt32)
+  fullName: Cosmos.HAL.PCI.GetDevice(System.UInt32, System.UInt32, System.UInt32)
+  nameWithType: PCI.GetDevice(UInt32, UInt32, UInt32)
 - uid: Cosmos.HAL.PCI.GetDevice*
   name: GetDevice
   href: api/Cosmos.HAL.PCI.html#Cosmos_HAL_PCI_GetDevice_
