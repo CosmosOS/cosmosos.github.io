@@ -1640,12 +1640,12 @@ references:
   commentId: M:Cosmos.Common.Extensions.ToHexString.ToHex(System.UInt32,System.Int32)
   fullName: Cosmos.Common.Extensions.ToHexString.ToHex(System.UInt32, System.Int32)
   nameWithType: ToHexString.ToHex(UInt32, Int32)
-- uid: Cosmos.Common.Extensions.ToHexString.ToHex(System.UInt64)
-  name: ToHex(UInt64)
-  href: api/Cosmos.Common.Extensions.ToHexString.html#Cosmos_Common_Extensions_ToHexString_ToHex_System_UInt64_
-  commentId: M:Cosmos.Common.Extensions.ToHexString.ToHex(System.UInt64)
-  fullName: Cosmos.Common.Extensions.ToHexString.ToHex(System.UInt64)
-  nameWithType: ToHexString.ToHex(UInt64)
+- uid: Cosmos.Common.Extensions.ToHexString.ToHex(System.UInt64,System.Boolean)
+  name: ToHex(UInt64, Boolean)
+  href: api/Cosmos.Common.Extensions.ToHexString.html#Cosmos_Common_Extensions_ToHexString_ToHex_System_UInt64_System_Boolean_
+  commentId: M:Cosmos.Common.Extensions.ToHexString.ToHex(System.UInt64,System.Boolean)
+  fullName: Cosmos.Common.Extensions.ToHexString.ToHex(System.UInt64, System.Boolean)
+  nameWithType: ToHexString.ToHex(UInt64, Boolean)
 - uid: Cosmos.Common.Extensions.ToHexString.ToHex(System.UInt64,System.Int32)
   name: ToHex(UInt64, Int32)
   href: api/Cosmos.Common.Extensions.ToHexString.html#Cosmos_Common_Extensions_ToHexString_ToHex_System_UInt64_System_Int32_
@@ -38020,6 +38020,15 @@ references:
   fullName.vb: Cosmos.System_Plugs.System.UInt64Impl.ToString(ByRef System.UInt64)
   nameWithType: UInt64Impl.ToString(ref UInt64)
   nameWithType.vb: UInt64Impl.ToString(ByRef UInt64)
+- uid: Cosmos.System_Plugs.System.UInt64Impl.ToString(System.UInt64@,System.String)
+  name: ToString(ref UInt64, String)
+  href: api/Cosmos.System_Plugs.System.UInt64Impl.html#Cosmos_System_Plugs_System_UInt64Impl_ToString_System_UInt64__System_String_
+  commentId: M:Cosmos.System_Plugs.System.UInt64Impl.ToString(System.UInt64@,System.String)
+  name.vb: ToString(ByRef UInt64, String)
+  fullName: Cosmos.System_Plugs.System.UInt64Impl.ToString(ref System.UInt64, System.String)
+  fullName.vb: Cosmos.System_Plugs.System.UInt64Impl.ToString(ByRef System.UInt64, System.String)
+  nameWithType: UInt64Impl.ToString(ref UInt64, String)
+  nameWithType.vb: UInt64Impl.ToString(ByRef UInt64, String)
 - uid: Cosmos.System_Plugs.System.UInt64Impl.ToString*
   name: ToString
   href: api/Cosmos.System_Plugs.System.UInt64Impl.html#Cosmos_System_Plugs_System_UInt64Impl_ToString_
