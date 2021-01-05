@@ -27306,6 +27306,62 @@ references:
   isSpec: "True"
   fullName: Cosmos.HAL.VGADriver.VGADriver
   nameWithType: VGADriver.VGADriver
+- uid: Cosmos.HAL.VGADriver.ColorDepth
+  name: VGADriver.ColorDepth
+  href: api/Cosmos.HAL.VGADriver.ColorDepth.html
+  commentId: T:Cosmos.HAL.VGADriver.ColorDepth
+  fullName: Cosmos.HAL.VGADriver.ColorDepth
+  nameWithType: VGADriver.ColorDepth
+- uid: Cosmos.HAL.VGADriver.ColorDepth.BitDepth16
+  name: BitDepth16
+  href: api/Cosmos.HAL.VGADriver.ColorDepth.html#Cosmos_HAL_VGADriver_ColorDepth_BitDepth16
+  commentId: F:Cosmos.HAL.VGADriver.ColorDepth.BitDepth16
+  fullName: Cosmos.HAL.VGADriver.ColorDepth.BitDepth16
+  nameWithType: VGADriver.ColorDepth.BitDepth16
+- uid: Cosmos.HAL.VGADriver.ColorDepth.BitDepth2
+  name: BitDepth2
+  href: api/Cosmos.HAL.VGADriver.ColorDepth.html#Cosmos_HAL_VGADriver_ColorDepth_BitDepth2
+  commentId: F:Cosmos.HAL.VGADriver.ColorDepth.BitDepth2
+  fullName: Cosmos.HAL.VGADriver.ColorDepth.BitDepth2
+  nameWithType: VGADriver.ColorDepth.BitDepth2
+- uid: Cosmos.HAL.VGADriver.ColorDepth.BitDepth4
+  name: BitDepth4
+  href: api/Cosmos.HAL.VGADriver.ColorDepth.html#Cosmos_HAL_VGADriver_ColorDepth_BitDepth4
+  commentId: F:Cosmos.HAL.VGADriver.ColorDepth.BitDepth4
+  fullName: Cosmos.HAL.VGADriver.ColorDepth.BitDepth4
+  nameWithType: VGADriver.ColorDepth.BitDepth4
+- uid: Cosmos.HAL.VGADriver.ColorDepth.BitDepth8
+  name: BitDepth8
+  href: api/Cosmos.HAL.VGADriver.ColorDepth.html#Cosmos_HAL_VGADriver_ColorDepth_BitDepth8
+  commentId: F:Cosmos.HAL.VGADriver.ColorDepth.BitDepth8
+  fullName: Cosmos.HAL.VGADriver.ColorDepth.BitDepth8
+  nameWithType: VGADriver.ColorDepth.BitDepth8
+- uid: Cosmos.HAL.VGADriver.Colors
+  name: Colors
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_Colors
+  commentId: P:Cosmos.HAL.VGADriver.Colors
+  fullName: Cosmos.HAL.VGADriver.Colors
+  nameWithType: VGADriver.Colors
+- uid: Cosmos.HAL.VGADriver.Colors*
+  name: Colors
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_Colors_
+  commentId: Overload:Cosmos.HAL.VGADriver.Colors
+  isSpec: "True"
+  fullName: Cosmos.HAL.VGADriver.Colors
+  nameWithType: VGADriver.Colors
+- uid: Cosmos.HAL.VGADriver.DrawFilledRectangle(System.Int32,System.Int32,System.Int32,System.Int32,System.UInt32)
+  name: DrawFilledRectangle(Int32, Int32, Int32, Int32, UInt32)
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_DrawFilledRectangle_System_Int32_System_Int32_System_Int32_System_Int32_System_UInt32_
+  commentId: M:Cosmos.HAL.VGADriver.DrawFilledRectangle(System.Int32,System.Int32,System.Int32,System.Int32,System.UInt32)
+  fullName: Cosmos.HAL.VGADriver.DrawFilledRectangle(System.Int32, System.Int32, System.Int32, System.Int32, System.UInt32)
+  nameWithType: VGADriver.DrawFilledRectangle(Int32, Int32, Int32, Int32, UInt32)
+- uid: Cosmos.HAL.VGADriver.DrawFilledRectangle*
+  name: DrawFilledRectangle
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_DrawFilledRectangle_
+  commentId: Overload:Cosmos.HAL.VGADriver.DrawFilledRectangle
+  isSpec: "True"
+  fullName: Cosmos.HAL.VGADriver.DrawFilledRectangle
+  nameWithType: VGADriver.DrawFilledRectangle
 - uid: Cosmos.HAL.VGADriver.GetClosestColorInPalette(Color)
   name: GetClosestColorInPalette(Color)
   href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_GetClosestColorInPalette_Color_
@@ -27319,6 +27375,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.HAL.VGADriver.GetClosestColorInPalette
   nameWithType: VGADriver.GetClosestColorInPalette
+- uid: Cosmos.HAL.VGADriver.GetPaletteEntry(System.Int32)
+  name: GetPaletteEntry(Int32)
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_GetPaletteEntry_System_Int32_
+  commentId: M:Cosmos.HAL.VGADriver.GetPaletteEntry(System.Int32)
+  fullName: Cosmos.HAL.VGADriver.GetPaletteEntry(System.Int32)
+  nameWithType: VGADriver.GetPaletteEntry(Int32)
+- uid: Cosmos.HAL.VGADriver.GetPaletteEntry*
+  name: GetPaletteEntry
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_GetPaletteEntry_
+  commentId: Overload:Cosmos.HAL.VGADriver.GetPaletteEntry
+  isSpec: "True"
+  fullName: Cosmos.HAL.VGADriver.GetPaletteEntry
+  nameWithType: VGADriver.GetPaletteEntry
 - uid: Cosmos.HAL.VGADriver.GetPixel(System.UInt32,System.UInt32)
   name: GetPixel(UInt32, UInt32)
   href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_GetPixel_System_UInt32_System_UInt32_
@@ -27332,6 +27401,140 @@ references:
   isSpec: "True"
   fullName: Cosmos.HAL.VGADriver.GetPixel
   nameWithType: VGADriver.GetPixel
+- uid: Cosmos.HAL.VGADriver.GetPixel320x200x8(System.UInt32,System.UInt32)
+  name: GetPixel320x200x8(UInt32, UInt32)
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_GetPixel320x200x8_System_UInt32_System_UInt32_
+  commentId: M:Cosmos.HAL.VGADriver.GetPixel320x200x8(System.UInt32,System.UInt32)
+  fullName: Cosmos.HAL.VGADriver.GetPixel320x200x8(System.UInt32, System.UInt32)
+  nameWithType: VGADriver.GetPixel320x200x8(UInt32, UInt32)
+- uid: Cosmos.HAL.VGADriver.GetPixel320x200x8*
+  name: GetPixel320x200x8
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_GetPixel320x200x8_
+  commentId: Overload:Cosmos.HAL.VGADriver.GetPixel320x200x8
+  isSpec: "True"
+  fullName: Cosmos.HAL.VGADriver.GetPixel320x200x8
+  nameWithType: VGADriver.GetPixel320x200x8
+- uid: Cosmos.HAL.VGADriver.GetPixel640x480x4(System.UInt32,System.UInt32)
+  name: GetPixel640x480x4(UInt32, UInt32)
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_GetPixel640x480x4_System_UInt32_System_UInt32_
+  commentId: M:Cosmos.HAL.VGADriver.GetPixel640x480x4(System.UInt32,System.UInt32)
+  fullName: Cosmos.HAL.VGADriver.GetPixel640x480x4(System.UInt32, System.UInt32)
+  nameWithType: VGADriver.GetPixel640x480x4(UInt32, UInt32)
+- uid: Cosmos.HAL.VGADriver.GetPixel640x480x4*
+  name: GetPixel640x480x4
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_GetPixel640x480x4_
+  commentId: Overload:Cosmos.HAL.VGADriver.GetPixel640x480x4
+  isSpec: "True"
+  fullName: Cosmos.HAL.VGADriver.GetPixel640x480x4
+  nameWithType: VGADriver.GetPixel640x480x4
+- uid: Cosmos.HAL.VGADriver.GetPixel720x480x4(System.UInt32,System.UInt32)
+  name: GetPixel720x480x4(UInt32, UInt32)
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_GetPixel720x480x4_System_UInt32_System_UInt32_
+  commentId: M:Cosmos.HAL.VGADriver.GetPixel720x480x4(System.UInt32,System.UInt32)
+  fullName: Cosmos.HAL.VGADriver.GetPixel720x480x4(System.UInt32, System.UInt32)
+  nameWithType: VGADriver.GetPixel720x480x4(UInt32, UInt32)
+- uid: Cosmos.HAL.VGADriver.GetPixel720x480x4*
+  name: GetPixel720x480x4
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_GetPixel720x480x4_
+  commentId: Overload:Cosmos.HAL.VGADriver.GetPixel720x480x4
+  isSpec: "True"
+  fullName: Cosmos.HAL.VGADriver.GetPixel720x480x4
+  nameWithType: VGADriver.GetPixel720x480x4
+- uid: Cosmos.HAL.VGADriver.PixelHeight
+  name: PixelHeight
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_PixelHeight
+  commentId: P:Cosmos.HAL.VGADriver.PixelHeight
+  fullName: Cosmos.HAL.VGADriver.PixelHeight
+  nameWithType: VGADriver.PixelHeight
+- uid: Cosmos.HAL.VGADriver.PixelHeight*
+  name: PixelHeight
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_PixelHeight_
+  commentId: Overload:Cosmos.HAL.VGADriver.PixelHeight
+  isSpec: "True"
+  fullName: Cosmos.HAL.VGADriver.PixelHeight
+  nameWithType: VGADriver.PixelHeight
+- uid: Cosmos.HAL.VGADriver.PixelWidth
+  name: PixelWidth
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_PixelWidth
+  commentId: P:Cosmos.HAL.VGADriver.PixelWidth
+  fullName: Cosmos.HAL.VGADriver.PixelWidth
+  nameWithType: VGADriver.PixelWidth
+- uid: Cosmos.HAL.VGADriver.PixelWidth*
+  name: PixelWidth
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_PixelWidth_
+  commentId: Overload:Cosmos.HAL.VGADriver.PixelWidth
+  isSpec: "True"
+  fullName: Cosmos.HAL.VGADriver.PixelWidth
+  nameWithType: VGADriver.PixelWidth
+- uid: Cosmos.HAL.VGADriver.ReadPalette
+  name: ReadPalette()
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_ReadPalette
+  commentId: M:Cosmos.HAL.VGADriver.ReadPalette
+  fullName: Cosmos.HAL.VGADriver.ReadPalette()
+  nameWithType: VGADriver.ReadPalette()
+- uid: Cosmos.HAL.VGADriver.ReadPalette*
+  name: ReadPalette
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_ReadPalette_
+  commentId: Overload:Cosmos.HAL.VGADriver.ReadPalette
+  isSpec: "True"
+  fullName: Cosmos.HAL.VGADriver.ReadPalette
+  nameWithType: VGADriver.ReadPalette
+- uid: Cosmos.HAL.VGADriver.ScreenSize
+  name: VGADriver.ScreenSize
+  href: api/Cosmos.HAL.VGADriver.ScreenSize.html
+  commentId: T:Cosmos.HAL.VGADriver.ScreenSize
+  fullName: Cosmos.HAL.VGADriver.ScreenSize
+  nameWithType: VGADriver.ScreenSize
+- uid: Cosmos.HAL.VGADriver.ScreenSize.Size320x200
+  name: Size320x200
+  href: api/Cosmos.HAL.VGADriver.ScreenSize.html#Cosmos_HAL_VGADriver_ScreenSize_Size320x200
+  commentId: F:Cosmos.HAL.VGADriver.ScreenSize.Size320x200
+  fullName: Cosmos.HAL.VGADriver.ScreenSize.Size320x200
+  nameWithType: VGADriver.ScreenSize.Size320x200
+- uid: Cosmos.HAL.VGADriver.ScreenSize.Size640x480
+  name: Size640x480
+  href: api/Cosmos.HAL.VGADriver.ScreenSize.html#Cosmos_HAL_VGADriver_ScreenSize_Size640x480
+  commentId: F:Cosmos.HAL.VGADriver.ScreenSize.Size640x480
+  fullName: Cosmos.HAL.VGADriver.ScreenSize.Size640x480
+  nameWithType: VGADriver.ScreenSize.Size640x480
+- uid: Cosmos.HAL.VGADriver.ScreenSize.Size720x480
+  name: Size720x480
+  href: api/Cosmos.HAL.VGADriver.ScreenSize.html#Cosmos_HAL_VGADriver_ScreenSize_Size720x480
+  commentId: F:Cosmos.HAL.VGADriver.ScreenSize.Size720x480
+  fullName: Cosmos.HAL.VGADriver.ScreenSize.Size720x480
+  nameWithType: VGADriver.ScreenSize.Size720x480
+- uid: Cosmos.HAL.VGADriver.SetGraphicsMode(Cosmos.HAL.VGADriver.ScreenSize,Cosmos.HAL.VGADriver.ColorDepth)
+  name: SetGraphicsMode(VGADriver.ScreenSize, VGADriver.ColorDepth)
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_SetGraphicsMode_Cosmos_HAL_VGADriver_ScreenSize_Cosmos_HAL_VGADriver_ColorDepth_
+  commentId: M:Cosmos.HAL.VGADriver.SetGraphicsMode(Cosmos.HAL.VGADriver.ScreenSize,Cosmos.HAL.VGADriver.ColorDepth)
+  fullName: Cosmos.HAL.VGADriver.SetGraphicsMode(Cosmos.HAL.VGADriver.ScreenSize, Cosmos.HAL.VGADriver.ColorDepth)
+  nameWithType: VGADriver.SetGraphicsMode(VGADriver.ScreenSize, VGADriver.ColorDepth)
+- uid: Cosmos.HAL.VGADriver.SetGraphicsMode*
+  name: SetGraphicsMode
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_SetGraphicsMode_
+  commentId: Overload:Cosmos.HAL.VGADriver.SetGraphicsMode
+  isSpec: "True"
+  fullName: Cosmos.HAL.VGADriver.SetGraphicsMode
+  nameWithType: VGADriver.SetGraphicsMode
+- uid: Cosmos.HAL.VGADriver.SetPaletteEntry(System.Int32,Color)
+  name: SetPaletteEntry(Int32, Color)
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_SetPaletteEntry_System_Int32_Color_
+  commentId: M:Cosmos.HAL.VGADriver.SetPaletteEntry(System.Int32,Color)
+  fullName: Cosmos.HAL.VGADriver.SetPaletteEntry(System.Int32, Color)
+  nameWithType: VGADriver.SetPaletteEntry(Int32, Color)
+- uid: Cosmos.HAL.VGADriver.SetPaletteEntry(System.Int32,System.Byte,System.Byte,System.Byte)
+  name: SetPaletteEntry(Int32, Byte, Byte, Byte)
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_SetPaletteEntry_System_Int32_System_Byte_System_Byte_System_Byte_
+  commentId: M:Cosmos.HAL.VGADriver.SetPaletteEntry(System.Int32,System.Byte,System.Byte,System.Byte)
+  fullName: Cosmos.HAL.VGADriver.SetPaletteEntry(System.Int32, System.Byte, System.Byte, System.Byte)
+  nameWithType: VGADriver.SetPaletteEntry(Int32, Byte, Byte, Byte)
+- uid: Cosmos.HAL.VGADriver.SetPaletteEntry*
+  name: SetPaletteEntry
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_SetPaletteEntry_
+  commentId: Overload:Cosmos.HAL.VGADriver.SetPaletteEntry
+  isSpec: "True"
+  fullName: Cosmos.HAL.VGADriver.SetPaletteEntry
+  nameWithType: VGADriver.SetPaletteEntry
 - uid: Cosmos.HAL.VGADriver.SetPixel(System.UInt32,System.UInt32,Color)
   name: SetPixel(UInt32, UInt32, Color)
   href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_SetPixel_System_UInt32_System_UInt32_Color_
@@ -27351,6 +27554,100 @@ references:
   isSpec: "True"
   fullName: Cosmos.HAL.VGADriver.SetPixel
   nameWithType: VGADriver.SetPixel
+- uid: Cosmos.HAL.VGADriver.SetPixel320x200x8(System.UInt32,System.UInt32,System.UInt32)
+  name: SetPixel320x200x8(UInt32, UInt32, UInt32)
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_SetPixel320x200x8_System_UInt32_System_UInt32_System_UInt32_
+  commentId: M:Cosmos.HAL.VGADriver.SetPixel320x200x8(System.UInt32,System.UInt32,System.UInt32)
+  fullName: Cosmos.HAL.VGADriver.SetPixel320x200x8(System.UInt32, System.UInt32, System.UInt32)
+  nameWithType: VGADriver.SetPixel320x200x8(UInt32, UInt32, UInt32)
+- uid: Cosmos.HAL.VGADriver.SetPixel320x200x8*
+  name: SetPixel320x200x8
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_SetPixel320x200x8_
+  commentId: Overload:Cosmos.HAL.VGADriver.SetPixel320x200x8
+  isSpec: "True"
+  fullName: Cosmos.HAL.VGADriver.SetPixel320x200x8
+  nameWithType: VGADriver.SetPixel320x200x8
+- uid: Cosmos.HAL.VGADriver.SetPixel640x480x4(System.UInt32,System.UInt32,System.UInt32)
+  name: SetPixel640x480x4(UInt32, UInt32, UInt32)
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_SetPixel640x480x4_System_UInt32_System_UInt32_System_UInt32_
+  commentId: M:Cosmos.HAL.VGADriver.SetPixel640x480x4(System.UInt32,System.UInt32,System.UInt32)
+  fullName: Cosmos.HAL.VGADriver.SetPixel640x480x4(System.UInt32, System.UInt32, System.UInt32)
+  nameWithType: VGADriver.SetPixel640x480x4(UInt32, UInt32, UInt32)
+- uid: Cosmos.HAL.VGADriver.SetPixel640x480x4*
+  name: SetPixel640x480x4
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_SetPixel640x480x4_
+  commentId: Overload:Cosmos.HAL.VGADriver.SetPixel640x480x4
+  isSpec: "True"
+  fullName: Cosmos.HAL.VGADriver.SetPixel640x480x4
+  nameWithType: VGADriver.SetPixel640x480x4
+- uid: Cosmos.HAL.VGADriver.SetPixel720x480x4(System.UInt32,System.UInt32,System.UInt32)
+  name: SetPixel720x480x4(UInt32, UInt32, UInt32)
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_SetPixel720x480x4_System_UInt32_System_UInt32_System_UInt32_
+  commentId: M:Cosmos.HAL.VGADriver.SetPixel720x480x4(System.UInt32,System.UInt32,System.UInt32)
+  fullName: Cosmos.HAL.VGADriver.SetPixel720x480x4(System.UInt32, System.UInt32, System.UInt32)
+  nameWithType: VGADriver.SetPixel720x480x4(UInt32, UInt32, UInt32)
+- uid: Cosmos.HAL.VGADriver.SetPixel720x480x4*
+  name: SetPixel720x480x4
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_SetPixel720x480x4_
+  commentId: Overload:Cosmos.HAL.VGADriver.SetPixel720x480x4
+  isSpec: "True"
+  fullName: Cosmos.HAL.VGADriver.SetPixel720x480x4
+  nameWithType: VGADriver.SetPixel720x480x4
+- uid: Cosmos.HAL.VGADriver.SetTextMode(Cosmos.HAL.VGADriver.TextSize)
+  name: SetTextMode(VGADriver.TextSize)
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_SetTextMode_Cosmos_HAL_VGADriver_TextSize_
+  commentId: M:Cosmos.HAL.VGADriver.SetTextMode(Cosmos.HAL.VGADriver.TextSize)
+  fullName: Cosmos.HAL.VGADriver.SetTextMode(Cosmos.HAL.VGADriver.TextSize)
+  nameWithType: VGADriver.SetTextMode(VGADriver.TextSize)
+- uid: Cosmos.HAL.VGADriver.SetTextMode*
+  name: SetTextMode
+  href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_SetTextMode_
+  commentId: Overload:Cosmos.HAL.VGADriver.SetTextMode
+  isSpec: "True"
+  fullName: Cosmos.HAL.VGADriver.SetTextMode
+  nameWithType: VGADriver.SetTextMode
+- uid: Cosmos.HAL.VGADriver.TextSize
+  name: VGADriver.TextSize
+  href: api/Cosmos.HAL.VGADriver.TextSize.html
+  commentId: T:Cosmos.HAL.VGADriver.TextSize
+  fullName: Cosmos.HAL.VGADriver.TextSize
+  nameWithType: VGADriver.TextSize
+- uid: Cosmos.HAL.VGADriver.TextSize.Size40x25
+  name: Size40x25
+  href: api/Cosmos.HAL.VGADriver.TextSize.html#Cosmos_HAL_VGADriver_TextSize_Size40x25
+  commentId: F:Cosmos.HAL.VGADriver.TextSize.Size40x25
+  fullName: Cosmos.HAL.VGADriver.TextSize.Size40x25
+  nameWithType: VGADriver.TextSize.Size40x25
+- uid: Cosmos.HAL.VGADriver.TextSize.Size40x50
+  name: Size40x50
+  href: api/Cosmos.HAL.VGADriver.TextSize.html#Cosmos_HAL_VGADriver_TextSize_Size40x50
+  commentId: F:Cosmos.HAL.VGADriver.TextSize.Size40x50
+  fullName: Cosmos.HAL.VGADriver.TextSize.Size40x50
+  nameWithType: VGADriver.TextSize.Size40x50
+- uid: Cosmos.HAL.VGADriver.TextSize.Size80x25
+  name: Size80x25
+  href: api/Cosmos.HAL.VGADriver.TextSize.html#Cosmos_HAL_VGADriver_TextSize_Size80x25
+  commentId: F:Cosmos.HAL.VGADriver.TextSize.Size80x25
+  fullName: Cosmos.HAL.VGADriver.TextSize.Size80x25
+  nameWithType: VGADriver.TextSize.Size80x25
+- uid: Cosmos.HAL.VGADriver.TextSize.Size80x50
+  name: Size80x50
+  href: api/Cosmos.HAL.VGADriver.TextSize.html#Cosmos_HAL_VGADriver_TextSize_Size80x50
+  commentId: F:Cosmos.HAL.VGADriver.TextSize.Size80x50
+  fullName: Cosmos.HAL.VGADriver.TextSize.Size80x50
+  nameWithType: VGADriver.TextSize.Size80x50
+- uid: Cosmos.HAL.VGADriver.TextSize.Size90x30
+  name: Size90x30
+  href: api/Cosmos.HAL.VGADriver.TextSize.html#Cosmos_HAL_VGADriver_TextSize_Size90x30
+  commentId: F:Cosmos.HAL.VGADriver.TextSize.Size90x30
+  fullName: Cosmos.HAL.VGADriver.TextSize.Size90x30
+  nameWithType: VGADriver.TextSize.Size90x30
+- uid: Cosmos.HAL.VGADriver.TextSize.Size90x60
+  name: Size90x60
+  href: api/Cosmos.HAL.VGADriver.TextSize.html#Cosmos_HAL_VGADriver_TextSize_Size90x60
+  commentId: F:Cosmos.HAL.VGADriver.TextSize.Size90x60
+  fullName: Cosmos.HAL.VGADriver.TextSize.Size90x60
+  nameWithType: VGADriver.TextSize.Size90x60
 - uid: Cosmos.HAL.VGADriver.WriteFont(System.Byte[],System.Byte)
   name: WriteFont(Byte[], Byte)
   href: api/Cosmos.HAL.VGADriver.html#Cosmos_HAL_VGADriver_WriteFont_System_Byte___System_Byte_
@@ -32341,12 +32638,46 @@ references:
   commentId: T:Cosmos.System.Graphics.VGAScreen
   fullName: Cosmos.System.Graphics.VGAScreen
   nameWithType: VGAScreen
-- uid: Cosmos.System.Graphics.VGAScreen.SetGraphicsMode(ScreenSize,Cosmos.System.Graphics.ColorDepth)
-  name: SetGraphicsMode(ScreenSize, ColorDepth)
-  href: api/Cosmos.System.Graphics.VGAScreen.html#Cosmos_System_Graphics_VGAScreen_SetGraphicsMode_ScreenSize_Cosmos_System_Graphics_ColorDepth_
-  commentId: M:Cosmos.System.Graphics.VGAScreen.SetGraphicsMode(ScreenSize,Cosmos.System.Graphics.ColorDepth)
-  fullName: Cosmos.System.Graphics.VGAScreen.SetGraphicsMode(ScreenSize, Cosmos.System.Graphics.ColorDepth)
-  nameWithType: VGAScreen.SetGraphicsMode(ScreenSize, ColorDepth)
+- uid: Cosmos.System.Graphics.VGAScreen.Colors
+  name: Colors
+  href: api/Cosmos.System.Graphics.VGAScreen.html#Cosmos_System_Graphics_VGAScreen_Colors
+  commentId: F:Cosmos.System.Graphics.VGAScreen.Colors
+  fullName: Cosmos.System.Graphics.VGAScreen.Colors
+  nameWithType: VGAScreen.Colors
+- uid: Cosmos.System.Graphics.VGAScreen.PixelHeight
+  name: PixelHeight
+  href: api/Cosmos.System.Graphics.VGAScreen.html#Cosmos_System_Graphics_VGAScreen_PixelHeight
+  commentId: F:Cosmos.System.Graphics.VGAScreen.PixelHeight
+  fullName: Cosmos.System.Graphics.VGAScreen.PixelHeight
+  nameWithType: VGAScreen.PixelHeight
+- uid: Cosmos.System.Graphics.VGAScreen.PixelWidth
+  name: PixelWidth
+  href: api/Cosmos.System.Graphics.VGAScreen.html#Cosmos_System_Graphics_VGAScreen_PixelWidth
+  commentId: F:Cosmos.System.Graphics.VGAScreen.PixelWidth
+  fullName: Cosmos.System.Graphics.VGAScreen.PixelWidth
+  nameWithType: VGAScreen.PixelWidth
+- uid: Cosmos.System.Graphics.VGAScreen.SetFont(System.Byte[],System.Int32)
+  name: SetFont(Byte[], Int32)
+  href: api/Cosmos.System.Graphics.VGAScreen.html#Cosmos_System_Graphics_VGAScreen_SetFont_System_Byte___System_Int32_
+  commentId: M:Cosmos.System.Graphics.VGAScreen.SetFont(System.Byte[],System.Int32)
+  name.vb: SetFont(Byte(), Int32)
+  fullName: Cosmos.System.Graphics.VGAScreen.SetFont(System.Byte[], System.Int32)
+  fullName.vb: Cosmos.System.Graphics.VGAScreen.SetFont(System.Byte(), System.Int32)
+  nameWithType: VGAScreen.SetFont(Byte[], Int32)
+  nameWithType.vb: VGAScreen.SetFont(Byte(), Int32)
+- uid: Cosmos.System.Graphics.VGAScreen.SetFont*
+  name: SetFont
+  href: api/Cosmos.System.Graphics.VGAScreen.html#Cosmos_System_Graphics_VGAScreen_SetFont_
+  commentId: Overload:Cosmos.System.Graphics.VGAScreen.SetFont
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.VGAScreen.SetFont
+  nameWithType: VGAScreen.SetFont
+- uid: Cosmos.System.Graphics.VGAScreen.SetGraphicsMode(Cosmos.HAL.VGADriver.ScreenSize,Cosmos.System.Graphics.ColorDepth)
+  name: SetGraphicsMode(VGADriver.ScreenSize, ColorDepth)
+  href: api/Cosmos.System.Graphics.VGAScreen.html#Cosmos_System_Graphics_VGAScreen_SetGraphicsMode_Cosmos_HAL_VGADriver_ScreenSize_Cosmos_System_Graphics_ColorDepth_
+  commentId: M:Cosmos.System.Graphics.VGAScreen.SetGraphicsMode(Cosmos.HAL.VGADriver.ScreenSize,Cosmos.System.Graphics.ColorDepth)
+  fullName: Cosmos.System.Graphics.VGAScreen.SetGraphicsMode(Cosmos.HAL.VGADriver.ScreenSize, Cosmos.System.Graphics.ColorDepth)
+  nameWithType: VGAScreen.SetGraphicsMode(VGADriver.ScreenSize, ColorDepth)
 - uid: Cosmos.System.Graphics.VGAScreen.SetGraphicsMode*
   name: SetGraphicsMode
   href: api/Cosmos.System.Graphics.VGAScreen.html#Cosmos_System_Graphics_VGAScreen_SetGraphicsMode_
@@ -32354,6 +32685,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.VGAScreen.SetGraphicsMode
   nameWithType: VGAScreen.SetGraphicsMode
+- uid: Cosmos.System.Graphics.VGAScreen.SetTextMode(Cosmos.HAL.VGADriver.TextSize)
+  name: SetTextMode(VGADriver.TextSize)
+  href: api/Cosmos.System.Graphics.VGAScreen.html#Cosmos_System_Graphics_VGAScreen_SetTextMode_Cosmos_HAL_VGADriver_TextSize_
+  commentId: M:Cosmos.System.Graphics.VGAScreen.SetTextMode(Cosmos.HAL.VGADriver.TextSize)
+  fullName: Cosmos.System.Graphics.VGAScreen.SetTextMode(Cosmos.HAL.VGADriver.TextSize)
+  nameWithType: VGAScreen.SetTextMode(VGADriver.TextSize)
+- uid: Cosmos.System.Graphics.VGAScreen.SetTextMode*
+  name: SetTextMode
+  href: api/Cosmos.System.Graphics.VGAScreen.html#Cosmos_System_Graphics_VGAScreen_SetTextMode_
+  commentId: Overload:Cosmos.System.Graphics.VGAScreen.SetTextMode
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.VGAScreen.SetTextMode
+  nameWithType: VGAScreen.SetTextMode
 - uid: Cosmos.System.Kernel
   name: Kernel
   href: api/Cosmos.System.Kernel.html
@@ -40023,13 +40367,13 @@ references:
   isSpec: "True"
   fullName: Cosmos.VS.DebugEngine.AD7.Impl.AD7Engine.GetENCUpdate
   nameWithType: AD7Engine.GetENCUpdate
-- uid: Cosmos.VS.DebugEngine.AD7.Impl.AD7Engine.GetEngineInfo(System.String@,Guid@)
+- uid: Cosmos.VS.DebugEngine.AD7.Impl.AD7Engine.GetEngineInfo(System.String@,System.Guid@)
   name: GetEngineInfo(out String, out Guid)
-  href: api/Cosmos.VS.DebugEngine.AD7.Impl.AD7Engine.html#Cosmos_VS_DebugEngine_AD7_Impl_AD7Engine_GetEngineInfo_System_String__Guid__
-  commentId: M:Cosmos.VS.DebugEngine.AD7.Impl.AD7Engine.GetEngineInfo(System.String@,Guid@)
+  href: api/Cosmos.VS.DebugEngine.AD7.Impl.AD7Engine.html#Cosmos_VS_DebugEngine_AD7_Impl_AD7Engine_GetEngineInfo_System_String__System_Guid__
+  commentId: M:Cosmos.VS.DebugEngine.AD7.Impl.AD7Engine.GetEngineInfo(System.String@,System.Guid@)
   name.vb: GetEngineInfo(ByRef String, ByRef Guid)
-  fullName: Cosmos.VS.DebugEngine.AD7.Impl.AD7Engine.GetEngineInfo(out System.String, out Guid)
-  fullName.vb: Cosmos.VS.DebugEngine.AD7.Impl.AD7Engine.GetEngineInfo(ByRef System.String, ByRef Guid)
+  fullName: Cosmos.VS.DebugEngine.AD7.Impl.AD7Engine.GetEngineInfo(out System.String, out System.Guid)
+  fullName.vb: Cosmos.VS.DebugEngine.AD7.Impl.AD7Engine.GetEngineInfo(ByRef System.String, ByRef System.Guid)
   nameWithType: AD7Engine.GetEngineInfo(out String, out Guid)
   nameWithType.vb: AD7Engine.GetEngineInfo(ByRef String, ByRef Guid)
 - uid: Cosmos.VS.DebugEngine.AD7.Impl.AD7Engine.GetEngineInfo*
@@ -40087,13 +40431,13 @@ references:
   isSpec: "True"
   fullName: Cosmos.VS.DebugEngine.AD7.Impl.AD7Engine.GetProcess
   nameWithType: AD7Engine.GetProcess
-- uid: Cosmos.VS.DebugEngine.AD7.Impl.AD7Engine.GetProgramId(Guid@)
+- uid: Cosmos.VS.DebugEngine.AD7.Impl.AD7Engine.GetProgramId(System.Guid@)
   name: GetProgramId(out Guid)
-  href: api/Cosmos.VS.DebugEngine.AD7.Impl.AD7Engine.html#Cosmos_VS_DebugEngine_AD7_Impl_AD7Engine_GetProgramId_Guid__
-  commentId: M:Cosmos.VS.DebugEngine.AD7.Impl.AD7Engine.GetProgramId(Guid@)
+  href: api/Cosmos.VS.DebugEngine.AD7.Impl.AD7Engine.html#Cosmos_VS_DebugEngine_AD7_Impl_AD7Engine_GetProgramId_System_Guid__
+  commentId: M:Cosmos.VS.DebugEngine.AD7.Impl.AD7Engine.GetProgramId(System.Guid@)
   name.vb: GetProgramId(ByRef Guid)
-  fullName: Cosmos.VS.DebugEngine.AD7.Impl.AD7Engine.GetProgramId(out Guid)
-  fullName.vb: Cosmos.VS.DebugEngine.AD7.Impl.AD7Engine.GetProgramId(ByRef Guid)
+  fullName: Cosmos.VS.DebugEngine.AD7.Impl.AD7Engine.GetProgramId(out System.Guid)
+  fullName.vb: Cosmos.VS.DebugEngine.AD7.Impl.AD7Engine.GetProgramId(ByRef System.Guid)
   nameWithType: AD7Engine.GetProgramId(out Guid)
   nameWithType.vb: AD7Engine.GetProgramId(ByRef Guid)
 - uid: Cosmos.VS.DebugEngine.AD7.Impl.AD7Engine.GetProgramId*
@@ -40283,13 +40627,13 @@ references:
   isSpec: "True"
   fullName: Cosmos.VS.DebugEngine.AD7.Impl.AD7MemoryAddress.GetInfo
   nameWithType: AD7MemoryAddress.GetInfo
-- uid: Cosmos.VS.DebugEngine.AD7.Impl.AD7MemoryAddress.GetLanguageInfo(System.String@,Guid@)
+- uid: Cosmos.VS.DebugEngine.AD7.Impl.AD7MemoryAddress.GetLanguageInfo(System.String@,System.Guid@)
   name: GetLanguageInfo(ref String, ref Guid)
-  href: api/Cosmos.VS.DebugEngine.AD7.Impl.AD7MemoryAddress.html#Cosmos_VS_DebugEngine_AD7_Impl_AD7MemoryAddress_GetLanguageInfo_System_String__Guid__
-  commentId: M:Cosmos.VS.DebugEngine.AD7.Impl.AD7MemoryAddress.GetLanguageInfo(System.String@,Guid@)
+  href: api/Cosmos.VS.DebugEngine.AD7.Impl.AD7MemoryAddress.html#Cosmos_VS_DebugEngine_AD7_Impl_AD7MemoryAddress_GetLanguageInfo_System_String__System_Guid__
+  commentId: M:Cosmos.VS.DebugEngine.AD7.Impl.AD7MemoryAddress.GetLanguageInfo(System.String@,System.Guid@)
   name.vb: GetLanguageInfo(ByRef String, ByRef Guid)
-  fullName: Cosmos.VS.DebugEngine.AD7.Impl.AD7MemoryAddress.GetLanguageInfo(ref System.String, ref Guid)
-  fullName.vb: Cosmos.VS.DebugEngine.AD7.Impl.AD7MemoryAddress.GetLanguageInfo(ByRef System.String, ByRef Guid)
+  fullName: Cosmos.VS.DebugEngine.AD7.Impl.AD7MemoryAddress.GetLanguageInfo(ref System.String, ref System.Guid)
+  fullName.vb: Cosmos.VS.DebugEngine.AD7.Impl.AD7MemoryAddress.GetLanguageInfo(ByRef System.String, ByRef System.Guid)
   nameWithType: AD7MemoryAddress.GetLanguageInfo(ref String, ref Guid)
   nameWithType.vb: AD7MemoryAddress.GetLanguageInfo(ByRef String, ByRef Guid)
 - uid: Cosmos.VS.DebugEngine.AD7.Impl.AD7MemoryAddress.GetLanguageInfo*
@@ -40445,13 +40789,13 @@ references:
   commentId: F:Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.ASMSteppingMode
   fullName: Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.ASMSteppingMode
   nameWithType: AD7Process.ASMSteppingMode
-- uid: Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.Attach(IDebugEventCallback2,Guid[],System.UInt32,System.Int32[])
+- uid: Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.Attach(IDebugEventCallback2,System.Guid[],System.UInt32,System.Int32[])
   name: Attach(IDebugEventCallback2, Guid[], UInt32, Int32[])
-  href: api/Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.html#Cosmos_VS_DebugEngine_AD7_Impl_AD7Process_Attach_IDebugEventCallback2_Guid___System_UInt32_System_Int32___
-  commentId: M:Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.Attach(IDebugEventCallback2,Guid[],System.UInt32,System.Int32[])
+  href: api/Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.html#Cosmos_VS_DebugEngine_AD7_Impl_AD7Process_Attach_IDebugEventCallback2_System_Guid___System_UInt32_System_Int32___
+  commentId: M:Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.Attach(IDebugEventCallback2,System.Guid[],System.UInt32,System.Int32[])
   name.vb: Attach(IDebugEventCallback2, Guid(), UInt32, Int32())
-  fullName: Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.Attach(IDebugEventCallback2, Guid[], System.UInt32, System.Int32[])
-  fullName.vb: Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.Attach(IDebugEventCallback2, Guid(), System.UInt32, System.Int32())
+  fullName: Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.Attach(IDebugEventCallback2, System.Guid[], System.UInt32, System.Int32[])
+  fullName.vb: Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.Attach(IDebugEventCallback2, System.Guid(), System.UInt32, System.Int32())
   nameWithType: AD7Process.Attach(IDebugEventCallback2, Guid[], UInt32, Int32[])
   nameWithType.vb: AD7Process.Attach(IDebugEventCallback2, Guid(), UInt32, Int32())
 - uid: Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.Attach*
@@ -40702,13 +41046,13 @@ references:
   isSpec: "True"
   fullName: Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.GetPort
   nameWithType: AD7Process.GetPort
-- uid: Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.GetProcessId(Guid@)
+- uid: Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.GetProcessId(System.Guid@)
   name: GetProcessId(out Guid)
-  href: api/Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.html#Cosmos_VS_DebugEngine_AD7_Impl_AD7Process_GetProcessId_Guid__
-  commentId: M:Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.GetProcessId(Guid@)
+  href: api/Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.html#Cosmos_VS_DebugEngine_AD7_Impl_AD7Process_GetProcessId_System_Guid__
+  commentId: M:Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.GetProcessId(System.Guid@)
   name.vb: GetProcessId(ByRef Guid)
-  fullName: Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.GetProcessId(out Guid)
-  fullName.vb: Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.GetProcessId(ByRef Guid)
+  fullName: Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.GetProcessId(out System.Guid)
+  fullName.vb: Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.GetProcessId(ByRef System.Guid)
   nameWithType: AD7Process.GetProcessId(out Guid)
   nameWithType.vb: AD7Process.GetProcessId(ByRef Guid)
 - uid: Cosmos.VS.DebugEngine.AD7.Impl.AD7Process.GetProcessId*
@@ -41163,13 +41507,13 @@ references:
   commentId: T:Cosmos.VS.DebugEngine.AsmSource
   fullName: Cosmos.VS.DebugEngine.AsmSource
   nameWithType: AsmSource
-- uid: Cosmos.VS.DebugEngine.AsmSource.GetSourceForLabels(System.String,List{System.String})
+- uid: Cosmos.VS.DebugEngine.AsmSource.GetSourceForLabels(System.String,System.Collections.Generic.List{System.String})
   name: GetSourceForLabels(String, List<String>)
-  href: api/Cosmos.VS.DebugEngine.AsmSource.html#Cosmos_VS_DebugEngine_AsmSource_GetSourceForLabels_System_String_List_System_String__
-  commentId: M:Cosmos.VS.DebugEngine.AsmSource.GetSourceForLabels(System.String,List{System.String})
+  href: api/Cosmos.VS.DebugEngine.AsmSource.html#Cosmos_VS_DebugEngine_AsmSource_GetSourceForLabels_System_String_System_Collections_Generic_List_System_String__
+  commentId: M:Cosmos.VS.DebugEngine.AsmSource.GetSourceForLabels(System.String,System.Collections.Generic.List{System.String})
   name.vb: GetSourceForLabels(String, List(Of String))
-  fullName: Cosmos.VS.DebugEngine.AsmSource.GetSourceForLabels(System.String, List<System.String>)
-  fullName.vb: Cosmos.VS.DebugEngine.AsmSource.GetSourceForLabels(System.String, List(Of System.String))
+  fullName: Cosmos.VS.DebugEngine.AsmSource.GetSourceForLabels(System.String, System.Collections.Generic.List<System.String>)
+  fullName.vb: Cosmos.VS.DebugEngine.AsmSource.GetSourceForLabels(System.String, System.Collections.Generic.List(Of System.String))
   nameWithType: AsmSource.GetSourceForLabels(String, List<String>)
   nameWithType.vb: AsmSource.GetSourceForLabels(String, List(Of String))
 - uid: Cosmos.VS.DebugEngine.AsmSource.GetSourceForLabels*
@@ -41216,11 +41560,11 @@ references:
   fullName: Cosmos.VS.DebugEngine.Commands.BaseDebugCommand
   nameWithType: BaseDebugCommand
 - uid: Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.#ctor(System.IServiceProvider)
-  name: BaseDebugCommand(System.IServiceProvider)
+  name: BaseDebugCommand(IServiceProvider)
   href: api/Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.html#Cosmos_VS_DebugEngine_Commands_BaseDebugCommand__ctor_System_IServiceProvider_
   commentId: M:Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.#ctor(System.IServiceProvider)
   fullName: Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.BaseDebugCommand(System.IServiceProvider)
-  nameWithType: BaseDebugCommand.BaseDebugCommand(System.IServiceProvider)
+  nameWithType: BaseDebugCommand.BaseDebugCommand(IServiceProvider)
 - uid: Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.#ctor*
   name: BaseDebugCommand
   href: api/Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.html#Cosmos_VS_DebugEngine_Commands_BaseDebugCommand__ctor_
@@ -41228,13 +41572,13 @@ references:
   isSpec: "True"
   fullName: Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.BaseDebugCommand
   nameWithType: BaseDebugCommand.BaseDebugCommand
-- uid: Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.EnsureString(IntPtr,System.String@)
+- uid: Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.EnsureString(System.IntPtr,System.String@)
   name: EnsureString(IntPtr, out String)
-  href: api/Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.html#Cosmos_VS_DebugEngine_Commands_BaseDebugCommand_EnsureString_IntPtr_System_String__
-  commentId: M:Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.EnsureString(IntPtr,System.String@)
+  href: api/Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.html#Cosmos_VS_DebugEngine_Commands_BaseDebugCommand_EnsureString_System_IntPtr_System_String__
+  commentId: M:Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.EnsureString(System.IntPtr,System.String@)
   name.vb: EnsureString(IntPtr, ByRef String)
-  fullName: Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.EnsureString(IntPtr, out System.String)
-  fullName.vb: Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.EnsureString(IntPtr, ByRef System.String)
+  fullName: Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.EnsureString(System.IntPtr, out System.String)
+  fullName.vb: Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.EnsureString(System.IntPtr, ByRef System.String)
   nameWithType: BaseDebugCommand.EnsureString(IntPtr, out String)
   nameWithType.vb: BaseDebugCommand.EnsureString(IntPtr, ByRef String)
 - uid: Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.EnsureString*
@@ -41244,11 +41588,11 @@ references:
   isSpec: "True"
   fullName: Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.EnsureString
   nameWithType: BaseDebugCommand.EnsureString
-- uid: Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.Execute(System.UInt32,IntPtr,IntPtr)
+- uid: Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.Execute(System.UInt32,System.IntPtr,System.IntPtr)
   name: Execute(UInt32, IntPtr, IntPtr)
-  href: api/Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.html#Cosmos_VS_DebugEngine_Commands_BaseDebugCommand_Execute_System_UInt32_IntPtr_IntPtr_
-  commentId: M:Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.Execute(System.UInt32,IntPtr,IntPtr)
-  fullName: Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.Execute(System.UInt32, IntPtr, IntPtr)
+  href: api/Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.html#Cosmos_VS_DebugEngine_Commands_BaseDebugCommand_Execute_System_UInt32_System_IntPtr_System_IntPtr_
+  commentId: M:Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.Execute(System.UInt32,System.IntPtr,System.IntPtr)
+  fullName: Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.Execute(System.UInt32, System.IntPtr, System.IntPtr)
   nameWithType: BaseDebugCommand.Execute(UInt32, IntPtr, IntPtr)
 - uid: Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.Execute*
   name: Execute
@@ -41257,11 +41601,11 @@ references:
   isSpec: "True"
   fullName: Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.Execute
   nameWithType: BaseDebugCommand.Execute
-- uid: Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.IsQueryParameterList(IntPtr,IntPtr,System.UInt32)
+- uid: Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.IsQueryParameterList(System.IntPtr,System.IntPtr,System.UInt32)
   name: IsQueryParameterList(IntPtr, IntPtr, UInt32)
-  href: api/Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.html#Cosmos_VS_DebugEngine_Commands_BaseDebugCommand_IsQueryParameterList_IntPtr_IntPtr_System_UInt32_
-  commentId: M:Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.IsQueryParameterList(IntPtr,IntPtr,System.UInt32)
-  fullName: Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.IsQueryParameterList(IntPtr, IntPtr, System.UInt32)
+  href: api/Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.html#Cosmos_VS_DebugEngine_Commands_BaseDebugCommand_IsQueryParameterList_System_IntPtr_System_IntPtr_System_UInt32_
+  commentId: M:Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.IsQueryParameterList(System.IntPtr,System.IntPtr,System.UInt32)
+  fullName: Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.IsQueryParameterList(System.IntPtr, System.IntPtr, System.UInt32)
   nameWithType: BaseDebugCommand.IsQueryParameterList(IntPtr, IntPtr, UInt32)
 - uid: Cosmos.VS.DebugEngine.Commands.BaseDebugCommand.IsQueryParameterList*
   name: IsQueryParameterList
@@ -41289,11 +41633,11 @@ references:
   fullName: Cosmos.VS.DebugEngine.Commands.DebugCommandHandler
   nameWithType: DebugCommandHandler
 - uid: Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.#ctor(System.IServiceProvider)
-  name: DebugCommandHandler(System.IServiceProvider)
+  name: DebugCommandHandler(IServiceProvider)
   href: api/Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.html#Cosmos_VS_DebugEngine_Commands_DebugCommandHandler__ctor_System_IServiceProvider_
   commentId: M:Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.#ctor(System.IServiceProvider)
   fullName: Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.DebugCommandHandler(System.IServiceProvider)
-  nameWithType: DebugCommandHandler.DebugCommandHandler(System.IServiceProvider)
+  nameWithType: DebugCommandHandler.DebugCommandHandler(IServiceProvider)
 - uid: Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.#ctor*
   name: DebugCommandHandler
   href: api/Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.html#Cosmos_VS_DebugEngine_Commands_DebugCommandHandler__ctor_
@@ -41301,11 +41645,11 @@ references:
   isSpec: "True"
   fullName: Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.DebugCommandHandler
   nameWithType: DebugCommandHandler.DebugCommandHandler
-- uid: Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.Execute(System.UInt32,System.UInt32,IntPtr,IntPtr)
+- uid: Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.Execute(System.UInt32,System.UInt32,System.IntPtr,System.IntPtr)
   name: Execute(UInt32, UInt32, IntPtr, IntPtr)
-  href: api/Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.html#Cosmos_VS_DebugEngine_Commands_DebugCommandHandler_Execute_System_UInt32_System_UInt32_IntPtr_IntPtr_
-  commentId: M:Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.Execute(System.UInt32,System.UInt32,IntPtr,IntPtr)
-  fullName: Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.Execute(System.UInt32, System.UInt32, IntPtr, IntPtr)
+  href: api/Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.html#Cosmos_VS_DebugEngine_Commands_DebugCommandHandler_Execute_System_UInt32_System_UInt32_System_IntPtr_System_IntPtr_
+  commentId: M:Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.Execute(System.UInt32,System.UInt32,System.IntPtr,System.IntPtr)
+  fullName: Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.Execute(System.UInt32, System.UInt32, System.IntPtr, System.IntPtr)
   nameWithType: DebugCommandHandler.Execute(UInt32, UInt32, IntPtr, IntPtr)
 - uid: Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.Execute*
   name: Execute
@@ -41332,13 +41676,13 @@ references:
   commentId: E:Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.OnDebugLog
   fullName: Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.OnDebugLog
   nameWithType: DebugCommandHandler.OnDebugLog
-- uid: Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.Query(System.UInt32,OLECMD[],IntPtr)
+- uid: Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.Query(System.UInt32,OLECMD[],System.IntPtr)
   name: Query(UInt32, OLECMD[], IntPtr)
-  href: api/Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.html#Cosmos_VS_DebugEngine_Commands_DebugCommandHandler_Query_System_UInt32_OLECMD___IntPtr_
-  commentId: M:Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.Query(System.UInt32,OLECMD[],IntPtr)
+  href: api/Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.html#Cosmos_VS_DebugEngine_Commands_DebugCommandHandler_Query_System_UInt32_OLECMD___System_IntPtr_
+  commentId: M:Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.Query(System.UInt32,OLECMD[],System.IntPtr)
   name.vb: Query(UInt32, OLECMD(), IntPtr)
-  fullName: Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.Query(System.UInt32, OLECMD[], IntPtr)
-  fullName.vb: Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.Query(System.UInt32, OLECMD(), IntPtr)
+  fullName: Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.Query(System.UInt32, OLECMD[], System.IntPtr)
+  fullName.vb: Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.Query(System.UInt32, OLECMD(), System.IntPtr)
   nameWithType: DebugCommandHandler.Query(UInt32, OLECMD[], IntPtr)
   nameWithType.vb: DebugCommandHandler.Query(UInt32, OLECMD(), IntPtr)
 - uid: Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.Query*
@@ -41354,11 +41698,11 @@ references:
   commentId: T:Cosmos.VS.DebugEngine.Commands.DebugExecCommand
   fullName: Cosmos.VS.DebugEngine.Commands.DebugExecCommand
   nameWithType: DebugExecCommand
-- uid: Cosmos.VS.DebugEngine.Commands.DebugExecCommand.#ctor(IServiceProvider)
+- uid: Cosmos.VS.DebugEngine.Commands.DebugExecCommand.#ctor(System.IServiceProvider)
   name: DebugExecCommand(IServiceProvider)
-  href: api/Cosmos.VS.DebugEngine.Commands.DebugExecCommand.html#Cosmos_VS_DebugEngine_Commands_DebugExecCommand__ctor_IServiceProvider_
-  commentId: M:Cosmos.VS.DebugEngine.Commands.DebugExecCommand.#ctor(IServiceProvider)
-  fullName: Cosmos.VS.DebugEngine.Commands.DebugExecCommand.DebugExecCommand(IServiceProvider)
+  href: api/Cosmos.VS.DebugEngine.Commands.DebugExecCommand.html#Cosmos_VS_DebugEngine_Commands_DebugExecCommand__ctor_System_IServiceProvider_
+  commentId: M:Cosmos.VS.DebugEngine.Commands.DebugExecCommand.#ctor(System.IServiceProvider)
+  fullName: Cosmos.VS.DebugEngine.Commands.DebugExecCommand.DebugExecCommand(System.IServiceProvider)
   nameWithType: DebugExecCommand.DebugExecCommand(IServiceProvider)
 - uid: Cosmos.VS.DebugEngine.Commands.DebugExecCommand.#ctor*
   name: DebugExecCommand
@@ -41367,11 +41711,11 @@ references:
   isSpec: "True"
   fullName: Cosmos.VS.DebugEngine.Commands.DebugExecCommand.DebugExecCommand
   nameWithType: DebugExecCommand.DebugExecCommand
-- uid: Cosmos.VS.DebugEngine.Commands.DebugExecCommand.Execute(System.UInt32,IntPtr,IntPtr)
+- uid: Cosmos.VS.DebugEngine.Commands.DebugExecCommand.Execute(System.UInt32,System.IntPtr,System.IntPtr)
   name: Execute(UInt32, IntPtr, IntPtr)
-  href: api/Cosmos.VS.DebugEngine.Commands.DebugExecCommand.html#Cosmos_VS_DebugEngine_Commands_DebugExecCommand_Execute_System_UInt32_IntPtr_IntPtr_
-  commentId: M:Cosmos.VS.DebugEngine.Commands.DebugExecCommand.Execute(System.UInt32,IntPtr,IntPtr)
-  fullName: Cosmos.VS.DebugEngine.Commands.DebugExecCommand.Execute(System.UInt32, IntPtr, IntPtr)
+  href: api/Cosmos.VS.DebugEngine.Commands.DebugExecCommand.html#Cosmos_VS_DebugEngine_Commands_DebugExecCommand_Execute_System_UInt32_System_IntPtr_System_IntPtr_
+  commentId: M:Cosmos.VS.DebugEngine.Commands.DebugExecCommand.Execute(System.UInt32,System.IntPtr,System.IntPtr)
+  fullName: Cosmos.VS.DebugEngine.Commands.DebugExecCommand.Execute(System.UInt32, System.IntPtr, System.IntPtr)
   nameWithType: DebugExecCommand.Execute(UInt32, IntPtr, IntPtr)
 - uid: Cosmos.VS.DebugEngine.Commands.DebugExecCommand.Execute*
   name: Execute
@@ -41386,11 +41730,11 @@ references:
   commentId: T:Cosmos.VS.DebugEngine.Commands.DebugLaunchCommand
   fullName: Cosmos.VS.DebugEngine.Commands.DebugLaunchCommand
   nameWithType: DebugLaunchCommand
-- uid: Cosmos.VS.DebugEngine.Commands.DebugLaunchCommand.#ctor(IServiceProvider)
+- uid: Cosmos.VS.DebugEngine.Commands.DebugLaunchCommand.#ctor(System.IServiceProvider)
   name: DebugLaunchCommand(IServiceProvider)
-  href: api/Cosmos.VS.DebugEngine.Commands.DebugLaunchCommand.html#Cosmos_VS_DebugEngine_Commands_DebugLaunchCommand__ctor_IServiceProvider_
-  commentId: M:Cosmos.VS.DebugEngine.Commands.DebugLaunchCommand.#ctor(IServiceProvider)
-  fullName: Cosmos.VS.DebugEngine.Commands.DebugLaunchCommand.DebugLaunchCommand(IServiceProvider)
+  href: api/Cosmos.VS.DebugEngine.Commands.DebugLaunchCommand.html#Cosmos_VS_DebugEngine_Commands_DebugLaunchCommand__ctor_System_IServiceProvider_
+  commentId: M:Cosmos.VS.DebugEngine.Commands.DebugLaunchCommand.#ctor(System.IServiceProvider)
+  fullName: Cosmos.VS.DebugEngine.Commands.DebugLaunchCommand.DebugLaunchCommand(System.IServiceProvider)
   nameWithType: DebugLaunchCommand.DebugLaunchCommand(IServiceProvider)
 - uid: Cosmos.VS.DebugEngine.Commands.DebugLaunchCommand.#ctor*
   name: DebugLaunchCommand
@@ -41399,11 +41743,11 @@ references:
   isSpec: "True"
   fullName: Cosmos.VS.DebugEngine.Commands.DebugLaunchCommand.DebugLaunchCommand
   nameWithType: DebugLaunchCommand.DebugLaunchCommand
-- uid: Cosmos.VS.DebugEngine.Commands.DebugLaunchCommand.Execute(System.UInt32,IntPtr,IntPtr)
+- uid: Cosmos.VS.DebugEngine.Commands.DebugLaunchCommand.Execute(System.UInt32,System.IntPtr,System.IntPtr)
   name: Execute(UInt32, IntPtr, IntPtr)
-  href: api/Cosmos.VS.DebugEngine.Commands.DebugLaunchCommand.html#Cosmos_VS_DebugEngine_Commands_DebugLaunchCommand_Execute_System_UInt32_IntPtr_IntPtr_
-  commentId: M:Cosmos.VS.DebugEngine.Commands.DebugLaunchCommand.Execute(System.UInt32,IntPtr,IntPtr)
-  fullName: Cosmos.VS.DebugEngine.Commands.DebugLaunchCommand.Execute(System.UInt32, IntPtr, IntPtr)
+  href: api/Cosmos.VS.DebugEngine.Commands.DebugLaunchCommand.html#Cosmos_VS_DebugEngine_Commands_DebugLaunchCommand_Execute_System_UInt32_System_IntPtr_System_IntPtr_
+  commentId: M:Cosmos.VS.DebugEngine.Commands.DebugLaunchCommand.Execute(System.UInt32,System.IntPtr,System.IntPtr)
+  fullName: Cosmos.VS.DebugEngine.Commands.DebugLaunchCommand.Execute(System.UInt32, System.IntPtr, System.IntPtr)
   nameWithType: DebugLaunchCommand.Execute(UInt32, IntPtr, IntPtr)
 - uid: Cosmos.VS.DebugEngine.Commands.DebugLaunchCommand.Execute*
   name: Execute
@@ -41418,11 +41762,11 @@ references:
   commentId: T:Cosmos.VS.DebugEngine.Commands.DebugLogCommand
   fullName: Cosmos.VS.DebugEngine.Commands.DebugLogCommand
   nameWithType: DebugLogCommand
-- uid: Cosmos.VS.DebugEngine.Commands.DebugLogCommand.#ctor(IServiceProvider)
+- uid: Cosmos.VS.DebugEngine.Commands.DebugLogCommand.#ctor(System.IServiceProvider)
   name: DebugLogCommand(IServiceProvider)
-  href: api/Cosmos.VS.DebugEngine.Commands.DebugLogCommand.html#Cosmos_VS_DebugEngine_Commands_DebugLogCommand__ctor_IServiceProvider_
-  commentId: M:Cosmos.VS.DebugEngine.Commands.DebugLogCommand.#ctor(IServiceProvider)
-  fullName: Cosmos.VS.DebugEngine.Commands.DebugLogCommand.DebugLogCommand(IServiceProvider)
+  href: api/Cosmos.VS.DebugEngine.Commands.DebugLogCommand.html#Cosmos_VS_DebugEngine_Commands_DebugLogCommand__ctor_System_IServiceProvider_
+  commentId: M:Cosmos.VS.DebugEngine.Commands.DebugLogCommand.#ctor(System.IServiceProvider)
+  fullName: Cosmos.VS.DebugEngine.Commands.DebugLogCommand.DebugLogCommand(System.IServiceProvider)
   nameWithType: DebugLogCommand.DebugLogCommand(IServiceProvider)
 - uid: Cosmos.VS.DebugEngine.Commands.DebugLogCommand.#ctor*
   name: DebugLogCommand
@@ -41431,11 +41775,11 @@ references:
   isSpec: "True"
   fullName: Cosmos.VS.DebugEngine.Commands.DebugLogCommand.DebugLogCommand
   nameWithType: DebugLogCommand.DebugLogCommand
-- uid: Cosmos.VS.DebugEngine.Commands.DebugLogCommand.Execute(System.UInt32,IntPtr,IntPtr)
+- uid: Cosmos.VS.DebugEngine.Commands.DebugLogCommand.Execute(System.UInt32,System.IntPtr,System.IntPtr)
   name: Execute(UInt32, IntPtr, IntPtr)
-  href: api/Cosmos.VS.DebugEngine.Commands.DebugLogCommand.html#Cosmos_VS_DebugEngine_Commands_DebugLogCommand_Execute_System_UInt32_IntPtr_IntPtr_
-  commentId: M:Cosmos.VS.DebugEngine.Commands.DebugLogCommand.Execute(System.UInt32,IntPtr,IntPtr)
-  fullName: Cosmos.VS.DebugEngine.Commands.DebugLogCommand.Execute(System.UInt32, IntPtr, IntPtr)
+  href: api/Cosmos.VS.DebugEngine.Commands.DebugLogCommand.html#Cosmos_VS_DebugEngine_Commands_DebugLogCommand_Execute_System_UInt32_System_IntPtr_System_IntPtr_
+  commentId: M:Cosmos.VS.DebugEngine.Commands.DebugLogCommand.Execute(System.UInt32,System.IntPtr,System.IntPtr)
+  fullName: Cosmos.VS.DebugEngine.Commands.DebugLogCommand.Execute(System.UInt32, System.IntPtr, System.IntPtr)
   nameWithType: DebugLogCommand.Execute(UInt32, IntPtr, IntPtr)
 - uid: Cosmos.VS.DebugEngine.Commands.DebugLogCommand.Execute*
   name: Execute
@@ -41612,13 +41956,13 @@ references:
   isSpec: "True"
   fullName: Cosmos.VS.DebugEngine.Engine.Impl.EngineCallback.OnBreak
   nameWithType: EngineCallback.OnBreak
-- uid: Cosmos.VS.DebugEngine.Engine.Impl.EngineCallback.OnBreakpoint(Cosmos.VS.DebugEngine.AD7.Impl.AD7Thread,IList{IDebugBoundBreakpoint2})
+- uid: Cosmos.VS.DebugEngine.Engine.Impl.EngineCallback.OnBreakpoint(Cosmos.VS.DebugEngine.AD7.Impl.AD7Thread,System.Collections.Generic.IList{IDebugBoundBreakpoint2})
   name: OnBreakpoint(AD7Thread, IList<IDebugBoundBreakpoint2>)
-  href: api/Cosmos.VS.DebugEngine.Engine.Impl.EngineCallback.html#Cosmos_VS_DebugEngine_Engine_Impl_EngineCallback_OnBreakpoint_Cosmos_VS_DebugEngine_AD7_Impl_AD7Thread_IList_IDebugBoundBreakpoint2__
-  commentId: M:Cosmos.VS.DebugEngine.Engine.Impl.EngineCallback.OnBreakpoint(Cosmos.VS.DebugEngine.AD7.Impl.AD7Thread,IList{IDebugBoundBreakpoint2})
+  href: api/Cosmos.VS.DebugEngine.Engine.Impl.EngineCallback.html#Cosmos_VS_DebugEngine_Engine_Impl_EngineCallback_OnBreakpoint_Cosmos_VS_DebugEngine_AD7_Impl_AD7Thread_System_Collections_Generic_IList_IDebugBoundBreakpoint2__
+  commentId: M:Cosmos.VS.DebugEngine.Engine.Impl.EngineCallback.OnBreakpoint(Cosmos.VS.DebugEngine.AD7.Impl.AD7Thread,System.Collections.Generic.IList{IDebugBoundBreakpoint2})
   name.vb: OnBreakpoint(AD7Thread, IList(Of IDebugBoundBreakpoint2))
-  fullName: Cosmos.VS.DebugEngine.Engine.Impl.EngineCallback.OnBreakpoint(Cosmos.VS.DebugEngine.AD7.Impl.AD7Thread, IList<IDebugBoundBreakpoint2>)
-  fullName.vb: Cosmos.VS.DebugEngine.Engine.Impl.EngineCallback.OnBreakpoint(Cosmos.VS.DebugEngine.AD7.Impl.AD7Thread, IList(Of IDebugBoundBreakpoint2))
+  fullName: Cosmos.VS.DebugEngine.Engine.Impl.EngineCallback.OnBreakpoint(Cosmos.VS.DebugEngine.AD7.Impl.AD7Thread, System.Collections.Generic.IList<IDebugBoundBreakpoint2>)
+  fullName.vb: Cosmos.VS.DebugEngine.Engine.Impl.EngineCallback.OnBreakpoint(Cosmos.VS.DebugEngine.AD7.Impl.AD7Thread, System.Collections.Generic.IList(Of IDebugBoundBreakpoint2))
   nameWithType: EngineCallback.OnBreakpoint(AD7Thread, IList<IDebugBoundBreakpoint2>)
   nameWithType.vb: EngineCallback.OnBreakpoint(AD7Thread, IList(Of IDebugBoundBreakpoint2))
 - uid: Cosmos.VS.DebugEngine.Engine.Impl.EngineCallback.OnBreakpoint*
@@ -41906,11 +42250,11 @@ references:
   isSpec: "True"
   fullName: Cosmos.VS.DebugEngine.Engine.Impl.EngineUtils.RequireOk
   nameWithType: EngineUtils.RequireOk
-- uid: Cosmos.VS.DebugEngine.Engine.Impl.EngineUtils.UnexpectedException(Exception)
+- uid: Cosmos.VS.DebugEngine.Engine.Impl.EngineUtils.UnexpectedException(System.Exception)
   name: UnexpectedException(Exception)
-  href: api/Cosmos.VS.DebugEngine.Engine.Impl.EngineUtils.html#Cosmos_VS_DebugEngine_Engine_Impl_EngineUtils_UnexpectedException_Exception_
-  commentId: M:Cosmos.VS.DebugEngine.Engine.Impl.EngineUtils.UnexpectedException(Exception)
-  fullName: Cosmos.VS.DebugEngine.Engine.Impl.EngineUtils.UnexpectedException(Exception)
+  href: api/Cosmos.VS.DebugEngine.Engine.Impl.EngineUtils.html#Cosmos_VS_DebugEngine_Engine_Impl_EngineUtils_UnexpectedException_System_Exception_
+  commentId: M:Cosmos.VS.DebugEngine.Engine.Impl.EngineUtils.UnexpectedException(System.Exception)
+  fullName: Cosmos.VS.DebugEngine.Engine.Impl.EngineUtils.UnexpectedException(System.Exception)
   nameWithType: EngineUtils.UnexpectedException(Exception)
 - uid: Cosmos.VS.DebugEngine.Engine.Impl.EngineUtils.UnexpectedException*
   name: UnexpectedException
@@ -41983,6 +42327,23 @@ references:
   isSpec: "True"
   fullName: Cosmos.VS.DebugEngine.Engine.Impl.WorkerThread.RunOperationAsync
   nameWithType: WorkerThread.RunOperationAsync
+- uid: Cosmos.VS.DebugEngine.Engine.Impl.WorkerThread.System#IDisposable#Dispose
+  name: IDisposable.Dispose()
+  href: api/Cosmos.VS.DebugEngine.Engine.Impl.WorkerThread.html#Cosmos_VS_DebugEngine_Engine_Impl_WorkerThread_System_IDisposable_Dispose
+  commentId: M:Cosmos.VS.DebugEngine.Engine.Impl.WorkerThread.System#IDisposable#Dispose
+  name.vb: System.IDisposable.Dispose()
+  fullName: Cosmos.VS.DebugEngine.Engine.Impl.WorkerThread.System.IDisposable.Dispose()
+  nameWithType: WorkerThread.IDisposable.Dispose()
+  nameWithType.vb: WorkerThread.System.IDisposable.Dispose()
+- uid: Cosmos.VS.DebugEngine.Engine.Impl.WorkerThread.System#IDisposable#Dispose*
+  name: IDisposable.Dispose
+  href: api/Cosmos.VS.DebugEngine.Engine.Impl.WorkerThread.html#Cosmos_VS_DebugEngine_Engine_Impl_WorkerThread_System_IDisposable_Dispose_
+  commentId: Overload:Cosmos.VS.DebugEngine.Engine.Impl.WorkerThread.System#IDisposable#Dispose
+  isSpec: "True"
+  name.vb: System.IDisposable.Dispose
+  fullName: Cosmos.VS.DebugEngine.Engine.Impl.WorkerThread.System.IDisposable.Dispose
+  nameWithType: WorkerThread.IDisposable.Dispose
+  nameWithType.vb: WorkerThread.System.IDisposable.Dispose
 - uid: Cosmos.VS.DebugEngine.Utilities
   name: Cosmos.VS.DebugEngine.Utilities
   href: api/Cosmos.VS.DebugEngine.Utilities.html
@@ -41995,17 +42356,17 @@ references:
   commentId: T:Cosmos.VS.DebugEngine.Utilities.Extensions
   fullName: Cosmos.VS.DebugEngine.Utilities.Extensions
   nameWithType: Extensions
-- uid: Cosmos.VS.DebugEngine.Utilities.Extensions.GetFullName(MethodBase)
+- uid: Cosmos.VS.DebugEngine.Utilities.Extensions.GetFullName(System.Reflection.MethodBase)
   name: GetFullName(MethodBase)
-  href: api/Cosmos.VS.DebugEngine.Utilities.Extensions.html#Cosmos_VS_DebugEngine_Utilities_Extensions_GetFullName_MethodBase_
-  commentId: M:Cosmos.VS.DebugEngine.Utilities.Extensions.GetFullName(MethodBase)
-  fullName: Cosmos.VS.DebugEngine.Utilities.Extensions.GetFullName(MethodBase)
+  href: api/Cosmos.VS.DebugEngine.Utilities.Extensions.html#Cosmos_VS_DebugEngine_Utilities_Extensions_GetFullName_System_Reflection_MethodBase_
+  commentId: M:Cosmos.VS.DebugEngine.Utilities.Extensions.GetFullName(System.Reflection.MethodBase)
+  fullName: Cosmos.VS.DebugEngine.Utilities.Extensions.GetFullName(System.Reflection.MethodBase)
   nameWithType: Extensions.GetFullName(MethodBase)
-- uid: Cosmos.VS.DebugEngine.Utilities.Extensions.GetFullName(Type)
+- uid: Cosmos.VS.DebugEngine.Utilities.Extensions.GetFullName(System.Type)
   name: GetFullName(Type)
-  href: api/Cosmos.VS.DebugEngine.Utilities.Extensions.html#Cosmos_VS_DebugEngine_Utilities_Extensions_GetFullName_Type_
-  commentId: M:Cosmos.VS.DebugEngine.Utilities.Extensions.GetFullName(Type)
-  fullName: Cosmos.VS.DebugEngine.Utilities.Extensions.GetFullName(Type)
+  href: api/Cosmos.VS.DebugEngine.Utilities.Extensions.html#Cosmos_VS_DebugEngine_Utilities_Extensions_GetFullName_System_Type_
+  commentId: M:Cosmos.VS.DebugEngine.Utilities.Extensions.GetFullName(System.Type)
+  fullName: Cosmos.VS.DebugEngine.Utilities.Extensions.GetFullName(System.Type)
   nameWithType: Extensions.GetFullName(Type)
 - uid: Cosmos.VS.DebugEngine.Utilities.Extensions.GetFullName*
   name: GetFullName
@@ -42405,11 +42766,11 @@ references:
   fullName: Cosmos.VS.Windows.AssemblyUC.mSelectedCodeRun
   nameWithType: AssemblyUC.mSelectedCodeRun
 - uid: Cosmos.VS.Windows.AssemblyUC.OnASMCodeTextMouseUp(System.Object,System.Windows.Input.MouseButtonEventArgs)
-  name: OnASMCodeTextMouseUp(Object, System.Windows.Input.MouseButtonEventArgs)
+  name: OnASMCodeTextMouseUp(Object, MouseButtonEventArgs)
   href: api/Cosmos.VS.Windows.AssemblyUC.html#Cosmos_VS_Windows_AssemblyUC_OnASMCodeTextMouseUp_System_Object_System_Windows_Input_MouseButtonEventArgs_
   commentId: M:Cosmos.VS.Windows.AssemblyUC.OnASMCodeTextMouseUp(System.Object,System.Windows.Input.MouseButtonEventArgs)
   fullName: Cosmos.VS.Windows.AssemblyUC.OnASMCodeTextMouseUp(System.Object, System.Windows.Input.MouseButtonEventArgs)
-  nameWithType: AssemblyUC.OnASMCodeTextMouseUp(Object, System.Windows.Input.MouseButtonEventArgs)
+  nameWithType: AssemblyUC.OnASMCodeTextMouseUp(Object, MouseButtonEventArgs)
 - uid: Cosmos.VS.Windows.AssemblyUC.OnASMCodeTextMouseUp*
   name: OnASMCodeTextMouseUp
   href: api/Cosmos.VS.Windows.AssemblyUC.html#Cosmos_VS_Windows_AssemblyUC_OnASMCodeTextMouseUp_
@@ -42534,11 +42895,11 @@ references:
   isSpec: "True"
   fullName: Cosmos.VS.Windows.CosmosWindowsPackage.Dispose
   nameWithType: CosmosWindowsPackage.Dispose
-- uid: Cosmos.VS.Windows.CosmosWindowsPackage.FindChannelWindow(Type)
+- uid: Cosmos.VS.Windows.CosmosWindowsPackage.FindChannelWindow(System.Type)
   name: FindChannelWindow(Type)
-  href: api/Cosmos.VS.Windows.CosmosWindowsPackage.html#Cosmos_VS_Windows_CosmosWindowsPackage_FindChannelWindow_Type_
-  commentId: M:Cosmos.VS.Windows.CosmosWindowsPackage.FindChannelWindow(Type)
-  fullName: Cosmos.VS.Windows.CosmosWindowsPackage.FindChannelWindow(Type)
+  href: api/Cosmos.VS.Windows.CosmosWindowsPackage.html#Cosmos_VS_Windows_CosmosWindowsPackage_FindChannelWindow_System_Type_
+  commentId: M:Cosmos.VS.Windows.CosmosWindowsPackage.FindChannelWindow(System.Type)
+  fullName: Cosmos.VS.Windows.CosmosWindowsPackage.FindChannelWindow(System.Type)
   nameWithType: CosmosWindowsPackage.FindChannelWindow(Type)
 - uid: Cosmos.VS.Windows.CosmosWindowsPackage.FindChannelWindow*
   name: FindChannelWindow
@@ -42547,11 +42908,11 @@ references:
   isSpec: "True"
   fullName: Cosmos.VS.Windows.CosmosWindowsPackage.FindChannelWindow
   nameWithType: CosmosWindowsPackage.FindChannelWindow
-- uid: Cosmos.VS.Windows.CosmosWindowsPackage.FindChannelWindowAsync(Type)
+- uid: Cosmos.VS.Windows.CosmosWindowsPackage.FindChannelWindowAsync(System.Type)
   name: FindChannelWindowAsync(Type)
-  href: api/Cosmos.VS.Windows.CosmosWindowsPackage.html#Cosmos_VS_Windows_CosmosWindowsPackage_FindChannelWindowAsync_Type_
-  commentId: M:Cosmos.VS.Windows.CosmosWindowsPackage.FindChannelWindowAsync(Type)
-  fullName: Cosmos.VS.Windows.CosmosWindowsPackage.FindChannelWindowAsync(Type)
+  href: api/Cosmos.VS.Windows.CosmosWindowsPackage.html#Cosmos_VS_Windows_CosmosWindowsPackage_FindChannelWindowAsync_System_Type_
+  commentId: M:Cosmos.VS.Windows.CosmosWindowsPackage.FindChannelWindowAsync(System.Type)
+  fullName: Cosmos.VS.Windows.CosmosWindowsPackage.FindChannelWindowAsync(System.Type)
   nameWithType: CosmosWindowsPackage.FindChannelWindowAsync(Type)
 - uid: Cosmos.VS.Windows.CosmosWindowsPackage.FindChannelWindowAsync*
   name: FindChannelWindowAsync
@@ -42560,11 +42921,11 @@ references:
   isSpec: "True"
   fullName: Cosmos.VS.Windows.CosmosWindowsPackage.FindChannelWindowAsync
   nameWithType: CosmosWindowsPackage.FindChannelWindowAsync
-- uid: Cosmos.VS.Windows.CosmosWindowsPackage.FindWindow(Type)
+- uid: Cosmos.VS.Windows.CosmosWindowsPackage.FindWindow(System.Type)
   name: FindWindow(Type)
-  href: api/Cosmos.VS.Windows.CosmosWindowsPackage.html#Cosmos_VS_Windows_CosmosWindowsPackage_FindWindow_Type_
-  commentId: M:Cosmos.VS.Windows.CosmosWindowsPackage.FindWindow(Type)
-  fullName: Cosmos.VS.Windows.CosmosWindowsPackage.FindWindow(Type)
+  href: api/Cosmos.VS.Windows.CosmosWindowsPackage.html#Cosmos_VS_Windows_CosmosWindowsPackage_FindWindow_System_Type_
+  commentId: M:Cosmos.VS.Windows.CosmosWindowsPackage.FindWindow(System.Type)
+  fullName: Cosmos.VS.Windows.CosmosWindowsPackage.FindWindow(System.Type)
   nameWithType: CosmosWindowsPackage.FindWindow(Type)
 - uid: Cosmos.VS.Windows.CosmosWindowsPackage.FindWindow*
   name: FindWindow
@@ -42573,11 +42934,11 @@ references:
   isSpec: "True"
   fullName: Cosmos.VS.Windows.CosmosWindowsPackage.FindWindow
   nameWithType: CosmosWindowsPackage.FindWindow
-- uid: Cosmos.VS.Windows.CosmosWindowsPackage.FindWindowAsync(Type)
+- uid: Cosmos.VS.Windows.CosmosWindowsPackage.FindWindowAsync(System.Type)
   name: FindWindowAsync(Type)
-  href: api/Cosmos.VS.Windows.CosmosWindowsPackage.html#Cosmos_VS_Windows_CosmosWindowsPackage_FindWindowAsync_Type_
-  commentId: M:Cosmos.VS.Windows.CosmosWindowsPackage.FindWindowAsync(Type)
-  fullName: Cosmos.VS.Windows.CosmosWindowsPackage.FindWindowAsync(Type)
+  href: api/Cosmos.VS.Windows.CosmosWindowsPackage.html#Cosmos_VS_Windows_CosmosWindowsPackage_FindWindowAsync_System_Type_
+  commentId: M:Cosmos.VS.Windows.CosmosWindowsPackage.FindWindowAsync(System.Type)
+  fullName: Cosmos.VS.Windows.CosmosWindowsPackage.FindWindowAsync(System.Type)
   nameWithType: CosmosWindowsPackage.FindWindowAsync(Type)
 - uid: Cosmos.VS.Windows.CosmosWindowsPackage.FindWindowAsync*
   name: FindWindowAsync
@@ -42586,13 +42947,13 @@ references:
   isSpec: "True"
   fullName: Cosmos.VS.Windows.CosmosWindowsPackage.FindWindowAsync
   nameWithType: CosmosWindowsPackage.FindWindowAsync
-- uid: Cosmos.VS.Windows.CosmosWindowsPackage.InitializeAsync(CancellationToken,IProgress{ServiceProgressData})
+- uid: Cosmos.VS.Windows.CosmosWindowsPackage.InitializeAsync(System.Threading.CancellationToken,System.IProgress{ServiceProgressData})
   name: InitializeAsync(CancellationToken, IProgress<ServiceProgressData>)
-  href: api/Cosmos.VS.Windows.CosmosWindowsPackage.html#Cosmos_VS_Windows_CosmosWindowsPackage_InitializeAsync_CancellationToken_IProgress_ServiceProgressData__
-  commentId: M:Cosmos.VS.Windows.CosmosWindowsPackage.InitializeAsync(CancellationToken,IProgress{ServiceProgressData})
+  href: api/Cosmos.VS.Windows.CosmosWindowsPackage.html#Cosmos_VS_Windows_CosmosWindowsPackage_InitializeAsync_System_Threading_CancellationToken_System_IProgress_ServiceProgressData__
+  commentId: M:Cosmos.VS.Windows.CosmosWindowsPackage.InitializeAsync(System.Threading.CancellationToken,System.IProgress{ServiceProgressData})
   name.vb: InitializeAsync(CancellationToken, IProgress(Of ServiceProgressData))
-  fullName: Cosmos.VS.Windows.CosmosWindowsPackage.InitializeAsync(CancellationToken, IProgress<ServiceProgressData>)
-  fullName.vb: Cosmos.VS.Windows.CosmosWindowsPackage.InitializeAsync(CancellationToken, IProgress(Of ServiceProgressData))
+  fullName: Cosmos.VS.Windows.CosmosWindowsPackage.InitializeAsync(System.Threading.CancellationToken, System.IProgress<ServiceProgressData>)
+  fullName.vb: Cosmos.VS.Windows.CosmosWindowsPackage.InitializeAsync(System.Threading.CancellationToken, System.IProgress(Of ServiceProgressData))
   nameWithType: CosmosWindowsPackage.InitializeAsync(CancellationToken, IProgress<ServiceProgressData>)
   nameWithType.vb: CosmosWindowsPackage.InitializeAsync(CancellationToken, IProgress(Of ServiceProgressData))
 - uid: Cosmos.VS.Windows.CosmosWindowsPackage.InitializeAsync*
@@ -42973,11 +43334,11 @@ references:
   isSpec: "True"
   fullName: Cosmos.VS.Windows.MemoryViewUC.MemoryViewUC
   nameWithType: MemoryViewUC.MemoryViewUC
-- uid: Cosmos.VS.Windows.MemoryViewUC.Add(System.String,UInt32)
+- uid: Cosmos.VS.Windows.MemoryViewUC.Add(System.String,System.UInt32)
   name: Add(String, UInt32)
-  href: api/Cosmos.VS.Windows.MemoryViewUC.html#Cosmos_VS_Windows_MemoryViewUC_Add_System_String_UInt32_
-  commentId: M:Cosmos.VS.Windows.MemoryViewUC.Add(System.String,UInt32)
-  fullName: Cosmos.VS.Windows.MemoryViewUC.Add(System.String, UInt32)
+  href: api/Cosmos.VS.Windows.MemoryViewUC.html#Cosmos_VS_Windows_MemoryViewUC_Add_System_String_System_UInt32_
+  commentId: M:Cosmos.VS.Windows.MemoryViewUC.Add(System.String,System.UInt32)
+  fullName: Cosmos.VS.Windows.MemoryViewUC.Add(System.String, System.UInt32)
   nameWithType: MemoryViewUC.Add(String, UInt32)
 - uid: Cosmos.VS.Windows.MemoryViewUC.Add*
   name: Add
@@ -43331,11 +43692,11 @@ references:
   isSpec: "True"
   fullName: Cosmos.VS.Windows.ToolWindowPane2.Content
   nameWithType: ToolWindowPane2.Content
-- uid: Cosmos.VS.Windows.ToolWindowPane2.OnUpdateWindow(EventArgs)
+- uid: Cosmos.VS.Windows.ToolWindowPane2.OnUpdateWindow(System.EventArgs)
   name: OnUpdateWindow(EventArgs)
-  href: api/Cosmos.VS.Windows.ToolWindowPane2.html#Cosmos_VS_Windows_ToolWindowPane2_OnUpdateWindow_EventArgs_
-  commentId: M:Cosmos.VS.Windows.ToolWindowPane2.OnUpdateWindow(EventArgs)
-  fullName: Cosmos.VS.Windows.ToolWindowPane2.OnUpdateWindow(EventArgs)
+  href: api/Cosmos.VS.Windows.ToolWindowPane2.html#Cosmos_VS_Windows_ToolWindowPane2_OnUpdateWindow_System_EventArgs_
+  commentId: M:Cosmos.VS.Windows.ToolWindowPane2.OnUpdateWindow(System.EventArgs)
+  fullName: Cosmos.VS.Windows.ToolWindowPane2.OnUpdateWindow(System.EventArgs)
   nameWithType: ToolWindowPane2.OnUpdateWindow(EventArgs)
 - uid: Cosmos.VS.Windows.ToolWindowPane2.OnUpdateWindow*
   name: OnUpdateWindow
@@ -43388,11 +43749,11 @@ references:
   commentId: F:Cosmos.VS.Windows.ToolWindowPaneChannel.mUserControl
   fullName: Cosmos.VS.Windows.ToolWindowPaneChannel.mUserControl
   nameWithType: ToolWindowPaneChannel.mUserControl
-- uid: Cosmos.VS.Windows.ToolWindowPaneChannel.OnUpdateWindow(EventArgs)
+- uid: Cosmos.VS.Windows.ToolWindowPaneChannel.OnUpdateWindow(System.EventArgs)
   name: OnUpdateWindow(EventArgs)
-  href: api/Cosmos.VS.Windows.ToolWindowPaneChannel.html#Cosmos_VS_Windows_ToolWindowPaneChannel_OnUpdateWindow_EventArgs_
-  commentId: M:Cosmos.VS.Windows.ToolWindowPaneChannel.OnUpdateWindow(EventArgs)
-  fullName: Cosmos.VS.Windows.ToolWindowPaneChannel.OnUpdateWindow(EventArgs)
+  href: api/Cosmos.VS.Windows.ToolWindowPaneChannel.html#Cosmos_VS_Windows_ToolWindowPaneChannel_OnUpdateWindow_System_EventArgs_
+  commentId: M:Cosmos.VS.Windows.ToolWindowPaneChannel.OnUpdateWindow(System.EventArgs)
+  fullName: Cosmos.VS.Windows.ToolWindowPaneChannel.OnUpdateWindow(System.EventArgs)
   nameWithType: ToolWindowPaneChannel.OnUpdateWindow(EventArgs)
 - uid: Cosmos.VS.Windows.ToolWindowPaneChannel.OnUpdateWindow*
   name: OnUpdateWindow
