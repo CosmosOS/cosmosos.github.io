@@ -10159,6 +10159,22 @@ references:
   commentId: T:Cosmos.Core_Plugs.System.Threading.InterlockedImpl
   fullName: Cosmos.Core_Plugs.System.Threading.InterlockedImpl
   nameWithType: InterlockedImpl
+- uid: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.CompareExchange(EventHandler@,EventHandler,EventHandler)
+  name: CompareExchange(ref EventHandler, EventHandler, EventHandler)
+  href: api/Cosmos.Core_Plugs.System.Threading.InterlockedImpl.html#Cosmos_Core_Plugs_System_Threading_InterlockedImpl_CompareExchange_EventHandler__EventHandler_EventHandler_
+  commentId: M:Cosmos.Core_Plugs.System.Threading.InterlockedImpl.CompareExchange(EventHandler@,EventHandler,EventHandler)
+  name.vb: CompareExchange(ByRef EventHandler, EventHandler, EventHandler)
+  fullName: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.CompareExchange(ref EventHandler, EventHandler, EventHandler)
+  fullName.vb: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.CompareExchange(ByRef EventHandler, EventHandler, EventHandler)
+  nameWithType: InterlockedImpl.CompareExchange(ref EventHandler, EventHandler, EventHandler)
+  nameWithType.vb: InterlockedImpl.CompareExchange(ByRef EventHandler, EventHandler, EventHandler)
+- uid: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.CompareExchange*
+  name: CompareExchange
+  href: api/Cosmos.Core_Plugs.System.Threading.InterlockedImpl.html#Cosmos_Core_Plugs_System_Threading_InterlockedImpl_CompareExchange_
+  commentId: Overload:Cosmos.Core_Plugs.System.Threading.InterlockedImpl.CompareExchange
+  isSpec: "True"
+  fullName: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.CompareExchange
+  nameWithType: InterlockedImpl.CompareExchange
 - uid: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Decrement(System.Int32@)
   name: Decrement(ref Int32)
   href: api/Cosmos.Core_Plugs.System.Threading.InterlockedImpl.html#Cosmos_Core_Plugs_System_Threading_InterlockedImpl_Decrement_System_Int32__
@@ -10168,6 +10184,15 @@ references:
   fullName.vb: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Decrement(ByRef System.Int32)
   nameWithType: InterlockedImpl.Decrement(ref Int32)
   nameWithType.vb: InterlockedImpl.Decrement(ByRef Int32)
+- uid: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Decrement(System.Int64@)
+  name: Decrement(ref Int64)
+  href: api/Cosmos.Core_Plugs.System.Threading.InterlockedImpl.html#Cosmos_Core_Plugs_System_Threading_InterlockedImpl_Decrement_System_Int64__
+  commentId: M:Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Decrement(System.Int64@)
+  name.vb: Decrement(ByRef Int64)
+  fullName: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Decrement(ref System.Int64)
+  fullName.vb: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Decrement(ByRef System.Int64)
+  nameWithType: InterlockedImpl.Decrement(ref Int64)
+  nameWithType.vb: InterlockedImpl.Decrement(ByRef Int64)
 - uid: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Decrement*
   name: Decrement
   href: api/Cosmos.Core_Plugs.System.Threading.InterlockedImpl.html#Cosmos_Core_Plugs_System_Threading_InterlockedImpl_Decrement_
@@ -10175,6 +10200,67 @@ references:
   isSpec: "True"
   fullName: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Decrement
   nameWithType: InterlockedImpl.Decrement
+- uid: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange(IntPtr@,IntPtr)
+  name: Exchange(ref IntPtr, IntPtr)
+  href: api/Cosmos.Core_Plugs.System.Threading.InterlockedImpl.html#Cosmos_Core_Plugs_System_Threading_InterlockedImpl_Exchange_IntPtr__IntPtr_
+  commentId: M:Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange(IntPtr@,IntPtr)
+  name.vb: Exchange(ByRef IntPtr, IntPtr)
+  fullName: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange(ref IntPtr, IntPtr)
+  fullName.vb: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange(ByRef IntPtr, IntPtr)
+  nameWithType: InterlockedImpl.Exchange(ref IntPtr, IntPtr)
+  nameWithType.vb: InterlockedImpl.Exchange(ByRef IntPtr, IntPtr)
+- uid: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange(Object@,Object)
+  name: Exchange(ref Object, Object)
+  href: api/Cosmos.Core_Plugs.System.Threading.InterlockedImpl.html#Cosmos_Core_Plugs_System_Threading_InterlockedImpl_Exchange_Object__Object_
+  commentId: M:Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange(Object@,Object)
+  name.vb: Exchange(ByRef Object, Object)
+  fullName: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange(ref Object, Object)
+  fullName.vb: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange(ByRef Object, Object)
+  nameWithType: InterlockedImpl.Exchange(ref Object, Object)
+  nameWithType.vb: InterlockedImpl.Exchange(ByRef Object, Object)
+- uid: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange(System.Double@,System.Double)
+  name: Exchange(ref Double, Double)
+  href: api/Cosmos.Core_Plugs.System.Threading.InterlockedImpl.html#Cosmos_Core_Plugs_System_Threading_InterlockedImpl_Exchange_System_Double__System_Double_
+  commentId: M:Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange(System.Double@,System.Double)
+  name.vb: Exchange(ByRef Double, Double)
+  fullName: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange(ref System.Double, System.Double)
+  fullName.vb: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange(ByRef System.Double, System.Double)
+  nameWithType: InterlockedImpl.Exchange(ref Double, Double)
+  nameWithType.vb: InterlockedImpl.Exchange(ByRef Double, Double)
+- uid: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange(System.Int32@,System.Int32)
+  name: Exchange(ref Int32, Int32)
+  href: api/Cosmos.Core_Plugs.System.Threading.InterlockedImpl.html#Cosmos_Core_Plugs_System_Threading_InterlockedImpl_Exchange_System_Int32__System_Int32_
+  commentId: M:Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange(System.Int32@,System.Int32)
+  name.vb: Exchange(ByRef Int32, Int32)
+  fullName: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange(ref System.Int32, System.Int32)
+  fullName.vb: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange(ByRef System.Int32, System.Int32)
+  nameWithType: InterlockedImpl.Exchange(ref Int32, Int32)
+  nameWithType.vb: InterlockedImpl.Exchange(ByRef Int32, Int32)
+- uid: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange(System.Int64@,System.Int64)
+  name: Exchange(ref Int64, Int64)
+  href: api/Cosmos.Core_Plugs.System.Threading.InterlockedImpl.html#Cosmos_Core_Plugs_System_Threading_InterlockedImpl_Exchange_System_Int64__System_Int64_
+  commentId: M:Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange(System.Int64@,System.Int64)
+  name.vb: Exchange(ByRef Int64, Int64)
+  fullName: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange(ref System.Int64, System.Int64)
+  fullName.vb: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange(ByRef System.Int64, System.Int64)
+  nameWithType: InterlockedImpl.Exchange(ref Int64, Int64)
+  nameWithType.vb: InterlockedImpl.Exchange(ByRef Int64, Int64)
+- uid: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange(System.Single@,System.Single)
+  name: Exchange(ref Single, Single)
+  href: api/Cosmos.Core_Plugs.System.Threading.InterlockedImpl.html#Cosmos_Core_Plugs_System_Threading_InterlockedImpl_Exchange_System_Single__System_Single_
+  commentId: M:Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange(System.Single@,System.Single)
+  name.vb: Exchange(ByRef Single, Single)
+  fullName: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange(ref System.Single, System.Single)
+  fullName.vb: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange(ByRef System.Single, System.Single)
+  nameWithType: InterlockedImpl.Exchange(ref Single, Single)
+  nameWithType.vb: InterlockedImpl.Exchange(ByRef Single, Single)
+- uid: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange*
+  name: Exchange
+  href: api/Cosmos.Core_Plugs.System.Threading.InterlockedImpl.html#Cosmos_Core_Plugs_System_Threading_InterlockedImpl_Exchange_
+  commentId: Overload:Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange
+  isSpec: "True"
+  fullName: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Exchange
+  nameWithType: InterlockedImpl.Exchange
 - uid: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Increment(System.Int32@)
   name: Increment(ref Int32)
   href: api/Cosmos.Core_Plugs.System.Threading.InterlockedImpl.html#Cosmos_Core_Plugs_System_Threading_InterlockedImpl_Increment_System_Int32__
@@ -10184,6 +10270,15 @@ references:
   fullName.vb: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Increment(ByRef System.Int32)
   nameWithType: InterlockedImpl.Increment(ref Int32)
   nameWithType.vb: InterlockedImpl.Increment(ByRef Int32)
+- uid: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Increment(System.Int64@)
+  name: Increment(ref Int64)
+  href: api/Cosmos.Core_Plugs.System.Threading.InterlockedImpl.html#Cosmos_Core_Plugs_System_Threading_InterlockedImpl_Increment_System_Int64__
+  commentId: M:Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Increment(System.Int64@)
+  name.vb: Increment(ByRef Int64)
+  fullName: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Increment(ref System.Int64)
+  fullName.vb: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Increment(ByRef System.Int64)
+  nameWithType: InterlockedImpl.Increment(ref Int64)
+  nameWithType.vb: InterlockedImpl.Increment(ByRef Int64)
 - uid: Cosmos.Core_Plugs.System.Threading.InterlockedImpl.Increment*
   name: Increment
   href: api/Cosmos.Core_Plugs.System.Threading.InterlockedImpl.html#Cosmos_Core_Plugs_System_Threading_InterlockedImpl_Increment_
