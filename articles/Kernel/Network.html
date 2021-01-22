@@ -191,9 +191,6 @@ IPConfig.Enable(nic, new Address(192, 168, 1, 69), new Address(255, 255, 255, 0)
     //This will automatically set the IP config after DHCP response
     xClient.SendDiscoverPacket();
 
-    /** Send a DHCP Release packet **/
-    xClient.SendReleasePacket(); //will tell the DHCP server to delete the address
-
     xClient.Close();  //don't forget to close!
 }
 </code></pre>
@@ -253,7 +250,7 @@ IPConfig.Enable(nic, new Address(192, 168, 1, 69), new Address(255, 255, 255, 0)
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/blob/46228944c99edc5ee12e702955c4a4692fb29424/Docs/articles/Kernel/Network.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/53b0fad4bcaa1e82386c76f5d5e8e01f12050967/Docs/articles/Kernel/Network.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>
