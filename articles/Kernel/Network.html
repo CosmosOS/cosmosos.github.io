@@ -173,8 +173,8 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="network">Network</h1>
 
-<p>In this article we will discuss about Networking on Cosmos, how to use the Network Stack, send and received packets. For now, available protocols are <strong>ARP</strong>, <strong>IPv4</strong>, <strong>UDP</strong>, <strong>ICMP</strong>, <strong>DHCP</strong> and <strong>DNS</strong> but the team is also working on TCP.</p>
-<p>All protocols here don't necessary support every feature described by their RFC and may have some bugs or architecture issues, if you find something abnormal please <a href="http://https://github.com/CosmosOS/Cosmos/issues/new/choose" title="repository">submit an issue</a> on our repository.</p>
+<p>In this article we will discuss about Networking on Cosmos, how to use the Network Stack, send and received packets. For now, available protocols are <strong>ARP</strong>, <strong>IPv4</strong>, <strong>UDP</strong>, <strong>ICMP</strong>, <strong>DHCP</strong> and <strong>DNS</strong> but the team is also working on TCP. Note that Cosmos devkit must be installed for this article.</p>
+<p>All protocols here don't necessary support every feature described by their RFC and may have some bugs or architecture issues, if you find bugs or something abnormal please <a href="http://https://github.com/CosmosOS/Cosmos/issues/new/choose" title="repository">submit an issue</a> on our repository.</p>
 <p>Each protocol has a Client class which can be used to receive and send data. If a Receive() method is blocking, the method will timeout after 5 seconds or use the value optionally set by parameter. Please note that all finished connections should be closed using Close().</p>
 <p>Cosmos Network Stack won't use Classes and Functions that are under .NET Core. Everything described here will be under:</p>
 <pre><code class="lang-csharp">using Cosmos.System.Network;
@@ -242,6 +242,10 @@ IPConfig.Enable(nic, new Address(192, 168, 1, 69), new Address(255, 255, 255, 0)
     xClient.Close();
 }
 </code></pre>
+<h2 id="utils">Utils</h2>
+<h2 id="get-local-ip">Get local IP</h2>
+<pre><code class="lang-csharp">Console.WriteLine(NetworkConfig.CurrentConfig.Value.IPAddress.ToString());
+</code></pre>
 </article>
           </div>
           
@@ -250,7 +254,7 @@ IPConfig.Enable(nic, new Address(192, 168, 1, 69), new Address(255, 255, 255, 0)
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/blob/53b0fad4bcaa1e82386c76f5d5e8e01f12050967/Docs/articles/Kernel/Network.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/112a7f554db68528c4f54059ff0785e46421d9fa/Docs/articles/Kernel/Network.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>

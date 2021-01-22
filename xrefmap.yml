@@ -34682,12 +34682,6 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.DHCPClient
   nameWithType: DHCPClient.DHCPClient
-- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.asked
-  name: asked
-  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.html#Cosmos_System_Network_IPv4_UDP_DHCP_DHCPClient_asked
-  commentId: F:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.asked
-  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.asked
-  nameWithType: DHCPClient.asked
 - uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.DHCPServerAddress(Cosmos.HAL.NetworkDevice)
   name: DHCPServerAddress(NetworkDevice)
   href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.html#Cosmos_System_Network_IPv4_UDP_DHCP_DHCPClient_DHCPServerAddress_Cosmos_HAL_NetworkDevice_
@@ -35248,18 +35242,6 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.Connect
   nameWithType: UdpClient.Connect
-- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.destination
-  name: destination
-  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient_destination
-  commentId: F:Cosmos.System.Network.IPv4.UDP.UdpClient.destination
-  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.destination
-  nameWithType: UdpClient.destination
-- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.destinationPort
-  name: destinationPort
-  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient_destinationPort
-  commentId: F:Cosmos.System.Network.IPv4.UDP.UdpClient.destinationPort
-  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.destinationPort
-  nameWithType: UdpClient.destinationPort
 - uid: Cosmos.System.Network.IPv4.UDP.UdpClient.Dispose
   name: Dispose()
   href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient_Dispose
@@ -35273,12 +35255,6 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.Dispose
   nameWithType: UdpClient.Dispose
-- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.localPort
-  name: localPort
-  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient_localPort
-  commentId: F:Cosmos.System.Network.IPv4.UDP.UdpClient.localPort
-  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.localPort
-  nameWithType: UdpClient.localPort
 - uid: Cosmos.System.Network.IPv4.UDP.UdpClient.NonBlockingReceive(Cosmos.System.Network.IPv4.EndPoint@)
   name: NonBlockingReceive(ref EndPoint)
   href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient_NonBlockingReceive_Cosmos_System_Network_IPv4_EndPoint__
@@ -35311,12 +35287,6 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.Receive
   nameWithType: UdpClient.Receive
-- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.rxBuffer
-  name: rxBuffer
-  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient_rxBuffer
-  commentId: F:Cosmos.System.Network.IPv4.UDP.UdpClient.rxBuffer
-  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.rxBuffer
-  nameWithType: UdpClient.rxBuffer
 - uid: Cosmos.System.Network.IPv4.UDP.UdpClient.Send(System.Byte[])
   name: Send(Byte[])
   href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient_Send_System_Byte___
