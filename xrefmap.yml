@@ -24209,6 +24209,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.HAL.Network.MACAddress.GetHashCode
   nameWithType: MACAddress.GetHashCode
+- uid: Cosmos.HAL.Network.MACAddress.Hash
+  name: Hash
+  href: api/Cosmos.HAL.Network.MACAddress.html#Cosmos_HAL_Network_MACAddress_Hash
+  commentId: P:Cosmos.HAL.Network.MACAddress.Hash
+  fullName: Cosmos.HAL.Network.MACAddress.Hash
+  nameWithType: MACAddress.Hash
+- uid: Cosmos.HAL.Network.MACAddress.Hash*
+  name: Hash
+  href: api/Cosmos.HAL.Network.MACAddress.html#Cosmos_HAL_Network_MACAddress_Hash_
+  commentId: Overload:Cosmos.HAL.Network.MACAddress.Hash
+  isSpec: "True"
+  fullName: Cosmos.HAL.Network.MACAddress.Hash
+  nameWithType: MACAddress.Hash
 - uid: Cosmos.HAL.Network.MACAddress.IsValid
   name: IsValid()
   href: api/Cosmos.HAL.Network.MACAddress.html#Cosmos_HAL_Network_MACAddress_IsValid
@@ -24228,6 +24241,19 @@ references:
   commentId: F:Cosmos.HAL.Network.MACAddress.None
   fullName: Cosmos.HAL.Network.MACAddress.None
   nameWithType: MACAddress.None
+- uid: Cosmos.HAL.Network.MACAddress.To32BitNumber
+  name: To32BitNumber()
+  href: api/Cosmos.HAL.Network.MACAddress.html#Cosmos_HAL_Network_MACAddress_To32BitNumber
+  commentId: M:Cosmos.HAL.Network.MACAddress.To32BitNumber
+  fullName: Cosmos.HAL.Network.MACAddress.To32BitNumber()
+  nameWithType: MACAddress.To32BitNumber()
+- uid: Cosmos.HAL.Network.MACAddress.To32BitNumber*
+  name: To32BitNumber
+  href: api/Cosmos.HAL.Network.MACAddress.html#Cosmos_HAL_Network_MACAddress_To32BitNumber_
+  commentId: Overload:Cosmos.HAL.Network.MACAddress.To32BitNumber
+  isSpec: "True"
+  fullName: Cosmos.HAL.Network.MACAddress.To32BitNumber
+  nameWithType: MACAddress.To32BitNumber
 - uid: Cosmos.HAL.Network.MACAddress.ToNumber
   name: ToNumber()
   href: api/Cosmos.HAL.Network.MACAddress.html#Cosmos_HAL_Network_MACAddress_ToNumber
@@ -24254,6 +24280,25 @@ references:
   isSpec: "True"
   fullName: Cosmos.HAL.Network.MACAddress.ToString
   nameWithType: MACAddress.ToString
+- uid: Cosmos.HAL.Network.NetworkInit
+  name: NetworkInit
+  href: api/Cosmos.HAL.Network.NetworkInit.html
+  commentId: T:Cosmos.HAL.Network.NetworkInit
+  fullName: Cosmos.HAL.Network.NetworkInit
+  nameWithType: NetworkInit
+- uid: Cosmos.HAL.Network.NetworkInit.Init
+  name: Init()
+  href: api/Cosmos.HAL.Network.NetworkInit.html#Cosmos_HAL_Network_NetworkInit_Init
+  commentId: M:Cosmos.HAL.Network.NetworkInit.Init
+  fullName: Cosmos.HAL.Network.NetworkInit.Init()
+  nameWithType: NetworkInit.Init()
+- uid: Cosmos.HAL.Network.NetworkInit.Init*
+  name: Init
+  href: api/Cosmos.HAL.Network.NetworkInit.html#Cosmos_HAL_Network_NetworkInit_Init_
+  commentId: Overload:Cosmos.HAL.Network.NetworkInit.Init
+  isSpec: "True"
+  fullName: Cosmos.HAL.Network.NetworkInit.Init
+  nameWithType: NetworkInit.Init
 - uid: Cosmos.HAL.NetworkDevice
   name: NetworkDevice
   href: api/Cosmos.HAL.NetworkDevice.html
@@ -24331,6 +24376,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.HAL.NetworkDevice.Enable
   nameWithType: NetworkDevice.Enable
+- uid: Cosmos.HAL.NetworkDevice.GetDeviceByName(System.String)
+  name: GetDeviceByName(String)
+  href: api/Cosmos.HAL.NetworkDevice.html#Cosmos_HAL_NetworkDevice_GetDeviceByName_System_String_
+  commentId: M:Cosmos.HAL.NetworkDevice.GetDeviceByName(System.String)
+  fullName: Cosmos.HAL.NetworkDevice.GetDeviceByName(System.String)
+  nameWithType: NetworkDevice.GetDeviceByName(String)
+- uid: Cosmos.HAL.NetworkDevice.GetDeviceByName*
+  name: GetDeviceByName
+  href: api/Cosmos.HAL.NetworkDevice.html#Cosmos_HAL_NetworkDevice_GetDeviceByName_
+  commentId: Overload:Cosmos.HAL.NetworkDevice.GetDeviceByName
+  isSpec: "True"
+  fullName: Cosmos.HAL.NetworkDevice.GetDeviceByName
+  nameWithType: NetworkDevice.GetDeviceByName
 - uid: Cosmos.HAL.NetworkDevice.IsReceiveBufferFull
   name: IsReceiveBufferFull()
   href: api/Cosmos.HAL.NetworkDevice.html#Cosmos_HAL_NetworkDevice_IsReceiveBufferFull
@@ -24383,6 +24441,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.HAL.NetworkDevice.Name
   nameWithType: NetworkDevice.Name
+- uid: Cosmos.HAL.NetworkDevice.NameID
+  name: NameID
+  href: api/Cosmos.HAL.NetworkDevice.html#Cosmos_HAL_NetworkDevice_NameID
+  commentId: P:Cosmos.HAL.NetworkDevice.NameID
+  fullName: Cosmos.HAL.NetworkDevice.NameID
+  nameWithType: NetworkDevice.NameID
+- uid: Cosmos.HAL.NetworkDevice.NameID*
+  name: NameID
+  href: api/Cosmos.HAL.NetworkDevice.html#Cosmos_HAL_NetworkDevice_NameID_
+  commentId: Overload:Cosmos.HAL.NetworkDevice.NameID
+  isSpec: "True"
+  fullName: Cosmos.HAL.NetworkDevice.NameID
+  nameWithType: NetworkDevice.NameID
 - uid: Cosmos.HAL.NetworkDevice.QueueBytes(System.Byte[])
   name: QueueBytes(Byte[])
   href: api/Cosmos.HAL.NetworkDevice.html#Cosmos_HAL_NetworkDevice_QueueBytes_System_Byte___
@@ -33541,6 +33612,426 @@ references:
   commentId: N:Cosmos.System.Network
   fullName: Cosmos.System.Network
   nameWithType: Cosmos.System.Network
+- uid: Cosmos.System.Network.ARP
+  name: Cosmos.System.Network.ARP
+  href: api/Cosmos.System.Network.ARP.html
+  commentId: N:Cosmos.System.Network.ARP
+  fullName: Cosmos.System.Network.ARP
+  nameWithType: Cosmos.System.Network.ARP
+- uid: Cosmos.System.Network.ARP.ARPPacket
+  name: ARPPacket
+  href: api/Cosmos.System.Network.ARP.ARPPacket.html
+  commentId: T:Cosmos.System.Network.ARP.ARPPacket
+  fullName: Cosmos.System.Network.ARP.ARPPacket
+  nameWithType: ARPPacket
+- uid: Cosmos.System.Network.ARP.ARPPacket.#ctor(Cosmos.HAL.Network.MACAddress,Cosmos.HAL.Network.MACAddress,System.UInt16,System.UInt16,System.Byte,System.Byte,System.UInt16,System.Int32)
+  name: ARPPacket(MACAddress, MACAddress, UInt16, UInt16, Byte, Byte, UInt16, Int32)
+  href: api/Cosmos.System.Network.ARP.ARPPacket.html#Cosmos_System_Network_ARP_ARPPacket__ctor_Cosmos_HAL_Network_MACAddress_Cosmos_HAL_Network_MACAddress_System_UInt16_System_UInt16_System_Byte_System_Byte_System_UInt16_System_Int32_
+  commentId: M:Cosmos.System.Network.ARP.ARPPacket.#ctor(Cosmos.HAL.Network.MACAddress,Cosmos.HAL.Network.MACAddress,System.UInt16,System.UInt16,System.Byte,System.Byte,System.UInt16,System.Int32)
+  fullName: Cosmos.System.Network.ARP.ARPPacket.ARPPacket(Cosmos.HAL.Network.MACAddress, Cosmos.HAL.Network.MACAddress, System.UInt16, System.UInt16, System.Byte, System.Byte, System.UInt16, System.Int32)
+  nameWithType: ARPPacket.ARPPacket(MACAddress, MACAddress, UInt16, UInt16, Byte, Byte, UInt16, Int32)
+- uid: Cosmos.System.Network.ARP.ARPPacket.#ctor(System.Byte[])
+  name: ARPPacket(Byte[])
+  href: api/Cosmos.System.Network.ARP.ARPPacket.html#Cosmos_System_Network_ARP_ARPPacket__ctor_System_Byte___
+  commentId: M:Cosmos.System.Network.ARP.ARPPacket.#ctor(System.Byte[])
+  name.vb: ARPPacket(Byte())
+  fullName: Cosmos.System.Network.ARP.ARPPacket.ARPPacket(System.Byte[])
+  fullName.vb: Cosmos.System.Network.ARP.ARPPacket.ARPPacket(System.Byte())
+  nameWithType: ARPPacket.ARPPacket(Byte[])
+  nameWithType.vb: ARPPacket.ARPPacket(Byte())
+- uid: Cosmos.System.Network.ARP.ARPPacket.#ctor*
+  name: ARPPacket
+  href: api/Cosmos.System.Network.ARP.ARPPacket.html#Cosmos_System_Network_ARP_ARPPacket__ctor_
+  commentId: Overload:Cosmos.System.Network.ARP.ARPPacket.#ctor
+  isSpec: "True"
+  fullName: Cosmos.System.Network.ARP.ARPPacket.ARPPacket
+  nameWithType: ARPPacket.ARPPacket
+- uid: Cosmos.System.Network.ARP.ARPPacket.aHardwareLen
+  name: aHardwareLen
+  href: api/Cosmos.System.Network.ARP.ARPPacket.html#Cosmos_System_Network_ARP_ARPPacket_aHardwareLen
+  commentId: F:Cosmos.System.Network.ARP.ARPPacket.aHardwareLen
+  fullName: Cosmos.System.Network.ARP.ARPPacket.aHardwareLen
+  nameWithType: ARPPacket.aHardwareLen
+- uid: Cosmos.System.Network.ARP.ARPPacket.aHardwareType
+  name: aHardwareType
+  href: api/Cosmos.System.Network.ARP.ARPPacket.html#Cosmos_System_Network_ARP_ARPPacket_aHardwareType
+  commentId: F:Cosmos.System.Network.ARP.ARPPacket.aHardwareType
+  fullName: Cosmos.System.Network.ARP.ARPPacket.aHardwareType
+  nameWithType: ARPPacket.aHardwareType
+- uid: Cosmos.System.Network.ARP.ARPPacket.aOperation
+  name: aOperation
+  href: api/Cosmos.System.Network.ARP.ARPPacket.html#Cosmos_System_Network_ARP_ARPPacket_aOperation
+  commentId: F:Cosmos.System.Network.ARP.ARPPacket.aOperation
+  fullName: Cosmos.System.Network.ARP.ARPPacket.aOperation
+  nameWithType: ARPPacket.aOperation
+- uid: Cosmos.System.Network.ARP.ARPPacket.aProtocolLen
+  name: aProtocolLen
+  href: api/Cosmos.System.Network.ARP.ARPPacket.html#Cosmos_System_Network_ARP_ARPPacket_aProtocolLen
+  commentId: F:Cosmos.System.Network.ARP.ARPPacket.aProtocolLen
+  fullName: Cosmos.System.Network.ARP.ARPPacket.aProtocolLen
+  nameWithType: ARPPacket.aProtocolLen
+- uid: Cosmos.System.Network.ARP.ARPPacket.aProtocolType
+  name: aProtocolType
+  href: api/Cosmos.System.Network.ARP.ARPPacket.html#Cosmos_System_Network_ARP_ARPPacket_aProtocolType
+  commentId: F:Cosmos.System.Network.ARP.ARPPacket.aProtocolType
+  fullName: Cosmos.System.Network.ARP.ARPPacket.aProtocolType
+  nameWithType: ARPPacket.aProtocolType
+- uid: Cosmos.System.Network.ARP.ARPPacket.InitFields
+  name: InitFields()
+  href: api/Cosmos.System.Network.ARP.ARPPacket.html#Cosmos_System_Network_ARP_ARPPacket_InitFields
+  commentId: M:Cosmos.System.Network.ARP.ARPPacket.InitFields
+  fullName: Cosmos.System.Network.ARP.ARPPacket.InitFields()
+  nameWithType: ARPPacket.InitFields()
+- uid: Cosmos.System.Network.ARP.ARPPacket.InitFields*
+  name: InitFields
+  href: api/Cosmos.System.Network.ARP.ARPPacket.html#Cosmos_System_Network_ARP_ARPPacket_InitFields_
+  commentId: Overload:Cosmos.System.Network.ARP.ARPPacket.InitFields
+  isSpec: "True"
+  fullName: Cosmos.System.Network.ARP.ARPPacket.InitFields
+  nameWithType: ARPPacket.InitFields
+- uid: Cosmos.System.Network.ARP.ARPPacket.ToString
+  name: ToString()
+  href: api/Cosmos.System.Network.ARP.ARPPacket.html#Cosmos_System_Network_ARP_ARPPacket_ToString
+  commentId: M:Cosmos.System.Network.ARP.ARPPacket.ToString
+  fullName: Cosmos.System.Network.ARP.ARPPacket.ToString()
+  nameWithType: ARPPacket.ToString()
+- uid: Cosmos.System.Network.ARP.ARPPacket.ToString*
+  name: ToString
+  href: api/Cosmos.System.Network.ARP.ARPPacket.html#Cosmos_System_Network_ARP_ARPPacket_ToString_
+  commentId: Overload:Cosmos.System.Network.ARP.ARPPacket.ToString
+  isSpec: "True"
+  fullName: Cosmos.System.Network.ARP.ARPPacket.ToString
+  nameWithType: ARPPacket.ToString
+- uid: Cosmos.System.Network.Config
+  name: Cosmos.System.Network.Config
+  href: api/Cosmos.System.Network.Config.html
+  commentId: N:Cosmos.System.Network.Config
+  fullName: Cosmos.System.Network.Config
+  nameWithType: Cosmos.System.Network.Config
+- uid: Cosmos.System.Network.Config.DNSConfig
+  name: DNSConfig
+  href: api/Cosmos.System.Network.Config.DNSConfig.html
+  commentId: T:Cosmos.System.Network.Config.DNSConfig
+  fullName: Cosmos.System.Network.Config.DNSConfig
+  nameWithType: DNSConfig
+- uid: Cosmos.System.Network.Config.DNSConfig.Add(Cosmos.System.Network.IPv4.Address)
+  name: Add(Address)
+  href: api/Cosmos.System.Network.Config.DNSConfig.html#Cosmos_System_Network_Config_DNSConfig_Add_Cosmos_System_Network_IPv4_Address_
+  commentId: M:Cosmos.System.Network.Config.DNSConfig.Add(Cosmos.System.Network.IPv4.Address)
+  fullName: Cosmos.System.Network.Config.DNSConfig.Add(Cosmos.System.Network.IPv4.Address)
+  nameWithType: DNSConfig.Add(Address)
+- uid: Cosmos.System.Network.Config.DNSConfig.Add*
+  name: Add
+  href: api/Cosmos.System.Network.Config.DNSConfig.html#Cosmos_System_Network_Config_DNSConfig_Add_
+  commentId: Overload:Cosmos.System.Network.Config.DNSConfig.Add
+  isSpec: "True"
+  fullName: Cosmos.System.Network.Config.DNSConfig.Add
+  nameWithType: DNSConfig.Add
+- uid: Cosmos.System.Network.Config.DNSConfig.DNSNameservers
+  name: DNSNameservers
+  href: api/Cosmos.System.Network.Config.DNSConfig.html#Cosmos_System_Network_Config_DNSConfig_DNSNameservers
+  commentId: F:Cosmos.System.Network.Config.DNSConfig.DNSNameservers
+  fullName: Cosmos.System.Network.Config.DNSConfig.DNSNameservers
+  nameWithType: DNSConfig.DNSNameservers
+- uid: Cosmos.System.Network.Config.DNSConfig.Remove(Cosmos.System.Network.IPv4.Address)
+  name: Remove(Address)
+  href: api/Cosmos.System.Network.Config.DNSConfig.html#Cosmos_System_Network_Config_DNSConfig_Remove_Cosmos_System_Network_IPv4_Address_
+  commentId: M:Cosmos.System.Network.Config.DNSConfig.Remove(Cosmos.System.Network.IPv4.Address)
+  fullName: Cosmos.System.Network.Config.DNSConfig.Remove(Cosmos.System.Network.IPv4.Address)
+  nameWithType: DNSConfig.Remove(Address)
+- uid: Cosmos.System.Network.Config.DNSConfig.Remove*
+  name: Remove
+  href: api/Cosmos.System.Network.Config.DNSConfig.html#Cosmos_System_Network_Config_DNSConfig_Remove_
+  commentId: Overload:Cosmos.System.Network.Config.DNSConfig.Remove
+  isSpec: "True"
+  fullName: Cosmos.System.Network.Config.DNSConfig.Remove
+  nameWithType: DNSConfig.Remove
+- uid: Cosmos.System.Network.Config.DNSConfig.Server(System.Int32)
+  name: Server(Int32)
+  href: api/Cosmos.System.Network.Config.DNSConfig.html#Cosmos_System_Network_Config_DNSConfig_Server_System_Int32_
+  commentId: M:Cosmos.System.Network.Config.DNSConfig.Server(System.Int32)
+  fullName: Cosmos.System.Network.Config.DNSConfig.Server(System.Int32)
+  nameWithType: DNSConfig.Server(Int32)
+- uid: Cosmos.System.Network.Config.DNSConfig.Server*
+  name: Server
+  href: api/Cosmos.System.Network.Config.DNSConfig.html#Cosmos_System_Network_Config_DNSConfig_Server_
+  commentId: Overload:Cosmos.System.Network.Config.DNSConfig.Server
+  isSpec: "True"
+  fullName: Cosmos.System.Network.Config.DNSConfig.Server
+  nameWithType: DNSConfig.Server
+- uid: Cosmos.System.Network.Config.IPConfig
+  name: IPConfig
+  href: api/Cosmos.System.Network.Config.IPConfig.html
+  commentId: T:Cosmos.System.Network.Config.IPConfig
+  fullName: Cosmos.System.Network.Config.IPConfig
+  nameWithType: IPConfig
+- uid: Cosmos.System.Network.Config.IPConfig.#ctor(Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address)
+  name: IPConfig(Address, Address)
+  href: api/Cosmos.System.Network.Config.IPConfig.html#Cosmos_System_Network_Config_IPConfig__ctor_Cosmos_System_Network_IPv4_Address_Cosmos_System_Network_IPv4_Address_
+  commentId: M:Cosmos.System.Network.Config.IPConfig.#ctor(Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address)
+  fullName: Cosmos.System.Network.Config.IPConfig.IPConfig(Cosmos.System.Network.IPv4.Address, Cosmos.System.Network.IPv4.Address)
+  nameWithType: IPConfig.IPConfig(Address, Address)
+- uid: Cosmos.System.Network.Config.IPConfig.#ctor(Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address)
+  name: IPConfig(Address, Address, Address)
+  href: api/Cosmos.System.Network.Config.IPConfig.html#Cosmos_System_Network_Config_IPConfig__ctor_Cosmos_System_Network_IPv4_Address_Cosmos_System_Network_IPv4_Address_Cosmos_System_Network_IPv4_Address_
+  commentId: M:Cosmos.System.Network.Config.IPConfig.#ctor(Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address)
+  fullName: Cosmos.System.Network.Config.IPConfig.IPConfig(Cosmos.System.Network.IPv4.Address, Cosmos.System.Network.IPv4.Address, Cosmos.System.Network.IPv4.Address)
+  nameWithType: IPConfig.IPConfig(Address, Address, Address)
+- uid: Cosmos.System.Network.Config.IPConfig.#ctor*
+  name: IPConfig
+  href: api/Cosmos.System.Network.Config.IPConfig.html#Cosmos_System_Network_Config_IPConfig__ctor_
+  commentId: Overload:Cosmos.System.Network.Config.IPConfig.#ctor
+  isSpec: "True"
+  fullName: Cosmos.System.Network.Config.IPConfig.IPConfig
+  nameWithType: IPConfig.IPConfig
+- uid: Cosmos.System.Network.Config.IPConfig.DefaultGateway
+  name: DefaultGateway
+  href: api/Cosmos.System.Network.Config.IPConfig.html#Cosmos_System_Network_Config_IPConfig_DefaultGateway
+  commentId: P:Cosmos.System.Network.Config.IPConfig.DefaultGateway
+  fullName: Cosmos.System.Network.Config.IPConfig.DefaultGateway
+  nameWithType: IPConfig.DefaultGateway
+- uid: Cosmos.System.Network.Config.IPConfig.DefaultGateway*
+  name: DefaultGateway
+  href: api/Cosmos.System.Network.Config.IPConfig.html#Cosmos_System_Network_Config_IPConfig_DefaultGateway_
+  commentId: Overload:Cosmos.System.Network.Config.IPConfig.DefaultGateway
+  isSpec: "True"
+  fullName: Cosmos.System.Network.Config.IPConfig.DefaultGateway
+  nameWithType: IPConfig.DefaultGateway
+- uid: Cosmos.System.Network.Config.IPConfig.Enable(Cosmos.HAL.NetworkDevice,Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address)
+  name: Enable(NetworkDevice, Address, Address, Address)
+  href: api/Cosmos.System.Network.Config.IPConfig.html#Cosmos_System_Network_Config_IPConfig_Enable_Cosmos_HAL_NetworkDevice_Cosmos_System_Network_IPv4_Address_Cosmos_System_Network_IPv4_Address_Cosmos_System_Network_IPv4_Address_
+  commentId: M:Cosmos.System.Network.Config.IPConfig.Enable(Cosmos.HAL.NetworkDevice,Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address)
+  fullName: Cosmos.System.Network.Config.IPConfig.Enable(Cosmos.HAL.NetworkDevice, Cosmos.System.Network.IPv4.Address, Cosmos.System.Network.IPv4.Address, Cosmos.System.Network.IPv4.Address)
+  nameWithType: IPConfig.Enable(NetworkDevice, Address, Address, Address)
+- uid: Cosmos.System.Network.Config.IPConfig.Enable*
+  name: Enable
+  href: api/Cosmos.System.Network.Config.IPConfig.html#Cosmos_System_Network_Config_IPConfig_Enable_
+  commentId: Overload:Cosmos.System.Network.Config.IPConfig.Enable
+  isSpec: "True"
+  fullName: Cosmos.System.Network.Config.IPConfig.Enable
+  nameWithType: IPConfig.Enable
+- uid: Cosmos.System.Network.Config.IPConfig.FindNetwork(Cosmos.System.Network.IPv4.Address)
+  name: FindNetwork(Address)
+  href: api/Cosmos.System.Network.Config.IPConfig.html#Cosmos_System_Network_Config_IPConfig_FindNetwork_Cosmos_System_Network_IPv4_Address_
+  commentId: M:Cosmos.System.Network.Config.IPConfig.FindNetwork(Cosmos.System.Network.IPv4.Address)
+  fullName: Cosmos.System.Network.Config.IPConfig.FindNetwork(Cosmos.System.Network.IPv4.Address)
+  nameWithType: IPConfig.FindNetwork(Address)
+- uid: Cosmos.System.Network.Config.IPConfig.FindNetwork*
+  name: FindNetwork
+  href: api/Cosmos.System.Network.Config.IPConfig.html#Cosmos_System_Network_Config_IPConfig_FindNetwork_
+  commentId: Overload:Cosmos.System.Network.Config.IPConfig.FindNetwork
+  isSpec: "True"
+  fullName: Cosmos.System.Network.Config.IPConfig.FindNetwork
+  nameWithType: IPConfig.FindNetwork
+- uid: Cosmos.System.Network.Config.IPConfig.IPAddress
+  name: IPAddress
+  href: api/Cosmos.System.Network.Config.IPConfig.html#Cosmos_System_Network_Config_IPConfig_IPAddress
+  commentId: P:Cosmos.System.Network.Config.IPConfig.IPAddress
+  fullName: Cosmos.System.Network.Config.IPConfig.IPAddress
+  nameWithType: IPConfig.IPAddress
+- uid: Cosmos.System.Network.Config.IPConfig.IPAddress*
+  name: IPAddress
+  href: api/Cosmos.System.Network.Config.IPConfig.html#Cosmos_System_Network_Config_IPConfig_IPAddress_
+  commentId: Overload:Cosmos.System.Network.Config.IPConfig.IPAddress
+  isSpec: "True"
+  fullName: Cosmos.System.Network.Config.IPConfig.IPAddress
+  nameWithType: IPConfig.IPAddress
+- uid: Cosmos.System.Network.Config.IPConfig.SubnetMask
+  name: SubnetMask
+  href: api/Cosmos.System.Network.Config.IPConfig.html#Cosmos_System_Network_Config_IPConfig_SubnetMask
+  commentId: P:Cosmos.System.Network.Config.IPConfig.SubnetMask
+  fullName: Cosmos.System.Network.Config.IPConfig.SubnetMask
+  nameWithType: IPConfig.SubnetMask
+- uid: Cosmos.System.Network.Config.IPConfig.SubnetMask*
+  name: SubnetMask
+  href: api/Cosmos.System.Network.Config.IPConfig.html#Cosmos_System_Network_Config_IPConfig_SubnetMask_
+  commentId: Overload:Cosmos.System.Network.Config.IPConfig.SubnetMask
+  isSpec: "True"
+  fullName: Cosmos.System.Network.Config.IPConfig.SubnetMask
+  nameWithType: IPConfig.SubnetMask
+- uid: Cosmos.System.Network.Config.NetworkConfig
+  name: NetworkConfig
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html
+  commentId: T:Cosmos.System.Network.Config.NetworkConfig
+  fullName: Cosmos.System.Network.Config.NetworkConfig
+  nameWithType: NetworkConfig
+- uid: Cosmos.System.Network.Config.NetworkConfig.Add(Cosmos.HAL.NetworkDevice,Cosmos.System.Network.Config.IPConfig)
+  name: Add(NetworkDevice, IPConfig)
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_Add_Cosmos_HAL_NetworkDevice_Cosmos_System_Network_Config_IPConfig_
+  commentId: M:Cosmos.System.Network.Config.NetworkConfig.Add(Cosmos.HAL.NetworkDevice,Cosmos.System.Network.Config.IPConfig)
+  fullName: Cosmos.System.Network.Config.NetworkConfig.Add(Cosmos.HAL.NetworkDevice, Cosmos.System.Network.Config.IPConfig)
+  nameWithType: NetworkConfig.Add(NetworkDevice, IPConfig)
+- uid: Cosmos.System.Network.Config.NetworkConfig.Add*
+  name: Add
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_Add_
+  commentId: Overload:Cosmos.System.Network.Config.NetworkConfig.Add
+  isSpec: "True"
+  fullName: Cosmos.System.Network.Config.NetworkConfig.Add
+  nameWithType: NetworkConfig.Add
+- uid: Cosmos.System.Network.Config.NetworkConfig.Clear
+  name: Clear()
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_Clear
+  commentId: M:Cosmos.System.Network.Config.NetworkConfig.Clear
+  fullName: Cosmos.System.Network.Config.NetworkConfig.Clear()
+  nameWithType: NetworkConfig.Clear()
+- uid: Cosmos.System.Network.Config.NetworkConfig.Clear*
+  name: Clear
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_Clear_
+  commentId: Overload:Cosmos.System.Network.Config.NetworkConfig.Clear
+  isSpec: "True"
+  fullName: Cosmos.System.Network.Config.NetworkConfig.Clear
+  nameWithType: NetworkConfig.Clear
+- uid: Cosmos.System.Network.Config.NetworkConfig.ContainsKey(Cosmos.HAL.NetworkDevice)
+  name: ContainsKey(NetworkDevice)
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_ContainsKey_Cosmos_HAL_NetworkDevice_
+  commentId: M:Cosmos.System.Network.Config.NetworkConfig.ContainsKey(Cosmos.HAL.NetworkDevice)
+  fullName: Cosmos.System.Network.Config.NetworkConfig.ContainsKey(Cosmos.HAL.NetworkDevice)
+  nameWithType: NetworkConfig.ContainsKey(NetworkDevice)
+- uid: Cosmos.System.Network.Config.NetworkConfig.ContainsKey*
+  name: ContainsKey
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_ContainsKey_
+  commentId: Overload:Cosmos.System.Network.Config.NetworkConfig.ContainsKey
+  isSpec: "True"
+  fullName: Cosmos.System.Network.Config.NetworkConfig.ContainsKey
+  nameWithType: NetworkConfig.ContainsKey
+- uid: Cosmos.System.Network.Config.NetworkConfig.Count
+  name: Count
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_Count
+  commentId: P:Cosmos.System.Network.Config.NetworkConfig.Count
+  fullName: Cosmos.System.Network.Config.NetworkConfig.Count
+  nameWithType: NetworkConfig.Count
+- uid: Cosmos.System.Network.Config.NetworkConfig.Count*
+  name: Count
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_Count_
+  commentId: Overload:Cosmos.System.Network.Config.NetworkConfig.Count
+  isSpec: "True"
+  fullName: Cosmos.System.Network.Config.NetworkConfig.Count
+  nameWithType: NetworkConfig.Count
+- uid: Cosmos.System.Network.Config.NetworkConfig.CurrentConfig
+  name: CurrentConfig
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_CurrentConfig
+  commentId: F:Cosmos.System.Network.Config.NetworkConfig.CurrentConfig
+  fullName: Cosmos.System.Network.Config.NetworkConfig.CurrentConfig
+  nameWithType: NetworkConfig.CurrentConfig
+- uid: Cosmos.System.Network.Config.NetworkConfig.Get(Cosmos.HAL.NetworkDevice)
+  name: Get(NetworkDevice)
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_Get_Cosmos_HAL_NetworkDevice_
+  commentId: M:Cosmos.System.Network.Config.NetworkConfig.Get(Cosmos.HAL.NetworkDevice)
+  fullName: Cosmos.System.Network.Config.NetworkConfig.Get(Cosmos.HAL.NetworkDevice)
+  nameWithType: NetworkConfig.Get(NetworkDevice)
+- uid: Cosmos.System.Network.Config.NetworkConfig.Get*
+  name: Get
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_Get_
+  commentId: Overload:Cosmos.System.Network.Config.NetworkConfig.Get
+  isSpec: "True"
+  fullName: Cosmos.System.Network.Config.NetworkConfig.Get
+  nameWithType: NetworkConfig.Get
+- uid: Cosmos.System.Network.Config.NetworkConfig.GetEnumerator
+  name: GetEnumerator()
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_GetEnumerator
+  commentId: M:Cosmos.System.Network.Config.NetworkConfig.GetEnumerator
+  fullName: Cosmos.System.Network.Config.NetworkConfig.GetEnumerator()
+  nameWithType: NetworkConfig.GetEnumerator()
+- uid: Cosmos.System.Network.Config.NetworkConfig.GetEnumerator*
+  name: GetEnumerator
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_GetEnumerator_
+  commentId: Overload:Cosmos.System.Network.Config.NetworkConfig.GetEnumerator
+  isSpec: "True"
+  fullName: Cosmos.System.Network.Config.NetworkConfig.GetEnumerator
+  nameWithType: NetworkConfig.GetEnumerator
+- uid: Cosmos.System.Network.Config.NetworkConfig.GetEnumerator_V
+  name: GetEnumerator_V()
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_GetEnumerator_V
+  commentId: M:Cosmos.System.Network.Config.NetworkConfig.GetEnumerator_V
+  fullName: Cosmos.System.Network.Config.NetworkConfig.GetEnumerator_V()
+  nameWithType: NetworkConfig.GetEnumerator_V()
+- uid: Cosmos.System.Network.Config.NetworkConfig.GetEnumerator_V*
+  name: GetEnumerator_V
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_GetEnumerator_V_
+  commentId: Overload:Cosmos.System.Network.Config.NetworkConfig.GetEnumerator_V
+  isSpec: "True"
+  fullName: Cosmos.System.Network.Config.NetworkConfig.GetEnumerator_V
+  nameWithType: NetworkConfig.GetEnumerator_V
+- uid: Cosmos.System.Network.Config.NetworkConfig.GetKeyByValue(Cosmos.System.Network.Config.IPConfig)
+  name: GetKeyByValue(IPConfig)
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_GetKeyByValue_Cosmos_System_Network_Config_IPConfig_
+  commentId: M:Cosmos.System.Network.Config.NetworkConfig.GetKeyByValue(Cosmos.System.Network.Config.IPConfig)
+  fullName: Cosmos.System.Network.Config.NetworkConfig.GetKeyByValue(Cosmos.System.Network.Config.IPConfig)
+  nameWithType: NetworkConfig.GetKeyByValue(IPConfig)
+- uid: Cosmos.System.Network.Config.NetworkConfig.GetKeyByValue*
+  name: GetKeyByValue
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_GetKeyByValue_
+  commentId: Overload:Cosmos.System.Network.Config.NetworkConfig.GetKeyByValue
+  isSpec: "True"
+  fullName: Cosmos.System.Network.Config.NetworkConfig.GetKeyByValue
+  nameWithType: NetworkConfig.GetKeyByValue
+- uid: Cosmos.System.Network.Config.NetworkConfig.GetKeys
+  name: GetKeys()
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_GetKeys
+  commentId: M:Cosmos.System.Network.Config.NetworkConfig.GetKeys
+  fullName: Cosmos.System.Network.Config.NetworkConfig.GetKeys()
+  nameWithType: NetworkConfig.GetKeys()
+- uid: Cosmos.System.Network.Config.NetworkConfig.GetKeys*
+  name: GetKeys
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_GetKeys_
+  commentId: Overload:Cosmos.System.Network.Config.NetworkConfig.GetKeys
+  isSpec: "True"
+  fullName: Cosmos.System.Network.Config.NetworkConfig.GetKeys
+  nameWithType: NetworkConfig.GetKeys
+- uid: Cosmos.System.Network.Config.NetworkConfig.GetValues
+  name: GetValues()
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_GetValues
+  commentId: M:Cosmos.System.Network.Config.NetworkConfig.GetValues
+  fullName: Cosmos.System.Network.Config.NetworkConfig.GetValues()
+  nameWithType: NetworkConfig.GetValues()
+- uid: Cosmos.System.Network.Config.NetworkConfig.GetValues*
+  name: GetValues
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_GetValues_
+  commentId: Overload:Cosmos.System.Network.Config.NetworkConfig.GetValues
+  isSpec: "True"
+  fullName: Cosmos.System.Network.Config.NetworkConfig.GetValues
+  nameWithType: NetworkConfig.GetValues
+- uid: Cosmos.System.Network.Config.NetworkConfig.Item(Cosmos.HAL.NetworkDevice)
+  name: Item[NetworkDevice]
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_Item_Cosmos_HAL_NetworkDevice_
+  commentId: P:Cosmos.System.Network.Config.NetworkConfig.Item(Cosmos.HAL.NetworkDevice)
+  name.vb: Item(NetworkDevice)
+  fullName: Cosmos.System.Network.Config.NetworkConfig.Item[Cosmos.HAL.NetworkDevice]
+  fullName.vb: Cosmos.System.Network.Config.NetworkConfig.Item(Cosmos.HAL.NetworkDevice)
+  nameWithType: NetworkConfig.Item[NetworkDevice]
+  nameWithType.vb: NetworkConfig.Item(NetworkDevice)
+- uid: Cosmos.System.Network.Config.NetworkConfig.Item*
+  name: Item
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_Item_
+  commentId: Overload:Cosmos.System.Network.Config.NetworkConfig.Item
+  isSpec: "True"
+  fullName: Cosmos.System.Network.Config.NetworkConfig.Item
+  nameWithType: NetworkConfig.Item
+- uid: Cosmos.System.Network.Config.NetworkConfig.Keys
+  name: Keys
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_Keys
+  commentId: F:Cosmos.System.Network.Config.NetworkConfig.Keys
+  fullName: Cosmos.System.Network.Config.NetworkConfig.Keys
+  nameWithType: NetworkConfig.Keys
+- uid: Cosmos.System.Network.Config.NetworkConfig.Remove(Cosmos.HAL.NetworkDevice)
+  name: Remove(NetworkDevice)
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_Remove_Cosmos_HAL_NetworkDevice_
+  commentId: M:Cosmos.System.Network.Config.NetworkConfig.Remove(Cosmos.HAL.NetworkDevice)
+  fullName: Cosmos.System.Network.Config.NetworkConfig.Remove(Cosmos.HAL.NetworkDevice)
+  nameWithType: NetworkConfig.Remove(NetworkDevice)
+- uid: Cosmos.System.Network.Config.NetworkConfig.Remove*
+  name: Remove
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_Remove_
+  commentId: Overload:Cosmos.System.Network.Config.NetworkConfig.Remove
+  isSpec: "True"
+  fullName: Cosmos.System.Network.Config.NetworkConfig.Remove
+  nameWithType: NetworkConfig.Remove
+- uid: Cosmos.System.Network.Config.NetworkConfig.Values
+  name: Values
+  href: api/Cosmos.System.Network.Config.NetworkConfig.html#Cosmos_System_Network_Config_NetworkConfig_Values
+  commentId: F:Cosmos.System.Network.Config.NetworkConfig.Values
+  fullName: Cosmos.System.Network.Config.NetworkConfig.Values
+  nameWithType: NetworkConfig.Values
 - uid: Cosmos.System.Network.EthernetPacket
   name: EthernetPacket
   href: api/Cosmos.System.Network.EthernetPacket.html
@@ -33587,19 +34078,19 @@ references:
   commentId: F:Cosmos.System.Network.EthernetPacket.destMAC
   fullName: Cosmos.System.Network.EthernetPacket.destMAC
   nameWithType: EthernetPacket.destMAC
-- uid: Cosmos.System.Network.EthernetPacket.initFields
-  name: initFields()
-  href: api/Cosmos.System.Network.EthernetPacket.html#Cosmos_System_Network_EthernetPacket_initFields
-  commentId: M:Cosmos.System.Network.EthernetPacket.initFields
-  fullName: Cosmos.System.Network.EthernetPacket.initFields()
-  nameWithType: EthernetPacket.initFields()
-- uid: Cosmos.System.Network.EthernetPacket.initFields*
-  name: initFields
-  href: api/Cosmos.System.Network.EthernetPacket.html#Cosmos_System_Network_EthernetPacket_initFields_
-  commentId: Overload:Cosmos.System.Network.EthernetPacket.initFields
+- uid: Cosmos.System.Network.EthernetPacket.InitFields
+  name: InitFields()
+  href: api/Cosmos.System.Network.EthernetPacket.html#Cosmos_System_Network_EthernetPacket_InitFields
+  commentId: M:Cosmos.System.Network.EthernetPacket.InitFields
+  fullName: Cosmos.System.Network.EthernetPacket.InitFields()
+  nameWithType: EthernetPacket.InitFields()
+- uid: Cosmos.System.Network.EthernetPacket.InitFields*
+  name: InitFields
+  href: api/Cosmos.System.Network.EthernetPacket.html#Cosmos_System_Network_EthernetPacket_InitFields_
+  commentId: Overload:Cosmos.System.Network.EthernetPacket.InitFields
   isSpec: "True"
-  fullName: Cosmos.System.Network.EthernetPacket.initFields
-  nameWithType: EthernetPacket.initFields
+  fullName: Cosmos.System.Network.EthernetPacket.InitFields
+  nameWithType: EthernetPacket.InitFields
 - uid: Cosmos.System.Network.EthernetPacket.PrepareForSending
   name: PrepareForSending()
   href: api/Cosmos.System.Network.EthernetPacket.html#Cosmos_System_Network_EthernetPacket_PrepareForSending
@@ -33613,6 +34104,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Network.EthernetPacket.PrepareForSending
   nameWithType: EthernetPacket.PrepareForSending
+- uid: Cosmos.System.Network.EthernetPacket.RawData
+  name: RawData
+  href: api/Cosmos.System.Network.EthernetPacket.html#Cosmos_System_Network_EthernetPacket_RawData
+  commentId: P:Cosmos.System.Network.EthernetPacket.RawData
+  fullName: Cosmos.System.Network.EthernetPacket.RawData
+  nameWithType: EthernetPacket.RawData
+- uid: Cosmos.System.Network.EthernetPacket.RawData*
+  name: RawData
+  href: api/Cosmos.System.Network.EthernetPacket.html#Cosmos_System_Network_EthernetPacket_RawData_
+  commentId: Overload:Cosmos.System.Network.EthernetPacket.RawData
+  isSpec: "True"
+  fullName: Cosmos.System.Network.EthernetPacket.RawData
+  nameWithType: EthernetPacket.RawData
 - uid: Cosmos.System.Network.EthernetPacket.srcMAC
   name: srcMAC
   href: api/Cosmos.System.Network.EthernetPacket.html#Cosmos_System_Network_EthernetPacket_srcMAC
@@ -33672,6 +34176,19 @@ references:
   commentId: F:Cosmos.System.Network.IPv4.Address.Broadcast
   fullName: Cosmos.System.Network.IPv4.Address.Broadcast
   nameWithType: Address.Broadcast
+- uid: Cosmos.System.Network.IPv4.Address.CIDRToAddress(System.Int32)
+  name: CIDRToAddress(Int32)
+  href: api/Cosmos.System.Network.IPv4.Address.html#Cosmos_System_Network_IPv4_Address_CIDRToAddress_System_Int32_
+  commentId: M:Cosmos.System.Network.IPv4.Address.CIDRToAddress(System.Int32)
+  fullName: Cosmos.System.Network.IPv4.Address.CIDRToAddress(System.Int32)
+  nameWithType: Address.CIDRToAddress(Int32)
+- uid: Cosmos.System.Network.IPv4.Address.CIDRToAddress*
+  name: CIDRToAddress
+  href: api/Cosmos.System.Network.IPv4.Address.html#Cosmos_System_Network_IPv4_Address_CIDRToAddress_
+  commentId: Overload:Cosmos.System.Network.IPv4.Address.CIDRToAddress
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.Address.CIDRToAddress
+  nameWithType: Address.CIDRToAddress
 - uid: Cosmos.System.Network.IPv4.Address.CompareTo(System.Object)
   name: CompareTo(Object)
   href: api/Cosmos.System.Network.IPv4.Address.html#Cosmos_System_Network_IPv4_Address_CompareTo_System_Object_
@@ -33782,70 +34299,6 @@ references:
   commentId: F:Cosmos.System.Network.IPv4.Address.Zero
   fullName: Cosmos.System.Network.IPv4.Address.Zero
   nameWithType: Address.Zero
-- uid: Cosmos.System.Network.IPv4.Config
-  name: Config
-  href: api/Cosmos.System.Network.IPv4.Config.html
-  commentId: T:Cosmos.System.Network.IPv4.Config
-  fullName: Cosmos.System.Network.IPv4.Config
-  nameWithType: Config
-- uid: Cosmos.System.Network.IPv4.Config.#ctor(Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address)
-  name: Config(Address, Address)
-  href: api/Cosmos.System.Network.IPv4.Config.html#Cosmos_System_Network_IPv4_Config__ctor_Cosmos_System_Network_IPv4_Address_Cosmos_System_Network_IPv4_Address_
-  commentId: M:Cosmos.System.Network.IPv4.Config.#ctor(Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address)
-  fullName: Cosmos.System.Network.IPv4.Config.Config(Cosmos.System.Network.IPv4.Address, Cosmos.System.Network.IPv4.Address)
-  nameWithType: Config.Config(Address, Address)
-- uid: Cosmos.System.Network.IPv4.Config.#ctor(Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address)
-  name: Config(Address, Address, Address)
-  href: api/Cosmos.System.Network.IPv4.Config.html#Cosmos_System_Network_IPv4_Config__ctor_Cosmos_System_Network_IPv4_Address_Cosmos_System_Network_IPv4_Address_Cosmos_System_Network_IPv4_Address_
-  commentId: M:Cosmos.System.Network.IPv4.Config.#ctor(Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address)
-  fullName: Cosmos.System.Network.IPv4.Config.Config(Cosmos.System.Network.IPv4.Address, Cosmos.System.Network.IPv4.Address, Cosmos.System.Network.IPv4.Address)
-  nameWithType: Config.Config(Address, Address, Address)
-- uid: Cosmos.System.Network.IPv4.Config.#ctor*
-  name: Config
-  href: api/Cosmos.System.Network.IPv4.Config.html#Cosmos_System_Network_IPv4_Config__ctor_
-  commentId: Overload:Cosmos.System.Network.IPv4.Config.#ctor
-  isSpec: "True"
-  fullName: Cosmos.System.Network.IPv4.Config.Config
-  nameWithType: Config.Config
-- uid: Cosmos.System.Network.IPv4.Config.DefaultGateway
-  name: DefaultGateway
-  href: api/Cosmos.System.Network.IPv4.Config.html#Cosmos_System_Network_IPv4_Config_DefaultGateway
-  commentId: P:Cosmos.System.Network.IPv4.Config.DefaultGateway
-  fullName: Cosmos.System.Network.IPv4.Config.DefaultGateway
-  nameWithType: Config.DefaultGateway
-- uid: Cosmos.System.Network.IPv4.Config.DefaultGateway*
-  name: DefaultGateway
-  href: api/Cosmos.System.Network.IPv4.Config.html#Cosmos_System_Network_IPv4_Config_DefaultGateway_
-  commentId: Overload:Cosmos.System.Network.IPv4.Config.DefaultGateway
-  isSpec: "True"
-  fullName: Cosmos.System.Network.IPv4.Config.DefaultGateway
-  nameWithType: Config.DefaultGateway
-- uid: Cosmos.System.Network.IPv4.Config.IPAddress
-  name: IPAddress
-  href: api/Cosmos.System.Network.IPv4.Config.html#Cosmos_System_Network_IPv4_Config_IPAddress
-  commentId: P:Cosmos.System.Network.IPv4.Config.IPAddress
-  fullName: Cosmos.System.Network.IPv4.Config.IPAddress
-  nameWithType: Config.IPAddress
-- uid: Cosmos.System.Network.IPv4.Config.IPAddress*
-  name: IPAddress
-  href: api/Cosmos.System.Network.IPv4.Config.html#Cosmos_System_Network_IPv4_Config_IPAddress_
-  commentId: Overload:Cosmos.System.Network.IPv4.Config.IPAddress
-  isSpec: "True"
-  fullName: Cosmos.System.Network.IPv4.Config.IPAddress
-  nameWithType: Config.IPAddress
-- uid: Cosmos.System.Network.IPv4.Config.SubnetMask
-  name: SubnetMask
-  href: api/Cosmos.System.Network.IPv4.Config.html#Cosmos_System_Network_IPv4_Config_SubnetMask
-  commentId: P:Cosmos.System.Network.IPv4.Config.SubnetMask
-  fullName: Cosmos.System.Network.IPv4.Config.SubnetMask
-  nameWithType: Config.SubnetMask
-- uid: Cosmos.System.Network.IPv4.Config.SubnetMask*
-  name: SubnetMask
-  href: api/Cosmos.System.Network.IPv4.Config.html#Cosmos_System_Network_IPv4_Config_SubnetMask_
-  commentId: Overload:Cosmos.System.Network.IPv4.Config.SubnetMask
-  isSpec: "True"
-  fullName: Cosmos.System.Network.IPv4.Config.SubnetMask
-  nameWithType: Config.SubnetMask
 - uid: Cosmos.System.Network.IPv4.EndPoint
   name: EndPoint
   href: api/Cosmos.System.Network.IPv4.EndPoint.html
@@ -33865,6 +34318,12 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Network.IPv4.EndPoint.EndPoint
   nameWithType: EndPoint.EndPoint
+- uid: Cosmos.System.Network.IPv4.EndPoint.address
+  name: address
+  href: api/Cosmos.System.Network.IPv4.EndPoint.html#Cosmos_System_Network_IPv4_EndPoint_address
+  commentId: F:Cosmos.System.Network.IPv4.EndPoint.address
+  fullName: Cosmos.System.Network.IPv4.EndPoint.address
+  nameWithType: EndPoint.address
 - uid: Cosmos.System.Network.IPv4.EndPoint.CompareTo(System.Object)
   name: CompareTo(Object)
   href: api/Cosmos.System.Network.IPv4.EndPoint.html#Cosmos_System_Network_IPv4_EndPoint_CompareTo_System_Object_
@@ -33878,6 +34337,12 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Network.IPv4.EndPoint.CompareTo
   nameWithType: EndPoint.CompareTo
+- uid: Cosmos.System.Network.IPv4.EndPoint.port
+  name: port
+  href: api/Cosmos.System.Network.IPv4.EndPoint.html#Cosmos_System_Network_IPv4_EndPoint_port
+  commentId: F:Cosmos.System.Network.IPv4.EndPoint.port
+  fullName: Cosmos.System.Network.IPv4.EndPoint.port
+  nameWithType: EndPoint.port
 - uid: Cosmos.System.Network.IPv4.EndPoint.ToString
   name: ToString()
   href: api/Cosmos.System.Network.IPv4.EndPoint.html#Cosmos_System_Network_IPv4_EndPoint_ToString
@@ -33891,6 +34356,181 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Network.IPv4.EndPoint.ToString
   nameWithType: EndPoint.ToString
+- uid: Cosmos.System.Network.IPv4.ICMPClient
+  name: ICMPClient
+  href: api/Cosmos.System.Network.IPv4.ICMPClient.html
+  commentId: T:Cosmos.System.Network.IPv4.ICMPClient
+  fullName: Cosmos.System.Network.IPv4.ICMPClient
+  nameWithType: ICMPClient
+- uid: Cosmos.System.Network.IPv4.ICMPClient.#ctor
+  name: ICMPClient()
+  href: api/Cosmos.System.Network.IPv4.ICMPClient.html#Cosmos_System_Network_IPv4_ICMPClient__ctor
+  commentId: M:Cosmos.System.Network.IPv4.ICMPClient.#ctor
+  fullName: Cosmos.System.Network.IPv4.ICMPClient.ICMPClient()
+  nameWithType: ICMPClient.ICMPClient()
+- uid: Cosmos.System.Network.IPv4.ICMPClient.#ctor*
+  name: ICMPClient
+  href: api/Cosmos.System.Network.IPv4.ICMPClient.html#Cosmos_System_Network_IPv4_ICMPClient__ctor_
+  commentId: Overload:Cosmos.System.Network.IPv4.ICMPClient.#ctor
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.ICMPClient.ICMPClient
+  nameWithType: ICMPClient.ICMPClient
+- uid: Cosmos.System.Network.IPv4.ICMPClient.Close
+  name: Close()
+  href: api/Cosmos.System.Network.IPv4.ICMPClient.html#Cosmos_System_Network_IPv4_ICMPClient_Close
+  commentId: M:Cosmos.System.Network.IPv4.ICMPClient.Close
+  fullName: Cosmos.System.Network.IPv4.ICMPClient.Close()
+  nameWithType: ICMPClient.Close()
+- uid: Cosmos.System.Network.IPv4.ICMPClient.Close*
+  name: Close
+  href: api/Cosmos.System.Network.IPv4.ICMPClient.html#Cosmos_System_Network_IPv4_ICMPClient_Close_
+  commentId: Overload:Cosmos.System.Network.IPv4.ICMPClient.Close
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.ICMPClient.Close
+  nameWithType: ICMPClient.Close
+- uid: Cosmos.System.Network.IPv4.ICMPClient.Connect(Cosmos.System.Network.IPv4.Address)
+  name: Connect(Address)
+  href: api/Cosmos.System.Network.IPv4.ICMPClient.html#Cosmos_System_Network_IPv4_ICMPClient_Connect_Cosmos_System_Network_IPv4_Address_
+  commentId: M:Cosmos.System.Network.IPv4.ICMPClient.Connect(Cosmos.System.Network.IPv4.Address)
+  fullName: Cosmos.System.Network.IPv4.ICMPClient.Connect(Cosmos.System.Network.IPv4.Address)
+  nameWithType: ICMPClient.Connect(Address)
+- uid: Cosmos.System.Network.IPv4.ICMPClient.Connect*
+  name: Connect
+  href: api/Cosmos.System.Network.IPv4.ICMPClient.html#Cosmos_System_Network_IPv4_ICMPClient_Connect_
+  commentId: Overload:Cosmos.System.Network.IPv4.ICMPClient.Connect
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.ICMPClient.Connect
+  nameWithType: ICMPClient.Connect
+- uid: Cosmos.System.Network.IPv4.ICMPClient.destination
+  name: destination
+  href: api/Cosmos.System.Network.IPv4.ICMPClient.html#Cosmos_System_Network_IPv4_ICMPClient_destination
+  commentId: F:Cosmos.System.Network.IPv4.ICMPClient.destination
+  fullName: Cosmos.System.Network.IPv4.ICMPClient.destination
+  nameWithType: ICMPClient.destination
+- uid: Cosmos.System.Network.IPv4.ICMPClient.Dispose
+  name: Dispose()
+  href: api/Cosmos.System.Network.IPv4.ICMPClient.html#Cosmos_System_Network_IPv4_ICMPClient_Dispose
+  commentId: M:Cosmos.System.Network.IPv4.ICMPClient.Dispose
+  fullName: Cosmos.System.Network.IPv4.ICMPClient.Dispose()
+  nameWithType: ICMPClient.Dispose()
+- uid: Cosmos.System.Network.IPv4.ICMPClient.Dispose*
+  name: Dispose
+  href: api/Cosmos.System.Network.IPv4.ICMPClient.html#Cosmos_System_Network_IPv4_ICMPClient_Dispose_
+  commentId: Overload:Cosmos.System.Network.IPv4.ICMPClient.Dispose
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.ICMPClient.Dispose
+  nameWithType: ICMPClient.Dispose
+- uid: Cosmos.System.Network.IPv4.ICMPClient.Receive(Cosmos.System.Network.IPv4.EndPoint@,System.Int32)
+  name: Receive(ref EndPoint, Int32)
+  href: api/Cosmos.System.Network.IPv4.ICMPClient.html#Cosmos_System_Network_IPv4_ICMPClient_Receive_Cosmos_System_Network_IPv4_EndPoint__System_Int32_
+  commentId: M:Cosmos.System.Network.IPv4.ICMPClient.Receive(Cosmos.System.Network.IPv4.EndPoint@,System.Int32)
+  name.vb: Receive(ByRef EndPoint, Int32)
+  fullName: Cosmos.System.Network.IPv4.ICMPClient.Receive(ref Cosmos.System.Network.IPv4.EndPoint, System.Int32)
+  fullName.vb: Cosmos.System.Network.IPv4.ICMPClient.Receive(ByRef Cosmos.System.Network.IPv4.EndPoint, System.Int32)
+  nameWithType: ICMPClient.Receive(ref EndPoint, Int32)
+  nameWithType.vb: ICMPClient.Receive(ByRef EndPoint, Int32)
+- uid: Cosmos.System.Network.IPv4.ICMPClient.Receive*
+  name: Receive
+  href: api/Cosmos.System.Network.IPv4.ICMPClient.html#Cosmos_System_Network_IPv4_ICMPClient_Receive_
+  commentId: Overload:Cosmos.System.Network.IPv4.ICMPClient.Receive
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.ICMPClient.Receive
+  nameWithType: ICMPClient.Receive
+- uid: Cosmos.System.Network.IPv4.ICMPClient.ReceiveData(Cosmos.System.Network.IPv4.ICMPPacket)
+  name: ReceiveData(ICMPPacket)
+  href: api/Cosmos.System.Network.IPv4.ICMPClient.html#Cosmos_System_Network_IPv4_ICMPClient_ReceiveData_Cosmos_System_Network_IPv4_ICMPPacket_
+  commentId: M:Cosmos.System.Network.IPv4.ICMPClient.ReceiveData(Cosmos.System.Network.IPv4.ICMPPacket)
+  fullName: Cosmos.System.Network.IPv4.ICMPClient.ReceiveData(Cosmos.System.Network.IPv4.ICMPPacket)
+  nameWithType: ICMPClient.ReceiveData(ICMPPacket)
+- uid: Cosmos.System.Network.IPv4.ICMPClient.ReceiveData*
+  name: ReceiveData
+  href: api/Cosmos.System.Network.IPv4.ICMPClient.html#Cosmos_System_Network_IPv4_ICMPClient_ReceiveData_
+  commentId: Overload:Cosmos.System.Network.IPv4.ICMPClient.ReceiveData
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.ICMPClient.ReceiveData
+  nameWithType: ICMPClient.ReceiveData
+- uid: Cosmos.System.Network.IPv4.ICMPClient.rxBuffer
+  name: rxBuffer
+  href: api/Cosmos.System.Network.IPv4.ICMPClient.html#Cosmos_System_Network_IPv4_ICMPClient_rxBuffer
+  commentId: F:Cosmos.System.Network.IPv4.ICMPClient.rxBuffer
+  fullName: Cosmos.System.Network.IPv4.ICMPClient.rxBuffer
+  nameWithType: ICMPClient.rxBuffer
+- uid: Cosmos.System.Network.IPv4.ICMPClient.SendEcho
+  name: SendEcho()
+  href: api/Cosmos.System.Network.IPv4.ICMPClient.html#Cosmos_System_Network_IPv4_ICMPClient_SendEcho
+  commentId: M:Cosmos.System.Network.IPv4.ICMPClient.SendEcho
+  fullName: Cosmos.System.Network.IPv4.ICMPClient.SendEcho()
+  nameWithType: ICMPClient.SendEcho()
+- uid: Cosmos.System.Network.IPv4.ICMPClient.SendEcho*
+  name: SendEcho
+  href: api/Cosmos.System.Network.IPv4.ICMPClient.html#Cosmos_System_Network_IPv4_ICMPClient_SendEcho_
+  commentId: Overload:Cosmos.System.Network.IPv4.ICMPClient.SendEcho
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.ICMPClient.SendEcho
+  nameWithType: ICMPClient.SendEcho
+- uid: Cosmos.System.Network.IPv4.ICMPPacket
+  name: ICMPPacket
+  href: api/Cosmos.System.Network.IPv4.ICMPPacket.html
+  commentId: T:Cosmos.System.Network.IPv4.ICMPPacket
+  fullName: Cosmos.System.Network.IPv4.ICMPPacket
+  nameWithType: ICMPPacket
+- uid: Cosmos.System.Network.IPv4.ICMPPacket.CalcICMPCRC(System.UInt16)
+  name: CalcICMPCRC(UInt16)
+  href: api/Cosmos.System.Network.IPv4.ICMPPacket.html#Cosmos_System_Network_IPv4_ICMPPacket_CalcICMPCRC_System_UInt16_
+  commentId: M:Cosmos.System.Network.IPv4.ICMPPacket.CalcICMPCRC(System.UInt16)
+  fullName: Cosmos.System.Network.IPv4.ICMPPacket.CalcICMPCRC(System.UInt16)
+  nameWithType: ICMPPacket.CalcICMPCRC(UInt16)
+- uid: Cosmos.System.Network.IPv4.ICMPPacket.CalcICMPCRC*
+  name: CalcICMPCRC
+  href: api/Cosmos.System.Network.IPv4.ICMPPacket.html#Cosmos_System_Network_IPv4_ICMPPacket_CalcICMPCRC_
+  commentId: Overload:Cosmos.System.Network.IPv4.ICMPPacket.CalcICMPCRC
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.ICMPPacket.CalcICMPCRC
+  nameWithType: ICMPPacket.CalcICMPCRC
+- uid: Cosmos.System.Network.IPv4.ICMPPacket.icmpCode
+  name: icmpCode
+  href: api/Cosmos.System.Network.IPv4.ICMPPacket.html#Cosmos_System_Network_IPv4_ICMPPacket_icmpCode
+  commentId: F:Cosmos.System.Network.IPv4.ICMPPacket.icmpCode
+  fullName: Cosmos.System.Network.IPv4.ICMPPacket.icmpCode
+  nameWithType: ICMPPacket.icmpCode
+- uid: Cosmos.System.Network.IPv4.ICMPPacket.icmpCRC
+  name: icmpCRC
+  href: api/Cosmos.System.Network.IPv4.ICMPPacket.html#Cosmos_System_Network_IPv4_ICMPPacket_icmpCRC
+  commentId: F:Cosmos.System.Network.IPv4.ICMPPacket.icmpCRC
+  fullName: Cosmos.System.Network.IPv4.ICMPPacket.icmpCRC
+  nameWithType: ICMPPacket.icmpCRC
+- uid: Cosmos.System.Network.IPv4.ICMPPacket.icmpType
+  name: icmpType
+  href: api/Cosmos.System.Network.IPv4.ICMPPacket.html#Cosmos_System_Network_IPv4_ICMPPacket_icmpType
+  commentId: F:Cosmos.System.Network.IPv4.ICMPPacket.icmpType
+  fullName: Cosmos.System.Network.IPv4.ICMPPacket.icmpType
+  nameWithType: ICMPPacket.icmpType
+- uid: Cosmos.System.Network.IPv4.ICMPPacket.InitFields
+  name: InitFields()
+  href: api/Cosmos.System.Network.IPv4.ICMPPacket.html#Cosmos_System_Network_IPv4_ICMPPacket_InitFields
+  commentId: M:Cosmos.System.Network.IPv4.ICMPPacket.InitFields
+  fullName: Cosmos.System.Network.IPv4.ICMPPacket.InitFields()
+  nameWithType: ICMPPacket.InitFields()
+- uid: Cosmos.System.Network.IPv4.ICMPPacket.InitFields*
+  name: InitFields
+  href: api/Cosmos.System.Network.IPv4.ICMPPacket.html#Cosmos_System_Network_IPv4_ICMPPacket_InitFields_
+  commentId: Overload:Cosmos.System.Network.IPv4.ICMPPacket.InitFields
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.ICMPPacket.InitFields
+  nameWithType: ICMPPacket.InitFields
+- uid: Cosmos.System.Network.IPv4.ICMPPacket.ToString
+  name: ToString()
+  href: api/Cosmos.System.Network.IPv4.ICMPPacket.html#Cosmos_System_Network_IPv4_ICMPPacket_ToString
+  commentId: M:Cosmos.System.Network.IPv4.ICMPPacket.ToString
+  fullName: Cosmos.System.Network.IPv4.ICMPPacket.ToString()
+  nameWithType: ICMPPacket.ToString()
+- uid: Cosmos.System.Network.IPv4.ICMPPacket.ToString*
+  name: ToString
+  href: api/Cosmos.System.Network.IPv4.ICMPPacket.html#Cosmos_System_Network_IPv4_ICMPPacket_ToString_
+  commentId: Overload:Cosmos.System.Network.IPv4.ICMPPacket.ToString
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.ICMPPacket.ToString
+  nameWithType: ICMPPacket.ToString
 - uid: Cosmos.System.Network.IPv4.IPPacket
   name: IPPacket
   href: api/Cosmos.System.Network.IPv4.IPPacket.html
@@ -33903,12 +34543,27 @@ references:
   commentId: M:Cosmos.System.Network.IPv4.IPPacket.#ctor(Cosmos.HAL.Network.MACAddress,Cosmos.HAL.Network.MACAddress,System.UInt16,System.Byte,Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address,System.Byte)
   fullName: Cosmos.System.Network.IPv4.IPPacket.IPPacket(Cosmos.HAL.Network.MACAddress, Cosmos.HAL.Network.MACAddress, System.UInt16, System.Byte, Cosmos.System.Network.IPv4.Address, Cosmos.System.Network.IPv4.Address, System.Byte)
   nameWithType: IPPacket.IPPacket(MACAddress, MACAddress, UInt16, Byte, Address, Address, Byte)
+- uid: Cosmos.System.Network.IPv4.IPPacket.#ctor(System.Byte[])
+  name: IPPacket(Byte[])
+  href: api/Cosmos.System.Network.IPv4.IPPacket.html#Cosmos_System_Network_IPv4_IPPacket__ctor_System_Byte___
+  commentId: M:Cosmos.System.Network.IPv4.IPPacket.#ctor(System.Byte[])
+  name.vb: IPPacket(Byte())
+  fullName: Cosmos.System.Network.IPv4.IPPacket.IPPacket(System.Byte[])
+  fullName.vb: Cosmos.System.Network.IPv4.IPPacket.IPPacket(System.Byte())
+  nameWithType: IPPacket.IPPacket(Byte[])
+  nameWithType.vb: IPPacket.IPPacket(Byte())
 - uid: Cosmos.System.Network.IPv4.IPPacket.#ctor(System.UInt16,System.Byte,Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address,System.Byte)
   name: IPPacket(UInt16, Byte, Address, Address, Byte)
   href: api/Cosmos.System.Network.IPv4.IPPacket.html#Cosmos_System_Network_IPv4_IPPacket__ctor_System_UInt16_System_Byte_Cosmos_System_Network_IPv4_Address_Cosmos_System_Network_IPv4_Address_System_Byte_
   commentId: M:Cosmos.System.Network.IPv4.IPPacket.#ctor(System.UInt16,System.Byte,Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address,System.Byte)
   fullName: Cosmos.System.Network.IPv4.IPPacket.IPPacket(System.UInt16, System.Byte, Cosmos.System.Network.IPv4.Address, Cosmos.System.Network.IPv4.Address, System.Byte)
   nameWithType: IPPacket.IPPacket(UInt16, Byte, Address, Address, Byte)
+- uid: Cosmos.System.Network.IPv4.IPPacket.#ctor(System.UInt16,System.Byte,Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address,System.Byte,Cosmos.HAL.Network.MACAddress)
+  name: IPPacket(UInt16, Byte, Address, Address, Byte, MACAddress)
+  href: api/Cosmos.System.Network.IPv4.IPPacket.html#Cosmos_System_Network_IPv4_IPPacket__ctor_System_UInt16_System_Byte_Cosmos_System_Network_IPv4_Address_Cosmos_System_Network_IPv4_Address_System_Byte_Cosmos_HAL_Network_MACAddress_
+  commentId: M:Cosmos.System.Network.IPv4.IPPacket.#ctor(System.UInt16,System.Byte,Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address,System.Byte,Cosmos.HAL.Network.MACAddress)
+  fullName: Cosmos.System.Network.IPv4.IPPacket.IPPacket(System.UInt16, System.Byte, Cosmos.System.Network.IPv4.Address, Cosmos.System.Network.IPv4.Address, System.Byte, Cosmos.HAL.Network.MACAddress)
+  nameWithType: IPPacket.IPPacket(UInt16, Byte, Address, Address, Byte, MACAddress)
 - uid: Cosmos.System.Network.IPv4.IPPacket.#ctor*
   name: IPPacket
   href: api/Cosmos.System.Network.IPv4.IPPacket.html#Cosmos_System_Network_IPv4_IPPacket__ctor_
@@ -33951,19 +34606,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Network.IPv4.IPPacket.CalcOcCRC
   nameWithType: IPPacket.CalcOcCRC
-- uid: Cosmos.System.Network.IPv4.IPPacket.initFields
-  name: initFields()
-  href: api/Cosmos.System.Network.IPv4.IPPacket.html#Cosmos_System_Network_IPv4_IPPacket_initFields
-  commentId: M:Cosmos.System.Network.IPv4.IPPacket.initFields
-  fullName: Cosmos.System.Network.IPv4.IPPacket.initFields()
-  nameWithType: IPPacket.initFields()
-- uid: Cosmos.System.Network.IPv4.IPPacket.initFields*
-  name: initFields
-  href: api/Cosmos.System.Network.IPv4.IPPacket.html#Cosmos_System_Network_IPv4_IPPacket_initFields_
-  commentId: Overload:Cosmos.System.Network.IPv4.IPPacket.initFields
+- uid: Cosmos.System.Network.IPv4.IPPacket.InitFields
+  name: InitFields()
+  href: api/Cosmos.System.Network.IPv4.IPPacket.html#Cosmos_System_Network_IPv4_IPPacket_InitFields
+  commentId: M:Cosmos.System.Network.IPv4.IPPacket.InitFields
+  fullName: Cosmos.System.Network.IPv4.IPPacket.InitFields()
+  nameWithType: IPPacket.InitFields()
+- uid: Cosmos.System.Network.IPv4.IPPacket.InitFields*
+  name: InitFields
+  href: api/Cosmos.System.Network.IPv4.IPPacket.html#Cosmos_System_Network_IPv4_IPPacket_InitFields_
+  commentId: Overload:Cosmos.System.Network.IPv4.IPPacket.InitFields
   isSpec: "True"
-  fullName: Cosmos.System.Network.IPv4.IPPacket.initFields
-  nameWithType: IPPacket.initFields
+  fullName: Cosmos.System.Network.IPv4.IPPacket.InitFields
+  nameWithType: IPPacket.InitFields
 - uid: Cosmos.System.Network.IPv4.IPPacket.ipHeaderLength
   name: ipHeaderLength
   href: api/Cosmos.System.Network.IPv4.IPPacket.html#Cosmos_System_Network_IPv4_IPPacket_ipHeaderLength
@@ -33996,185 +34651,843 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Network.IPv4.IPPacket.ToString
   nameWithType: IPPacket.ToString
-- uid: Cosmos.System.Network.IPv4.UDPPacket
+- uid: Cosmos.System.Network.IPv4.UDP
+  name: Cosmos.System.Network.IPv4.UDP
+  href: api/Cosmos.System.Network.IPv4.UDP.html
+  commentId: N:Cosmos.System.Network.IPv4.UDP
+  fullName: Cosmos.System.Network.IPv4.UDP
+  nameWithType: Cosmos.System.Network.IPv4.UDP
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP
+  name: Cosmos.System.Network.IPv4.UDP.DHCP
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.html
+  commentId: N:Cosmos.System.Network.IPv4.UDP.DHCP
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP
+  nameWithType: Cosmos.System.Network.IPv4.UDP.DHCP
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient
+  name: DHCPClient
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.html
+  commentId: T:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient
+  nameWithType: DHCPClient
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.#ctor
+  name: DHCPClient()
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.html#Cosmos_System_Network_IPv4_UDP_DHCP_DHCPClient__ctor
+  commentId: M:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.#ctor
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.DHCPClient()
+  nameWithType: DHCPClient.DHCPClient()
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.#ctor*
+  name: DHCPClient
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.html#Cosmos_System_Network_IPv4_UDP_DHCP_DHCPClient__ctor_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.#ctor
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.DHCPClient
+  nameWithType: DHCPClient.DHCPClient
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.asked
+  name: asked
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.html#Cosmos_System_Network_IPv4_UDP_DHCP_DHCPClient_asked
+  commentId: F:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.asked
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.asked
+  nameWithType: DHCPClient.asked
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.DHCPServerAddress(Cosmos.HAL.NetworkDevice)
+  name: DHCPServerAddress(NetworkDevice)
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.html#Cosmos_System_Network_IPv4_UDP_DHCP_DHCPClient_DHCPServerAddress_Cosmos_HAL_NetworkDevice_
+  commentId: M:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.DHCPServerAddress(Cosmos.HAL.NetworkDevice)
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.DHCPServerAddress(Cosmos.HAL.NetworkDevice)
+  nameWithType: DHCPClient.DHCPServerAddress(NetworkDevice)
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.DHCPServerAddress*
+  name: DHCPServerAddress
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.html#Cosmos_System_Network_IPv4_UDP_DHCP_DHCPClient_DHCPServerAddress_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.DHCPServerAddress
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.DHCPServerAddress
+  nameWithType: DHCPClient.DHCPServerAddress
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.SendDiscoverPacket
+  name: SendDiscoverPacket()
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.html#Cosmos_System_Network_IPv4_UDP_DHCP_DHCPClient_SendDiscoverPacket
+  commentId: M:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.SendDiscoverPacket
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.SendDiscoverPacket()
+  nameWithType: DHCPClient.SendDiscoverPacket()
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.SendDiscoverPacket*
+  name: SendDiscoverPacket
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.html#Cosmos_System_Network_IPv4_UDP_DHCP_DHCPClient_SendDiscoverPacket_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.SendDiscoverPacket
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.SendDiscoverPacket
+  nameWithType: DHCPClient.SendDiscoverPacket
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.SendReleasePacket
+  name: SendReleasePacket()
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.html#Cosmos_System_Network_IPv4_UDP_DHCP_DHCPClient_SendReleasePacket
+  commentId: M:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.SendReleasePacket
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.SendReleasePacket()
+  nameWithType: DHCPClient.SendReleasePacket()
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.SendReleasePacket*
+  name: SendReleasePacket
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.html#Cosmos_System_Network_IPv4_UDP_DHCP_DHCPClient_SendReleasePacket_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.SendReleasePacket
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPClient.SendReleasePacket
+  nameWithType: DHCPClient.SendReleasePacket
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption
+  name: DHCPOption
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.html
+  commentId: T:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption
+  nameWithType: DHCPOption
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.Data
+  name: Data
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.html#Cosmos_System_Network_IPv4_UDP_DHCP_DHCPOption_Data
+  commentId: P:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.Data
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.Data
+  nameWithType: DHCPOption.Data
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.Data*
+  name: Data
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.html#Cosmos_System_Network_IPv4_UDP_DHCP_DHCPOption_Data_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.Data
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.Data
+  nameWithType: DHCPOption.Data
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.Length
+  name: Length
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.html#Cosmos_System_Network_IPv4_UDP_DHCP_DHCPOption_Length
+  commentId: P:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.Length
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.Length
+  nameWithType: DHCPOption.Length
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.Length*
+  name: Length
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.html#Cosmos_System_Network_IPv4_UDP_DHCP_DHCPOption_Length_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.Length
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.Length
+  nameWithType: DHCPOption.Length
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.Type
+  name: Type
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.html#Cosmos_System_Network_IPv4_UDP_DHCP_DHCPOption_Type
+  commentId: P:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.Type
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.Type
+  nameWithType: DHCPOption.Type
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.Type*
+  name: Type
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.html#Cosmos_System_Network_IPv4_UDP_DHCP_DHCPOption_Type_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.Type
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPOption.Type
+  nameWithType: DHCPOption.Type
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket
+  name: DHCPPacket
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.html
+  commentId: T:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket
+  nameWithType: DHCPPacket
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.#ctor(System.Byte[])
+  name: DHCPPacket(Byte[])
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.html#Cosmos_System_Network_IPv4_UDP_DHCP_DHCPPacket__ctor_System_Byte___
+  commentId: M:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.#ctor(System.Byte[])
+  name.vb: DHCPPacket(Byte())
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.DHCPPacket(System.Byte[])
+  fullName.vb: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.DHCPPacket(System.Byte())
+  nameWithType: DHCPPacket.DHCPPacket(Byte[])
+  nameWithType.vb: DHCPPacket.DHCPPacket(Byte())
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.#ctor*
+  name: DHCPPacket
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.html#Cosmos_System_Network_IPv4_UDP_DHCP_DHCPPacket__ctor_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.#ctor
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.DHCPPacket
+  nameWithType: DHCPPacket.DHCPPacket
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.DHCPHandler(System.Byte[])
+  name: DHCPHandler(Byte[])
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.html#Cosmos_System_Network_IPv4_UDP_DHCP_DHCPPacket_DHCPHandler_System_Byte___
+  commentId: M:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.DHCPHandler(System.Byte[])
+  name.vb: DHCPHandler(Byte())
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.DHCPHandler(System.Byte[])
+  fullName.vb: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.DHCPHandler(System.Byte())
+  nameWithType: DHCPPacket.DHCPHandler(Byte[])
+  nameWithType.vb: DHCPPacket.DHCPHandler(Byte())
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.DHCPHandler*
+  name: DHCPHandler
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.html#Cosmos_System_Network_IPv4_UDP_DHCP_DHCPPacket_DHCPHandler_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.DHCPHandler
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.DHCPHandler
+  nameWithType: DHCPPacket.DHCPHandler
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.InitFields
+  name: InitFields()
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.html#Cosmos_System_Network_IPv4_UDP_DHCP_DHCPPacket_InitFields
+  commentId: M:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.InitFields
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.InitFields()
+  nameWithType: DHCPPacket.InitFields()
+- uid: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.InitFields*
+  name: InitFields
+  href: api/Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.html#Cosmos_System_Network_IPv4_UDP_DHCP_DHCPPacket_InitFields_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.InitFields
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DHCP.DHCPPacket.InitFields
+  nameWithType: DHCPPacket.InitFields
+- uid: Cosmos.System.Network.IPv4.UDP.DNS
+  name: Cosmos.System.Network.IPv4.UDP.DNS
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.html
+  commentId: N:Cosmos.System.Network.IPv4.UDP.DNS
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS
+  nameWithType: Cosmos.System.Network.IPv4.UDP.DNS
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer
+  name: DNSAnswer
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.html
+  commentId: T:Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer
+  nameWithType: DNSAnswer
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.Address
+  name: Address
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSAnswer_Address
+  commentId: P:Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.Address
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.Address
+  nameWithType: DNSAnswer.Address
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.Address*
+  name: Address
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSAnswer_Address_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.Address
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.Address
+  nameWithType: DNSAnswer.Address
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.Class
+  name: Class
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSAnswer_Class
+  commentId: P:Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.Class
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.Class
+  nameWithType: DNSAnswer.Class
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.Class*
+  name: Class
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSAnswer_Class_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.Class
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.Class
+  nameWithType: DNSAnswer.Class
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.DataLenght
+  name: DataLenght
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSAnswer_DataLenght
+  commentId: P:Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.DataLenght
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.DataLenght
+  nameWithType: DNSAnswer.DataLenght
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.DataLenght*
+  name: DataLenght
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSAnswer_DataLenght_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.DataLenght
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.DataLenght
+  nameWithType: DNSAnswer.DataLenght
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.Name
+  name: Name
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSAnswer_Name
+  commentId: P:Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.Name
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.Name
+  nameWithType: DNSAnswer.Name
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.Name*
+  name: Name
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSAnswer_Name_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.Name
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.Name
+  nameWithType: DNSAnswer.Name
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.TimeToLive
+  name: TimeToLive
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSAnswer_TimeToLive
+  commentId: P:Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.TimeToLive
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.TimeToLive
+  nameWithType: DNSAnswer.TimeToLive
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.TimeToLive*
+  name: TimeToLive
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSAnswer_TimeToLive_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.TimeToLive
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.TimeToLive
+  nameWithType: DNSAnswer.TimeToLive
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.Type
+  name: Type
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSAnswer_Type
+  commentId: P:Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.Type
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.Type
+  nameWithType: DNSAnswer.Type
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.Type*
+  name: Type
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSAnswer_Type_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.Type
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSAnswer.Type
+  nameWithType: DNSAnswer.Type
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DnsClient
+  name: DnsClient
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.html
+  commentId: T:Cosmos.System.Network.IPv4.UDP.DNS.DnsClient
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DnsClient
+  nameWithType: DnsClient
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.#ctor
+  name: DnsClient()
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.html#Cosmos_System_Network_IPv4_UDP_DNS_DnsClient__ctor
+  commentId: M:Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.#ctor
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.DnsClient()
+  nameWithType: DnsClient.DnsClient()
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.#ctor*
+  name: DnsClient
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.html#Cosmos_System_Network_IPv4_UDP_DNS_DnsClient__ctor_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.#ctor
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.DnsClient
+  nameWithType: DnsClient.DnsClient
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.Connect(Cosmos.System.Network.IPv4.Address)
+  name: Connect(Address)
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.html#Cosmos_System_Network_IPv4_UDP_DNS_DnsClient_Connect_Cosmos_System_Network_IPv4_Address_
+  commentId: M:Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.Connect(Cosmos.System.Network.IPv4.Address)
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.Connect(Cosmos.System.Network.IPv4.Address)
+  nameWithType: DnsClient.Connect(Address)
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.Connect*
+  name: Connect
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.html#Cosmos_System_Network_IPv4_UDP_DNS_DnsClient_Connect_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.Connect
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.Connect
+  nameWithType: DnsClient.Connect
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.Receive(System.Int32)
+  name: Receive(Int32)
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.html#Cosmos_System_Network_IPv4_UDP_DNS_DnsClient_Receive_System_Int32_
+  commentId: M:Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.Receive(System.Int32)
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.Receive(System.Int32)
+  nameWithType: DnsClient.Receive(Int32)
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.Receive*
+  name: Receive
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.html#Cosmos_System_Network_IPv4_UDP_DNS_DnsClient_Receive_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.Receive
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.Receive
+  nameWithType: DnsClient.Receive
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.SendAsk(System.String)
+  name: SendAsk(String)
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.html#Cosmos_System_Network_IPv4_UDP_DNS_DnsClient_SendAsk_System_String_
+  commentId: M:Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.SendAsk(System.String)
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.SendAsk(System.String)
+  nameWithType: DnsClient.SendAsk(String)
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.SendAsk*
+  name: SendAsk
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.html#Cosmos_System_Network_IPv4_UDP_DNS_DnsClient_SendAsk_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.SendAsk
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DnsClient.SendAsk
+  nameWithType: DnsClient.SendAsk
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket
+  name: DNSPacket
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.html
+  commentId: T:Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket
+  nameWithType: DNSPacket
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.#ctor(Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address,System.UInt16,System.UInt16)
+  name: DNSPacket(Address, Address, UInt16, UInt16)
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSPacket__ctor_Cosmos_System_Network_IPv4_Address_Cosmos_System_Network_IPv4_Address_System_UInt16_System_UInt16_
+  commentId: M:Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.#ctor(Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address,System.UInt16,System.UInt16)
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.DNSPacket(Cosmos.System.Network.IPv4.Address, Cosmos.System.Network.IPv4.Address, System.UInt16, System.UInt16)
+  nameWithType: DNSPacket.DNSPacket(Address, Address, UInt16, UInt16)
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.#ctor(System.Byte[])
+  name: DNSPacket(Byte[])
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSPacket__ctor_System_Byte___
+  commentId: M:Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.#ctor(System.Byte[])
+  name.vb: DNSPacket(Byte())
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.DNSPacket(System.Byte[])
+  fullName.vb: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.DNSPacket(System.Byte())
+  nameWithType: DNSPacket.DNSPacket(Byte[])
+  nameWithType.vb: DNSPacket.DNSPacket(Byte())
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.#ctor*
+  name: DNSPacket
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSPacket__ctor_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.#ctor
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.DNSPacket
+  nameWithType: DNSPacket.DNSPacket
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.InitFields
+  name: InitFields()
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSPacket_InitFields
+  commentId: M:Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.InitFields
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.InitFields()
+  nameWithType: DNSPacket.InitFields()
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.InitFields*
+  name: InitFields
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSPacket_InitFields_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.InitFields
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.InitFields
+  nameWithType: DNSPacket.InitFields
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.ParseName(System.Byte[],System.Int32@)
+  name: ParseName(Byte[], ref Int32)
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSPacket_ParseName_System_Byte___System_Int32__
+  commentId: M:Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.ParseName(System.Byte[],System.Int32@)
+  name.vb: ParseName(Byte(), ByRef Int32)
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.ParseName(System.Byte[], ref System.Int32)
+  fullName.vb: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.ParseName(System.Byte(), ByRef System.Int32)
+  nameWithType: DNSPacket.ParseName(Byte[], ref Int32)
+  nameWithType.vb: DNSPacket.ParseName(Byte(), ByRef Int32)
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.ParseName*
+  name: ParseName
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSPacket_ParseName_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.ParseName
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.ParseName
+  nameWithType: DNSPacket.ParseName
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.ToString
+  name: ToString()
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSPacket_ToString
+  commentId: M:Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.ToString
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.ToString()
+  nameWithType: DNSPacket.ToString()
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.ToString*
+  name: ToString
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSPacket_ToString_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.ToString
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacket.ToString
+  nameWithType: DNSPacket.ToString
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAnswer
+  name: DNSPacketAnswer
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAnswer.html
+  commentId: T:Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAnswer
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAnswer
+  nameWithType: DNSPacketAnswer
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAnswer.#ctor(System.Byte[])
+  name: DNSPacketAnswer(Byte[])
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAnswer.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSPacketAnswer__ctor_System_Byte___
+  commentId: M:Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAnswer.#ctor(System.Byte[])
+  name.vb: DNSPacketAnswer(Byte())
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAnswer.DNSPacketAnswer(System.Byte[])
+  fullName.vb: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAnswer.DNSPacketAnswer(System.Byte())
+  nameWithType: DNSPacketAnswer.DNSPacketAnswer(Byte[])
+  nameWithType.vb: DNSPacketAnswer.DNSPacketAnswer(Byte())
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAnswer.#ctor*
+  name: DNSPacketAnswer
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAnswer.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSPacketAnswer__ctor_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAnswer.#ctor
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAnswer.DNSPacketAnswer
+  nameWithType: DNSPacketAnswer.DNSPacketAnswer
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAnswer.InitFields
+  name: InitFields()
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAnswer.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSPacketAnswer_InitFields
+  commentId: M:Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAnswer.InitFields
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAnswer.InitFields()
+  nameWithType: DNSPacketAnswer.InitFields()
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAnswer.InitFields*
+  name: InitFields
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAnswer.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSPacketAnswer_InitFields_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAnswer.InitFields
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAnswer.InitFields
+  nameWithType: DNSPacketAnswer.InitFields
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAsk
+  name: DNSPacketAsk
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAsk.html
+  commentId: T:Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAsk
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAsk
+  nameWithType: DNSPacketAsk
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAsk.#ctor(Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address,System.String)
+  name: DNSPacketAsk(Address, Address, String)
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAsk.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSPacketAsk__ctor_Cosmos_System_Network_IPv4_Address_Cosmos_System_Network_IPv4_Address_System_String_
+  commentId: M:Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAsk.#ctor(Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address,System.String)
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAsk.DNSPacketAsk(Cosmos.System.Network.IPv4.Address, Cosmos.System.Network.IPv4.Address, System.String)
+  nameWithType: DNSPacketAsk.DNSPacketAsk(Address, Address, String)
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAsk.#ctor(System.Byte[])
+  name: DNSPacketAsk(Byte[])
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAsk.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSPacketAsk__ctor_System_Byte___
+  commentId: M:Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAsk.#ctor(System.Byte[])
+  name.vb: DNSPacketAsk(Byte())
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAsk.DNSPacketAsk(System.Byte[])
+  fullName.vb: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAsk.DNSPacketAsk(System.Byte())
+  nameWithType: DNSPacketAsk.DNSPacketAsk(Byte[])
+  nameWithType.vb: DNSPacketAsk.DNSPacketAsk(Byte())
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAsk.#ctor*
+  name: DNSPacketAsk
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAsk.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSPacketAsk__ctor_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAsk.#ctor
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSPacketAsk.DNSPacketAsk
+  nameWithType: DNSPacketAsk.DNSPacketAsk
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery
+  name: DNSQuery
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.html
+  commentId: T:Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery
+  nameWithType: DNSQuery
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.Class
+  name: Class
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSQuery_Class
+  commentId: P:Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.Class
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.Class
+  nameWithType: DNSQuery.Class
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.Class*
+  name: Class
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSQuery_Class_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.Class
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.Class
+  nameWithType: DNSQuery.Class
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.Name
+  name: Name
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSQuery_Name
+  commentId: P:Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.Name
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.Name
+  nameWithType: DNSQuery.Name
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.Name*
+  name: Name
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSQuery_Name_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.Name
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.Name
+  nameWithType: DNSQuery.Name
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.Type
+  name: Type
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSQuery_Type
+  commentId: P:Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.Type
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.Type
+  nameWithType: DNSQuery.Type
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.Type*
+  name: Type
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.html#Cosmos_System_Network_IPv4_UDP_DNS_DNSQuery_Type_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.Type
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.DNSQuery.Type
+  nameWithType: DNSQuery.Type
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode
+  name: ReplyCode
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.html
+  commentId: T:Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode
+  nameWithType: ReplyCode
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.FormatError
+  name: FormatError
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.html#Cosmos_System_Network_IPv4_UDP_DNS_ReplyCode_FormatError
+  commentId: F:Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.FormatError
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.FormatError
+  nameWithType: ReplyCode.FormatError
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.NameError
+  name: NameError
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.html#Cosmos_System_Network_IPv4_UDP_DNS_ReplyCode_NameError
+  commentId: F:Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.NameError
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.NameError
+  nameWithType: ReplyCode.NameError
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.NotSupported
+  name: NotSupported
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.html#Cosmos_System_Network_IPv4_UDP_DNS_ReplyCode_NotSupported
+  commentId: F:Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.NotSupported
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.NotSupported
+  nameWithType: ReplyCode.NotSupported
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.OK
+  name: OK
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.html#Cosmos_System_Network_IPv4_UDP_DNS_ReplyCode_OK
+  commentId: F:Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.OK
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.OK
+  nameWithType: ReplyCode.OK
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.Refused
+  name: Refused
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.html#Cosmos_System_Network_IPv4_UDP_DNS_ReplyCode_Refused
+  commentId: F:Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.Refused
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.Refused
+  nameWithType: ReplyCode.Refused
+- uid: Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.ServerFailure
+  name: ServerFailure
+  href: api/Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.html#Cosmos_System_Network_IPv4_UDP_DNS_ReplyCode_ServerFailure
+  commentId: F:Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.ServerFailure
+  fullName: Cosmos.System.Network.IPv4.UDP.DNS.ReplyCode.ServerFailure
+  nameWithType: ReplyCode.ServerFailure
+- uid: Cosmos.System.Network.IPv4.UDP.UdpClient
+  name: UdpClient
+  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html
+  commentId: T:Cosmos.System.Network.IPv4.UDP.UdpClient
+  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient
+  nameWithType: UdpClient
+- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.#ctor
+  name: UdpClient()
+  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient__ctor
+  commentId: M:Cosmos.System.Network.IPv4.UDP.UdpClient.#ctor
+  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.UdpClient()
+  nameWithType: UdpClient.UdpClient()
+- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.#ctor(Cosmos.System.Network.IPv4.Address,System.Int32)
+  name: UdpClient(Address, Int32)
+  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient__ctor_Cosmos_System_Network_IPv4_Address_System_Int32_
+  commentId: M:Cosmos.System.Network.IPv4.UDP.UdpClient.#ctor(Cosmos.System.Network.IPv4.Address,System.Int32)
+  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.UdpClient(Cosmos.System.Network.IPv4.Address, System.Int32)
+  nameWithType: UdpClient.UdpClient(Address, Int32)
+- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.#ctor(System.Int32)
+  name: UdpClient(Int32)
+  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient__ctor_System_Int32_
+  commentId: M:Cosmos.System.Network.IPv4.UDP.UdpClient.#ctor(System.Int32)
+  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.UdpClient(System.Int32)
+  nameWithType: UdpClient.UdpClient(Int32)
+- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.#ctor*
+  name: UdpClient
+  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient__ctor_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.UdpClient.#ctor
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.UdpClient
+  nameWithType: UdpClient.UdpClient
+- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.Close
+  name: Close()
+  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient_Close
+  commentId: M:Cosmos.System.Network.IPv4.UDP.UdpClient.Close
+  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.Close()
+  nameWithType: UdpClient.Close()
+- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.Close*
+  name: Close
+  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient_Close_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.UdpClient.Close
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.Close
+  nameWithType: UdpClient.Close
+- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.Connect(Cosmos.System.Network.IPv4.Address,System.Int32)
+  name: Connect(Address, Int32)
+  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient_Connect_Cosmos_System_Network_IPv4_Address_System_Int32_
+  commentId: M:Cosmos.System.Network.IPv4.UDP.UdpClient.Connect(Cosmos.System.Network.IPv4.Address,System.Int32)
+  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.Connect(Cosmos.System.Network.IPv4.Address, System.Int32)
+  nameWithType: UdpClient.Connect(Address, Int32)
+- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.Connect*
+  name: Connect
+  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient_Connect_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.UdpClient.Connect
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.Connect
+  nameWithType: UdpClient.Connect
+- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.destination
+  name: destination
+  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient_destination
+  commentId: F:Cosmos.System.Network.IPv4.UDP.UdpClient.destination
+  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.destination
+  nameWithType: UdpClient.destination
+- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.destinationPort
+  name: destinationPort
+  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient_destinationPort
+  commentId: F:Cosmos.System.Network.IPv4.UDP.UdpClient.destinationPort
+  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.destinationPort
+  nameWithType: UdpClient.destinationPort
+- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.Dispose
+  name: Dispose()
+  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient_Dispose
+  commentId: M:Cosmos.System.Network.IPv4.UDP.UdpClient.Dispose
+  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.Dispose()
+  nameWithType: UdpClient.Dispose()
+- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.Dispose*
+  name: Dispose
+  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient_Dispose_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.UdpClient.Dispose
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.Dispose
+  nameWithType: UdpClient.Dispose
+- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.localPort
+  name: localPort
+  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient_localPort
+  commentId: F:Cosmos.System.Network.IPv4.UDP.UdpClient.localPort
+  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.localPort
+  nameWithType: UdpClient.localPort
+- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.NonBlockingReceive(Cosmos.System.Network.IPv4.EndPoint@)
+  name: NonBlockingReceive(ref EndPoint)
+  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient_NonBlockingReceive_Cosmos_System_Network_IPv4_EndPoint__
+  commentId: M:Cosmos.System.Network.IPv4.UDP.UdpClient.NonBlockingReceive(Cosmos.System.Network.IPv4.EndPoint@)
+  name.vb: NonBlockingReceive(ByRef EndPoint)
+  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.NonBlockingReceive(ref Cosmos.System.Network.IPv4.EndPoint)
+  fullName.vb: Cosmos.System.Network.IPv4.UDP.UdpClient.NonBlockingReceive(ByRef Cosmos.System.Network.IPv4.EndPoint)
+  nameWithType: UdpClient.NonBlockingReceive(ref EndPoint)
+  nameWithType.vb: UdpClient.NonBlockingReceive(ByRef EndPoint)
+- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.NonBlockingReceive*
+  name: NonBlockingReceive
+  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient_NonBlockingReceive_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.UdpClient.NonBlockingReceive
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.NonBlockingReceive
+  nameWithType: UdpClient.NonBlockingReceive
+- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.Receive(Cosmos.System.Network.IPv4.EndPoint@)
+  name: Receive(ref EndPoint)
+  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient_Receive_Cosmos_System_Network_IPv4_EndPoint__
+  commentId: M:Cosmos.System.Network.IPv4.UDP.UdpClient.Receive(Cosmos.System.Network.IPv4.EndPoint@)
+  name.vb: Receive(ByRef EndPoint)
+  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.Receive(ref Cosmos.System.Network.IPv4.EndPoint)
+  fullName.vb: Cosmos.System.Network.IPv4.UDP.UdpClient.Receive(ByRef Cosmos.System.Network.IPv4.EndPoint)
+  nameWithType: UdpClient.Receive(ref EndPoint)
+  nameWithType.vb: UdpClient.Receive(ByRef EndPoint)
+- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.Receive*
+  name: Receive
+  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient_Receive_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.UdpClient.Receive
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.Receive
+  nameWithType: UdpClient.Receive
+- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.rxBuffer
+  name: rxBuffer
+  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient_rxBuffer
+  commentId: F:Cosmos.System.Network.IPv4.UDP.UdpClient.rxBuffer
+  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.rxBuffer
+  nameWithType: UdpClient.rxBuffer
+- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.Send(System.Byte[])
+  name: Send(Byte[])
+  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient_Send_System_Byte___
+  commentId: M:Cosmos.System.Network.IPv4.UDP.UdpClient.Send(System.Byte[])
+  name.vb: Send(Byte())
+  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.Send(System.Byte[])
+  fullName.vb: Cosmos.System.Network.IPv4.UDP.UdpClient.Send(System.Byte())
+  nameWithType: UdpClient.Send(Byte[])
+  nameWithType.vb: UdpClient.Send(Byte())
+- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.Send(System.Byte[],Cosmos.System.Network.IPv4.Address,System.Int32)
+  name: Send(Byte[], Address, Int32)
+  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient_Send_System_Byte___Cosmos_System_Network_IPv4_Address_System_Int32_
+  commentId: M:Cosmos.System.Network.IPv4.UDP.UdpClient.Send(System.Byte[],Cosmos.System.Network.IPv4.Address,System.Int32)
+  name.vb: Send(Byte(), Address, Int32)
+  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.Send(System.Byte[], Cosmos.System.Network.IPv4.Address, System.Int32)
+  fullName.vb: Cosmos.System.Network.IPv4.UDP.UdpClient.Send(System.Byte(), Cosmos.System.Network.IPv4.Address, System.Int32)
+  nameWithType: UdpClient.Send(Byte[], Address, Int32)
+  nameWithType.vb: UdpClient.Send(Byte(), Address, Int32)
+- uid: Cosmos.System.Network.IPv4.UDP.UdpClient.Send*
+  name: Send
+  href: api/Cosmos.System.Network.IPv4.UDP.UdpClient.html#Cosmos_System_Network_IPv4_UDP_UdpClient_Send_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.UdpClient.Send
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.UDP.UdpClient.Send
+  nameWithType: UdpClient.Send
+- uid: Cosmos.System.Network.IPv4.UDP.UDPPacket
   name: UDPPacket
-  href: api/Cosmos.System.Network.IPv4.UDPPacket.html
-  commentId: T:Cosmos.System.Network.IPv4.UDPPacket
-  fullName: Cosmos.System.Network.IPv4.UDPPacket
+  href: api/Cosmos.System.Network.IPv4.UDP.UDPPacket.html
+  commentId: T:Cosmos.System.Network.IPv4.UDP.UDPPacket
+  fullName: Cosmos.System.Network.IPv4.UDP.UDPPacket
   nameWithType: UDPPacket
-- uid: Cosmos.System.Network.IPv4.UDPPacket.#ctor(Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address,System.UInt16,System.UInt16,System.Byte[])
+- uid: Cosmos.System.Network.IPv4.UDP.UDPPacket.#ctor(Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address,System.UInt16,System.UInt16,System.Byte[])
   name: UDPPacket(Address, Address, UInt16, UInt16, Byte[])
-  href: api/Cosmos.System.Network.IPv4.UDPPacket.html#Cosmos_System_Network_IPv4_UDPPacket__ctor_Cosmos_System_Network_IPv4_Address_Cosmos_System_Network_IPv4_Address_System_UInt16_System_UInt16_System_Byte___
-  commentId: M:Cosmos.System.Network.IPv4.UDPPacket.#ctor(Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address,System.UInt16,System.UInt16,System.Byte[])
+  href: api/Cosmos.System.Network.IPv4.UDP.UDPPacket.html#Cosmos_System_Network_IPv4_UDP_UDPPacket__ctor_Cosmos_System_Network_IPv4_Address_Cosmos_System_Network_IPv4_Address_System_UInt16_System_UInt16_System_Byte___
+  commentId: M:Cosmos.System.Network.IPv4.UDP.UDPPacket.#ctor(Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address,System.UInt16,System.UInt16,System.Byte[])
   name.vb: UDPPacket(Address, Address, UInt16, UInt16, Byte())
-  fullName: Cosmos.System.Network.IPv4.UDPPacket.UDPPacket(Cosmos.System.Network.IPv4.Address, Cosmos.System.Network.IPv4.Address, System.UInt16, System.UInt16, System.Byte[])
-  fullName.vb: Cosmos.System.Network.IPv4.UDPPacket.UDPPacket(Cosmos.System.Network.IPv4.Address, Cosmos.System.Network.IPv4.Address, System.UInt16, System.UInt16, System.Byte())
+  fullName: Cosmos.System.Network.IPv4.UDP.UDPPacket.UDPPacket(Cosmos.System.Network.IPv4.Address, Cosmos.System.Network.IPv4.Address, System.UInt16, System.UInt16, System.Byte[])
+  fullName.vb: Cosmos.System.Network.IPv4.UDP.UDPPacket.UDPPacket(Cosmos.System.Network.IPv4.Address, Cosmos.System.Network.IPv4.Address, System.UInt16, System.UInt16, System.Byte())
   nameWithType: UDPPacket.UDPPacket(Address, Address, UInt16, UInt16, Byte[])
   nameWithType.vb: UDPPacket.UDPPacket(Address, Address, UInt16, UInt16, Byte())
-- uid: Cosmos.System.Network.IPv4.UDPPacket.#ctor(System.Byte[])
+- uid: Cosmos.System.Network.IPv4.UDP.UDPPacket.#ctor(Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address,UInt16,UInt16,UInt16)
+  name: UDPPacket(Address, Address, UInt16, UInt16, UInt16)
+  href: api/Cosmos.System.Network.IPv4.UDP.UDPPacket.html#Cosmos_System_Network_IPv4_UDP_UDPPacket__ctor_Cosmos_System_Network_IPv4_Address_Cosmos_System_Network_IPv4_Address_UInt16_UInt16_UInt16_
+  commentId: M:Cosmos.System.Network.IPv4.UDP.UDPPacket.#ctor(Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address,UInt16,UInt16,UInt16)
+  fullName: Cosmos.System.Network.IPv4.UDP.UDPPacket.UDPPacket(Cosmos.System.Network.IPv4.Address, Cosmos.System.Network.IPv4.Address, UInt16, UInt16, UInt16)
+  nameWithType: UDPPacket.UDPPacket(Address, Address, UInt16, UInt16, UInt16)
+- uid: Cosmos.System.Network.IPv4.UDP.UDPPacket.#ctor(Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address,UInt16,UInt16,UInt16,Cosmos.HAL.Network.MACAddress)
+  name: UDPPacket(Address, Address, UInt16, UInt16, UInt16, MACAddress)
+  href: api/Cosmos.System.Network.IPv4.UDP.UDPPacket.html#Cosmos_System_Network_IPv4_UDP_UDPPacket__ctor_Cosmos_System_Network_IPv4_Address_Cosmos_System_Network_IPv4_Address_UInt16_UInt16_UInt16_Cosmos_HAL_Network_MACAddress_
+  commentId: M:Cosmos.System.Network.IPv4.UDP.UDPPacket.#ctor(Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address,UInt16,UInt16,UInt16,Cosmos.HAL.Network.MACAddress)
+  fullName: Cosmos.System.Network.IPv4.UDP.UDPPacket.UDPPacket(Cosmos.System.Network.IPv4.Address, Cosmos.System.Network.IPv4.Address, UInt16, UInt16, UInt16, Cosmos.HAL.Network.MACAddress)
+  nameWithType: UDPPacket.UDPPacket(Address, Address, UInt16, UInt16, UInt16, MACAddress)
+- uid: Cosmos.System.Network.IPv4.UDP.UDPPacket.#ctor(System.Byte[])
   name: UDPPacket(Byte[])
-  href: api/Cosmos.System.Network.IPv4.UDPPacket.html#Cosmos_System_Network_IPv4_UDPPacket__ctor_System_Byte___
-  commentId: M:Cosmos.System.Network.IPv4.UDPPacket.#ctor(System.Byte[])
+  href: api/Cosmos.System.Network.IPv4.UDP.UDPPacket.html#Cosmos_System_Network_IPv4_UDP_UDPPacket__ctor_System_Byte___
+  commentId: M:Cosmos.System.Network.IPv4.UDP.UDPPacket.#ctor(System.Byte[])
   name.vb: UDPPacket(Byte())
-  fullName: Cosmos.System.Network.IPv4.UDPPacket.UDPPacket(System.Byte[])
-  fullName.vb: Cosmos.System.Network.IPv4.UDPPacket.UDPPacket(System.Byte())
+  fullName: Cosmos.System.Network.IPv4.UDP.UDPPacket.UDPPacket(System.Byte[])
+  fullName.vb: Cosmos.System.Network.IPv4.UDP.UDPPacket.UDPPacket(System.Byte())
   nameWithType: UDPPacket.UDPPacket(Byte[])
   nameWithType.vb: UDPPacket.UDPPacket(Byte())
-- uid: Cosmos.System.Network.IPv4.UDPPacket.#ctor*
+- uid: Cosmos.System.Network.IPv4.UDP.UDPPacket.#ctor*
   name: UDPPacket
-  href: api/Cosmos.System.Network.IPv4.UDPPacket.html#Cosmos_System_Network_IPv4_UDPPacket__ctor_
-  commentId: Overload:Cosmos.System.Network.IPv4.UDPPacket.#ctor
+  href: api/Cosmos.System.Network.IPv4.UDP.UDPPacket.html#Cosmos_System_Network_IPv4_UDP_UDPPacket__ctor_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.UDPPacket.#ctor
   isSpec: "True"
-  fullName: Cosmos.System.Network.IPv4.UDPPacket.UDPPacket
+  fullName: Cosmos.System.Network.IPv4.UDP.UDPPacket.UDPPacket
   nameWithType: UDPPacket.UDPPacket
-- uid: Cosmos.System.Network.IPv4.UDPPacket.Check(System.Byte[],System.UInt16,System.Int32)
-  name: Check(Byte[], UInt16, Int32)
-  href: api/Cosmos.System.Network.IPv4.UDPPacket.html#Cosmos_System_Network_IPv4_UDPPacket_Check_System_Byte___System_UInt16_System_Int32_
-  commentId: M:Cosmos.System.Network.IPv4.UDPPacket.Check(System.Byte[],System.UInt16,System.Int32)
-  name.vb: Check(Byte(), UInt16, Int32)
-  fullName: Cosmos.System.Network.IPv4.UDPPacket.Check(System.Byte[], System.UInt16, System.Int32)
-  fullName.vb: Cosmos.System.Network.IPv4.UDPPacket.Check(System.Byte(), System.UInt16, System.Int32)
-  nameWithType: UDPPacket.Check(Byte[], UInt16, Int32)
-  nameWithType.vb: UDPPacket.Check(Byte(), UInt16, Int32)
-- uid: Cosmos.System.Network.IPv4.UDPPacket.Check*
-  name: Check
-  href: api/Cosmos.System.Network.IPv4.UDPPacket.html#Cosmos_System_Network_IPv4_UDPPacket_Check_
-  commentId: Overload:Cosmos.System.Network.IPv4.UDPPacket.Check
-  isSpec: "True"
-  fullName: Cosmos.System.Network.IPv4.UDPPacket.Check
-  nameWithType: UDPPacket.Check
-- uid: Cosmos.System.Network.IPv4.UDPPacket.CheckCRC(Cosmos.System.Network.IPv4.UDPPacket)
-  name: CheckCRC(UDPPacket)
-  href: api/Cosmos.System.Network.IPv4.UDPPacket.html#Cosmos_System_Network_IPv4_UDPPacket_CheckCRC_Cosmos_System_Network_IPv4_UDPPacket_
-  commentId: M:Cosmos.System.Network.IPv4.UDPPacket.CheckCRC(Cosmos.System.Network.IPv4.UDPPacket)
-  fullName: Cosmos.System.Network.IPv4.UDPPacket.CheckCRC(Cosmos.System.Network.IPv4.UDPPacket)
-  nameWithType: UDPPacket.CheckCRC(UDPPacket)
-- uid: Cosmos.System.Network.IPv4.UDPPacket.CheckCRC*
-  name: CheckCRC
-  href: api/Cosmos.System.Network.IPv4.UDPPacket.html#Cosmos_System_Network_IPv4_UDPPacket_CheckCRC_
-  commentId: Overload:Cosmos.System.Network.IPv4.UDPPacket.CheckCRC
-  isSpec: "True"
-  fullName: Cosmos.System.Network.IPv4.UDPPacket.CheckCRC
-  nameWithType: UDPPacket.CheckCRC
-- uid: Cosmos.System.Network.IPv4.UDPPacket.DestinationPort
+- uid: Cosmos.System.Network.IPv4.UDP.UDPPacket.DestinationPort
   name: DestinationPort
-  href: api/Cosmos.System.Network.IPv4.UDPPacket.html#Cosmos_System_Network_IPv4_UDPPacket_DestinationPort
-  commentId: P:Cosmos.System.Network.IPv4.UDPPacket.DestinationPort
-  fullName: Cosmos.System.Network.IPv4.UDPPacket.DestinationPort
+  href: api/Cosmos.System.Network.IPv4.UDP.UDPPacket.html#Cosmos_System_Network_IPv4_UDP_UDPPacket_DestinationPort
+  commentId: P:Cosmos.System.Network.IPv4.UDP.UDPPacket.DestinationPort
+  fullName: Cosmos.System.Network.IPv4.UDP.UDPPacket.DestinationPort
   nameWithType: UDPPacket.DestinationPort
-- uid: Cosmos.System.Network.IPv4.UDPPacket.DestinationPort*
+- uid: Cosmos.System.Network.IPv4.UDP.UDPPacket.DestinationPort*
   name: DestinationPort
-  href: api/Cosmos.System.Network.IPv4.UDPPacket.html#Cosmos_System_Network_IPv4_UDPPacket_DestinationPort_
-  commentId: Overload:Cosmos.System.Network.IPv4.UDPPacket.DestinationPort
+  href: api/Cosmos.System.Network.IPv4.UDP.UDPPacket.html#Cosmos_System_Network_IPv4_UDP_UDPPacket_DestinationPort_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.UDPPacket.DestinationPort
   isSpec: "True"
-  fullName: Cosmos.System.Network.IPv4.UDPPacket.DestinationPort
+  fullName: Cosmos.System.Network.IPv4.UDP.UDPPacket.DestinationPort
   nameWithType: UDPPacket.DestinationPort
-- uid: Cosmos.System.Network.IPv4.UDPPacket.initFields
-  name: initFields()
-  href: api/Cosmos.System.Network.IPv4.UDPPacket.html#Cosmos_System_Network_IPv4_UDPPacket_initFields
-  commentId: M:Cosmos.System.Network.IPv4.UDPPacket.initFields
-  fullName: Cosmos.System.Network.IPv4.UDPPacket.initFields()
-  nameWithType: UDPPacket.initFields()
-- uid: Cosmos.System.Network.IPv4.UDPPacket.initFields*
-  name: initFields
-  href: api/Cosmos.System.Network.IPv4.UDPPacket.html#Cosmos_System_Network_IPv4_UDPPacket_initFields_
-  commentId: Overload:Cosmos.System.Network.IPv4.UDPPacket.initFields
+- uid: Cosmos.System.Network.IPv4.UDP.UDPPacket.InitFields
+  name: InitFields()
+  href: api/Cosmos.System.Network.IPv4.UDP.UDPPacket.html#Cosmos_System_Network_IPv4_UDP_UDPPacket_InitFields
+  commentId: M:Cosmos.System.Network.IPv4.UDP.UDPPacket.InitFields
+  fullName: Cosmos.System.Network.IPv4.UDP.UDPPacket.InitFields()
+  nameWithType: UDPPacket.InitFields()
+- uid: Cosmos.System.Network.IPv4.UDP.UDPPacket.InitFields*
+  name: InitFields
+  href: api/Cosmos.System.Network.IPv4.UDP.UDPPacket.html#Cosmos_System_Network_IPv4_UDP_UDPPacket_InitFields_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.UDPPacket.InitFields
   isSpec: "True"
-  fullName: Cosmos.System.Network.IPv4.UDPPacket.initFields
-  nameWithType: UDPPacket.initFields
-- uid: Cosmos.System.Network.IPv4.UDPPacket.MakeHeader(System.Byte[],System.Byte[],UInt16,UInt16,UInt16,System.Byte[])
-  name: MakeHeader(Byte[], Byte[], UInt16, UInt16, UInt16, Byte[])
-  href: api/Cosmos.System.Network.IPv4.UDPPacket.html#Cosmos_System_Network_IPv4_UDPPacket_MakeHeader_System_Byte___System_Byte___UInt16_UInt16_UInt16_System_Byte___
-  commentId: M:Cosmos.System.Network.IPv4.UDPPacket.MakeHeader(System.Byte[],System.Byte[],UInt16,UInt16,UInt16,System.Byte[])
-  name.vb: MakeHeader(Byte(), Byte(), UInt16, UInt16, UInt16, Byte())
-  fullName: Cosmos.System.Network.IPv4.UDPPacket.MakeHeader(System.Byte[], System.Byte[], UInt16, UInt16, UInt16, System.Byte[])
-  fullName.vb: Cosmos.System.Network.IPv4.UDPPacket.MakeHeader(System.Byte(), System.Byte(), UInt16, UInt16, UInt16, System.Byte())
-  nameWithType: UDPPacket.MakeHeader(Byte[], Byte[], UInt16, UInt16, UInt16, Byte[])
-  nameWithType.vb: UDPPacket.MakeHeader(Byte(), Byte(), UInt16, UInt16, UInt16, Byte())
-- uid: Cosmos.System.Network.IPv4.UDPPacket.MakeHeader*
-  name: MakeHeader
-  href: api/Cosmos.System.Network.IPv4.UDPPacket.html#Cosmos_System_Network_IPv4_UDPPacket_MakeHeader_
-  commentId: Overload:Cosmos.System.Network.IPv4.UDPPacket.MakeHeader
-  isSpec: "True"
-  fullName: Cosmos.System.Network.IPv4.UDPPacket.MakeHeader
-  nameWithType: UDPPacket.MakeHeader
-- uid: Cosmos.System.Network.IPv4.UDPPacket.SourcePort
+  fullName: Cosmos.System.Network.IPv4.UDP.UDPPacket.InitFields
+  nameWithType: UDPPacket.InitFields
+- uid: Cosmos.System.Network.IPv4.UDP.UDPPacket.SourcePort
   name: SourcePort
-  href: api/Cosmos.System.Network.IPv4.UDPPacket.html#Cosmos_System_Network_IPv4_UDPPacket_SourcePort
-  commentId: P:Cosmos.System.Network.IPv4.UDPPacket.SourcePort
-  fullName: Cosmos.System.Network.IPv4.UDPPacket.SourcePort
+  href: api/Cosmos.System.Network.IPv4.UDP.UDPPacket.html#Cosmos_System_Network_IPv4_UDP_UDPPacket_SourcePort
+  commentId: P:Cosmos.System.Network.IPv4.UDP.UDPPacket.SourcePort
+  fullName: Cosmos.System.Network.IPv4.UDP.UDPPacket.SourcePort
   nameWithType: UDPPacket.SourcePort
-- uid: Cosmos.System.Network.IPv4.UDPPacket.SourcePort*
+- uid: Cosmos.System.Network.IPv4.UDP.UDPPacket.SourcePort*
   name: SourcePort
-  href: api/Cosmos.System.Network.IPv4.UDPPacket.html#Cosmos_System_Network_IPv4_UDPPacket_SourcePort_
-  commentId: Overload:Cosmos.System.Network.IPv4.UDPPacket.SourcePort
+  href: api/Cosmos.System.Network.IPv4.UDP.UDPPacket.html#Cosmos_System_Network_IPv4_UDP_UDPPacket_SourcePort_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.UDPPacket.SourcePort
   isSpec: "True"
-  fullName: Cosmos.System.Network.IPv4.UDPPacket.SourcePort
+  fullName: Cosmos.System.Network.IPv4.UDP.UDPPacket.SourcePort
   nameWithType: UDPPacket.SourcePort
-- uid: Cosmos.System.Network.IPv4.UDPPacket.ToString
+- uid: Cosmos.System.Network.IPv4.UDP.UDPPacket.ToString
   name: ToString()
-  href: api/Cosmos.System.Network.IPv4.UDPPacket.html#Cosmos_System_Network_IPv4_UDPPacket_ToString
-  commentId: M:Cosmos.System.Network.IPv4.UDPPacket.ToString
-  fullName: Cosmos.System.Network.IPv4.UDPPacket.ToString()
+  href: api/Cosmos.System.Network.IPv4.UDP.UDPPacket.html#Cosmos_System_Network_IPv4_UDP_UDPPacket_ToString
+  commentId: M:Cosmos.System.Network.IPv4.UDP.UDPPacket.ToString
+  fullName: Cosmos.System.Network.IPv4.UDP.UDPPacket.ToString()
   nameWithType: UDPPacket.ToString()
-- uid: Cosmos.System.Network.IPv4.UDPPacket.ToString*
+- uid: Cosmos.System.Network.IPv4.UDP.UDPPacket.ToString*
   name: ToString
-  href: api/Cosmos.System.Network.IPv4.UDPPacket.html#Cosmos_System_Network_IPv4_UDPPacket_ToString_
-  commentId: Overload:Cosmos.System.Network.IPv4.UDPPacket.ToString
+  href: api/Cosmos.System.Network.IPv4.UDP.UDPPacket.html#Cosmos_System_Network_IPv4_UDP_UDPPacket_ToString_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.UDPPacket.ToString
   isSpec: "True"
-  fullName: Cosmos.System.Network.IPv4.UDPPacket.ToString
+  fullName: Cosmos.System.Network.IPv4.UDP.UDPPacket.ToString
   nameWithType: UDPPacket.ToString
-- uid: Cosmos.System.Network.IPv4.UDPPacket.UDP_DataLength
+- uid: Cosmos.System.Network.IPv4.UDP.UDPPacket.UDP_DataLength
   name: UDP_DataLength
-  href: api/Cosmos.System.Network.IPv4.UDPPacket.html#Cosmos_System_Network_IPv4_UDPPacket_UDP_DataLength
-  commentId: P:Cosmos.System.Network.IPv4.UDPPacket.UDP_DataLength
-  fullName: Cosmos.System.Network.IPv4.UDPPacket.UDP_DataLength
+  href: api/Cosmos.System.Network.IPv4.UDP.UDPPacket.html#Cosmos_System_Network_IPv4_UDP_UDPPacket_UDP_DataLength
+  commentId: P:Cosmos.System.Network.IPv4.UDP.UDPPacket.UDP_DataLength
+  fullName: Cosmos.System.Network.IPv4.UDP.UDPPacket.UDP_DataLength
   nameWithType: UDPPacket.UDP_DataLength
-- uid: Cosmos.System.Network.IPv4.UDPPacket.UDP_DataLength*
+- uid: Cosmos.System.Network.IPv4.UDP.UDPPacket.UDP_DataLength*
   name: UDP_DataLength
-  href: api/Cosmos.System.Network.IPv4.UDPPacket.html#Cosmos_System_Network_IPv4_UDPPacket_UDP_DataLength_
-  commentId: Overload:Cosmos.System.Network.IPv4.UDPPacket.UDP_DataLength
+  href: api/Cosmos.System.Network.IPv4.UDP.UDPPacket.html#Cosmos_System_Network_IPv4_UDP_UDPPacket_UDP_DataLength_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.UDPPacket.UDP_DataLength
   isSpec: "True"
-  fullName: Cosmos.System.Network.IPv4.UDPPacket.UDP_DataLength
+  fullName: Cosmos.System.Network.IPv4.UDP.UDPPacket.UDP_DataLength
   nameWithType: UDPPacket.UDP_DataLength
-- uid: Cosmos.System.Network.IPv4.UDPPacket.UDP_Length
+- uid: Cosmos.System.Network.IPv4.UDP.UDPPacket.UDP_Length
   name: UDP_Length
-  href: api/Cosmos.System.Network.IPv4.UDPPacket.html#Cosmos_System_Network_IPv4_UDPPacket_UDP_Length
-  commentId: P:Cosmos.System.Network.IPv4.UDPPacket.UDP_Length
-  fullName: Cosmos.System.Network.IPv4.UDPPacket.UDP_Length
+  href: api/Cosmos.System.Network.IPv4.UDP.UDPPacket.html#Cosmos_System_Network_IPv4_UDP_UDPPacket_UDP_Length
+  commentId: P:Cosmos.System.Network.IPv4.UDP.UDPPacket.UDP_Length
+  fullName: Cosmos.System.Network.IPv4.UDP.UDPPacket.UDP_Length
   nameWithType: UDPPacket.UDP_Length
-- uid: Cosmos.System.Network.IPv4.UDPPacket.UDP_Length*
+- uid: Cosmos.System.Network.IPv4.UDP.UDPPacket.UDP_Length*
   name: UDP_Length
-  href: api/Cosmos.System.Network.IPv4.UDPPacket.html#Cosmos_System_Network_IPv4_UDPPacket_UDP_Length_
-  commentId: Overload:Cosmos.System.Network.IPv4.UDPPacket.UDP_Length
+  href: api/Cosmos.System.Network.IPv4.UDP.UDPPacket.html#Cosmos_System_Network_IPv4_UDP_UDPPacket_UDP_Length_
+  commentId: Overload:Cosmos.System.Network.IPv4.UDP.UDPPacket.UDP_Length
   isSpec: "True"
-  fullName: Cosmos.System.Network.IPv4.UDPPacket.UDP_Length
+  fullName: Cosmos.System.Network.IPv4.UDP.UDPPacket.UDP_Length
   nameWithType: UDPPacket.UDP_Length
-- uid: Cosmos.System.Network.IPv4.UDPPacket.VMTInclude
-  name: VMTInclude()
-  href: api/Cosmos.System.Network.IPv4.UDPPacket.html#Cosmos_System_Network_IPv4_UDPPacket_VMTInclude
-  commentId: M:Cosmos.System.Network.IPv4.UDPPacket.VMTInclude
-  fullName: Cosmos.System.Network.IPv4.UDPPacket.VMTInclude()
-  nameWithType: UDPPacket.VMTInclude()
-- uid: Cosmos.System.Network.IPv4.UDPPacket.VMTInclude*
-  name: VMTInclude
-  href: api/Cosmos.System.Network.IPv4.UDPPacket.html#Cosmos_System_Network_IPv4_UDPPacket_VMTInclude_
-  commentId: Overload:Cosmos.System.Network.IPv4.UDPPacket.VMTInclude
-  isSpec: "True"
-  fullName: Cosmos.System.Network.IPv4.UDPPacket.VMTInclude
-  nameWithType: UDPPacket.VMTInclude
 - uid: Cosmos.System.Network.NetworkStack
   name: NetworkStack
   href: api/Cosmos.System.Network.NetworkStack.html
   commentId: T:Cosmos.System.Network.NetworkStack
   fullName: Cosmos.System.Network.NetworkStack
   nameWithType: NetworkStack
-- uid: Cosmos.System.Network.NetworkStack.ConfigIP(Cosmos.HAL.NetworkDevice,Cosmos.System.Network.IPv4.Config)
-  name: ConfigIP(NetworkDevice, Config)
-  href: api/Cosmos.System.Network.NetworkStack.html#Cosmos_System_Network_NetworkStack_ConfigIP_Cosmos_HAL_NetworkDevice_Cosmos_System_Network_IPv4_Config_
-  commentId: M:Cosmos.System.Network.NetworkStack.ConfigIP(Cosmos.HAL.NetworkDevice,Cosmos.System.Network.IPv4.Config)
-  fullName: Cosmos.System.Network.NetworkStack.ConfigIP(Cosmos.HAL.NetworkDevice, Cosmos.System.Network.IPv4.Config)
-  nameWithType: NetworkStack.ConfigIP(NetworkDevice, Config)
+- uid: Cosmos.System.Network.NetworkStack.ConfigEmpty
+  name: ConfigEmpty()
+  href: api/Cosmos.System.Network.NetworkStack.html#Cosmos_System_Network_NetworkStack_ConfigEmpty
+  commentId: M:Cosmos.System.Network.NetworkStack.ConfigEmpty
+  fullName: Cosmos.System.Network.NetworkStack.ConfigEmpty()
+  nameWithType: NetworkStack.ConfigEmpty()
+- uid: Cosmos.System.Network.NetworkStack.ConfigEmpty*
+  name: ConfigEmpty
+  href: api/Cosmos.System.Network.NetworkStack.html#Cosmos_System_Network_NetworkStack_ConfigEmpty_
+  commentId: Overload:Cosmos.System.Network.NetworkStack.ConfigEmpty
+  isSpec: "True"
+  fullName: Cosmos.System.Network.NetworkStack.ConfigEmpty
+  nameWithType: NetworkStack.ConfigEmpty
+- uid: Cosmos.System.Network.NetworkStack.ConfigIP(Cosmos.HAL.NetworkDevice,Cosmos.System.Network.Config.IPConfig)
+  name: ConfigIP(NetworkDevice, IPConfig)
+  href: api/Cosmos.System.Network.NetworkStack.html#Cosmos_System_Network_NetworkStack_ConfigIP_Cosmos_HAL_NetworkDevice_Cosmos_System_Network_Config_IPConfig_
+  commentId: M:Cosmos.System.Network.NetworkStack.ConfigIP(Cosmos.HAL.NetworkDevice,Cosmos.System.Network.Config.IPConfig)
+  fullName: Cosmos.System.Network.NetworkStack.ConfigIP(Cosmos.HAL.NetworkDevice, Cosmos.System.Network.Config.IPConfig)
+  nameWithType: NetworkStack.ConfigIP(NetworkDevice, IPConfig)
 - uid: Cosmos.System.Network.NetworkStack.ConfigIP*
   name: ConfigIP
   href: api/Cosmos.System.Network.NetworkStack.html#Cosmos_System_Network_NetworkStack_ConfigIP_
@@ -34201,6 +35514,32 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Network.NetworkStack.Init
   nameWithType: NetworkStack.Init
+- uid: Cosmos.System.Network.NetworkStack.RemoveAllConfigIP
+  name: RemoveAllConfigIP()
+  href: api/Cosmos.System.Network.NetworkStack.html#Cosmos_System_Network_NetworkStack_RemoveAllConfigIP
+  commentId: M:Cosmos.System.Network.NetworkStack.RemoveAllConfigIP
+  fullName: Cosmos.System.Network.NetworkStack.RemoveAllConfigIP()
+  nameWithType: NetworkStack.RemoveAllConfigIP()
+- uid: Cosmos.System.Network.NetworkStack.RemoveAllConfigIP*
+  name: RemoveAllConfigIP
+  href: api/Cosmos.System.Network.NetworkStack.html#Cosmos_System_Network_NetworkStack_RemoveAllConfigIP_
+  commentId: Overload:Cosmos.System.Network.NetworkStack.RemoveAllConfigIP
+  isSpec: "True"
+  fullName: Cosmos.System.Network.NetworkStack.RemoveAllConfigIP
+  nameWithType: NetworkStack.RemoveAllConfigIP
+- uid: Cosmos.System.Network.NetworkStack.RemoveIPConfig(Cosmos.HAL.NetworkDevice)
+  name: RemoveIPConfig(NetworkDevice)
+  href: api/Cosmos.System.Network.NetworkStack.html#Cosmos_System_Network_NetworkStack_RemoveIPConfig_Cosmos_HAL_NetworkDevice_
+  commentId: M:Cosmos.System.Network.NetworkStack.RemoveIPConfig(Cosmos.HAL.NetworkDevice)
+  fullName: Cosmos.System.Network.NetworkStack.RemoveIPConfig(Cosmos.HAL.NetworkDevice)
+  nameWithType: NetworkStack.RemoveIPConfig(NetworkDevice)
+- uid: Cosmos.System.Network.NetworkStack.RemoveIPConfig*
+  name: RemoveIPConfig
+  href: api/Cosmos.System.Network.NetworkStack.html#Cosmos_System_Network_NetworkStack_RemoveIPConfig_
+  commentId: Overload:Cosmos.System.Network.NetworkStack.RemoveIPConfig
+  isSpec: "True"
+  fullName: Cosmos.System.Network.NetworkStack.RemoveIPConfig
+  nameWithType: NetworkStack.RemoveIPConfig
 - uid: Cosmos.System.Network.NetworkStack.Update
   name: Update()
   href: api/Cosmos.System.Network.NetworkStack.html#Cosmos_System_Network_NetworkStack_Update
@@ -34214,122 +35553,6 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Network.NetworkStack.Update
   nameWithType: NetworkStack.Update
-- uid: Cosmos.System.Network.UdpClient
-  name: UdpClient
-  href: api/Cosmos.System.Network.UdpClient.html
-  commentId: T:Cosmos.System.Network.UdpClient
-  fullName: Cosmos.System.Network.UdpClient
-  nameWithType: UdpClient
-- uid: Cosmos.System.Network.UdpClient.#ctor
-  name: UdpClient()
-  href: api/Cosmos.System.Network.UdpClient.html#Cosmos_System_Network_UdpClient__ctor
-  commentId: M:Cosmos.System.Network.UdpClient.#ctor
-  fullName: Cosmos.System.Network.UdpClient.UdpClient()
-  nameWithType: UdpClient.UdpClient()
-- uid: Cosmos.System.Network.UdpClient.#ctor(Cosmos.System.Network.IPv4.Address,Int32)
-  name: UdpClient(Address, Int32)
-  href: api/Cosmos.System.Network.UdpClient.html#Cosmos_System_Network_UdpClient__ctor_Cosmos_System_Network_IPv4_Address_Int32_
-  commentId: M:Cosmos.System.Network.UdpClient.#ctor(Cosmos.System.Network.IPv4.Address,Int32)
-  fullName: Cosmos.System.Network.UdpClient.UdpClient(Cosmos.System.Network.IPv4.Address, Int32)
-  nameWithType: UdpClient.UdpClient(Address, Int32)
-- uid: Cosmos.System.Network.UdpClient.#ctor(Int32)
-  name: UdpClient(Int32)
-  href: api/Cosmos.System.Network.UdpClient.html#Cosmos_System_Network_UdpClient__ctor_Int32_
-  commentId: M:Cosmos.System.Network.UdpClient.#ctor(Int32)
-  fullName: Cosmos.System.Network.UdpClient.UdpClient(Int32)
-  nameWithType: UdpClient.UdpClient(Int32)
-- uid: Cosmos.System.Network.UdpClient.#ctor*
-  name: UdpClient
-  href: api/Cosmos.System.Network.UdpClient.html#Cosmos_System_Network_UdpClient__ctor_
-  commentId: Overload:Cosmos.System.Network.UdpClient.#ctor
-  isSpec: "True"
-  fullName: Cosmos.System.Network.UdpClient.UdpClient
-  nameWithType: UdpClient.UdpClient
-- uid: Cosmos.System.Network.UdpClient.Close
-  name: Close()
-  href: api/Cosmos.System.Network.UdpClient.html#Cosmos_System_Network_UdpClient_Close
-  commentId: M:Cosmos.System.Network.UdpClient.Close
-  fullName: Cosmos.System.Network.UdpClient.Close()
-  nameWithType: UdpClient.Close()
-- uid: Cosmos.System.Network.UdpClient.Close*
-  name: Close
-  href: api/Cosmos.System.Network.UdpClient.html#Cosmos_System_Network_UdpClient_Close_
-  commentId: Overload:Cosmos.System.Network.UdpClient.Close
-  isSpec: "True"
-  fullName: Cosmos.System.Network.UdpClient.Close
-  nameWithType: UdpClient.Close
-- uid: Cosmos.System.Network.UdpClient.Connect(Cosmos.System.Network.IPv4.Address,Int32)
-  name: Connect(Address, Int32)
-  href: api/Cosmos.System.Network.UdpClient.html#Cosmos_System_Network_UdpClient_Connect_Cosmos_System_Network_IPv4_Address_Int32_
-  commentId: M:Cosmos.System.Network.UdpClient.Connect(Cosmos.System.Network.IPv4.Address,Int32)
-  fullName: Cosmos.System.Network.UdpClient.Connect(Cosmos.System.Network.IPv4.Address, Int32)
-  nameWithType: UdpClient.Connect(Address, Int32)
-- uid: Cosmos.System.Network.UdpClient.Connect*
-  name: Connect
-  href: api/Cosmos.System.Network.UdpClient.html#Cosmos_System_Network_UdpClient_Connect_
-  commentId: Overload:Cosmos.System.Network.UdpClient.Connect
-  isSpec: "True"
-  fullName: Cosmos.System.Network.UdpClient.Connect
-  nameWithType: UdpClient.Connect
-- uid: Cosmos.System.Network.UdpClient.destination
-  name: destination
-  href: api/Cosmos.System.Network.UdpClient.html#Cosmos_System_Network_UdpClient_destination
-  commentId: F:Cosmos.System.Network.UdpClient.destination
-  fullName: Cosmos.System.Network.UdpClient.destination
-  nameWithType: UdpClient.destination
-- uid: Cosmos.System.Network.UdpClient.destinationPort
-  name: destinationPort
-  href: api/Cosmos.System.Network.UdpClient.html#Cosmos_System_Network_UdpClient_destinationPort
-  commentId: F:Cosmos.System.Network.UdpClient.destinationPort
-  fullName: Cosmos.System.Network.UdpClient.destinationPort
-  nameWithType: UdpClient.destinationPort
-- uid: Cosmos.System.Network.UdpClient.localPort
-  name: localPort
-  href: api/Cosmos.System.Network.UdpClient.html#Cosmos_System_Network_UdpClient_localPort
-  commentId: F:Cosmos.System.Network.UdpClient.localPort
-  fullName: Cosmos.System.Network.UdpClient.localPort
-  nameWithType: UdpClient.localPort
-- uid: Cosmos.System.Network.UdpClient.Receive(Cosmos.System.Network.IPv4.EndPoint@)
-  name: Receive(ref EndPoint)
-  href: api/Cosmos.System.Network.UdpClient.html#Cosmos_System_Network_UdpClient_Receive_Cosmos_System_Network_IPv4_EndPoint__
-  commentId: M:Cosmos.System.Network.UdpClient.Receive(Cosmos.System.Network.IPv4.EndPoint@)
-  name.vb: Receive(ByRef EndPoint)
-  fullName: Cosmos.System.Network.UdpClient.Receive(ref Cosmos.System.Network.IPv4.EndPoint)
-  fullName.vb: Cosmos.System.Network.UdpClient.Receive(ByRef Cosmos.System.Network.IPv4.EndPoint)
-  nameWithType: UdpClient.Receive(ref EndPoint)
-  nameWithType.vb: UdpClient.Receive(ByRef EndPoint)
-- uid: Cosmos.System.Network.UdpClient.Receive*
-  name: Receive
-  href: api/Cosmos.System.Network.UdpClient.html#Cosmos_System_Network_UdpClient_Receive_
-  commentId: Overload:Cosmos.System.Network.UdpClient.Receive
-  isSpec: "True"
-  fullName: Cosmos.System.Network.UdpClient.Receive
-  nameWithType: UdpClient.Receive
-- uid: Cosmos.System.Network.UdpClient.Send(System.Byte[])
-  name: Send(Byte[])
-  href: api/Cosmos.System.Network.UdpClient.html#Cosmos_System_Network_UdpClient_Send_System_Byte___
-  commentId: M:Cosmos.System.Network.UdpClient.Send(System.Byte[])
-  name.vb: Send(Byte())
-  fullName: Cosmos.System.Network.UdpClient.Send(System.Byte[])
-  fullName.vb: Cosmos.System.Network.UdpClient.Send(System.Byte())
-  nameWithType: UdpClient.Send(Byte[])
-  nameWithType.vb: UdpClient.Send(Byte())
-- uid: Cosmos.System.Network.UdpClient.Send(System.Byte[],Cosmos.System.Network.IPv4.Address,Int32)
-  name: Send(Byte[], Address, Int32)
-  href: api/Cosmos.System.Network.UdpClient.html#Cosmos_System_Network_UdpClient_Send_System_Byte___Cosmos_System_Network_IPv4_Address_Int32_
-  commentId: M:Cosmos.System.Network.UdpClient.Send(System.Byte[],Cosmos.System.Network.IPv4.Address,Int32)
-  name.vb: Send(Byte(), Address, Int32)
-  fullName: Cosmos.System.Network.UdpClient.Send(System.Byte[], Cosmos.System.Network.IPv4.Address, Int32)
-  fullName.vb: Cosmos.System.Network.UdpClient.Send(System.Byte(), Cosmos.System.Network.IPv4.Address, Int32)
-  nameWithType: UdpClient.Send(Byte[], Address, Int32)
-  nameWithType.vb: UdpClient.Send(Byte(), Address, Int32)
-- uid: Cosmos.System.Network.UdpClient.Send*
-  name: Send
-  href: api/Cosmos.System.Network.UdpClient.html#Cosmos_System_Network_UdpClient_Send_
-  commentId: Overload:Cosmos.System.Network.UdpClient.Send
-  isSpec: "True"
-  fullName: Cosmos.System.Network.UdpClient.Send
-  nameWithType: UdpClient.Send
 - uid: Cosmos.System.Notes
   name: Notes
   href: api/Cosmos.System.Notes.html
