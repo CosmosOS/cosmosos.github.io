@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class ConsoleConsts
+    <title>Class RTL8139
    </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class ConsoleConsts
+    <meta name="title" content="Class RTL8139
    ">
     <meta name="generator" content="docfx 2.56.7.0">
     
@@ -1370,8 +1370,8 @@
                           <li class="">
                             <a href="Cosmos.HAL.Drivers.PCI.Network.AMDPCNetII.html" title="AMDPCNetII" class="">AMDPCNetII</a>
                           </li>
-                          <li class="">
-                            <a href="Cosmos.HAL.Drivers.PCI.Network.RTL8139.html" title="RTL8139" class="">RTL8139</a>
+                          <li class="active">
+                            <a href="Cosmos.HAL.Drivers.PCI.Network.RTL8139.html" title="RTL8139" class="active">RTL8139</a>
                           </li>
                         </ul>  </li>
                     <li class="">
@@ -2069,8 +2069,8 @@
                           <li class="">
                             <a href="Cosmos.VS.Windows.AssemblyUC.html" title="AssemblyUC" class="">AssemblyUC</a>
                           </li>
-                          <li class="active">
-                            <a href="Cosmos.VS.Windows.ConsoleConsts.html" title="ConsoleConsts" class="active">ConsoleConsts</a>
+                          <li class="">
+                            <a href="Cosmos.VS.Windows.ConsoleConsts.html" title="ConsoleConsts" class="">ConsoleConsts</a>
                           </li>
                           <li class="">
                             <a href="Cosmos.VS.Windows.ConsoleTW.html" title="ConsoleTW" class="">ConsoleTW</a>
@@ -2146,65 +2146,391 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Cosmos.VS.Windows.ConsoleConsts">
+            <article class="content wrap" id="_content" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139">
   
   
-  <h1 id="Cosmos_VS_Windows_ConsoleConsts" data-uid="Cosmos.VS.Windows.ConsoleConsts" class="text-break">Class ConsoleConsts
+  <h1 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139" class="text-break">Class RTL8139
   </h1>
   <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">ConsoleConsts</span></div>
+    <div class="level1"><a class="xref" href="Cosmos.HAL.NetworkDevice.html">NetworkDevice</a></div>
+    <div class="level2"><span class="xref">RTL8139</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
+      <a class="xref" href="Cosmos.HAL.NetworkDevice.html#Cosmos_HAL_NetworkDevice_Devices">NetworkDevice.Devices</a>
     </div>
     <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+      <a class="xref" href="Cosmos.HAL.NetworkDevice.html#Cosmos_HAL_NetworkDevice_GetDeviceByName_System_String_">NetworkDevice.GetDeviceByName(String)</a>
     </div>
     <div>
-      <span class="xref">System.Object.GetHashCode()</span>
+      <a class="xref" href="Cosmos.HAL.NetworkDevice.html#Cosmos_HAL_NetworkDevice_DataReceived">NetworkDevice.DataReceived</a>
     </div>
     <div>
-      <span class="xref">System.Object.GetType()</span>
+      <a class="xref" href="Cosmos.HAL.NetworkDevice.html#Cosmos_HAL_NetworkDevice_NameID">NetworkDevice.NameID</a>
     </div>
     <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
+      <a class="xref" href="Cosmos.HAL.NetworkDevice.html#Cosmos_HAL_NetworkDevice_QueueBytes_System_Byte___">NetworkDevice.QueueBytes(Byte[])</a>
     </div>
   </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Cosmos.VS.Windows.html">Cosmos.VS.Windows</a></h6>
-  <h6><strong>Assembly</strong>: Cosmos.VS.Windows.dll</h6>
-  <h5 id="Cosmos_VS_Windows_ConsoleConsts_syntax">Syntax</h5>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Cosmos.HAL.Drivers.PCI.Network.html">Cosmos.HAL.Drivers.PCI.Network</a></h6>
+  <h6><strong>Assembly</strong>: Cosmos.HAL2.dll</h6>
+  <h5 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static class ConsoleConsts</code></pre>
+    <pre><code class="lang-csharp hljs">public class RTL8139 : NetworkDevice</code></pre>
   </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139__ctor_Cosmos_HAL_PCIDevice_.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.%23ctor(Cosmos.HAL.PCIDevice)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L23">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_Drivers_PCI_Network_RTL8139__ctor_" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.#ctor*"></a>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139__ctor_Cosmos_HAL_PCIDevice_" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.#ctor(Cosmos.HAL.PCIDevice)">RTL8139(PCIDevice)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RTL8139(PCIDevice device)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.HAL.PCIDevice.html">PCIDevice</a></td>
+        <td><span class="parametername">device</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="fields">Fields
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_VS_Windows_ConsoleConsts_Channel.md&amp;value=---%0Auid%3A%20Cosmos.VS.Windows.ConsoleConsts.Channel%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_capr.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.capr%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.VS.Windows/ConsoleConsts.cs/#L11">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L16">View Source</a>
   </span>
-  <h4 id="Cosmos_VS_Windows_ConsoleConsts_Channel" data-uid="Cosmos.VS.Windows.ConsoleConsts.Channel">Channel</h4>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_capr" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.capr">capr</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static readonly byte Channel</code></pre>
+    <pre><code class="lang-csharp hljs">protected UInt16 capr</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">UInt16</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_mac.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.mac%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L12">View Source</a>
+  </span>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_mac" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.mac">mac</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected MACAddress mac</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.HAL.Network.MACAddress.html">MACAddress</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_mInitDone.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.mInitDone%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L13">View Source</a>
+  </span>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_mInitDone" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.mInitDone">mInitDone</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected bool mInitDone</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_mRecvBuffer.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.mRecvBuffer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L17">View Source</a>
+  </span>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_mRecvBuffer" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.mRecvBuffer">mRecvBuffer</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected Queue&lt;byte[]&gt; mRecvBuffer</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Queue</span>&lt;<span class="xref">System.Byte</span>[]&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_mTransmitBuffer.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.mTransmitBuffer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L18">View Source</a>
+  </span>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_mTransmitBuffer" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.mTransmitBuffer">mTransmitBuffer</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected Queue&lt;byte[]&gt; mTransmitBuffer</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Queue</span>&lt;<span class="xref">System.Byte</span>[]&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_pciCard.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.pciCard%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L11">View Source</a>
+  </span>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_pciCard" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.pciCard">pciCard</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected PCIDevice pciCard</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.HAL.PCIDevice.html">PCIDevice</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_rxBuffer.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.rxBuffer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L14">View Source</a>
+  </span>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_rxBuffer" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.rxBuffer">rxBuffer</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected ManagedMemoryBlock rxBuffer</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.Core.ManagedMemoryBlock.html">ManagedMemoryBlock</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_rxBufferOffset.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.rxBufferOffset%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L15">View Source</a>
+  </span>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_rxBufferOffset" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.rxBufferOffset">rxBufferOffset</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected int rxBufferOffset</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_CardType.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.CardType%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L297">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_CardType_" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.CardType*"></a>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_CardType" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.CardType">CardType</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override CardType CardType { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.HAL.CardType.html">CardType</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.HAL.NetworkDevice.html#Cosmos_HAL_NetworkDevice_CardType">NetworkDevice.CardType</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_CmdBufferEmpty.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.CmdBufferEmpty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L227">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_CmdBufferEmpty_" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.CmdBufferEmpty*"></a>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_CmdBufferEmpty" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.CmdBufferEmpty">CmdBufferEmpty</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected bool CmdBufferEmpty { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_Config1Register.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.Config1Register%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L176">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_Config1Register_" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.Config1Register*"></a>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_Config1Register" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.Config1Register">Config1Register</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected byte Config1Register { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
@@ -2221,19 +2547,52 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_VS_Windows_ConsoleConsts_Command_WriteText.md&amp;value=---%0Auid%3A%20Cosmos.VS.Windows.ConsoleConsts.Command_WriteText%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_MACAddress.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.MACAddress%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.VS.Windows/ConsoleConsts.cs/#L13">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L232">View Source</a>
   </span>
-  <h4 id="Cosmos_VS_Windows_ConsoleConsts_Command_WriteText" data-uid="Cosmos.VS.Windows.ConsoleConsts.Command_WriteText">Command_WriteText</h4>
+  <a id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_MACAddress_" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.MACAddress*"></a>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_MACAddress" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.MACAddress">MACAddress</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static readonly byte Command_WriteText</code></pre>
+    <pre><code class="lang-csharp hljs">public override MACAddress MACAddress { get; }</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.HAL.Network.MACAddress.html">MACAddress</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.HAL.NetworkDevice.html#Cosmos_HAL_NetworkDevice_MACAddress">NetworkDevice.MACAddress</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_MediaStatusRegister.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.MediaStatusRegister%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L171">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_MediaStatusRegister_" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.MediaStatusRegister*"></a>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_MediaStatusRegister" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.MediaStatusRegister">MediaStatusRegister</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected byte MediaStatusRegister { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
@@ -2248,6 +2607,504 @@
       </tr>
     </tbody>
   </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_Name.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.Name%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L292">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_Name_" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.Name*"></a>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_Name" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.Name">Name</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string Name { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.HAL.NetworkDevice.html#Cosmos_HAL_NetworkDevice_Name">NetworkDevice.Name</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_RBStartRegister.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.RBStartRegister%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L136">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_RBStartRegister_" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.RBStartRegister*"></a>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_RBStartRegister" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.RBStartRegister">RBStartRegister</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected UInt32 RBStartRegister { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">UInt32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_Ready.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.Ready%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L244">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_Ready_" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.Ready*"></a>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_Ready" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.Ready">Ready</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Ready { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.HAL.NetworkDevice.html#Cosmos_HAL_NetworkDevice_Ready">NetworkDevice.Ready</a></div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_BytesAvailable.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.BytesAvailable%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L276">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_BytesAvailable_" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.BytesAvailable*"></a>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_BytesAvailable" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.BytesAvailable">BytesAvailable()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int BytesAvailable()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.HAL.NetworkDevice.html#Cosmos_HAL_NetworkDevice_BytesAvailable">NetworkDevice.BytesAvailable()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_Enable.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.Enable%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L236">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_Enable_" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.Enable*"></a>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_Enable" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.Enable">Enable()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Enable()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.HAL.NetworkDevice.html#Cosmos_HAL_NetworkDevice_Enable">NetworkDevice.Enable()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_FindAll.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.FindAll%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L89">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_FindAll_" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.FindAll*"></a>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_FindAll" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.FindAll">FindAll()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static List&lt;RTL8139&gt; FindAll()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">List</span>&lt;<a class="xref" href="Cosmos.HAL.Drivers.PCI.Network.RTL8139.html">RTL8139</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_HandleNetworkInterrupt_Cosmos_Core_INTs_IRQContext__.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.HandleNetworkInterrupt(Cosmos.Core.INTs.IRQContext%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L104">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_HandleNetworkInterrupt_" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.HandleNetworkInterrupt*"></a>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_HandleNetworkInterrupt_Cosmos_Core_INTs_IRQContext__" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.HandleNetworkInterrupt(Cosmos.Core.INTs.IRQContext@)">HandleNetworkInterrupt(ref INTs.IRQContext)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected void HandleNetworkInterrupt(ref INTs.IRQContext aContext)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.Core.INTs.IRQContext.html">INTs.IRQContext</a></td>
+        <td><span class="parametername">aContext</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_IsReceiveBufferFull.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.IsReceiveBufferFull%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L288">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_IsReceiveBufferFull_" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.IsReceiveBufferFull*"></a>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_IsReceiveBufferFull" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.IsReceiveBufferFull">IsReceiveBufferFull()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool IsReceiveBufferFull()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.HAL.NetworkDevice.html#Cosmos_HAL_NetworkDevice_IsReceiveBufferFull">NetworkDevice.IsReceiveBufferFull()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_IsSendBufferFull.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.IsSendBufferFull%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L284">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_IsSendBufferFull_" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.IsSendBufferFull*"></a>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_IsSendBufferFull" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.IsSendBufferFull">IsSendBufferFull()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool IsSendBufferFull()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.HAL.NetworkDevice.html#Cosmos_HAL_NetworkDevice_IsSendBufferFull">NetworkDevice.IsSendBufferFull()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_QueueBytes_System_Byte___System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.QueueBytes(System.Byte%5B%5D%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L248">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_QueueBytes_" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.QueueBytes*"></a>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_QueueBytes_System_Byte___System_Int32_System_Int32_" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.QueueBytes(System.Byte[],System.Int32,System.Int32)">QueueBytes(Byte[], Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool QueueBytes(byte[] buffer, int offset, int length)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">buffer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">offset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">length</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.HAL.NetworkDevice.html#Cosmos_HAL_NetworkDevice_QueueBytes_System_Byte___System_Int32_System_Int32_">NetworkDevice.QueueBytes(Byte[], Int32, Int32)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_ReceiveBytes_System_Byte___System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.ReceiveBytes(System.Byte%5B%5D%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L263">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_ReceiveBytes_" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.ReceiveBytes*"></a>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_ReceiveBytes_System_Byte___System_Int32_System_Int32_" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.ReceiveBytes(System.Byte[],System.Int32,System.Int32)">ReceiveBytes(Byte[], Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool ReceiveBytes(byte[] buffer, int offset, int max)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">buffer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">offset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">max</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.HAL.NetworkDevice.html#Cosmos_HAL_NetworkDevice_ReceiveBytes_System_Byte___System_Int32_System_Int32_">NetworkDevice.ReceiveBytes(Byte[], Int32, Int32)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_ReceivePacket.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.ReceivePacket%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L267">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_ReceivePacket_" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.ReceivePacket*"></a>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_ReceivePacket" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.ReceivePacket">ReceivePacket()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override byte[] ReceivePacket()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.HAL.NetworkDevice.html#Cosmos_HAL_NetworkDevice_ReceivePacket">NetworkDevice.ReceivePacket()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_SendBytes_System_Byte____.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.SendBytes(System.Byte%5B%5D%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L332">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_SendBytes_" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.SendBytes*"></a>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_SendBytes_System_Byte____" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.SendBytes(System.Byte[]@)">SendBytes(ref Byte[])</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected bool SendBytes(ref byte[] aData)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">aData</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139_SoftwareReset.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139.SoftwareReset%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L326">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_SoftwareReset_" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.SoftwareReset*"></a>
+  <h4 id="Cosmos_HAL_Drivers_PCI_Network_RTL8139_SoftwareReset" data-uid="Cosmos.HAL.Drivers.PCI.Network.RTL8139.SoftwareReset">SoftwareReset()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected void SoftwareReset()</code></pre>
+  </div>
 </article>
           </div>
           
@@ -2256,10 +3113,10 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_VS_Windows_ConsoleConsts.md&amp;value=---%0Auid%3A%20Cosmos.VS.Windows.ConsoleConsts%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/new/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/apiSpec/new?filename=Cosmos_HAL_Drivers_PCI_Network_RTL8139.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Drivers.PCI.Network.RTL8139%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.VS.Windows/ConsoleConsts.cs/#L9" class="contribution-link">View Source</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/4a0c31ca24936f4b86a09dd6d12f6bebfc5b4ed1/source/Cosmos.HAL2/Drivers/PCI/Network/RTL8139.cs/#L9" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>
