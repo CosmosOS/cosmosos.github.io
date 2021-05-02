@@ -19155,13 +19155,13 @@ references:
   isSpec: "True"
   fullName: Cosmos.HAL.BlockDevice.AtaPio.FirmwareRev
   nameWithType: AtaPio.FirmwareRev
-- uid: Cosmos.HAL.BlockDevice.AtaPio.GetString(UInt16[],System.Int32,System.Int32)
+- uid: Cosmos.HAL.BlockDevice.AtaPio.GetString(System.UInt16[],System.Int32,System.Int32)
   name: GetString(UInt16[], Int32, Int32)
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_GetString_UInt16___System_Int32_System_Int32_
-  commentId: M:Cosmos.HAL.BlockDevice.AtaPio.GetString(UInt16[],System.Int32,System.Int32)
+  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_GetString_System_UInt16___System_Int32_System_Int32_
+  commentId: M:Cosmos.HAL.BlockDevice.AtaPio.GetString(System.UInt16[],System.Int32,System.Int32)
   name.vb: GetString(UInt16(), Int32, Int32)
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.GetString(UInt16[], System.Int32, System.Int32)
-  fullName.vb: Cosmos.HAL.BlockDevice.AtaPio.GetString(UInt16(), System.Int32, System.Int32)
+  fullName: Cosmos.HAL.BlockDevice.AtaPio.GetString(System.UInt16[], System.Int32, System.Int32)
+  fullName.vb: Cosmos.HAL.BlockDevice.AtaPio.GetString(System.UInt16(), System.Int32, System.Int32)
   nameWithType: AtaPio.GetString(UInt16[], Int32, Int32)
   nameWithType.vb: AtaPio.GetString(UInt16(), Int32, Int32)
 - uid: Cosmos.HAL.BlockDevice.AtaPio.GetString*
