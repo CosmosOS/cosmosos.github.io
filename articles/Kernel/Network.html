@@ -205,8 +205,25 @@ IPConfig.Enable(nic, new Address(192, 168, 1, 69), new Address(255, 255, 255, 0)
 
     /** Receive data **/
     var endpoint = new EndPoint(Address.Zero, 0);
-    xClient.Receive(ref endpoint);  //set endpoint to remote machine IP:port
-    xClient.NonBlockingReceive(ref endpoint); //retrieve receive buffer without waiting
+    var data = xClient.Receive(ref endpoint);  //set endpoint to remote machine IP:port
+    var data2 = xClient.NonBlockingReceive(ref endpoint); //retrieve receive buffer without waiting
+
+    xClient.Close();
+}
+</code></pre>
+<h2 id="tcp">TCP</h2>
+<p>Like UDP, TCP has to create a client and call Connect() to specify the remote machine address before sending or receiving data.</p>
+<pre><code class="lang-csharp">using(var xClient = new TcpClient(4242))
+{
+    xClient.Connect(new Address(192, 168, 1, 70), 4242);
+
+    /** Send data **/
+    xClient.Send(Encoding.ASCII.GetBytes(message));
+
+    /** Receive data **/
+    var endpoint = new EndPoint(Address.Zero, 0);
+    var data = xClient.Receive(ref endpoint);  //set endpoint to remote machine IP:port
+    var data2 = xClient.NonBlockingReceive(ref endpoint); //retrieve receive buffer without waiting
 
     xClient.Close();
 }
@@ -254,7 +271,7 @@ IPConfig.Enable(nic, new Address(192, 168, 1, 69), new Address(255, 255, 255, 0)
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/blob/cde96ab46763a06872e736d77c76dc212c03bbda/Docs/articles/Kernel/Network.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/e6adeff19105c846ed93172d38ef435d0c0c8f68/Docs/articles/Kernel/Network.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>
