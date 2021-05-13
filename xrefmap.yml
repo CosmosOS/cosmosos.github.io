@@ -34964,6 +34964,22 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Network.IPv4.IPPacket.NextIPFragmentID
   nameWithType: IPPacket.NextIPFragmentID
+- uid: Cosmos.System.Network.IPv4.IPPacket.SumShortValues(System.Byte[],System.Int32,System.Int32)
+  name: SumShortValues(Byte[], Int32, Int32)
+  href: api/Cosmos.System.Network.IPv4.IPPacket.html#Cosmos_System_Network_IPv4_IPPacket_SumShortValues_System_Byte___System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Network.IPv4.IPPacket.SumShortValues(System.Byte[],System.Int32,System.Int32)
+  name.vb: SumShortValues(Byte(), Int32, Int32)
+  fullName: Cosmos.System.Network.IPv4.IPPacket.SumShortValues(System.Byte[], System.Int32, System.Int32)
+  fullName.vb: Cosmos.System.Network.IPv4.IPPacket.SumShortValues(System.Byte(), System.Int32, System.Int32)
+  nameWithType: IPPacket.SumShortValues(Byte[], Int32, Int32)
+  nameWithType.vb: IPPacket.SumShortValues(Byte(), Int32, Int32)
+- uid: Cosmos.System.Network.IPv4.IPPacket.SumShortValues*
+  name: SumShortValues
+  href: api/Cosmos.System.Network.IPv4.IPPacket.html#Cosmos_System_Network_IPv4_IPPacket_SumShortValues_
+  commentId: Overload:Cosmos.System.Network.IPv4.IPPacket.SumShortValues
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.IPPacket.SumShortValues
+  nameWithType: IPPacket.SumShortValues
 - uid: Cosmos.System.Network.IPv4.IPPacket.ToString
   name: ToString()
   href: api/Cosmos.System.Network.IPv4.IPPacket.html#Cosmos_System_Network_IPv4_IPPacket_ToString
