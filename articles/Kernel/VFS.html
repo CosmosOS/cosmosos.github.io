@@ -189,7 +189,7 @@ This is essential for using the VFS.</p>
 <p>After our VFS has been initialized, we can use more interesting functions, lets go over some of them:</p>
 <h2 id="get-available-free-space">Get available free space</h2>
 <p>We use this function to get the size of the available free space in our file system, in bytes.</p>
-<pre><code class="lang-C#">long available_space = fs.GetAvailableFreeSpace(&quot;0:/&quot;);
+<pre><code class="lang-C#">long available_space = fs.GetAvailableFreeSpace(@&quot;0:\&quot;);
 Console.WriteLine(&quot;Available Free Space: &quot; + available_space);
 </code></pre>
 <p><img src="https://raw.githubusercontent.com/CosmosOS/Cosmos/master/Docs/articles/Kernel/images/File%20System%20Free%20Space.PNG" alt="Free Space"></p>
@@ -198,12 +198,12 @@ Cosmos using DOS drive naming system and this is why we use &quot;0&quot;.</p>
 <h2 id="get-file-system-type">Get file system type</h2>
 <p>This will let us know what is the file system type that we are using.</p>
 <p><img src="https://raw.githubusercontent.com/CosmosOS/Cosmos/master/Docs/articles/Kernel/images/File%20System%20Type.PNG" alt="System Type"></p>
-<pre><code class="lang-C#">string fs_type = fs.GetFileSystemType(&quot;0:/&quot;);
+<pre><code class="lang-C#">string fs_type = fs.GetFileSystemType(@&quot;0:\&quot;);
 Console.WriteLine(&quot;File System Type: &quot; + fs_type);
 </code></pre>
 <h2 id="get-files-list">Get files list</h2>
 <p>We start by getting the directory entrys list, using:</p>
-<pre><code class="lang-C#">var directory_list = fs.GetDirectoryListing(&quot;0:/&quot;);
+<pre><code class="lang-C#">var directory_list = fs.GetDirectoryListing(@&quot;0:\&quot;);
 </code></pre>
 <p>Once we have it, we can get the names of our files:</p>
 <pre><code class="lang-C#">foreach (var directoryEntry in directory_list)
@@ -216,7 +216,7 @@ Console.WriteLine(&quot;File System Type: &quot; + fs_type);
 <p>This one is more tricky,
 We need to get a directoryEntryList, find files in the list and print the content to the screen.</p>
 <p>of course, we start with geting the directory listing;</p>
-<pre><code class="lang-C#">var directory_list = fs.GetDirectoryListing(&quot;0:/&quot;);
+<pre><code class="lang-C#">var directory_list = fs.GetDirectoryListing(@&quot;0:\&quot;);
 </code></pre>
 <p>Now we can go through our list, and and print the txt file content.</p>
 <pre><code class="lang-C#">try
@@ -318,7 +318,7 @@ Now we can <a href="https://github.com/CosmosOS/Cosmos/wiki/FAT-FileSystem#get-f
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/blob/8476383f1fcc59dddd2572fd3c656010d59f8e35/Docs/articles/Kernel/VFS.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/9552187859e1e0a37c829c47a5ae3e59350977a2/Docs/articles/Kernel/VFS.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>
