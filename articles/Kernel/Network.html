@@ -213,6 +213,23 @@ IPConfig.Enable(nic, new Address(192, 168, 1, 69), new Address(255, 255, 255, 0)
 </code></pre>
 <h2 id="tcp">TCP</h2>
 <p>Like UDP, TCP has to create a client and call Connect() to specify the remote machine address before sending or receiving data.</p>
+<p>Server :</p>
+<pre><code class="lang-csharp">using(var xServer = new TcpListener(4242))
+{
+    /** Start server **/
+    xServer.Start();
+    
+    /** Accept incoming TCP connection **/
+    var client = xServer.AcceptTcpClient(); //blocking
+    
+    /** Stop server **/
+    xServer.Stop();
+
+    /** Send data **/
+    client.Send(Encoding.ASCII.GetBytes(message));
+}
+</code></pre>
+<p>Client :</p>
 <pre><code class="lang-csharp">using(var xClient = new TcpClient(4242))
 {
     xClient.Connect(new Address(192, 168, 1, 70), 4242);
@@ -271,7 +288,7 @@ IPConfig.Enable(nic, new Address(192, 168, 1, 69), new Address(255, 255, 255, 0)
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/blob/9552187859e1e0a37c829c47a5ae3e59350977a2/Docs/articles/Kernel/Network.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/054a097ce1fd9eed049f1a7d36695782ce4fea1b/Docs/articles/Kernel/Network.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>

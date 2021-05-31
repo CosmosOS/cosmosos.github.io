@@ -33203,6 +33203,50 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.VGAScreen.SetTextMode
   nameWithType: VGAScreen.SetTextMode
+- uid: Cosmos.System.Helpers
+  name: Cosmos.System.Helpers
+  href: api/Cosmos.System.Helpers.html
+  commentId: N:Cosmos.System.Helpers
+  fullName: Cosmos.System.Helpers
+  nameWithType: Cosmos.System.Helpers
+- uid: Cosmos.System.Helpers.ArrayHelper
+  name: ArrayHelper
+  href: api/Cosmos.System.Helpers.ArrayHelper.html
+  commentId: T:Cosmos.System.Helpers.ArrayHelper
+  fullName: Cosmos.System.Helpers.ArrayHelper
+  nameWithType: ArrayHelper
+- uid: Cosmos.System.Helpers.ArrayHelper.ArraySplit(System.Byte[],System.Int32)
+  name: ArraySplit(Byte[], Int32)
+  href: api/Cosmos.System.Helpers.ArrayHelper.html#Cosmos_System_Helpers_ArrayHelper_ArraySplit_System_Byte___System_Int32_
+  commentId: M:Cosmos.System.Helpers.ArrayHelper.ArraySplit(System.Byte[],System.Int32)
+  name.vb: ArraySplit(Byte(), Int32)
+  fullName: Cosmos.System.Helpers.ArrayHelper.ArraySplit(System.Byte[], System.Int32)
+  fullName.vb: Cosmos.System.Helpers.ArrayHelper.ArraySplit(System.Byte(), System.Int32)
+  nameWithType: ArrayHelper.ArraySplit(Byte[], Int32)
+  nameWithType.vb: ArrayHelper.ArraySplit(Byte(), Int32)
+- uid: Cosmos.System.Helpers.ArrayHelper.ArraySplit*
+  name: ArraySplit
+  href: api/Cosmos.System.Helpers.ArrayHelper.html#Cosmos_System_Helpers_ArrayHelper_ArraySplit_
+  commentId: Overload:Cosmos.System.Helpers.ArrayHelper.ArraySplit
+  isSpec: "True"
+  fullName: Cosmos.System.Helpers.ArrayHelper.ArraySplit
+  nameWithType: ArrayHelper.ArraySplit
+- uid: Cosmos.System.Helpers.ArrayHelper.Concat(System.Byte[],System.Byte[])
+  name: Concat(Byte[], Byte[])
+  href: api/Cosmos.System.Helpers.ArrayHelper.html#Cosmos_System_Helpers_ArrayHelper_Concat_System_Byte___System_Byte___
+  commentId: M:Cosmos.System.Helpers.ArrayHelper.Concat(System.Byte[],System.Byte[])
+  name.vb: Concat(Byte(), Byte())
+  fullName: Cosmos.System.Helpers.ArrayHelper.Concat(System.Byte[], System.Byte[])
+  fullName.vb: Cosmos.System.Helpers.ArrayHelper.Concat(System.Byte(), System.Byte())
+  nameWithType: ArrayHelper.Concat(Byte[], Byte[])
+  nameWithType.vb: ArrayHelper.Concat(Byte(), Byte())
+- uid: Cosmos.System.Helpers.ArrayHelper.Concat*
+  name: Concat
+  href: api/Cosmos.System.Helpers.ArrayHelper.html#Cosmos_System_Helpers_ArrayHelper_Concat_
+  commentId: Overload:Cosmos.System.Helpers.ArrayHelper.Concat
+  isSpec: "True"
+  fullName: Cosmos.System.Helpers.ArrayHelper.Concat
+  nameWithType: ArrayHelper.Concat
 - uid: Cosmos.System.Kernel
   name: Kernel
   href: api/Cosmos.System.Kernel.html
@@ -35206,110 +35250,6 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Network.IPv4.TCP.TcpClient.NonBlockingReceive
   nameWithType: TcpClient.NonBlockingReceive
-- uid: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessCloseWait(Cosmos.System.Network.IPv4.TCP.TCPPacket)
-  name: ProcessCloseWait(TCPPacket)
-  href: api/Cosmos.System.Network.IPv4.TCP.TcpClient.html#Cosmos_System_Network_IPv4_TCP_TcpClient_ProcessCloseWait_Cosmos_System_Network_IPv4_TCP_TCPPacket_
-  commentId: M:Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessCloseWait(Cosmos.System.Network.IPv4.TCP.TCPPacket)
-  fullName: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessCloseWait(Cosmos.System.Network.IPv4.TCP.TCPPacket)
-  nameWithType: TcpClient.ProcessCloseWait(TCPPacket)
-- uid: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessCloseWait*
-  name: ProcessCloseWait
-  href: api/Cosmos.System.Network.IPv4.TCP.TcpClient.html#Cosmos_System_Network_IPv4_TCP_TcpClient_ProcessCloseWait_
-  commentId: Overload:Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessCloseWait
-  isSpec: "True"
-  fullName: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessCloseWait
-  nameWithType: TcpClient.ProcessCloseWait
-- uid: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessClosing(Cosmos.System.Network.IPv4.TCP.TCPPacket)
-  name: ProcessClosing(TCPPacket)
-  href: api/Cosmos.System.Network.IPv4.TCP.TcpClient.html#Cosmos_System_Network_IPv4_TCP_TcpClient_ProcessClosing_Cosmos_System_Network_IPv4_TCP_TCPPacket_
-  commentId: M:Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessClosing(Cosmos.System.Network.IPv4.TCP.TCPPacket)
-  fullName: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessClosing(Cosmos.System.Network.IPv4.TCP.TCPPacket)
-  nameWithType: TcpClient.ProcessClosing(TCPPacket)
-- uid: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessClosing*
-  name: ProcessClosing
-  href: api/Cosmos.System.Network.IPv4.TCP.TcpClient.html#Cosmos_System_Network_IPv4_TCP_TcpClient_ProcessClosing_
-  commentId: Overload:Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessClosing
-  isSpec: "True"
-  fullName: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessClosing
-  nameWithType: TcpClient.ProcessClosing
-- uid: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessEstablished(Cosmos.System.Network.IPv4.TCP.TCPPacket)
-  name: ProcessEstablished(TCPPacket)
-  href: api/Cosmos.System.Network.IPv4.TCP.TcpClient.html#Cosmos_System_Network_IPv4_TCP_TcpClient_ProcessEstablished_Cosmos_System_Network_IPv4_TCP_TCPPacket_
-  commentId: M:Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessEstablished(Cosmos.System.Network.IPv4.TCP.TCPPacket)
-  fullName: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessEstablished(Cosmos.System.Network.IPv4.TCP.TCPPacket)
-  nameWithType: TcpClient.ProcessEstablished(TCPPacket)
-- uid: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessEstablished*
-  name: ProcessEstablished
-  href: api/Cosmos.System.Network.IPv4.TCP.TcpClient.html#Cosmos_System_Network_IPv4_TCP_TcpClient_ProcessEstablished_
-  commentId: Overload:Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessEstablished
-  isSpec: "True"
-  fullName: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessEstablished
-  nameWithType: TcpClient.ProcessEstablished
-- uid: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessFinWait1(Cosmos.System.Network.IPv4.TCP.TCPPacket)
-  name: ProcessFinWait1(TCPPacket)
-  href: api/Cosmos.System.Network.IPv4.TCP.TcpClient.html#Cosmos_System_Network_IPv4_TCP_TcpClient_ProcessFinWait1_Cosmos_System_Network_IPv4_TCP_TCPPacket_
-  commentId: M:Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessFinWait1(Cosmos.System.Network.IPv4.TCP.TCPPacket)
-  fullName: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessFinWait1(Cosmos.System.Network.IPv4.TCP.TCPPacket)
-  nameWithType: TcpClient.ProcessFinWait1(TCPPacket)
-- uid: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessFinWait1*
-  name: ProcessFinWait1
-  href: api/Cosmos.System.Network.IPv4.TCP.TcpClient.html#Cosmos_System_Network_IPv4_TCP_TcpClient_ProcessFinWait1_
-  commentId: Overload:Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessFinWait1
-  isSpec: "True"
-  fullName: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessFinWait1
-  nameWithType: TcpClient.ProcessFinWait1
-- uid: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessFinWait2(Cosmos.System.Network.IPv4.TCP.TCPPacket)
-  name: ProcessFinWait2(TCPPacket)
-  href: api/Cosmos.System.Network.IPv4.TCP.TcpClient.html#Cosmos_System_Network_IPv4_TCP_TcpClient_ProcessFinWait2_Cosmos_System_Network_IPv4_TCP_TCPPacket_
-  commentId: M:Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessFinWait2(Cosmos.System.Network.IPv4.TCP.TCPPacket)
-  fullName: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessFinWait2(Cosmos.System.Network.IPv4.TCP.TCPPacket)
-  nameWithType: TcpClient.ProcessFinWait2(TCPPacket)
-- uid: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessFinWait2*
-  name: ProcessFinWait2
-  href: api/Cosmos.System.Network.IPv4.TCP.TcpClient.html#Cosmos_System_Network_IPv4_TCP_TcpClient_ProcessFinWait2_
-  commentId: Overload:Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessFinWait2
-  isSpec: "True"
-  fullName: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessFinWait2
-  nameWithType: TcpClient.ProcessFinWait2
-- uid: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessListen(Cosmos.System.Network.IPv4.TCP.TCPPacket)
-  name: ProcessListen(TCPPacket)
-  href: api/Cosmos.System.Network.IPv4.TCP.TcpClient.html#Cosmos_System_Network_IPv4_TCP_TcpClient_ProcessListen_Cosmos_System_Network_IPv4_TCP_TCPPacket_
-  commentId: M:Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessListen(Cosmos.System.Network.IPv4.TCP.TCPPacket)
-  fullName: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessListen(Cosmos.System.Network.IPv4.TCP.TCPPacket)
-  nameWithType: TcpClient.ProcessListen(TCPPacket)
-- uid: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessListen*
-  name: ProcessListen
-  href: api/Cosmos.System.Network.IPv4.TCP.TcpClient.html#Cosmos_System_Network_IPv4_TCP_TcpClient_ProcessListen_
-  commentId: Overload:Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessListen
-  isSpec: "True"
-  fullName: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessListen
-  nameWithType: TcpClient.ProcessListen
-- uid: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessSynReceived(Cosmos.System.Network.IPv4.TCP.TCPPacket)
-  name: ProcessSynReceived(TCPPacket)
-  href: api/Cosmos.System.Network.IPv4.TCP.TcpClient.html#Cosmos_System_Network_IPv4_TCP_TcpClient_ProcessSynReceived_Cosmos_System_Network_IPv4_TCP_TCPPacket_
-  commentId: M:Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessSynReceived(Cosmos.System.Network.IPv4.TCP.TCPPacket)
-  fullName: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessSynReceived(Cosmos.System.Network.IPv4.TCP.TCPPacket)
-  nameWithType: TcpClient.ProcessSynReceived(TCPPacket)
-- uid: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessSynReceived*
-  name: ProcessSynReceived
-  href: api/Cosmos.System.Network.IPv4.TCP.TcpClient.html#Cosmos_System_Network_IPv4_TCP_TcpClient_ProcessSynReceived_
-  commentId: Overload:Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessSynReceived
-  isSpec: "True"
-  fullName: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessSynReceived
-  nameWithType: TcpClient.ProcessSynReceived
-- uid: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessSynSent(Cosmos.System.Network.IPv4.TCP.TCPPacket)
-  name: ProcessSynSent(TCPPacket)
-  href: api/Cosmos.System.Network.IPv4.TCP.TcpClient.html#Cosmos_System_Network_IPv4_TCP_TcpClient_ProcessSynSent_Cosmos_System_Network_IPv4_TCP_TCPPacket_
-  commentId: M:Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessSynSent(Cosmos.System.Network.IPv4.TCP.TCPPacket)
-  fullName: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessSynSent(Cosmos.System.Network.IPv4.TCP.TCPPacket)
-  nameWithType: TcpClient.ProcessSynSent(TCPPacket)
-- uid: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessSynSent*
-  name: ProcessSynSent
-  href: api/Cosmos.System.Network.IPv4.TCP.TcpClient.html#Cosmos_System_Network_IPv4_TCP_TcpClient_ProcessSynSent_
-  commentId: Overload:Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessSynSent
-  isSpec: "True"
-  fullName: Cosmos.System.Network.IPv4.TCP.TcpClient.ProcessSynSent
-  nameWithType: TcpClient.ProcessSynSent
 - uid: Cosmos.System.Network.IPv4.TCP.TcpClient.Receive(Cosmos.System.Network.IPv4.EndPoint@)
   name: Receive(ref EndPoint)
   href: api/Cosmos.System.Network.IPv4.TCP.TcpClient.html#Cosmos_System_Network_IPv4_TCP_TcpClient_Receive_Cosmos_System_Network_IPv4_EndPoint__
@@ -35342,6 +35282,77 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Network.IPv4.TCP.TcpClient.Send
   nameWithType: TcpClient.Send
+- uid: Cosmos.System.Network.IPv4.TCP.TcpListener
+  name: TcpListener
+  href: api/Cosmos.System.Network.IPv4.TCP.TcpListener.html
+  commentId: T:Cosmos.System.Network.IPv4.TCP.TcpListener
+  fullName: Cosmos.System.Network.IPv4.TCP.TcpListener
+  nameWithType: TcpListener
+- uid: Cosmos.System.Network.IPv4.TCP.TcpListener.#ctor(System.Int32)
+  name: TcpListener(Int32)
+  href: api/Cosmos.System.Network.IPv4.TCP.TcpListener.html#Cosmos_System_Network_IPv4_TCP_TcpListener__ctor_System_Int32_
+  commentId: M:Cosmos.System.Network.IPv4.TCP.TcpListener.#ctor(System.Int32)
+  fullName: Cosmos.System.Network.IPv4.TCP.TcpListener.TcpListener(System.Int32)
+  nameWithType: TcpListener.TcpListener(Int32)
+- uid: Cosmos.System.Network.IPv4.TCP.TcpListener.#ctor*
+  name: TcpListener
+  href: api/Cosmos.System.Network.IPv4.TCP.TcpListener.html#Cosmos_System_Network_IPv4_TCP_TcpListener__ctor_
+  commentId: Overload:Cosmos.System.Network.IPv4.TCP.TcpListener.#ctor
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.TCP.TcpListener.TcpListener
+  nameWithType: TcpListener.TcpListener
+- uid: Cosmos.System.Network.IPv4.TCP.TcpListener.AcceptTcpClient(System.Int32)
+  name: AcceptTcpClient(Int32)
+  href: api/Cosmos.System.Network.IPv4.TCP.TcpListener.html#Cosmos_System_Network_IPv4_TCP_TcpListener_AcceptTcpClient_System_Int32_
+  commentId: M:Cosmos.System.Network.IPv4.TCP.TcpListener.AcceptTcpClient(System.Int32)
+  fullName: Cosmos.System.Network.IPv4.TCP.TcpListener.AcceptTcpClient(System.Int32)
+  nameWithType: TcpListener.AcceptTcpClient(Int32)
+- uid: Cosmos.System.Network.IPv4.TCP.TcpListener.AcceptTcpClient*
+  name: AcceptTcpClient
+  href: api/Cosmos.System.Network.IPv4.TCP.TcpListener.html#Cosmos_System_Network_IPv4_TCP_TcpListener_AcceptTcpClient_
+  commentId: Overload:Cosmos.System.Network.IPv4.TCP.TcpListener.AcceptTcpClient
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.TCP.TcpListener.AcceptTcpClient
+  nameWithType: TcpListener.AcceptTcpClient
+- uid: Cosmos.System.Network.IPv4.TCP.TcpListener.Dispose
+  name: Dispose()
+  href: api/Cosmos.System.Network.IPv4.TCP.TcpListener.html#Cosmos_System_Network_IPv4_TCP_TcpListener_Dispose
+  commentId: M:Cosmos.System.Network.IPv4.TCP.TcpListener.Dispose
+  fullName: Cosmos.System.Network.IPv4.TCP.TcpListener.Dispose()
+  nameWithType: TcpListener.Dispose()
+- uid: Cosmos.System.Network.IPv4.TCP.TcpListener.Dispose*
+  name: Dispose
+  href: api/Cosmos.System.Network.IPv4.TCP.TcpListener.html#Cosmos_System_Network_IPv4_TCP_TcpListener_Dispose_
+  commentId: Overload:Cosmos.System.Network.IPv4.TCP.TcpListener.Dispose
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.TCP.TcpListener.Dispose
+  nameWithType: TcpListener.Dispose
+- uid: Cosmos.System.Network.IPv4.TCP.TcpListener.Start
+  name: Start()
+  href: api/Cosmos.System.Network.IPv4.TCP.TcpListener.html#Cosmos_System_Network_IPv4_TCP_TcpListener_Start
+  commentId: M:Cosmos.System.Network.IPv4.TCP.TcpListener.Start
+  fullName: Cosmos.System.Network.IPv4.TCP.TcpListener.Start()
+  nameWithType: TcpListener.Start()
+- uid: Cosmos.System.Network.IPv4.TCP.TcpListener.Start*
+  name: Start
+  href: api/Cosmos.System.Network.IPv4.TCP.TcpListener.html#Cosmos_System_Network_IPv4_TCP_TcpListener_Start_
+  commentId: Overload:Cosmos.System.Network.IPv4.TCP.TcpListener.Start
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.TCP.TcpListener.Start
+  nameWithType: TcpListener.Start
+- uid: Cosmos.System.Network.IPv4.TCP.TcpListener.Stop
+  name: Stop()
+  href: api/Cosmos.System.Network.IPv4.TCP.TcpListener.html#Cosmos_System_Network_IPv4_TCP_TcpListener_Stop
+  commentId: M:Cosmos.System.Network.IPv4.TCP.TcpListener.Stop
+  fullName: Cosmos.System.Network.IPv4.TCP.TcpListener.Stop()
+  nameWithType: TcpListener.Stop()
+- uid: Cosmos.System.Network.IPv4.TCP.TcpListener.Stop*
+  name: Stop
+  href: api/Cosmos.System.Network.IPv4.TCP.TcpListener.html#Cosmos_System_Network_IPv4_TCP_TcpListener_Stop_
+  commentId: Overload:Cosmos.System.Network.IPv4.TCP.TcpListener.Stop
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.TCP.TcpListener.Stop
+  nameWithType: TcpListener.Stop
 - uid: Cosmos.System.Network.IPv4.TCP.TCPOption
   name: TCPOption
   href: api/Cosmos.System.Network.IPv4.TCP.TCPOption.html
@@ -35463,6 +35474,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Network.IPv4.TCP.TCPPacket.DestinationPort
   nameWithType: TCPPacket.DestinationPort
+- uid: Cosmos.System.Network.IPv4.TCP.TCPPacket.getFlags
+  name: getFlags()
+  href: api/Cosmos.System.Network.IPv4.TCP.TCPPacket.html#Cosmos_System_Network_IPv4_TCP_TCPPacket_getFlags
+  commentId: M:Cosmos.System.Network.IPv4.TCP.TCPPacket.getFlags
+  fullName: Cosmos.System.Network.IPv4.TCP.TCPPacket.getFlags()
+  nameWithType: TCPPacket.getFlags()
+- uid: Cosmos.System.Network.IPv4.TCP.TCPPacket.getFlags*
+  name: getFlags
+  href: api/Cosmos.System.Network.IPv4.TCP.TCPPacket.html#Cosmos_System_Network_IPv4_TCP_TCPPacket_getFlags_
+  commentId: Overload:Cosmos.System.Network.IPv4.TCP.TCPPacket.getFlags
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.TCP.TCPPacket.getFlags
+  nameWithType: TCPPacket.getFlags
 - uid: Cosmos.System.Network.IPv4.TCP.TCPPacket.InitFields
   name: InitFields()
   href: api/Cosmos.System.Network.IPv4.TCP.TCPPacket.html#Cosmos_System_Network_IPv4_TCP_TCPPacket_InitFields
