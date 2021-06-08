@@ -4093,6 +4093,25 @@ references:
   commentId: T:Cosmos.Core.IOGroup.ATA
   fullName: Cosmos.Core.IOGroup.ATA
   nameWithType: ATA
+- uid: Cosmos.Core.IOGroup.ATA.#ctor(System.Boolean)
+  name: ATA(Boolean)
+  href: api/Cosmos.Core.IOGroup.ATA.html#Cosmos_Core_IOGroup_ATA__ctor_System_Boolean_
+  commentId: M:Cosmos.Core.IOGroup.ATA.#ctor(System.Boolean)
+  fullName: Cosmos.Core.IOGroup.ATA.ATA(System.Boolean)
+  nameWithType: ATA.ATA(Boolean)
+- uid: Cosmos.Core.IOGroup.ATA.#ctor*
+  name: ATA
+  href: api/Cosmos.Core.IOGroup.ATA.html#Cosmos_Core_IOGroup_ATA__ctor_
+  commentId: Overload:Cosmos.Core.IOGroup.ATA.#ctor
+  isSpec: "True"
+  fullName: Cosmos.Core.IOGroup.ATA.ATA
+  nameWithType: ATA.ATA
+- uid: Cosmos.Core.IOGroup.ATA.AlternateStatus
+  name: AlternateStatus
+  href: api/Cosmos.Core.IOGroup.ATA.html#Cosmos_Core_IOGroup_ATA_AlternateStatus
+  commentId: F:Cosmos.Core.IOGroup.ATA.AlternateStatus
+  fullName: Cosmos.Core.IOGroup.ATA.AlternateStatus
+  nameWithType: ATA.AlternateStatus
 - uid: Cosmos.Core.IOGroup.ATA.Command
   name: Command
   href: api/Cosmos.Core.IOGroup.ATA.html#Cosmos_Core_IOGroup_ATA_Command
@@ -4117,6 +4136,18 @@ references:
   commentId: F:Cosmos.Core.IOGroup.ATA.DeviceSelect
   fullName: Cosmos.Core.IOGroup.ATA.DeviceSelect
   nameWithType: ATA.DeviceSelect
+- uid: Cosmos.Core.IOGroup.ATA.Error
+  name: Error
+  href: api/Cosmos.Core.IOGroup.ATA.html#Cosmos_Core_IOGroup_ATA_Error
+  commentId: F:Cosmos.Core.IOGroup.ATA.Error
+  fullName: Cosmos.Core.IOGroup.ATA.Error
+  nameWithType: ATA.Error
+- uid: Cosmos.Core.IOGroup.ATA.Features
+  name: Features
+  href: api/Cosmos.Core.IOGroup.ATA.html#Cosmos_Core_IOGroup_ATA_Features
+  commentId: F:Cosmos.Core.IOGroup.ATA.Features
+  fullName: Cosmos.Core.IOGroup.ATA.Features
+  nameWithType: ATA.Features
 - uid: Cosmos.Core.IOGroup.ATA.LBA0
   name: LBA0
   href: api/Cosmos.Core.IOGroup.ATA.html#Cosmos_Core_IOGroup_ATA_LBA0
@@ -4135,18 +4166,55 @@ references:
   commentId: F:Cosmos.Core.IOGroup.ATA.LBA2
   fullName: Cosmos.Core.IOGroup.ATA.LBA2
   nameWithType: ATA.LBA2
+- uid: Cosmos.Core.IOGroup.ATA.LBA3
+  name: LBA3
+  href: api/Cosmos.Core.IOGroup.ATA.html#Cosmos_Core_IOGroup_ATA_LBA3
+  commentId: F:Cosmos.Core.IOGroup.ATA.LBA3
+  fullName: Cosmos.Core.IOGroup.ATA.LBA3
+  nameWithType: ATA.LBA3
+- uid: Cosmos.Core.IOGroup.ATA.LBA4
+  name: LBA4
+  href: api/Cosmos.Core.IOGroup.ATA.html#Cosmos_Core_IOGroup_ATA_LBA4
+  commentId: F:Cosmos.Core.IOGroup.ATA.LBA4
+  fullName: Cosmos.Core.IOGroup.ATA.LBA4
+  nameWithType: ATA.LBA4
+- uid: Cosmos.Core.IOGroup.ATA.LBA5
+  name: LBA5
+  href: api/Cosmos.Core.IOGroup.ATA.html#Cosmos_Core_IOGroup_ATA_LBA5
+  commentId: F:Cosmos.Core.IOGroup.ATA.LBA5
+  fullName: Cosmos.Core.IOGroup.ATA.LBA5
+  nameWithType: ATA.LBA5
 - uid: Cosmos.Core.IOGroup.ATA.SectorCount
   name: SectorCount
   href: api/Cosmos.Core.IOGroup.ATA.html#Cosmos_Core_IOGroup_ATA_SectorCount
   commentId: F:Cosmos.Core.IOGroup.ATA.SectorCount
   fullName: Cosmos.Core.IOGroup.ATA.SectorCount
   nameWithType: ATA.SectorCount
+- uid: Cosmos.Core.IOGroup.ATA.SectorCountLBA48
+  name: SectorCountLBA48
+  href: api/Cosmos.Core.IOGroup.ATA.html#Cosmos_Core_IOGroup_ATA_SectorCountLBA48
+  commentId: F:Cosmos.Core.IOGroup.ATA.SectorCountLBA48
+  fullName: Cosmos.Core.IOGroup.ATA.SectorCountLBA48
+  nameWithType: ATA.SectorCountLBA48
 - uid: Cosmos.Core.IOGroup.ATA.Status
   name: Status
   href: api/Cosmos.Core.IOGroup.ATA.html#Cosmos_Core_IOGroup_ATA_Status
   commentId: F:Cosmos.Core.IOGroup.ATA.Status
   fullName: Cosmos.Core.IOGroup.ATA.Status
   nameWithType: ATA.Status
+- uid: Cosmos.Core.IOGroup.ATA.Wait
+  name: Wait()
+  href: api/Cosmos.Core.IOGroup.ATA.html#Cosmos_Core_IOGroup_ATA_Wait
+  commentId: M:Cosmos.Core.IOGroup.ATA.Wait
+  fullName: Cosmos.Core.IOGroup.ATA.Wait()
+  nameWithType: ATA.Wait()
+- uid: Cosmos.Core.IOGroup.ATA.Wait*
+  name: Wait
+  href: api/Cosmos.Core.IOGroup.ATA.html#Cosmos_Core_IOGroup_ATA_Wait_
+  commentId: Overload:Cosmos.Core.IOGroup.ATA.Wait
+  isSpec: "True"
+  fullName: Cosmos.Core.IOGroup.ATA.Wait
+  nameWithType: ATA.Wait
 - uid: Cosmos.Core.IOGroup.COM
   name: COM
   href: api/Cosmos.Core.IOGroup.COM.html
@@ -19001,510 +19069,647 @@ references:
   isSpec: "True"
   fullName: Cosmos.HAL.BlockDevice.Ata.ToString
   nameWithType: Ata.ToString
-- uid: Cosmos.HAL.BlockDevice.AtaPio
-  name: AtaPio
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html
-  commentId: T:Cosmos.HAL.BlockDevice.AtaPio
-  fullName: Cosmos.HAL.BlockDevice.AtaPio
-  nameWithType: AtaPio
-- uid: Cosmos.HAL.BlockDevice.AtaPio.#ctor(Cosmos.Core.IOGroup.ATA,Cosmos.HAL.BlockDevice.Ata.ControllerIdEnum,Cosmos.HAL.BlockDevice.Ata.BusPositionEnum)
-  name: AtaPio(ATA, Ata.ControllerIdEnum, Ata.BusPositionEnum)
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio__ctor_Cosmos_Core_IOGroup_ATA_Cosmos_HAL_BlockDevice_Ata_ControllerIdEnum_Cosmos_HAL_BlockDevice_Ata_BusPositionEnum_
-  commentId: M:Cosmos.HAL.BlockDevice.AtaPio.#ctor(Cosmos.Core.IOGroup.ATA,Cosmos.HAL.BlockDevice.Ata.ControllerIdEnum,Cosmos.HAL.BlockDevice.Ata.BusPositionEnum)
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.AtaPio(Cosmos.Core.IOGroup.ATA, Cosmos.HAL.BlockDevice.Ata.ControllerIdEnum, Cosmos.HAL.BlockDevice.Ata.BusPositionEnum)
-  nameWithType: AtaPio.AtaPio(ATA, Ata.ControllerIdEnum, Ata.BusPositionEnum)
-- uid: Cosmos.HAL.BlockDevice.AtaPio.#ctor*
-  name: AtaPio
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio__ctor_
-  commentId: Overload:Cosmos.HAL.BlockDevice.AtaPio.#ctor
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO
+  name: ATA_PIO
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html
+  commentId: T:Cosmos.HAL.BlockDevice.ATA_PIO
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO
+  nameWithType: ATA_PIO
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.#ctor(Cosmos.Core.IOGroup.ATA,Cosmos.HAL.BlockDevice.Ata.ControllerIdEnum,Cosmos.HAL.BlockDevice.Ata.BusPositionEnum)
+  name: ATA_PIO(ATA, Ata.ControllerIdEnum, Ata.BusPositionEnum)
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO__ctor_Cosmos_Core_IOGroup_ATA_Cosmos_HAL_BlockDevice_Ata_ControllerIdEnum_Cosmos_HAL_BlockDevice_Ata_BusPositionEnum_
+  commentId: M:Cosmos.HAL.BlockDevice.ATA_PIO.#ctor(Cosmos.Core.IOGroup.ATA,Cosmos.HAL.BlockDevice.Ata.ControllerIdEnum,Cosmos.HAL.BlockDevice.Ata.BusPositionEnum)
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.ATA_PIO(Cosmos.Core.IOGroup.ATA, Cosmos.HAL.BlockDevice.Ata.ControllerIdEnum, Cosmos.HAL.BlockDevice.Ata.BusPositionEnum)
+  nameWithType: ATA_PIO.ATA_PIO(ATA, Ata.ControllerIdEnum, Ata.BusPositionEnum)
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.#ctor*
+  name: ATA_PIO
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO__ctor_
+  commentId: Overload:Cosmos.HAL.BlockDevice.ATA_PIO.#ctor
   isSpec: "True"
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.AtaPio
-  nameWithType: AtaPio.AtaPio
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Cmd
-  name: AtaPio.Cmd
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Cmd.html
-  commentId: T:Cosmos.HAL.BlockDevice.AtaPio.Cmd
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Cmd
-  nameWithType: AtaPio.Cmd
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Cmd.CacheFlush
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.ATA_PIO
+  nameWithType: ATA_PIO.ATA_PIO
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd
+  name: ATA_PIO.Cmd
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.html
+  commentId: T:Cosmos.HAL.BlockDevice.ATA_PIO.Cmd
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd
+  nameWithType: ATA_PIO.Cmd
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.CacheFlush
   name: CacheFlush
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Cmd.html#Cosmos_HAL_BlockDevice_AtaPio_Cmd_CacheFlush
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Cmd.CacheFlush
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Cmd.CacheFlush
-  nameWithType: AtaPio.Cmd.CacheFlush
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Cmd.CacheFlushExt
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.html#Cosmos_HAL_BlockDevice_ATA_PIO_Cmd_CacheFlush
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.CacheFlush
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.CacheFlush
+  nameWithType: ATA_PIO.Cmd.CacheFlush
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.CacheFlushExt
   name: CacheFlushExt
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Cmd.html#Cosmos_HAL_BlockDevice_AtaPio_Cmd_CacheFlushExt
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Cmd.CacheFlushExt
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Cmd.CacheFlushExt
-  nameWithType: AtaPio.Cmd.CacheFlushExt
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Cmd.Eject
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.html#Cosmos_HAL_BlockDevice_ATA_PIO_Cmd_CacheFlushExt
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.CacheFlushExt
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.CacheFlushExt
+  nameWithType: ATA_PIO.Cmd.CacheFlushExt
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.Eject
   name: Eject
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Cmd.html#Cosmos_HAL_BlockDevice_AtaPio_Cmd_Eject
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Cmd.Eject
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Cmd.Eject
-  nameWithType: AtaPio.Cmd.Eject
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Cmd.Identify
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.html#Cosmos_HAL_BlockDevice_ATA_PIO_Cmd_Eject
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.Eject
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.Eject
+  nameWithType: ATA_PIO.Cmd.Eject
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.Identify
   name: Identify
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Cmd.html#Cosmos_HAL_BlockDevice_AtaPio_Cmd_Identify
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Cmd.Identify
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Cmd.Identify
-  nameWithType: AtaPio.Cmd.Identify
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Cmd.IdentifyPacket
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.html#Cosmos_HAL_BlockDevice_ATA_PIO_Cmd_Identify
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.Identify
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.Identify
+  nameWithType: ATA_PIO.Cmd.Identify
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.IdentifyPacket
   name: IdentifyPacket
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Cmd.html#Cosmos_HAL_BlockDevice_AtaPio_Cmd_IdentifyPacket
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Cmd.IdentifyPacket
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Cmd.IdentifyPacket
-  nameWithType: AtaPio.Cmd.IdentifyPacket
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Cmd.Packet
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.html#Cosmos_HAL_BlockDevice_ATA_PIO_Cmd_IdentifyPacket
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.IdentifyPacket
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.IdentifyPacket
+  nameWithType: ATA_PIO.Cmd.IdentifyPacket
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.Packet
   name: Packet
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Cmd.html#Cosmos_HAL_BlockDevice_AtaPio_Cmd_Packet
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Cmd.Packet
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Cmd.Packet
-  nameWithType: AtaPio.Cmd.Packet
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Cmd.Read
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.html#Cosmos_HAL_BlockDevice_ATA_PIO_Cmd_Packet
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.Packet
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.Packet
+  nameWithType: ATA_PIO.Cmd.Packet
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.Read
   name: Read
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Cmd.html#Cosmos_HAL_BlockDevice_AtaPio_Cmd_Read
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Cmd.Read
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Cmd.Read
-  nameWithType: AtaPio.Cmd.Read
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Cmd.ReadDma
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.html#Cosmos_HAL_BlockDevice_ATA_PIO_Cmd_Read
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.Read
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.Read
+  nameWithType: ATA_PIO.Cmd.Read
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.ReadDma
   name: ReadDma
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Cmd.html#Cosmos_HAL_BlockDevice_AtaPio_Cmd_ReadDma
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Cmd.ReadDma
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Cmd.ReadDma
-  nameWithType: AtaPio.Cmd.ReadDma
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Cmd.ReadDmaExt
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.html#Cosmos_HAL_BlockDevice_ATA_PIO_Cmd_ReadDma
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.ReadDma
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.ReadDma
+  nameWithType: ATA_PIO.Cmd.ReadDma
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.ReadDmaExt
   name: ReadDmaExt
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Cmd.html#Cosmos_HAL_BlockDevice_AtaPio_Cmd_ReadDmaExt
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Cmd.ReadDmaExt
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Cmd.ReadDmaExt
-  nameWithType: AtaPio.Cmd.ReadDmaExt
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Cmd.ReadPio
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.html#Cosmos_HAL_BlockDevice_ATA_PIO_Cmd_ReadDmaExt
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.ReadDmaExt
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.ReadDmaExt
+  nameWithType: ATA_PIO.Cmd.ReadDmaExt
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.ReadPio
   name: ReadPio
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Cmd.html#Cosmos_HAL_BlockDevice_AtaPio_Cmd_ReadPio
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Cmd.ReadPio
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Cmd.ReadPio
-  nameWithType: AtaPio.Cmd.ReadPio
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Cmd.ReadPioExt
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.html#Cosmos_HAL_BlockDevice_ATA_PIO_Cmd_ReadPio
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.ReadPio
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.ReadPio
+  nameWithType: ATA_PIO.Cmd.ReadPio
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.ReadPioExt
   name: ReadPioExt
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Cmd.html#Cosmos_HAL_BlockDevice_AtaPio_Cmd_ReadPioExt
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Cmd.ReadPioExt
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Cmd.ReadPioExt
-  nameWithType: AtaPio.Cmd.ReadPioExt
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Cmd.WriteDma
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.html#Cosmos_HAL_BlockDevice_ATA_PIO_Cmd_ReadPioExt
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.ReadPioExt
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.ReadPioExt
+  nameWithType: ATA_PIO.Cmd.ReadPioExt
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.WriteDma
   name: WriteDma
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Cmd.html#Cosmos_HAL_BlockDevice_AtaPio_Cmd_WriteDma
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Cmd.WriteDma
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Cmd.WriteDma
-  nameWithType: AtaPio.Cmd.WriteDma
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Cmd.WriteDmaExt
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.html#Cosmos_HAL_BlockDevice_ATA_PIO_Cmd_WriteDma
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.WriteDma
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.WriteDma
+  nameWithType: ATA_PIO.Cmd.WriteDma
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.WriteDmaExt
   name: WriteDmaExt
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Cmd.html#Cosmos_HAL_BlockDevice_AtaPio_Cmd_WriteDmaExt
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Cmd.WriteDmaExt
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Cmd.WriteDmaExt
-  nameWithType: AtaPio.Cmd.WriteDmaExt
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Cmd.WritePio
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.html#Cosmos_HAL_BlockDevice_ATA_PIO_Cmd_WriteDmaExt
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.WriteDmaExt
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.WriteDmaExt
+  nameWithType: ATA_PIO.Cmd.WriteDmaExt
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.WritePio
   name: WritePio
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Cmd.html#Cosmos_HAL_BlockDevice_AtaPio_Cmd_WritePio
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Cmd.WritePio
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Cmd.WritePio
-  nameWithType: AtaPio.Cmd.WritePio
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Cmd.WritePioExt
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.html#Cosmos_HAL_BlockDevice_ATA_PIO_Cmd_WritePio
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.WritePio
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.WritePio
+  nameWithType: ATA_PIO.Cmd.WritePio
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.WritePioExt
   name: WritePioExt
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Cmd.html#Cosmos_HAL_BlockDevice_AtaPio_Cmd_WritePioExt
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Cmd.WritePioExt
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Cmd.WritePioExt
-  nameWithType: AtaPio.Cmd.WritePioExt
-- uid: Cosmos.HAL.BlockDevice.AtaPio.DiscoverDrive
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.html#Cosmos_HAL_BlockDevice_ATA_PIO_Cmd_WritePioExt
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.WritePioExt
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Cmd.WritePioExt
+  nameWithType: ATA_PIO.Cmd.WritePioExt
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.DiscoverDrive
   name: DiscoverDrive()
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_DiscoverDrive
-  commentId: M:Cosmos.HAL.BlockDevice.AtaPio.DiscoverDrive
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.DiscoverDrive()
-  nameWithType: AtaPio.DiscoverDrive()
-- uid: Cosmos.HAL.BlockDevice.AtaPio.DiscoverDrive*
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_DiscoverDrive
+  commentId: M:Cosmos.HAL.BlockDevice.ATA_PIO.DiscoverDrive
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.DiscoverDrive()
+  nameWithType: ATA_PIO.DiscoverDrive()
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.DiscoverDrive*
   name: DiscoverDrive
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_DiscoverDrive_
-  commentId: Overload:Cosmos.HAL.BlockDevice.AtaPio.DiscoverDrive
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_DiscoverDrive_
+  commentId: Overload:Cosmos.HAL.BlockDevice.ATA_PIO.DiscoverDrive
   isSpec: "True"
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.DiscoverDrive
-  nameWithType: AtaPio.DiscoverDrive
-- uid: Cosmos.HAL.BlockDevice.AtaPio.DriveType
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.DiscoverDrive
+  nameWithType: ATA_PIO.DiscoverDrive
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.DriveType
   name: DriveType
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_DriveType
-  commentId: P:Cosmos.HAL.BlockDevice.AtaPio.DriveType
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.DriveType
-  nameWithType: AtaPio.DriveType
-- uid: Cosmos.HAL.BlockDevice.AtaPio.DriveType*
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_DriveType
+  commentId: P:Cosmos.HAL.BlockDevice.ATA_PIO.DriveType
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.DriveType
+  nameWithType: ATA_PIO.DriveType
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.DriveType*
   name: DriveType
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_DriveType_
-  commentId: Overload:Cosmos.HAL.BlockDevice.AtaPio.DriveType
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_DriveType_
+  commentId: Overload:Cosmos.HAL.BlockDevice.ATA_PIO.DriveType
   isSpec: "True"
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.DriveType
-  nameWithType: AtaPio.DriveType
-- uid: Cosmos.HAL.BlockDevice.AtaPio.FirmwareRev
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.DriveType
+  nameWithType: ATA_PIO.DriveType
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.DvcSelVal
+  name: ATA_PIO.DvcSelVal
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.DvcSelVal.html
+  commentId: T:Cosmos.HAL.BlockDevice.ATA_PIO.DvcSelVal
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.DvcSelVal
+  nameWithType: ATA_PIO.DvcSelVal
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.DvcSelVal.Default
+  name: Default
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.DvcSelVal.html#Cosmos_HAL_BlockDevice_ATA_PIO_DvcSelVal_Default
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.DvcSelVal.Default
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.DvcSelVal.Default
+  nameWithType: ATA_PIO.DvcSelVal.Default
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.DvcSelVal.LBA
+  name: LBA
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.DvcSelVal.html#Cosmos_HAL_BlockDevice_ATA_PIO_DvcSelVal_LBA
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.DvcSelVal.LBA
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.DvcSelVal.LBA
+  nameWithType: ATA_PIO.DvcSelVal.LBA
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.DvcSelVal.Slave
+  name: Slave
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.DvcSelVal.html#Cosmos_HAL_BlockDevice_ATA_PIO_DvcSelVal_Slave
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.DvcSelVal.Slave
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.DvcSelVal.Slave
+  nameWithType: ATA_PIO.DvcSelVal.Slave
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.FirmwareRev
   name: FirmwareRev
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_FirmwareRev
-  commentId: P:Cosmos.HAL.BlockDevice.AtaPio.FirmwareRev
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.FirmwareRev
-  nameWithType: AtaPio.FirmwareRev
-- uid: Cosmos.HAL.BlockDevice.AtaPio.FirmwareRev*
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_FirmwareRev
+  commentId: P:Cosmos.HAL.BlockDevice.ATA_PIO.FirmwareRev
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.FirmwareRev
+  nameWithType: ATA_PIO.FirmwareRev
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.FirmwareRev*
   name: FirmwareRev
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_FirmwareRev_
-  commentId: Overload:Cosmos.HAL.BlockDevice.AtaPio.FirmwareRev
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_FirmwareRev_
+  commentId: Overload:Cosmos.HAL.BlockDevice.ATA_PIO.FirmwareRev
   isSpec: "True"
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.FirmwareRev
-  nameWithType: AtaPio.FirmwareRev
-- uid: Cosmos.HAL.BlockDevice.AtaPio.GetString(System.UInt16[],System.Int32,System.Int32)
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.FirmwareRev
+  nameWithType: ATA_PIO.FirmwareRev
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.GetString(System.UInt16[],System.Int32,System.Int32)
   name: GetString(UInt16[], Int32, Int32)
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_GetString_System_UInt16___System_Int32_System_Int32_
-  commentId: M:Cosmos.HAL.BlockDevice.AtaPio.GetString(System.UInt16[],System.Int32,System.Int32)
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_GetString_System_UInt16___System_Int32_System_Int32_
+  commentId: M:Cosmos.HAL.BlockDevice.ATA_PIO.GetString(System.UInt16[],System.Int32,System.Int32)
   name.vb: GetString(UInt16(), Int32, Int32)
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.GetString(System.UInt16[], System.Int32, System.Int32)
-  fullName.vb: Cosmos.HAL.BlockDevice.AtaPio.GetString(System.UInt16(), System.Int32, System.Int32)
-  nameWithType: AtaPio.GetString(UInt16[], Int32, Int32)
-  nameWithType.vb: AtaPio.GetString(UInt16(), Int32, Int32)
-- uid: Cosmos.HAL.BlockDevice.AtaPio.GetString*
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.GetString(System.UInt16[], System.Int32, System.Int32)
+  fullName.vb: Cosmos.HAL.BlockDevice.ATA_PIO.GetString(System.UInt16(), System.Int32, System.Int32)
+  nameWithType: ATA_PIO.GetString(UInt16[], Int32, Int32)
+  nameWithType.vb: ATA_PIO.GetString(UInt16(), Int32, Int32)
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.GetString*
   name: GetString
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_GetString_
-  commentId: Overload:Cosmos.HAL.BlockDevice.AtaPio.GetString
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_GetString_
+  commentId: Overload:Cosmos.HAL.BlockDevice.ATA_PIO.GetString
   isSpec: "True"
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.GetString
-  nameWithType: AtaPio.GetString
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Ident
-  name: AtaPio.Ident
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Ident.html
-  commentId: T:Cosmos.HAL.BlockDevice.AtaPio.Ident
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Ident
-  nameWithType: AtaPio.Ident
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Ident.CAPABILITIES
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.GetString
+  nameWithType: ATA_PIO.GetString
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Ident
+  name: ATA_PIO.Ident
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Ident.html
+  commentId: T:Cosmos.HAL.BlockDevice.ATA_PIO.Ident
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Ident
+  nameWithType: ATA_PIO.Ident
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Ident.CAPABILITIES
   name: CAPABILITIES
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Ident.html#Cosmos_HAL_BlockDevice_AtaPio_Ident_CAPABILITIES
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Ident.CAPABILITIES
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Ident.CAPABILITIES
-  nameWithType: AtaPio.Ident.CAPABILITIES
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Ident.COMMANDSETS
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Ident.html#Cosmos_HAL_BlockDevice_ATA_PIO_Ident_CAPABILITIES
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Ident.CAPABILITIES
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Ident.CAPABILITIES
+  nameWithType: ATA_PIO.Ident.CAPABILITIES
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Ident.COMMANDSETS
   name: COMMANDSETS
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Ident.html#Cosmos_HAL_BlockDevice_AtaPio_Ident_COMMANDSETS
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Ident.COMMANDSETS
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Ident.COMMANDSETS
-  nameWithType: AtaPio.Ident.COMMANDSETS
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Ident.CYLINDERS
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Ident.html#Cosmos_HAL_BlockDevice_ATA_PIO_Ident_COMMANDSETS
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Ident.COMMANDSETS
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Ident.COMMANDSETS
+  nameWithType: ATA_PIO.Ident.COMMANDSETS
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Ident.CYLINDERS
   name: CYLINDERS
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Ident.html#Cosmos_HAL_BlockDevice_AtaPio_Ident_CYLINDERS
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Ident.CYLINDERS
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Ident.CYLINDERS
-  nameWithType: AtaPio.Ident.CYLINDERS
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Ident.DEVICETYPE
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Ident.html#Cosmos_HAL_BlockDevice_ATA_PIO_Ident_CYLINDERS
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Ident.CYLINDERS
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Ident.CYLINDERS
+  nameWithType: ATA_PIO.Ident.CYLINDERS
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Ident.DEVICETYPE
   name: DEVICETYPE
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Ident.html#Cosmos_HAL_BlockDevice_AtaPio_Ident_DEVICETYPE
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Ident.DEVICETYPE
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Ident.DEVICETYPE
-  nameWithType: AtaPio.Ident.DEVICETYPE
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Ident.FIELDVALID
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Ident.html#Cosmos_HAL_BlockDevice_ATA_PIO_Ident_DEVICETYPE
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Ident.DEVICETYPE
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Ident.DEVICETYPE
+  nameWithType: ATA_PIO.Ident.DEVICETYPE
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Ident.FIELDVALID
   name: FIELDVALID
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Ident.html#Cosmos_HAL_BlockDevice_AtaPio_Ident_FIELDVALID
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Ident.FIELDVALID
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Ident.FIELDVALID
-  nameWithType: AtaPio.Ident.FIELDVALID
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Ident.HEADS
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Ident.html#Cosmos_HAL_BlockDevice_ATA_PIO_Ident_FIELDVALID
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Ident.FIELDVALID
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Ident.FIELDVALID
+  nameWithType: ATA_PIO.Ident.FIELDVALID
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Ident.HEADS
   name: HEADS
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Ident.html#Cosmos_HAL_BlockDevice_AtaPio_Ident_HEADS
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Ident.HEADS
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Ident.HEADS
-  nameWithType: AtaPio.Ident.HEADS
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Ident.MAX_LBA
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Ident.html#Cosmos_HAL_BlockDevice_ATA_PIO_Ident_HEADS
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Ident.HEADS
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Ident.HEADS
+  nameWithType: ATA_PIO.Ident.HEADS
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Ident.MAX_LBA
   name: MAX_LBA
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Ident.html#Cosmos_HAL_BlockDevice_AtaPio_Ident_MAX_LBA
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Ident.MAX_LBA
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Ident.MAX_LBA
-  nameWithType: AtaPio.Ident.MAX_LBA
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Ident.MAX_LBA_EXT
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Ident.html#Cosmos_HAL_BlockDevice_ATA_PIO_Ident_MAX_LBA
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Ident.MAX_LBA
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Ident.MAX_LBA
+  nameWithType: ATA_PIO.Ident.MAX_LBA
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Ident.MAX_LBA_EXT
   name: MAX_LBA_EXT
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Ident.html#Cosmos_HAL_BlockDevice_AtaPio_Ident_MAX_LBA_EXT
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Ident.MAX_LBA_EXT
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Ident.MAX_LBA_EXT
-  nameWithType: AtaPio.Ident.MAX_LBA_EXT
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Ident.MODEL
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Ident.html#Cosmos_HAL_BlockDevice_ATA_PIO_Ident_MAX_LBA_EXT
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Ident.MAX_LBA_EXT
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Ident.MAX_LBA_EXT
+  nameWithType: ATA_PIO.Ident.MAX_LBA_EXT
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Ident.MODEL
   name: MODEL
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Ident.html#Cosmos_HAL_BlockDevice_AtaPio_Ident_MODEL
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Ident.MODEL
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Ident.MODEL
-  nameWithType: AtaPio.Ident.MODEL
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Ident.SECTORS
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Ident.html#Cosmos_HAL_BlockDevice_ATA_PIO_Ident_MODEL
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Ident.MODEL
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Ident.MODEL
+  nameWithType: ATA_PIO.Ident.MODEL
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Ident.SECTORS
   name: SECTORS
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Ident.html#Cosmos_HAL_BlockDevice_AtaPio_Ident_SECTORS
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Ident.SECTORS
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Ident.SECTORS
-  nameWithType: AtaPio.Ident.SECTORS
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Ident.SERIAL
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Ident.html#Cosmos_HAL_BlockDevice_ATA_PIO_Ident_SECTORS
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Ident.SECTORS
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Ident.SECTORS
+  nameWithType: ATA_PIO.Ident.SECTORS
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Ident.SERIAL
   name: SERIAL
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Ident.html#Cosmos_HAL_BlockDevice_AtaPio_Ident_SERIAL
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Ident.SERIAL
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Ident.SERIAL
-  nameWithType: AtaPio.Ident.SERIAL
-- uid: Cosmos.HAL.BlockDevice.AtaPio.InitDrive
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Ident.html#Cosmos_HAL_BlockDevice_ATA_PIO_Ident_SERIAL
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Ident.SERIAL
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Ident.SERIAL
+  nameWithType: ATA_PIO.Ident.SERIAL
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.InitDrive
   name: InitDrive()
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_InitDrive
-  commentId: M:Cosmos.HAL.BlockDevice.AtaPio.InitDrive
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.InitDrive()
-  nameWithType: AtaPio.InitDrive()
-- uid: Cosmos.HAL.BlockDevice.AtaPio.InitDrive*
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_InitDrive
+  commentId: M:Cosmos.HAL.BlockDevice.ATA_PIO.InitDrive
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.InitDrive()
+  nameWithType: ATA_PIO.InitDrive()
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.InitDrive*
   name: InitDrive
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_InitDrive_
-  commentId: Overload:Cosmos.HAL.BlockDevice.AtaPio.InitDrive
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_InitDrive_
+  commentId: Overload:Cosmos.HAL.BlockDevice.ATA_PIO.InitDrive
   isSpec: "True"
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.InitDrive
-  nameWithType: AtaPio.InitDrive
-- uid: Cosmos.HAL.BlockDevice.AtaPio.IO
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.InitDrive
+  nameWithType: ATA_PIO.InitDrive
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.IO
   name: IO
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_IO
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.IO
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.IO
-  nameWithType: AtaPio.IO
-- uid: Cosmos.HAL.BlockDevice.AtaPio.LBA48Bit
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_IO
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.IO
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.IO
+  nameWithType: ATA_PIO.IO
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.LBA48Bit
   name: LBA48Bit
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_LBA48Bit
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.LBA48Bit
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.LBA48Bit
-  nameWithType: AtaPio.LBA48Bit
-- uid: Cosmos.HAL.BlockDevice.AtaPio.mDriveType
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_LBA48Bit
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.LBA48Bit
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.LBA48Bit
+  nameWithType: ATA_PIO.LBA48Bit
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.mDriveType
   name: mDriveType
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_mDriveType
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.mDriveType
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.mDriveType
-  nameWithType: AtaPio.mDriveType
-- uid: Cosmos.HAL.BlockDevice.AtaPio.mFirmwareRev
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_mDriveType
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.mDriveType
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.mDriveType
+  nameWithType: ATA_PIO.mDriveType
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.mFirmwareRev
   name: mFirmwareRev
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_mFirmwareRev
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.mFirmwareRev
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.mFirmwareRev
-  nameWithType: AtaPio.mFirmwareRev
-- uid: Cosmos.HAL.BlockDevice.AtaPio.mModelNo
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_mFirmwareRev
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.mFirmwareRev
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.mFirmwareRev
+  nameWithType: ATA_PIO.mFirmwareRev
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.mModelNo
   name: mModelNo
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_mModelNo
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.mModelNo
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.mModelNo
-  nameWithType: AtaPio.mModelNo
-- uid: Cosmos.HAL.BlockDevice.AtaPio.ModelNo
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_mModelNo
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.mModelNo
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.mModelNo
+  nameWithType: ATA_PIO.mModelNo
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.ModelNo
   name: ModelNo
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_ModelNo
-  commentId: P:Cosmos.HAL.BlockDevice.AtaPio.ModelNo
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.ModelNo
-  nameWithType: AtaPio.ModelNo
-- uid: Cosmos.HAL.BlockDevice.AtaPio.ModelNo*
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_ModelNo
+  commentId: P:Cosmos.HAL.BlockDevice.ATA_PIO.ModelNo
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.ModelNo
+  nameWithType: ATA_PIO.ModelNo
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.ModelNo*
   name: ModelNo
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_ModelNo_
-  commentId: Overload:Cosmos.HAL.BlockDevice.AtaPio.ModelNo
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_ModelNo_
+  commentId: Overload:Cosmos.HAL.BlockDevice.ATA_PIO.ModelNo
   isSpec: "True"
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.ModelNo
-  nameWithType: AtaPio.ModelNo
-- uid: Cosmos.HAL.BlockDevice.AtaPio.mSerialNo
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.ModelNo
+  nameWithType: ATA_PIO.ModelNo
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.mSerialNo
   name: mSerialNo
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_mSerialNo
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.mSerialNo
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.mSerialNo
-  nameWithType: AtaPio.mSerialNo
-- uid: Cosmos.HAL.BlockDevice.AtaPio.ReadBlock(UInt64,UInt64,System.Byte[]@)
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_mSerialNo
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.mSerialNo
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.mSerialNo
+  nameWithType: ATA_PIO.mSerialNo
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.ReadBlock(UInt64,UInt64,System.Byte[]@)
   name: ReadBlock(UInt64, UInt64, ref Byte[])
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_ReadBlock_UInt64_UInt64_System_Byte____
-  commentId: M:Cosmos.HAL.BlockDevice.AtaPio.ReadBlock(UInt64,UInt64,System.Byte[]@)
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_ReadBlock_UInt64_UInt64_System_Byte____
+  commentId: M:Cosmos.HAL.BlockDevice.ATA_PIO.ReadBlock(UInt64,UInt64,System.Byte[]@)
   name.vb: ReadBlock(UInt64, UInt64, ByRef Byte())
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.ReadBlock(UInt64, UInt64, ref System.Byte[])
-  fullName.vb: Cosmos.HAL.BlockDevice.AtaPio.ReadBlock(UInt64, UInt64, ByRef System.Byte())
-  nameWithType: AtaPio.ReadBlock(UInt64, UInt64, ref Byte[])
-  nameWithType.vb: AtaPio.ReadBlock(UInt64, UInt64, ByRef Byte())
-- uid: Cosmos.HAL.BlockDevice.AtaPio.ReadBlock*
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.ReadBlock(UInt64, UInt64, ref System.Byte[])
+  fullName.vb: Cosmos.HAL.BlockDevice.ATA_PIO.ReadBlock(UInt64, UInt64, ByRef System.Byte())
+  nameWithType: ATA_PIO.ReadBlock(UInt64, UInt64, ref Byte[])
+  nameWithType.vb: ATA_PIO.ReadBlock(UInt64, UInt64, ByRef Byte())
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.ReadBlock*
   name: ReadBlock
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_ReadBlock_
-  commentId: Overload:Cosmos.HAL.BlockDevice.AtaPio.ReadBlock
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_ReadBlock_
+  commentId: Overload:Cosmos.HAL.BlockDevice.ATA_PIO.ReadBlock
   isSpec: "True"
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.ReadBlock
-  nameWithType: AtaPio.ReadBlock
-- uid: Cosmos.HAL.BlockDevice.AtaPio.SelectDrive(System.Byte)
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.ReadBlock
+  nameWithType: ATA_PIO.ReadBlock
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.SelectDrive(System.Byte)
   name: SelectDrive(Byte)
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_SelectDrive_System_Byte_
-  commentId: M:Cosmos.HAL.BlockDevice.AtaPio.SelectDrive(System.Byte)
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.SelectDrive(System.Byte)
-  nameWithType: AtaPio.SelectDrive(Byte)
-- uid: Cosmos.HAL.BlockDevice.AtaPio.SelectDrive*
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_SelectDrive_System_Byte_
+  commentId: M:Cosmos.HAL.BlockDevice.ATA_PIO.SelectDrive(System.Byte)
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.SelectDrive(System.Byte)
+  nameWithType: ATA_PIO.SelectDrive(Byte)
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.SelectDrive*
   name: SelectDrive
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_SelectDrive_
-  commentId: Overload:Cosmos.HAL.BlockDevice.AtaPio.SelectDrive
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_SelectDrive_
+  commentId: Overload:Cosmos.HAL.BlockDevice.ATA_PIO.SelectDrive
   isSpec: "True"
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.SelectDrive
-  nameWithType: AtaPio.SelectDrive
-- uid: Cosmos.HAL.BlockDevice.AtaPio.SelectSector(UInt64,UInt64)
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.SelectDrive
+  nameWithType: ATA_PIO.SelectDrive
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.SelectSector(UInt64,UInt64)
   name: SelectSector(UInt64, UInt64)
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_SelectSector_UInt64_UInt64_
-  commentId: M:Cosmos.HAL.BlockDevice.AtaPio.SelectSector(UInt64,UInt64)
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.SelectSector(UInt64, UInt64)
-  nameWithType: AtaPio.SelectSector(UInt64, UInt64)
-- uid: Cosmos.HAL.BlockDevice.AtaPio.SelectSector*
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_SelectSector_UInt64_UInt64_
+  commentId: M:Cosmos.HAL.BlockDevice.ATA_PIO.SelectSector(UInt64,UInt64)
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.SelectSector(UInt64, UInt64)
+  nameWithType: ATA_PIO.SelectSector(UInt64, UInt64)
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.SelectSector*
   name: SelectSector
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_SelectSector_
-  commentId: Overload:Cosmos.HAL.BlockDevice.AtaPio.SelectSector
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_SelectSector_
+  commentId: Overload:Cosmos.HAL.BlockDevice.ATA_PIO.SelectSector
   isSpec: "True"
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.SelectSector
-  nameWithType: AtaPio.SelectSector
-- uid: Cosmos.HAL.BlockDevice.AtaPio.SendCmd(Cosmos.HAL.BlockDevice.AtaPio.Cmd)
-  name: SendCmd(AtaPio.Cmd)
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_SendCmd_Cosmos_HAL_BlockDevice_AtaPio_Cmd_
-  commentId: M:Cosmos.HAL.BlockDevice.AtaPio.SendCmd(Cosmos.HAL.BlockDevice.AtaPio.Cmd)
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.SendCmd(Cosmos.HAL.BlockDevice.AtaPio.Cmd)
-  nameWithType: AtaPio.SendCmd(AtaPio.Cmd)
-- uid: Cosmos.HAL.BlockDevice.AtaPio.SendCmd(Cosmos.HAL.BlockDevice.AtaPio.Cmd,System.Boolean)
-  name: SendCmd(AtaPio.Cmd, Boolean)
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_SendCmd_Cosmos_HAL_BlockDevice_AtaPio_Cmd_System_Boolean_
-  commentId: M:Cosmos.HAL.BlockDevice.AtaPio.SendCmd(Cosmos.HAL.BlockDevice.AtaPio.Cmd,System.Boolean)
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.SendCmd(Cosmos.HAL.BlockDevice.AtaPio.Cmd, System.Boolean)
-  nameWithType: AtaPio.SendCmd(AtaPio.Cmd, Boolean)
-- uid: Cosmos.HAL.BlockDevice.AtaPio.SendCmd*
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.SelectSector
+  nameWithType: ATA_PIO.SelectSector
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.SendCmd(Cosmos.HAL.BlockDevice.ATA_PIO.Cmd)
+  name: SendCmd(ATA_PIO.Cmd)
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_SendCmd_Cosmos_HAL_BlockDevice_ATA_PIO_Cmd_
+  commentId: M:Cosmos.HAL.BlockDevice.ATA_PIO.SendCmd(Cosmos.HAL.BlockDevice.ATA_PIO.Cmd)
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.SendCmd(Cosmos.HAL.BlockDevice.ATA_PIO.Cmd)
+  nameWithType: ATA_PIO.SendCmd(ATA_PIO.Cmd)
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.SendCmd(Cosmos.HAL.BlockDevice.ATA_PIO.Cmd,System.Boolean)
+  name: SendCmd(ATA_PIO.Cmd, Boolean)
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_SendCmd_Cosmos_HAL_BlockDevice_ATA_PIO_Cmd_System_Boolean_
+  commentId: M:Cosmos.HAL.BlockDevice.ATA_PIO.SendCmd(Cosmos.HAL.BlockDevice.ATA_PIO.Cmd,System.Boolean)
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.SendCmd(Cosmos.HAL.BlockDevice.ATA_PIO.Cmd, System.Boolean)
+  nameWithType: ATA_PIO.SendCmd(ATA_PIO.Cmd, Boolean)
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.SendCmd*
   name: SendCmd
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_SendCmd_
-  commentId: Overload:Cosmos.HAL.BlockDevice.AtaPio.SendCmd
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_SendCmd_
+  commentId: Overload:Cosmos.HAL.BlockDevice.ATA_PIO.SendCmd
   isSpec: "True"
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.SendCmd
-  nameWithType: AtaPio.SendCmd
-- uid: Cosmos.HAL.BlockDevice.AtaPio.SerialNo
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.SendCmd
+  nameWithType: ATA_PIO.SendCmd
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.SerialNo
   name: SerialNo
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_SerialNo
-  commentId: P:Cosmos.HAL.BlockDevice.AtaPio.SerialNo
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.SerialNo
-  nameWithType: AtaPio.SerialNo
-- uid: Cosmos.HAL.BlockDevice.AtaPio.SerialNo*
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_SerialNo
+  commentId: P:Cosmos.HAL.BlockDevice.ATA_PIO.SerialNo
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.SerialNo
+  nameWithType: ATA_PIO.SerialNo
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.SerialNo*
   name: SerialNo
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_SerialNo_
-  commentId: Overload:Cosmos.HAL.BlockDevice.AtaPio.SerialNo
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_SerialNo_
+  commentId: Overload:Cosmos.HAL.BlockDevice.ATA_PIO.SerialNo
   isSpec: "True"
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.SerialNo
-  nameWithType: AtaPio.SerialNo
-- uid: Cosmos.HAL.BlockDevice.AtaPio.SpecLevel
-  name: AtaPio.SpecLevel
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.SpecLevel.html
-  commentId: T:Cosmos.HAL.BlockDevice.AtaPio.SpecLevel
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.SpecLevel
-  nameWithType: AtaPio.SpecLevel
-- uid: Cosmos.HAL.BlockDevice.AtaPio.SpecLevel.ATA
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.SerialNo
+  nameWithType: ATA_PIO.SerialNo
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.SpecLevel
+  name: ATA_PIO.SpecLevel
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.SpecLevel.html
+  commentId: T:Cosmos.HAL.BlockDevice.ATA_PIO.SpecLevel
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.SpecLevel
+  nameWithType: ATA_PIO.SpecLevel
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.SpecLevel.ATA
   name: ATA
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.SpecLevel.html#Cosmos_HAL_BlockDevice_AtaPio_SpecLevel_ATA
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.SpecLevel.ATA
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.SpecLevel.ATA
-  nameWithType: AtaPio.SpecLevel.ATA
-- uid: Cosmos.HAL.BlockDevice.AtaPio.SpecLevel.ATAPI
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.SpecLevel.html#Cosmos_HAL_BlockDevice_ATA_PIO_SpecLevel_ATA
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.SpecLevel.ATA
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.SpecLevel.ATA
+  nameWithType: ATA_PIO.SpecLevel.ATA
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.SpecLevel.ATAPI
   name: ATAPI
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.SpecLevel.html#Cosmos_HAL_BlockDevice_AtaPio_SpecLevel_ATAPI
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.SpecLevel.ATAPI
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.SpecLevel.ATAPI
-  nameWithType: AtaPio.SpecLevel.ATAPI
-- uid: Cosmos.HAL.BlockDevice.AtaPio.SpecLevel.Null
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.SpecLevel.html#Cosmos_HAL_BlockDevice_ATA_PIO_SpecLevel_ATAPI
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.SpecLevel.ATAPI
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.SpecLevel.ATAPI
+  nameWithType: ATA_PIO.SpecLevel.ATAPI
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.SpecLevel.Null
   name: "Null"
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.SpecLevel.html#Cosmos_HAL_BlockDevice_AtaPio_SpecLevel_Null
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.SpecLevel.Null
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.SpecLevel.Null
-  nameWithType: AtaPio.SpecLevel.Null
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Status
-  name: AtaPio.Status
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Status.html
-  commentId: T:Cosmos.HAL.BlockDevice.AtaPio.Status
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Status
-  nameWithType: AtaPio.Status
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Status.ATA_SR_COR
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.SpecLevel.html#Cosmos_HAL_BlockDevice_ATA_PIO_SpecLevel_Null
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.SpecLevel.Null
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.SpecLevel.Null
+  nameWithType: ATA_PIO.SpecLevel.Null
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Status
+  name: ATA_PIO.Status
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Status.html
+  commentId: T:Cosmos.HAL.BlockDevice.ATA_PIO.Status
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Status
+  nameWithType: ATA_PIO.Status
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Status.ATA_SR_COR
   name: ATA_SR_COR
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Status.html#Cosmos_HAL_BlockDevice_AtaPio_Status_ATA_SR_COR
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Status.ATA_SR_COR
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Status.ATA_SR_COR
-  nameWithType: AtaPio.Status.ATA_SR_COR
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Status.ATA_SR_DF
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Status.html#Cosmos_HAL_BlockDevice_ATA_PIO_Status_ATA_SR_COR
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Status.ATA_SR_COR
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Status.ATA_SR_COR
+  nameWithType: ATA_PIO.Status.ATA_SR_COR
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Status.ATA_SR_DF
   name: ATA_SR_DF
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Status.html#Cosmos_HAL_BlockDevice_AtaPio_Status_ATA_SR_DF
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Status.ATA_SR_DF
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Status.ATA_SR_DF
-  nameWithType: AtaPio.Status.ATA_SR_DF
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Status.ATA_SR_DRD
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Status.html#Cosmos_HAL_BlockDevice_ATA_PIO_Status_ATA_SR_DF
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Status.ATA_SR_DF
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Status.ATA_SR_DF
+  nameWithType: ATA_PIO.Status.ATA_SR_DF
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Status.ATA_SR_DRD
   name: ATA_SR_DRD
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Status.html#Cosmos_HAL_BlockDevice_AtaPio_Status_ATA_SR_DRD
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Status.ATA_SR_DRD
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Status.ATA_SR_DRD
-  nameWithType: AtaPio.Status.ATA_SR_DRD
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Status.ATA_SR_DSC
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Status.html#Cosmos_HAL_BlockDevice_ATA_PIO_Status_ATA_SR_DRD
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Status.ATA_SR_DRD
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Status.ATA_SR_DRD
+  nameWithType: ATA_PIO.Status.ATA_SR_DRD
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Status.ATA_SR_DSC
   name: ATA_SR_DSC
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Status.html#Cosmos_HAL_BlockDevice_AtaPio_Status_ATA_SR_DSC
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Status.ATA_SR_DSC
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Status.ATA_SR_DSC
-  nameWithType: AtaPio.Status.ATA_SR_DSC
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Status.ATA_SR_IDX
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Status.html#Cosmos_HAL_BlockDevice_ATA_PIO_Status_ATA_SR_DSC
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Status.ATA_SR_DSC
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Status.ATA_SR_DSC
+  nameWithType: ATA_PIO.Status.ATA_SR_DSC
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Status.ATA_SR_IDX
   name: ATA_SR_IDX
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Status.html#Cosmos_HAL_BlockDevice_AtaPio_Status_ATA_SR_IDX
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Status.ATA_SR_IDX
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Status.ATA_SR_IDX
-  nameWithType: AtaPio.Status.ATA_SR_IDX
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Status.Busy
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Status.html#Cosmos_HAL_BlockDevice_ATA_PIO_Status_ATA_SR_IDX
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Status.ATA_SR_IDX
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Status.ATA_SR_IDX
+  nameWithType: ATA_PIO.Status.ATA_SR_IDX
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Status.Busy
   name: Busy
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Status.html#Cosmos_HAL_BlockDevice_AtaPio_Status_Busy
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Status.Busy
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Status.Busy
-  nameWithType: AtaPio.Status.Busy
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Status.DRQ
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Status.html#Cosmos_HAL_BlockDevice_ATA_PIO_Status_Busy
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Status.Busy
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Status.Busy
+  nameWithType: ATA_PIO.Status.Busy
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Status.DRQ
   name: DRQ
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Status.html#Cosmos_HAL_BlockDevice_AtaPio_Status_DRQ
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Status.DRQ
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Status.DRQ
-  nameWithType: AtaPio.Status.DRQ
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Status.Error
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Status.html#Cosmos_HAL_BlockDevice_ATA_PIO_Status_DRQ
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Status.DRQ
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Status.DRQ
+  nameWithType: ATA_PIO.Status.DRQ
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Status.Error
   name: Error
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Status.html#Cosmos_HAL_BlockDevice_AtaPio_Status_Error
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Status.Error
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Status.Error
-  nameWithType: AtaPio.Status.Error
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Status.None
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Status.html#Cosmos_HAL_BlockDevice_ATA_PIO_Status_Error
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Status.Error
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Status.Error
+  nameWithType: ATA_PIO.Status.Error
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Status.None
   name: None
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.Status.html#Cosmos_HAL_BlockDevice_AtaPio_Status_None
-  commentId: F:Cosmos.HAL.BlockDevice.AtaPio.Status.None
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Status.None
-  nameWithType: AtaPio.Status.None
-- uid: Cosmos.HAL.BlockDevice.AtaPio.ToString
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.Status.html#Cosmos_HAL_BlockDevice_ATA_PIO_Status_None
+  commentId: F:Cosmos.HAL.BlockDevice.ATA_PIO.Status.None
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Status.None
+  nameWithType: ATA_PIO.Status.None
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.ToString
   name: ToString()
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_ToString
-  commentId: M:Cosmos.HAL.BlockDevice.AtaPio.ToString
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.ToString()
-  nameWithType: AtaPio.ToString()
-- uid: Cosmos.HAL.BlockDevice.AtaPio.ToString*
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_ToString
+  commentId: M:Cosmos.HAL.BlockDevice.ATA_PIO.ToString
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.ToString()
+  nameWithType: ATA_PIO.ToString()
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.ToString*
   name: ToString
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_ToString_
-  commentId: Overload:Cosmos.HAL.BlockDevice.AtaPio.ToString
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_ToString_
+  commentId: Overload:Cosmos.HAL.BlockDevice.ATA_PIO.ToString
   isSpec: "True"
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.ToString
-  nameWithType: AtaPio.ToString
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Wait
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.ToString
+  nameWithType: ATA_PIO.ToString
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Wait
   name: Wait()
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_Wait
-  commentId: M:Cosmos.HAL.BlockDevice.AtaPio.Wait
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Wait()
-  nameWithType: AtaPio.Wait()
-- uid: Cosmos.HAL.BlockDevice.AtaPio.Wait*
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_Wait
+  commentId: M:Cosmos.HAL.BlockDevice.ATA_PIO.Wait
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Wait()
+  nameWithType: ATA_PIO.Wait()
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.Wait*
   name: Wait
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_Wait_
-  commentId: Overload:Cosmos.HAL.BlockDevice.AtaPio.Wait
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_Wait_
+  commentId: Overload:Cosmos.HAL.BlockDevice.ATA_PIO.Wait
   isSpec: "True"
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.Wait
-  nameWithType: AtaPio.Wait
-- uid: Cosmos.HAL.BlockDevice.AtaPio.WriteBlock(UInt64,UInt64,System.Byte[]@)
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.Wait
+  nameWithType: ATA_PIO.Wait
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.WriteBlock(UInt64,UInt64,System.Byte[]@)
   name: WriteBlock(UInt64, UInt64, ref Byte[])
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_WriteBlock_UInt64_UInt64_System_Byte____
-  commentId: M:Cosmos.HAL.BlockDevice.AtaPio.WriteBlock(UInt64,UInt64,System.Byte[]@)
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_WriteBlock_UInt64_UInt64_System_Byte____
+  commentId: M:Cosmos.HAL.BlockDevice.ATA_PIO.WriteBlock(UInt64,UInt64,System.Byte[]@)
   name.vb: WriteBlock(UInt64, UInt64, ByRef Byte())
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.WriteBlock(UInt64, UInt64, ref System.Byte[])
-  fullName.vb: Cosmos.HAL.BlockDevice.AtaPio.WriteBlock(UInt64, UInt64, ByRef System.Byte())
-  nameWithType: AtaPio.WriteBlock(UInt64, UInt64, ref Byte[])
-  nameWithType.vb: AtaPio.WriteBlock(UInt64, UInt64, ByRef Byte())
-- uid: Cosmos.HAL.BlockDevice.AtaPio.WriteBlock*
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.WriteBlock(UInt64, UInt64, ref System.Byte[])
+  fullName.vb: Cosmos.HAL.BlockDevice.ATA_PIO.WriteBlock(UInt64, UInt64, ByRef System.Byte())
+  nameWithType: ATA_PIO.WriteBlock(UInt64, UInt64, ref Byte[])
+  nameWithType.vb: ATA_PIO.WriteBlock(UInt64, UInt64, ByRef Byte())
+- uid: Cosmos.HAL.BlockDevice.ATA_PIO.WriteBlock*
   name: WriteBlock
-  href: api/Cosmos.HAL.BlockDevice.AtaPio.html#Cosmos_HAL_BlockDevice_AtaPio_WriteBlock_
-  commentId: Overload:Cosmos.HAL.BlockDevice.AtaPio.WriteBlock
+  href: api/Cosmos.HAL.BlockDevice.ATA_PIO.html#Cosmos_HAL_BlockDevice_ATA_PIO_WriteBlock_
+  commentId: Overload:Cosmos.HAL.BlockDevice.ATA_PIO.WriteBlock
   isSpec: "True"
-  fullName: Cosmos.HAL.BlockDevice.AtaPio.WriteBlock
-  nameWithType: AtaPio.WriteBlock
+  fullName: Cosmos.HAL.BlockDevice.ATA_PIO.WriteBlock
+  nameWithType: ATA_PIO.WriteBlock
+- uid: Cosmos.HAL.BlockDevice.ATAPI
+  name: ATAPI
+  href: api/Cosmos.HAL.BlockDevice.ATAPI.html
+  commentId: T:Cosmos.HAL.BlockDevice.ATAPI
+  fullName: Cosmos.HAL.BlockDevice.ATAPI
+  nameWithType: ATAPI
+- uid: Cosmos.HAL.BlockDevice.ATAPI.#ctor(Cosmos.HAL.BlockDevice.ATA_PIO)
+  name: ATAPI(ATA_PIO)
+  href: api/Cosmos.HAL.BlockDevice.ATAPI.html#Cosmos_HAL_BlockDevice_ATAPI__ctor_Cosmos_HAL_BlockDevice_ATA_PIO_
+  commentId: M:Cosmos.HAL.BlockDevice.ATAPI.#ctor(Cosmos.HAL.BlockDevice.ATA_PIO)
+  fullName: Cosmos.HAL.BlockDevice.ATAPI.ATAPI(Cosmos.HAL.BlockDevice.ATA_PIO)
+  nameWithType: ATAPI.ATAPI(ATA_PIO)
+- uid: Cosmos.HAL.BlockDevice.ATAPI.#ctor*
+  name: ATAPI
+  href: api/Cosmos.HAL.BlockDevice.ATAPI.html#Cosmos_HAL_BlockDevice_ATAPI__ctor_
+  commentId: Overload:Cosmos.HAL.BlockDevice.ATAPI.#ctor
+  isSpec: "True"
+  fullName: Cosmos.HAL.BlockDevice.ATAPI.ATAPI
+  nameWithType: ATAPI.ATAPI
+- uid: Cosmos.HAL.BlockDevice.ATAPI.ATAPIDevices
+  name: ATAPIDevices
+  href: api/Cosmos.HAL.BlockDevice.ATAPI.html#Cosmos_HAL_BlockDevice_ATAPI_ATAPIDevices
+  commentId: F:Cosmos.HAL.BlockDevice.ATAPI.ATAPIDevices
+  fullName: Cosmos.HAL.BlockDevice.ATAPI.ATAPIDevices
+  nameWithType: ATAPI.ATAPIDevices
+- uid: Cosmos.HAL.BlockDevice.ATAPI.Eject
+  name: Eject()
+  href: api/Cosmos.HAL.BlockDevice.ATAPI.html#Cosmos_HAL_BlockDevice_ATAPI_Eject
+  commentId: M:Cosmos.HAL.BlockDevice.ATAPI.Eject
+  fullName: Cosmos.HAL.BlockDevice.ATAPI.Eject()
+  nameWithType: ATAPI.Eject()
+- uid: Cosmos.HAL.BlockDevice.ATAPI.Eject*
+  name: Eject
+  href: api/Cosmos.HAL.BlockDevice.ATAPI.html#Cosmos_HAL_BlockDevice_ATAPI_Eject_
+  commentId: Overload:Cosmos.HAL.BlockDevice.ATAPI.Eject
+  isSpec: "True"
+  fullName: Cosmos.HAL.BlockDevice.ATAPI.Eject
+  nameWithType: ATAPI.Eject
+- uid: Cosmos.HAL.BlockDevice.ATAPI.Init
+  name: Init()
+  href: api/Cosmos.HAL.BlockDevice.ATAPI.html#Cosmos_HAL_BlockDevice_ATAPI_Init
+  commentId: M:Cosmos.HAL.BlockDevice.ATAPI.Init
+  fullName: Cosmos.HAL.BlockDevice.ATAPI.Init()
+  nameWithType: ATAPI.Init()
+- uid: Cosmos.HAL.BlockDevice.ATAPI.Init*
+  name: Init
+  href: api/Cosmos.HAL.BlockDevice.ATAPI.html#Cosmos_HAL_BlockDevice_ATAPI_Init_
+  commentId: Overload:Cosmos.HAL.BlockDevice.ATAPI.Init
+  isSpec: "True"
+  fullName: Cosmos.HAL.BlockDevice.ATAPI.Init
+  nameWithType: ATAPI.Init
+- uid: Cosmos.HAL.BlockDevice.ATAPI.IO
+  name: IO
+  href: api/Cosmos.HAL.BlockDevice.ATAPI.html#Cosmos_HAL_BlockDevice_ATAPI_IO
+  commentId: F:Cosmos.HAL.BlockDevice.ATAPI.IO
+  fullName: Cosmos.HAL.BlockDevice.ATAPI.IO
+  nameWithType: ATAPI.IO
+- uid: Cosmos.HAL.BlockDevice.ATAPI.PacketCommands
+  name: ATAPI.PacketCommands
+  href: api/Cosmos.HAL.BlockDevice.ATAPI.PacketCommands.html
+  commentId: T:Cosmos.HAL.BlockDevice.ATAPI.PacketCommands
+  fullName: Cosmos.HAL.BlockDevice.ATAPI.PacketCommands
+  nameWithType: ATAPI.PacketCommands
+- uid: Cosmos.HAL.BlockDevice.ATAPI.PacketCommands.ReadSector
+  name: ReadSector
+  href: api/Cosmos.HAL.BlockDevice.ATAPI.PacketCommands.html#Cosmos_HAL_BlockDevice_ATAPI_PacketCommands_ReadSector
+  commentId: F:Cosmos.HAL.BlockDevice.ATAPI.PacketCommands.ReadSector
+  fullName: Cosmos.HAL.BlockDevice.ATAPI.PacketCommands.ReadSector
+  nameWithType: ATAPI.PacketCommands.ReadSector
+- uid: Cosmos.HAL.BlockDevice.ATAPI.PacketCommands.Unload
+  name: Unload
+  href: api/Cosmos.HAL.BlockDevice.ATAPI.PacketCommands.html#Cosmos_HAL_BlockDevice_ATAPI_PacketCommands_Unload
+  commentId: F:Cosmos.HAL.BlockDevice.ATAPI.PacketCommands.Unload
+  fullName: Cosmos.HAL.BlockDevice.ATAPI.PacketCommands.Unload
+  nameWithType: ATAPI.PacketCommands.Unload
+- uid: Cosmos.HAL.BlockDevice.ATAPI.ReadBlock(System.UInt64,System.UInt64,System.Byte[]@)
+  name: ReadBlock(UInt64, UInt64, ref Byte[])
+  href: api/Cosmos.HAL.BlockDevice.ATAPI.html#Cosmos_HAL_BlockDevice_ATAPI_ReadBlock_System_UInt64_System_UInt64_System_Byte____
+  commentId: M:Cosmos.HAL.BlockDevice.ATAPI.ReadBlock(System.UInt64,System.UInt64,System.Byte[]@)
+  name.vb: ReadBlock(UInt64, UInt64, ByRef Byte())
+  fullName: Cosmos.HAL.BlockDevice.ATAPI.ReadBlock(System.UInt64, System.UInt64, ref System.Byte[])
+  fullName.vb: Cosmos.HAL.BlockDevice.ATAPI.ReadBlock(System.UInt64, System.UInt64, ByRef System.Byte())
+  nameWithType: ATAPI.ReadBlock(UInt64, UInt64, ref Byte[])
+  nameWithType.vb: ATAPI.ReadBlock(UInt64, UInt64, ByRef Byte())
+- uid: Cosmos.HAL.BlockDevice.ATAPI.ReadBlock*
+  name: ReadBlock
+  href: api/Cosmos.HAL.BlockDevice.ATAPI.html#Cosmos_HAL_BlockDevice_ATAPI_ReadBlock_
+  commentId: Overload:Cosmos.HAL.BlockDevice.ATAPI.ReadBlock
+  isSpec: "True"
+  fullName: Cosmos.HAL.BlockDevice.ATAPI.ReadBlock
+  nameWithType: ATAPI.ReadBlock
+- uid: Cosmos.HAL.BlockDevice.ATAPI.SectorSize
+  name: SectorSize
+  href: api/Cosmos.HAL.BlockDevice.ATAPI.html#Cosmos_HAL_BlockDevice_ATAPI_SectorSize
+  commentId: F:Cosmos.HAL.BlockDevice.ATAPI.SectorSize
+  fullName: Cosmos.HAL.BlockDevice.ATAPI.SectorSize
+  nameWithType: ATAPI.SectorSize
+- uid: Cosmos.HAL.BlockDevice.ATAPI.WriteBlock(System.UInt64,System.UInt64,System.Byte[]@)
+  name: WriteBlock(UInt64, UInt64, ref Byte[])
+  href: api/Cosmos.HAL.BlockDevice.ATAPI.html#Cosmos_HAL_BlockDevice_ATAPI_WriteBlock_System_UInt64_System_UInt64_System_Byte____
+  commentId: M:Cosmos.HAL.BlockDevice.ATAPI.WriteBlock(System.UInt64,System.UInt64,System.Byte[]@)
+  name.vb: WriteBlock(UInt64, UInt64, ByRef Byte())
+  fullName: Cosmos.HAL.BlockDevice.ATAPI.WriteBlock(System.UInt64, System.UInt64, ref System.Byte[])
+  fullName.vb: Cosmos.HAL.BlockDevice.ATAPI.WriteBlock(System.UInt64, System.UInt64, ByRef System.Byte())
+  nameWithType: ATAPI.WriteBlock(UInt64, UInt64, ref Byte[])
+  nameWithType.vb: ATAPI.WriteBlock(UInt64, UInt64, ByRef Byte())
+- uid: Cosmos.HAL.BlockDevice.ATAPI.WriteBlock*
+  name: WriteBlock
+  href: api/Cosmos.HAL.BlockDevice.ATAPI.html#Cosmos_HAL_BlockDevice_ATAPI_WriteBlock_
+  commentId: Overload:Cosmos.HAL.BlockDevice.ATAPI.WriteBlock
+  isSpec: "True"
+  fullName: Cosmos.HAL.BlockDevice.ATAPI.WriteBlock
+  nameWithType: ATAPI.WriteBlock
 - uid: Cosmos.HAL.BlockDevice.BlockDevice
   name: BlockDevice
   href: api/Cosmos.HAL.BlockDevice.BlockDevice.html
