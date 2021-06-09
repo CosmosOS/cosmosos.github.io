@@ -1703,6 +1703,21 @@
                           <li class="">
                             <a href="Cosmos.System.Network.IPv4.TCP.TCPPacket.html" title="TCPPacket" class="">TCPPacket</a>
                           </li>
+                          <li class="">
+                            <a href="Cosmos.System.Network.IPv4.TCP.TransmissionControlBlock.html" title="TransmissionControlBlock" class="">TransmissionControlBlock</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a href="Cosmos.System.Network.IPv4.TCP.FTP.html" title="Cosmos.System.Network.IPv4.TCP.FTP" class="">Cosmos.System.Network.IPv4.TCP.FTP</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="Cosmos.System.Network.IPv4.TCP.FTP.FtpServer.html" title="FtpServer" class="">FtpServer</a>
+                          </li>
+                          <li class="">
+                            <a href="Cosmos.System.Network.IPv4.TCP.FTP.TransferMode.html" title="TransferMode" class="">TransferMode</a>
+                          </li>
                         </ul>  </li>
                     <li class="">
                       <span class="expand-stub"></span>
@@ -2214,47 +2229,58 @@
     <tbody>
       <tr>
         <td id="Cosmos_System_Network_IPv4_TCP_Status_CLOSE_WAIT">CLOSE_WAIT</td>
-        <td></td>
+        <td><p>Wait for a connection termination request from the local user.</p>
+</td>
       </tr>
       <tr>
         <td id="Cosmos_System_Network_IPv4_TCP_Status_CLOSED">CLOSED</td>
-        <td></td>
+        <td><p>represents no connection state at all.</p>
+</td>
       </tr>
       <tr>
         <td id="Cosmos_System_Network_IPv4_TCP_Status_CLOSING">CLOSING</td>
-        <td></td>
+        <td><p>Wait for a connection termination request acknowledgment from the remote TCP.</p>
+</td>
       </tr>
       <tr>
         <td id="Cosmos_System_Network_IPv4_TCP_Status_ESTABLISHED">ESTABLISHED</td>
-        <td></td>
+        <td><p>Represents an open connection, data received can be delivered to the user. The normal state for the data transfer phase of the connection.</p>
+</td>
       </tr>
       <tr>
         <td id="Cosmos_System_Network_IPv4_TCP_Status_FIN_WAIT1">FIN_WAIT1</td>
-        <td></td>
+        <td><p>Wait for a connection termination request from the remote TCP, or an acknowledgment of the connection termination request previously sent.</p>
+</td>
       </tr>
       <tr>
         <td id="Cosmos_System_Network_IPv4_TCP_Status_FIN_WAIT2">FIN_WAIT2</td>
-        <td></td>
+        <td><p>Wait for a connection termination request from the remote TCP.</p>
+</td>
       </tr>
       <tr>
         <td id="Cosmos_System_Network_IPv4_TCP_Status_LAST_ACK">LAST_ACK</td>
-        <td></td>
+        <td><p>Wait for an acknowledgment of the connection termination request previously sent to the remote TCP (which includes an acknowledgment of its connection termination request).</p>
+</td>
       </tr>
       <tr>
         <td id="Cosmos_System_Network_IPv4_TCP_Status_LISTEN">LISTEN</td>
-        <td></td>
+        <td><p>Wait for a connection request from any remote TCP and port.</p>
+</td>
       </tr>
       <tr>
         <td id="Cosmos_System_Network_IPv4_TCP_Status_SYN_RECEIVED">SYN_RECEIVED</td>
-        <td></td>
+        <td><p>Wait for a confirming connection request acknowledgment after having both received and sent a connection request.</p>
+</td>
       </tr>
       <tr>
         <td id="Cosmos_System_Network_IPv4_TCP_Status_SYN_SENT">SYN_SENT</td>
-        <td></td>
+        <td><p>Wait for a matching connection request after having sent a connection request.</p>
+</td>
       </tr>
       <tr>
         <td id="Cosmos_System_Network_IPv4_TCP_Status_TIME_WAIT">TIME_WAIT</td>
-        <td></td>
+        <td><p>Wait for enough time to pass to be sure the remote TCP received the acknowledgment of its connection termination request.</p>
+</td>
       </tr>
     </tbody>
   </thead></thead></table>
@@ -2266,10 +2292,10 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/new/96c8f41ccb29c8a287971120308b03a6114c323c/apiSpec/new?filename=Cosmos_System_Network_IPv4_TCP_Status.md&amp;value=---%0Auid%3A%20Cosmos.System.Network.IPv4.TCP.Status%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/new/5301ff558d30e92de104f1923a1d789a6f510088/apiSpec/new?filename=Cosmos_System_Network_IPv4_TCP_Status.md&amp;value=---%0Auid%3A%20Cosmos.System.Network.IPv4.TCP.Status%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/blob/96c8f41ccb29c8a287971120308b03a6114c323c/source/Cosmos.System2/Network/IPv4/TCP/Tcp.cs/#L13" class="contribution-link">View Source</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/5301ff558d30e92de104f1923a1d789a6f510088/source/Cosmos.System2/Network/IPv4/TCP/Tcp.cs/#L13" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>
