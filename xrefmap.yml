@@ -29590,12 +29590,12 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.FileSystem.CosmosVFS.GetVolumes
   nameWithType: CosmosVFS.GetVolumes
-- uid: Cosmos.System.FileSystem.CosmosVFS.Initialize
-  name: Initialize()
-  href: api/Cosmos.System.FileSystem.CosmosVFS.html#Cosmos_System_FileSystem_CosmosVFS_Initialize
-  commentId: M:Cosmos.System.FileSystem.CosmosVFS.Initialize
-  fullName: Cosmos.System.FileSystem.CosmosVFS.Initialize()
-  nameWithType: CosmosVFS.Initialize()
+- uid: Cosmos.System.FileSystem.CosmosVFS.Initialize(System.Boolean)
+  name: Initialize(Boolean)
+  href: api/Cosmos.System.FileSystem.CosmosVFS.html#Cosmos_System_FileSystem_CosmosVFS_Initialize_System_Boolean_
+  commentId: M:Cosmos.System.FileSystem.CosmosVFS.Initialize(System.Boolean)
+  fullName: Cosmos.System.FileSystem.CosmosVFS.Initialize(System.Boolean)
+  nameWithType: CosmosVFS.Initialize(Boolean)
 - uid: Cosmos.System.FileSystem.CosmosVFS.Initialize*
   name: Initialize
   href: api/Cosmos.System.FileSystem.CosmosVFS.html#Cosmos_System_FileSystem_CosmosVFS_Initialize_
@@ -29603,12 +29603,12 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.FileSystem.CosmosVFS.Initialize
   nameWithType: CosmosVFS.Initialize
-- uid: Cosmos.System.FileSystem.CosmosVFS.InitializeFileSystems
-  name: InitializeFileSystems()
-  href: api/Cosmos.System.FileSystem.CosmosVFS.html#Cosmos_System_FileSystem_CosmosVFS_InitializeFileSystems
-  commentId: M:Cosmos.System.FileSystem.CosmosVFS.InitializeFileSystems
-  fullName: Cosmos.System.FileSystem.CosmosVFS.InitializeFileSystems()
-  nameWithType: CosmosVFS.InitializeFileSystems()
+- uid: Cosmos.System.FileSystem.CosmosVFS.InitializeFileSystems(System.Boolean)
+  name: InitializeFileSystems(Boolean)
+  href: api/Cosmos.System.FileSystem.CosmosVFS.html#Cosmos_System_FileSystem_CosmosVFS_InitializeFileSystems_System_Boolean_
+  commentId: M:Cosmos.System.FileSystem.CosmosVFS.InitializeFileSystems(System.Boolean)
+  fullName: Cosmos.System.FileSystem.CosmosVFS.InitializeFileSystems(System.Boolean)
+  nameWithType: CosmosVFS.InitializeFileSystems(Boolean)
 - uid: Cosmos.System.FileSystem.CosmosVFS.InitializeFileSystems*
   name: InitializeFileSystems
   href: api/Cosmos.System.FileSystem.CosmosVFS.html#Cosmos_System_FileSystem_CosmosVFS_InitializeFileSystems_
@@ -29616,12 +29616,12 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.FileSystem.CosmosVFS.InitializeFileSystems
   nameWithType: CosmosVFS.InitializeFileSystems
-- uid: Cosmos.System.FileSystem.CosmosVFS.InitializePartitions
-  name: InitializePartitions()
-  href: api/Cosmos.System.FileSystem.CosmosVFS.html#Cosmos_System_FileSystem_CosmosVFS_InitializePartitions
-  commentId: M:Cosmos.System.FileSystem.CosmosVFS.InitializePartitions
-  fullName: Cosmos.System.FileSystem.CosmosVFS.InitializePartitions()
-  nameWithType: CosmosVFS.InitializePartitions()
+- uid: Cosmos.System.FileSystem.CosmosVFS.InitializePartitions(System.Boolean)
+  name: InitializePartitions(Boolean)
+  href: api/Cosmos.System.FileSystem.CosmosVFS.html#Cosmos_System_FileSystem_CosmosVFS_InitializePartitions_System_Boolean_
+  commentId: M:Cosmos.System.FileSystem.CosmosVFS.InitializePartitions(System.Boolean)
+  fullName: Cosmos.System.FileSystem.CosmosVFS.InitializePartitions(System.Boolean)
+  nameWithType: CosmosVFS.InitializePartitions(Boolean)
 - uid: Cosmos.System.FileSystem.CosmosVFS.InitializePartitions*
   name: InitializePartitions
   href: api/Cosmos.System.FileSystem.CosmosVFS.html#Cosmos_System_FileSystem_CosmosVFS_InitializePartitions_
@@ -30661,12 +30661,12 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.FileSystem.VFS.VFSBase.GetVolumes
   nameWithType: VFSBase.GetVolumes
-- uid: Cosmos.System.FileSystem.VFS.VFSBase.Initialize
-  name: Initialize()
-  href: api/Cosmos.System.FileSystem.VFS.VFSBase.html#Cosmos_System_FileSystem_VFS_VFSBase_Initialize
-  commentId: M:Cosmos.System.FileSystem.VFS.VFSBase.Initialize
-  fullName: Cosmos.System.FileSystem.VFS.VFSBase.Initialize()
-  nameWithType: VFSBase.Initialize()
+- uid: Cosmos.System.FileSystem.VFS.VFSBase.Initialize(System.Boolean)
+  name: Initialize(Boolean)
+  href: api/Cosmos.System.FileSystem.VFS.VFSBase.html#Cosmos_System_FileSystem_VFS_VFSBase_Initialize_System_Boolean_
+  commentId: M:Cosmos.System.FileSystem.VFS.VFSBase.Initialize(System.Boolean)
+  fullName: Cosmos.System.FileSystem.VFS.VFSBase.Initialize(System.Boolean)
+  nameWithType: VFSBase.Initialize(Boolean)
 - uid: Cosmos.System.FileSystem.VFS.VFSBase.Initialize*
   name: Initialize
   href: api/Cosmos.System.FileSystem.VFS.VFSBase.html#Cosmos_System_FileSystem_VFS_VFSBase_Initialize_
@@ -31186,12 +31186,12 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.FileSystem.VFS.VFSManager.RegisterFileSystem
   nameWithType: VFSManager.RegisterFileSystem
-- uid: Cosmos.System.FileSystem.VFS.VFSManager.RegisterVFS(Cosmos.System.FileSystem.VFS.VFSBase,System.Boolean)
-  name: RegisterVFS(VFSBase, Boolean)
-  href: api/Cosmos.System.FileSystem.VFS.VFSManager.html#Cosmos_System_FileSystem_VFS_VFSManager_RegisterVFS_Cosmos_System_FileSystem_VFS_VFSBase_System_Boolean_
-  commentId: M:Cosmos.System.FileSystem.VFS.VFSManager.RegisterVFS(Cosmos.System.FileSystem.VFS.VFSBase,System.Boolean)
-  fullName: Cosmos.System.FileSystem.VFS.VFSManager.RegisterVFS(Cosmos.System.FileSystem.VFS.VFSBase, System.Boolean)
-  nameWithType: VFSManager.RegisterVFS(VFSBase, Boolean)
+- uid: Cosmos.System.FileSystem.VFS.VFSManager.RegisterVFS(Cosmos.System.FileSystem.VFS.VFSBase,System.Boolean,System.Boolean)
+  name: RegisterVFS(VFSBase, Boolean, Boolean)
+  href: api/Cosmos.System.FileSystem.VFS.VFSManager.html#Cosmos_System_FileSystem_VFS_VFSManager_RegisterVFS_Cosmos_System_FileSystem_VFS_VFSBase_System_Boolean_System_Boolean_
+  commentId: M:Cosmos.System.FileSystem.VFS.VFSManager.RegisterVFS(Cosmos.System.FileSystem.VFS.VFSBase,System.Boolean,System.Boolean)
+  fullName: Cosmos.System.FileSystem.VFS.VFSManager.RegisterVFS(Cosmos.System.FileSystem.VFS.VFSBase, System.Boolean, System.Boolean)
+  nameWithType: VFSManager.RegisterVFS(VFSBase, Boolean, Boolean)
 - uid: Cosmos.System.FileSystem.VFS.VFSManager.RegisterVFS*
   name: RegisterVFS
   href: api/Cosmos.System.FileSystem.VFS.VFSManager.html#Cosmos_System_FileSystem_VFS_VFSManager_RegisterVFS_
