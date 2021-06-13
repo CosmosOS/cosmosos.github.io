@@ -227,6 +227,8 @@ IPConfig.Enable(nic, new Address(192, 168, 1, 69), new Address(255, 255, 255, 0)
 <h2 id="ftp">FTP</h2>
 <p>Only server side is implemented in Cosmos. We recommand to use FileZilla as your FTP client.</p>
 <p><strong>Your FTP client must enable active mode</strong>. Since in Active Mode the server has to open TCP connections, <strong>your computer firewall must be disabled</strong> to accept incoming connection. An FTP connection is made of two TCP sockets. One for control connection (as a textual protocol) and one for data transmission. Data transmission sockets can be opened by the client (if it is in Passive Mode) or by the server (if in Active Mode). The Passive Mode is not supported yet due to current Cosmos TCP and multithreading limitation.</p>
+<p>FTP client configuration (plain FTP, Anonymous):</p>
+<p><img src="https://user-images.githubusercontent.com/18724279/121685499-4c71f380-cac0-11eb-8d08-6db1c0096e68.png" alt="FTP client configuration"></p>
 <p>Please note that for now only one FTP connection can be accepted, the server will shut down itself after the client disconnection.</p>
 <pre><code class="lang-csharp">/** Initialize filesystem **/
 var fs = new CosmosVFS();
@@ -292,7 +294,7 @@ using(var xServer = new FtpServer(fs, &quot;0:\\&quot;))
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/blob/a4953e7c92a7274e5cb5be1bf34608d9555dd5f2/Docs/articles/Kernel/Network.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/3d919f730c35eab5db78994fa1b3a37250af559e/Docs/articles/Kernel/Network.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>
