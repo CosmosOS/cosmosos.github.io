@@ -5069,6 +5069,15 @@ references:
   commentId: M:Cosmos.Core.ManagedMemoryBlock.Copy(Cosmos.Core.MemoryBlock)
   fullName: Cosmos.Core.ManagedMemoryBlock.Copy(Cosmos.Core.MemoryBlock)
   nameWithType: ManagedMemoryBlock.Copy(MemoryBlock)
+- uid: Cosmos.Core.ManagedMemoryBlock.Copy(System.Int32,System.Byte[],System.Int32,System.Int32)
+  name: Copy(Int32, Byte[], Int32, Int32)
+  href: api/Cosmos.Core.ManagedMemoryBlock.html#Cosmos_Core_ManagedMemoryBlock_Copy_System_Int32_System_Byte___System_Int32_System_Int32_
+  commentId: M:Cosmos.Core.ManagedMemoryBlock.Copy(System.Int32,System.Byte[],System.Int32,System.Int32)
+  name.vb: Copy(Int32, Byte(), Int32, Int32)
+  fullName: Cosmos.Core.ManagedMemoryBlock.Copy(System.Int32, System.Byte[], System.Int32, System.Int32)
+  fullName.vb: Cosmos.Core.ManagedMemoryBlock.Copy(System.Int32, System.Byte(), System.Int32, System.Int32)
+  nameWithType: ManagedMemoryBlock.Copy(Int32, Byte[], Int32, Int32)
+  nameWithType.vb: ManagedMemoryBlock.Copy(Int32, Byte(), Int32, Int32)
 - uid: Cosmos.Core.ManagedMemoryBlock.Copy(System.Int32,System.Int32[],System.Int32,System.Int32)
   name: Copy(Int32, Int32[], Int32, Int32)
   href: api/Cosmos.Core.ManagedMemoryBlock.html#Cosmos_Core_ManagedMemoryBlock_Copy_System_Int32_System_Int32___System_Int32_System_Int32_
@@ -5126,6 +5135,12 @@ references:
   isSpec: "True"
   fullName: Cosmos.Core.ManagedMemoryBlock.Item
   nameWithType: ManagedMemoryBlock.Item
+- uid: Cosmos.Core.ManagedMemoryBlock.memory
+  name: memory
+  href: api/Cosmos.Core.ManagedMemoryBlock.html#Cosmos_Core_ManagedMemoryBlock_memory
+  commentId: F:Cosmos.Core.ManagedMemoryBlock.memory
+  fullName: Cosmos.Core.ManagedMemoryBlock.memory
+  nameWithType: ManagedMemoryBlock.memory
 - uid: Cosmos.Core.ManagedMemoryBlock.Offset
   name: Offset
   href: api/Cosmos.Core.ManagedMemoryBlock.html#Cosmos_Core_ManagedMemoryBlock_Offset
@@ -5190,6 +5205,32 @@ references:
   isSpec: "True"
   fullName: Cosmos.Core.ManagedMemoryBlock.Write32
   nameWithType: ManagedMemoryBlock.Write32
+- uid: Cosmos.Core.ManagedMemoryBlock.Write8(System.UInt32,System.Byte)
+  name: Write8(UInt32, Byte)
+  href: api/Cosmos.Core.ManagedMemoryBlock.html#Cosmos_Core_ManagedMemoryBlock_Write8_System_UInt32_System_Byte_
+  commentId: M:Cosmos.Core.ManagedMemoryBlock.Write8(System.UInt32,System.Byte)
+  fullName: Cosmos.Core.ManagedMemoryBlock.Write8(System.UInt32, System.Byte)
+  nameWithType: ManagedMemoryBlock.Write8(UInt32, Byte)
+- uid: Cosmos.Core.ManagedMemoryBlock.Write8*
+  name: Write8
+  href: api/Cosmos.Core.ManagedMemoryBlock.html#Cosmos_Core_ManagedMemoryBlock_Write8_
+  commentId: Overload:Cosmos.Core.ManagedMemoryBlock.Write8
+  isSpec: "True"
+  fullName: Cosmos.Core.ManagedMemoryBlock.Write8
+  nameWithType: ManagedMemoryBlock.Write8
+- uid: Cosmos.Core.ManagedMemoryBlock.WriteString(System.UInt32,System.String)
+  name: WriteString(UInt32, String)
+  href: api/Cosmos.Core.ManagedMemoryBlock.html#Cosmos_Core_ManagedMemoryBlock_WriteString_System_UInt32_System_String_
+  commentId: M:Cosmos.Core.ManagedMemoryBlock.WriteString(System.UInt32,System.String)
+  fullName: Cosmos.Core.ManagedMemoryBlock.WriteString(System.UInt32, System.String)
+  nameWithType: ManagedMemoryBlock.WriteString(UInt32, String)
+- uid: Cosmos.Core.ManagedMemoryBlock.WriteString*
+  name: WriteString
+  href: api/Cosmos.Core.ManagedMemoryBlock.html#Cosmos_Core_ManagedMemoryBlock_WriteString_
+  commentId: Overload:Cosmos.Core.ManagedMemoryBlock.WriteString
+  isSpec: "True"
+  fullName: Cosmos.Core.ManagedMemoryBlock.WriteString
+  nameWithType: ManagedMemoryBlock.WriteString
 - uid: Cosmos.Core.Memory
   name: Cosmos.Core.Memory
   href: api/Cosmos.Core.Memory.html
