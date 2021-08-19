@@ -35147,11 +35147,11 @@ references:
   commentId: T:Cosmos.System.Network.IPv4.EndPoint
   fullName: Cosmos.System.Network.IPv4.EndPoint
   nameWithType: EndPoint
-- uid: Cosmos.System.Network.IPv4.EndPoint.#ctor(Cosmos.System.Network.IPv4.Address,UInt16)
+- uid: Cosmos.System.Network.IPv4.EndPoint.#ctor(Cosmos.System.Network.IPv4.Address,System.UInt16)
   name: EndPoint(Address, UInt16)
-  href: api/Cosmos.System.Network.IPv4.EndPoint.html#Cosmos_System_Network_IPv4_EndPoint__ctor_Cosmos_System_Network_IPv4_Address_UInt16_
-  commentId: M:Cosmos.System.Network.IPv4.EndPoint.#ctor(Cosmos.System.Network.IPv4.Address,UInt16)
-  fullName: Cosmos.System.Network.IPv4.EndPoint.EndPoint(Cosmos.System.Network.IPv4.Address, UInt16)
+  href: api/Cosmos.System.Network.IPv4.EndPoint.html#Cosmos_System_Network_IPv4_EndPoint__ctor_Cosmos_System_Network_IPv4_Address_System_UInt16_
+  commentId: M:Cosmos.System.Network.IPv4.EndPoint.#ctor(Cosmos.System.Network.IPv4.Address,System.UInt16)
+  fullName: Cosmos.System.Network.IPv4.EndPoint.EndPoint(Cosmos.System.Network.IPv4.Address, System.UInt16)
   nameWithType: EndPoint.EndPoint(Address, UInt16)
 - uid: Cosmos.System.Network.IPv4.EndPoint.#ctor*
   name: EndPoint
@@ -35160,12 +35160,12 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Network.IPv4.EndPoint.EndPoint
   nameWithType: EndPoint.EndPoint
-- uid: Cosmos.System.Network.IPv4.EndPoint.address
-  name: address
-  href: api/Cosmos.System.Network.IPv4.EndPoint.html#Cosmos_System_Network_IPv4_EndPoint_address
-  commentId: F:Cosmos.System.Network.IPv4.EndPoint.address
-  fullName: Cosmos.System.Network.IPv4.EndPoint.address
-  nameWithType: EndPoint.address
+- uid: Cosmos.System.Network.IPv4.EndPoint.Address
+  name: Address
+  href: api/Cosmos.System.Network.IPv4.EndPoint.html#Cosmos_System_Network_IPv4_EndPoint_Address
+  commentId: F:Cosmos.System.Network.IPv4.EndPoint.Address
+  fullName: Cosmos.System.Network.IPv4.EndPoint.Address
+  nameWithType: EndPoint.Address
 - uid: Cosmos.System.Network.IPv4.EndPoint.CompareTo(System.Object)
   name: CompareTo(Object)
   href: api/Cosmos.System.Network.IPv4.EndPoint.html#Cosmos_System_Network_IPv4_EndPoint_CompareTo_System_Object_
@@ -35179,12 +35179,12 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Network.IPv4.EndPoint.CompareTo
   nameWithType: EndPoint.CompareTo
-- uid: Cosmos.System.Network.IPv4.EndPoint.port
-  name: port
-  href: api/Cosmos.System.Network.IPv4.EndPoint.html#Cosmos_System_Network_IPv4_EndPoint_port
-  commentId: F:Cosmos.System.Network.IPv4.EndPoint.port
-  fullName: Cosmos.System.Network.IPv4.EndPoint.port
-  nameWithType: EndPoint.port
+- uid: Cosmos.System.Network.IPv4.EndPoint.Port
+  name: Port
+  href: api/Cosmos.System.Network.IPv4.EndPoint.html#Cosmos_System_Network_IPv4_EndPoint_Port
+  commentId: F:Cosmos.System.Network.IPv4.EndPoint.Port
+  fullName: Cosmos.System.Network.IPv4.EndPoint.Port
+  nameWithType: EndPoint.Port
 - uid: Cosmos.System.Network.IPv4.EndPoint.ToString
   name: ToString()
   href: api/Cosmos.System.Network.IPv4.EndPoint.html#Cosmos_System_Network_IPv4_EndPoint_ToString
@@ -35794,6 +35794,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Network.IPv4.TCP.TcpClient.IsConnected
   nameWithType: TcpClient.IsConnected
+- uid: Cosmos.System.Network.IPv4.TCP.TcpClient.LocalEndPoint
+  name: LocalEndPoint
+  href: api/Cosmos.System.Network.IPv4.TCP.TcpClient.html#Cosmos_System_Network_IPv4_TCP_TcpClient_LocalEndPoint
+  commentId: P:Cosmos.System.Network.IPv4.TCP.TcpClient.LocalEndPoint
+  fullName: Cosmos.System.Network.IPv4.TCP.TcpClient.LocalEndPoint
+  nameWithType: TcpClient.LocalEndPoint
+- uid: Cosmos.System.Network.IPv4.TCP.TcpClient.LocalEndPoint*
+  name: LocalEndPoint
+  href: api/Cosmos.System.Network.IPv4.TCP.TcpClient.html#Cosmos_System_Network_IPv4_TCP_TcpClient_LocalEndPoint_
+  commentId: Overload:Cosmos.System.Network.IPv4.TCP.TcpClient.LocalEndPoint
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.TCP.TcpClient.LocalEndPoint
+  nameWithType: TcpClient.LocalEndPoint
 - uid: Cosmos.System.Network.IPv4.TCP.TcpClient.NonBlockingReceive(Cosmos.System.Network.IPv4.EndPoint@)
   name: NonBlockingReceive(ref EndPoint)
   href: api/Cosmos.System.Network.IPv4.TCP.TcpClient.html#Cosmos_System_Network_IPv4_TCP_TcpClient_NonBlockingReceive_Cosmos_System_Network_IPv4_EndPoint__
@@ -35826,6 +35839,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Network.IPv4.TCP.TcpClient.Receive
   nameWithType: TcpClient.Receive
+- uid: Cosmos.System.Network.IPv4.TCP.TcpClient.RemoteEndPoint
+  name: RemoteEndPoint
+  href: api/Cosmos.System.Network.IPv4.TCP.TcpClient.html#Cosmos_System_Network_IPv4_TCP_TcpClient_RemoteEndPoint
+  commentId: P:Cosmos.System.Network.IPv4.TCP.TcpClient.RemoteEndPoint
+  fullName: Cosmos.System.Network.IPv4.TCP.TcpClient.RemoteEndPoint
+  nameWithType: TcpClient.RemoteEndPoint
+- uid: Cosmos.System.Network.IPv4.TCP.TcpClient.RemoteEndPoint*
+  name: RemoteEndPoint
+  href: api/Cosmos.System.Network.IPv4.TCP.TcpClient.html#Cosmos_System_Network_IPv4_TCP_TcpClient_RemoteEndPoint_
+  commentId: Overload:Cosmos.System.Network.IPv4.TCP.TcpClient.RemoteEndPoint
+  isSpec: "True"
+  fullName: Cosmos.System.Network.IPv4.TCP.TcpClient.RemoteEndPoint
+  nameWithType: TcpClient.RemoteEndPoint
 - uid: Cosmos.System.Network.IPv4.TCP.TcpClient.Send(System.Byte[])
   name: Send(Byte[])
   href: api/Cosmos.System.Network.IPv4.TCP.TcpClient.html#Cosmos_System_Network_IPv4_TCP_TcpClient_Send_System_Byte___
