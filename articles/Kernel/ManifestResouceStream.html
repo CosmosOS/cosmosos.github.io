@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>ISO </title>
+    <title>Manifest Resource Streams </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="ISO ">
+    <meta name="title" content="Manifest Resource Streams ">
     <meta name="generator" content="docfx 2.56.7.0">
     
     <link rel="shortcut icon" href="../../favicon.ico">
@@ -114,8 +114,8 @@
                           <li class="">
                             <a href="../Installation/DevKit.html" title="Dev Kit" class="">Dev Kit</a>
                           </li>
-                          <li class="active">
-                            <a href="../Installation/Running.html" title="Running" class="active">Running</a>
+                          <li class="">
+                            <a href="../Installation/Running.html" title="Running" class="">Running</a>
                           </li>
                         </ul>  </li>
                     <li class="">
@@ -174,35 +174,25 @@
         <div class="article row grid-right">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
+<h1 id="manifest-resource-streams">Manifest Resource Streams</h1>
 
-<p>Cosmos supports running on any Intel x86 environment. However for debugging
-and ease of use, many virtual and physical setups have integrated support. If
-you do not see your environment, this does not mean Cosmos will not work. You
-can simply fall back to ISO which should work with any environment.</p>
-<h3 id="iso">ISO</h3>
-<p>The ISO option creates an ISO image of the Cosmos output. This ISO file can be
-mounted and booted by most virtualization technologies. In addition, a physical
-optical disk can be burned and used to boot physical hardware.</p>
-<h3 id="vmware-workstationplayer">VMWare Workstation/Player</h3>
-<p>WMWare Workstation and VMWare Player are the preferred testing environments
-for Cosmos. This is because they are stable, reliable, and easily controlled
-by the Cosmos Visual Studio integration package. This allows for easy debugging and code execution control.</p>
-<p>VMWare Workstation is not free, however VMWare Player is. VMWare Player for
-the typical Cosmos developer provides more than enough functionality.</p>
-<h3 id="vmware-player">VMWare Player</h3>
-<p>VMWare Player can be downloaded <a href="http://vmware.com/download/player/"> here</a>.</p>
-<h3 id="vmware-server">VMWare Server</h3>
-<p> _place_holder;</p>
-<h3 id="qemu">QEMU</h3>
-<p>Not officially supported at this time, but can be done. Just use the ISO option above with debugging turned off.</p>
-<p>Bochs</p>
-<p>Support is underway.</p>
-<p>PXE</p>
-<p>For PXE, no special software is required. Only an ethernet connection to your router. However, if you have a computer that does not support network booting, or if you must perform the action over WiFi, you may need to look at a PXE chainloader such as <a href="#">gPXE</a>.</p>
-<p>Virtual PC</p>
-<p>Not officially supported at this time, but can be done. Just use the ISO option above with debugging turned off.</p>
-<p>Hyper-V</p>
-<p>Not supported at this time.</p>
+<p>Manifest Resource Streams allow you to include data from the files as byte arrays in your code. An example of its use is in the <a href="https://github.com/CosmosOS/Cosmos/blob/5973a3fae95c989dc13505184aff9a15aae9f65f/Demos/ZMachine/ZKernel/Kernel.cs#L19">ZMachine Demo</a></p>
+<h2 id="drawbacks">Drawbacks</h2>
+<p>Due to short comings in NASM there is a maximum size to any individual file which can be included this way. If the file is too large the error will be an <code>interminable macro recursion</code> from nasm.</p>
+<h2 id="how-to-use">How to use</h2>
+<ol>
+<li>Set for the the file you want to use <code>Build As: Embedded Resource</code> using the File Properties window in VS.
+<img src="https://user-images.githubusercontent.com/8559822/132468001-256b92d1-0b29-4db3-9ef5-3383bfdef023.png" alt="image"></li>
+<li>In the code reference the file using the following format (a static byte array with the attribute):</li>
+</ol>
+<pre><code>[ManifestResourceStream(ResourceName = “{project_name}.{path}.{to}.{filename_with_extension}”)] 
+static byte[] file;
+</code></pre>
+<p>The field <em>must</em> be static but the name of the field can be changed. You will also need to add <code>using IL2CPU.API.Attribs;</code> to the code.
+For example, if the project is called Kernel and the file is <code>Data\Text.txt</code>, then <code>ResourceName = &quot;Kernel.Data.Text.txt&quot;</code>.</p>
+<ol start="3">
+<li>To access the data simply read from the byte array defined.</li>
+</ol>
 </article>
           </div>
           
@@ -211,7 +201,7 @@ the typical Cosmos developer provides more than enough functionality.</p>
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/blob/ac300bd4ede2b3de52984999f6a67722e1878c29/Docs/articles/Installation/Running.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/ac300bd4ede2b3de52984999f6a67722e1878c29/Docs/articles/Kernel/ManifestResouceStream.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>
