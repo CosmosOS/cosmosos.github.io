@@ -35874,12 +35874,12 @@ references:
   commentId: T:Cosmos.System.Network.IPv4.TCP.TcpListener
   fullName: Cosmos.System.Network.IPv4.TCP.TcpListener
   nameWithType: TcpListener
-- uid: Cosmos.System.Network.IPv4.TCP.TcpListener.#ctor(System.Int32)
-  name: TcpListener(Int32)
-  href: api/Cosmos.System.Network.IPv4.TCP.TcpListener.html#Cosmos_System_Network_IPv4_TCP_TcpListener__ctor_System_Int32_
-  commentId: M:Cosmos.System.Network.IPv4.TCP.TcpListener.#ctor(System.Int32)
-  fullName: Cosmos.System.Network.IPv4.TCP.TcpListener.TcpListener(System.Int32)
-  nameWithType: TcpListener.TcpListener(Int32)
+- uid: Cosmos.System.Network.IPv4.TCP.TcpListener.#ctor(System.UInt16)
+  name: TcpListener(UInt16)
+  href: api/Cosmos.System.Network.IPv4.TCP.TcpListener.html#Cosmos_System_Network_IPv4_TCP_TcpListener__ctor_System_UInt16_
+  commentId: M:Cosmos.System.Network.IPv4.TCP.TcpListener.#ctor(System.UInt16)
+  fullName: Cosmos.System.Network.IPv4.TCP.TcpListener.TcpListener(System.UInt16)
+  nameWithType: TcpListener.TcpListener(UInt16)
 - uid: Cosmos.System.Network.IPv4.TCP.TcpListener.#ctor*
   name: TcpListener
   href: api/Cosmos.System.Network.IPv4.TCP.TcpListener.html#Cosmos_System_Network_IPv4_TCP_TcpListener__ctor_
