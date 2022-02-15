@@ -177,28 +177,23 @@
 <h1 id="introduction">Introduction</h1>
 
 <p>The Cosmos Graphic Subsystem (CGS from now on) is based on the abstraction of Canvas that is an empty space in which the user of CGS can draw its content. CGS is not a widget toolkit as Winforms or Gnome / GTK but is thought to be more lower level and it will be the basic in which widget toolkits will be implemented. CGS hides the graphics driver (so far VGA, VBE and SVGA II) used and it is thought to be the universal way to draw on the screen in Cosmos.</p>
-<p>While Canvas could be overwritten (for example to create sub windows) the user of CGS does not have to deal with it directly but they must use the static class FullScreenCanvas.</p>
-<p>Let's give a look to its API methods.</p>
 <h1 id="fullscreencanvas">FullScreenCanvas</h1>
-<pre><code>public static Canvas GetFullScreenCanvas(Mode mode) gets the instance of Canvas representing the complete screen (actually the instance of the running VGA driver) using the specified mode
-public static Canvas GetFullScreenCanvas() gets the instance of Canvas representing the complete screen (actually the instance of the running VGA driver) using the VGA driver's preferred mode
-</code></pre>
-<p>To really draw into the screen we need to use the Canvas class. Let's give a look to the API:</p>
+<p>The <code>FullScreenCanvas</code> provides two methods to get a canvas instance for the screen. It automatically chooses the best available driver to use.</p>
+<p><code>public static Canvas GetFullScreenCanvas(Mode mode)</code>: gets the instance of Canvas representing the complete screen in the specified mode</p>
+<p><code>public static Canvas GetFullScreenCanvas()</code>: gets the instance of Canvas representing the complete screen in the best driver available on your platform</p>
 <h1 id="canvas">Canvas</h1>
 <h2 id="list-of-properties-of-the-canvas-class">List of Properties of the Canvas class</h2>
-<pre><code>Mode: get / set the mode of the video card to mode. It throws if the selected mode is not supported by the video card
-DefaultGraphicMode: default graphic mode this will change based on the underlying hardware
-AvailableModes: list of the available modes supported this will change based on the underlying hardware
-</code></pre>
+<p><code>Mode</code>: get / set the mode of the video card to mode. It throws if the selected mode is not supported by the video card
+<code>DefaultGraphicMode</code>: default graphic mode this will change based on the underlying hardware
+<code>AvailableModes</code>: list of the available modes supported this will change based on the underlying hardware</p>
 <h2 id="list-of-methods-of-the-canvas-class">List of Methods of the Canvas class</h2>
-<pre><code>Clear(Color color: black) clear the entire Canvas using the specified color as background
-void DrawPoint(Pen pen, int x, int y) draws a point at the coordinates specified by x and y with the specified pen
-void DrawLine(Pen pen, int x_start, int y_start, int x_end, int y_end) draws a line at the coordinates specified by x_start, y_start and x_end, y_end with the specified pen
-void DrawRectangle(Pen pen, int x_start, int y_start,int width, int height) draws a rectangle specified by a coordinate pair, a width, and a height with the specified pen
-void DrawImage(Image image, int x, int y) draws an image at the x and y specified
-void DrawString(String string, Font font, Brush brush, int x, int y) draws a string with the specified font and brush at the specified x and y coordinates
-void Display() only for double buffering, swaps the 2 buffers then display everything to the screen
-</code></pre>
+<p><code>Clear(Color color)</code> clear the entire Canvas using the specified color as background
+<code>void DrawPoint(Pen pen, int x, int y)</code> draws a point at the coordinates specified by x and y with the specified pen
+<code>void DrawLine(Pen pen, int x_start, int y_start, int x_end, int y_end)</code> draws a line at the coordinates specified by x_start, y_start and x_end, y_end with the specified pen
+<code>void DrawRectangle(Pen pen, int x_start, int y_start,int width, int height)</code> draws a rectangle specified by a coordinate pair, a width, and a height with the specified pen
+<code>void DrawImage(Image image, int x, int y)</code> draws an image at the x and y specified
+<code>void DrawString(String string, Font font, Brush brush, int x, int y)</code> draws a string with the specified font and brush at the specified x and y coordinates
+<code>void Display()</code> is only required when using a double buffered driver, swaps the 2 buffers which causes all changes to be displayed</p>
 <p>Really simple right?</p>
 <h1 id="a-working-example">A working example</h1>
 <pre><code class="lang-CSharp">using System;
@@ -270,7 +265,9 @@ namespace GraphicTest
 
                 // A bitmap
                 canvas.DrawImage(bitmap, new Point(100, 150));
-
+                
+                canas.Display(); // Required for something to be displayed when using a double buffered driver
+                
                 Console.ReadKey();
                 Sys.Power.Shutdown();
             }
@@ -290,7 +287,6 @@ namespace GraphicTest
 <li><p>In addition, some other nice things could be implemented:</p>
 <ul>
 <li>Plugging System.Drawing functions for easier manipulation of colors</li>
-<li>A double buffering strategy, to make drawing faster (one is already implemented in the VBE driver, but not VGA or SVGA II)</li>
 </ul>
 </li>
 <li><p>CGS interacts badly with the Kernel.Stop method: the screen will freeze without displaying any error message whatsoever. You must use the Sys.Power.Shutdown() function to properly shut down your computer.</p>
@@ -304,7 +300,7 @@ namespace GraphicTest
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/blob/be073dcfb18ca381f6e1b1c79c47d1efd847e916/Docs/articles/Kernel/CGS.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/bf2b1d985e5cb21013b30bae8dcaaaa43e5d7ff0/Docs/articles/Kernel/CGS.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>
