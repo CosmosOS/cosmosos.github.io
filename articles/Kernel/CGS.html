@@ -187,13 +187,13 @@
 <code>DefaultGraphicMode</code>: default graphic mode this will change based on the underlying hardware
 <code>AvailableModes</code>: list of the available modes supported this will change based on the underlying hardware</p>
 <h2 id="list-of-methods-of-the-canvas-class">List of Methods of the Canvas class</h2>
-<p><code>Clear(Color color)</code> clear the entire Canvas using the specified color as background
-<code>void DrawPoint(Pen pen, int x, int y)</code> draws a point at the coordinates specified by x and y with the specified pen
-<code>void DrawLine(Pen pen, int x_start, int y_start, int x_end, int y_end)</code> draws a line at the coordinates specified by x_start, y_start and x_end, y_end with the specified pen
-<code>void DrawRectangle(Pen pen, int x_start, int y_start,int width, int height)</code> draws a rectangle specified by a coordinate pair, a width, and a height with the specified pen
-<code>void DrawImage(Image image, int x, int y)</code> draws an image at the x and y specified
-<code>void DrawString(String string, Font font, Brush brush, int x, int y)</code> draws a string with the specified font and brush at the specified x and y coordinates
-<code>void Display()</code> is only required when using a double buffered driver, swaps the 2 buffers which causes all changes to be displayed</p>
+<p><code>Clear(Color color)</code> clear the entire Canvas using the specified color as background</p>
+<p><code>void DrawPoint(Pen pen, int x, int y)</code> draws a point at the coordinates specified by x and y with the specified pen</p>
+<p><code>void DrawLine(Pen pen, int x_start, int y_start, int x_end, int y_end)</code> draws a line at the coordinates specified by x_start, y_start and x_end, y_end with the specified pen</p>
+<p><code>void DrawRectangle(Pen pen, int x_start, int y_start,int width, int height)</code> draws a rectangle specified by a coordinate pair, a width, and a height with the specified pen</p>
+<p><code>void DrawImage(Image image, int x, int y)</code> draws an image at the x and y specified</p>
+<p><code>void DrawString(String string, Font font, Brush brush, int x, int y)</code> draws a string with the specified font and brush at the specified x and y coordinates</p>
+<p><code>void Display()</code> is only required when using a double buffered driver, swaps the 2 buffers which causes all changes to be displayed</p>
 <p>Really simple right?</p>
 <h1 id="a-working-example">A working example</h1>
 <pre><code class="lang-CSharp">using System;
@@ -266,7 +266,7 @@ namespace GraphicTest
                 // A bitmap
                 canvas.DrawImage(bitmap, new Point(100, 150));
                 
-                canas.Display(); // Required for something to be displayed when using a double buffered driver
+                canvas.Display(); // Required for something to be displayed when using a double buffered driver
                 
                 Console.ReadKey();
                 Sys.Power.Shutdown();
@@ -289,7 +289,7 @@ namespace GraphicTest
 <li>Plugging System.Drawing functions for easier manipulation of colors</li>
 </ul>
 </li>
-<li><p>CGS interacts badly with the Kernel.Stop method: the screen will freeze without displaying any error message whatsoever. You must use the Sys.Power.Shutdown() function to properly shut down your computer.</p>
+<li><p>CGS interacts badly with the uncaught exceptions and Kernel.Stop method: the screen will freeze without displaying any error message whatsoever. You must use the Sys.Power.Shutdown() function to properly shut down your computer.</p>
 </li>
 </ol>
 </article>
@@ -300,7 +300,7 @@ namespace GraphicTest
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/blob/bf2b1d985e5cb21013b30bae8dcaaaa43e5d7ff0/Docs/articles/Kernel/CGS.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/0d0e7428244402c0f1e0e74dda7340b650d625f1/Docs/articles/Kernel/CGS.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>
