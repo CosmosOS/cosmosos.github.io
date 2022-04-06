@@ -238,7 +238,7 @@ debugger and use additional functionality. It is accessed using the Debugger
 class in the Cosmos.Debug namespace in the Cosmos.Kernel assembly. This
 assembly is used by all Cosmos projects.</p>
 <h2 id="code-based-breakpoints">Code Based Breakpoints</h2>
-<pre><code>Debugger.Break();
+<pre><code>mDebugger.Break();
 </code></pre>
 <p>Break can be used to issue a code based break. Visual Studio will break on the
 line after this statement.</p>
@@ -246,7 +246,7 @@ line after this statement.</p>
 <p>Since Cosmos does not support conditional breakpoints in the IDE yet, code
 base breaks are very useful for implementing such. For example:</p>
 <pre><code>if (x == 5) {
-    Debugger.Break();
+    mDebugger.Break();
 }
 </code></pre>
 <p>Alternatively you can call the .NET class libary break:</p>
@@ -257,7 +257,7 @@ base breaks are very useful for implementing such. For example:</p>
 <p>Debug strings can be output to the debug window of the host. Because Cosmos
 does not support watches yet, this functionality can be very useful for
 watching variable values and for performing tracing without breakpoints.</p>
-<pre><code>Debugger.Send(&quot;Hello from Cosmos!&quot;);
+<pre><code>mDebugger.Send(&quot;Hello from Cosmos!&quot;);
 </code></pre>
 <p>When this line is executed, it will send a message over the debugging channel
 and it will appear in the Visual Studio output window.</p>
@@ -269,10 +269,6 @@ interest that are on our current task list include interfaces (necessary for
 foreach loops), file systems (partial support exists), threads, networking, and
 graphics. We have prototypes and experimentation for each, but none have been
 rolled into the mainline Cosmos development as of yet.</p>
-<h2 id="what-was-that-syslinux-thing-i-saw-on-boot">What was that Syslinux thing I saw on boot?</h2>
-<p>Cosmos does not run on Linux. A boot loader called Syslinux is used to boot
-Cosmos. After booting, Syslinux is not used. Syslinux is a bootloader and is
-not a Linux distro. Syslinux simplifies the booting process by doing tasks such as enabling the A20 gate, initializing hardware, and switching to real mode (all of which are required by modern operating systems).</p>
 <h2 id="obtaining-cosmos">Obtaining Cosmos</h2>
 <ul>
 <li>Cosmos Website - <a href="http://www.GoCosmos.org">http://www.GoCosmos.org</a></li>
@@ -286,7 +282,7 @@ not a Linux distro. Syslinux simplifies the booting process by doing tasks such 
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/blob/2b905bc1358303d892f3a4e6ed5f45819d0ef18c/Docs/articles/GettingStarted.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/095270538cbea1fcecd73d2b7473bcddf79d66e2/Docs/articles/GettingStarted.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>

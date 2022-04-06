@@ -186,9 +186,6 @@ This is essential for using the VFS.</p>
 <p>Next, we register our VFS at the VFS manager, this will initiate the VFS and make it usable, add this to your kernel's BeforeRun() function:</p>
 <pre><code class="lang-C#">Sys.FileSystem.VFS.VFSManager.RegisterVFS(fs);
 </code></pre>
-<p>After the initialization process is done, a message like this would appear on your screen:
-<img src="https://raw.githubusercontent.com/CosmosOS/Cosmos/master/Docs/articles/Kernel/images/File%20System%20Initialize.PNG" alt="Initialize"></p>
-<p>This message is printed by the RegisterVFS() method and it provides info about the partition.</p>
 <p><strong>Note</strong>: From now on, we'll be using some plugged functions from <code>System.IO</code>, so be sure to use that reference to your code. Alright, now, let's get started over some useful functions:</p>
 <h2 id="format-drive">Format drive</h2>
 <p><strong>Note</strong>: You don't have to format your drive if you're debugging your Cosmos project with VMWare. The build will automatically add an already formatted FAT32 VMDK file for your convenience.</p>
@@ -261,7 +258,6 @@ catch (Exception e)
 }
 </code></pre>
 <p>We can also <a href="https://github.com/CosmosOS/Cosmos/wiki/FAT-FileSystem#get-files-list">check our files list</a> and see our new file in it.</p>
-<p><img src="https://raw.githubusercontent.com/CosmosOS/Cosmos/master/Docs/articles/Kernel/images/File%20System%20Create%20File.PNG" alt="Create File"></p>
 <h2 id="write-to-file">Write to file</h2>
 <p>Now we will write to an existing file.
 Writing to a file is almost the same as reading from a file.
@@ -296,7 +292,7 @@ catch (Exception e)
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/blob/2b905bc1358303d892f3a4e6ed5f45819d0ef18c/Docs/articles/Kernel/VFS.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/095270538cbea1fcecd73d2b7473bcddf79d66e2/Docs/articles/Kernel/VFS.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>
