@@ -1,0 +1,209 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Prerequisites </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Prerequisites ">
+    <meta name="generator" content="docfx 2.59.2.0">
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles/docfx.vendor.css">
+    <link rel="stylesheet" href="styles/docfx.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <meta property="docfx:navrel" content="toc">
+    <meta property="docfx:tocrel" content="toc">
+    
+    
+    <meta property="docfx:newtab" content="true">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="index.html">
+                <img id="logo" class="svg" src="images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+                
+                <ul class="nav level1 navbar-nav">
+                      <li>
+                          <a href="index.html" title="Home">Home</a>
+                      </li>
+                      <li>
+                          <a href="install.html" title="Install">Install</a>
+                      </li>
+                      <li>
+                          <a href="https://gocosmos.org" title="Cosmos Website">Cosmos Website</a>
+                      </li>
+                      <li>
+                          <a href="articles/GettingStarted.html" title="Articles">Articles</a>
+                      </li>
+                      <li>
+                          <a href="api/Cosmos.Build.Common.html" title="API Documentation">API Documentation</a>
+                      </li>
+                </ul>    </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h3 id="prerequisites">Prerequisites</h3>
+
+<ul>
+<li><strong>Visual Studio 2019</strong> - <a href="https://www.visualstudio.com/en-us/downloads/download-visual-studio-vs.aspx">Download</a></li>
+<li><strong>Visual Studio 2019 Workload: .NET Core Tools</strong> - .NET Core cross-platform development</li>
+<li><strong>.NET Framework 4.6.2 Developer Pack</strong> - <a href="https://www.microsoft.com/en-us/download/details.aspx?id=53321">Download</a></li>
+<li><strong>VMware Player OR Workstation</strong> VMware Player is free, so that is recommended instead - <a href="https://www.vmware.com/uk/products/workstation-player/workstation-player-evaluation.html">Download</a></li>
+</ul>
+<h3 id="installing-cosmos">Installing Cosmos</h3>
+<p>First, you need to choose between the User Kit and the Dev Kit. It is recommended that new users start with the User Kit but only move later to the Dev Kit if you need the latest features and want to contribute back to the main project.
+The Dev Kit is the live source against which the Cosmos Team develops directly. The Dev Kit has the latest and greatest features, but at various times has known issues, and sometimes may not even build. Thus to use the Dev Kit be sure to join our support channels and inquire about the current status before using the Dev Kit or updating it.</p>
+<p>The User Kit is a snapshot stable version of Cosmos including a premade installer. The UserKit however is often quite a bit out of date compared to the DevKit and is only occasionally updated. The User Kit is a great easy way to get familiar with Cosmos, but active developers should transition to the Dev Kit after becoming very familiar with the UserKit, and expect some bugs here and there.</p>
+<h3 id="user-kit">User Kit</h3>
+<ol>
+<li>Download <a href="http://github.com/CosmosOS/Cosmos/releases/latest">the latest release of Cosmos</a> (download the <strong>exe</strong> file)</li>
+<li>Wait for the download to complete then run the installer. Allow it to run as admin. Make sure <strong>VS2019 is NOT running</strong> when you do this.</li>
+<li>Click &quot;Next&quot; then &quot;Install&quot;</li>
+<li>Wait for the install to progress. <strong>Tip:</strong> At the end the installer may look like it has stalled, but it is still doing something in the background. WAIT for the &quot;Finish&quot; button to become available.</li>
+<li>Cosmos should now be installed. Follow other tutorials to find out how to create your first OS.</li>
+</ol>
+<h3 id="dev-kit">Dev Kit</h3>
+<h5 id="additional-prerequisites"><strong>Additional Prerequisites</strong></h5>
+<ul>
+<li><strong>Visual Studio 2019 Workload: Visual Studio Extension Development</strong></li>
+<li><strong>Inno Quick Start Pack (Free)</strong> – Install with defaults, keep Preprocessor option checked <a href="http://www.jrsoftware.org/isdl.php#qsp">Download</a></li>
+<li><strong>.NET Core 2.0 SDK</strong> - <a href="https://www.microsoft.com/net/download/core">Download</a></li>
+</ul>
+<h5 id="get-the-source">Get the Source</h5>
+<p>Cosmos source is hosted at GitHub. The simplest method to obtain the source is download a .zip file, however this makes updating and getting the latest updates a bit tricky.<br>
+To update the Cosmos source more efficiently, use the Git command line, or any of the many Git User Interfaces. Any frontend may work fine but for users new to Git, we suggest <a href="https://desktop.github.com/">GitHub Desktop</a>. For more experienced Git users, we really like <a href="https://www.gitkraken.com/">Git Kraken</a>. Git Kraken is free for non-commercial use such as Cosmos. SourceTree, Git GUI, and others are also available.</p>
+<p>To aid in better encapsulation and to invite more developers to assist in various areas, Cosmos is split into four Git repositories. Each of these is designed to be an independent project although Cosmos relies on the other three.<br>
+You will need to pull the source for all four repositories and they must exist in sibling directories as shown in the diagram below. The Cosmos base directory can be named anything and exist anywhere. But the directories inside it must match exactly.  </p>
+<p>Windows is not case sensitive for files, but many of the .<em><strong>NET Core tools used to build are case sensitive even on Windows for file paths</strong></em>. Make sure to create the subdirectories exactly as shown. For demonstration purposes let us assume that you will use c:\source\Cosmos to install to.<br>
+This base directory is referred to as the Cosmos directory. Each of the four repositories then must be cloned or extracted to the corresponding sub folder of the Cosmos directory. Using this example, the set up should look like this:</p>
+<pre><code>c:\\source\\CosmosOS\\
+c:\\source\\CosmosOS\\Cosmos\\ - [Git Repository for Cosmos](https://github.com/CosmosOS/Cosmos) 
+c:\\source\\CosmosOS\\IL2CPU\\ - [Git Repository for IL2CPU](https://github.com/CosmosOS/IL2CPU) 
+c:\\source\\CosmosOS\\XSharp\\ - [Git Repository for XSharp](https://github.com/CosmosOS/XSharp) 
+c:\\source\\CosmosOS\\Common\\ - [Git Repository for Common](https://github.com/CosmosOS/Common) 
+</code></pre>
+<p>A tree diagram of the source should look like the following:<br>
+<img src="https://www.gocosmos.org/wp-content/uploads/2021/06/tree-214x300.png" alt=""></p>
+<p>We are working to make syncing code easier. We have already experimented with Git Submodules, however the simple use of submodules presents a few issues, but the biggest of them is that they trigger a fireworks show of problems and errors in every Git UI we tried and would have limited developers options and forced them to the command line in most cases. We are currently investigating subtrees.</p>
+<p>For now, it's much easier to handle the 4 repositories as most of the time, new Cosmos developers may only have to work in the Cosmos repository. Only when you are comfortable with the concept of Operating System development and C# should you venture into IL2CPU and XSharp.</p>
+<p>If you want to keep your source up to date in a one-click method, paste this code into a .bat file in the CosmosOS folder ( as shown in the above example). This .bat file will only work after the repositories have been cloned with git at least once.</p>
+<p>cd C:\XSharp<br>
+git pull<br>
+cd ..\IL2CPU<br>
+git pull<br>
+cd ..\Cosmos<br>
+git pull<br>
+cd ..\Common<br>
+git pull<br>
+cd ..</p>
+<h5 id="building-and-installing">Building and Installing</h5>
+<p>(if you have already installed) If you edited the Cosmos DevKit source using <em>Cosmos.sln</em> or <em>Test.sln</em>, be sure to set solution config to <strong>Debug x86</strong>.</p>
+<ol>
+<li>Make sure Visual Studio is <strong>NOT running</strong>.</li>
+<li>In the root directory of the DevKit files, you downloaded earlier, run <code>install-VS2019.bat</code>.</li>
+<li>Wait for the install to progress. (<strong>Tip:</strong> At the end the installer may look like it is stalling, it is still doing something, just in the background)</li>
+<li>VS will open with Cosmos loaded. You can now make changes to core assemblies of Cosmos. If you don't want to, you can close this VS window and create a new Cosmos project as with the user kit.</li>
+</ol>
+<p>Happy Cosmos-ing!</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/master/Docs/install.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              <span></span>
+              
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="styles/docfx.js"></script>
+    <script type="text/javascript" src="styles/main.js"></script>
+  </body>
+</html>
