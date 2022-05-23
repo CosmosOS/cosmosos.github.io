@@ -179,11 +179,17 @@
 <p>TestRunner is used to run Kernel Tests using the tests at a specified location and can run each kernel in multiple targets to ensure full compatibility and stability accross these targets.</p>
 <p>TestRunner generates a result file upon completion to detail the results of the tests.</p>
 <h2 id="get-started">Get Started</h2>
-<p>To use the TestRunnner open the <code>Test.sln</code> and set the Target Project to <code>Cosmos.TestRunner</code>.</p>
+<p>To use the TestRunnner open the <code>Test.sln</code>, set the Target Project to <code>Cosmos.TestRunner</code> and run the solution.</p>
 <h2 id="configuration">Configuration</h2>
-<p>Editing the configuration for TestRunner can be done by editing <a href="https://github.com/CosmosOS/Cosmos/blob/master/Tests/Cosmos.TestRunner.Core/DefaultEngineConfiguration.cs#L6">DefaultEngineConfiguration</a> in ..\Tests\TestRunner\TestRunner.Core
-This allows one to choose between running it using VMWare or Bochs.</p>
+<p>Editing the configuration for TestRunner via <a href="https://github.com/CosmosOS/Cosmos/blob/master/Tests/Cosmos.TestRunner.Core/DefaultEngineConfiguration.cs#L6">DefaultEngineConfiguration</a> in ..\Tests\TestRunner\TestRunner.Core
+This allows one to choose which emulator to use and at what level the kernel is debugged.</p>
 <p>To select which Test Kernels to run, edit <code>GetStableKernelTypes()</code> in <code>TestKernelSets.cs</code>.</p>
+<h3 id="adding-a-kernel">Adding a Kernel</h3>
+<p>To add a kernel to the TestRunner, open the TestKernelSets file and add a line to GetStableKernelTypes() like this line:</p>
+<p><code>yield return typeof(Cosmos.Kernel.Tests.Fat.Kernel);</code></p>
+<p>Note: This can be used to test your own kernel for debug purposes. Simply add a reference to your kernel csproj to Cosmos.TestRunner.Full and add it to TestKernelSets.</p>
+<h3 id="time-out">Time Out</h3>
+<p>To set the period before the TestRunner registers an error, change the line: <code>engine.AllowedSecondsInKernel = 1800;</code> This means that, in this case, if the Kernel runs for more that 30 minutes then it will register a failure.</p>
 <h2 id="project-location">Project Location</h2>
 <p>The TestRunner Projects are located in ..\Tests\TestRunner</p>
 </article>
