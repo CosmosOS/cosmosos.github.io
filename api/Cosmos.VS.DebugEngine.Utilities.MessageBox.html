@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class PropertyPageBase
+    <title>Class MessageBox
    </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class PropertyPageBase
+    <meta name="title" content="Class MessageBox
    ">
     <meta name="generator" content="docfx 2.59.2.0">
     
@@ -1459,6 +1459,15 @@
                         </ul>  </li>
                     <li class="">
                       <span class="expand-stub"></span>
+                      <a href="Cosmos.HAL.Debug.html" title="Cosmos.HAL.Debug" class="">Cosmos.HAL.Debug</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="Cosmos.HAL.Debug.Serial.html" title="Serial" class="">Serial</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
                       <a href="Cosmos.HAL.Drivers.html" title="Cosmos.HAL.Drivers" class="">Cosmos.HAL.Drivers</a>
                         
                         <ul class="nav level2">
@@ -2813,6 +2822,9 @@
                             <a href="Cosmos.VS.DebugEngine.Commands.DebugCommandHandler.html" title="DebugCommandHandler" class="">DebugCommandHandler</a>
                           </li>
                           <li class="">
+                            <a href="Cosmos.VS.DebugEngine.Commands.DebugCommandHandlerBase.html" title="DebugCommandHandlerBase" class="">DebugCommandHandlerBase</a>
+                          </li>
+                          <li class="">
                             <a href="Cosmos.VS.DebugEngine.Commands.DebugExecCommand.html" title="DebugExecCommand" class="">DebugExecCommand</a>
                           </li>
                           <li class="">
@@ -2850,6 +2862,12 @@
                         <ul class="nav level2">
                           <li class="">
                             <a href="Cosmos.VS.DebugEngine.Utilities.Extensions.html" title="Extensions" class="">Extensions</a>
+                          </li>
+                          <li class="active">
+                            <a href="Cosmos.VS.DebugEngine.Utilities.MessageBox.html" title="MessageBox" class="active">MessageBox</a>
+                          </li>
+                          <li class="">
+                            <a href="Cosmos.VS.DebugEngine.Utilities.VS.html" title="VS" class="">VS</a>
                           </li>
                         </ul>  </li>
                     <li class="">
@@ -3438,48 +3456,6 @@
                         <ul class="nav level2">
                           <li class="">
                             <a href="TheRingMaster.Program.html" title="Program" class="">Program</a>
-                          </li>
-                        </ul>  </li>
-                    <li class="">
-                      <span class="expand-stub"></span>
-                      <a href="VSPropertyPages.html" title="VSPropertyPages" class="">VSPropertyPages</a>
-                        
-                        <ul class="nav level2">
-                          <li class="">
-                            <a href="VSPropertyPages.DynamicConfiguredPropertyManager.html" title="DynamicConfiguredPropertyManager" class="">DynamicConfiguredPropertyManager</a>
-                          </li>
-                          <li class="">
-                            <a href="VSPropertyPages.DynamicUnconfiguredPropertyManager.html" title="DynamicUnconfiguredPropertyManager" class="">DynamicUnconfiguredPropertyManager</a>
-                          </li>
-                          <li class="">
-                            <a href="VSPropertyPages.IPropertyManager.html" title="IPropertyManager" class="">IPropertyManager</a>
-                          </li>
-                          <li class="">
-                            <a href="VSPropertyPages.IPropertyPageUI.html" title="IPropertyPageUI" class="">IPropertyPageUI</a>
-                          </li>
-                          <li class="">
-                            <a href="VSPropertyPages.ProjectPropertyChangedEventArgs.html" title="ProjectPropertyChangedEventArgs" class="">ProjectPropertyChangedEventArgs</a>
-                          </li>
-                          <li class="">
-                            <a href="VSPropertyPages.ProjectPropertyChangingEventArgs.html" title="ProjectPropertyChangingEventArgs" class="">ProjectPropertyChangingEventArgs</a>
-                          </li>
-                          <li class="active">
-                            <a href="VSPropertyPages.PropertyPageBase.html" title="PropertyPageBase" class="active">PropertyPageBase</a>
-                          </li>
-                          <li class="">
-                            <a href="VSPropertyPages.PropertyPageMetadata.html" title="PropertyPageMetadata" class="">PropertyPageMetadata</a>
-                          </li>
-                          <li class="">
-                            <a href="VSPropertyPages.PropertyPageViewModel.html" title="PropertyPageViewModel" class="">PropertyPageViewModel</a>
-                          </li>
-                          <li class="">
-                            <a href="VSPropertyPages.RuleBasedPropertyManager.html" title="RuleBasedPropertyManager" class="">RuleBasedPropertyManager</a>
-                          </li>
-                          <li class="">
-                            <a href="VSPropertyPages.WinFormsPropertyPageUI.html" title="WinFormsPropertyPageUI" class="">WinFormsPropertyPageUI</a>
-                          </li>
-                          <li class="">
-                            <a href="VSPropertyPages.WpfPropertyPageUI.html" title="WpfPropertyPageUI" class="">WpfPropertyPageUI</a>
                           </li>
                         </ul>  </li>
                     <li class="">
@@ -4752,469 +4728,66 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="VSPropertyPages.PropertyPageBase">
+            <article class="content wrap" id="_content" data-uid="Cosmos.VS.DebugEngine.Utilities.MessageBox">
   
   
-  <h1 id="VSPropertyPages_PropertyPageBase" data-uid="VSPropertyPages.PropertyPageBase" class="text-break">Class PropertyPageBase
+  <h1 id="Cosmos_VS_DebugEngine_Utilities_MessageBox" data-uid="Cosmos.VS.DebugEngine.Utilities.MessageBox" class="text-break">Class MessageBox
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary"><p>Shows message boxes.</p>
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">PropertyPageBase</span></div>
+    <div class="level1"><span class="xref">MessageBox</span></div>
   </div>
-  <div classs="implements">
-    <h5>Implements</h5>
-    <div><span class="xref">IVsProjectDesignerPage</span></div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
   </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="VSPropertyPages.html">VSPropertyPages</a></h6>
-  <h6><strong>Assembly</strong>: VSPropertyPages.dll</h6>
-  <h5 id="VSPropertyPages_PropertyPageBase_syntax">Syntax</h5>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Cosmos.VS.DebugEngine.Utilities.html">Cosmos.VS.DebugEngine.Utilities</a></h6>
+  <h6><strong>Assembly</strong>: Cosmos.VS.DebugEngine.dll</h6>
+  <h5 id="Cosmos_VS_DebugEngine_Utilities_MessageBox_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract class PropertyPageBase : IPropertyPage2</code></pre>
+    <pre><code class="lang-csharp hljs">public class MessageBox</code></pre>
   </div>
-  <h3 id="properties">Properties
-  </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_PageName.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.PageName%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L22">View Source</a>
-  </span>
-  <a id="VSPropertyPages_PropertyPageBase_PageName_" data-uid="VSPropertyPages.PropertyPageBase.PageName*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_PageName" data-uid="VSPropertyPages.PropertyPageBase.PageName">PageName</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract string PageName { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_ProjectThreadingService.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.ProjectThreadingService%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L31">View Source</a>
-  </span>
-  <a id="VSPropertyPages_PropertyPageBase_ProjectThreadingService_" data-uid="VSPropertyPages.PropertyPageBase.ProjectThreadingService*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_ProjectThreadingService" data-uid="VSPropertyPages.PropertyPageBase.ProjectThreadingService">ProjectThreadingService</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected IProjectThreadingService ProjectThreadingService { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">IProjectThreadingService</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_PropertyManager.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.PropertyManager%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L33">View Source</a>
-  </span>
-  <a id="VSPropertyPages_PropertyPageBase_PropertyManager_" data-uid="VSPropertyPages.PropertyPageBase.PropertyManager*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_PropertyManager" data-uid="VSPropertyPages.PropertyPageBase.PropertyManager">PropertyManager</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected IPropertyManager PropertyManager { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="VSPropertyPages.IPropertyManager.html">IPropertyManager</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_PropertyPageSite.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.PropertyPageSite%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L27">View Source</a>
-  </span>
-  <a id="VSPropertyPages_PropertyPageBase_PropertyPageSite_" data-uid="VSPropertyPages.PropertyPageBase.PropertyPageSite*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_PropertyPageSite" data-uid="VSPropertyPages.PropertyPageBase.PropertyPageSite">PropertyPageSite</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected IPropertyPageSite PropertyPageSite { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">IPropertyPageSite</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_UnconfiguredProject.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.UnconfiguredProject%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L30">View Source</a>
-  </span>
-  <a id="VSPropertyPages_PropertyPageBase_UnconfiguredProject_" data-uid="VSPropertyPages.PropertyPageBase.UnconfiguredProject*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_UnconfiguredProject" data-uid="VSPropertyPages.PropertyPageBase.UnconfiguredProject">UnconfiguredProject</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected UnconfiguredProject UnconfiguredProject { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">UnconfiguredProject</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_VsProjectDesignerPageSite.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.VsProjectDesignerPageSite%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L28">View Source</a>
-  </span>
-  <a id="VSPropertyPages_PropertyPageBase_VsProjectDesignerPageSite_" data-uid="VSPropertyPages.PropertyPageBase.VsProjectDesignerPageSite*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_VsProjectDesignerPageSite" data-uid="VSPropertyPages.PropertyPageBase.VsProjectDesignerPageSite">VsProjectDesignerPageSite</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected IVsProjectDesignerPageSite VsProjectDesignerPageSite { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">IVsProjectDesignerPageSite</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="methods">Methods
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_Activate_System_IntPtr_RECT___System_Int32_.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.Activate(System.IntPtr%2CRECT%5B%5D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_VS_DebugEngine_Utilities_MessageBox_Show_System_String_System_String_OLEMSGICON_OLEMSGBUTTON_OLEMSGDEFBUTTON_.md&amp;value=---%0Auid%3A%20Cosmos.VS.DebugEngine.Utilities.MessageBox.Show(System.String%2CSystem.String%2COLEMSGICON%2COLEMSGBUTTON%2COLEMSGDEFBUTTON)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L48">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.VS.DebugEngine/Utilities/MessageBox.cs/#L24">View Source</a>
   </span>
-  <a id="VSPropertyPages_PropertyPageBase_Activate_" data-uid="VSPropertyPages.PropertyPageBase.Activate*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_Activate_System_IntPtr_RECT___System_Int32_" data-uid="VSPropertyPages.PropertyPageBase.Activate(System.IntPtr,RECT[],System.Int32)">Activate(IntPtr, RECT[], Int32)</h4>
-  <div class="markdown level1 summary"></div>
+  <a id="Cosmos_VS_DebugEngine_Utilities_MessageBox_Show_" data-uid="Cosmos.VS.DebugEngine.Utilities.MessageBox.Show*"></a>
+  <h4 id="Cosmos_VS_DebugEngine_Utilities_MessageBox_Show_System_String_System_String_OLEMSGICON_OLEMSGBUTTON_OLEMSGDEFBUTTON_" data-uid="Cosmos.VS.DebugEngine.Utilities.MessageBox.Show(System.String,System.String,OLEMSGICON,OLEMSGBUTTON,OLEMSGDEFBUTTON)">Show(String, String, OLEMSGICON, OLEMSGBUTTON, OLEMSGDEFBUTTON)</h4>
+  <div class="markdown level1 summary"><p>Shows a message box that is parented to the main Visual Studio window.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Activate(IntPtr hWndParent, RECT[] pRect, int bModal)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.IntPtr</span></td>
-        <td><span class="parametername">hWndParent</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">RECT</span>[]</td>
-        <td><span class="parametername">pRect</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">bModal</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_Apply.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.Apply%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L212">View Source</a>
-  </span>
-  <a id="VSPropertyPages_PropertyPageBase_Apply_" data-uid="VSPropertyPages.PropertyPageBase.Apply*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_Apply" data-uid="VSPropertyPages.PropertyPageBase.Apply">Apply()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Apply()</code></pre>
-  </div>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_CreatePropertyManager_System_Collections_Generic_IReadOnlyCollection_ConfiguredProject__.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.CreatePropertyManager(System.Collections.Generic.IReadOnlyCollection%7BConfiguredProject%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L25">View Source</a>
-  </span>
-  <a id="VSPropertyPages_PropertyPageBase_CreatePropertyManager_" data-uid="VSPropertyPages.PropertyPageBase.CreatePropertyManager*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_CreatePropertyManager_System_Collections_Generic_IReadOnlyCollection_ConfiguredProject__" data-uid="VSPropertyPages.PropertyPageBase.CreatePropertyManager(System.Collections.Generic.IReadOnlyCollection{ConfiguredProject})">CreatePropertyManager(IReadOnlyCollection&lt;ConfiguredProject&gt;)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract IPropertyManager CreatePropertyManager(IReadOnlyCollection&lt;ConfiguredProject&gt; configuredProjects)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.IReadOnlyCollection</span>&lt;<span class="xref">ConfiguredProject</span>&gt;</td>
-        <td><span class="parametername">configuredProjects</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="VSPropertyPages.IPropertyManager.html">IPropertyManager</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_CreatePropertyPageUI.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.CreatePropertyPageUI%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L24">View Source</a>
-  </span>
-  <a id="VSPropertyPages_PropertyPageBase_CreatePropertyPageUI_" data-uid="VSPropertyPages.PropertyPageBase.CreatePropertyPageUI*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_CreatePropertyPageUI" data-uid="VSPropertyPages.PropertyPageBase.CreatePropertyPageUI">CreatePropertyPageUI()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract IPropertyPageUI CreatePropertyPageUI()</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="VSPropertyPages.IPropertyPageUI.html">IPropertyPageUI</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_Deactivate.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.Deactivate%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L71">View Source</a>
-  </span>
-  <a id="VSPropertyPages_PropertyPageBase_Deactivate_" data-uid="VSPropertyPages.PropertyPageBase.Deactivate*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_Deactivate" data-uid="VSPropertyPages.PropertyPageBase.Deactivate">Deactivate()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Deactivate()</code></pre>
-  </div>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_EditProperty_System_Int32_.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.EditProperty(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L237">View Source</a>
-  </span>
-  <a id="VSPropertyPages_PropertyPageBase_EditProperty_" data-uid="VSPropertyPages.PropertyPageBase.EditProperty*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_EditProperty_System_Int32_" data-uid="VSPropertyPages.PropertyPageBase.EditProperty(System.Int32)">EditProperty(Int32)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void EditProperty(int DISPID)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">DISPID</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_FinishPendingValidations.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.FinishPendingValidations%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L261">View Source</a>
-  </span>
-  <a id="VSPropertyPages_PropertyPageBase_FinishPendingValidations_" data-uid="VSPropertyPages.PropertyPageBase.FinishPendingValidations*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_FinishPendingValidations" data-uid="VSPropertyPages.PropertyPageBase.FinishPendingValidations">FinishPendingValidations()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool FinishPendingValidations()</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_GetPageInfo_PROPPAGEINFO___.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.GetPageInfo(PROPPAGEINFO%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L73">View Source</a>
-  </span>
-  <a id="VSPropertyPages_PropertyPageBase_GetPageInfo_" data-uid="VSPropertyPages.PropertyPageBase.GetPageInfo*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_GetPageInfo_PROPPAGEINFO___" data-uid="VSPropertyPages.PropertyPageBase.GetPageInfo(PROPPAGEINFO[])">GetPageInfo(PROPPAGEINFO[])</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void GetPageInfo(PROPPAGEINFO[] pPageInfo)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">PROPPAGEINFO</span>[]</td>
-        <td><span class="parametername">pPageInfo</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_GetProperty_System_String_.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.GetProperty(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L247">View Source</a>
-  </span>
-  <a id="VSPropertyPages_PropertyPageBase_GetProperty_" data-uid="VSPropertyPages.PropertyPageBase.GetProperty*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_GetProperty_System_String_" data-uid="VSPropertyPages.PropertyPageBase.GetProperty(System.String)">GetProperty(String)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public object GetProperty(string propertyName)</code></pre>
+    <pre><code class="lang-csharp hljs">public MessageBoxResult Show(string line1, string line2 = &quot;&quot;, OLEMSGICON icon = null, OLEMSGBUTTON buttons = null, OLEMSGDEFBUTTON defaultButton = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5228,7 +4801,27 @@
     <tbody>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">propertyName</span></td>
+        <td><span class="parametername">line1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">line2</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">OLEMSGICON</span></td>
+        <td><span class="parametername">icon</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">OLEMSGBUTTON</span></td>
+        <td><span class="parametername">buttons</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">OLEMSGDEFBUTTON</span></td>
+        <td><span class="parametername">defaultButton</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5243,25 +4836,30 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Object</span></td>
-        <td></td>
+        <td><span class="xref">MessageBoxResult</span></td>
+        <td><p>The result of which button on the message box was clicked.</p>
+</td>
       </tr>
     </tbody>
   </table>
+  <h5 id="Cosmos_VS_DebugEngine_Utilities_MessageBox_Show_System_String_System_String_OLEMSGICON_OLEMSGBUTTON_OLEMSGDEFBUTTON__examples">Examples</h5>
+  <pre><code>VS.MessageBox.Show(&quot;Title&quot;, &quot;The message&quot;);</code></pre>
+
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_GetPropertyMultipleValues_System_String_System_Object____System_Object____.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.GetPropertyMultipleValues(System.String%2CSystem.Object%5B%5D%40%2CSystem.Object%5B%5D%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_VS_DebugEngine_Utilities_MessageBox_ShowAsync_System_String_System_String_OLEMSGICON_OLEMSGBUTTON_OLEMSGDEFBUTTON_.md&amp;value=---%0Auid%3A%20Cosmos.VS.DebugEngine.Utilities.MessageBox.ShowAsync(System.String%2CSystem.String%2COLEMSGICON%2COLEMSGBUTTON%2COLEMSGDEFBUTTON)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L255">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.VS.DebugEngine/Utilities/MessageBox.cs/#L52">View Source</a>
   </span>
-  <a id="VSPropertyPages_PropertyPageBase_GetPropertyMultipleValues_" data-uid="VSPropertyPages.PropertyPageBase.GetPropertyMultipleValues*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_GetPropertyMultipleValues_System_String_System_Object____System_Object____" data-uid="VSPropertyPages.PropertyPageBase.GetPropertyMultipleValues(System.String,System.Object[]@,System.Object[]@)">GetPropertyMultipleValues(String, out Object[], out Object[])</h4>
-  <div class="markdown level1 summary"></div>
+  <a id="Cosmos_VS_DebugEngine_Utilities_MessageBox_ShowAsync_" data-uid="Cosmos.VS.DebugEngine.Utilities.MessageBox.ShowAsync*"></a>
+  <h4 id="Cosmos_VS_DebugEngine_Utilities_MessageBox_ShowAsync_System_String_System_String_OLEMSGICON_OLEMSGBUTTON_OLEMSGDEFBUTTON_" data-uid="Cosmos.VS.DebugEngine.Utilities.MessageBox.ShowAsync(System.String,System.String,OLEMSGICON,OLEMSGBUTTON,OLEMSGDEFBUTTON)">ShowAsync(String, String, OLEMSGICON, OLEMSGBUTTON, OLEMSGDEFBUTTON)</h4>
+  <div class="markdown level1 summary"><p>Shows a message box that is parented to the main Visual Studio window.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool GetPropertyMultipleValues(string propertyName, out object[] objects, out object[] values)</code></pre>
+    <pre><code class="lang-csharp hljs">public async Task&lt;MessageBoxResult&gt; ShowAsync(string line1, string line2 = &quot;&quot;, OLEMSGICON icon = null, OLEMSGBUTTON buttons = null, OLEMSGDEFBUTTON defaultButton = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5275,17 +4873,84 @@
     <tbody>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">propertyName</span></td>
+        <td><span class="parametername">line1</span></td>
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Object</span>[]</td>
-        <td><span class="parametername">objects</span></td>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">line2</span></td>
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Object</span>[]</td>
-        <td><span class="parametername">values</span></td>
+        <td><span class="xref">OLEMSGICON</span></td>
+        <td><span class="parametername">icon</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">OLEMSGBUTTON</span></td>
+        <td><span class="parametername">buttons</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">OLEMSGDEFBUTTON</span></td>
+        <td><span class="parametername">defaultButton</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">MessageBoxResult</span>&gt;</td>
+        <td><p>The result of which button on the message box was clicked.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Cosmos_VS_DebugEngine_Utilities_MessageBox_ShowAsync_System_String_System_String_OLEMSGICON_OLEMSGBUTTON_OLEMSGDEFBUTTON__examples">Examples</h5>
+  <pre><code>await VS.MessageBox.ShowAsync(&quot;Title&quot;, &quot;The message&quot;);</code></pre>
+
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_VS_DebugEngine_Utilities_MessageBox_ShowConfirm_System_String_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.VS.DebugEngine.Utilities.MessageBox.ShowConfirm(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.VS.DebugEngine/Utilities/MessageBox.cs/#L111">View Source</a>
+  </span>
+  <a id="Cosmos_VS_DebugEngine_Utilities_MessageBox_ShowConfirm_" data-uid="Cosmos.VS.DebugEngine.Utilities.MessageBox.ShowConfirm*"></a>
+  <h4 id="Cosmos_VS_DebugEngine_Utilities_MessageBox_ShowConfirm_System_String_System_String_" data-uid="Cosmos.VS.DebugEngine.Utilities.MessageBox.ShowConfirm(System.String,System.String)">ShowConfirm(String, String)</h4>
+  <div class="markdown level1 summary"><p>Shows a yes/no/cancel message box.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool ShowConfirm(string line1, string line2 = &quot;&quot;)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">line1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">line2</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5301,24 +4966,26 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Boolean</span></td>
-        <td></td>
+        <td><p>true if the user clicks the 'Yes' button.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_Help_System_String_.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.Help(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_VS_DebugEngine_Utilities_MessageBox_ShowConfirmAsync_System_String_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.VS.DebugEngine.Utilities.MessageBox.ShowConfirmAsync(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L214">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.VS.DebugEngine/Utilities/MessageBox.cs/#L121">View Source</a>
   </span>
-  <a id="VSPropertyPages_PropertyPageBase_Help_" data-uid="VSPropertyPages.PropertyPageBase.Help*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_Help_System_String_" data-uid="VSPropertyPages.PropertyPageBase.Help(System.String)">Help(String)</h4>
-  <div class="markdown level1 summary"></div>
+  <a id="Cosmos_VS_DebugEngine_Utilities_MessageBox_ShowConfirmAsync_" data-uid="Cosmos.VS.DebugEngine.Utilities.MessageBox.ShowConfirmAsync*"></a>
+  <h4 id="Cosmos_VS_DebugEngine_Utilities_MessageBox_ShowConfirmAsync_System_String_System_String_" data-uid="Cosmos.VS.DebugEngine.Utilities.MessageBox.ShowConfirmAsync(System.String,System.String)">ShowConfirmAsync(String, String)</h4>
+  <div class="markdown level1 summary"><p>Shows a yes/no/cancel message box.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Help(string pszHelpDir)</code></pre>
+    <pre><code class="lang-csharp hljs">public async Task&lt;bool&gt; ShowConfirmAsync(string line1, string line2 = &quot;&quot;)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5332,345 +4999,12 @@
     <tbody>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">pszHelpDir</span></td>
+        <td><span class="parametername">line1</span></td>
         <td></td>
       </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_IsPageDirty.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.IsPageDirty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L209">View Source</a>
-  </span>
-  <a id="VSPropertyPages_PropertyPageBase_IsPageDirty_" data-uid="VSPropertyPages.PropertyPageBase.IsPageDirty*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_IsPageDirty" data-uid="VSPropertyPages.PropertyPageBase.IsPageDirty">IsPageDirty()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int IsPageDirty()</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_Move_RECT___.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.Move(RECT%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L190">View Source</a>
-  </span>
-  <a id="VSPropertyPages_PropertyPageBase_Move_" data-uid="VSPropertyPages.PropertyPageBase.Move*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_Move_RECT___" data-uid="VSPropertyPages.PropertyPageBase.Move(RECT[])">Move(RECT[])</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Move(RECT[] pRect)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">RECT</span>[]</td>
-        <td><span class="parametername">pRect</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_OnActivated_System_Boolean_.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.OnActivated(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L263">View Source</a>
-  </span>
-  <a id="VSPropertyPages_PropertyPageBase_OnActivated_" data-uid="VSPropertyPages.PropertyPageBase.OnActivated*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_OnActivated_System_Boolean_" data-uid="VSPropertyPages.PropertyPageBase.OnActivated(System.Boolean)">OnActivated(Boolean)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void OnActivated(bool activated)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td><span class="parametername">activated</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_SetObjects_System_UInt32_System_Object___.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.SetObjects(System.UInt32%2CSystem.Object%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L98">View Source</a>
-  </span>
-  <a id="VSPropertyPages_PropertyPageBase_SetObjects_" data-uid="VSPropertyPages.PropertyPageBase.SetObjects*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_SetObjects_System_UInt32_System_Object___" data-uid="VSPropertyPages.PropertyPageBase.SetObjects(System.UInt32,System.Object[])">SetObjects(UInt32, Object[])</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void SetObjects(uint cObjects, object[] ppUnk)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.UInt32</span></td>
-        <td><span class="parametername">cObjects</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Object</span>[]</td>
-        <td><span class="parametername">ppUnk</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_SetPageSite_IPropertyPageSite_.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.SetPageSite(IPropertyPageSite)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L46">View Source</a>
-  </span>
-  <a id="VSPropertyPages_PropertyPageBase_SetPageSite_" data-uid="VSPropertyPages.PropertyPageBase.SetPageSite*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_SetPageSite_IPropertyPageSite_" data-uid="VSPropertyPages.PropertyPageBase.SetPageSite(IPropertyPageSite)">SetPageSite(IPropertyPageSite)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void SetPageSite(IPropertyPageSite pPageSite)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">IPropertyPageSite</span></td>
-        <td><span class="parametername">pPageSite</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_SetProperty_System_String_System_Object_.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.SetProperty(System.String%2CSystem.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L250">View Source</a>
-  </span>
-  <a id="VSPropertyPages_PropertyPageBase_SetProperty_" data-uid="VSPropertyPages.PropertyPageBase.SetProperty*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_SetProperty_System_String_System_Object_" data-uid="VSPropertyPages.PropertyPageBase.SetProperty(System.String,System.Object)">SetProperty(String, Object)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void SetProperty(string propertyName, object value)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">propertyName</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Object</span></td>
-        <td><span class="parametername">value</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_SetPropertyMultipleValues_System_String_System_Object___System_Object___.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.SetPropertyMultipleValues(System.String%2CSystem.Object%5B%5D%2CSystem.Object%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L258">View Source</a>
-  </span>
-  <a id="VSPropertyPages_PropertyPageBase_SetPropertyMultipleValues_" data-uid="VSPropertyPages.PropertyPageBase.SetPropertyMultipleValues*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_SetPropertyMultipleValues_System_String_System_Object___System_Object___" data-uid="VSPropertyPages.PropertyPageBase.SetPropertyMultipleValues(System.String,System.Object[],System.Object[])">SetPropertyMultipleValues(String, Object[], Object[])</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void SetPropertyMultipleValues(string propertyName, object[] objects, object[] values)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">propertyName</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Object</span>[]</td>
-        <td><span class="parametername">objects</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Object</span>[]</td>
-        <td><span class="parametername">values</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_SetSite_IVsProjectDesignerPageSite_.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.SetSite(IVsProjectDesignerPageSite)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L245">View Source</a>
-  </span>
-  <a id="VSPropertyPages_PropertyPageBase_SetSite_" data-uid="VSPropertyPages.PropertyPageBase.SetSite*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_SetSite_IVsProjectDesignerPageSite_" data-uid="VSPropertyPages.PropertyPageBase.SetSite(IVsProjectDesignerPageSite)">SetSite(IVsProjectDesignerPageSite)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void SetSite(IVsProjectDesignerPageSite site)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">IVsProjectDesignerPageSite</span></td>
-        <td><span class="parametername">site</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_Show_System_UInt32_.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.Show(System.UInt32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L179">View Source</a>
-  </span>
-  <a id="VSPropertyPages_PropertyPageBase_Show_" data-uid="VSPropertyPages.PropertyPageBase.Show*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_Show_System_UInt32_" data-uid="VSPropertyPages.PropertyPageBase.Show(System.UInt32)">Show(UInt32)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Show(uint nCmdShow)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.UInt32</span></td>
-        <td><span class="parametername">nCmdShow</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_SupportsMultipleValueUndo_System_String_.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.SupportsMultipleValueUndo(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L253">View Source</a>
-  </span>
-  <a id="VSPropertyPages_PropertyPageBase_SupportsMultipleValueUndo_" data-uid="VSPropertyPages.PropertyPageBase.SupportsMultipleValueUndo*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_SupportsMultipleValueUndo_System_String_" data-uid="VSPropertyPages.PropertyPageBase.SupportsMultipleValueUndo(System.String)">SupportsMultipleValueUndo(String)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool SupportsMultipleValueUndo(string propertyName)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">propertyName</span></td>
+        <td><span class="parametername">line2</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5685,25 +5019,27 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.Boolean</span>&gt;</td>
+        <td><p>true if the user clicks the 'Yes' button.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase_TranslateAccelerator_MSG___.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase.TranslateAccelerator(MSG%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_VS_DebugEngine_Utilities_MessageBox_ShowError_System_String_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.VS.DebugEngine.Utilities.MessageBox.ShowError(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L216">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.VS.DebugEngine/Utilities/MessageBox.cs/#L66">View Source</a>
   </span>
-  <a id="VSPropertyPages_PropertyPageBase_TranslateAccelerator_" data-uid="VSPropertyPages.PropertyPageBase.TranslateAccelerator*"></a>
-  <h4 id="VSPropertyPages_PropertyPageBase_TranslateAccelerator_MSG___" data-uid="VSPropertyPages.PropertyPageBase.TranslateAccelerator(MSG[])">TranslateAccelerator(MSG[])</h4>
-  <div class="markdown level1 summary"></div>
+  <a id="Cosmos_VS_DebugEngine_Utilities_MessageBox_ShowError_" data-uid="Cosmos.VS.DebugEngine.Utilities.MessageBox.ShowError*"></a>
+  <h4 id="Cosmos_VS_DebugEngine_Utilities_MessageBox_ShowError_System_String_System_String_" data-uid="Cosmos.VS.DebugEngine.Utilities.MessageBox.ShowError(System.String,System.String)">ShowError(String, String)</h4>
+  <div class="markdown level1 summary"><p>Shows an error message box.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int TranslateAccelerator(MSG[] pMsg)</code></pre>
+    <pre><code class="lang-csharp hljs">public MessageBoxResult ShowError(string line1, string line2 = &quot;&quot;)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5716,8 +5052,13 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">MSG</span>[]</td>
-        <td><span class="parametername">pMsg</span></td>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">line1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">line2</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5732,15 +5073,174 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Int32</span></td>
+        <td><span class="xref">MessageBoxResult</span></td>
+        <td><p>The result of which button on the message box was clicked.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_VS_DebugEngine_Utilities_MessageBox_ShowErrorAsync_System_String_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.VS.DebugEngine.Utilities.MessageBox.ShowErrorAsync(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.VS.DebugEngine/Utilities/MessageBox.cs/#L81">View Source</a>
+  </span>
+  <a id="Cosmos_VS_DebugEngine_Utilities_MessageBox_ShowErrorAsync_" data-uid="Cosmos.VS.DebugEngine.Utilities.MessageBox.ShowErrorAsync*"></a>
+  <h4 id="Cosmos_VS_DebugEngine_Utilities_MessageBox_ShowErrorAsync_System_String_System_String_" data-uid="Cosmos.VS.DebugEngine.Utilities.MessageBox.ShowErrorAsync(System.String,System.String)">ShowErrorAsync(String, String)</h4>
+  <div class="markdown level1 summary"><p>Shows an error message box.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public async Task&lt;MessageBoxResult&gt; ShowErrorAsync(string line1, string line2 = &quot;&quot;)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">line1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">line2</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  <h3 id="implements">Implements</h3>
-  <div>
-      <span class="xref">IVsProjectDesignerPage</span>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">MessageBoxResult</span>&gt;</td>
+        <td><p>The result of which button on the message box was clicked.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_VS_DebugEngine_Utilities_MessageBox_ShowWarning_System_String_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.VS.DebugEngine.Utilities.MessageBox.ShowWarning(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.VS.DebugEngine/Utilities/MessageBox.cs/#L91">View Source</a>
+  </span>
+  <a id="Cosmos_VS_DebugEngine_Utilities_MessageBox_ShowWarning_" data-uid="Cosmos.VS.DebugEngine.Utilities.MessageBox.ShowWarning*"></a>
+  <h4 id="Cosmos_VS_DebugEngine_Utilities_MessageBox_ShowWarning_System_String_System_String_" data-uid="Cosmos.VS.DebugEngine.Utilities.MessageBox.ShowWarning(System.String,System.String)">ShowWarning(String, String)</h4>
+  <div class="markdown level1 summary"><p>Shows a warning message box.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MessageBoxResult ShowWarning(string line1, string line2 = &quot;&quot;)</code></pre>
   </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">line1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">line2</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">MessageBoxResult</span></td>
+        <td><p>The result of which button on the message box was clicked.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_VS_DebugEngine_Utilities_MessageBox_ShowWarningAsync_System_String_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.VS.DebugEngine.Utilities.MessageBox.ShowWarningAsync(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.VS.DebugEngine/Utilities/MessageBox.cs/#L101">View Source</a>
+  </span>
+  <a id="Cosmos_VS_DebugEngine_Utilities_MessageBox_ShowWarningAsync_" data-uid="Cosmos.VS.DebugEngine.Utilities.MessageBox.ShowWarningAsync*"></a>
+  <h4 id="Cosmos_VS_DebugEngine_Utilities_MessageBox_ShowWarningAsync_System_String_System_String_" data-uid="Cosmos.VS.DebugEngine.Utilities.MessageBox.ShowWarningAsync(System.String,System.String)">ShowWarningAsync(String, String)</h4>
+  <div class="markdown level1 summary"><p>Shows a warning message box.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public async Task&lt;MessageBoxResult&gt; ShowWarningAsync(string line1, string line2 = &quot;&quot;)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">line1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">line2</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">MessageBoxResult</span>&gt;</td>
+        <td><p>The result of which button on the message box was clicked.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
 </article>
           </div>
           
@@ -5749,10 +5249,10 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/CosmosOS/Common/new/master/apiSpec/new?filename=VSPropertyPages_PropertyPageBase.md&amp;value=---%0Auid%3A%20VSPropertyPages.PropertyPageBase%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_VS_DebugEngine_Utilities_MessageBox.md&amp;value=---%0Auid%3A%20Cosmos.VS.DebugEngine.Utilities.MessageBox%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/CosmosOS/Common/blob/master/source/VSPropertyPages/Implementations/PropertyPageBase.cs/#L20" class="contribution-link">View Source</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.VS.DebugEngine/Utilities/MessageBox.cs/#L11" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>
