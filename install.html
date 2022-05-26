@@ -79,8 +79,8 @@
 <h3 id="prerequisites">Prerequisites</h3>
 
 <ul>
-<li><strong>Visual Studio 2019</strong> - <a href="https://www.visualstudio.com/en-us/downloads/download-visual-studio-vs.aspx">Download</a></li>
-<li><strong>Visual Studio 2019 Workload: .NET Core Tools</strong> - .NET Core cross-platform development</li>
+<li><strong>Visual Studio 2022</strong> - <a href="https://www.visualstudio.com/en-us/downloads/download-visual-studio-vs.aspx">Download</a></li>
+<li><strong>Visual Studio 2022 Workload: .NET Core Tools</strong> - .NET Core cross-platform development</li>
 <li><strong>.NET Framework 4.6.2 Developer Pack</strong> - <a href="https://www.microsoft.com/en-us/download/details.aspx?id=53321">Download</a></li>
 <li><strong>VMware Player OR Workstation</strong> VMware Player is free, so that is recommended instead - <a href="https://www.vmware.com/uk/products/workstation-player/workstation-player-evaluation.html">Download</a></li>
 </ul>
@@ -91,7 +91,7 @@ The Dev Kit is the live source against which the Cosmos Team develops directly. 
 <h3 id="user-kit">User Kit</h3>
 <ol>
 <li>Download <a href="http://github.com/CosmosOS/Cosmos/releases/latest">the latest release of Cosmos</a> (download the <strong>exe</strong> file)</li>
-<li>Wait for the download to complete then run the installer. Allow it to run as admin. Make sure <strong>VS2019 is NOT running</strong> when you do this.</li>
+<li>Wait for the download to complete then run the installer. Allow it to run as admin. Make sure <strong>VS2022 is NOT running</strong> when you do this.</li>
 <li>Click &quot;Next&quot; then &quot;Install&quot;</li>
 <li>Wait for the install to progress. <strong>Tip:</strong> At the end the installer may look like it has stalled, but it is still doing something in the background. WAIT for the &quot;Finish&quot; button to become available.</li>
 <li>Cosmos should now be installed. Follow other tutorials to find out how to create your first OS.</li>
@@ -99,9 +99,9 @@ The Dev Kit is the live source against which the Cosmos Team develops directly. 
 <h3 id="dev-kit">Dev Kit</h3>
 <h5 id="additional-prerequisites"><strong>Additional Prerequisites</strong></h5>
 <ul>
-<li><strong>Visual Studio 2019 Workload: Visual Studio Extension Development</strong></li>
+<li><strong>Visual Studio 2022 Workload: Visual Studio Extension Development</strong></li>
 <li><strong>Inno Quick Start Pack (Free)</strong> – Install with defaults, keep Preprocessor option checked <a href="http://www.jrsoftware.org/isdl.php#qsp">Download</a></li>
-<li><strong>.NET Core 2.0 SDK</strong> - <a href="https://www.microsoft.com/net/download/core">Download</a></li>
+<li><strong>.NET 5 SDK</strong> - <a href="https://www.microsoft.com/net/download/core">Download</a></li>
 </ul>
 <h5 id="get-the-source">Get the Source</h5>
 <p>Cosmos source is hosted at GitHub. The simplest method to obtain the source is download a .zip file, however this makes updating and getting the latest updates a bit tricky.<br>
@@ -134,7 +134,7 @@ cd ..</p>
 <p>(if you have already installed) If you edited the Cosmos DevKit source using <em>Cosmos.sln</em> or <em>Test.sln</em>, be sure to set solution config to <strong>Debug x86</strong>.</p>
 <ol>
 <li>Make sure Visual Studio is <strong>NOT running</strong>.</li>
-<li>In the root directory of the DevKit files, you downloaded earlier, run <code>install-VS2019.bat</code>.</li>
+<li>In the root directory of the DevKit files, you downloaded earlier, run <code>install-VS2022.bat</code>.</li>
 <li>Wait for the install to progress. (<strong>Tip:</strong> At the end the installer may look like it is stalling, it is still doing something, just in the background)</li>
 <li>VS will open with Cosmos loaded. You can now make changes to core assemblies of Cosmos. If you don't want to, you can close this VS window and create a new Cosmos project as with the user kit.</li>
 </ol>
