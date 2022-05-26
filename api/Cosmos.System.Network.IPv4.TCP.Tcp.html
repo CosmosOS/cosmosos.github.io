@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class FtpServer
+    <title>Class Tcp
    </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class FtpServer
+    <meta name="title" content="Class Tcp
    ">
     <meta name="generator" content="docfx 2.59.2.0">
     
@@ -2393,7 +2393,7 @@
                             <a href="Cosmos.System.Network.Config.IPConfig.html" title="IPConfig" class="">IPConfig</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.Network.Config.NetworkConfig.html" title="NetworkConfig" class="">NetworkConfig</a>
+                            <a href="Cosmos.System.Network.Config.NetworkConfiguration.html" title="NetworkConfiguration" class="">NetworkConfiguration</a>
                           </li>
                         </ul>  </li>
                     <li class="">
@@ -2428,6 +2428,9 @@
                           <li class="">
                             <a href="Cosmos.System.Network.IPv4.TCP.Status.html" title="Status" class="">Status</a>
                           </li>
+                          <li class="active">
+                            <a href="Cosmos.System.Network.IPv4.TCP.Tcp.html" title="Tcp" class="active">Tcp</a>
+                          </li>
                           <li class="">
                             <a href="Cosmos.System.Network.IPv4.TCP.TcpClient.html" title="TcpClient" class="">TcpClient</a>
                           </li>
@@ -2442,18 +2445,6 @@
                           </li>
                           <li class="">
                             <a href="Cosmos.System.Network.IPv4.TCP.TransmissionControlBlock.html" title="TransmissionControlBlock" class="">TransmissionControlBlock</a>
-                          </li>
-                        </ul>  </li>
-                    <li class="">
-                      <span class="expand-stub"></span>
-                      <a href="Cosmos.System.Network.IPv4.TCP.FTP.html" title="Cosmos.System.Network.IPv4.TCP.FTP" class="">Cosmos.System.Network.IPv4.TCP.FTP</a>
-                        
-                        <ul class="nav level2">
-                          <li class="active">
-                            <a href="Cosmos.System.Network.IPv4.TCP.FTP.FtpServer.html" title="FtpServer" class="active">FtpServer</a>
-                          </li>
-                          <li class="">
-                            <a href="Cosmos.System.Network.IPv4.TCP.FTP.TransferMode.html" title="TransferMode" class="">TransferMode</a>
                           </li>
                         </ul>  </li>
                     <li class="">
@@ -4728,42 +4719,43 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Cosmos.System.Network.IPv4.TCP.FTP.FtpServer">
+            <article class="content wrap" id="_content" data-uid="Cosmos.System.Network.IPv4.TCP.Tcp">
   
   
-  <h1 id="Cosmos_System_Network_IPv4_TCP_FTP_FtpServer" data-uid="Cosmos.System.Network.IPv4.TCP.FTP.FtpServer" class="text-break">Class FtpServer
+  <h1 id="Cosmos_System_Network_IPv4_TCP_Tcp" data-uid="Cosmos.System.Network.IPv4.TCP.Tcp" class="text-break">Class Tcp
   </h1>
-  <div class="markdown level0 summary"><p>FtpServer class. Used to handle FTP client connections.</p>
+  <div class="markdown level0 summary"><p>Tcp class. Used to manage the TCP state machine.
+Handle received packets according to current TCP connection Status. Also contains TCB (Transmission Control Block) information.
+See <a href="https://datatracker.ietf.org/doc/html/rfc793">RFC 793</a> for more information.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">FtpServer</span></div>
+    <div class="level1"><span class="xref">Tcp</span></div>
   </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Cosmos.System.Network.IPv4.TCP.FTP.html">Cosmos.System.Network.IPv4.TCP.FTP</a></h6>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Cosmos.System.Network.IPv4.TCP.html">Cosmos.System.Network.IPv4.TCP</a></h6>
   <h6><strong>Assembly</strong>: Cosmos.System2.dll</h6>
-  <h5 id="Cosmos_System_Network_IPv4_TCP_FTP_FtpServer_syntax">Syntax</h5>
+  <h5 id="Cosmos_System_Network_IPv4_TCP_Tcp_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class FtpServer : IDisposable</code></pre>
+    <pre><code class="lang-csharp hljs">public class Tcp : object</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Network_IPv4_TCP_FTP_FtpServer__ctor_Cosmos_System_FileSystem_CosmosVFS_System_String_System_Boolean_.md&amp;value=---%0Auid%3A%20Cosmos.System.Network.IPv4.TCP.FTP.FtpServer.%23ctor(Cosmos.System.FileSystem.CosmosVFS%2CSystem.String%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Network_IPv4_TCP_Tcp__ctor_System_UInt16_System_UInt16_Cosmos_System_Network_IPv4_Address_Cosmos_System_Network_IPv4_Address_.md&amp;value=---%0Auid%3A%20Cosmos.System.Network.IPv4.TCP.Tcp.%23ctor(System.UInt16%2CSystem.UInt16%2CCosmos.System.Network.IPv4.Address%2CCosmos.System.Network.IPv4.Address)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Network/IPv4/TCP/FTP/FtpServer.cs/#L83">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Network/IPv4/TCP/Tcp.cs/#L264">View Source</a>
   </span>
-  <a id="Cosmos_System_Network_IPv4_TCP_FTP_FtpServer__ctor_" data-uid="Cosmos.System.Network.IPv4.TCP.FTP.FtpServer.#ctor*"></a>
-  <h4 id="Cosmos_System_Network_IPv4_TCP_FTP_FtpServer__ctor_Cosmos_System_FileSystem_CosmosVFS_System_String_System_Boolean_" data-uid="Cosmos.System.Network.IPv4.TCP.FTP.FtpServer.#ctor(Cosmos.System.FileSystem.CosmosVFS,System.String,System.Boolean)">FtpServer(CosmosVFS, String, Boolean)</h4>
-  <div class="markdown level1 summary"><p>Create new instance of the <a class="xref" href="Cosmos.System.Network.IPv4.TCP.FTP.FtpServer.html">FtpServer</a> class.</p>
-</div>
+  <a id="Cosmos_System_Network_IPv4_TCP_Tcp__ctor_" data-uid="Cosmos.System.Network.IPv4.TCP.Tcp.#ctor*"></a>
+  <h4 id="Cosmos_System_Network_IPv4_TCP_Tcp__ctor_System_UInt16_System_UInt16_Cosmos_System_Network_IPv4_Address_Cosmos_System_Network_IPv4_Address_" data-uid="Cosmos.System.Network.IPv4.TCP.Tcp.#ctor(System.UInt16,System.UInt16,Cosmos.System.Network.IPv4.Address,Cosmos.System.Network.IPv4.Address)">Tcp(UInt16, UInt16, Address, Address)</h4>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public FtpServer(CosmosVFS fs, string directory, bool debug = false)</code></pre>
+    <pre><code class="lang-csharp hljs">public Tcp(ushort localPort, ushort remotePort, Address localIp, Address remoteIp)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4776,22 +4768,146 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Cosmos.System.FileSystem.CosmosVFS.html">CosmosVFS</a></td>
-        <td><span class="parametername">fs</span></td>
-        <td><p>Initialized Cosmos Virtual Filesystem.</p>
-</td>
+        <td><span class="xref">System.UInt16</span></td>
+        <td><span class="parametername">localPort</span></td>
+        <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">directory</span></td>
-        <td><p>FTP Server root directory path.</p>
-</td>
+        <td><span class="xref">System.UInt16</span></td>
+        <td><span class="parametername">remotePort</span></td>
+        <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td><span class="parametername">debug</span></td>
-        <td><p>Is debug logging enabled.</p>
-</td>
+        <td><a class="xref" href="Cosmos.System.Network.IPv4.Address.html">Address</a></td>
+        <td><span class="parametername">localIp</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Network.IPv4.Address.html">Address</a></td>
+        <td><span class="parametername">remoteIp</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Network_IPv4_TCP_Tcp_LocalEndPoint.md&amp;value=---%0Auid%3A%20Cosmos.System.Network.IPv4.TCP.Tcp.LocalEndPoint%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Network/IPv4/TCP/Tcp.cs/#L235">View Source</a>
+  </span>
+  <h4 id="Cosmos_System_Network_IPv4_TCP_Tcp_LocalEndPoint" data-uid="Cosmos.System.Network.IPv4.TCP.Tcp.LocalEndPoint">LocalEndPoint</h4>
+  <div class="markdown level1 summary"><p>Local EndPoint.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public EndPoint LocalEndPoint</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Network.IPv4.EndPoint.html">EndPoint</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Network_IPv4_TCP_Tcp_RemoteEndPoint.md&amp;value=---%0Auid%3A%20Cosmos.System.Network.IPv4.TCP.Tcp.RemoteEndPoint%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Network/IPv4/TCP/Tcp.cs/#L240">View Source</a>
+  </span>
+  <h4 id="Cosmos_System_Network_IPv4_TCP_Tcp_RemoteEndPoint" data-uid="Cosmos.System.Network.IPv4.TCP.Tcp.RemoteEndPoint">RemoteEndPoint</h4>
+  <div class="markdown level1 summary"><p>Remote EndPoint.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public EndPoint RemoteEndPoint</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Network.IPv4.EndPoint.html">EndPoint</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Network_IPv4_TCP_Tcp_Status.md&amp;value=---%0Auid%3A%20Cosmos.System.Network.IPv4.TCP.Tcp.Status%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Network/IPv4/TCP/Tcp.cs/#L257">View Source</a>
+  </span>
+  <h4 id="Cosmos_System_Network_IPv4_TCP_Tcp_Status" data-uid="Cosmos.System.Network.IPv4.TCP.Tcp.Status">Status</h4>
+  <div class="markdown level1 summary"><p>Connection status.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Status Status</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Network.IPv4.TCP.Status.html">Status</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Network_IPv4_TCP_Tcp_TcpWindowSize.md&amp;value=---%0Auid%3A%20Cosmos.System.Network.IPv4.TCP.Tcp.TcpWindowSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Network/IPv4/TCP/Tcp.cs/#L146">View Source</a>
+  </span>
+  <h4 id="Cosmos_System_Network_IPv4_TCP_Tcp_TcpWindowSize" data-uid="Cosmos.System.Network.IPv4.TCP.Tcp.TcpWindowSize">TcpWindowSize</h4>
+  <div class="markdown level1 summary"><p>TCP Window Size.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const ushort TcpWindowSize = null</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -4799,52 +4915,276 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Network_IPv4_TCP_FTP_FtpServer_Close.md&amp;value=---%0Auid%3A%20Cosmos.System.Network.IPv4.TCP.FTP.FtpServer.Close%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Network_IPv4_TCP_Tcp_ProcessCloseWait_Cosmos_System_Network_IPv4_TCP_TCPPacket_.md&amp;value=---%0Auid%3A%20Cosmos.System.Network.IPv4.TCP.Tcp.ProcessCloseWait(Cosmos.System.Network.IPv4.TCP.TCPPacket)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Network/IPv4/TCP/FTP/FtpServer.cs/#L186">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Network/IPv4/TCP/Tcp.cs/#L633">View Source</a>
   </span>
-  <a id="Cosmos_System_Network_IPv4_TCP_FTP_FtpServer_Close_" data-uid="Cosmos.System.Network.IPv4.TCP.FTP.FtpServer.Close*"></a>
-  <h4 id="Cosmos_System_Network_IPv4_TCP_FTP_FtpServer_Close" data-uid="Cosmos.System.Network.IPv4.TCP.FTP.FtpServer.Close">Close()</h4>
-  <div class="markdown level1 summary"><p>Close FTP server.</p>
+  <a id="Cosmos_System_Network_IPv4_TCP_Tcp_ProcessCloseWait_" data-uid="Cosmos.System.Network.IPv4.TCP.Tcp.ProcessCloseWait*"></a>
+  <h4 id="Cosmos_System_Network_IPv4_TCP_Tcp_ProcessCloseWait_Cosmos_System_Network_IPv4_TCP_TCPPacket_" data-uid="Cosmos.System.Network.IPv4.TCP.Tcp.ProcessCloseWait(Cosmos.System.Network.IPv4.TCP.TCPPacket)">ProcessCloseWait(TCPPacket)</h4>
+  <div class="markdown level1 summary"><p>Process Close_WAIT Status.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Close()</code></pre>
+    <pre><code class="lang-csharp hljs">public void ProcessCloseWait(TCPPacket packet)</code></pre>
   </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Network.IPv4.TCP.TCPPacket.html">TCPPacket</a></td>
+        <td><span class="parametername">packet</span></td>
+        <td><p>Packet to receive.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Network_IPv4_TCP_FTP_FtpServer_Dispose.md&amp;value=---%0Auid%3A%20Cosmos.System.Network.IPv4.TCP.FTP.FtpServer.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Network_IPv4_TCP_Tcp_ProcessClosing_Cosmos_System_Network_IPv4_TCP_TCPPacket_.md&amp;value=---%0Auid%3A%20Cosmos.System.Network.IPv4.TCP.Tcp.ProcessClosing(Cosmos.System.Network.IPv4.TCP.TCPPacket)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Network/IPv4/TCP/FTP/FtpServer.cs/#L195">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Network/IPv4/TCP/Tcp.cs/#L621">View Source</a>
   </span>
-  <a id="Cosmos_System_Network_IPv4_TCP_FTP_FtpServer_Dispose_" data-uid="Cosmos.System.Network.IPv4.TCP.FTP.FtpServer.Dispose*"></a>
-  <h4 id="Cosmos_System_Network_IPv4_TCP_FTP_FtpServer_Dispose" data-uid="Cosmos.System.Network.IPv4.TCP.FTP.FtpServer.Dispose">Dispose()</h4>
-  <div class="markdown level1 summary"><p>Dispose</p>
+  <a id="Cosmos_System_Network_IPv4_TCP_Tcp_ProcessClosing_" data-uid="Cosmos.System.Network.IPv4.TCP.Tcp.ProcessClosing*"></a>
+  <h4 id="Cosmos_System_Network_IPv4_TCP_Tcp_ProcessClosing_Cosmos_System_Network_IPv4_TCP_TCPPacket_" data-uid="Cosmos.System.Network.IPv4.TCP.Tcp.ProcessClosing(Cosmos.System.Network.IPv4.TCP.TCPPacket)">ProcessClosing(TCPPacket)</h4>
+  <div class="markdown level1 summary"><p>Process CLOSING Status.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
+    <pre><code class="lang-csharp hljs">public void ProcessClosing(TCPPacket packet)</code></pre>
   </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Network.IPv4.TCP.TCPPacket.html">TCPPacket</a></td>
+        <td><span class="parametername">packet</span></td>
+        <td><p>Packet to receive.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Network_IPv4_TCP_FTP_FtpServer_Listen.md&amp;value=---%0Auid%3A%20Cosmos.System.Network.IPv4.TCP.FTP.FtpServer.Listen%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Network_IPv4_TCP_Tcp_ProcessEstablished_Cosmos_System_Network_IPv4_TCP_TCPPacket_.md&amp;value=---%0Auid%3A%20Cosmos.System.Network.IPv4.TCP.Tcp.ProcessEstablished(Cosmos.System.Network.IPv4.TCP.TCPPacket)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Network/IPv4/TCP/FTP/FtpServer.cs/#L99">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Network/IPv4/TCP/Tcp.cs/#L489">View Source</a>
   </span>
-  <a id="Cosmos_System_Network_IPv4_TCP_FTP_FtpServer_Listen_" data-uid="Cosmos.System.Network.IPv4.TCP.FTP.FtpServer.Listen*"></a>
-  <h4 id="Cosmos_System_Network_IPv4_TCP_FTP_FtpServer_Listen" data-uid="Cosmos.System.Network.IPv4.TCP.FTP.FtpServer.Listen">Listen()</h4>
-  <div class="markdown level1 summary"><p>Listen for new FTP clients.</p>
+  <a id="Cosmos_System_Network_IPv4_TCP_Tcp_ProcessEstablished_" data-uid="Cosmos.System.Network.IPv4.TCP.Tcp.ProcessEstablished*"></a>
+  <h4 id="Cosmos_System_Network_IPv4_TCP_Tcp_ProcessEstablished_Cosmos_System_Network_IPv4_TCP_TCPPacket_" data-uid="Cosmos.System.Network.IPv4.TCP.Tcp.ProcessEstablished(Cosmos.System.Network.IPv4.TCP.TCPPacket)">ProcessEstablished(TCPPacket)</h4>
+  <div class="markdown level1 summary"><p>Process ESTABLISHED Status.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Listen()</code></pre>
+    <pre><code class="lang-csharp hljs">public void ProcessEstablished(TCPPacket packet)</code></pre>
   </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Network.IPv4.TCP.TCPPacket.html">TCPPacket</a></td>
+        <td><span class="parametername">packet</span></td>
+        <td><p>Packet to receive.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Network_IPv4_TCP_Tcp_ProcessFinWait1_Cosmos_System_Network_IPv4_TCP_TCPPacket_.md&amp;value=---%0Auid%3A%20Cosmos.System.Network.IPv4.TCP.Tcp.ProcessFinWait1(Cosmos.System.Network.IPv4.TCP.TCPPacket)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Network/IPv4/TCP/Tcp.cs/#L574">View Source</a>
+  </span>
+  <a id="Cosmos_System_Network_IPv4_TCP_Tcp_ProcessFinWait1_" data-uid="Cosmos.System.Network.IPv4.TCP.Tcp.ProcessFinWait1*"></a>
+  <h4 id="Cosmos_System_Network_IPv4_TCP_Tcp_ProcessFinWait1_Cosmos_System_Network_IPv4_TCP_TCPPacket_" data-uid="Cosmos.System.Network.IPv4.TCP.Tcp.ProcessFinWait1(Cosmos.System.Network.IPv4.TCP.TCPPacket)">ProcessFinWait1(TCPPacket)</h4>
+  <div class="markdown level1 summary"><p>Process FIN_WAIT1 Status.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ProcessFinWait1(TCPPacket packet)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Network.IPv4.TCP.TCPPacket.html">TCPPacket</a></td>
+        <td><span class="parametername">packet</span></td>
+        <td><p>Packet to receive.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Network_IPv4_TCP_Tcp_ProcessFinWait2_Cosmos_System_Network_IPv4_TCP_TCPPacket_.md&amp;value=---%0Auid%3A%20Cosmos.System.Network.IPv4.TCP.Tcp.ProcessFinWait2(Cosmos.System.Network.IPv4.TCP.TCPPacket)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Network/IPv4/TCP/Tcp.cs/#L605">View Source</a>
+  </span>
+  <a id="Cosmos_System_Network_IPv4_TCP_Tcp_ProcessFinWait2_" data-uid="Cosmos.System.Network.IPv4.TCP.Tcp.ProcessFinWait2*"></a>
+  <h4 id="Cosmos_System_Network_IPv4_TCP_Tcp_ProcessFinWait2_Cosmos_System_Network_IPv4_TCP_TCPPacket_" data-uid="Cosmos.System.Network.IPv4.TCP.Tcp.ProcessFinWait2(Cosmos.System.Network.IPv4.TCP.TCPPacket)">ProcessFinWait2(TCPPacket)</h4>
+  <div class="markdown level1 summary"><p>Process FIN_WAIT2 Status.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ProcessFinWait2(TCPPacket packet)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Network.IPv4.TCP.TCPPacket.html">TCPPacket</a></td>
+        <td><span class="parametername">packet</span></td>
+        <td><p>Packet to receive.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Network_IPv4_TCP_Tcp_ProcessListen_Cosmos_System_Network_IPv4_TCP_TCPPacket_.md&amp;value=---%0Auid%3A%20Cosmos.System.Network.IPv4.TCP.Tcp.ProcessListen(Cosmos.System.Network.IPv4.TCP.TCPPacket)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Network/IPv4/TCP/Tcp.cs/#L346">View Source</a>
+  </span>
+  <a id="Cosmos_System_Network_IPv4_TCP_Tcp_ProcessListen_" data-uid="Cosmos.System.Network.IPv4.TCP.Tcp.ProcessListen*"></a>
+  <h4 id="Cosmos_System_Network_IPv4_TCP_Tcp_ProcessListen_Cosmos_System_Network_IPv4_TCP_TCPPacket_" data-uid="Cosmos.System.Network.IPv4.TCP.Tcp.ProcessListen(Cosmos.System.Network.IPv4.TCP.TCPPacket)">ProcessListen(TCPPacket)</h4>
+  <div class="markdown level1 summary"><p>Process LISTEN Status.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ProcessListen(TCPPacket packet)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Network.IPv4.TCP.TCPPacket.html">TCPPacket</a></td>
+        <td><span class="parametername">packet</span></td>
+        <td><p>Packet to receive.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Network_IPv4_TCP_Tcp_ProcessSynReceived_Cosmos_System_Network_IPv4_TCP_TCPPacket_.md&amp;value=---%0Auid%3A%20Cosmos.System.Network.IPv4.TCP.Tcp.ProcessSynReceived(Cosmos.System.Network.IPv4.TCP.TCPPacket)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Network/IPv4/TCP/Tcp.cs/#L400">View Source</a>
+  </span>
+  <a id="Cosmos_System_Network_IPv4_TCP_Tcp_ProcessSynReceived_" data-uid="Cosmos.System.Network.IPv4.TCP.Tcp.ProcessSynReceived*"></a>
+  <h4 id="Cosmos_System_Network_IPv4_TCP_Tcp_ProcessSynReceived_Cosmos_System_Network_IPv4_TCP_TCPPacket_" data-uid="Cosmos.System.Network.IPv4.TCP.Tcp.ProcessSynReceived(Cosmos.System.Network.IPv4.TCP.TCPPacket)">ProcessSynReceived(TCPPacket)</h4>
+  <div class="markdown level1 summary"><p>Process SYN_RECEIVED Status.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ProcessSynReceived(TCPPacket packet)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Network.IPv4.TCP.TCPPacket.html">TCPPacket</a></td>
+        <td><span class="parametername">packet</span></td>
+        <td><p>Packet to receive.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Network_IPv4_TCP_Tcp_ProcessSynSent_Cosmos_System_Network_IPv4_TCP_TCPPacket_.md&amp;value=---%0Auid%3A%20Cosmos.System.Network.IPv4.TCP.Tcp.ProcessSynSent(Cosmos.System.Network.IPv4.TCP.TCPPacket)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Network/IPv4/TCP/Tcp.cs/#L423">View Source</a>
+  </span>
+  <a id="Cosmos_System_Network_IPv4_TCP_Tcp_ProcessSynSent_" data-uid="Cosmos.System.Network.IPv4.TCP.Tcp.ProcessSynSent*"></a>
+  <h4 id="Cosmos_System_Network_IPv4_TCP_Tcp_ProcessSynSent_Cosmos_System_Network_IPv4_TCP_TCPPacket_" data-uid="Cosmos.System.Network.IPv4.TCP.Tcp.ProcessSynSent(Cosmos.System.Network.IPv4.TCP.TCPPacket)">ProcessSynSent(TCPPacket)</h4>
+  <div class="markdown level1 summary"><p>Process SYN_SENT Status.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ProcessSynSent(TCPPacket packet)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Network.IPv4.TCP.TCPPacket.html">TCPPacket</a></td>
+        <td><span class="parametername">packet</span></td>
+        <td><p>Packet to receive.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
 </article>
           </div>
           
@@ -4853,10 +5193,10 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Network_IPv4_TCP_FTP_FtpServer.md&amp;value=---%0Auid%3A%20Cosmos.System.Network.IPv4.TCP.FTP.FtpServer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Network_IPv4_TCP_Tcp.md&amp;value=---%0Auid%3A%20Cosmos.System.Network.IPv4.TCP.Tcp%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Network/IPv4/TCP/FTP/FtpServer.cs/#L54" class="contribution-link">View Source</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Network/IPv4/TCP/Tcp.cs/#L141" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>
