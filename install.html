@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Prerequisites </title>
+    <title>Installation </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Prerequisites ">
+    <meta name="title" content="Installation ">
     <meta name="generator" content="docfx 2.59.2.0">
     
     <link rel="shortcut icon" href="favicon.ico">
@@ -76,12 +76,13 @@
         <div class="article row grid">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
-<h3 id="prerequisites">Prerequisites</h3>
+<h1 id="installation">Installation</h1>
 
+<h3 id="prerequisites">Prerequisites</h3>
 <ul>
 <li><strong>Visual Studio 2022</strong> - <a href="https://www.visualstudio.com/en-us/downloads/download-visual-studio-vs.aspx">Download</a></li>
 <li><strong>Visual Studio 2022 Workload: .NET Core Tools</strong> - .NET Core cross-platform development</li>
-<li><strong>.NET Framework 4.6.2 Developer Pack</strong> - <a href="https://www.microsoft.com/en-us/download/details.aspx?id=53321">Download</a></li>
+<li><strong>.NET Framework 4.8 Developer Pack</strong> - <a href="https://www.microsoft.com/en-us/download/details.aspx?id=53321">Download</a></li>
 <li><strong>VMware Player OR Workstation</strong> VMware Player is free, so that is recommended instead - <a href="https://www.vmware.com/uk/products/workstation-player/workstation-player-evaluation.html">Download</a></li>
 </ul>
 <h3 id="installing-cosmos">Installing Cosmos</h3>
@@ -110,26 +111,27 @@ To update the Cosmos source more efficiently, use the Git command line, or any o
 You will need to pull the source for all four repositories and they must exist in sibling directories as shown in the diagram below. The Cosmos base directory can be named anything and exist anywhere. But the directories inside it must match exactly.  </p>
 <p>Windows is not case sensitive for files, but many of the .<em><strong>NET Core tools used to build are case sensitive even on Windows for file paths</strong></em>. Make sure to create the subdirectories exactly as shown. For demonstration purposes let us assume that you will use c:\source\Cosmos to install to.<br>
 This base directory is referred to as the Cosmos directory. Each of the four repositories then must be cloned or extracted to the corresponding sub folder of the Cosmos directory. Using this example, the set up should look like this:</p>
-<pre><code>c:\\source\\CosmosOS\\
-c:\\source\\CosmosOS\\Cosmos\\ - [Git Repository for Cosmos](https://github.com/CosmosOS/Cosmos) 
-c:\\source\\CosmosOS\\IL2CPU\\ - [Git Repository for IL2CPU](https://github.com/CosmosOS/IL2CPU) 
-c:\\source\\CosmosOS\\XSharp\\ - [Git Repository for XSharp](https://github.com/CosmosOS/XSharp) 
-c:\\source\\CosmosOS\\Common\\ - [Git Repository for Common](https://github.com/CosmosOS/Common) 
+<pre><code>C:\\source\\CosmosOS\\
+C:\\source\\CosmosOS\\Cosmos\\ - [Git Repository for Cosmos](https://github.com/CosmosOS/Cosmos) 
+C:\\source\\CosmosOS\\IL2CPU\\ - [Git Repository for IL2CPU](https://github.com/CosmosOS/IL2CPU) 
+C:\\source\\CosmosOS\\XSharp\\ - [Git Repository for XSharp](https://github.com/CosmosOS/XSharp) 
+C:\\source\\CosmosOS\\Common\\ - [Git Repository for Common](https://github.com/CosmosOS/Common) 
 </code></pre>
 <p>A tree diagram of the source should look like the following:<br>
 <img src="https://www.gocosmos.org/wp-content/uploads/2021/06/tree-214x300.png" alt=""></p>
 <p>We are working to make syncing code easier. We have already experimented with Git Submodules, however the simple use of submodules presents a few issues, but the biggest of them is that they trigger a fireworks show of problems and errors in every Git UI we tried and would have limited developers options and forced them to the command line in most cases. We are currently investigating subtrees.</p>
 <p>For now, it's much easier to handle the 4 repositories as most of the time, new Cosmos developers may only have to work in the Cosmos repository. Only when you are comfortable with the concept of Operating System development and C# should you venture into IL2CPU and XSharp.</p>
 <p>If you want to keep your source up to date in a one-click method, paste this code into a .bat file in the CosmosOS folder ( as shown in the above example). This .bat file will only work after the repositories have been cloned with git at least once.</p>
-<p>cd C:\XSharp<br>
-git pull<br>
-cd ..\IL2CPU<br>
-git pull<br>
-cd ..\Cosmos<br>
-git pull<br>
-cd ..\Common<br>
-git pull<br>
-cd ..</p>
+<pre><code class="lang-cmd">cd C:\\XSharp  
+git pull  
+cd ..\\IL2CPU  
+git pull  
+cd ..\\Cosmos  
+git pull  
+cd ..\\Common  
+git pull  
+cd ..  
+</code></pre>
 <h5 id="building-and-installing">Building and Installing</h5>
 <p>(if you have already installed) If you edited the Cosmos DevKit source using <em>Cosmos.sln</em> or <em>Test.sln</em>, be sure to set solution config to <strong>Debug x86</strong>.</p>
 <ol>
