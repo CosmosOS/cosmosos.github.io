@@ -467,6 +467,9 @@
                         
                         <ul class="nav level2">
                           <li class="">
+                            <a href="Cosmos.Core_Asm.ArrayClearAsm.html" title="ArrayClearAsm" class="">ArrayClearAsm</a>
+                          </li>
+                          <li class="">
                             <a href="Cosmos.Core_Asm.ArrayGetLengthAsm.html" title="ArrayGetLengthAsm" class="">ArrayGetLengthAsm</a>
                           </li>
                           <li class="">
@@ -609,9 +612,6 @@
                           </li>
                           <li class="">
                             <a href="Cosmos.Core_Plugs.System.CharUnicodeInfoImpl.html" title="CharUnicodeInfoImpl" class="">CharUnicodeInfoImpl</a>
-                          </li>
-                          <li class="">
-                            <a href="Cosmos.Core_Plugs.System.CLRConfigImpl.html" title="CLRConfigImpl" class="">CLRConfigImpl</a>
                           </li>
                           <li class="">
                             <a href="Cosmos.Core_Plugs.System.DelegateImpl.html" title="DelegateImpl" class="">DelegateImpl</a>
@@ -780,9 +780,6 @@
                         <ul class="nav level2">
                           <li class="">
                             <a href="Cosmos.Core_Plugs.System.Globalization.CultureInfoImpl.html" title="CultureInfoImpl" class="">CultureInfoImpl</a>
-                          </li>
-                          <li class="">
-                            <a href="Cosmos.Core_Plugs.System.Globalization.NumberFormatInfoImpl.html" title="NumberFormatInfoImpl" class="">NumberFormatInfoImpl</a>
                           </li>
                         </ul>  </li>
                     <li class="">
@@ -4747,6 +4744,27 @@
     <div>
       <a class="xref" href="Cosmos.System.FileSystem.VFS.VFSBase.html#Cosmos_System_FileSystem_VFS_VFSBase_VolumeSeparatorChar">VFSBase.VolumeSeparatorChar</a>
     </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Cosmos.System.FileSystem.html">Cosmos.System.FileSystem</a></h6>
   <h6><strong>Assembly</strong>: Cosmos.System2.dll</h6>
@@ -4782,7 +4800,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">List</span>&lt;<a class="xref" href="Cosmos.System.FileSystem.Disk.html">Disk</a>&gt;</td>
+        <td><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="Cosmos.System.FileSystem.Disk.html">Disk</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -4841,6 +4859,62 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Cosmos.System.FileSystem.VFS.VFSBase.html#Cosmos_System_FileSystem_VFS_VFSBase_CreateDirectory_System_String_">VFSBase.CreateDirectory(String)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><ul><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown on memory error / unknown directory entry type.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.OverflowException</span></td>
+        <td><p>Thrown when data lenght is greater then Int32.MaxValue.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Exception</span></td>
+        <td><ul><li></li><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><ul><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.RankException</span></td>
+        <td><p>Thrown on fatal error (contact support).</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArrayTypeMismatchException</span></td>
+        <td><p>Thrown on fatal error (contact support).</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.InvalidCastException</span></td>
+        <td><p>Thrown on memory error.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.PathTooLongException</span></td>
+        <td><p>Thrown when The aPath is longer than the system defined maximum length.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_FileSystem_CosmosVFS_CreateFile_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.CosmosVFS.CreateFile(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -4893,6 +4967,62 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Cosmos.System.FileSystem.VFS.VFSBase.html#Cosmos_System_FileSystem_VFS_VFSBase_CreateFile_System_String_">VFSBase.CreateFile(String)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><ul><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown on memory error / unknown directory entry type.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.OverflowException</span></td>
+        <td><p>Thrown when data lenght is greater then Int32.MaxValue.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Exception</span></td>
+        <td><ul><li></li><li></li><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><ul><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.RankException</span></td>
+        <td><p>Thrown on fatal error (contact support).</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArrayTypeMismatchException</span></td>
+        <td><p>Thrown on fatal error (contact support).</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.InvalidCastException</span></td>
+        <td><p>Thrown on memory error.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.PathTooLongException</span></td>
+        <td><p>Thrown when The aPath is longer than the system defined maximum length.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_FileSystem_CosmosVFS_DeleteDirectory_Cosmos_System_FileSystem_Listing_DirectoryEntry_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.CosmosVFS.DeleteDirectory(Cosmos.System.FileSystem.Listing.DirectoryEntry)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -5049,6 +5179,27 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Cosmos.System.FileSystem.VFS.VFSBase.html#Cosmos_System_FileSystem_VFS_VFSBase_GetAvailableFreeSpace_System_String_">VFSBase.GetAvailableFreeSpace(String)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown when aDriveId is null or empty.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Exception</span></td>
+        <td><p>Unable to determine filesystem for path:  + aDriveId</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_FileSystem_CosmosVFS_GetDirectory_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.CosmosVFS.GetDirectory(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -5101,6 +5252,22 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Cosmos.System.FileSystem.VFS.VFSBase.html#Cosmos_System_FileSystem_VFS_VFSBase_GetDirectory_System_String_">VFSBase.GetDirectory(String)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Exception</span></td>
+        <td><p>Thrown when the entry at aPath is not a directory.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_FileSystem_CosmosVFS_GetDirectoryListing_Cosmos_System_FileSystem_Listing_DirectoryEntry_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.CosmosVFS.GetDirectoryListing(Cosmos.System.FileSystem.Listing.DirectoryEntry)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -5145,7 +5312,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">List</span>&lt;<a class="xref" href="Cosmos.System.FileSystem.Listing.DirectoryEntry.html">DirectoryEntry</a>&gt;</td>
+        <td><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="Cosmos.System.FileSystem.Listing.DirectoryEntry.html">DirectoryEntry</a>&gt;</td>
         <td><p>DirectoryEntry type list value.</p>
 </td>
       </tr>
@@ -5153,6 +5320,42 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Cosmos.System.FileSystem.VFS.VFSBase.html#Cosmos_System_FileSystem_VFS_VFSBase_GetDirectoryListing_Cosmos_System_FileSystem_Listing_DirectoryEntry_">VFSBase.GetDirectoryListing(DirectoryEntry)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><ul><li></li><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><ul><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><ul><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.OverflowException</span></td>
+        <td><ul><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Exception</span></td>
+        <td><ul><li></li><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_FileSystem_CosmosVFS_GetDirectoryListing_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.CosmosVFS.GetDirectoryListing(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -5197,7 +5400,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">List</span>&lt;<a class="xref" href="Cosmos.System.FileSystem.Listing.DirectoryEntry.html">DirectoryEntry</a>&gt;</td>
+        <td><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="Cosmos.System.FileSystem.Listing.DirectoryEntry.html">DirectoryEntry</a>&gt;</td>
         <td><p>DirectoryEntry list value.</p>
 </td>
       </tr>
@@ -5205,6 +5408,42 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Cosmos.System.FileSystem.VFS.VFSBase.html#Cosmos_System_FileSystem_VFS_VFSBase_GetDirectoryListing_System_String_">VFSBase.GetDirectoryListing(String)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><ul><li></li><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><ul><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><ul><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.OverflowException</span></td>
+        <td><ul><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Exception</span></td>
+        <td><ul><li></li><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_FileSystem_CosmosVFS_GetDisks.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.CosmosVFS.GetDisks%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -5230,7 +5469,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">List</span>&lt;<a class="xref" href="Cosmos.System.FileSystem.Disk.html">Disk</a>&gt;</td>
+        <td><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="Cosmos.System.FileSystem.Disk.html">Disk</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -5289,6 +5528,22 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Cosmos.System.FileSystem.VFS.VFSBase.html#Cosmos_System_FileSystem_VFS_VFSBase_GetFile_System_String_">VFSBase.GetFile(String)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Exception</span></td>
+        <td><p>Thrown when the entry at aPath is not a file.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_FileSystem_CosmosVFS_GetFileAttributes_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.CosmosVFS.GetFileAttributes(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -5333,7 +5588,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">FileAttributes</span></td>
+        <td><span class="xref">System.IO.FileAttributes</span></td>
         <td><p>The File / Directory attributes.</p>
 </td>
       </tr>
@@ -5341,6 +5596,42 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Cosmos.System.FileSystem.VFS.VFSBase.html#Cosmos_System_FileSystem_VFS_VFSBase_GetFileAttributes_System_String_">VFSBase.GetFileAttributes(String)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><ul><li></li><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><ul><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><ul><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.OverflowException</span></td>
+        <td><ul><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Exception</span></td>
+        <td><ul><li></li><li></li><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_FileSystem_CosmosVFS_GetFileSystemLabel_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.CosmosVFS.GetFileSystemLabel(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -5393,6 +5684,27 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Cosmos.System.FileSystem.VFS.VFSBase.html#Cosmos_System_FileSystem_VFS_VFSBase_GetFileSystemLabel_System_String_">VFSBase.GetFileSystemLabel(String)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown when aDriveId is null or empty.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Exception</span></td>
+        <td><p>Unable to determine filesystem for path:  + aDriveId</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_FileSystem_CosmosVFS_GetFileSystemType_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.CosmosVFS.GetFileSystemType(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -5445,6 +5757,27 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Cosmos.System.FileSystem.VFS.VFSBase.html#Cosmos_System_FileSystem_VFS_VFSBase_GetFileSystemType_System_String_">VFSBase.GetFileSystemType(String)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown when aDriveId is null or empty.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Exception</span></td>
+        <td><p>Unable to determine filesystem for path:  + aDriveId</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_FileSystem_CosmosVFS_GetNextFilesystemLetter.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.CosmosVFS.GetNextFilesystemLetter%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -5529,6 +5862,27 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Cosmos.System.FileSystem.VFS.VFSBase.html#Cosmos_System_FileSystem_VFS_VFSBase_GetTotalFreeSpace_System_String_">VFSBase.GetTotalFreeSpace(String)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown when aDriveId is null or empty.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Exception</span></td>
+        <td><p>Unable to determine filesystem for path:  + aDriveId</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_FileSystem_CosmosVFS_GetTotalSize_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.CosmosVFS.GetTotalSize(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -5581,6 +5935,27 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Cosmos.System.FileSystem.VFS.VFSBase.html#Cosmos_System_FileSystem_VFS_VFSBase_GetTotalSize_System_String_">VFSBase.GetTotalSize(String)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown when aDriveId is null or empty.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Exception</span></td>
+        <td><p>Unable to determine filesystem for path:  + aDriveId</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_FileSystem_CosmosVFS_GetVolume_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.CosmosVFS.GetVolume(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -5633,6 +6008,37 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Cosmos.System.FileSystem.VFS.VFSBase.html#Cosmos_System_FileSystem_VFS_VFSBase_GetVolume_System_String_">VFSBase.GetVolume(String)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown when aPath is null or empty.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Exception</span></td>
+        <td><p>Unable to determine filesystem for path:  + aPath</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if filesystem is null.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown when root directory address is smaller then root directory address.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_FileSystem_CosmosVFS_GetVolumes.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.CosmosVFS.GetVolumes%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -5659,7 +6065,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">List</span>&lt;<a class="xref" href="Cosmos.System.FileSystem.Listing.DirectoryEntry.html">DirectoryEntry</a>&gt;</td>
+        <td><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="Cosmos.System.FileSystem.Listing.DirectoryEntry.html">DirectoryEntry</a>&gt;</td>
         <td><p>A list of directory entries for all volumes.</p>
 </td>
       </tr>
@@ -5667,6 +6073,32 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Cosmos.System.FileSystem.VFS.VFSBase.html#Cosmos_System_FileSystem_VFS_VFSBase_GetVolumes">VFSBase.GetVolumes()</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if filesystem is null.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown when root directory address is smaller then root directory address.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown when root path is null or empty.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_FileSystem_CosmosVFS_Initialize_System_Boolean_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.CosmosVFS.Initialize(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -5702,6 +6134,62 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Cosmos.System.FileSystem.VFS.VFSBase.html#Cosmos_System_FileSystem_VFS_VFSBase_Initialize_System_Boolean_">VFSBase.Initialize(Boolean)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td><p>Thrown on I/O exception.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown on memory error.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.OverflowException</span></td>
+        <td><p>Thrown on memory error.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Exception</span></td>
+        <td><p>Thrown on memory error.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown on memory error.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown on memory error.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.PathTooLongException</span></td>
+        <td><p>Thrown on fatal error.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.FileNotFoundException</span></td>
+        <td><p>Thrown on memory error.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.DirectoryNotFoundException</span></td>
+        <td><p>Thrown on fatal error.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_FileSystem_CosmosVFS_InitializePartitions.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.CosmosVFS.InitializePartitions%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -5770,15 +6258,31 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Cosmos.System.FileSystem.VFS.VFSBase.html#Cosmos_System_FileSystem_VFS_VFSBase_IsValidDriveId_System_String_">VFSBase.IsValidDriveId(String)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if driveId length is smaller then 2, or greater than Int32.MaxValue.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_FileSystem_CosmosVFS_SetFileAttributes_System_String_FileAttributes_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.CosmosVFS.SetFileAttributes(System.String%2CFileAttributes)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_FileSystem_CosmosVFS_SetFileAttributes_System_String_System_IO_FileAttributes_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.CosmosVFS.SetFileAttributes(System.String%2CSystem.IO.FileAttributes)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/FileSystem/CosmosVFS.cs/#L556">View Source</a>
   </span>
   <a id="Cosmos_System_FileSystem_CosmosVFS_SetFileAttributes_" data-uid="Cosmos.System.FileSystem.CosmosVFS.SetFileAttributes*"></a>
-  <h4 id="Cosmos_System_FileSystem_CosmosVFS_SetFileAttributes_System_String_FileAttributes_" data-uid="Cosmos.System.FileSystem.CosmosVFS.SetFileAttributes(System.String,FileAttributes)">SetFileAttributes(String, FileAttributes)</h4>
+  <h4 id="Cosmos_System_FileSystem_CosmosVFS_SetFileAttributes_System_String_System_IO_FileAttributes_" data-uid="Cosmos.System.FileSystem.CosmosVFS.SetFileAttributes(System.String,System.IO.FileAttributes)">SetFileAttributes(String, FileAttributes)</h4>
   <div class="markdown level1 summary"><p>Sets the attributes for a File / Directory.
 Not implemented.</p>
 </div>
@@ -5804,7 +6308,7 @@ Not implemented.</p>
 </td>
       </tr>
       <tr>
-        <td><span class="xref">FileAttributes</span></td>
+        <td><span class="xref">System.IO.FileAttributes</span></td>
         <td><span class="parametername">fileAttributes</span></td>
         <td><p>The attributes of the File / Directory.</p>
 </td>
@@ -5812,7 +6316,23 @@ Not implemented.</p>
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Cosmos.System.FileSystem.VFS.VFSBase.html#Cosmos_System_FileSystem_VFS_VFSBase_SetFileAttributes_System_String_FileAttributes_">VFSBase.SetFileAttributes(String, FileAttributes)</a></div>
+  <div><a class="xref" href="Cosmos.System.FileSystem.VFS.VFSBase.html#Cosmos_System_FileSystem_VFS_VFSBase_SetFileAttributes_System_String_System_IO_FileAttributes_">VFSBase.SetFileAttributes(String, FileAttributes)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.NotImplementedException</span></td>
+        <td><p>Thrown always</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_FileSystem_CosmosVFS_SetFileSystemLabel_System_String_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.CosmosVFS.SetFileSystemLabel(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -5855,6 +6375,27 @@ Not implemented.</p>
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Cosmos.System.FileSystem.VFS.VFSBase.html#Cosmos_System_FileSystem_VFS_VFSBase_SetFileSystemLabel_System_String_System_String_">VFSBase.SetFileSystemLabel(String, String)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown when aDriveId is null or empty.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Exception</span></td>
+        <td><p>Unable to determine filesystem for path:  + aDriveId</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="seealso">See Also</h3>
   <div class="seealso">
       <div><a class="xref" href="Cosmos.System.FileSystem.VFS.VFSBase.html">VFSBase</a></div>

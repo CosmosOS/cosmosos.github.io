@@ -467,6 +467,9 @@
                         
                         <ul class="nav level2">
                           <li class="">
+                            <a href="Cosmos.Core_Asm.ArrayClearAsm.html" title="ArrayClearAsm" class="">ArrayClearAsm</a>
+                          </li>
+                          <li class="">
                             <a href="Cosmos.Core_Asm.ArrayGetLengthAsm.html" title="ArrayGetLengthAsm" class="">ArrayGetLengthAsm</a>
                           </li>
                           <li class="">
@@ -609,9 +612,6 @@
                           </li>
                           <li class="">
                             <a href="Cosmos.Core_Plugs.System.CharUnicodeInfoImpl.html" title="CharUnicodeInfoImpl" class="">CharUnicodeInfoImpl</a>
-                          </li>
-                          <li class="">
-                            <a href="Cosmos.Core_Plugs.System.CLRConfigImpl.html" title="CLRConfigImpl" class="">CLRConfigImpl</a>
                           </li>
                           <li class="">
                             <a href="Cosmos.Core_Plugs.System.DelegateImpl.html" title="DelegateImpl" class="">DelegateImpl</a>
@@ -780,9 +780,6 @@
                         <ul class="nav level2">
                           <li class="">
                             <a href="Cosmos.Core_Plugs.System.Globalization.CultureInfoImpl.html" title="CultureInfoImpl" class="">CultureInfoImpl</a>
-                          </li>
-                          <li class="">
-                            <a href="Cosmos.Core_Plugs.System.Globalization.NumberFormatInfoImpl.html" title="NumberFormatInfoImpl" class="">NumberFormatInfoImpl</a>
                           </li>
                         </ul>  </li>
                     <li class="">
@@ -4735,11 +4732,35 @@
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><span class="xref">RAT.PageType</span></div>
   </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Cosmos.Core.Memory.html">Cosmos.Core.Memory</a></h6>
   <h6><strong>Assembly</strong>: Cosmos.Core.dll</h6>
   <h5 id="Cosmos_Core_Memory_RAT_PageType_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static class PageType : object</code></pre>
+    <pre><code class="lang-csharp hljs">public static class PageType</code></pre>
   </div>
   <h5 id="Cosmos_Core_Memory_RAT_PageType_remarks"><strong>Remarks</strong></h5>
   <div class="markdown level0 remarks"><p>Only used to define page type.</p>
@@ -4760,7 +4781,7 @@ Can also indicate invalid page.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public const byte Empty = null</code></pre>
+    <pre><code class="lang-csharp hljs">public const byte Empty = 0</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4790,7 +4811,7 @@ Can also indicate invalid page.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public const byte Extension = null</code></pre>
+    <pre><code class="lang-csharp hljs">public const byte Extension = 128</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4820,7 +4841,7 @@ Can also indicate invalid page.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public const byte GCManaged = null</code></pre>
+    <pre><code class="lang-csharp hljs">public const byte GCManaged = 1</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4850,7 +4871,7 @@ Can also indicate invalid page.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public const byte HeapLarge = null</code></pre>
+    <pre><code class="lang-csharp hljs">public const byte HeapLarge = 7</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4880,7 +4901,7 @@ Can also indicate invalid page.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public const byte HeapMedium = null</code></pre>
+    <pre><code class="lang-csharp hljs">public const byte HeapMedium = 5</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4910,7 +4931,7 @@ Can also indicate invalid page.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public const byte HeapSmall = null</code></pre>
+    <pre><code class="lang-csharp hljs">public const byte HeapSmall = 3</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4940,7 +4961,7 @@ Can also indicate invalid page.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public const byte RAT = null</code></pre>
+    <pre><code class="lang-csharp hljs">public const byte RAT = 32</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4970,7 +4991,7 @@ Can also indicate invalid page.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public const byte SMT = null</code></pre>
+    <pre><code class="lang-csharp hljs">public const byte SMT = 64</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">

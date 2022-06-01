@@ -467,6 +467,9 @@
                         
                         <ul class="nav level2">
                           <li class="">
+                            <a href="Cosmos.Core_Asm.ArrayClearAsm.html" title="ArrayClearAsm" class="">ArrayClearAsm</a>
+                          </li>
+                          <li class="">
                             <a href="Cosmos.Core_Asm.ArrayGetLengthAsm.html" title="ArrayGetLengthAsm" class="">ArrayGetLengthAsm</a>
                           </li>
                           <li class="">
@@ -609,9 +612,6 @@
                           </li>
                           <li class="">
                             <a href="Cosmos.Core_Plugs.System.CharUnicodeInfoImpl.html" title="CharUnicodeInfoImpl" class="">CharUnicodeInfoImpl</a>
-                          </li>
-                          <li class="">
-                            <a href="Cosmos.Core_Plugs.System.CLRConfigImpl.html" title="CLRConfigImpl" class="">CLRConfigImpl</a>
                           </li>
                           <li class="">
                             <a href="Cosmos.Core_Plugs.System.DelegateImpl.html" title="DelegateImpl" class="">DelegateImpl</a>
@@ -780,9 +780,6 @@
                         <ul class="nav level2">
                           <li class="">
                             <a href="Cosmos.Core_Plugs.System.Globalization.CultureInfoImpl.html" title="CultureInfoImpl" class="">CultureInfoImpl</a>
-                          </li>
-                          <li class="">
-                            <a href="Cosmos.Core_Plugs.System.Globalization.NumberFormatInfoImpl.html" title="NumberFormatInfoImpl" class="">NumberFormatInfoImpl</a>
                           </li>
                         </ul>  </li>
                     <li class="">
@@ -4736,11 +4733,35 @@
     <div class="level1"><span class="xref">FileSystem</span></div>
       <div class="level2"><a class="xref" href="Cosmos.System.FileSystem.ISO9660.ISO9660FileSystem.html">ISO9660FileSystem</a></div>
   </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Cosmos.System.FileSystem.html">Cosmos.System.FileSystem</a></h6>
   <h6><strong>Assembly</strong>: Cosmos.System2.dll</h6>
   <h5 id="Cosmos_System_FileSystem_FileSystem_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract class FileSystem : object</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract class FileSystem</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -5067,6 +5088,57 @@
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><ul><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown on memory error / unknown directory entry type.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.OverflowException</span></td>
+        <td><p>Thrown when data lenght is greater then Int32.MaxValue.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Exception</span></td>
+        <td><p>Thrown when data size invalid / invalid directory entry type / memory error.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown on memory error.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.RankException</span></td>
+        <td><p>Thrown on fatal error (contact support).</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArrayTypeMismatchException</span></td>
+        <td><p>Thrown on fatal error (contact support).</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.InvalidCastException</span></td>
+        <td><p>Thrown on memory error.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_FileSystem_FileSystem_CreateFile_Cosmos_System_FileSystem_Listing_DirectoryEntry_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.FileSystem.CreateFile(Cosmos.System.FileSystem.Listing.DirectoryEntry%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -5123,6 +5195,57 @@
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><ul><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown on memory error / unknown directory entry type.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.OverflowException</span></td>
+        <td><p>Thrown when data lenght is greater then Int32.MaxValue.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Exception</span></td>
+        <td><p>Thrown when data size invalid / invalid directory entry type / memory error.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown on memory error.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.RankException</span></td>
+        <td><p>Thrown on fatal error (contact support).</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArrayTypeMismatchException</span></td>
+        <td><p>Thrown on fatal error (contact support).</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.InvalidCastException</span></td>
+        <td><p>Thrown on memory error.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_FileSystem_FileSystem_DeleteDirectory_Cosmos_System_FileSystem_Listing_DirectoryEntry_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.FileSystem.DeleteDirectory(Cosmos.System.FileSystem.Listing.DirectoryEntry)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -5153,6 +5276,67 @@
         <td><a class="xref" href="Cosmos.System.FileSystem.Listing.DirectoryEntry.html">DirectoryEntry</a></td>
         <td><span class="parametername">aPath</span></td>
         <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.NotImplementedException</span></td>
+        <td><p>Thrown when given entry type is unknown.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Exception</span></td>
+        <td><ul><li></li><li></li><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.OverflowException</span></td>
+        <td><p>Thrown when data lenght is greater then Int32.MaxValue.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><ul><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.RankException</span></td>
+        <td><p>Thrown on fatal error (contact support).</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArrayTypeMismatchException</span></td>
+        <td><p>Thrown on fatal error (contact support).</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.InvalidCastException</span></td>
+        <td><p>Thrown when the data in aData is corrupted.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><ul><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><ul><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.NotSupportedException</span></td>
+        <td><p>Thrown when FAT type is unknown.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -5189,6 +5373,67 @@
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.NotImplementedException</span></td>
+        <td><p>Thrown when given entry type is unknown.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Exception</span></td>
+        <td><ul><li></li><li></li><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.OverflowException</span></td>
+        <td><ul><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><ul><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.RankException</span></td>
+        <td><p>Thrown on fatal error (contact support).</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArrayTypeMismatchException</span></td>
+        <td><p>Thrown on fatal error (contact support).</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.InvalidCastException</span></td>
+        <td><p>Thrown when the data in aData is corrupted.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><ul><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><ul><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.NotSupportedException</span></td>
+        <td><p>Thrown when FAT type is unknown.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_FileSystem_FileSystem_DisplayFileSystemInfo.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.FileSystem.DisplayFileSystemInfo%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -5205,6 +5450,22 @@
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public abstract void DisplayFileSystemInfo()</code></pre>
   </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td><p>Thrown on I/O error.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_FileSystem_FileSystem_Format_System_String_System_Boolean_.md&amp;value=---%0Auid%3A%20Cosmos.System.FileSystem.FileSystem.Format(System.String%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -5241,6 +5502,67 @@
         <td><span class="xref">System.Boolean</span></td>
         <td><span class="parametername">aQuick</span></td>
         <td><p>unused.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><ul><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown when filesystem is null / memory error.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><ul><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Exception</span></td>
+        <td><ul><li></li><li></li><li></li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.OverflowException</span></td>
+        <td><p>Thrown when data lenght is greater then Int32.MaxValue.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.NotImplementedException</span></td>
+        <td><p>Thrown when FAT type is unknown.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.RankException</span></td>
+        <td><p>Thrown on fatal error (contact support).</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArrayTypeMismatchException</span></td>
+        <td><p>Thrown on fatal error (contact support).</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.InvalidCastException</span></td>
+        <td><p>Thrown when the data in aData is corrupted.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.NotSupportedException</span></td>
+        <td><p>Thrown when FAT type is unknown.</p>
 </td>
       </tr>
     </tbody>
@@ -5289,8 +5611,44 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">List</span>&lt;<a class="xref" href="Cosmos.System.FileSystem.Listing.DirectoryEntry.html">DirectoryEntry</a>&gt;</td>
+        <td><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="Cosmos.System.FileSystem.Listing.DirectoryEntry.html">DirectoryEntry</a>&gt;</td>
         <td><p>DirectoryEntry list.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown when baseDirectory is null / memory error.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.OverflowException</span></td>
+        <td><p>Thrown when data lenght is greater then Int32.MaxValue.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Exception</span></td>
+        <td><p>Thrown when data size invalid / invalid directory entry type.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown on memory error.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown on memory error.</p>
 </td>
       </tr>
     </tbody>
@@ -5323,6 +5681,32 @@
       <tr>
         <td><a class="xref" href="Cosmos.System.FileSystem.Listing.DirectoryEntry.html">DirectoryEntry</a></td>
         <td><p>DirectoryEntry value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown when root directory address is smaller then root directory address.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown when filesystem is null.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown when root path is null or empty.</p>
 </td>
       </tr>
     </tbody>

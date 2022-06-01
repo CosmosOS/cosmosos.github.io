@@ -467,6 +467,9 @@
                         
                         <ul class="nav level2">
                           <li class="">
+                            <a href="Cosmos.Core_Asm.ArrayClearAsm.html" title="ArrayClearAsm" class="">ArrayClearAsm</a>
+                          </li>
+                          <li class="">
                             <a href="Cosmos.Core_Asm.ArrayGetLengthAsm.html" title="ArrayGetLengthAsm" class="">ArrayGetLengthAsm</a>
                           </li>
                           <li class="">
@@ -609,9 +612,6 @@
                           </li>
                           <li class="">
                             <a href="Cosmos.Core_Plugs.System.CharUnicodeInfoImpl.html" title="CharUnicodeInfoImpl" class="">CharUnicodeInfoImpl</a>
-                          </li>
-                          <li class="">
-                            <a href="Cosmos.Core_Plugs.System.CLRConfigImpl.html" title="CLRConfigImpl" class="">CLRConfigImpl</a>
                           </li>
                           <li class="">
                             <a href="Cosmos.Core_Plugs.System.DelegateImpl.html" title="DelegateImpl" class="">DelegateImpl</a>
@@ -780,9 +780,6 @@
                         <ul class="nav level2">
                           <li class="">
                             <a href="Cosmos.Core_Plugs.System.Globalization.CultureInfoImpl.html" title="CultureInfoImpl" class="">CultureInfoImpl</a>
-                          </li>
-                          <li class="">
-                            <a href="Cosmos.Core_Plugs.System.Globalization.NumberFormatInfoImpl.html" title="NumberFormatInfoImpl" class="">NumberFormatInfoImpl</a>
                           </li>
                         </ul>  </li>
                     <li class="">
@@ -4763,6 +4760,24 @@
     <div>
       <a class="xref" href="Cosmos.HAL.BlockDevice.BlockDevice.html#Cosmos_HAL_BlockDevice_BlockDevice_CheckBlockNo_System_UInt64_System_UInt64_">BlockDevice.CheckBlockNo(UInt64, UInt64)</a>
     </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Cosmos.HAL.BlockDevice.html">Cosmos.HAL.BlockDevice</a></h6>
   <h6><strong>Assembly</strong>: Cosmos.HAL2.dll</h6>
@@ -4872,7 +4887,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">List</span>&lt;<a class="xref" href="Cosmos.HAL.BlockDevice.Partition.html">Partition</a>&gt;</td>
+        <td><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="Cosmos.HAL.BlockDevice.Partition.html">Partition</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -4991,6 +5006,27 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Cosmos.HAL.BlockDevice.BlockDevice.html#Cosmos_HAL_BlockDevice_BlockDevice_ReadBlock_System_UInt64_System_UInt64_System_Byte____">BlockDevice.ReadBlock(UInt64, UInt64, ref Byte[])</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.OverflowException</span></td>
+        <td><p>Thrown when data lenght is greater then Int32.MaxValue.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Exception</span></td>
+        <td><p>Thrown when data size invalid.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_BlockDevice_Partition_ToString.md&amp;value=---%0Auid%3A%20Cosmos.HAL.BlockDevice.Partition.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -5023,6 +5059,8 @@
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.ToString()</span></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_BlockDevice_Partition_WriteBlock_System_UInt64_System_UInt64_System_Byte____.md&amp;value=---%0Auid%3A%20Cosmos.HAL.BlockDevice.Partition.WriteBlock(System.UInt64%2CSystem.UInt64%2CSystem.Byte%5B%5D%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -5071,6 +5109,27 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Cosmos.HAL.BlockDevice.BlockDevice.html#Cosmos_HAL_BlockDevice_BlockDevice_WriteBlock_System_UInt64_System_UInt64_System_Byte____">BlockDevice.WriteBlock(UInt64, UInt64, ref Byte[])</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.OverflowException</span></td>
+        <td><p>Thrown when data lenght is greater then Int32.MaxValue.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Exception</span></td>
+        <td><p>Thrown when data size invalid.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
 </article>
           </div>
           

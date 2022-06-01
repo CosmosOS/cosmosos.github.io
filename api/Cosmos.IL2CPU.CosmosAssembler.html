@@ -467,6 +467,9 @@
                         
                         <ul class="nav level2">
                           <li class="">
+                            <a href="Cosmos.Core_Asm.ArrayClearAsm.html" title="ArrayClearAsm" class="">ArrayClearAsm</a>
+                          </li>
+                          <li class="">
                             <a href="Cosmos.Core_Asm.ArrayGetLengthAsm.html" title="ArrayGetLengthAsm" class="">ArrayGetLengthAsm</a>
                           </li>
                           <li class="">
@@ -609,9 +612,6 @@
                           </li>
                           <li class="">
                             <a href="Cosmos.Core_Plugs.System.CharUnicodeInfoImpl.html" title="CharUnicodeInfoImpl" class="">CharUnicodeInfoImpl</a>
-                          </li>
-                          <li class="">
-                            <a href="Cosmos.Core_Plugs.System.CLRConfigImpl.html" title="CLRConfigImpl" class="">CLRConfigImpl</a>
                           </li>
                           <li class="">
                             <a href="Cosmos.Core_Plugs.System.DelegateImpl.html" title="DelegateImpl" class="">DelegateImpl</a>
@@ -780,9 +780,6 @@
                         <ul class="nav level2">
                           <li class="">
                             <a href="Cosmos.Core_Plugs.System.Globalization.CultureInfoImpl.html" title="CultureInfoImpl" class="">CultureInfoImpl</a>
-                          </li>
-                          <li class="">
-                            <a href="Cosmos.Core_Plugs.System.Globalization.NumberFormatInfoImpl.html" title="NumberFormatInfoImpl" class="">NumberFormatInfoImpl</a>
                           </li>
                         </ul>  </li>
                     <li class="">
@@ -4798,6 +4795,12 @@
       <a class="xref" href="XSharp.Assembler.Assembler.html#XSharp_Assembler_Assembler_FlushText_TextWriter_">Assembler.FlushText(TextWriter)</a>
     </div>
     <div>
+      <a class="xref" href="XSharp.Assembler.Assembler.html#XSharp_Assembler_Assembler_BeforeFlushText_TextWriter_">Assembler.BeforeFlushText(TextWriter)</a>
+    </div>
+    <div>
+      <a class="xref" href="XSharp.Assembler.Assembler.html#XSharp_Assembler_Assembler_OnFlushTextAfterEmitEverything_TextWriter_">Assembler.OnFlushTextAfterEmitEverything(TextWriter)</a>
+    </div>
+    <div>
       <a class="xref" href="XSharp.Assembler.Assembler.html#XSharp_Assembler_Assembler_ClearCurrentInstance">Assembler.ClearCurrentInstance()</a>
     </div>
   </div>
@@ -4855,7 +4858,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public const string EntryPointName = null</code></pre>
+    <pre><code class="lang-csharp hljs">public const string EntryPointName = &quot;__ENGINE_ENTRYPOINT__&quot;</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4907,13 +4910,13 @@ This allows the automated kernel tester to use the live ones, instead of the ins
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/IL2CPU/new/master/apiSpec/new?filename=Cosmos_IL2CPU_CosmosAssembler_BeforeFlushText_TextWriter_.md&amp;value=---%0Auid%3A%20Cosmos.IL2CPU.CosmosAssembler.BeforeFlushText(TextWriter)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/IL2CPU/new/master/apiSpec/new?filename=Cosmos_IL2CPU_CosmosAssembler_BeforeFlushText_System_IO_TextWriter_.md&amp;value=---%0Auid%3A%20Cosmos.IL2CPU.CosmosAssembler.BeforeFlushText(System.IO.TextWriter)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/CosmosOS/IL2CPU/blob/master/source/Cosmos.IL2CPU/CosmosAssembler.cs/#L574">View Source</a>
   </span>
   <a id="Cosmos_IL2CPU_CosmosAssembler_BeforeFlushText_" data-uid="Cosmos.IL2CPU.CosmosAssembler.BeforeFlushText*"></a>
-  <h4 id="Cosmos_IL2CPU_CosmosAssembler_BeforeFlushText_TextWriter_" data-uid="Cosmos.IL2CPU.CosmosAssembler.BeforeFlushText(TextWriter)">BeforeFlushText(TextWriter)</h4>
+  <h4 id="Cosmos_IL2CPU_CosmosAssembler_BeforeFlushText_System_IO_TextWriter_" data-uid="Cosmos.IL2CPU.CosmosAssembler.BeforeFlushText(System.IO.TextWriter)">BeforeFlushText(TextWriter)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -4931,7 +4934,7 @@ This allows the automated kernel tester to use the live ones, instead of the ins
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">TextWriter</span></td>
+        <td><span class="xref">System.IO.TextWriter</span></td>
         <td><span class="parametername">aOutput</span></td>
         <td></td>
       </tr>
@@ -5095,13 +5098,13 @@ This allows the automated kernel tester to use the live ones, instead of the ins
   <div><a class="xref" href="XSharp.Assembler.Assembler.html#XSharp_Assembler_Assembler_OnBeforeFlush">Assembler.OnBeforeFlush()</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/IL2CPU/new/master/apiSpec/new?filename=Cosmos_IL2CPU_CosmosAssembler_OnFlushTextAfterEmitEverything_TextWriter_.md&amp;value=---%0Auid%3A%20Cosmos.IL2CPU.CosmosAssembler.OnFlushTextAfterEmitEverything(TextWriter)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/IL2CPU/new/master/apiSpec/new?filename=Cosmos_IL2CPU_CosmosAssembler_OnFlushTextAfterEmitEverything_System_IO_TextWriter_.md&amp;value=---%0Auid%3A%20Cosmos.IL2CPU.CosmosAssembler.OnFlushTextAfterEmitEverything(System.IO.TextWriter)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/CosmosOS/IL2CPU/blob/master/source/Cosmos.IL2CPU/CosmosAssembler.cs/#L589">View Source</a>
   </span>
   <a id="Cosmos_IL2CPU_CosmosAssembler_OnFlushTextAfterEmitEverything_" data-uid="Cosmos.IL2CPU.CosmosAssembler.OnFlushTextAfterEmitEverything*"></a>
-  <h4 id="Cosmos_IL2CPU_CosmosAssembler_OnFlushTextAfterEmitEverything_TextWriter_" data-uid="Cosmos.IL2CPU.CosmosAssembler.OnFlushTextAfterEmitEverything(TextWriter)">OnFlushTextAfterEmitEverything(TextWriter)</h4>
+  <h4 id="Cosmos_IL2CPU_CosmosAssembler_OnFlushTextAfterEmitEverything_System_IO_TextWriter_" data-uid="Cosmos.IL2CPU.CosmosAssembler.OnFlushTextAfterEmitEverything(System.IO.TextWriter)">OnFlushTextAfterEmitEverything(TextWriter)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -5119,7 +5122,7 @@ This allows the automated kernel tester to use the live ones, instead of the ins
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">TextWriter</span></td>
+        <td><span class="xref">System.IO.TextWriter</span></td>
         <td><span class="parametername">aOutput</span></td>
         <td></td>
       </tr>

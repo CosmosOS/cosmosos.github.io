@@ -467,6 +467,9 @@
                         
                         <ul class="nav level2">
                           <li class="">
+                            <a href="Cosmos.Core_Asm.ArrayClearAsm.html" title="ArrayClearAsm" class="">ArrayClearAsm</a>
+                          </li>
+                          <li class="">
                             <a href="Cosmos.Core_Asm.ArrayGetLengthAsm.html" title="ArrayGetLengthAsm" class="">ArrayGetLengthAsm</a>
                           </li>
                           <li class="">
@@ -609,9 +612,6 @@
                           </li>
                           <li class="">
                             <a href="Cosmos.Core_Plugs.System.CharUnicodeInfoImpl.html" title="CharUnicodeInfoImpl" class="">CharUnicodeInfoImpl</a>
-                          </li>
-                          <li class="">
-                            <a href="Cosmos.Core_Plugs.System.CLRConfigImpl.html" title="CLRConfigImpl" class="">CLRConfigImpl</a>
                           </li>
                           <li class="">
                             <a href="Cosmos.Core_Plugs.System.DelegateImpl.html" title="DelegateImpl" class="">DelegateImpl</a>
@@ -780,9 +780,6 @@
                         <ul class="nav level2">
                           <li class="">
                             <a href="Cosmos.Core_Plugs.System.Globalization.CultureInfoImpl.html" title="CultureInfoImpl" class="">CultureInfoImpl</a>
-                          </li>
-                          <li class="">
-                            <a href="Cosmos.Core_Plugs.System.Globalization.NumberFormatInfoImpl.html" title="NumberFormatInfoImpl" class="">NumberFormatInfoImpl</a>
                           </li>
                         </ul>  </li>
                     <li class="">
@@ -4732,13 +4729,52 @@
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">ByteComparer</span></div>
+    <div class="level1"><span class="xref">System.Collections.Generic.Comparer</span>&lt;<span class="xref">System.Byte</span>&gt;</div>
+    <div class="level2"><span class="xref">ByteComparer</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.Collections.Generic.IComparer</span>&lt;<span class="xref">System.Byte</span>&gt;</div>
+    <div><span class="xref">System.Collections.IComparer</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Collections.Generic.Comparer&lt;System.Byte&gt;.Create(System.Comparison&lt;System.Byte&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.Comparer&lt;System.Byte&gt;.System.Collections.IComparer.Compare(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.Comparer&lt;System.Byte&gt;.Default</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Cosmos.Core_Plugs.System.Collections.Generic.html">Cosmos.Core_Plugs.System.Collections.Generic</a></h6>
   <h6><strong>Assembly</strong>: Cosmos.Core_Plugs.dll</h6>
   <h5 id="Cosmos_Core_Plugs_System_Collections_Generic_ByteComparer_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class ByteComparer : Comparer&lt;byte&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public class ByteComparer : Comparer&lt;byte&gt;, IComparer&lt;byte&gt;, IComparer</code></pre>
   </div>
   <h3 id="methods">Methods
   </h3>
@@ -4794,6 +4830,15 @@
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Collections.Generic.Comparer&lt;System.Byte&gt;.Compare(System.Byte, System.Byte)</span></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.Collections.Generic.IComparer&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.IComparer</span>
+  </div>
 </article>
           </div>
           
