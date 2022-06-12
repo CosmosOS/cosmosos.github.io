@@ -187,7 +187,8 @@ This allows one to choose which emulator to use and at what level the kernel is 
 <h3 id="adding-a-kernel">Adding a Kernel</h3>
 <p>To add a kernel to the TestRunner, open the TestKernelSets file and add a line to GetStableKernelTypes() like this line:</p>
 <p><code>yield return typeof(Cosmos.Kernel.Tests.Fat.Kernel);</code></p>
-<p>Note: This can be used to test your own kernel for debug purposes. Simply add a reference to your kernel csproj to Cosmos.TestRunner.Full and add it to TestKernelSets.</p>
+<p>Note: This can be used to test your own kernel for debug purposes. Add your kernel to the Test solution, add a project reference to your kernel to Cosmos.TestRunner.Full and add the kernel to the TestKernelSets list.
+You will also need to modify the .csproj file by removing the platform line. You also need to replace the nuget references with references to the actual projects (System2, Core etc) and import the <code>/Tests/Kernels/Directory.Build.targets</code> file. If you are still faced with the .refs file not generating, comment out the Cosmos related parts of the csproj.</p>
 <h3 id="time-out">Time Out</h3>
 <p>To set the period before the TestRunner registers an error, change the line: <code>engine.AllowedSecondsInKernel = 1800;</code> This means that, in this case, if the Kernel runs for more that 30 minutes then it will register a failure.</p>
 <h2 id="project-location">Project Location</h2>
