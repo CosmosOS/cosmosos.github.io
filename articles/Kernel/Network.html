@@ -243,7 +243,7 @@ VFSManager.RegisterVFS(fs);
 using(var xServer = new FtpServer(fs, &quot;0:\\&quot;))
 {
     /** Listen for new FTP client connections **/
-    ftpSever.Listen();
+    FtpServer.Listen();
 }
 </code></pre>
 <h2 id="udp">UDP</h2>
