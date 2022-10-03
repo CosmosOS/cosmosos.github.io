@@ -1250,7 +1250,7 @@
                             <a href="Cosmos.HAL.PIT.PITTimer.html" title="PIT.PITTimer" class="active">PIT.PITTimer</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.HAL.PIT.PITTimer.dOnTrigger.html" title="PIT.PITTimer.dOnTrigger" class="">PIT.PITTimer.dOnTrigger</a>
+                            <a href="Cosmos.HAL.PIT.PITTimer.OnTrigger.html" title="PIT.PITTimer.OnTrigger" class="">PIT.PITTimer.OnTrigger</a>
                           </li>
                           <li class="">
                             <a href="Cosmos.HAL.Power.html" title="Power" class="">Power</a>
@@ -4805,7 +4805,9 @@
   
   <h1 id="Cosmos_HAL_PIT_PITTimer" data-uid="Cosmos.HAL.PIT.PITTimer" class="text-break">Class PIT.PITTimer
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary"><p>Represents a virtual timer that can be handled using the
+Programmable Interrupt Timer (PIT).</p>
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
@@ -4850,18 +4852,20 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_PIT_PITTimer__ctor_Cosmos_HAL_PIT_PITTimer_dOnTrigger_System_Int32_System_Boolean_.md&amp;value=---%0Auid%3A%20Cosmos.HAL.PIT.PITTimer.%23ctor(Cosmos.HAL.PIT.PITTimer.dOnTrigger%2CSystem.Int32%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_PIT_PITTimer__ctor_Cosmos_HAL_PIT_PITTimer_OnTrigger_System_UInt64_System_Boolean_.md&amp;value=---%0Auid%3A%20Cosmos.HAL.PIT.PITTimer.%23ctor(Cosmos.HAL.PIT.PITTimer.OnTrigger%2CSystem.UInt64%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/PIT.cs/#L33">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/PIT.cs/#L54">View Source</a>
   </span>
   <a id="Cosmos_HAL_PIT_PITTimer__ctor_" data-uid="Cosmos.HAL.PIT.PITTimer.#ctor*"></a>
-  <h4 id="Cosmos_HAL_PIT_PITTimer__ctor_Cosmos_HAL_PIT_PITTimer_dOnTrigger_System_Int32_System_Boolean_" data-uid="Cosmos.HAL.PIT.PITTimer.#ctor(Cosmos.HAL.PIT.PITTimer.dOnTrigger,System.Int32,System.Boolean)">PITTimer(PIT.PITTimer.dOnTrigger, Int32, Boolean)</h4>
-  <div class="markdown level1 summary"></div>
+  <h4 id="Cosmos_HAL_PIT_PITTimer__ctor_Cosmos_HAL_PIT_PITTimer_OnTrigger_System_UInt64_System_Boolean_" data-uid="Cosmos.HAL.PIT.PITTimer.#ctor(Cosmos.HAL.PIT.PITTimer.OnTrigger,System.UInt64,System.Boolean)">PITTimer(PIT.PITTimer.OnTrigger, UInt64, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new <a class="xref" href="Cosmos.HAL.PIT.PITTimer.html">PIT.PITTimer</a>, with the specified
+callback method and properties.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public PITTimer(PIT.PITTimer.dOnTrigger HandleOnTrigger, int NanosecondsTimeout, bool Recuring)</code></pre>
+    <pre><code class="lang-csharp hljs">public PITTimer(PIT.PITTimer.OnTrigger callback, ulong nanosecondsTimeout, bool recurring)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4874,36 +4878,128 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Cosmos.HAL.PIT.PITTimer.dOnTrigger.html">PIT.PITTimer.dOnTrigger</a></td>
-        <td><span class="parametername">HandleOnTrigger</span></td>
+        <td><a class="xref" href="Cosmos.HAL.PIT.PITTimer.OnTrigger.html">PIT.PITTimer.OnTrigger</a></td>
+        <td><span class="parametername">callback</span></td>
+        <td><p>The method to invoke for each timer cycle.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.UInt64</span></td>
+        <td><span class="parametername">nanosecondsTimeout</span></td>
+        <td><p>The delay between timer cycles.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">recurring</span></td>
+        <td><p>Whether this timer will fire once, or will fire indefinetly until unregistered.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_PIT_PITTimer__ctor_Cosmos_HAL_PIT_PITTimer_OnTrigger_System_UInt64_System_UInt64_.md&amp;value=---%0Auid%3A%20Cosmos.HAL.PIT.PITTimer.%23ctor(Cosmos.HAL.PIT.PITTimer.OnTrigger%2CSystem.UInt64%2CSystem.UInt64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/PIT.cs/#L74">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_PIT_PITTimer__ctor_" data-uid="Cosmos.HAL.PIT.PITTimer.#ctor*"></a>
+  <h4 id="Cosmos_HAL_PIT_PITTimer__ctor_Cosmos_HAL_PIT_PITTimer_OnTrigger_System_UInt64_System_UInt64_" data-uid="Cosmos.HAL.PIT.PITTimer.#ctor(Cosmos.HAL.PIT.PITTimer.OnTrigger,System.UInt64,System.UInt64)">PITTimer(PIT.PITTimer.OnTrigger, UInt64, UInt64)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new recurring <a class="xref" href="Cosmos.HAL.PIT.PITTimer.html">PIT.PITTimer</a>, with the specified
+callback method and amount of nanoseconds left until the next timer cycle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PITTimer(PIT.PITTimer.OnTrigger callback, ulong nanosecondsTimeout, ulong nanosecondsLeft)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.HAL.PIT.PITTimer.OnTrigger.html">PIT.PITTimer.OnTrigger</a></td>
+        <td><span class="parametername">callback</span></td>
+        <td><p>The method to invoke for each timer cycle.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.UInt64</span></td>
+        <td><span class="parametername">nanosecondsTimeout</span></td>
+        <td><p>The delay between timer cycles.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.UInt64</span></td>
+        <td><span class="parametername">nanosecondsLeft</span></td>
+        <td><p>The amount of time left before the first timer cycle is fired.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_PIT_PITTimer__ctor_System_Action_System_UInt64_System_Boolean_.md&amp;value=---%0Auid%3A%20Cosmos.HAL.PIT.PITTimer.%23ctor(System.Action%2CSystem.UInt64%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/PIT.cs/#L63">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_PIT_PITTimer__ctor_" data-uid="Cosmos.HAL.PIT.PITTimer.#ctor*"></a>
+  <h4 id="Cosmos_HAL_PIT_PITTimer__ctor_System_Action_System_UInt64_System_Boolean_" data-uid="Cosmos.HAL.PIT.PITTimer.#ctor(System.Action,System.UInt64,System.Boolean)">PITTimer(Action, UInt64, Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PITTimer(Action callback, ulong nanosecondsTimeout, bool recurring)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Action</span></td>
+        <td><span class="parametername">callback</span></td>
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">NanosecondsTimeout</span></td>
+        <td><span class="xref">System.UInt64</span></td>
+        <td><span class="parametername">nanosecondsTimeout</span></td>
         <td></td>
       </tr>
       <tr>
         <td><span class="xref">System.Boolean</span></td>
-        <td><span class="parametername">Recuring</span></td>
+        <td><span class="parametername">recurring</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_PIT_PITTimer__ctor_Cosmos_HAL_PIT_PITTimer_dOnTrigger_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.HAL.PIT.PITTimer.%23ctor(Cosmos.HAL.PIT.PITTimer.dOnTrigger%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_PIT_PITTimer__ctor_System_Action_System_UInt64_System_UInt64_.md&amp;value=---%0Auid%3A%20Cosmos.HAL.PIT.PITTimer.%23ctor(System.Action%2CSystem.UInt64%2CSystem.UInt64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/PIT.cs/#L41">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/PIT.cs/#L83">View Source</a>
   </span>
   <a id="Cosmos_HAL_PIT_PITTimer__ctor_" data-uid="Cosmos.HAL.PIT.PITTimer.#ctor*"></a>
-  <h4 id="Cosmos_HAL_PIT_PITTimer__ctor_Cosmos_HAL_PIT_PITTimer_dOnTrigger_System_Int32_System_Int32_" data-uid="Cosmos.HAL.PIT.PITTimer.#ctor(Cosmos.HAL.PIT.PITTimer.dOnTrigger,System.Int32,System.Int32)">PITTimer(PIT.PITTimer.dOnTrigger, Int32, Int32)</h4>
+  <h4 id="Cosmos_HAL_PIT_PITTimer__ctor_System_Action_System_UInt64_System_UInt64_" data-uid="Cosmos.HAL.PIT.PITTimer.#ctor(System.Action,System.UInt64,System.UInt64)">PITTimer(Action, UInt64, UInt64)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public PITTimer(PIT.PITTimer.dOnTrigger HandleOnTrigger, int NanosecondsTimeout, int NanosecondsLeft)</code></pre>
+    <pre><code class="lang-csharp hljs">public PITTimer(Action callback, ulong nanosecondsTimeout, ulong nanosecondsLeft)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4916,18 +5012,18 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Cosmos.HAL.PIT.PITTimer.dOnTrigger.html">PIT.PITTimer.dOnTrigger</a></td>
-        <td><span class="parametername">HandleOnTrigger</span></td>
+        <td><span class="xref">System.Action</span></td>
+        <td><span class="parametername">callback</span></td>
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">NanosecondsTimeout</span></td>
+        <td><span class="xref">System.UInt64</span></td>
+        <td><span class="parametername">nanosecondsTimeout</span></td>
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">NanosecondsLeft</span></td>
+        <td><span class="xref">System.UInt64</span></td>
+        <td><span class="parametername">nanosecondsLeft</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -4939,14 +5035,15 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_PIT_PITTimer_HandleTrigger.md&amp;value=---%0Auid%3A%20Cosmos.HAL.PIT.PITTimer.HandleTrigger%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/PIT.cs/#L31">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/PIT.cs/#L39">View Source</a>
   </span>
   <h4 id="Cosmos_HAL_PIT_PITTimer_HandleTrigger" data-uid="Cosmos.HAL.PIT.PITTimer.HandleTrigger">HandleTrigger</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>The method to invoke for each cycle of the timer.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public PIT.PITTimer.dOnTrigger HandleTrigger</code></pre>
+    <pre><code class="lang-csharp hljs">public PIT.PITTimer.OnTrigger HandleTrigger</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4958,7 +5055,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Cosmos.HAL.PIT.PITTimer.dOnTrigger.html">PIT.PITTimer.dOnTrigger</a></td>
+        <td><a class="xref" href="Cosmos.HAL.PIT.PITTimer.OnTrigger.html">PIT.PITTimer.OnTrigger</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -4968,14 +5065,15 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_PIT_PITTimer_NanosecondsTimeout.md&amp;value=---%0Auid%3A%20Cosmos.HAL.PIT.PITTimer.NanosecondsTimeout%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/PIT.cs/#L18">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/PIT.cs/#L24">View Source</a>
   </span>
   <h4 id="Cosmos_HAL_PIT_PITTimer_NanosecondsTimeout" data-uid="Cosmos.HAL.PIT.PITTimer.NanosecondsTimeout">NanosecondsTimeout</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>The delay between each timer cycle.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int NanosecondsTimeout</code></pre>
+    <pre><code class="lang-csharp hljs">public ulong NanosecondsTimeout</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4987,24 +5085,25 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Int32</span></td>
+        <td><span class="xref">System.UInt64</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_PIT_PITTimer_Recuring.md&amp;value=---%0Auid%3A%20Cosmos.HAL.PIT.PITTimer.Recuring%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_PIT_PITTimer_Recurring.md&amp;value=---%0Auid%3A%20Cosmos.HAL.PIT.PITTimer.Recurring%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/PIT.cs/#L19">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/PIT.cs/#L29">View Source</a>
   </span>
-  <h4 id="Cosmos_HAL_PIT_PITTimer_Recuring" data-uid="Cosmos.HAL.PIT.PITTimer.Recuring">Recuring</h4>
-  <div class="markdown level1 summary"></div>
+  <h4 id="Cosmos_HAL_PIT_PITTimer_Recurring" data-uid="Cosmos.HAL.PIT.PITTimer.Recurring">Recurring</h4>
+  <div class="markdown level1 summary"><p>Whether this timer will fire once, or will fire indefinetly until unregistered.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool Recuring</code></pre>
+    <pre><code class="lang-csharp hljs">public bool Recurring</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5025,14 +5124,46 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_PIT_PITTimer_Recuring.md&amp;value=---%0Auid%3A%20Cosmos.HAL.PIT.PITTimer.Recuring%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/PIT.cs/#L102">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_PIT_PITTimer_Recuring_" data-uid="Cosmos.HAL.PIT.PITTimer.Recuring*"></a>
+  <h4 id="Cosmos_HAL_PIT_PITTimer_Recuring" data-uid="Cosmos.HAL.PIT.PITTimer.Recuring">Recuring</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use the Recurring property instead.&quot;)]
+public bool Recuring { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_PIT_PITTimer_TimerID.md&amp;value=---%0Auid%3A%20Cosmos.HAL.PIT.PITTimer.TimerID%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/PIT.cs/#L22">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/PIT.cs/#L34">View Source</a>
   </span>
   <a id="Cosmos_HAL_PIT_PITTimer_TimerID_" data-uid="Cosmos.HAL.PIT.PITTimer.TimerID*"></a>
   <h4 id="Cosmos_HAL_PIT_PITTimer_TimerID" data-uid="Cosmos.HAL.PIT.PITTimer.TimerID">TimerID</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>The ID of the timer.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -5060,7 +5191,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_PIT_PITTimer_Dispose.md&amp;value=---%0Auid%3A%20Cosmos.HAL.PIT.PITTimer.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/PIT.cs/#L54">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/PIT.cs/#L92">View Source</a>
   </span>
   <a id="Cosmos_HAL_PIT_PITTimer_Dispose_" data-uid="Cosmos.HAL.PIT.PITTimer.Dispose*"></a>
   <h4 id="Cosmos_HAL_PIT_PITTimer_Dispose" data-uid="Cosmos.HAL.PIT.PITTimer.Dispose">Dispose()</h4>
@@ -5075,7 +5206,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_PIT_PITTimer_Finalize.md&amp;value=---%0Auid%3A%20Cosmos.HAL.PIT.PITTimer.Finalize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/PIT.cs/#L49">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/PIT.cs/#L87">View Source</a>
   </span>
   <a id="Cosmos_HAL_PIT_PITTimer_Finalize_" data-uid="Cosmos.HAL.PIT.PITTimer.Finalize*"></a>
   <h4 id="Cosmos_HAL_PIT_PITTimer_Finalize" data-uid="Cosmos.HAL.PIT.PITTimer.Finalize">Finalize()</h4>
@@ -5100,7 +5231,7 @@
                     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_PIT_PITTimer.md&amp;value=---%0Auid%3A%20Cosmos.HAL.PIT.PITTimer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/PIT.cs/#L15" class="contribution-link">View Source</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/PIT.cs/#L16" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>
