@@ -503,6 +503,9 @@
                             <a href="Cosmos.Core_Asm.CPUGetEndOfKernelAsm.html" title="CPUGetEndOfKernelAsm" class="">CPUGetEndOfKernelAsm</a>
                           </li>
                           <li class="">
+                            <a href="Cosmos.Core_Asm.CPUGetESPValue.html" title="CPUGetESPValue" class="">CPUGetESPValue</a>
+                          </li>
+                          <li class="">
                             <a href="Cosmos.Core_Asm.CPUGetStackStart.html" title="CPUGetStackStart" class="">CPUGetStackStart</a>
                           </li>
                           <li class="">
@@ -525,6 +528,9 @@
                           </li>
                           <li class="">
                             <a href="Cosmos.Core_Asm.CPUReadTimestampCounterAsm.html" title="CPUReadTimestampCounterAsm" class="">CPUReadTimestampCounterAsm</a>
+                          </li>
+                          <li class="">
+                            <a href="Cosmos.Core_Asm.CPUSetESPValue.html" title="CPUSetESPValue" class="">CPUSetESPValue</a>
                           </li>
                           <li class="">
                             <a href="Cosmos.Core_Asm.CPUUpdateIDTAsm.html" title="CPUUpdateIDTAsm" class="">CPUUpdateIDTAsm</a>
@@ -4861,7 +4867,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Asm_CPUImpl_CanReadCPUID.md&amp;value=---%0Auid%3A%20Cosmos.Core_Asm.CPUImpl.CanReadCPUID%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core_Asm/CPUImpl.cs/#L39">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core_Asm/CPUImpl.cs/#L46">View Source</a>
   </span>
   <a id="Cosmos_Core_Asm_CPUImpl_CanReadCPUID_" data-uid="Cosmos.Core_Asm.CPUImpl.CanReadCPUID*"></a>
   <h4 id="Cosmos_Core_Asm_CPUImpl_CanReadCPUID" data-uid="Cosmos.Core_Asm.CPUImpl.CanReadCPUID">CanReadCPUID()</h4>
@@ -4891,7 +4897,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Asm_CPUImpl_DoDisableInterrupts.md&amp;value=---%0Auid%3A%20Cosmos.Core_Asm.CPUImpl.DoDisableInterrupts%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core_Asm/CPUImpl.cs/#L33">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core_Asm/CPUImpl.cs/#L40">View Source</a>
   </span>
   <a id="Cosmos_Core_Asm_CPUImpl_DoDisableInterrupts_" data-uid="Cosmos.Core_Asm.CPUImpl.DoDisableInterrupts*"></a>
   <h4 id="Cosmos_Core_Asm_CPUImpl_DoDisableInterrupts" data-uid="Cosmos.Core_Asm.CPUImpl.DoDisableInterrupts">DoDisableInterrupts()</h4>
@@ -4906,7 +4912,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Asm_CPUImpl_DoEnableInterrupts.md&amp;value=---%0Auid%3A%20Cosmos.Core_Asm.CPUImpl.DoEnableInterrupts%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core_Asm/CPUImpl.cs/#L36">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core_Asm/CPUImpl.cs/#L43">View Source</a>
   </span>
   <a id="Cosmos_Core_Asm_CPUImpl_DoEnableInterrupts_" data-uid="Cosmos.Core_Asm.CPUImpl.DoEnableInterrupts*"></a>
   <h4 id="Cosmos_Core_Asm_CPUImpl_DoEnableInterrupts" data-uid="Cosmos.Core_Asm.CPUImpl.DoEnableInterrupts">DoEnableInterrupts()</h4>
@@ -4978,10 +4984,40 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Asm_CPUImpl_GetESPValue.md&amp;value=---%0Auid%3A%20Cosmos.Core_Asm.CPUImpl.GetESPValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core_Asm/CPUImpl.cs/#L19">View Source</a>
+  </span>
+  <a id="Cosmos_Core_Asm_CPUImpl_GetESPValue_" data-uid="Cosmos.Core_Asm.CPUImpl.GetESPValue*"></a>
+  <h4 id="Cosmos_Core_Asm_CPUImpl_GetESPValue" data-uid="Cosmos.Core_Asm.CPUImpl.GetESPValue">GetESPValue()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static uint GetESPValue()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Asm_CPUImpl_GetStackStart.md&amp;value=---%0Auid%3A%20Cosmos.Core_Asm.CPUImpl.GetStackStart%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core_Asm/CPUImpl.cs/#L18">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core_Asm/CPUImpl.cs/#L25">View Source</a>
   </span>
   <a id="Cosmos_Core_Asm_CPUImpl_GetStackStart_" data-uid="Cosmos.Core_Asm.CPUImpl.GetStackStart*"></a>
   <h4 id="Cosmos_Core_Asm_CPUImpl_GetStackStart" data-uid="Cosmos.Core_Asm.CPUImpl.GetStackStart">GetStackStart()</h4>
@@ -5011,7 +5047,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Asm_CPUImpl_Halt.md&amp;value=---%0Auid%3A%20Cosmos.Core_Asm.CPUImpl.Halt%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core_Asm/CPUImpl.cs/#L30">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core_Asm/CPUImpl.cs/#L37">View Source</a>
   </span>
   <a id="Cosmos_Core_Asm_CPUImpl_Halt_" data-uid="Cosmos.Core_Asm.CPUImpl.Halt*"></a>
   <h4 id="Cosmos_Core_Asm_CPUImpl_Halt" data-uid="Cosmos.Core_Asm.CPUImpl.Halt">Halt()</h4>
@@ -5026,7 +5062,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Asm_CPUImpl_InitFloat.md&amp;value=---%0Auid%3A%20Cosmos.Core_Asm.CPUImpl.InitFloat%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core_Asm/CPUImpl.cs/#L24">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core_Asm/CPUImpl.cs/#L31">View Source</a>
   </span>
   <a id="Cosmos_Core_Asm_CPUImpl_InitFloat_" data-uid="Cosmos.Core_Asm.CPUImpl.InitFloat*"></a>
   <h4 id="Cosmos_Core_Asm_CPUImpl_InitFloat" data-uid="Cosmos.Core_Asm.CPUImpl.InitFloat">InitFloat()</h4>
@@ -5041,7 +5077,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Asm_CPUImpl_InitSSE.md&amp;value=---%0Auid%3A%20Cosmos.Core_Asm.CPUImpl.InitSSE%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core_Asm/CPUImpl.cs/#L27">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core_Asm/CPUImpl.cs/#L34">View Source</a>
   </span>
   <a id="Cosmos_Core_Asm_CPUImpl_InitSSE_" data-uid="Cosmos.Core_Asm.CPUImpl.InitSSE*"></a>
   <h4 id="Cosmos_Core_Asm_CPUImpl_InitSSE" data-uid="Cosmos.Core_Asm.CPUImpl.InitSSE">InitSSE()</h4>
@@ -5056,7 +5092,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Asm_CPUImpl_ReadCPUID_System_UInt32_System_Int32__System_Int32__System_Int32__System_Int32__.md&amp;value=---%0Auid%3A%20Cosmos.Core_Asm.CPUImpl.ReadCPUID(System.UInt32%2CSystem.Int32%40%2CSystem.Int32%40%2CSystem.Int32%40%2CSystem.Int32%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core_Asm/CPUImpl.cs/#L42">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core_Asm/CPUImpl.cs/#L49">View Source</a>
   </span>
   <a id="Cosmos_Core_Asm_CPUImpl_ReadCPUID_" data-uid="Cosmos.Core_Asm.CPUImpl.ReadCPUID*"></a>
   <h4 id="Cosmos_Core_Asm_CPUImpl_ReadCPUID_System_UInt32_System_Int32__System_Int32__System_Int32__System_Int32__" data-uid="Cosmos.Core_Asm.CPUImpl.ReadCPUID(System.UInt32,System.Int32@,System.Int32@,System.Int32@,System.Int32@)">ReadCPUID(UInt32, ref Int32, ref Int32, ref Int32, ref Int32)</h4>
@@ -5108,7 +5144,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Asm_CPUImpl_ReadFromModelSpecificRegister.md&amp;value=---%0Auid%3A%20Cosmos.Core_Asm.CPUImpl.ReadFromModelSpecificRegister%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core_Asm/CPUImpl.cs/#L48">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core_Asm/CPUImpl.cs/#L55">View Source</a>
   </span>
   <a id="Cosmos_Core_Asm_CPUImpl_ReadFromModelSpecificRegister_" data-uid="Cosmos.Core_Asm.CPUImpl.ReadFromModelSpecificRegister*"></a>
   <h4 id="Cosmos_Core_Asm_CPUImpl_ReadFromModelSpecificRegister" data-uid="Cosmos.Core_Asm.CPUImpl.ReadFromModelSpecificRegister">ReadFromModelSpecificRegister()</h4>
@@ -5138,7 +5174,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Asm_CPUImpl_ReadTimestampCounter.md&amp;value=---%0Auid%3A%20Cosmos.Core_Asm.CPUImpl.ReadTimestampCounter%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core_Asm/CPUImpl.cs/#L45">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core_Asm/CPUImpl.cs/#L52">View Source</a>
   </span>
   <a id="Cosmos_Core_Asm_CPUImpl_ReadTimestampCounter_" data-uid="Cosmos.Core_Asm.CPUImpl.ReadTimestampCounter*"></a>
   <h4 id="Cosmos_Core_Asm_CPUImpl_ReadTimestampCounter" data-uid="Cosmos.Core_Asm.CPUImpl.ReadTimestampCounter">ReadTimestampCounter()</h4>
@@ -5159,6 +5195,38 @@
     <tbody>
       <tr>
         <td><span class="xref">System.UInt64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Asm_CPUImpl_SetESPValue_System_UInt32_.md&amp;value=---%0Auid%3A%20Cosmos.Core_Asm.CPUImpl.SetESPValue(System.UInt32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core_Asm/CPUImpl.cs/#L22">View Source</a>
+  </span>
+  <a id="Cosmos_Core_Asm_CPUImpl_SetESPValue_" data-uid="Cosmos.Core_Asm.CPUImpl.SetESPValue*"></a>
+  <h4 id="Cosmos_Core_Asm_CPUImpl_SetESPValue_System_UInt32_" data-uid="Cosmos.Core_Asm.CPUImpl.SetESPValue(System.UInt32)">SetESPValue(UInt32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SetESPValue(uint val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt32</span></td>
+        <td><span class="parametername">val</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5200,7 +5268,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Asm_CPUImpl_ZeroFill_System_UInt32_System_UInt32_.md&amp;value=---%0Auid%3A%20Cosmos.Core_Asm.CPUImpl.ZeroFill(System.UInt32%2CSystem.UInt32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core_Asm/CPUImpl.cs/#L20">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core_Asm/CPUImpl.cs/#L27">View Source</a>
   </span>
   <a id="Cosmos_Core_Asm_CPUImpl_ZeroFill_" data-uid="Cosmos.Core_Asm.CPUImpl.ZeroFill*"></a>
   <h4 id="Cosmos_Core_Asm_CPUImpl_ZeroFill_System_UInt32_System_UInt32_" data-uid="Cosmos.Core_Asm.CPUImpl.ZeroFill(System.UInt32,System.UInt32)">ZeroFill(UInt32, UInt32)</h4>
