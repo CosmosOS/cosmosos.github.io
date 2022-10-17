@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title> </title>
+    <title>Startup </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content=" ">
+    <meta name="title" content="Startup ">
     <meta name="generator" content="docfx 2.59.4.0">
     
     <link rel="shortcut icon" href="../../favicon.ico">
@@ -103,9 +103,6 @@
                           </li>
                         </ul>  </li>
                     <li class="">
-                      <a href="../Express/Compile.html" title="Express" class="">Express</a>
-                    </li>
-                    <li class="">
                       <span class="expand-stub"></span>
                       <a class="">Installation</a>
                         
@@ -130,6 +127,9 @@
                           </li>
                           <li class="active">
                             <a href="../Kernel/Startup.html" title="Startup" class="active">Startup</a>
+                          </li>
+                          <li class="">
+                            <a href="../Kernel/OnBoot.html" title="OnBoot" class="">OnBoot</a>
                           </li>
                           <li class="">
                             <a href="../Kernel/CGS.html" title="Graphics" class="">Graphics</a>
@@ -176,8 +176,9 @@
         <div class="article row grid-right">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
+<h1 id="startup">Startup</h1>
 
-<p>On startup, there is some hand-coded assembly that runs before the Cosmos layer kicks in. From there, the C# entry point Cosmos.System.Kernel.Start() is called.</p>
+<p>On startup, there is some hand-coded assembly that runs before the Cosmos layer kicks in. From there, the C# entry point Cosmos.System.Kernel.Start(); or Sys.Kernel.Start(); is called.</p>
 <p>Cosmos.System.Kernel is an abstract class that forms the Cosmos framework upon which your OS is built upon.</p>
 <p>You can override the Kernel.Start() method to suppress the standard Cosmos boot routines.</p>
 </article>

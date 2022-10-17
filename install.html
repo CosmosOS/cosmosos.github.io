@@ -102,7 +102,7 @@ The Dev Kit is the live source against which the Cosmos Team develops directly. 
 <ul>
 <li><strong>Visual Studio 2022 Workload: Visual Studio Extension Development</strong></li>
 <li><strong>Inno Quick Start Pack (Free)</strong> – Install with defaults, keep Preprocessor option checked <a href="http://www.jrsoftware.org/isdl.php#qsp">Download</a></li>
-<li><strong>.NET 5 SDK</strong> - <a href="https://www.microsoft.com/net/download/core">Download</a></li>
+<li><strong>.NET 6 SDK</strong> - <a href="https://dotnet.microsoft.com/en-us/download">Download</a></li>
 </ul>
 <h5 id="get-the-source">Get the Source</h5>
 <p>Cosmos source is hosted at GitHub. The simplest method to obtain the source is download a .zip file, however this makes updating and getting the latest updates a bit tricky.<br>
@@ -117,8 +117,8 @@ C:\\source\\CosmosOS\\IL2CPU\\ - [Git Repository for IL2CPU](https://github.com/
 C:\\source\\CosmosOS\\XSharp\\ - [Git Repository for XSharp](https://github.com/CosmosOS/XSharp) 
 C:\\source\\CosmosOS\\Common\\ - [Git Repository for Common](https://github.com/CosmosOS/Common) 
 </code></pre>
-<p>A tree diagram of the source should look like the following:<br>
-<img src="https://www.gocosmos.org/wp-content/uploads/2021/06/tree-214x300.png" alt=""></p>
+<p>A tree diagram of the source should look like the following:</p>
+<img src="https://raw.githubusercontent.com/CosmosOS/Cosmos/master/Docs/images/Dir.png" width="200">
 <p>We are working to make syncing code easier. We have already experimented with Git Submodules, however the simple use of submodules presents a few issues, but the biggest of them is that they trigger a fireworks show of problems and errors in every Git UI we tried and would have limited developers options and forced them to the command line in most cases. We are currently investigating subtrees.</p>
 <p>For now, it's much easier to handle the 4 repositories as most of the time, new Cosmos developers may only have to work in the Cosmos repository. Only when you are comfortable with the concept of Operating System development and C# should you venture into IL2CPU and XSharp.</p>
 <p>If you want to keep your source up to date in a one-click method, paste this code into a .bat file in the CosmosOS folder ( as shown in the above example). This .bat file will only work after the repositories have been cloned with git at least once.</p>

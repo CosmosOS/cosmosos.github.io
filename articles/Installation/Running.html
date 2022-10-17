@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>ISO </title>
+    <title>Running </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="ISO ">
+    <meta name="title" content="Running ">
     <meta name="generator" content="docfx 2.59.4.0">
     
     <link rel="shortcut icon" href="../../favicon.ico">
@@ -103,9 +103,6 @@
                           </li>
                         </ul>  </li>
                     <li class="">
-                      <a href="../Express/Compile.html" title="Express" class="">Express</a>
-                    </li>
-                    <li class="">
                       <span class="expand-stub"></span>
                       <a class="">Installation</a>
                         
@@ -130,6 +127,9 @@
                           </li>
                           <li class="">
                             <a href="../Kernel/Startup.html" title="Startup" class="">Startup</a>
+                          </li>
+                          <li class="">
+                            <a href="../Kernel/OnBoot.html" title="OnBoot" class="">OnBoot</a>
                           </li>
                           <li class="">
                             <a href="../Kernel/CGS.html" title="Graphics" class="">Graphics</a>
@@ -176,34 +176,42 @@
         <div class="article row grid-right">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
+<h1 id="running">Running</h1>
 
 <p>Cosmos supports running on any Intel x86 environment. However for debugging
 and ease of use, many virtual and physical setups have integrated support. If
 you do not see your environment, this does not mean Cosmos will not work. You
 can simply fall back to ISO which should work with any environment.</p>
-<h3 id="iso">ISO</h3>
+<h2 id="iso">ISO</h2>
 <p>The ISO option creates an ISO image of the Cosmos output. This ISO file can be
 mounted and booted by most virtualization technologies. In addition, a physical
 optical disk can be burned and used to boot physical hardware.</p>
-<h3 id="vmware-workstationplayer">VMWare Workstation/Player</h3>
+<h2 id="vmware">VMWare</h2>
 <p>WMWare Workstation and VMWare Player are the preferred testing environments
 for Cosmos. This is because they are stable, reliable, and easily controlled
 by the Cosmos Visual Studio integration package. This allows for easy debugging and code execution control.</p>
 <p>VMWare Workstation is not free, however VMWare Player is. VMWare Player for
 the typical Cosmos developer provides more than enough functionality.</p>
 <h3 id="vmware-player">VMWare Player</h3>
-<p>VMWare Player can be downloaded <a href="http://vmware.com/download/player/"> here</a>.</p>
-<h3 id="vmware-server">VMWare Server</h3>
-<p> _place_holder;</p>
-<h3 id="qemu">QEMU</h3>
+<p>VMWare Player can be downloaded <a href="https://www.vmware.com/go/getplayer-win">here</a>.</p>
+<h3 id="vmware-workstation">VMWare Workstation</h3>
+<p>VMWare Workstation can be downloaded for free trial <a href="https://www.vmware.com/go/getworkstation-win">here</a>.</p>
+<h2 id="qemu">QEMU</h2>
 <p>Not officially supported at this time, but can be done. Just use the ISO option above with debugging turned off.</p>
-<p>Bochs</p>
-<p>Support is underway.</p>
-<p>PXE</p>
-<p>For PXE, no special software is required. Only an ethernet connection to your router. However, if you have a computer that does not support network booting, or if you must perform the action over WiFi, you may need to look at a PXE chainloader such as <a href="#">gPXE</a>.</p>
-<p>Virtual PC</p>
-<p>Not officially supported at this time, but can be done. Just use the ISO option above with debugging turned off.</p>
-<p>Hyper-V</p>
+<p>QEMU can be downloaded <a href="https://qemu.weilnetz.de/w64/">here</a></p>
+<h2 id="bochs">Bochs</h2>
+<p>Bochs is officially supported.</p>
+<p>Bochs can be downloaded <a href="https://bochs.sourceforge.io/getcurrent.html">here</a></p>
+<h2 id="pxe">PXE</h2>
+<p>For PXE, no special software is required. Only an ethernet connection to your router. However, if you have a computer that does not support network booting, or if you must perform the action over WiFi, you may need to look at a PXE chainloader such as <a href="http://etherboot.org/wiki/">gPXE</a>.
+To run your Cosmos kernel in PXE you need to follow these steps:</p>
+<p>Step #1: disable Cosmos Remote Debugger, activate PXE and compilation in bin format.
+Go to Properties and copy these settings:</p>
+<p><img src="https://user-images.githubusercontent.com/98218366/178479237-a22a7b5f-250e-432d-ba74-0da502e82f7b.png" alt="image"></p>
+<p>Boot the machine and connect it via Ethernet and will show this screen:</p>
+<p><img src="https://user-images.githubusercontent.com/98218366/178479800-c70faa5d-1fab-4da4-8f27-05eefee89b75.png" alt="image"></p>
+<p>Wait and your os will boot up.</p>
+<h2 id="hyper-v">Hyper-V</h2>
 <p>Not supported at this time.</p>
 </article>
           </div>
