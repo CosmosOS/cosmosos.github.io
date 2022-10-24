@@ -197,13 +197,12 @@ operating system and doing some Cosmos work. The dev kit might be thought of
 as the Cosmos SDK. Most users should start off with the user kit as it is not
 so overwhelming like the dev kit. This article focuses on the user kit.</p>
 <h2 id="writing-your-first-operating-system">Writing your first Operating System</h2>
-<p>Create a new project as you would any C# project, but select Cosmos Kernel<br>
-(Previously CosmosBoot; same functionality) as the project type.</p>
+<p>Create a new project as you would any C# project, but select Cosmos as the project type.</p>
 <p><img src="images/SNAG-0000.png" alt=""></p>
 <p>A starter project will be created. It looks very much like a standard C#
 console application.</p>
 <p><img src="images/SNAG-0001.png" alt=""></p>
-<p>Program.cs contains the boot and execution code. Instead of seeing a Windows
+<p>Kernel.cs contains the boot and execution code. Instead of seeing a Windows
 console window, you will see the following:</p>
 <p><img src="images/SNAG-0003.png" alt=""></p>
 <p>This is your operating system running in VMWare Player! Cosmos can of course
@@ -249,7 +248,7 @@ base breaks are very useful for implementing such. For example:</p>
     mDebugger.Break();
 }
 </code></pre>
-<p>Alternatively you can call the .NET class libary break:</p>
+<p>Or you can use the .NET BCL debugger break:</p>
 <pre><code>System.Diagnostics.Debugger.Break();
 </code></pre>
 <p>Both functions will produce the same result.</p>
@@ -265,10 +264,9 @@ and it will appear in the Visual Studio output window.</p>
 <h2 id="whats-the-catch">What's the catch?</h2>
 <p>There really is no catch. Everything we've shown here is functioning as seen.
 No mockups were used. However we still have a lot of work to go. Items of
-interest that are on our current task list include interfaces (necessary for
-foreach loops), file systems (partial support exists), threads, networking, and
-graphics. We have prototypes and experimentation for each, but none have been
-rolled into the mainline Cosmos development as of yet.</p>
+interest that are on our current task list include threads and networking.
+We have prototypes and experiments for each, but none have been rolled into
+the mainline Cosmos development as of yet.</p>
 <h2 id="obtaining-cosmos">Obtaining Cosmos</h2>
 <ul>
 <li>Cosmos Website - <a href="http://www.GoCosmos.org">http://www.GoCosmos.org</a></li>
