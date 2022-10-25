@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Prerequisites </title>
+    <title>Prerequisites for Windows </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Prerequisites ">
+    <meta name="title" content="Prerequisites for Windows ">
     <meta name="generator" content="docfx 2.59.4.0">
     
     <link rel="shortcut icon" href="../../favicon.ico">
@@ -176,7 +176,7 @@
         <div class="article row grid-right">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
-<h3 id="prerequisites">Prerequisites</h3>
+<h3 id="prerequisites-for-windows">Prerequisites for Windows</h3>
 
 <ul>
 <li>(Free) source code of Devloppement Kit from <a href="https://github.com/CosmosOS/Cosmos">Cosmos on GitHub</a>
@@ -197,7 +197,14 @@
 </li>
 <li>Visual Studio SDK: <a href="https://www.microsoft.com/en-us/download/details.aspx?id=40758">download here</a>.</li>
 </ul>
-<h3 id="installation">Installation</h3>
+<h3 id="prerequisites-for-linux">Prerequisites for Linux</h3>
+<ul>
+<li>.NET 6 SDK: <a href="https://learn.microsoft.com/en-us/dotnet/core/install/linux">Download .NET SDK</a></li>
+<li>Make</li>
+<li>Yasm (<code>apt install yasm</code>)</li>
+<li>QEMU or any other virtual machine</li>
+</ul>
+<h3 id="installation-on-windows">Installation on Windows</h3>
 <ul>
 <li>Look in the downloaded sources and run <strong>install-VS2019.bat</strong> with admin privileges (UAC will ask for permission), needed for install in system directories.</li>
 <li>When the installation is complete, Visual Studio will automatically open and you may begin programming with your new, modified copy of Cosmos.</li>
@@ -213,6 +220,8 @@
 <li><code>-IGNOREVS</code> Ignore running VS during installation.</li>
 <li><code>-VSEXPHIVE</code> or <code>/VSEXPHIVE</code> Use Visual Studio Experimental Hive for installation.</li>
 </ul>
+<h3 id="installation-on-linux">Installation on Linux</h3>
+<p>Run <code>make all</code> to build Cosmos. Run <code>sudo make install</code>. Make sure to run <code>make nuget-install</code> under your user account, and not as sudo.</p>
 </article>
           </div>
           
