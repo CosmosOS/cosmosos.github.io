@@ -186,6 +186,53 @@ can simply fall back to ISO which should work with any environment.</p>
 <p>The ISO option creates an ISO image of the Cosmos output. This ISO file can be
 mounted and booted by most virtualization technologies. In addition, a physical
 optical disk can be burned and used to boot physical hardware.</p>
+<h1 id="linuxposix">Linux/Posix</h1>
+<h3 id="disclaimer-this-article-assumes-that-you-are-using-a-debian-based-operating-system">DISCLAIMER: This article assumes that you are using a debian based operating system</h3>
+<h2 id="qemu">QEMU</h2>
+<p>Here you can use a generic run file, you can run it by using <code>sh run.sh -i &lt;ISO&gt; -m &lt;memory size&gt; -h &lt;hdd image&gt;</code>.
+It has to be at the root directory of the project</p>
+<p>QEMU is required and can be installed with <code>apt-get install qemu-system</code>.</p>
+<p>To create an hdd image, you have to convert this <a href="https://github.com/CosmosOS/Cosmos/blob/master/Build/VMWare/Workstation/Filesystem.vmdk?raw=true">.vmdk</a> file to a .img wich can then be used by QEMU using the following command
+<code>qemu-img convert -f vmdk -O raw Filesystem.vmdk cosmos.img</code></p>
+<p><code>run.sh:</code></p>
+<pre><code class="lang-sh">#!/bin/bash
+
+helpFunction()
+{
+   echo &quot;&quot;
+   echo &quot;Usage: $0 -i &lt;ISO&gt; -m &lt;memory size&gt; -h &lt;hdd image&gt;&quot;
+   echo &quot;\t-i ISO path to be used&quot;
+   echo &quot;\t-m Memory size to allocate to the Virtual Machine&quot;
+   echo &quot;\t-h Hard disk image location, can be created with qemu-img&quot;
+   exit 1 # Exit script after printing help
+}
+
+while getopts &quot;i:m:h:&quot; opt
+do
+   case &quot;$opt&quot; in
+      i ) ISO=&quot;$OPTARG&quot; ;;
+      m ) MEMORY_SIZE=&quot;$OPTARG&quot; ;;
+      h ) HDD_IMAGE=&quot;$OPTARG&quot; ;;
+      ? ) helpFunction ;; # Print helpFunction in case parameter is non-existent
+   esac
+done
+
+# Print helpFunction in case parameters are empty
+if [ -z &quot;$ISO&quot; ] || [ -z &quot;$MEMORY_SIZE&quot; ] || [ -z &quot;$HDD_IMAGE&quot; ]
+then
+   echo &quot;Some or all of the parameters are empty&quot;;
+   helpFunction
+fi
+
+# Build the project
+dotnet build
+
+# Emulate the ISO
+qemu-system-x86_64 -boot d -cdrom $ISO -m $MEMORY_SIZE -hda $HDD_IMAGE
+</code></pre>
+<h2 id="virtualbox">Virtualbox</h2>
+<p>Create a virtual machine and use this <a href="https://github.com/CosmosOS/Cosmos/blob/master/Build/VMWare/Workstation/Filesystem.vmdk?raw=true">.vmdk</a> as HDD image</p>
+<h1 id="windows">Windows</h1>
 <h2 id="vmware">VMWare</h2>
 <p>WMWare Workstation and VMWare Player are the preferred testing environments
 for Cosmos. This is because they are stable, reliable, and easily controlled
@@ -196,7 +243,7 @@ the typical Cosmos developer provides more than enough functionality.</p>
 <p>VMWare Player can be downloaded <a href="https://www.vmware.com/go/getplayer-win">here</a>.</p>
 <h3 id="vmware-workstation">VMWare Workstation</h3>
 <p>VMWare Workstation can be downloaded for free trial <a href="https://www.vmware.com/go/getworkstation-win">here</a>.</p>
-<h2 id="qemu">QEMU</h2>
+<h2 id="qemu-1">QEMU</h2>
 <p>Not officially supported at this time, but can be done. Just use the ISO option above with debugging turned off.</p>
 <p>QEMU can be downloaded <a href="https://qemu.weilnetz.de/w64/">here</a></p>
 <h2 id="bochs">Bochs</h2>
