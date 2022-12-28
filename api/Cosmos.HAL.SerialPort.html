@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class Serial
+    <title>Class SerialPort
    </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class Serial
+    <meta name="title" content="Class SerialPort
    ">
     <meta name="generator" content="docfx 2.59.4.0">
     
@@ -1130,9 +1130,6 @@
                             <a href="Cosmos.HAL.DataReceivedHandler.html" title="DataReceivedHandler" class="">DataReceivedHandler</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.HAL.DebugTextScreen.html" title="DebugTextScreen" class="">DebugTextScreen</a>
-                          </li>
-                          <li class="">
                             <a href="Cosmos.HAL.Device.html" title="Device" class="">Device</a>
                           </li>
                           <li class="">
@@ -1221,6 +1218,9 @@
                           </li>
                           <li class="">
                             <a href="Cosmos.HAL.RTC.html" title="RTC" class="">RTC</a>
+                          </li>
+                          <li class="active">
+                            <a href="Cosmos.HAL.SerialPort.html" title="SerialPort" class="active">SerialPort</a>
                           </li>
                           <li class="">
                             <a href="Cosmos.HAL.SpeakerExtensions.html" title="SpeakerExtensions" class="">SpeakerExtensions</a>
@@ -1428,15 +1428,6 @@
                           </li>
                           <li class="">
                             <a href="Cosmos.HAL.BlockDevice.Registers.PortType.html" title="PortType" class="">PortType</a>
-                          </li>
-                        </ul>  </li>
-                    <li class="">
-                      <span class="expand-stub"></span>
-                      <a href="Cosmos.HAL.Debug.html" title="Cosmos.HAL.Debug" class="">Cosmos.HAL.Debug</a>
-                        
-                        <ul class="nav level2">
-                          <li class="active">
-                            <a href="Cosmos.HAL.Debug.Serial.html" title="Serial" class="active">Serial</a>
                           </li>
                         </ul>  </li>
                     <li class="">
@@ -4755,17 +4746,18 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Cosmos.HAL.Debug.Serial">
+            <article class="content wrap" id="_content" data-uid="Cosmos.HAL.SerialPort">
   
   
-  <h1 id="Cosmos_HAL_Debug_Serial" data-uid="Cosmos.HAL.Debug.Serial" class="text-break">Class Serial
+  <h1 id="Cosmos_HAL_SerialPort" data-uid="Cosmos.HAL.SerialPort" class="text-break">Class SerialPort
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary"><p>Provides mehods for interacting with serial ports</p>
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">Serial</span></div>
+    <div class="level1"><span class="xref">SerialPort</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -4791,43 +4783,460 @@
       <span class="xref">System.Object.ToString()</span>
     </div>
   </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Cosmos.HAL.Debug.html">Cosmos.HAL.Debug</a></h6>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Cosmos.HAL.html">Cosmos.HAL</a></h6>
   <h6><strong>Assembly</strong>: Cosmos.HAL2.dll</h6>
-  <h5 id="Cosmos_HAL_Debug_Serial_syntax">Syntax</h5>
+  <h5 id="Cosmos_HAL_SerialPort_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class Serial</code></pre>
+    <pre><code class="lang-csharp hljs">public static class SerialPort</code></pre>
   </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_SerialPort_COM1.md&amp;value=---%0Auid%3A%20Cosmos.HAL.SerialPort.COM1%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/SerialPort.cs/#L14">View Source</a>
+  </span>
+  <h4 id="Cosmos_HAL_SerialPort_COM1" data-uid="Cosmos.HAL.SerialPort.COM1">COM1</h4>
+  <div class="markdown level1 summary"><p>IO port for COM1 port</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const ushort COM1 = 1016</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_SerialPort_COM2.md&amp;value=---%0Auid%3A%20Cosmos.HAL.SerialPort.COM2%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/SerialPort.cs/#L18">View Source</a>
+  </span>
+  <h4 id="Cosmos_HAL_SerialPort_COM2" data-uid="Cosmos.HAL.SerialPort.COM2">COM2</h4>
+  <div class="markdown level1 summary"><p>IO port for COM2 port</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const ushort COM2 = 760</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_SerialPort_COM3.md&amp;value=---%0Auid%3A%20Cosmos.HAL.SerialPort.COM3%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/SerialPort.cs/#L22">View Source</a>
+  </span>
+  <h4 id="Cosmos_HAL_SerialPort_COM3" data-uid="Cosmos.HAL.SerialPort.COM3">COM3</h4>
+  <div class="markdown level1 summary"><p>IO port for COM3 port</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const ushort COM3 = 1016</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_SerialPort_COM4.md&amp;value=---%0Auid%3A%20Cosmos.HAL.SerialPort.COM4%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/SerialPort.cs/#L26">View Source</a>
+  </span>
+  <h4 id="Cosmos_HAL_SerialPort_COM4" data-uid="Cosmos.HAL.SerialPort.COM4">COM4</h4>
+  <div class="markdown level1 summary"><p>IO port for COM4 port</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const ushort COM4 = 1016</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_SerialPort_COM5.md&amp;value=---%0Auid%3A%20Cosmos.HAL.SerialPort.COM5%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/SerialPort.cs/#L30">View Source</a>
+  </span>
+  <h4 id="Cosmos_HAL_SerialPort_COM5" data-uid="Cosmos.HAL.SerialPort.COM5">COM5</h4>
+  <div class="markdown level1 summary"><p>IO port for COM5 port</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const ushort COM5 = 1016</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_SerialPort_COM6.md&amp;value=---%0Auid%3A%20Cosmos.HAL.SerialPort.COM6%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/SerialPort.cs/#L34">View Source</a>
+  </span>
+  <h4 id="Cosmos_HAL_SerialPort_COM6" data-uid="Cosmos.HAL.SerialPort.COM6">COM6</h4>
+  <div class="markdown level1 summary"><p>IO port for COM6 port</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const ushort COM6 = 1016</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_SerialPort_COM7.md&amp;value=---%0Auid%3A%20Cosmos.HAL.SerialPort.COM7%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/SerialPort.cs/#L38">View Source</a>
+  </span>
+  <h4 id="Cosmos_HAL_SerialPort_COM7" data-uid="Cosmos.HAL.SerialPort.COM7">COM7</h4>
+  <div class="markdown level1 summary"><p>IO port for COM7 port</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const ushort COM7 = 1016</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_SerialPort_COM8.md&amp;value=---%0Auid%3A%20Cosmos.HAL.SerialPort.COM8%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/SerialPort.cs/#L42">View Source</a>
+  </span>
+  <h4 id="Cosmos_HAL_SerialPort_COM8" data-uid="Cosmos.HAL.SerialPort.COM8">COM8</h4>
+  <div class="markdown level1 summary"><p>IO port for COM8 port</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const ushort COM8 = 1016</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="methods">Methods
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_Debug_Serial_Enable.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Debug.Serial.Enable%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_SerialPort_Enable_System_UInt16_.md&amp;value=---%0Auid%3A%20Cosmos.HAL.SerialPort.Enable(System.UInt16)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/Debug/Serial.cs/#L9">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/SerialPort.cs/#L48">View Source</a>
   </span>
-  <a id="Cosmos_HAL_Debug_Serial_Enable_" data-uid="Cosmos.HAL.Debug.Serial.Enable*"></a>
-  <h4 id="Cosmos_HAL_Debug_Serial_Enable" data-uid="Cosmos.HAL.Debug.Serial.Enable">Enable()</h4>
-  <div class="markdown level1 summary"></div>
+  <a id="Cosmos_HAL_SerialPort_Enable_" data-uid="Cosmos.HAL.SerialPort.Enable*"></a>
+  <h4 id="Cosmos_HAL_SerialPort_Enable_System_UInt16_" data-uid="Cosmos.HAL.SerialPort.Enable(System.UInt16)">Enable(UInt16)</h4>
+  <div class="markdown level1 summary"><p>Enables certain COM port</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Enable()</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Enable(ushort aPort)</code></pre>
   </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td><span class="parametername">aPort</span></td>
+        <td><p>COM port</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_Debug_Serial_SendString_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Debug.Serial.SendString(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_SerialPort_Receive.md&amp;value=---%0Auid%3A%20Cosmos.HAL.SerialPort.Receive%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/Debug/Serial.cs/#L47">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/SerialPort.cs/#L74">View Source</a>
   </span>
-  <a id="Cosmos_HAL_Debug_Serial_SendString_" data-uid="Cosmos.HAL.Debug.Serial.SendString*"></a>
-  <h4 id="Cosmos_HAL_Debug_Serial_SendString_System_String_" data-uid="Cosmos.HAL.Debug.Serial.SendString(System.String)">SendString(String)</h4>
-  <div class="markdown level1 summary"></div>
+  <a id="Cosmos_HAL_SerialPort_Receive_" data-uid="Cosmos.HAL.SerialPort.Receive*"></a>
+  <h4 id="Cosmos_HAL_SerialPort_Receive" data-uid="Cosmos.HAL.SerialPort.Receive">Receive()</h4>
+  <div class="markdown level1 summary"><p>Reads byte (ASCII character) from COM1 port</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SendString(string output)</code></pre>
+    <pre><code class="lang-csharp hljs">public static byte Receive()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_SerialPort_Receive_System_UInt16_.md&amp;value=---%0Auid%3A%20Cosmos.HAL.SerialPort.Receive(System.UInt16)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/SerialPort.cs/#L64">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_SerialPort_Receive_" data-uid="Cosmos.HAL.SerialPort.Receive*"></a>
+  <h4 id="Cosmos_HAL_SerialPort_Receive_System_UInt16_" data-uid="Cosmos.HAL.SerialPort.Receive(System.UInt16)">Receive(UInt16)</h4>
+  <div class="markdown level1 summary"><p>Reads byte (ASCII character) from COM port</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static byte Receive(ushort aPort)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td><span class="parametername">aPort</span></td>
+        <td><p>COM port</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span></td>
+        <td><p>ASCII character as byte</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_SerialPort_Send_System_Char_.md&amp;value=---%0Auid%3A%20Cosmos.HAL.SerialPort.Send(System.Char)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/SerialPort.cs/#L94">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_SerialPort_Send_" data-uid="Cosmos.HAL.SerialPort.Send*"></a>
+  <h4 id="Cosmos_HAL_SerialPort_Send_System_Char_" data-uid="Cosmos.HAL.SerialPort.Send(System.Char)">Send(Char)</h4>
+  <div class="markdown level1 summary"><p>Sends character to COM1 port</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void Send(char aText)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span></td>
+        <td><span class="parametername">aText</span></td>
+        <td><p>Character to send</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_SerialPort_Send_System_Char_System_UInt16_.md&amp;value=---%0Auid%3A%20Cosmos.HAL.SerialPort.Send(System.Char%2CSystem.UInt16)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/SerialPort.cs/#L84">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_SerialPort_Send_" data-uid="Cosmos.HAL.SerialPort.Send*"></a>
+  <h4 id="Cosmos_HAL_SerialPort_Send_System_Char_System_UInt16_" data-uid="Cosmos.HAL.SerialPort.Send(System.Char,System.UInt16)">Send(Char, UInt16)</h4>
+  <div class="markdown level1 summary"><p>Sends character to COM port</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void Send(char aText, ushort aPort)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span></td>
+        <td><span class="parametername">aText</span></td>
+        <td><p>Character to send</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td><span class="parametername">aPort</span></td>
+        <td><p>COM port</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_SerialPort_SendString_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.HAL.SerialPort.SendString(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/SerialPort.cs/#L115">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_SerialPort_SendString_" data-uid="Cosmos.HAL.SerialPort.SendString*"></a>
+  <h4 id="Cosmos_HAL_SerialPort_SendString_System_String_" data-uid="Cosmos.HAL.SerialPort.SendString(System.String)">SendString(String)</h4>
+  <div class="markdown level1 summary"><p>Sends string to COM1 port</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SendString(string aText)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4841,8 +5250,49 @@
     <tbody>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">output</span></td>
-        <td></td>
+        <td><span class="parametername">aText</span></td>
+        <td><p>String to send</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_SerialPort_SendString_System_String_System_UInt16_.md&amp;value=---%0Auid%3A%20Cosmos.HAL.SerialPort.SendString(System.String%2CSystem.UInt16)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/SerialPort.cs/#L104">View Source</a>
+  </span>
+  <a id="Cosmos_HAL_SerialPort_SendString_" data-uid="Cosmos.HAL.SerialPort.SendString*"></a>
+  <h4 id="Cosmos_HAL_SerialPort_SendString_System_String_System_UInt16_" data-uid="Cosmos.HAL.SerialPort.SendString(System.String,System.UInt16)">SendString(String, UInt16)</h4>
+  <div class="markdown level1 summary"><p>Sends string to COM port</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SendString(string aText, ushort aPort)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">aText</span></td>
+        <td><p>String to send</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td><span class="parametername">aPort</span></td>
+        <td><p>COM port</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -4854,10 +5304,10 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_Debug_Serial.md&amp;value=---%0Auid%3A%20Cosmos.HAL.Debug.Serial%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_HAL_SerialPort.md&amp;value=---%0Auid%3A%20Cosmos.HAL.SerialPort%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/Debug/Serial.cs/#L5" class="contribution-link">View Source</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.HAL2/SerialPort.cs/#L8" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>
