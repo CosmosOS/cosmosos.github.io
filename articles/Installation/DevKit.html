@@ -223,6 +223,10 @@
 </ul>
 <h3 id="installation-on-linux">Installation on Linux</h3>
 <p>Run <code>make all</code> to build Cosmos. Run <code>sudo make install</code>. Make sure to run <code>make nuget-install</code> under your user account, and not as sudo.</p>
+<h3 id="dotnet-project-templates">dotnet Project Templates</h3>
+<p>If you are using linux or prefer not using Visual Studio for your projects, you can install the dotnet project template using <code>dotnet new --install .\source\templates\csharp\</code> assuming you are currently in the Cosmos base directory.
+After installing the template use <code>dotnet new cosmosCSKernel -n {name}</code> to create a new Cosmos Kernel project.
+The dotnet template can be removed at a later time using <code>dotnet new --uninstall .\source\templates\csharp\</code>.</p>
 </article>
           </div>
           
