@@ -179,8 +179,6 @@
 <h1 id="manifest-resource-streams">Manifest Resource Streams</h1>
 
 <p>Manifest Resource Streams allow you to include data from the files as byte arrays in your code. An example of its use is in the <a href="https://github.com/CosmosOS/Cosmos/blob/5973a3fae95c989dc13505184aff9a15aae9f65f/Demos/ZMachine/ZKernel/Kernel.cs#L19">ZMachine Demo</a></p>
-<h2 id="drawbacks">Drawbacks</h2>
-<p>Due to short comings in NASM there is a maximum size to any individual file which can be included this way. If the file is too large the error will be an <code>interminable macro recursion</code> from nasm.</p>
 <h2 id="how-to-use">How to use</h2>
 <ol>
 <li>Set for the the file you want to use <code>Build As: Embedded Resource</code> using the File Properties window in VS.
