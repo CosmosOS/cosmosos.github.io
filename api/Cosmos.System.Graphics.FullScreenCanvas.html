@@ -2534,22 +2534,22 @@
                         
                         <ul class="nav level2">
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.DE_Standard.html" title="DE_Standard" class="">DE_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.DEStandardLayout.html" title="DEStandardLayout" class="">DEStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.ES_Standard.html" title="ES_Standard" class="">ES_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.ESStandardLayout.html" title="ESStandardLayout" class="">ESStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.FR_Standard.html" title="FR_Standard" class="">FR_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.FRStandardLayout.html" title="FRStandardLayout" class="">FRStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.GB_Standard.html" title="GB_Standard" class="">GB_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.GBStandardLayout.html" title="GBStandardLayout" class="">GBStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.TR_StandardQ.html" title="TR_StandardQ" class="">TR_StandardQ</a>
+                            <a href="Cosmos.System.ScanMaps.TRStandardLayout.html" title="TRStandardLayout" class="">TRStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.US_Standard.html" title="US_Standard" class="">US_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.USStandardLayout.html" title="USStandardLayout" class="">USStandardLayout</a>
                           </li>
                         </ul>  </li>
                     <li class="">
@@ -4772,7 +4772,8 @@
   
   <h1 id="Cosmos_System_Graphics_FullScreenCanvas" data-uid="Cosmos.System.Graphics.FullScreenCanvas" class="text-break">Class FullScreenCanvas
   </h1>
-  <div class="markdown level0 summary"><p>FullScreenCanvas class. Used to set and get full screen canvas.</p>
+  <div class="markdown level0 summary"><p>Provides functionality to fetch canvases that write directly to the
+underlying display device.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -4810,24 +4811,25 @@
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public static class FullScreenCanvas</code></pre>
   </div>
-  <h3 id="fields">Fields
+  <h3 id="properties">Properties
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_FullScreenCanvas_IsInUse.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.FullScreenCanvas.IsInUse%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/FullScreenCanvas.cs/#L17">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/FullScreenCanvas.cs/#L18">View Source</a>
   </span>
+  <a id="Cosmos_System_Graphics_FullScreenCanvas_IsInUse_" data-uid="Cosmos.System.Graphics.FullScreenCanvas.IsInUse*"></a>
   <h4 id="Cosmos_System_Graphics_FullScreenCanvas_IsInUse" data-uid="Cosmos.System.Graphics.FullScreenCanvas.IsInUse">IsInUse</h4>
-  <div class="markdown level1 summary"><p>Boolean value whether CGS is in use or not</p>
+  <div class="markdown level1 summary"><p>Whether the CGS (Cosmos Graphics Subsystem) is currently in use.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static bool IsInUse</code></pre>
+    <pre><code class="lang-csharp hljs">public static bool IsInUse { get; }</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
+  <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
@@ -4849,11 +4851,11 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_FullScreenCanvas_BGAExists.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.FullScreenCanvas.BGAExists%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/FullScreenCanvas.cs/#L51">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/FullScreenCanvas.cs/#L46">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_FullScreenCanvas_BGAExists_" data-uid="Cosmos.System.Graphics.FullScreenCanvas.BGAExists*"></a>
   <h4 id="Cosmos_System_Graphics_FullScreenCanvas_BGAExists" data-uid="Cosmos.System.Graphics.FullScreenCanvas.BGAExists">BGAExists()</h4>
-  <div class="markdown level1 summary"><p>Checks whether the Bochs Graphics Adapter exists (not limited to Bochs)</p>
+  <div class="markdown level1 summary"><p>Checks whether the Bochs Graphics Adapter exists.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -4880,11 +4882,11 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_FullScreenCanvas_Disable.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.FullScreenCanvas.Disable%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/FullScreenCanvas.cs/#L22">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/FullScreenCanvas.cs/#L23">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_FullScreenCanvas_Disable_" data-uid="Cosmos.System.Graphics.FullScreenCanvas.Disable*"></a>
   <h4 id="Cosmos_System_Graphics_FullScreenCanvas_Disable" data-uid="Cosmos.System.Graphics.FullScreenCanvas.Disable">Disable()</h4>
-  <div class="markdown level1 summary"><p>Disables the specified Graphics Driver used and returns to VGA text mode 80x25</p>
+  <div class="markdown level1 summary"><p>Disables the specified graphics driver used, and returns to VGA text mode 80x25.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -4896,12 +4898,11 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_FullScreenCanvas_GetCurrentFullScreenCanvas.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.FullScreenCanvas.GetCurrentFullScreenCanvas%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/FullScreenCanvas.cs/#L177">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/FullScreenCanvas.cs/#L151">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_FullScreenCanvas_GetCurrentFullScreenCanvas_" data-uid="Cosmos.System.Graphics.FullScreenCanvas.GetCurrentFullScreenCanvas*"></a>
   <h4 id="Cosmos_System_Graphics_FullScreenCanvas_GetCurrentFullScreenCanvas" data-uid="Cosmos.System.Graphics.FullScreenCanvas.GetCurrentFullScreenCanvas">GetCurrentFullScreenCanvas()</h4>
-  <div class="markdown level1 summary"><p>Gets current full screen canvas
-with out setting Mode.</p>
+  <div class="markdown level1 summary"><p>Gets the currently used screen display canvas.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -4919,8 +4920,7 @@ with out setting Mode.</p>
     <tbody>
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.Canvas.html">Canvas</a></td>
-        <td><p>Canvas value.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -4929,12 +4929,11 @@ with out setting Mode.</p>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_FullScreenCanvas_GetFullScreenCanvas.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.FullScreenCanvas.GetFullScreenCanvas%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/FullScreenCanvas.cs/#L110">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/FullScreenCanvas.cs/#L95">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_FullScreenCanvas_GetFullScreenCanvas_" data-uid="Cosmos.System.Graphics.FullScreenCanvas.GetFullScreenCanvas*"></a>
   <h4 id="Cosmos_System_Graphics_FullScreenCanvas_GetFullScreenCanvas" data-uid="Cosmos.System.Graphics.FullScreenCanvas.GetFullScreenCanvas">GetFullScreenCanvas()</h4>
-  <div class="markdown level1 summary"><p>Get full screen canvas.
-Changes current Mode to default.</p>
+  <div class="markdown level1 summary"><p>Gets a screen display canvas, and changes the display mode to the default.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -4952,8 +4951,7 @@ Changes current Mode to default.</p>
     <tbody>
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.Canvas.html">Canvas</a></td>
-        <td><p>Canvas value.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -4962,12 +4960,11 @@ Changes current Mode to default.</p>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_FullScreenCanvas_GetFullScreenCanvas_Cosmos_System_Graphics_Mode_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.FullScreenCanvas.GetFullScreenCanvas(Cosmos.System.Graphics.Mode)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/FullScreenCanvas.cs/#L134">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/FullScreenCanvas.cs/#L113">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_FullScreenCanvas_GetFullScreenCanvas_" data-uid="Cosmos.System.Graphics.FullScreenCanvas.GetFullScreenCanvas*"></a>
   <h4 id="Cosmos_System_Graphics_FullScreenCanvas_GetFullScreenCanvas_Cosmos_System_Graphics_Mode_" data-uid="Cosmos.System.Graphics.FullScreenCanvas.GetFullScreenCanvas(Cosmos.System.Graphics.Mode)">GetFullScreenCanvas(Mode)</h4>
-  <div class="markdown level1 summary"><p>Get full screen canvas.
-Changes the current Mode.</p>
+  <div class="markdown level1 summary"><p>Gets a screen display canvas, and changes the display mode to the given <code data-dev-comment-type="paramref" class="paramref">mode</code>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -4987,8 +4984,7 @@ Changes the current Mode.</p>
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.Mode.html">Mode</a></td>
         <td><span class="parametername">mode</span></td>
-        <td><p>Mode.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -5003,8 +4999,7 @@ Changes the current Mode.</p>
     <tbody>
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.Canvas.html">Canvas</a></td>
-        <td><p>Canvas value.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -5013,11 +5008,11 @@ Changes the current Mode.</p>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_FullScreenCanvas_TryGetFullScreenCanvas_Cosmos_System_Graphics_Mode_Cosmos_System_Graphics_Canvas__.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.FullScreenCanvas.TryGetFullScreenCanvas(Cosmos.System.Graphics.Mode%2CCosmos.System.Graphics.Canvas%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/FullScreenCanvas.cs/#L156">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/FullScreenCanvas.cs/#L132">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_FullScreenCanvas_TryGetFullScreenCanvas_" data-uid="Cosmos.System.Graphics.FullScreenCanvas.TryGetFullScreenCanvas*"></a>
   <h4 id="Cosmos_System_Graphics_FullScreenCanvas_TryGetFullScreenCanvas_Cosmos_System_Graphics_Mode_Cosmos_System_Graphics_Canvas__" data-uid="Cosmos.System.Graphics.FullScreenCanvas.TryGetFullScreenCanvas(Cosmos.System.Graphics.Mode,Cosmos.System.Graphics.Canvas@)">TryGetFullScreenCanvas(Mode, out Canvas)</h4>
-  <div class="markdown level1 summary"><p>Trys to get full screen canvas.</p>
+  <div class="markdown level1 summary"><p>Attempts to get a screen display canvas, and changes the display mode to the default.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -5037,8 +5032,7 @@ Changes the current Mode.</p>
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.Mode.html">Mode</a></td>
         <td><span class="parametername">mode</span></td>
-        <td><p>Mode.</p>
-</td>
+        <td></td>
       </tr>
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.Canvas.html">Canvas</a></td>
@@ -5058,7 +5052,7 @@ Changes the current Mode.</p>
     <tbody>
       <tr>
         <td><span class="xref">System.Boolean</span></td>
-        <td><p>true if successfully; otherwise, false.</p>
+        <td><p><span class="xref">true</span> if the operation was successful; otherwise, <span class="xref">false</span>.</p>
 </td>
       </tr>
     </tbody>
@@ -5074,7 +5068,7 @@ Changes the current Mode.</p>
                     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_FullScreenCanvas.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.FullScreenCanvas%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/FullScreenCanvas.cs/#L12" class="contribution-link">View Source</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/FullScreenCanvas.cs/#L13" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

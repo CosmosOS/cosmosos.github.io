@@ -2534,22 +2534,22 @@
                         
                         <ul class="nav level2">
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.DE_Standard.html" title="DE_Standard" class="">DE_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.DEStandardLayout.html" title="DEStandardLayout" class="">DEStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.ES_Standard.html" title="ES_Standard" class="">ES_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.ESStandardLayout.html" title="ESStandardLayout" class="">ESStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.FR_Standard.html" title="FR_Standard" class="">FR_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.FRStandardLayout.html" title="FRStandardLayout" class="">FRStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.GB_Standard.html" title="GB_Standard" class="">GB_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.GBStandardLayout.html" title="GBStandardLayout" class="">GBStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.TR_StandardQ.html" title="TR_StandardQ" class="">TR_StandardQ</a>
+                            <a href="Cosmos.System.ScanMaps.TRStandardLayout.html" title="TRStandardLayout" class="">TRStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.US_Standard.html" title="US_Standard" class="">US_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.USStandardLayout.html" title="USStandardLayout" class="">USStandardLayout</a>
                           </li>
                         </ul>  </li>
                     <li class="">
@@ -4772,7 +4772,9 @@
   
   <h1 id="Cosmos_Debug_Kernel_Debugger" data-uid="Cosmos.Debug.Kernel.Debugger" class="text-break">Class Debugger
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary"><p>Represents a categorized remote debugger, capable of communicating
+with an external host machine, including virtualizers.</p>
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
@@ -4792,15 +4794,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger__ctor_System_String_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.%23ctor(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L24">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L47">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger__ctor_" data-uid="Cosmos.Debug.Kernel.Debugger.#ctor*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger__ctor_System_String_System_String_" data-uid="Cosmos.Debug.Kernel.Debugger.#ctor(System.String,System.String)">Debugger(String, String)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Creates a new instance of the <a class="xref" href="Cosmos.Debug.Kernel.Debugger.html">Debugger</a> class.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Debugger(string aRing, string aSection)</code></pre>
+    <pre><code class="lang-csharp hljs">public Debugger(string ring, string section)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4814,13 +4817,15 @@
     <tbody>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">aRing</span></td>
-        <td></td>
+        <td><span class="parametername">ring</span></td>
+        <td><p>The virtual compile-time ring the debugger is operating in.</p>
+</td>
       </tr>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">aSection</span></td>
-        <td></td>
+        <td><span class="parametername">section</span></td>
+        <td><p>The section the debugger refers to.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -4831,11 +4836,13 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_Ring.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.Ring%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L30">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L57">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_Ring_" data-uid="Cosmos.Debug.Kernel.Debugger.Ring*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_Ring" data-uid="Cosmos.Debug.Kernel.Debugger.Ring">Ring</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>The virtual compile-time ring the debugger is operating in. This value acts like
+a label, and can be virtually any string.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -4861,11 +4868,12 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_Section.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.Section%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L32">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L62">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_Section_" data-uid="Cosmos.Debug.Kernel.Debugger.Section*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_Section" data-uid="Cosmos.Debug.Kernel.Debugger.Section">Section</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>The section the debugger refers to.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -4893,11 +4901,12 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_Break.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.Break%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L34">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L67">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_Break_" data-uid="Cosmos.Debug.Kernel.Debugger.Break*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_Break" data-uid="Cosmos.Debug.Kernel.Debugger.Break">Break()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Triggers a software breakpoint.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -4908,7 +4917,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_CreateNumber_System_UInt32_System_Byte_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.CreateNumber(System.UInt32%2CSystem.Byte)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L183">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L312">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_CreateNumber_" data-uid="Cosmos.Debug.Kernel.Debugger.CreateNumber*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_CreateNumber_System_UInt32_System_Byte_" data-uid="Cosmos.Debug.Kernel.Debugger.CreateNumber(System.UInt32,System.Byte)">CreateNumber(UInt32, Byte)</h4>
@@ -4960,7 +4969,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_CreateNumber_System_UInt32_System_Byte_System_Boolean_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.CreateNumber(System.UInt32%2CSystem.Byte%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L187">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L317">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_CreateNumber_" data-uid="Cosmos.Debug.Kernel.Debugger.CreateNumber*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_CreateNumber_System_UInt32_System_Byte_System_Boolean_" data-uid="Cosmos.Debug.Kernel.Debugger.CreateNumber(System.UInt32,System.Byte,System.Boolean)">CreateNumber(UInt32, Byte, Boolean)</h4>
@@ -5017,11 +5026,12 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_DoBochsBreak.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.DoBochsBreak%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L36">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L72">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_DoBochsBreak_" data-uid="Cosmos.Debug.Kernel.Debugger.DoBochsBreak*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_DoBochsBreak" data-uid="Cosmos.Debug.Kernel.Debugger.DoBochsBreak">DoBochsBreak()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Triggers a Bochs breakpoint.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -5032,15 +5042,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_DoSendNumber_System_Double_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.DoSendNumber(System.Double)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L54">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L111">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_DoSendNumber_" data-uid="Cosmos.Debug.Kernel.Debugger.DoSendNumber*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_DoSendNumber_System_Double_" data-uid="Cosmos.Debug.Kernel.Debugger.DoSendNumber(System.Double)">DoSendNumber(Double)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends a 64-bit floating-point number to connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void DoSendNumber(double aNumber)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void DoSendNumber(double number)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5054,7 +5065,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Double</span></td>
-        <td><span class="parametername">aNumber</span></td>
+        <td><span class="parametername">number</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5064,15 +5075,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_DoSendNumber_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.DoSendNumber(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L46">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L91">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_DoSendNumber_" data-uid="Cosmos.Debug.Kernel.Debugger.DoSendNumber*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_DoSendNumber_System_Int32_" data-uid="Cosmos.Debug.Kernel.Debugger.DoSendNumber(System.Int32)">DoSendNumber(Int32)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends a 32-bit signed integer to connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void DoSendNumber(int aNumber)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void DoSendNumber(int number)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5086,7 +5098,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">aNumber</span></td>
+        <td><span class="parametername">number</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5096,15 +5108,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_DoSendNumber_System_Int64_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.DoSendNumber(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L50">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L101">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_DoSendNumber_" data-uid="Cosmos.Debug.Kernel.Debugger.DoSendNumber*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_DoSendNumber_System_Int64_" data-uid="Cosmos.Debug.Kernel.Debugger.DoSendNumber(System.Int64)">DoSendNumber(Int64)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends a 64-bit signed integer to connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void DoSendNumber(long aNumber)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void DoSendNumber(long number)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5118,7 +5131,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Int64</span></td>
-        <td><span class="parametername">aNumber</span></td>
+        <td><span class="parametername">number</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5128,15 +5141,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_DoSendNumber_System_Single_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.DoSendNumber(System.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L52">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L106">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_DoSendNumber_" data-uid="Cosmos.Debug.Kernel.Debugger.DoSendNumber*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_DoSendNumber_System_Single_" data-uid="Cosmos.Debug.Kernel.Debugger.DoSendNumber(System.Single)">DoSendNumber(Single)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends a 32-bit floating-point number to connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void DoSendNumber(float aNumber)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void DoSendNumber(float number)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5150,7 +5164,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">aNumber</span></td>
+        <td><span class="parametername">number</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5160,15 +5174,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_DoSendNumber_System_UInt32_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.DoSendNumber(System.UInt32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L44">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L86">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_DoSendNumber_" data-uid="Cosmos.Debug.Kernel.Debugger.DoSendNumber*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_DoSendNumber_System_UInt32_" data-uid="Cosmos.Debug.Kernel.Debugger.DoSendNumber(System.UInt32)">DoSendNumber(UInt32)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends a 32-bit unsigned integer to connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void DoSendNumber(uint aNumber)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void DoSendNumber(uint number)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5182,7 +5197,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.UInt32</span></td>
-        <td><span class="parametername">aNumber</span></td>
+        <td><span class="parametername">number</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5192,15 +5207,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_DoSendNumber_System_UInt64_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.DoSendNumber(System.UInt64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L48">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L96">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_DoSendNumber_" data-uid="Cosmos.Debug.Kernel.Debugger.DoSendNumber*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_DoSendNumber_System_UInt64_" data-uid="Cosmos.Debug.Kernel.Debugger.DoSendNumber(System.UInt64)">DoSendNumber(UInt64)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends a 64-bit unsigned integer to connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void DoSendNumber(ulong aNumber)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void DoSendNumber(ulong number)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5214,7 +5230,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.UInt64</span></td>
-        <td><span class="parametername">aNumber</span></td>
+        <td><span class="parametername">number</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5224,15 +5240,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_Send_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.Send(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L90">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L177">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_Send_" data-uid="Cosmos.Debug.Kernel.Debugger.Send*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_Send_System_String_" data-uid="Cosmos.Debug.Kernel.Debugger.Send(System.String)">Send(String)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends the given string to connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Send(string aText)</code></pre>
+    <pre><code class="lang-csharp hljs">public void Send(string text)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5246,8 +5263,9 @@
     <tbody>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">aText</span></td>
-        <td></td>
+        <td><span class="parametername">text</span></td>
+        <td><p>The text/message to send.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -5256,15 +5274,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_Send_System_String___.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.Send(System.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L92">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L183">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_Send_" data-uid="Cosmos.Debug.Kernel.Debugger.Send*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_Send_System_String___" data-uid="Cosmos.Debug.Kernel.Debugger.Send(System.String[])">Send(String[])</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends multiple strings to connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Send(string[] aStringArray)</code></pre>
+    <pre><code class="lang-csharp hljs">public void Send(string[] stringArray)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5278,8 +5297,9 @@
     <tbody>
       <tr>
         <td><span class="xref">System.String</span>[]</td>
-        <td><span class="parametername">aStringArray</span></td>
-        <td></td>
+        <td><span class="parametername">stringArray</span></td>
+        <td><p>The strings to send.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -5288,15 +5308,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendChannelCommand_System_Byte_System_Byte_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendChannelCommand(System.Byte%2CSystem.Byte)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L78">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L157">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendChannelCommand_" data-uid="Cosmos.Debug.Kernel.Debugger.SendChannelCommand*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendChannelCommand_System_Byte_System_Byte_" data-uid="Cosmos.Debug.Kernel.Debugger.SendChannelCommand(System.Byte,System.Byte)">SendChannelCommand(Byte, Byte)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends a command to the given debug channel.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SendChannelCommand(byte aChannel, byte aCommand)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SendChannelCommand(byte channel, byte command)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5310,13 +5331,15 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Byte</span></td>
-        <td><span class="parametername">aChannel</span></td>
-        <td></td>
+        <td><span class="parametername">channel</span></td>
+        <td><p>The channel to send the data to.</p>
+</td>
       </tr>
       <tr>
         <td><span class="xref">System.Byte</span></td>
-        <td><span class="parametername">aCommand</span></td>
-        <td></td>
+        <td><span class="parametername">command</span></td>
+        <td><p>The numeric command.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -5325,7 +5348,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendChannelCommand_System_Byte_System_Byte_System_Byte___.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendChannelCommand(System.Byte%2CSystem.Byte%2CSystem.Byte%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L70">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L137">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendChannelCommand_" data-uid="Cosmos.Debug.Kernel.Debugger.SendChannelCommand*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendChannelCommand_System_Byte_System_Byte_System_Byte___" data-uid="Cosmos.Debug.Kernel.Debugger.SendChannelCommand(System.Byte,System.Byte,System.Byte[])">SendChannelCommand(Byte, Byte, Byte[])</h4>
@@ -5367,15 +5390,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendChannelCommand_System_Byte_System_Byte_System_Int32_System_Byte__.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendChannelCommand(System.Byte%2CSystem.Byte%2CSystem.Int32%2CSystem.Byte*)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L76">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L150">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendChannelCommand_" data-uid="Cosmos.Debug.Kernel.Debugger.SendChannelCommand*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendChannelCommand_System_Byte_System_Byte_System_Int32_System_Byte__" data-uid="Cosmos.Debug.Kernel.Debugger.SendChannelCommand(System.Byte,System.Byte,System.Int32,System.Byte*)">SendChannelCommand(Byte, Byte, Int32, Byte*)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends a command and its associated data to the given debug channel.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SendChannelCommand(byte aChannel, byte aCommand, int aByteCount, byte *aData)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SendChannelCommand(byte channel, byte command, int byteCount, byte *data)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5389,23 +5413,27 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Byte</span></td>
-        <td><span class="parametername">aChannel</span></td>
-        <td></td>
+        <td><span class="parametername">channel</span></td>
+        <td><p>The channel to send the data to.</p>
+</td>
       </tr>
       <tr>
         <td><span class="xref">System.Byte</span></td>
-        <td><span class="parametername">aCommand</span></td>
-        <td></td>
+        <td><span class="parametername">command</span></td>
+        <td><p>The numeric command.</p>
+</td>
       </tr>
       <tr>
         <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">aByteCount</span></td>
-        <td></td>
+        <td><span class="parametername">byteCount</span></td>
+        <td><p>The amount of bytes in the data associated with the command.</p>
+</td>
       </tr>
       <tr>
         <td><span class="xref">System.Byte</span>*</td>
-        <td><span class="parametername">aData</span></td>
-        <td></td>
+        <td><span class="parametername">data</span></td>
+        <td><p>The data associated with the command</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -5414,7 +5442,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendCoreDump.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendCoreDump%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L332">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L469">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendCoreDump_" data-uid="Cosmos.Debug.Kernel.Debugger.SendCoreDump*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendCoreDump" data-uid="Cosmos.Debug.Kernel.Debugger.SendCoreDump">SendCoreDump()</h4>
@@ -5429,7 +5457,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendError_System_String_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendError(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L161">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L286">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendError_" data-uid="Cosmos.Debug.Kernel.Debugger.SendError*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendError_System_String_System_String_" data-uid="Cosmos.Debug.Kernel.Debugger.SendError(System.String,System.String)">SendError(String, String)</h4>
@@ -5466,15 +5494,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendInternal_System_Double_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendInternal(System.Double)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L115">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L230">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendInternal_" data-uid="Cosmos.Debug.Kernel.Debugger.SendInternal*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendInternal_System_Double_" data-uid="Cosmos.Debug.Kernel.Debugger.SendInternal(System.Double)">SendInternal(Double)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends the given 64-bit floating-point number to all connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void SendInternal(double aNumber)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual void SendInternal(double number)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5488,7 +5517,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Double</span></td>
-        <td><span class="parametername">aNumber</span></td>
+        <td><span class="parametername">number</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5498,15 +5527,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendInternal_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendInternal(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L103">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L206">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendInternal_" data-uid="Cosmos.Debug.Kernel.Debugger.SendInternal*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendInternal_System_Int32_" data-uid="Cosmos.Debug.Kernel.Debugger.SendInternal(System.Int32)">SendInternal(Int32)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends the given 32-bit signed integer to all connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void SendInternal(int aNumber)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual void SendInternal(int number)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5520,7 +5550,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">aNumber</span></td>
+        <td><span class="parametername">number</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5530,15 +5560,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendInternal_System_Int64_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendInternal(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L109">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L218">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendInternal_" data-uid="Cosmos.Debug.Kernel.Debugger.SendInternal*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendInternal_System_Int64_" data-uid="Cosmos.Debug.Kernel.Debugger.SendInternal(System.Int64)">SendInternal(Int64)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends the given 64-bit signed integer to all connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void SendInternal(long aNumber)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual void SendInternal(long number)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5552,7 +5583,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Int64</span></td>
-        <td><span class="parametername">aNumber</span></td>
+        <td><span class="parametername">number</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5562,15 +5593,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendInternal_System_Single_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendInternal(System.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L112">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L224">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendInternal_" data-uid="Cosmos.Debug.Kernel.Debugger.SendInternal*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendInternal_System_Single_" data-uid="Cosmos.Debug.Kernel.Debugger.SendInternal(System.Single)">SendInternal(Single)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends the given 32-bit floating-point number to all connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void SendInternal(float aNumber)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual void SendInternal(float number)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5584,7 +5616,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">aNumber</span></td>
+        <td><span class="parametername">number</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5594,15 +5626,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendInternal_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendInternal(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L94">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L188">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendInternal_" data-uid="Cosmos.Debug.Kernel.Debugger.SendInternal*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendInternal_System_String_" data-uid="Cosmos.Debug.Kernel.Debugger.SendInternal(System.String)">SendInternal(String)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends the given message to all connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void SendInternal(string aText)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual void SendInternal(string text)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5616,7 +5649,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">aText</span></td>
+        <td><span class="parametername">text</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5626,15 +5659,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendInternal_System_String___.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendInternal(System.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L97">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L194">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendInternal_" data-uid="Cosmos.Debug.Kernel.Debugger.SendInternal*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendInternal_System_String___" data-uid="Cosmos.Debug.Kernel.Debugger.SendInternal(System.String[])">SendInternal(String[])</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends the given strings to all connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void SendInternal(string[] aStringArray)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual void SendInternal(string[] stringArray)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5648,7 +5682,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.String</span>[]</td>
-        <td><span class="parametername">aStringArray</span></td>
+        <td><span class="parametername">stringArray</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5658,15 +5692,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendInternal_System_UInt32_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendInternal(System.UInt32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L100">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L200">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendInternal_" data-uid="Cosmos.Debug.Kernel.Debugger.SendInternal*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendInternal_System_UInt32_" data-uid="Cosmos.Debug.Kernel.Debugger.SendInternal(System.UInt32)">SendInternal(UInt32)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends the given 32-bit unsigned integer to all connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void SendInternal(uint aNumber)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual void SendInternal(uint number)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5680,7 +5715,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.UInt32</span></td>
-        <td><span class="parametername">aNumber</span></td>
+        <td><span class="parametername">number</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5690,15 +5725,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendInternal_System_UInt64_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendInternal(System.UInt64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L106">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L212">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendInternal_" data-uid="Cosmos.Debug.Kernel.Debugger.SendInternal*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendInternal_System_UInt64_" data-uid="Cosmos.Debug.Kernel.Debugger.SendInternal(System.UInt64)">SendInternal(UInt64)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends the given 64-bit unsigned integer to all connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void SendInternal(ulong aNumber)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual void SendInternal(ulong number)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5712,7 +5748,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.UInt64</span></td>
-        <td><span class="parametername">aNumber</span></td>
+        <td><span class="parametername">number</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5722,11 +5758,12 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendKernelPanic_System_UInt32_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendKernelPanic(System.UInt32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L89">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L171">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendKernelPanic_" data-uid="Cosmos.Debug.Kernel.Debugger.SendKernelPanic*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendKernelPanic_System_UInt32_" data-uid="Cosmos.Debug.Kernel.Debugger.SendKernelPanic(System.UInt32)">SendKernelPanic(UInt32)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends a kernel panic error code to connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -5754,7 +5791,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendMessage_System_String_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendMessage(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L149">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L273">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendMessage_" data-uid="Cosmos.Debug.Kernel.Debugger.SendMessage*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendMessage_System_String_System_String_" data-uid="Cosmos.Debug.Kernel.Debugger.SendMessage(System.String,System.String)">SendMessage(String, String)</h4>
@@ -5762,7 +5799,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void SendMessage(string aModule, string aData)</code></pre>
+    <pre><code class="lang-csharp hljs">public void SendMessage(string module, string data)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5776,12 +5813,12 @@
     <tbody>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">aModule</span></td>
+        <td><span class="parametername">module</span></td>
         <td></td>
       </tr>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">aData</span></td>
+        <td><span class="parametername">data</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5791,15 +5828,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendMessageBox_System_Int32_System_Char__.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendMessageBox(System.Int32%2CSystem.Char*)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L133">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L253">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendMessageBox_" data-uid="Cosmos.Debug.Kernel.Debugger.SendMessageBox*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendMessageBox_System_Int32_System_Char__" data-uid="Cosmos.Debug.Kernel.Debugger.SendMessageBox(System.Int32,System.Char*)">SendMessageBox(Int32, Char*)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Displays a message box on connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void SendMessageBox(int aLength, char *aText)</code></pre>
+    <pre><code class="lang-csharp hljs">public void SendMessageBox(int length, char *text)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5813,13 +5851,15 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">aLength</span></td>
-        <td></td>
+        <td><span class="parametername">length</span></td>
+        <td><p>The length of the <code data-dev-comment-type="paramref" class="paramref">text</code> C-string.</p>
+</td>
       </tr>
       <tr>
         <td><span class="xref">System.Char</span>*</td>
-        <td><span class="parametername">aText</span></td>
-        <td></td>
+        <td><span class="parametername">text</span></td>
+        <td><p>The text to display in the message box, as a C-string.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -5828,15 +5868,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendMessageBox_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendMessageBox(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L135">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L259">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendMessageBox_" data-uid="Cosmos.Debug.Kernel.Debugger.SendMessageBox*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendMessageBox_System_String_" data-uid="Cosmos.Debug.Kernel.Debugger.SendMessageBox(System.String)">SendMessageBox(String)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Displays a message box on connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void SendMessageBox(string aText)</code></pre>
+    <pre><code class="lang-csharp hljs">public void SendMessageBox(string text)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5850,8 +5891,9 @@
     <tbody>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">aText</span></td>
-        <td></td>
+        <td><span class="parametername">text</span></td>
+        <td><p>The text to display.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -5860,15 +5902,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendNumber_System_Double_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendNumber(System.Double)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L68">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L135">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendNumber_" data-uid="Cosmos.Debug.Kernel.Debugger.SendNumber*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendNumber_System_Double_" data-uid="Cosmos.Debug.Kernel.Debugger.SendNumber(System.Double)">SendNumber(Double)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends a 64-bit floating-point number to connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void SendNumber(double aNumber)</code></pre>
+    <pre><code class="lang-csharp hljs">public void SendNumber(double number)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5882,7 +5925,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Double</span></td>
-        <td><span class="parametername">aNumber</span></td>
+        <td><span class="parametername">number</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5892,15 +5935,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendNumber_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendNumber(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L60">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L123">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendNumber_" data-uid="Cosmos.Debug.Kernel.Debugger.SendNumber*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendNumber_System_Int32_" data-uid="Cosmos.Debug.Kernel.Debugger.SendNumber(System.Int32)">SendNumber(Int32)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends a 32-bit signed integer to connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void SendNumber(int aNumber)</code></pre>
+    <pre><code class="lang-csharp hljs">public void SendNumber(int number)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5914,7 +5958,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">aNumber</span></td>
+        <td><span class="parametername">number</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5924,15 +5968,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendNumber_System_Int64_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendNumber(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L64">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L129">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendNumber_" data-uid="Cosmos.Debug.Kernel.Debugger.SendNumber*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendNumber_System_Int64_" data-uid="Cosmos.Debug.Kernel.Debugger.SendNumber(System.Int64)">SendNumber(Int64)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends a 64-bit signed integer to connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void SendNumber(long aNumber)</code></pre>
+    <pre><code class="lang-csharp hljs">public void SendNumber(long number)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5946,7 +5991,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Int64</span></td>
-        <td><span class="parametername">aNumber</span></td>
+        <td><span class="parametername">number</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5956,15 +6001,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendNumber_System_Single_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendNumber(System.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L66">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L132">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendNumber_" data-uid="Cosmos.Debug.Kernel.Debugger.SendNumber*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendNumber_System_Single_" data-uid="Cosmos.Debug.Kernel.Debugger.SendNumber(System.Single)">SendNumber(Single)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends a 32-bit floating-point number to connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void SendNumber(float aNumber)</code></pre>
+    <pre><code class="lang-csharp hljs">public void SendNumber(float number)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5978,7 +6024,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">aNumber</span></td>
+        <td><span class="parametername">number</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5988,7 +6034,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendNumber_System_String_System_String_System_UInt32_System_Byte_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendNumber(System.String%2CSystem.String%2CSystem.UInt32%2CSystem.Byte)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L168">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L294">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendNumber_" data-uid="Cosmos.Debug.Kernel.Debugger.SendNumber*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendNumber_System_String_System_String_System_UInt32_System_Byte_" data-uid="Cosmos.Debug.Kernel.Debugger.SendNumber(System.String,System.String,System.UInt32,System.Byte)">SendNumber(String, String, UInt32, Byte)</h4>
@@ -6035,15 +6081,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendNumber_System_UInt32_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendNumber(System.UInt32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L58">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L120">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendNumber_" data-uid="Cosmos.Debug.Kernel.Debugger.SendNumber*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendNumber_System_UInt32_" data-uid="Cosmos.Debug.Kernel.Debugger.SendNumber(System.UInt32)">SendNumber(UInt32)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends a 32-bit unsigned integer to connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void SendNumber(uint aNumber)</code></pre>
+    <pre><code class="lang-csharp hljs">public void SendNumber(uint number)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -6057,7 +6104,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.UInt32</span></td>
-        <td><span class="parametername">aNumber</span></td>
+        <td><span class="parametername">number</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -6067,15 +6114,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendNumber_System_UInt64_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendNumber(System.UInt64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L62">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L126">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendNumber_" data-uid="Cosmos.Debug.Kernel.Debugger.SendNumber*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendNumber_System_UInt64_" data-uid="Cosmos.Debug.Kernel.Debugger.SendNumber(System.UInt64)">SendNumber(UInt64)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends a 64-bit unsigned integer to connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void SendNumber(ulong aNumber)</code></pre>
+    <pre><code class="lang-csharp hljs">public void SendNumber(ulong number)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -6089,7 +6137,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.UInt64</span></td>
-        <td><span class="parametername">aNumber</span></td>
+        <td><span class="parametername">number</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -6099,15 +6147,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_SendPtr_System_Object_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.SendPtr(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L42">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L81">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_SendPtr_" data-uid="Cosmos.Debug.Kernel.Debugger.SendPtr*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_SendPtr_System_Object_" data-uid="Cosmos.Debug.Kernel.Debugger.SendPtr(System.Object)">SendPtr(Object)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sends the pointer of the given object to any connected debugging hosts.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void SendPtr(object aObject)</code></pre>
+    <pre><code class="lang-csharp hljs">public void SendPtr(object obj)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -6121,7 +6170,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Object</span></td>
-        <td><span class="parametername">aObject</span></td>
+        <td><span class="parametername">obj</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -6131,7 +6180,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_ViewMemory.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.ViewMemory%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L289">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L423">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_ViewMemory_" data-uid="Cosmos.Debug.Kernel.Debugger.ViewMemory*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_ViewMemory" data-uid="Cosmos.Debug.Kernel.Debugger.ViewMemory">ViewMemory()</h4>
@@ -6146,7 +6195,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_ViewMemory_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.ViewMemory(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L293">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L428">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_ViewMemory_" data-uid="Cosmos.Debug.Kernel.Debugger.ViewMemory*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_ViewMemory_System_Int32_" data-uid="Cosmos.Debug.Kernel.Debugger.ViewMemory(System.Int32)">ViewMemory(Int32)</h4>
@@ -6178,7 +6227,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_WriteBinary_System_String_System_String_System_Byte__System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.WriteBinary(System.String%2CSystem.String%2CSystem.Byte*%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L276">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L409">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_WriteBinary_" data-uid="Cosmos.Debug.Kernel.Debugger.WriteBinary*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_WriteBinary_System_String_System_String_System_Byte__System_Int32_System_Int32_" data-uid="Cosmos.Debug.Kernel.Debugger.WriteBinary(System.String,System.String,System.Byte*,System.Int32,System.Int32)">WriteBinary(String, String, Byte*, Int32, Int32)</h4>
@@ -6230,7 +6279,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_WriteBinary_System_String_System_String_System_Byte___.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.WriteBinary(System.String%2CSystem.String%2CSystem.Byte%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L259">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L390">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_WriteBinary_" data-uid="Cosmos.Debug.Kernel.Debugger.WriteBinary*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_WriteBinary_System_String_System_String_System_Byte___" data-uid="Cosmos.Debug.Kernel.Debugger.WriteBinary(System.String,System.String,System.Byte[])">WriteBinary(String, String, Byte[])</h4>
@@ -6272,7 +6321,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_WriteBinary_System_String_System_String_System_Byte___System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.WriteBinary(System.String%2CSystem.String%2CSystem.Byte%5B%5D%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L263">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L395">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_WriteBinary_" data-uid="Cosmos.Debug.Kernel.Debugger.WriteBinary*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_WriteBinary_System_String_System_String_System_Byte___System_Int32_System_Int32_" data-uid="Cosmos.Debug.Kernel.Debugger.WriteBinary(System.String,System.String,System.Byte[],System.Int32,System.Int32)">WriteBinary(String, String, Byte[], Int32, Int32)</h4>
@@ -6324,7 +6373,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_WriteNumber_System_UInt32_System_Byte_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.WriteNumber(System.UInt32%2CSystem.Byte)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L175">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L302">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_WriteNumber_" data-uid="Cosmos.Debug.Kernel.Debugger.WriteNumber*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_WriteNumber_System_UInt32_System_Byte_" data-uid="Cosmos.Debug.Kernel.Debugger.WriteNumber(System.UInt32,System.Byte)">WriteNumber(UInt32, Byte)</h4>
@@ -6361,7 +6410,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger_WriteNumber_System_UInt32_System_Byte_System_Boolean_.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger.WriteNumber(System.UInt32%2CSystem.Byte%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L179">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L307">View Source</a>
   </span>
   <a id="Cosmos_Debug_Kernel_Debugger_WriteNumber_" data-uid="Cosmos.Debug.Kernel.Debugger.WriteNumber*"></a>
   <h4 id="Cosmos_Debug_Kernel_Debugger_WriteNumber_System_UInt32_System_Byte_System_Boolean_" data-uid="Cosmos.Debug.Kernel.Debugger.WriteNumber(System.UInt32,System.Byte,System.Boolean)">WriteNumber(UInt32, Byte, Boolean)</h4>
@@ -6409,7 +6458,7 @@
                     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Debug_Kernel_Debugger.md&amp;value=---%0Auid%3A%20Cosmos.Debug.Kernel.Debugger%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L22" class="contribution-link">View Source</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Debug.Kernel/Debugger.cs/#L40" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

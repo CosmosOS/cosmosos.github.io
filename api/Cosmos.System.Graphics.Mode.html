@@ -2534,22 +2534,22 @@
                         
                         <ul class="nav level2">
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.DE_Standard.html" title="DE_Standard" class="">DE_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.DEStandardLayout.html" title="DEStandardLayout" class="">DEStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.ES_Standard.html" title="ES_Standard" class="">ES_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.ESStandardLayout.html" title="ESStandardLayout" class="">ESStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.FR_Standard.html" title="FR_Standard" class="">FR_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.FRStandardLayout.html" title="FRStandardLayout" class="">FRStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.GB_Standard.html" title="GB_Standard" class="">GB_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.GBStandardLayout.html" title="GBStandardLayout" class="">GBStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.TR_StandardQ.html" title="TR_StandardQ" class="">TR_StandardQ</a>
+                            <a href="Cosmos.System.ScanMaps.TRStandardLayout.html" title="TRStandardLayout" class="">TRStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.US_Standard.html" title="US_Standard" class="">US_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.USStandardLayout.html" title="USStandardLayout" class="">USStandardLayout</a>
                           </li>
                         </ul>  </li>
                     <li class="">
@@ -4772,7 +4772,7 @@
   
   <h1 id="Cosmos_System_Graphics_Mode" data-uid="Cosmos.System.Graphics.Mode" class="text-break">Struct Mode
   </h1>
-  <div class="markdown level0 summary"><p>Mode struct. Represents a video mode in term of its number of columns, rows and color depth.</p>
+  <div class="markdown level0 summary"><p>Represents a video mode, definining its width (rows), height (columns) and color depth.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritedMembers">
@@ -4791,7 +4791,7 @@
   <h6><strong>Assembly</strong>: Cosmos.System2.dll</h6>
   <h5 id="Cosmos_System_Graphics_Mode_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public struct Mode</code></pre>
+    <pre><code class="lang-csharp hljs">public readonly struct Mode</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -4800,16 +4800,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Mode__ctor_System_Int32_System_Int32_Cosmos_System_Graphics_ColorDepth_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Mode.%23ctor(System.Int32%2CSystem.Int32%2CCosmos.System.Graphics.ColorDepth)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L22">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L36">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Mode__ctor_" data-uid="Cosmos.System.Graphics.Mode.#ctor*"></a>
   <h4 id="Cosmos_System_Graphics_Mode__ctor_System_Int32_System_Int32_Cosmos_System_Graphics_ColorDepth_" data-uid="Cosmos.System.Graphics.Mode.#ctor(System.Int32,System.Int32,Cosmos.System.Graphics.ColorDepth)">Mode(Int32, Int32, ColorDepth)</h4>
-  <div class="markdown level1 summary"><p>Create new instance of the <a class="xref" href="Cosmos.System.Graphics.Mode.html">Mode</a> struct.</p>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Cosmos.System.Graphics.Mode.html">Mode</a> struct.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Mode(int columns, int rows, ColorDepth color_depth)</code></pre>
+    <pre><code class="lang-csharp hljs">public Mode(int columns, int rows, ColorDepth colorDepth)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4824,19 +4824,19 @@
       <tr>
         <td><span class="xref">System.Int32</span></td>
         <td><span class="parametername">columns</span></td>
-        <td><p>Number of columns.</p>
+        <td><p>The number of columns.</p>
 </td>
       </tr>
       <tr>
         <td><span class="xref">System.Int32</span></td>
         <td><span class="parametername">rows</span></td>
-        <td><p>Number of rows.</p>
+        <td><p>The number of rows.</p>
 </td>
       </tr>
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.ColorDepth.html">ColorDepth</a></td>
-        <td><span class="parametername">color_depth</span></td>
-        <td><p>Color depth.</p>
+        <td><span class="parametername">colorDepth</span></td>
+        <td><p>The color depth, i.e. the amount of bits per a single pixel.</p>
 </td>
       </tr>
     </tbody>
@@ -4848,11 +4848,11 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Mode_ColorDepth.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Mode.ColorDepth%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L162">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L28">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Mode_ColorDepth_" data-uid="Cosmos.System.Graphics.Mode.ColorDepth*"></a>
   <h4 id="Cosmos_System_Graphics_Mode_ColorDepth" data-uid="Cosmos.System.Graphics.Mode.ColorDepth">ColorDepth</h4>
-  <div class="markdown level1 summary"><p>Get color depth</p>
+  <div class="markdown level1 summary"><p>The color depth of the display mode, i.e. the amount of bits per a single pixel.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -4879,11 +4879,11 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Mode_Height.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Mode.Height%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L157">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L23">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Mode_Height_" data-uid="Cosmos.System.Graphics.Mode.Height*"></a>
   <h4 id="Cosmos_System_Graphics_Mode_Height" data-uid="Cosmos.System.Graphics.Mode.Height">Height</h4>
-  <div class="markdown level1 summary"><p>Get rows.</p>
+  <div class="markdown level1 summary"><p>The height, or columns, of the display mode.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -4910,11 +4910,11 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Mode_Width.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Mode.Width%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L152">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L18">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Mode_Width_" data-uid="Cosmos.System.Graphics.Mode.Width*"></a>
   <h4 id="Cosmos_System_Graphics_Mode_Width" data-uid="Cosmos.System.Graphics.Mode.Width">Width</h4>
-  <div class="markdown level1 summary"><p>Get columns.</p>
+  <div class="markdown level1 summary"><p>The width, or rows, of the display mode.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -4943,16 +4943,15 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Mode_CompareTo_Cosmos_System_Graphics_Mode_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Mode.CompareTo(Cosmos.System.Graphics.Mode)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L68">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L62">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Mode_CompareTo_" data-uid="Cosmos.System.Graphics.Mode.CompareTo*"></a>
   <h4 id="Cosmos_System_Graphics_Mode_CompareTo_Cosmos_System_Graphics_Mode_" data-uid="Cosmos.System.Graphics.Mode.CompareTo(Cosmos.System.Graphics.Mode)">CompareTo(Mode)</h4>
-  <div class="markdown level1 summary"><p>Compare modes.</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int CompareTo(Mode other)</code></pre>
+    <pre><code class="lang-csharp hljs">public readonly int CompareTo(Mode other)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4967,8 +4966,7 @@
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.Mode.html">Mode</a></td>
         <td><span class="parametername">other</span></td>
-        <td><p>Other mode to compare to.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -4983,8 +4981,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Int32</span></td>
-        <td><p>-1 if this smaller, +1 if this bigger, 0 otherwise.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -4993,16 +4990,15 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Mode_Equals_Cosmos_System_Graphics_Mode_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Mode.Equals(Cosmos.System.Graphics.Mode)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L34">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L43">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Mode_Equals_" data-uid="Cosmos.System.Graphics.Mode.Equals*"></a>
   <h4 id="Cosmos_System_Graphics_Mode_Equals_Cosmos_System_Graphics_Mode_" data-uid="Cosmos.System.Graphics.Mode.Equals(Cosmos.System.Graphics.Mode)">Equals(Mode)</h4>
-  <div class="markdown level1 summary"><p>Check if modes equal.</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool Equals(Mode other)</code></pre>
+    <pre><code class="lang-csharp hljs">public readonly bool Equals(Mode other)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5017,8 +5013,7 @@
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.Mode.html">Mode</a></td>
         <td><span class="parametername">other</span></td>
-        <td><p>Other mode.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -5033,8 +5028,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Boolean</span></td>
-        <td><p>bool value.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -5043,16 +5037,15 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Mode_Equals_System_Object_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Mode.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L44">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L48">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Mode_Equals_" data-uid="Cosmos.System.Graphics.Mode.Equals*"></a>
   <h4 id="Cosmos_System_Graphics_Mode_Equals_System_Object_" data-uid="Cosmos.System.Graphics.Mode.Equals(System.Object)">Equals(Object)</h4>
-  <div class="markdown level1 summary"><p>Check if modes equal.</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override bool Equals(object obj)</code></pre>
+    <pre><code class="lang-csharp hljs">public override readonly bool Equals(object obj)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5067,8 +5060,7 @@
       <tr>
         <td><span class="xref">System.Object</span></td>
         <td><span class="parametername">obj</span></td>
-        <td><p>Object to compare to.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -5083,8 +5075,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Boolean</span></td>
-        <td><p>bool value.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -5095,16 +5086,15 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Mode_GetHashCode.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Mode.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L51">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L50">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Mode_GetHashCode_" data-uid="Cosmos.System.Graphics.Mode.GetHashCode*"></a>
   <h4 id="Cosmos_System_Graphics_Mode_GetHashCode" data-uid="Cosmos.System.Graphics.Mode.GetHashCode">GetHashCode()</h4>
-  <div class="markdown level1 summary"><p>Get hash code.</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+    <pre><code class="lang-csharp hljs">public override readonly int GetHashCode()</code></pre>
   </div>
   <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5117,8 +5107,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Int32</span></td>
-        <td><p>int value.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -5129,16 +5118,15 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Mode_ToString.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Mode.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L168">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L86">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Mode_ToString_" data-uid="Cosmos.System.Graphics.Mode.ToString*"></a>
   <h4 id="Cosmos_System_Graphics_Mode_ToString" data-uid="Cosmos.System.Graphics.Mode.ToString">ToString()</h4>
-  <div class="markdown level1 summary"><p>To string.</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+    <pre><code class="lang-csharp hljs">public override readonly string ToString()</code></pre>
   </div>
   <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5151,8 +5139,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td><p>string value.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -5165,16 +5152,15 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Mode_op_Equality_Cosmos_System_Graphics_Mode_Cosmos_System_Graphics_Mode_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Mode.op_Equality(Cosmos.System.Graphics.Mode%2CCosmos.System.Graphics.Mode)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L91">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L79">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Mode_op_Equality_" data-uid="Cosmos.System.Graphics.Mode.op_Equality*"></a>
   <h4 id="Cosmos_System_Graphics_Mode_op_Equality_Cosmos_System_Graphics_Mode_Cosmos_System_Graphics_Mode_" data-uid="Cosmos.System.Graphics.Mode.op_Equality(Cosmos.System.Graphics.Mode,Cosmos.System.Graphics.Mode)">Equality(Mode, Mode)</h4>
-  <div class="markdown level1 summary"><p>Check if modes are equal.</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static bool operator ==(Mode mode_a, Mode mode_b)</code></pre>
+    <pre><code class="lang-csharp hljs">public static bool operator ==(Mode a, Mode b)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5188,15 +5174,13 @@
     <tbody>
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.Mode.html">Mode</a></td>
-        <td><span class="parametername">mode_a</span></td>
-        <td><p>lhs mode.</p>
-</td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
       </tr>
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.Mode.html">Mode</a></td>
-        <td><span class="parametername">mode_b</span></td>
-        <td><p>rhs mode.</p>
-</td>
+        <td><span class="parametername">b</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -5211,8 +5195,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Boolean</span></td>
-        <td><p>bool value.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -5221,16 +5204,15 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Mode_op_GreaterThan_Cosmos_System_Graphics_Mode_Cosmos_System_Graphics_Mode_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Mode.op_GreaterThan(Cosmos.System.Graphics.Mode%2CCosmos.System.Graphics.Mode)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L107">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L81">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Mode_op_GreaterThan_" data-uid="Cosmos.System.Graphics.Mode.op_GreaterThan*"></a>
   <h4 id="Cosmos_System_Graphics_Mode_op_GreaterThan_Cosmos_System_Graphics_Mode_Cosmos_System_Graphics_Mode_" data-uid="Cosmos.System.Graphics.Mode.op_GreaterThan(Cosmos.System.Graphics.Mode,Cosmos.System.Graphics.Mode)">GreaterThan(Mode, Mode)</h4>
-  <div class="markdown level1 summary"><p>Compare modes.</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static bool operator&gt;(Mode mode_a, Mode mode_b)</code></pre>
+    <pre><code class="lang-csharp hljs">public static bool operator&gt;(Mode a, Mode b)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5244,15 +5226,13 @@
     <tbody>
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.Mode.html">Mode</a></td>
-        <td><span class="parametername">mode_a</span></td>
-        <td><p>lhs mode.</p>
-</td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
       </tr>
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.Mode.html">Mode</a></td>
-        <td><span class="parametername">mode_b</span></td>
-        <td><p>rhs mode.</p>
-</td>
+        <td><span class="parametername">b</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -5267,8 +5247,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Boolean</span></td>
-        <td><p>bool value.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -5277,16 +5256,15 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Mode_op_GreaterThanOrEqual_Cosmos_System_Graphics_Mode_Cosmos_System_Graphics_Mode_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Mode.op_GreaterThanOrEqual(Cosmos.System.Graphics.Mode%2CCosmos.System.Graphics.Mode)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L133">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L83">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Mode_op_GreaterThanOrEqual_" data-uid="Cosmos.System.Graphics.Mode.op_GreaterThanOrEqual*"></a>
   <h4 id="Cosmos_System_Graphics_Mode_op_GreaterThanOrEqual_Cosmos_System_Graphics_Mode_Cosmos_System_Graphics_Mode_" data-uid="Cosmos.System.Graphics.Mode.op_GreaterThanOrEqual(Cosmos.System.Graphics.Mode,Cosmos.System.Graphics.Mode)">GreaterThanOrEqual(Mode, Mode)</h4>
-  <div class="markdown level1 summary"><p>Compare modes.</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static bool operator &gt;=(Mode mode_a, Mode mode_b)</code></pre>
+    <pre><code class="lang-csharp hljs">public static bool operator &gt;=(Mode a, Mode b)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5300,15 +5278,13 @@
     <tbody>
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.Mode.html">Mode</a></td>
-        <td><span class="parametername">mode_a</span></td>
-        <td><p>lhs mode.</p>
-</td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
       </tr>
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.Mode.html">Mode</a></td>
-        <td><span class="parametername">mode_b</span></td>
-        <td><p>rhs mode.</p>
-</td>
+        <td><span class="parametername">b</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -5323,8 +5299,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Boolean</span></td>
-        <td><p>bool value.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -5333,16 +5308,15 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Mode_op_Inequality_Cosmos_System_Graphics_Mode_Cosmos_System_Graphics_Mode_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Mode.op_Inequality(Cosmos.System.Graphics.Mode%2CCosmos.System.Graphics.Mode)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L99">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L80">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Mode_op_Inequality_" data-uid="Cosmos.System.Graphics.Mode.op_Inequality*"></a>
   <h4 id="Cosmos_System_Graphics_Mode_op_Inequality_Cosmos_System_Graphics_Mode_Cosmos_System_Graphics_Mode_" data-uid="Cosmos.System.Graphics.Mode.op_Inequality(Cosmos.System.Graphics.Mode,Cosmos.System.Graphics.Mode)">Inequality(Mode, Mode)</h4>
-  <div class="markdown level1 summary"><p>Check if modes are not equal.</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static bool operator !=(Mode mode_a, Mode mode_b)</code></pre>
+    <pre><code class="lang-csharp hljs">public static bool operator !=(Mode a, Mode b)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5356,15 +5330,13 @@
     <tbody>
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.Mode.html">Mode</a></td>
-        <td><span class="parametername">mode_a</span></td>
-        <td><p>lhs mode.</p>
-</td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
       </tr>
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.Mode.html">Mode</a></td>
-        <td><span class="parametername">mode_b</span></td>
-        <td><p>rhs mode.</p>
-</td>
+        <td><span class="parametername">b</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -5379,8 +5351,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Boolean</span></td>
-        <td><p>bool value.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -5389,16 +5360,15 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Mode_op_LessThan_Cosmos_System_Graphics_Mode_Cosmos_System_Graphics_Mode_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Mode.op_LessThan(Cosmos.System.Graphics.Mode%2CCosmos.System.Graphics.Mode)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L120">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L82">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Mode_op_LessThan_" data-uid="Cosmos.System.Graphics.Mode.op_LessThan*"></a>
   <h4 id="Cosmos_System_Graphics_Mode_op_LessThan_Cosmos_System_Graphics_Mode_Cosmos_System_Graphics_Mode_" data-uid="Cosmos.System.Graphics.Mode.op_LessThan(Cosmos.System.Graphics.Mode,Cosmos.System.Graphics.Mode)">LessThan(Mode, Mode)</h4>
-  <div class="markdown level1 summary"><p>Compare modes.</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static bool operator &lt;(Mode mode_a, Mode mode_b)</code></pre>
+    <pre><code class="lang-csharp hljs">public static bool operator &lt;(Mode a, Mode b)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5412,15 +5382,13 @@
     <tbody>
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.Mode.html">Mode</a></td>
-        <td><span class="parametername">mode_a</span></td>
-        <td><p>lhs mode.</p>
-</td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
       </tr>
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.Mode.html">Mode</a></td>
-        <td><span class="parametername">mode_b</span></td>
-        <td><p>rhs mode.</p>
-</td>
+        <td><span class="parametername">b</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -5435,8 +5403,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Boolean</span></td>
-        <td><p>bool value.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -5445,16 +5412,15 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Mode_op_LessThanOrEqual_Cosmos_System_Graphics_Mode_Cosmos_System_Graphics_Mode_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Mode.op_LessThanOrEqual(Cosmos.System.Graphics.Mode%2CCosmos.System.Graphics.Mode)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L144">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Mode.cs/#L84">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Mode_op_LessThanOrEqual_" data-uid="Cosmos.System.Graphics.Mode.op_LessThanOrEqual*"></a>
   <h4 id="Cosmos_System_Graphics_Mode_op_LessThanOrEqual_Cosmos_System_Graphics_Mode_Cosmos_System_Graphics_Mode_" data-uid="Cosmos.System.Graphics.Mode.op_LessThanOrEqual(Cosmos.System.Graphics.Mode,Cosmos.System.Graphics.Mode)">LessThanOrEqual(Mode, Mode)</h4>
-  <div class="markdown level1 summary"><p>Compare modes.</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static bool operator &lt;=(Mode mode_a, Mode mode_b)</code></pre>
+    <pre><code class="lang-csharp hljs">public static bool operator &lt;=(Mode a, Mode b)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5468,15 +5434,13 @@
     <tbody>
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.Mode.html">Mode</a></td>
-        <td><span class="parametername">mode_a</span></td>
-        <td><p>lhs mode.</p>
-</td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
       </tr>
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.Mode.html">Mode</a></td>
-        <td><span class="parametername">mode_b</span></td>
-        <td><p>rhs mode.</p>
-</td>
+        <td><span class="parametername">b</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -5491,8 +5455,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Boolean</span></td>
-        <td><p>bool value.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>

@@ -2534,22 +2534,22 @@
                         
                         <ul class="nav level2">
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.DE_Standard.html" title="DE_Standard" class="">DE_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.DEStandardLayout.html" title="DEStandardLayout" class="">DEStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.ES_Standard.html" title="ES_Standard" class="">ES_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.ESStandardLayout.html" title="ESStandardLayout" class="">ESStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.FR_Standard.html" title="FR_Standard" class="">FR_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.FRStandardLayout.html" title="FRStandardLayout" class="">FRStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.GB_Standard.html" title="GB_Standard" class="">GB_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.GBStandardLayout.html" title="GBStandardLayout" class="">GBStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.TR_StandardQ.html" title="TR_StandardQ" class="">TR_StandardQ</a>
+                            <a href="Cosmos.System.ScanMaps.TRStandardLayout.html" title="TRStandardLayout" class="">TRStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.US_Standard.html" title="US_Standard" class="">US_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.USStandardLayout.html" title="USStandardLayout" class="">USStandardLayout</a>
                           </li>
                         </ul>  </li>
                     <li class="">
@@ -4772,7 +4772,7 @@
   
   <h1 id="Cosmos_System_Graphics_VGACanvas" data-uid="Cosmos.System.Graphics.VGACanvas" class="text-break">Class VGACanvas
   </h1>
-  <div class="markdown level0 summary"><p>VGACanvas class. Used to control screen.</p>
+  <div class="markdown level0 summary"><p>Defines a VGA canvas implementation.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -4785,6 +4785,9 @@
     <h5>Inherited Members</h5>
     <div>
       <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_Clear">Canvas.Clear()</a>
+    </div>
+    <div>
+      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawPoint_System_Drawing_Color_System_Single_System_Single_">Canvas.DrawPoint(Color, Single, Single)</a>
     </div>
     <div>
       <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawLine_System_Drawing_Color_System_Int32_System_Int32_System_Int32_System_Int32_">Canvas.DrawLine(Color, Int32, Int32, Int32, Int32)</a>
@@ -4887,11 +4890,12 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VGACanvas__ctor.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VGACanvas.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L41">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L44">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_VGACanvas__ctor_" data-uid="Cosmos.System.Graphics.VGACanvas.#ctor*"></a>
   <h4 id="Cosmos_System_Graphics_VGACanvas__ctor" data-uid="Cosmos.System.Graphics.VGACanvas.#ctor">VGACanvas()</h4>
-  <div class="markdown level1 summary"><p>Creates a VGA graphics mode with the default mode</p>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Cosmos.System.Graphics.VGACanvas.html">VGACanvas</a> class
+with the default display mode.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -4903,16 +4907,17 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VGACanvas__ctor_Cosmos_System_Graphics_Mode_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VGACanvas.%23ctor(Cosmos.System.Graphics.Mode)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L29">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L32">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_VGACanvas__ctor_" data-uid="Cosmos.System.Graphics.VGACanvas.#ctor*"></a>
   <h4 id="Cosmos_System_Graphics_VGACanvas__ctor_Cosmos_System_Graphics_Mode_" data-uid="Cosmos.System.Graphics.VGACanvas.#ctor(Cosmos.System.Graphics.Mode)">VGACanvas(Mode)</h4>
-  <div class="markdown level1 summary"><p>VGA graphics mode Canvas constructor - see Canvas.cs</p>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Cosmos.System.Graphics.VGACanvas.html">VGACanvas</a> class
+with the given display mode.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public VGACanvas(Mode aMode)</code></pre>
+    <pre><code class="lang-csharp hljs">public VGACanvas(Mode mode)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4926,7 +4931,7 @@
     <tbody>
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.Mode.html">Mode</a></td>
-        <td><span class="parametername">aMode</span></td>
+        <td><span class="parametername">mode</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -4938,7 +4943,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VGACanvas_AvailableModes.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VGACanvas.AvailableModes%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L159">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L96">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_VGACanvas_AvailableModes_" data-uid="Cosmos.System.Graphics.VGACanvas.AvailableModes*"></a>
   <h4 id="Cosmos_System_Graphics_VGACanvas_AvailableModes" data-uid="Cosmos.System.Graphics.VGACanvas.AvailableModes">AvailableModes</h4>
@@ -4967,19 +4972,18 @@
   <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_AvailableModes">Canvas.AvailableModes</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VGACanvas_DefaultGraphicMode.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VGACanvas.DefaultGraphicMode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VGACanvas_DefaultGraphicsMode.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VGACanvas.DefaultGraphicsMode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L181">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L103">View Source</a>
   </span>
-  <a id="Cosmos_System_Graphics_VGACanvas_DefaultGraphicMode_" data-uid="Cosmos.System.Graphics.VGACanvas.DefaultGraphicMode*"></a>
-  <h4 id="Cosmos_System_Graphics_VGACanvas_DefaultGraphicMode" data-uid="Cosmos.System.Graphics.VGACanvas.DefaultGraphicMode">DefaultGraphicMode</h4>
-  <div class="markdown level1 summary"><p>The default graphics mode</p>
-</div>
+  <a id="Cosmos_System_Graphics_VGACanvas_DefaultGraphicsMode_" data-uid="Cosmos.System.Graphics.VGACanvas.DefaultGraphicsMode*"></a>
+  <h4 id="Cosmos_System_Graphics_VGACanvas_DefaultGraphicsMode" data-uid="Cosmos.System.Graphics.VGACanvas.DefaultGraphicsMode">DefaultGraphicsMode</h4>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override Mode DefaultGraphicMode { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public override Mode DefaultGraphicsMode { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4997,17 +5001,18 @@
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DefaultGraphicMode">Canvas.DefaultGraphicMode</a></div>
+  <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DefaultGraphicsMode">Canvas.DefaultGraphicsMode</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VGACanvas_Enabled.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VGACanvas.Enabled%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L186">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L109">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_VGACanvas_Enabled_" data-uid="Cosmos.System.Graphics.VGACanvas.Enabled*"></a>
   <h4 id="Cosmos_System_Graphics_VGACanvas_Enabled" data-uid="Cosmos.System.Graphics.VGACanvas.Enabled">Enabled</h4>
-  <div class="markdown level1 summary"><p>Boolean value whether VGA is in graphics mode or not</p>
+  <div class="markdown level1 summary"><p>Whether the canvas is active, and the display is currently in VGA
+graphics mode.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -5034,12 +5039,11 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VGACanvas_Mode.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VGACanvas.Mode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L58">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L54">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_VGACanvas_Mode_" data-uid="Cosmos.System.Graphics.VGACanvas.Mode*"></a>
   <h4 id="Cosmos_System_Graphics_VGACanvas_Mode" data-uid="Cosmos.System.Graphics.VGACanvas.Mode">Mode</h4>
-  <div class="markdown level1 summary"><p>Gets or sets the VGA graphics mode</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -5069,12 +5073,11 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VGACanvas_Clear_System_Drawing_Color_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VGACanvas.Clear(System.Drawing.Color)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L73">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L61">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_VGACanvas_Clear_" data-uid="Cosmos.System.Graphics.VGACanvas.Clear*"></a>
   <h4 id="Cosmos_System_Graphics_VGACanvas_Clear_System_Drawing_Color_" data-uid="Cosmos.System.Graphics.VGACanvas.Clear(System.Drawing.Color)">Clear(Color)</h4>
-  <div class="markdown level1 summary"><p>Clears the screen of all pixels</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -5104,12 +5107,11 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VGACanvas_Clear_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VGACanvas.Clear(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L64">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L56">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_VGACanvas_Clear_" data-uid="Cosmos.System.Graphics.VGACanvas.Clear*"></a>
   <h4 id="Cosmos_System_Graphics_VGACanvas_Clear_System_Int32_" data-uid="Cosmos.System.Graphics.VGACanvas.Clear(System.Int32)">Clear(Int32)</h4>
-  <div class="markdown level1 summary"><p>Clears the screen of all pixels</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -5139,12 +5141,11 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VGACanvas_Disable.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VGACanvas.Disable%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L82">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L67">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_VGACanvas_Disable_" data-uid="Cosmos.System.Graphics.VGACanvas.Disable*"></a>
   <h4 id="Cosmos_System_Graphics_VGACanvas_Disable" data-uid="Cosmos.System.Graphics.VGACanvas.Disable">Disable()</h4>
-  <div class="markdown level1 summary"><p>Disables VGA graphics mode, parent method returns to 80x25 text mode</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -5157,7 +5158,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VGACanvas_Display.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VGACanvas.Display%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L208">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L131">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_VGACanvas_Display_" data-uid="Cosmos.System.Graphics.VGACanvas.Display*"></a>
   <h4 id="Cosmos_System_Graphics_VGACanvas_Display" data-uid="Cosmos.System.Graphics.VGACanvas.Display">Display()</h4>
@@ -5174,16 +5175,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VGACanvas_DrawArray_System_Drawing_Color___System_Int32_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VGACanvas.DrawArray(System.Drawing.Color%5B%5D%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L98">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L75">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_VGACanvas_DrawArray_" data-uid="Cosmos.System.Graphics.VGACanvas.DrawArray*"></a>
   <h4 id="Cosmos_System_Graphics_VGACanvas_DrawArray_System_Drawing_Color___System_Int32_System_Int32_System_Int32_System_Int32_" data-uid="Cosmos.System.Graphics.VGACanvas.DrawArray(System.Drawing.Color[],System.Int32,System.Int32,System.Int32,System.Int32)">DrawArray(Color[], Int32, Int32, Int32, Int32)</h4>
-  <div class="markdown level1 summary"><p>Draws an array of colors, specifiying X and Y coords</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void DrawArray(Color[] aColors, int aX, int aY, int aWidth, int aHeight)</code></pre>
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;This method is not yet implemented.&quot;, true)]
+public override void DrawArray(Color[] aColors, int aX, int aY, int aWidth, int aHeight)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5229,12 +5230,11 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VGACanvas_DrawFilledRectangle_System_Drawing_Color_System_Int32_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VGACanvas.DrawFilledRectangle(System.Drawing.Color%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L111">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L81">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_VGACanvas_DrawFilledRectangle_" data-uid="Cosmos.System.Graphics.VGACanvas.DrawFilledRectangle*"></a>
   <h4 id="Cosmos_System_Graphics_VGACanvas_DrawFilledRectangle_System_Drawing_Color_System_Int32_System_Int32_System_Int32_System_Int32_" data-uid="Cosmos.System.Graphics.VGACanvas.DrawFilledRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32)">DrawFilledRectangle(Color, Int32, Int32, Int32, Int32)</h4>
-  <div class="markdown level1 summary"><p>Draws a filled rectangle</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -5284,12 +5284,11 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VGACanvas_DrawPoint_System_Drawing_Color_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VGACanvas.DrawPoint(System.Drawing.Color%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L122">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L86">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_VGACanvas_DrawPoint_" data-uid="Cosmos.System.Graphics.VGACanvas.DrawPoint*"></a>
   <h4 id="Cosmos_System_Graphics_VGACanvas_DrawPoint_System_Drawing_Color_System_Int32_System_Int32_" data-uid="Cosmos.System.Graphics.VGACanvas.DrawPoint(System.Drawing.Color,System.Int32,System.Int32)">DrawPoint(Color, Int32, Int32)</h4>
-  <div class="markdown level1 summary"><p>Draws a point</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -5326,60 +5325,14 @@
   <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawPoint_System_Drawing_Color_System_Int32_System_Int32_">Canvas.DrawPoint(Color, Int32, Int32)</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VGACanvas_DrawPoint_System_Drawing_Color_System_Single_System_Single_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VGACanvas.DrawPoint(System.Drawing.Color%2CSystem.Single%2CSystem.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L144">View Source</a>
-  </span>
-  <a id="Cosmos_System_Graphics_VGACanvas_DrawPoint_" data-uid="Cosmos.System.Graphics.VGACanvas.DrawPoint*"></a>
-  <h4 id="Cosmos_System_Graphics_VGACanvas_DrawPoint_System_Drawing_Color_System_Single_System_Single_" data-uid="Cosmos.System.Graphics.VGACanvas.DrawPoint(System.Drawing.Color,System.Single,System.Single)">DrawPoint(Color, Single, Single)</h4>
-  <div class="markdown level1 summary"><p>Draws a point</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void DrawPoint(Color aColor, float aX, float aY)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Drawing.Color</span></td>
-        <td><span class="parametername">aColor</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">aX</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">aY</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawPoint_System_Drawing_Color_System_Single_System_Single_">Canvas.DrawPoint(Color, Single, Single)</a></div>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VGACanvas_DrawPoint_System_UInt32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VGACanvas.DrawPoint(System.UInt32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L133">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L91">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_VGACanvas_DrawPoint_" data-uid="Cosmos.System.Graphics.VGACanvas.DrawPoint*"></a>
   <h4 id="Cosmos_System_Graphics_VGACanvas_DrawPoint_System_UInt32_System_Int32_System_Int32_" data-uid="Cosmos.System.Graphics.VGACanvas.DrawPoint(System.UInt32,System.Int32,System.Int32)">DrawPoint(UInt32, Int32, Int32)</h4>
-  <div class="markdown level1 summary"><p>Draws a point</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -5417,12 +5370,11 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VGACanvas_GetPointColor_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VGACanvas.GetPointColor(System.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L173">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L98">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_VGACanvas_GetPointColor_" data-uid="Cosmos.System.Graphics.VGACanvas.GetPointColor*"></a>
   <h4 id="Cosmos_System_Graphics_VGACanvas_GetPointColor_System_Int32_System_Int32_" data-uid="Cosmos.System.Graphics.VGACanvas.GetPointColor(System.Int32,System.Int32)">GetPointColor(Int32, Int32)</h4>
-  <div class="markdown level1 summary"><p>Retrieves the RGB value of a specified pixel</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -5472,12 +5424,11 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VGACanvas_Name.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VGACanvas.Name%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L53">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VGACanvas.cs/#L52">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_VGACanvas_Name_" data-uid="Cosmos.System.Graphics.VGACanvas.Name*"></a>
   <h4 id="Cosmos_System_Graphics_VGACanvas_Name" data-uid="Cosmos.System.Graphics.VGACanvas.Name">Name()</h4>
-  <div class="markdown level1 summary"><p>Name of the backend</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">

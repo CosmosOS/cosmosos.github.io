@@ -2534,22 +2534,22 @@
                         
                         <ul class="nav level2">
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.DE_Standard.html" title="DE_Standard" class="">DE_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.DEStandardLayout.html" title="DEStandardLayout" class="">DEStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.ES_Standard.html" title="ES_Standard" class="">ES_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.ESStandardLayout.html" title="ESStandardLayout" class="">ESStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.FR_Standard.html" title="FR_Standard" class="">FR_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.FRStandardLayout.html" title="FRStandardLayout" class="">FRStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.GB_Standard.html" title="GB_Standard" class="">GB_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.GBStandardLayout.html" title="GBStandardLayout" class="">GBStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.TR_StandardQ.html" title="TR_StandardQ" class="">TR_StandardQ</a>
+                            <a href="Cosmos.System.ScanMaps.TRStandardLayout.html" title="TRStandardLayout" class="">TRStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.US_Standard.html" title="US_Standard" class="">US_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.USStandardLayout.html" title="USStandardLayout" class="">USStandardLayout</a>
                           </li>
                         </ul>  </li>
                     <li class="">
@@ -4772,7 +4772,7 @@
   
   <h1 id="Cosmos_System_Graphics_Bitmap" data-uid="Cosmos.System.Graphics.Bitmap" class="text-break">Class Bitmap
   </h1>
-  <div class="markdown level0 summary"><p>Bitmap class, used to represent image of the type of Bitmap. See also: <a class="xref" href="Cosmos.System.Graphics.Image.html">Image</a>.</p>
+  <div class="markdown level0 summary"><p>Represents a bitmap image.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -4784,7 +4784,7 @@
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="Cosmos.System.Graphics.Image.html#Cosmos_System_Graphics_Image_rawData">Image.rawData</a>
+      <a class="xref" href="Cosmos.System.Graphics.Image.html#Cosmos_System_Graphics_Image_RawData">Image.RawData</a>
     </div>
     <div>
       <a class="xref" href="Cosmos.System.Graphics.Image.html#Cosmos_System_Graphics_Image_Width">Image.Width</a>
@@ -4830,11 +4830,11 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Bitmap__ctor_System_Byte___.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Bitmap.%23ctor(System.Byte%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Bitmap.cs/#L166">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Bitmap.cs/#L176">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Bitmap__ctor_" data-uid="Cosmos.System.Graphics.Bitmap.#ctor*"></a>
   <h4 id="Cosmos_System_Graphics_Bitmap__ctor_System_Byte___" data-uid="Cosmos.System.Graphics.Bitmap.#ctor(System.Byte[])">Bitmap(Byte[])</h4>
-  <div class="markdown level1 summary"><p>Create new instance of the <a class="xref" href="Cosmos.System.Graphics.Bitmap.html">Bitmap</a> class, with a specified image data byte array.</p>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Cosmos.System.Graphics.Bitmap.html">Bitmap</a> class, with the specified image data byte array.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -4880,7 +4880,7 @@
       </tr>
       <tr>
         <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
-        <td><p>Thrown on fatal error (contact support).</p>
+        <td><p>Thrown on fatal error.</p>
 </td>
       </tr>
       <tr>
@@ -4890,12 +4890,12 @@
       </tr>
       <tr>
         <td><span class="xref">System.NotSupportedException</span></td>
-        <td><p>Thrown on fatal error (contact support).</p>
+        <td><p>Thrown on fatal error.</p>
 </td>
       </tr>
       <tr>
         <td><span class="xref">System.ObjectDisposedException</span></td>
-        <td><p>Thrown on fatal error (contact support).</p>
+        <td><p>Thrown on fatal error.</p>
 </td>
       </tr>
       <tr>
@@ -4915,11 +4915,11 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Bitmap__ctor_System_Byte___Cosmos_System_Graphics_ColorOrder_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Bitmap.%23ctor(System.Byte%5B%5D%2CCosmos.System.Graphics.ColorOrder)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Bitmap.cs/#L190">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Bitmap.cs/#L200">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Bitmap__ctor_" data-uid="Cosmos.System.Graphics.Bitmap.#ctor*"></a>
   <h4 id="Cosmos_System_Graphics_Bitmap__ctor_System_Byte___Cosmos_System_Graphics_ColorOrder_" data-uid="Cosmos.System.Graphics.Bitmap.#ctor(System.Byte[],Cosmos.System.Graphics.ColorOrder)">Bitmap(Byte[], ColorOrder)</h4>
-  <div class="markdown level1 summary"><p>Create new instance of the <a class="xref" href="Cosmos.System.Graphics.Bitmap.html">Bitmap</a> class, with a specified image data byte array.</p>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Cosmos.System.Graphics.Bitmap.html">Bitmap</a> class, with the specified image data byte array.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -4971,7 +4971,7 @@
       </tr>
       <tr>
         <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
-        <td><p>Thrown on fatal error (contact support).</p>
+        <td><p>Thrown on fatal error.</p>
 </td>
       </tr>
       <tr>
@@ -4981,12 +4981,12 @@
       </tr>
       <tr>
         <td><span class="xref">System.NotSupportedException</span></td>
-        <td><p>Thrown on fatal error (contact support).</p>
+        <td><p>Thrown on fatal error.</p>
 </td>
       </tr>
       <tr>
         <td><span class="xref">System.ObjectDisposedException</span></td>
-        <td><p>Thrown on fatal error (contact support).</p>
+        <td><p>Thrown on fatal error.</p>
 </td>
       </tr>
       <tr>
@@ -5006,11 +5006,11 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Bitmap__ctor_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Bitmap.%23ctor(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Bitmap.cs/#L96">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Bitmap.cs/#L108">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Bitmap__ctor_" data-uid="Cosmos.System.Graphics.Bitmap.#ctor*"></a>
   <h4 id="Cosmos_System_Graphics_Bitmap__ctor_System_String_" data-uid="Cosmos.System.Graphics.Bitmap.#ctor(System.String)">Bitmap(String)</h4>
-  <div class="markdown level1 summary"><p>Create new instance of the <a class="xref" href="Cosmos.System.Graphics.Bitmap.html">Bitmap</a> class, with a specified path to a BMP file.</p>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Cosmos.System.Graphics.Bitmap.html">Bitmap</a> class, using the specified path to a BMP file.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -5056,7 +5056,7 @@
       </tr>
       <tr>
         <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
-        <td><p>Thrown on fatal error (contact support).</p>
+        <td><p>Thrown on fatal error.</p>
 </td>
       </tr>
       <tr>
@@ -5066,7 +5066,7 @@
       </tr>
       <tr>
         <td><span class="xref">System.NotSupportedException</span></td>
-        <td><ul><li>Thrown on fatal error (contact support).</li><li>The path refers to non-file.</li></ul>
+        <td><ul><li>Thrown on fatal error.</li><li>The path refers to non-file.</li></ul>
 </td>
       </tr>
       <tr>
@@ -5111,11 +5111,11 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Bitmap__ctor_System_String_Cosmos_System_Graphics_ColorOrder_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Bitmap.%23ctor(System.String%2CCosmos.System.Graphics.ColorOrder)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Bitmap.cs/#L139">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Bitmap.cs/#L151">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Bitmap__ctor_" data-uid="Cosmos.System.Graphics.Bitmap.#ctor*"></a>
   <h4 id="Cosmos_System_Graphics_Bitmap__ctor_System_String_Cosmos_System_Graphics_ColorOrder_" data-uid="Cosmos.System.Graphics.Bitmap.#ctor(System.String,Cosmos.System.Graphics.ColorOrder)">Bitmap(String, ColorOrder)</h4>
-  <div class="markdown level1 summary"><p>Create new instance of the <a class="xref" href="Cosmos.System.Graphics.Bitmap.html">Bitmap</a> class, with a specified path to a BMP file.</p>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Cosmos.System.Graphics.Bitmap.html">Bitmap</a> class, with a specified path to a BMP file.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -5167,7 +5167,7 @@
       </tr>
       <tr>
         <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
-        <td><p>Thrown on fatal error (contact support).</p>
+        <td><p>Thrown on fatal error.</p>
 </td>
       </tr>
       <tr>
@@ -5177,7 +5177,7 @@
       </tr>
       <tr>
         <td><span class="xref">System.NotSupportedException</span></td>
-        <td><ul><li>Thrown on fatal error (contact support).</li><li>The path refers to non-file.</li></ul>
+        <td><ul><li>Thrown on fatal error.</li><li>The path refers to non-file.</li></ul>
 </td>
       </tr>
       <tr>
@@ -5222,16 +5222,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Bitmap__ctor_System_UInt32_System_UInt32_Cosmos_System_Graphics_ColorDepth_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Bitmap.%23ctor(System.UInt32%2CSystem.UInt32%2CCosmos.System.Graphics.ColorDepth)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Bitmap.cs/#L19">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Bitmap.cs/#L20">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Bitmap__ctor_" data-uid="Cosmos.System.Graphics.Bitmap.#ctor*"></a>
   <h4 id="Cosmos_System_Graphics_Bitmap__ctor_System_UInt32_System_UInt32_Cosmos_System_Graphics_ColorDepth_" data-uid="Cosmos.System.Graphics.Bitmap.#ctor(System.UInt32,System.UInt32,Cosmos.System.Graphics.ColorDepth)">Bitmap(UInt32, UInt32, ColorDepth)</h4>
-  <div class="markdown level1 summary"><p>Create new instance of <a class="xref" href="Cosmos.System.Graphics.Bitmap.html">Bitmap</a> class.</p>
+  <div class="markdown level1 summary"><p>Initializes a new instance of <a class="xref" href="Cosmos.System.Graphics.Bitmap.html">Bitmap</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Bitmap(uint Width, uint Height, ColorDepth colorDepth)</code></pre>
+    <pre><code class="lang-csharp hljs">public Bitmap(uint width, uint height, ColorDepth colorDepth)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5245,20 +5245,36 @@
     <tbody>
       <tr>
         <td><span class="xref">System.UInt32</span></td>
-        <td><span class="parametername">Width</span></td>
-        <td><p>Image width (greater then 0).</p>
+        <td><span class="parametername">width</span></td>
+        <td><p>The width of the image.</p>
 </td>
       </tr>
       <tr>
         <td><span class="xref">System.UInt32</span></td>
-        <td><span class="parametername">Height</span></td>
-        <td><p>Image height (greater then 0).</p>
+        <td><span class="parametername">height</span></td>
+        <td><p>The height of the image.</p>
 </td>
       </tr>
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.ColorDepth.html">ColorDepth</a></td>
         <td><span class="parametername">colorDepth</span></td>
-        <td><p>Color depth.</p>
+        <td><p>The color depth.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown when either the width or height is lower than 0.</p>
 </td>
       </tr>
     </tbody>
@@ -5268,16 +5284,17 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Bitmap__ctor_System_UInt32_System_UInt32_System_Byte___Cosmos_System_Graphics_ColorDepth_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Bitmap.%23ctor(System.UInt32%2CSystem.UInt32%2CSystem.Byte%5B%5D%2CCosmos.System.Graphics.ColorDepth)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Bitmap.cs/#L36">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Bitmap.cs/#L48">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Bitmap__ctor_" data-uid="Cosmos.System.Graphics.Bitmap.#ctor*"></a>
   <h4 id="Cosmos_System_Graphics_Bitmap__ctor_System_UInt32_System_UInt32_System_Byte___Cosmos_System_Graphics_ColorDepth_" data-uid="Cosmos.System.Graphics.Bitmap.#ctor(System.UInt32,System.UInt32,System.Byte[],Cosmos.System.Graphics.ColorDepth)">Bitmap(UInt32, UInt32, Byte[], ColorDepth)</h4>
-  <div class="markdown level1 summary"><p>Create a bitmap from a byte array representing the pixels.</p>
+  <div class="markdown level1 summary"><p>Initializes a new instance of <a class="xref" href="Cosmos.System.Graphics.Bitmap.html">Bitmap</a> class from a byte array
+representing the pixels.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Bitmap(uint Width, uint Height, byte[] pixelData, ColorDepth colorDepth)</code></pre>
+    <pre><code class="lang-csharp hljs">public Bitmap(uint width, uint height, byte[] pixelData, ColorDepth colorDepth)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5291,26 +5308,26 @@
     <tbody>
       <tr>
         <td><span class="xref">System.UInt32</span></td>
-        <td><span class="parametername">Width</span></td>
-        <td><p>Width of the bitmap.</p>
+        <td><span class="parametername">width</span></td>
+        <td><p>The width of the bitmap.</p>
 </td>
       </tr>
       <tr>
         <td><span class="xref">System.UInt32</span></td>
-        <td><span class="parametername">Height</span></td>
-        <td><p>Height of the bitmap.</p>
+        <td><span class="parametername">height</span></td>
+        <td><p>The height of the bitmap.</p>
 </td>
       </tr>
       <tr>
         <td><span class="xref">System.Byte</span>[]</td>
         <td><span class="parametername">pixelData</span></td>
-        <td><p>Byte array which includes the values for each pixel.</p>
+        <td><p>A byte array which includes the values for each pixel.</p>
 </td>
       </tr>
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.ColorDepth.html">ColorDepth</a></td>
         <td><span class="parametername">colorDepth</span></td>
-        <td><p>Format of pixel data.</p>
+        <td><p>The format of the pixel data.</p>
 </td>
       </tr>
     </tbody>
@@ -5326,7 +5343,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.NotImplementedException</span></td>
-        <td><p>Thrwon if color depth is not 32.</p>
+        <td><p>Thrown if color depth is not 32.</p>
 </td>
       </tr>
       <tr>
@@ -5336,7 +5353,7 @@
       </tr>
       <tr>
         <td><span class="xref">System.ArgumentException</span></td>
-        <td><p>Thrown on fatal error (contact support).</p>
+        <td><p>Thrown on fatal error.</p>
 </td>
       </tr>
       <tr>
@@ -5346,7 +5363,7 @@
       </tr>
       <tr>
         <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
-        <td><p>Thrown on fatal error (contact support).</p>
+        <td><p>Thrown on fatal error.</p>
 </td>
       </tr>
     </tbody>
@@ -5358,16 +5375,16 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Bitmap_Save_System_IO_Stream_Cosmos_System_Graphics_ImageFormat_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Bitmap.Save(System.IO.Stream%2CCosmos.System.Graphics.ImageFormat)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Bitmap.cs/#L410">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Bitmap.cs/#L418">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Bitmap_Save_" data-uid="Cosmos.System.Graphics.Bitmap.Save*"></a>
   <h4 id="Cosmos_System_Graphics_Bitmap_Save_System_IO_Stream_Cosmos_System_Graphics_ImageFormat_" data-uid="Cosmos.System.Graphics.Bitmap.Save(System.IO.Stream,Cosmos.System.Graphics.ImageFormat)">Save(Stream, ImageFormat)</h4>
-  <div class="markdown level1 summary"><p>Save image to stream.</p>
+  <div class="markdown level1 summary"><p>Saves the image to the given stream.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Save(Stream stream, ImageFormat imageFormat)</code></pre>
+    <pre><code class="lang-csharp hljs">public void Save(Stream stream, ImageFormat imageFormat = ImageFormat.BMP)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5382,13 +5399,13 @@
       <tr>
         <td><span class="xref">System.IO.Stream</span></td>
         <td><span class="parametername">stream</span></td>
-        <td><p>Stream.</p>
+        <td><p>The target stream.</p>
 </td>
       </tr>
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.ImageFormat.html">ImageFormat</a></td>
         <td><span class="parametername">imageFormat</span></td>
-        <td><p>Image format.</p>
+        <td><p>The format to save the image with.</p>
 </td>
       </tr>
     </tbody>
@@ -5409,17 +5426,17 @@
       </tr>
       <tr>
         <td><span class="xref">System.RankException</span></td>
-        <td><p>Thrown on fatal error (contact support).</p>
+        <td><p>Thrown on fatal error.</p>
 </td>
       </tr>
       <tr>
         <td><span class="xref">System.ArrayTypeMismatchException</span></td>
-        <td><p>Thrown on fatal error (contact support).</p>
+        <td><p>Thrown on fatal error.</p>
 </td>
       </tr>
       <tr>
         <td><span class="xref">System.InvalidCastException</span></td>
-        <td><p>Thrown on fatal error (contact support).</p>
+        <td><p>Thrown on fatal error.</p>
 </td>
       </tr>
       <tr>
@@ -5459,11 +5476,11 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Bitmap_Save_System_String_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Bitmap.Save(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Bitmap.cs/#L387">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Bitmap.cs/#L397">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Bitmap_Save_" data-uid="Cosmos.System.Graphics.Bitmap.Save*"></a>
   <h4 id="Cosmos_System_Graphics_Bitmap_Save_System_String_" data-uid="Cosmos.System.Graphics.Bitmap.Save(System.String)">Save(String)</h4>
-  <div class="markdown level1 summary"><p>Save image as bmp file.</p>
+  <div class="markdown level1 summary"><p>Saves the given image as a BMP file.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -5483,7 +5500,7 @@
       <tr>
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">path</span></td>
-        <td><p>Path to the file.</p>
+        <td><p>The path to the file.</p>
 </td>
       </tr>
     </tbody>
@@ -5504,17 +5521,17 @@
       </tr>
       <tr>
         <td><span class="xref">System.RankException</span></td>
-        <td><p>Thrown on fatal error (contact support).</p>
+        <td><p>Thrown on fatal error.</p>
 </td>
       </tr>
       <tr>
         <td><span class="xref">System.ArrayTypeMismatchException</span></td>
-        <td><p>Thrown on fatal error (contact support).</p>
+        <td><p>Thrown on fatal error.</p>
 </td>
       </tr>
       <tr>
         <td><span class="xref">System.InvalidCastException</span></td>
-        <td><p>Thrown on fatal error (contact support).</p>
+        <td><p>Thrown on fatal error.</p>
 </td>
       </tr>
       <tr>
@@ -5539,12 +5556,12 @@
       </tr>
       <tr>
         <td><span class="xref">System.NotSupportedException</span></td>
-        <td><p>Thrown on fatal error (contact support).</p>
+        <td><p>Thrown on fatal error.</p>
 </td>
       </tr>
       <tr>
         <td><span class="xref">System.ObjectDisposedException</span></td>
-        <td><p>Thrown on fatal error (contact support).</p>
+        <td><p>Thrown on fatal error.</p>
 </td>
       </tr>
     </tbody>

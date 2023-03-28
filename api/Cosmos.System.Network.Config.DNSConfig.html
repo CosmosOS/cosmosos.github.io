@@ -2534,22 +2534,22 @@
                         
                         <ul class="nav level2">
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.DE_Standard.html" title="DE_Standard" class="">DE_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.DEStandardLayout.html" title="DEStandardLayout" class="">DEStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.ES_Standard.html" title="ES_Standard" class="">ES_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.ESStandardLayout.html" title="ESStandardLayout" class="">ESStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.FR_Standard.html" title="FR_Standard" class="">FR_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.FRStandardLayout.html" title="FRStandardLayout" class="">FRStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.GB_Standard.html" title="GB_Standard" class="">GB_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.GBStandardLayout.html" title="GBStandardLayout" class="">GBStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.TR_StandardQ.html" title="TR_StandardQ" class="">TR_StandardQ</a>
+                            <a href="Cosmos.System.ScanMaps.TRStandardLayout.html" title="TRStandardLayout" class="">TRStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.US_Standard.html" title="US_Standard" class="">US_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.USStandardLayout.html" title="USStandardLayout" class="">USStandardLayout</a>
                           </li>
                         </ul>  </li>
                     <li class="">
@@ -4772,7 +4772,7 @@
   
   <h1 id="Cosmos_System_Network_Config_DNSConfig" data-uid="Cosmos.System.Network.Config.DNSConfig" class="text-break">Class DNSConfig
   </h1>
-  <div class="markdown level0 summary"><p>Contains DNS configuration</p>
+  <div class="markdown level0 summary"><p>Represents DNS configuration.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -4820,12 +4820,12 @@
     <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Network/Config/DNSConfig.cs/#L16">View Source</a>
   </span>
   <h4 id="Cosmos_System_Network_Config_DNSConfig_DNSNameservers" data-uid="Cosmos.System.Network.Config.DNSConfig.DNSNameservers">DNSNameservers</h4>
-  <div class="markdown level1 summary"><p>DNS Addresses list.</p>
+  <div class="markdown level1 summary"><p>The list of known DNS nameserver addresses.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static List&lt;Address&gt; DNSNameservers</code></pre>
+    <pre><code class="lang-csharp hljs">public static readonly List&lt;Address&gt; DNSNameservers</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4853,7 +4853,7 @@
   </span>
   <a id="Cosmos_System_Network_Config_DNSConfig_Add_" data-uid="Cosmos.System.Network.Config.DNSConfig.Add*"></a>
   <h4 id="Cosmos_System_Network_Config_DNSConfig_Add_Cosmos_System_Network_IPv4_Address_" data-uid="Cosmos.System.Network.Config.DNSConfig.Add(Cosmos.System.Network.IPv4.Address)">Add(Address)</h4>
-  <div class="markdown level1 summary"><p>Add IPv4 configuration.</p>
+  <div class="markdown level1 summary"><p>Registers a given DNS server.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -4873,7 +4873,8 @@
       <tr>
         <td><a class="xref" href="Cosmos.System.Network.IPv4.Address.html">Address</a></td>
         <td><span class="parametername">nameserver</span></td>
-        <td></td>
+        <td><p>The IP address of the target DNS server.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -4886,7 +4887,7 @@
   </span>
   <a id="Cosmos_System_Network_Config_DNSConfig_Remove_" data-uid="Cosmos.System.Network.Config.DNSConfig.Remove*"></a>
   <h4 id="Cosmos_System_Network_Config_DNSConfig_Remove_Cosmos_System_Network_IPv4_Address_" data-uid="Cosmos.System.Network.Config.DNSConfig.Remove(Cosmos.System.Network.IPv4.Address)">Remove(Address)</h4>
-  <div class="markdown level1 summary"><p>Remove IPv4 configuration.</p>
+  <div class="markdown level1 summary"><p>Removes the given DNS server from the list of registered nameservers.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -4906,7 +4907,8 @@
       <tr>
         <td><a class="xref" href="Cosmos.System.Network.IPv4.Address.html">Address</a></td>
         <td><span class="parametername">nameserver</span></td>
-        <td></td>
+        <td><p>The IP address of the target DNS server.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -4919,12 +4921,14 @@
   </span>
   <a id="Cosmos_System_Network_Config_DNSConfig_Server_" data-uid="Cosmos.System.Network.Config.DNSConfig.Server*"></a>
   <h4 id="Cosmos_System_Network_Config_DNSConfig_Server_System_Int32_" data-uid="Cosmos.System.Network.Config.DNSConfig.Server(System.Int32)">Server(Int32)</h4>
-  <div class="markdown level1 summary"><p>Call this to get your adress to request your DNS server</p>
+  <div class="markdown level1 summary"><p>Gets the address of a known DNS server under the given
+registered list index.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Address Server(int index)</code></pre>
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Directly index the 'DNSNameservers' dictionary instead.&quot;)]
+public static Address Server(int index)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4939,7 +4943,7 @@
       <tr>
         <td><span class="xref">System.Int32</span></td>
         <td><span class="parametername">index</span></td>
-        <td><p>Which server you want to get</p>
+        <td><p>The index of the server to fetch.</p>
 </td>
       </tr>
     </tbody>
@@ -4955,8 +4959,7 @@
     <tbody>
       <tr>
         <td><a class="xref" href="Cosmos.System.Network.IPv4.Address.html">Address</a></td>
-        <td><p>DNS Server</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>

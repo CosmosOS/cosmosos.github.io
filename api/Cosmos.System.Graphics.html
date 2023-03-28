@@ -2534,22 +2534,22 @@
                         
                         <ul class="nav level2">
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.DE_Standard.html" title="DE_Standard" class="">DE_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.DEStandardLayout.html" title="DEStandardLayout" class="">DEStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.ES_Standard.html" title="ES_Standard" class="">ES_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.ESStandardLayout.html" title="ESStandardLayout" class="">ESStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.FR_Standard.html" title="FR_Standard" class="">FR_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.FRStandardLayout.html" title="FRStandardLayout" class="">FRStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.GB_Standard.html" title="GB_Standard" class="">GB_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.GBStandardLayout.html" title="GBStandardLayout" class="">GBStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.TR_StandardQ.html" title="TR_StandardQ" class="">TR_StandardQ</a>
+                            <a href="Cosmos.System.ScanMaps.TRStandardLayout.html" title="TRStandardLayout" class="">TRStandardLayout</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.System.ScanMaps.US_Standard.html" title="US_Standard" class="">US_Standard</a>
+                            <a href="Cosmos.System.ScanMaps.USStandardLayout.html" title="USStandardLayout" class="">USStandardLayout</a>
                           </li>
                         </ul>  </li>
                     <li class="">
@@ -4777,42 +4777,46 @@
     <h3 id="classes">Classes
   </h3>
       <h4><a class="xref" href="Cosmos.System.Graphics.Bitmap.html">Bitmap</a></h4>
-      <section><p>Bitmap class, used to represent image of the type of Bitmap. See also: <a class="xref" href="Cosmos.System.Graphics.Image.html">Image</a>.</p>
+      <section><p>Represents a bitmap image.</p>
 </section>
       <h4><a class="xref" href="Cosmos.System.Graphics.Canvas.html">Canvas</a></h4>
-      <section><p>Canvas abstract class.</p>
+      <section><p>Represents a drawing surface.</p>
 </section>
       <h4><a class="xref" href="Cosmos.System.Graphics.FullScreenCanvas.html">FullScreenCanvas</a></h4>
-      <section><p>FullScreenCanvas class. Used to set and get full screen canvas.</p>
+      <section><p>Provides functionality to fetch canvases that write directly to the
+underlying display device.</p>
 </section>
       <h4><a class="xref" href="Cosmos.System.Graphics.Image.html">Image</a></h4>
-      <section><p>Image class.</p>
+      <section><p>Represents a raster image.</p>
 </section>
       <h4><a class="xref" href="Cosmos.System.Graphics.SVGAIICanvas.html">SVGAIICanvas</a></h4>
-      <section><p>SVGAIIScreen class. Used to draw ractengales to the screen. See also: <a class="xref" href="Cosmos.System.Graphics.Canvas.html">Canvas</a>.</p>
+      <section><p>Defines a VMWare SVGAII canvas implementation. Please note that this implementation
+of <a class="xref" href="Cosmos.System.Graphics.Canvas.html">Canvas</a> can only be used with virtualizers that do implement
+SVGAII, meaning that this class will not work on regular hardware.</p>
 </section>
       <h4><a class="xref" href="Cosmos.System.Graphics.VBECanvas.html">VBECanvas</a></h4>
-      <section><p>VBECanvas class. Used to control screen, by VBE (VESA BIOS Extensions) standard. See also: <a class="xref" href="Cosmos.System.Graphics.Canvas.html">Canvas</a>.</p>
+      <section><p>Defines a VBE (VESA Bios Extensions) canvas implementation. Please note
+that this implementation of <a class="xref" href="Cosmos.System.Graphics.Canvas.html">Canvas</a> only works on BIOS
+implementations, meaning that it is not available on UEFI systems.</p>
 </section>
       <h4><a class="xref" href="Cosmos.System.Graphics.VGACanvas.html">VGACanvas</a></h4>
-      <section><p>VGACanvas class. Used to control screen.</p>
+      <section><p>Defines a VGA canvas implementation.</p>
 </section>
       <h4><a class="xref" href="Cosmos.System.Graphics.VGAScreen.html">VGAScreen</a></h4>
-      <section><p>VGAScreen class. Used to control VGA textmode.</p>
+      <section><p>Controls VGA text-mode.</p>
 </section>
     <h3 id="structs">Structs
   </h3>
       <h4><a class="xref" href="Cosmos.System.Graphics.Mode.html">Mode</a></h4>
-      <section><p>Mode struct. Represents a video mode in term of its number of columns, rows and color depth.</p>
+      <section><p>Represents a video mode, definining its width (rows), height (columns) and color depth.</p>
 </section>
     <h3 id="enums">Enums
   </h3>
       <h4><a class="xref" href="Cosmos.System.Graphics.ColorDepth.html">ColorDepth</a></h4>
-      <section><p>Color depth. Available:</p>
-<ul><li>ColorDepth4 - EGA 16 colors</li><li>ColorDepth8 - VGA 256 colors</li><li>ColorDepth16 - 65535 colors</li><li>ColorDepth24 - 16,777,216 of colors</li><li>ColorDepth32 - 16,777,216 of colors (with transparency)</li></ul>
+      <section><p>Represents the color depth of the pixels of a graphics surface.</p>
 </section>
       <h4><a class="xref" href="Cosmos.System.Graphics.ColorOrder.html">ColorOrder</a></h4>
-      <section><p>Describes the order in which the colors are stored in each pixel of an image</p>
+      <section><p>Describes the order in which the colors are stored in each pixel of an image.</p>
 </section>
       <h4><a class="xref" href="Cosmos.System.Graphics.ImageFormat.html">ImageFormat</a></h4>
       <section><p>Supported image formats.</p>
