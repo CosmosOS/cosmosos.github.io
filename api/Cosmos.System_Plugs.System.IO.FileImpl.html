@@ -2648,12 +2648,6 @@
                         
                         <ul class="nav level2">
                           <li class="">
-                            <a href="Cosmos.System_Plugs.System.IO.CosmosFileSystem.html" title="CosmosFileSystem" class="">CosmosFileSystem</a>
-                          </li>
-                          <li class="">
-                            <a href="Cosmos.System_Plugs.System.IO.CosmosFileSystemInfo.html" title="CosmosFileSystemInfo" class="">CosmosFileSystemInfo</a>
-                          </li>
-                          <li class="">
                             <a href="Cosmos.System_Plugs.System.IO.DirectoryImpl.html" title="DirectoryImpl" class="">DirectoryImpl</a>
                           </li>
                           <li class="">
@@ -2676,6 +2670,9 @@
                           </li>
                           <li class="">
                             <a href="Cosmos.System_Plugs.System.IO.FileStreamImpl.html" title="FileStreamImpl" class="">FileStreamImpl</a>
+                          </li>
+                          <li class="">
+                            <a href="Cosmos.System_Plugs.System.IO.FileSystemInfoImpl.html" title="FileSystemInfoImpl" class="">FileSystemInfoImpl</a>
                           </li>
                           <li class="">
                             <a href="Cosmos.System_Plugs.System.IO.PathImpl.html" title="PathImpl" class="">PathImpl</a>
@@ -4816,7 +4813,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_IO_FileImpl_WriteAllBytes_System_String_System_Byte___.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.IO.FileImpl.WriteAllBytes(System.String%2CSystem.Byte%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/IO/FileImpl.cs/#L49">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/IO/FileImpl.cs/#L42">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_IO_FileImpl_WriteAllBytes_" data-uid="Cosmos.System_Plugs.System.IO.FileImpl.WriteAllBytes*"></a>
   <h4 id="Cosmos_System_Plugs_System_IO_FileImpl_WriteAllBytes_System_String_System_Byte___" data-uid="Cosmos.System_Plugs.System.IO.FileImpl.WriteAllBytes(System.String,System.Byte[])">WriteAllBytes(String, Byte[])</h4>
@@ -4824,7 +4821,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void WriteAllBytes(string aFile, byte[] aData)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void WriteAllBytes(string path, byte[] aData)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4838,7 +4835,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">aFile</span></td>
+        <td><span class="parametername">path</span></td>
         <td></td>
       </tr>
       <tr>
@@ -4853,7 +4850,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_IO_FileImpl_WriteAllLines_System_String_System_String___.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.IO.FileImpl.WriteAllLines(System.String%2CSystem.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/IO/FileImpl.cs/#L23">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/IO/FileImpl.cs/#L15">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_IO_FileImpl_WriteAllLines_" data-uid="Cosmos.System_Plugs.System.IO.FileImpl.WriteAllLines*"></a>
   <h4 id="Cosmos_System_Plugs_System_IO_FileImpl_WriteAllLines_System_String_System_String___" data-uid="Cosmos.System_Plugs.System.IO.FileImpl.WriteAllLines(System.String,System.String[])">WriteAllLines(String, String[])</h4>
@@ -4861,7 +4858,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void WriteAllLines(string aFile, string[] contents)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void WriteAllLines(string path, string[] contents)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4875,7 +4872,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">aFile</span></td>
+        <td><span class="parametername">path</span></td>
         <td></td>
       </tr>
       <tr>
@@ -4896,7 +4893,7 @@
                     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_IO_FileImpl.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.IO.FileImpl%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/IO/FileImpl.cs/#L16" class="contribution-link">View Source</a>
+                    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/IO/FileImpl.cs/#L8" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>
