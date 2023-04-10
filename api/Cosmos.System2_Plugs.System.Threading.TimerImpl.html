@@ -551,16 +551,10 @@
                             <a href="Cosmos.Core_Plugs.MathFImpl.html" title="MathFImpl" class="">MathFImpl</a>
                           </li>
                           <li class="">
-                            <a href="Cosmos.Core_Plugs.RuntimeFieldHandleImpl.html" title="RuntimeFieldHandleImpl" class="">RuntimeFieldHandleImpl</a>
+                            <a href="Cosmos.Core_Plugs.MemoryOperationsImpl.html" title="MemoryOperationsImpl" class="">MemoryOperationsImpl</a>
                           </li>
-                        </ul>  </li>
-                    <li class="">
-                      <span class="expand-stub"></span>
-                      <a href="Cosmos.Core_Plugs.MemoryOperations.html" title="Cosmos.Core_Plugs.MemoryOperations" class="">Cosmos.Core_Plugs.MemoryOperations</a>
-                        
-                        <ul class="nav level2">
                           <li class="">
-                            <a href="Cosmos.Core_Plugs.MemoryOperations.MemoryOperationsImpl.html" title="MemoryOperationsImpl" class="">MemoryOperationsImpl</a>
+                            <a href="Cosmos.Core_Plugs.RuntimeFieldHandleImpl.html" title="RuntimeFieldHandleImpl" class="">RuntimeFieldHandleImpl</a>
                           </li>
                         </ul>  </li>
                     <li class="">
@@ -2716,6 +2710,9 @@
                       <a href="Cosmos.System_Plugs.System.Text.html" title="Cosmos.System_Plugs.System.Text" class="">Cosmos.System_Plugs.System.Text</a>
                         
                         <ul class="nav level2">
+                          <li class="">
+                            <a href="Cosmos.System_Plugs.System.Text.CodePage.html" title="CodePage" class="">CodePage</a>
+                          </li>
                           <li class="">
                             <a href="Cosmos.System_Plugs.System.Text.DecoderReplacementFallbackBufferImpl.html" title="DecoderReplacementFallbackBufferImpl" class="">DecoderReplacementFallbackBufferImpl</a>
                           </li>
@@ -4969,7 +4966,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Ctor(Timer This, TimerCallback callback)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Ctor(Timer context, TimerCallback callback)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4983,7 +4980,7 @@
     <tbody>
       <tr>
         <td><span class="xref">Timer</span></td>
-        <td><span class="parametername">This</span></td>
+        <td><span class="parametername">context</span></td>
         <td></td>
       </tr>
       <tr>
@@ -5006,7 +5003,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Ctor(Timer This, TimerCallback callback, object state, int dueTime, int period)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Ctor(Timer context, TimerCallback callback, object state, int dueTime, int period)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5020,7 +5017,7 @@
     <tbody>
       <tr>
         <td><span class="xref">Timer</span></td>
-        <td><span class="parametername">This</span></td>
+        <td><span class="parametername">context</span></td>
         <td></td>
       </tr>
       <tr>
@@ -5058,7 +5055,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Ctor(Timer This, TimerCallback callback, object state, long dueTime, long period)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Ctor(Timer context, TimerCallback callback, object state, long dueTime, long period)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5072,7 +5069,7 @@
     <tbody>
       <tr>
         <td><span class="xref">Timer</span></td>
-        <td><span class="parametername">This</span></td>
+        <td><span class="parametername">context</span></td>
         <td></td>
       </tr>
       <tr>
@@ -5110,7 +5107,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Ctor(Timer This, TimerCallback callback, object state, uint dueTime, uint period)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Ctor(Timer context, TimerCallback callback, object state, uint dueTime, uint period)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5124,7 +5121,7 @@
     <tbody>
       <tr>
         <td><span class="xref">Timer</span></td>
-        <td><span class="parametername">This</span></td>
+        <td><span class="parametername">context</span></td>
         <td></td>
       </tr>
       <tr>
@@ -5162,7 +5159,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Ctor(Timer This, TimerCallback callback, object state, TimeSpan dueTime, TimeSpan period)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Ctor(Timer context, TimerCallback callback, object state, TimeSpan dueTime, TimeSpan period)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5176,7 +5173,7 @@
     <tbody>
       <tr>
         <td><span class="xref">Timer</span></td>
-        <td><span class="parametername">This</span></td>
+        <td><span class="parametername">context</span></td>
         <td></td>
       </tr>
       <tr>
