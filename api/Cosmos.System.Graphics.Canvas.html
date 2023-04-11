@@ -205,9 +205,6 @@
                           <li class="">
                             <a href="Cosmos.Build.Tasks.ReadNasmMapToDebugInfo.html" title="ReadNasmMapToDebugInfo" class="">ReadNasmMapToDebugInfo</a>
                           </li>
-                          <li class="">
-                            <a href="Cosmos.Build.Tasks.TheRingMaster.html" title="TheRingMaster" class="">TheRingMaster</a>
-                          </li>
                         </ul>  </li>
                     <li class="">
                       <span class="expand-stub"></span>
@@ -3484,15 +3481,6 @@
                         </ul>  </li>
                     <li class="">
                       <span class="expand-stub"></span>
-                      <a href="TheRingMaster.html" title="TheRingMaster" class="">TheRingMaster</a>
-                        
-                        <ul class="nav level2">
-                          <li class="">
-                            <a href="TheRingMaster.Program.html" title="Program" class="">Program</a>
-                          </li>
-                        </ul>  </li>
-                    <li class="">
-                      <span class="expand-stub"></span>
                       <a href="XSharp.html" title="XSharp" class="">XSharp</a>
                         
                         <ul class="nav level2">
@@ -4909,7 +4897,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Canvas_AlphaBlend_System_Drawing_Color_System_Drawing_Color_System_Byte_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Canvas.AlphaBlend(System.Drawing.Color%2CSystem.Drawing.Color%2CSystem.Byte)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Canvas.cs/#L811">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Canvas.cs/#L812">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Canvas_AlphaBlend_" data-uid="Cosmos.System.Graphics.Canvas.AlphaBlend*"></a>
   <h4 id="Cosmos_System_Graphics_Canvas_AlphaBlend_System_Drawing_Color_System_Drawing_Color_System_Byte_" data-uid="Cosmos.System.Graphics.Canvas.AlphaBlend(System.Drawing.Color,System.Drawing.Color,System.Byte)">AlphaBlend(Color, Color, Byte)</h4>
@@ -6369,11 +6357,13 @@ public void DrawRectangle(Color color, float xStart, float yStart, float width, 
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Canvas_ThrowIfCoordNotValid_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Canvas.ThrowIfCoordNotValid(System.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Canvas.cs/#L703">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Canvas.cs/#L704">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Canvas_ThrowIfCoordNotValid_" data-uid="Cosmos.System.Graphics.Canvas.ThrowIfCoordNotValid*"></a>
   <h4 id="Cosmos_System_Graphics_Canvas_ThrowIfCoordNotValid_System_Int32_System_Int32_" data-uid="Cosmos.System.Graphics.Canvas.ThrowIfCoordNotValid(System.Int32,System.Int32)">ThrowIfCoordNotValid(Int32, Int32)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Validates that the given coordinates are in-range of the canvas, and
+throws an exception if the coordinates are out-of-bounds.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -6392,12 +6382,30 @@ public void DrawRectangle(Color color, float xStart, float yStart, float width, 
       <tr>
         <td><span class="xref">System.Int32</span></td>
         <td><span class="parametername">x</span></td>
-        <td></td>
+        <td><p>The X coordinate.</p>
+</td>
       </tr>
       <tr>
         <td><span class="xref">System.Int32</span></td>
         <td><span class="parametername">y</span></td>
-        <td></td>
+        <td><p>The Y coordinate.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if the coordinates are invalid.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -6456,7 +6464,7 @@ given value is invalid.</p>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_Canvas_TrimLine_System_Int32__System_Int32__System_Int32__System_Int32__.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.Canvas.TrimLine(System.Int32%40%2CSystem.Int32%40%2CSystem.Int32%40%2CSystem.Int32%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Canvas.cs/#L716">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/Canvas.cs/#L717">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_Canvas_TrimLine_" data-uid="Cosmos.System.Graphics.Canvas.TrimLine*"></a>
   <h4 id="Cosmos_System_Graphics_Canvas_TrimLine_System_Int32__System_Int32__System_Int32__System_Int32__" data-uid="Cosmos.System.Graphics.Canvas.TrimLine(System.Int32@,System.Int32@,System.Int32@,System.Int32@)">TrimLine(ref Int32, ref Int32, ref Int32, ref Int32)</h4>
