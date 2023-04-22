@@ -178,9 +178,23 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="startup">Startup</h1>
 
-<p>On startup, there is some hand-coded assembly that runs before the Cosmos layer kicks in. From there, the C# entry point Cosmos.System.Kernel.Start(); or Sys.Kernel.Start(); is called.</p>
-<p>Cosmos.System.Kernel is an abstract class that forms the Cosmos framework upon which your OS is built upon.</p>
-<p>You can override the Kernel.Start() method to suppress the standard Cosmos boot routines.</p>
+<p>On startup, the first thing that happens is that the BIOS of your computer loads Limine, the bootloader that Cosmos uses. From there, there is some hand-coded assembly that runs before the &quot;Cosmos layer&quot; kicks in. From there, the IL2CPU-ed C# entry point <code>Cosmos.System.Kernel.Start()</code> or <code>Sys.Kernel.Start()</code> is called.</p>
+<blockquote>
+<p>By the way, <code>Cosmos.System.Kernel</code> is an abstract class that forms the Cosmos framework. It provides a base that your OS is built on top of.</p>
+</blockquote>
+<h2 id="syskernelstart">Sys.Kernel.Start()</h2>
+<h3 id="what-does-it-do">What does it do?</h3>
+<p><code>Kernel.Start()</code> does quite a bit of stuff. First, it checks if <code>System.String.Empty</code> was not... Uhh, thrown away by the compiler. Then it initializes the hardware bootstrap, then calls <code>OnBoot()</code>.</p>
+<blockquote>
+<p>We have an article explaining what <code>OnBoot()</code> is.</p>
+</blockquote>
+<p>Then, <code>Kernel.Start()</code> calls your <code>BeforeRun()</code> method, after it finishes, <code>Kernel.Start()</code> enables the hardware interrupts. Then it simply does a <code>while (!mStopped)</code> loop with your <code>Run()</code> method. After that, it calls an optional method called <code>AfterRun()</code>. By default, <code>AfterRun()</code> is just empty, so don't worry about nulls or something like that. Then it finishes. All of that is also try/catched too with the <code>A kernel exception has occurred</code> message.</p>
+<h3 id="overriding-it">Overriding it</h3>
+<p>You can override the <code>Kernel.Start()</code> method in your Kernel to suppress the standard Cosmos boot routines and get deeper control of Cosmos.</p>
+<blockquote>
+<p>You override it the same way you do with other methods. An extremely simple base override in your Kernel would be: <code>protected override void Start() {}</code></p>
+</blockquote>
+<p>The default <code>Kernel.Start()</code> method is located in <code>Cosmos\source\Cosmos.System2\Kernel.cs</code>. You can copy it and make modifications with your Kernel override.</p>
 </article>
           </div>
           
