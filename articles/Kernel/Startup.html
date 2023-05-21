@@ -184,7 +184,7 @@
 </blockquote>
 <h2 id="syskernelstart">Sys.Kernel.Start()</h2>
 <h3 id="what-does-it-do">What does it do?</h3>
-<p><code>Kernel.Start()</code> does quite a bit of stuff. First, it checks if <code>System.String.Empty</code> was not... Uhh, thrown away by the compiler. Then it initializes the hardware bootstrap, then calls <code>OnBoot()</code>.</p>
+<p><code>Kernel.Start()</code> does quite a bit of stuff. First, it checks if <code>System.String.Empty</code> is null. If it is null, then it will just throw an exception. If it isn't, it just continues. After that check, <code>Kernel.Start()</code> initializes the hardware bootstrap, then calls <code>OnBoot()</code>.</p>
 <blockquote>
 <p>We have an article explaining what <code>OnBoot()</code> is.</p>
 </blockquote>
