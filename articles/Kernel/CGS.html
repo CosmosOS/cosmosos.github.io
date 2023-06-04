@@ -197,7 +197,7 @@
 <p><code>void DrawString(String string, Font font, Brush brush, int x, int y)</code> draws a string with the specified font and brush at the specified x and y coordinates</p>
 <p><code>void Display()</code> is only required when using a double buffered driver, swaps the 2 buffers which causes all changes to be displayed</p>
 <p>Really simple right?</p>
-<h1 id="a-working-example">A working example</h1>
+<h1 id="a-working-example-devkit-only">A working example (devkit only!)</h1>
 <pre><code class="lang-CSharp">using System;
 using Sys = Cosmos.System;
 using Cosmos.System.Graphics;
@@ -240,8 +240,6 @@ namespace GraphicTest
         {
             try
             {
-                Pen pen = new Pen();
-
                 // A red Point
                 canvas.DrawPoint(Color.Red, 69, 69);
 
