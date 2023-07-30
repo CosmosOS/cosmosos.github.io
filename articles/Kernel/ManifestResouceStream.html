@@ -185,10 +185,10 @@
 <img src="https://user-images.githubusercontent.com/8559822/132468001-256b92d1-0b29-4db3-9ef5-3383bfdef023.png" alt="image"></li>
 <li>In the code reference the file using the following format (a static byte array with the attribute):</li>
 </ol>
-<pre><code>[ManifestResourceStream(ResourceName = “{project_name}.{path}.{to}.{filename_with_extension}”)] 
+<pre><code>[ManifestResourceStream(ResourceName = &quot;{project_name}.{path}.{to}.{filename_with_extension}&quot;)] 
 static byte[] file;
 </code></pre>
-<p>The field <em>must</em> be static but the name of the field can be changed. You will also need to add <code>using IL2CPU.API.Attribs;</code> to the code.
+<p>The field <em>must</em> be static but the name of the field (file) can be changed. You will also need to add <code>using IL2CPU.API.Attribs;</code> to the code.
 For example, if the project is called Kernel and the file is <code>Data\Text.txt</code>, then <code>ResourceName = &quot;Kernel.Data.Text.txt&quot;</code>.</p>
 <ol start="3">
 <li>To access the data simply read from the byte array defined.</li>

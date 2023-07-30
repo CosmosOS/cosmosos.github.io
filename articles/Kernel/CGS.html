@@ -178,7 +178,7 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="introduction">Introduction</h1>
 
-<p>The Cosmos Graphic Subsystem (CGS from now on) is based on the abstraction of Canvas that is an empty space in which the user of CGS can draw its content. CGS is not a widget toolkit as Winforms or Gnome / GTK but is thought to be more lower level and it will be the basic in which widget toolkits will be implemented. CGS hides the graphics driver (so far VGA, VBE and SVGA II) used and it is thought to be the universal way to draw on the screen in Cosmos.</p>
+<p>The Cosmos Graphic Subsystem (CGS from now on) is based on the abstraction of Canvas that is an empty space in which the user of CGS can draw its content. CGS is not a widget toolkit as Winforms or Gnome / GTK but is thought to be more lower level and it will be the basic in which widget toolkits will be implemented. CGS hides the graphics driver (so far VGA, VBE and SVGAII) used and it is thought to be the universal way to draw on the screen in Cosmos.</p>
 <h1 id="fullscreencanvas">FullScreenCanvas</h1>
 <p>The <code>FullScreenCanvas</code> provides two methods to get a canvas instance for the screen. It automatically chooses the best available driver to use.</p>
 <p><code>public static Canvas GetFullScreenCanvas(Mode mode)</code>: gets the instance of Canvas representing the complete screen in the specified mode</p>
@@ -190,9 +190,9 @@
 <code>AvailableModes</code>: list of the available modes supported this will change based on the underlying hardware</p>
 <h2 id="list-of-methods-of-the-canvas-class">List of Methods of the Canvas class</h2>
 <p><code>Clear(Color color)</code> clear the entire Canvas using the specified color as background</p>
-<p><code>void DrawPoint(Pen pen, int x, int y)</code> draws a point at the coordinates specified by x and y with the specified pen</p>
-<p><code>void DrawLine(Pen pen, int x_start, int y_start, int x_end, int y_end)</code> draws a line at the coordinates specified by x_start, y_start and x_end, y_end with the specified pen</p>
-<p><code>void DrawRectangle(Pen pen, int x_start, int y_start,int width, int height)</code> draws a rectangle specified by a coordinate pair, a width, and a height with the specified pen</p>
+<p><code>void DrawPoint(Color color, int x, int y)</code> draws a point at the coordinates specified by x and y with the specified pen</p>
+<p><code>void DrawLine(Color color, int x_start, int y_start, int x_end, int y_end)</code> draws a line at the coordinates specified by x_start, y_start and x_end, y_end with the specified pen</p>
+<p><code>void DrawRectangle(Color color, int x_start, int y_start,int width, int height)</code> draws a rectangle specified by a coordinate pair, a width, and a height with the specified pen</p>
 <p><code>void DrawImage(Image image, int x, int y)</code> draws an image at the x and y specified</p>
 <p><code>void DrawString(String string, Font font, Brush brush, int x, int y)</code> draws a string with the specified font and brush at the specified x and y coordinates</p>
 <p><code>void Display()</code> is only required when using a double buffered driver, swaps the 2 buffers which causes all changes to be displayed</p>
@@ -231,8 +231,14 @@ namespace GraphicTest
             // If all works correctly you should not really see this :-)
             Console.WriteLine(&quot;Cosmos booted successfully. Let's go in Graphical Mode&quot;);
 
-            // You don't have to specify the Mode, but here we do to show that you can.
+            /*
+            You don't have to specify the Mode, but here we do to show that you can.
+            To not specify the Mode and pick the best one, use:
+            canvas = FullScreenCanvas.GetFullScreenCanvas();
+            */
             canvas = FullScreenCanvas.GetFullScreenCanvas(new Mode(640, 480, ColorDepth.ColorDepth32));
+
+            // This will clear the canvas with the specified color.
             canvas.Clear(Color.Blue);
         }
 
@@ -268,7 +274,7 @@ namespace GraphicTest
             }
             catch (Exception e)
             {
-                mDebugger.Send(&quot;Exception occurred: &quot; + e.Message);
+                Debugger.Send(&quot;Exception occurred: &quot; + e.Message);
                 Sys.Power.Shutdown();
             }
         }
@@ -277,7 +283,8 @@ namespace GraphicTest
 </code></pre>
 <h1 id="limitations-of-the-current-implementation">Limitations of the current implementation</h1>
 <ol>
-<li><p>Only 32 bit color depth is actually supported, the API provides methods to set a resolution with 24, 16, 8 and 4 bit but the low level Bochs driver has not yet implemented them.</p>
+<li><p>Only 32 bit color depth is actually supported, the API provides methods to set a resolution with 24, 16, 8 and 4 bit but the low level Bochs driver has not yet implemented them.
+If you use SVGAIICanvas, you can use 24 bit Color depth and if you use VGACanvas there are 3 modes: 320x200x8, 640x480x4 and 720x480x4.</p>
 </li>
 <li><p>In addition, some other nice things could be implemented:</p>
 <ul>
@@ -287,6 +294,8 @@ namespace GraphicTest
 <li><p>CGS interacts badly with the uncaught exceptions and Kernel.Stop method: the screen will freeze without displaying any error message whatsoever. You must use the Sys.Power.Shutdown() function to properly shut down your computer.</p>
 </li>
 </ol>
+<h1 id="old-examples">Old examples</h1>
+<p>In the web there are a lot of tutorials explaining how to use graphics in Cosmos, but most of them are outdated. Just remember that the new Mouse class is Sys.MouseManager and Pen has been replaced with Color.</p>
 </article>
           </div>
           

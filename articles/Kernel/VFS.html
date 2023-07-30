@@ -185,7 +185,7 @@ Cosmos VFS and the VFS manager classes, let you manage your file system.</p>
 <p>First, we should create and initialize an instance of the VFS, this will initialize the partition and files-system lists, as well as register the new VFS.
 This is essential for using the VFS.</p>
 <p>We start with creating a global CosmosVFS, this line should appear outside of any function, and before the BeforeRun() function.</p>
-<pre><code class="lang-C#">Sys.FileSystem.CosmosVFS fs = new Sys.FileSystem.CosmosVFS();
+<pre><code class="lang-C#">Sys.FileSystem.CosmosVFS fs = new Cosmos.FileSystem.CosmosVFS();
 </code></pre>
 <p>Next, we register our VFS at the VFS manager, this will initiate the VFS and make it usable, add this to your kernel's BeforeRun() function:</p>
 <pre><code class="lang-C#">Sys.FileSystem.VFS.VFSManager.RegisterVFS(fs);
@@ -195,7 +195,6 @@ This is essential for using the VFS.</p>
 <p><strong>Note</strong>: You don't have to format your drive if you're debugging your Cosmos project with VMWare. The build will automatically add an already formatted FAT32 VMDK file for your convenience.</p>
 <p>You can get all available disks using <code>VFSManager.GetDisks()</code>. The methods to get information about the disk or format it can be found under the <a href="https://cosmosos.github.io/api/Cosmos.System.FileSystem.Disk.html">Disk</a> class. To format a disk use the <a href="https://cosmosos.github.io/api/Cosmos.System.FileSystem.Disk.html#Cosmos_System_FileSystem_Disk_FormatPartition_System_Int32_System_String_System_Boolean_"><code>FormatDisk(int index, string format, bool quick = true)</code></a>
 method.</p>
-<p><strong>TODO</strong>: Extend documentation and add examples</p>
 <h2 id="get-available-free-space">Get available free space</h2>
 <p>We use this function to get the size of the available free space in our file system, in bytes.</p>
 <pre><code class="lang-C#">var available_space = fs.GetAvailableFreeSpace(@&quot;0:\&quot;);
@@ -214,15 +213,29 @@ Console.WriteLine(&quot;File System Type: &quot; + fs_type);
 </code></pre>
 <h2 id="get-files-list">Get files list</h2>
 <p>We start by getting a list of files, using:</p>
-<pre><code class="lang-C#">var directory_list = Directory.GetFiles(@&quot;0:\&quot;);
+<pre><code class="lang-C#">var files_list = Directory.GetFiles(@&quot;0:\&quot;);
 </code></pre>
 <p>Once we have it, we can get the names of our files:</p>
-<pre><code class="lang-C#">foreach (var file in directory_list)
+<pre><code class="lang-C#">foreach (var file in files_list)
 {
     Console.WriteLine(file);
 }
 </code></pre>
 <p><img src="https://raw.githubusercontent.com/CosmosOS/Cosmos/master/Docs/articles/Kernel/images/File%20System%20Files%20List.PNG" alt="Files List"></p>
+<h2 id="get-directory-listing-files-and-directories">Get directory listing (Files and directories)</h2>
+<p>You can get files and directory listing by using this code:</p>
+<pre><code class="lang-C#">var files_list = Directory.GetFiles(@&quot;0:\&quot;);
+var directory_list = Directory.GetDirectories(@&quot;0:\&quot;);
+
+foreach (var file in files_list);
+{
+    Console.WriteLine(file)
+}
+foreach (var directory in directory_list)
+{
+    Console.WriteLine(directory);
+}
+</code></pre>
 <h2 id="read-all-the-files-in-a-directory">Read all the files in a directory</h2>
 <p>This one is more tricky,
 We need to get a list of files and print all of their content to the screen.</p>
@@ -258,7 +271,29 @@ catch (Exception e)
     Console.WriteLine(e.ToString());
 }
 </code></pre>
-<p>We can also <a href="https://github.com/CosmosOS/Cosmos/wiki/FAT-FileSystem#get-files-list">check our files list</a> and see our new file in it.</p>
+<h2 id="create-a-new-directory">Create a new Directory</h2>
+<p>Here is a example of code of creating a new directory:</p>
+<pre><code class="lang-C#">try
+{
+    Directory.Create(@&quot;0:\testing\&quot;);
+}
+catch (Exception e)
+{
+    Console.WriteLine(e.ToString());
+}
+</code></pre>
+<h2 id="deleting-a-file-or-a-directory">Deleting a file or a directory</h2>
+<p>You can also delete files or directories using this code:</p>
+<pre><code class="lang-C#">try
+{
+    File.Delete(@&quot;0:\testing.txt&quot;);
+    Directory.Delete(@&quot;0:\testing\&quot;);
+}
+catch (Exception e)
+{
+    Console.WriteLine(e.ToString());
+}
+</code></pre>
 <h2 id="write-to-file">Write to file</h2>
 <p>Now we will write to an existing file.
 Writing to a file is almost the same as reading from a file.
@@ -272,7 +307,23 @@ catch (Exception e)
     Console.WriteLine(e.ToString());
 }
 </code></pre>
-<h2 id="read-specific-file">Read specific file</h2>
+<h2 id="move-a-file">Move a file</h2>
+<p>Actually, File.Move() is not plugged in Cosmos, so you need to Copy the file and then delete the old file.
+Here is an example Method:</p>
+<pre><code class="lang-C#">public static void MoveFile(string file, string newpath)
+{
+    try
+    {
+        File.Copy(file, newpath);
+        File.Delete(file);
+    }
+    catch(Exception e)
+    {
+        Console.WriteLine(ex);
+    }
+}
+</code></pre>
+<h2 id="read-all-text-from-a-specific-file">Read all text from a specific file</h2>
 <p>Now we will read a specific file from a given path.<br>
 As usual, we'll do it in a try catch block.</p>
 <pre><code class="lang-C#">try
@@ -285,6 +336,17 @@ catch (Exception e)
 }
 </code></pre>
 <p><img src="https://raw.githubusercontent.com/CosmosOS/Cosmos/master/Docs/articles/Kernel/images/File%20System%20Read%20Specified%20File.PNG" alt="Read Specific File"></p>
+<h1 id="read-all-bytes-from-a-specific-file">Read All bytes from a specific file</h1>
+<p>As like the ReadAllText Method, ReadAllBytes should return all bytes the bytes from a file.</p>
+<pre><code class="lang-C#">try
+{
+    Console.WriteLine(File.ReadAllBytes(@&quot;0:\testing.txt&quot;));
+}
+catch (Exception e)
+{
+    Console.WriteLine(e.ToString());
+}
+</code></pre>
 </article>
           </div>
           
