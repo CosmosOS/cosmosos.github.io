@@ -5,11 +5,23 @@
   "files": [
     {
       "type": "Conceptual",
+      "source_relative_path": "articles/ChangeLog.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/ChangeLog.html",
+          "hash": "Rk8y4FtC+PDAp/aln4fRqQcpgjWobS7X7itYI4+arKU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "articles/Compiler/il2cpu.md",
       "output": {
         ".html": {
           "relative_path": "articles/Compiler/il2cpu.html",
-          "hash": "YZlMgBZrsuyoi5SEmYKrlCzs5xF/2tLk+FoUhUovVuY="
+          "hash": "Mo0Gsp1yKbDcVLxJtBy6SSCpokGVbZ85XS3yeFvPDX4="
         }
       },
       "is_incremental": false,
@@ -21,7 +33,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/Debugger/DebugCommands.html",
-          "hash": "4WkhFEzoWmqEvRXmONbUvuusKaQrSM4MvBwNOTPSYdg="
+          "hash": "t2CuFYzk2r3VZuuQl102CaM6rqlRjJpYLW4WiJ3RMH8="
         }
       },
       "is_incremental": false,
@@ -33,7 +45,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/Directories.html",
-          "hash": "iRXEEd7cGpQyo971cYL8AOb/M1mcIsXU12a1OCBYs3U="
+          "hash": "bLvJbjXxwRaeVDmot4mt4SV3bAEuTOQG7IEMUTGk25A="
         }
       },
       "is_incremental": false,
@@ -48,7 +60,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/GettingStarted.html",
-          "hash": "9gqYE8I9wnYY0QSIlV/nHFA+dF08cRliHKRHUw7Q9KA="
+          "hash": "KA6/qNY5mEg72IluKQuoE7wxRYbNhoHvYLKX8MvDzKc="
         }
       },
       "is_incremental": false,
@@ -60,7 +72,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/Installation/DevKit.html",
-          "hash": "yvN5dZ/ezLLr2QOvZMmROu8QnfR/iUAbNUIGq2wVmsc="
+          "hash": "gvoo5ijrTZRXCkCBsKR0O1Y69VjUm5kuybeemPcXuxw="
         }
       },
       "is_incremental": false,
@@ -72,7 +84,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/Installation/Running.html",
-          "hash": "OnG5TViER7slWjfLfw9je1HSYn/Xj/GEvoA9ox/kXrE="
+          "hash": "hyf6cGz3ksq3525PyvU3phdCcNl0kkPc4DXeOXHhGQY="
         }
       },
       "is_incremental": false,
@@ -84,7 +96,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/Kernel/Audio.html",
-          "hash": "+8LUn9WPqvEJJbAZ1GoQrWwdIkrPnSEUH1Sbe8oLdBs="
+          "hash": "Kg/Tz3me8uahENbJtbX0lYYkRFAYnXReKZZVo1rVyrE="
         }
       },
       "is_incremental": false,
@@ -96,7 +108,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/Kernel/CGS.html",
-          "hash": "2Mj+qziFNvwz41S07ckr74G9ZHQ6IZ0snQYN0lL5rak="
+          "hash": "SlInPwMHJPHaXsehdFHCEmt6cmmmqPPd7Unw5Yf/+5U="
         }
       },
       "is_incremental": false,
@@ -108,7 +120,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/Kernel/Levels.html",
-          "hash": "8+r+ApE7BTyQMpPzMxZlQ8tnC4eG0wrOp7TU49p5iD8="
+          "hash": "Skiu74aN0jUwXElpQ8mdCJbaVbV0wItc2K/+E2MG160="
         }
       },
       "is_incremental": false,
@@ -120,7 +132,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/Kernel/ManifestResouceStream.html",
-          "hash": "BIfFkv5iCPb/ts5Fu3AWUUbfVSy6iltErUllfVX23OE="
+          "hash": "1unA7YVnR3rhG9sbtGGKkmTmk7R3OKYpq6W1NUI9xPM="
         }
       },
       "is_incremental": false,
@@ -132,7 +144,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/Kernel/MemoryManagement.html",
-          "hash": "qFbgnJmR618IVffVPHchyJWNAOi8qWckHsfaMdJNtmY="
+          "hash": "hXWVWQOiU4JAaClUD4snnoklfCcQgpWRfsdqIG22bII="
         }
       },
       "is_incremental": false,
@@ -144,7 +156,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/Kernel/Network.html",
-          "hash": "UTuLIrhZbtrwaSet8MmHchaOh9JuunVxr2OyW6xG9F8="
+          "hash": "NecUQHH3LeFl/lUPuMsEDl82mtkM3O+YXgI2mJGTY9o="
         }
       },
       "is_incremental": false,
@@ -156,7 +168,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/Kernel/OnBoot.html",
-          "hash": "0iw9D/IpjnwzSATUpb7/jPjR/mob/w8uW4CyUTxmN84="
+          "hash": "po+TXN2nf+pMvrekPJLI+hKKmwZVyalgPvlfce6kJVo="
         }
       },
       "is_incremental": false,
@@ -168,7 +180,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/Kernel/Plugs.html",
-          "hash": "+NUnJcwK97h8qT1qZnYM2fxd53deLc7RgHESXO2TXa4="
+          "hash": "1bicpxbM/7drGeK0z8Flac//7NOhevVe5QIFTCUa0qs="
         }
       },
       "is_incremental": false,
@@ -180,7 +192,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/Kernel/Startup.html",
-          "hash": "fg6cPK8DJU2L4Ec29MFy+2Lmhenf2d5uQrC1wg0c+7o="
+          "hash": "FpOp/XRRBSbJi6nXbP+YIld2KnQFE+Qo35FPllPUJQk="
         }
       },
       "is_incremental": false,
@@ -192,7 +204,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/Kernel/VFS.html",
-          "hash": "TupkNIAxCceOTSKx5lFqVpTKImCbQFmw30M4Ud1M/7I="
+          "hash": "YqHwVLzhpymlh5sP3FzlSOTIoZ0qlD74hk0SmAp6JGk="
         }
       },
       "is_incremental": false,
@@ -204,7 +216,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/Reference/x86.html",
-          "hash": "iBzTSvPYTpCovB8hlBzT+J52zVK4mLFpEX/WjXPcPok="
+          "hash": "Xhz++tEWjftUOEVnVO7/zB/AuzVMoRNiaQIaN4K0KHw="
         }
       },
       "is_incremental": false,
@@ -216,7 +228,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/Tests/TestRunner.html",
-          "hash": "Hl+2wP2zh3JPdiO/p7d4ZmOE+eL9zJhRHffNqxHEzaw="
+          "hash": "DgpICJ8X2vWxkfk6hsqtFvOAi77URNd/dOq5PJcPQmc="
         }
       },
       "is_incremental": false,
@@ -12325,7 +12337,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IL2CPU.Debug.Symbols.SqliteBulkCopy.html",
-          "hash": "wpJsKo1VF/dvrzvuuUoDf0i3pXPgkHuksJuOqmClGuA="
+          "hash": "Afo2HoheGc0L0A44AmzLR2upIaQBmYMBSC+BEQ9Wp1U="
         }
       },
       "is_incremental": false,
@@ -17782,7 +17794,7 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 20,
+          "total_file_count": 21,
           "skipped_file_count": 0
         },
         "ManagedReferenceDocumentProcessor": {
