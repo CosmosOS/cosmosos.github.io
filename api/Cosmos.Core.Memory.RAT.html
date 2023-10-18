@@ -4835,6 +4835,66 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Memory_RAT_FreePageCount.md&amp;value=---%0Auid%3A%20Cosmos.Core.Memory.RAT.FreePageCount%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/Memory/RAT.cs/#L101">View Source</a>
+  </span>
+  <h4 id="Cosmos_Core_Memory_RAT_FreePageCount" data-uid="Cosmos.Core.Memory.RAT.FreePageCount">FreePageCount</h4>
+  <div class="markdown level1 summary"><p>Number of pages which are currently not in use</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static uint FreePageCount</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Memory_RAT_GCTriggered.md&amp;value=---%0Auid%3A%20Cosmos.Core.Memory.RAT.GCTriggered%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/Memory/RAT.cs/#L112">View Source</a>
+  </span>
+  <h4 id="Cosmos_Core_Memory_RAT_GCTriggered" data-uid="Cosmos.Core.Memory.RAT.GCTriggered">GCTriggered</h4>
+  <div class="markdown level1 summary"><p>Number of the times the GC has been triggered automatically</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static uint GCTriggered</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Memory_RAT_HeapEnd.md&amp;value=---%0Auid%3A%20Cosmos.Core.Memory.RAT.HeapEnd%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
@@ -4865,10 +4925,41 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Memory_RAT_MinFreePages.md&amp;value=---%0Auid%3A%20Cosmos.Core.Memory.RAT.MinFreePages%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/Memory/RAT.cs/#L107">View Source</a>
+  </span>
+  <h4 id="Cosmos_Core_Memory_RAT_MinFreePages" data-uid="Cosmos.Core.Memory.RAT.MinFreePages">MinFreePages</h4>
+  <div class="markdown level1 summary"><p>If number of free pages drops below this number, we trigger the GC.Collect automatically
+If set to -1 it is disabled</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int MinFreePages</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Memory_RAT_mRAT.md&amp;value=---%0Auid%3A%20Cosmos.Core.Memory.RAT.mRAT%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/Memory/RAT.cs/#L103">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/Memory/RAT.cs/#L119">View Source</a>
   </span>
   <h4 id="Cosmos_Core_Memory_RAT_mRAT" data-uid="Cosmos.Core.Memory.RAT.mRAT">mRAT</h4>
   <div class="markdown level1 summary"><p>Pointer to the RAT.</p>
@@ -5029,7 +5120,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Memory_RAT_AllocPages_Cosmos_Core_Memory_RAT_PageType_System_UInt32_.md&amp;value=---%0Auid%3A%20Cosmos.Core.Memory.RAT.AllocPages(Cosmos.Core.Memory.RAT.PageType%2CSystem.UInt32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/Memory/RAT.cs/#L193">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/Memory/RAT.cs/#L213">View Source</a>
   </span>
   <a id="Cosmos_Core_Memory_RAT_AllocPages_" data-uid="Cosmos.Core.Memory.RAT.AllocPages*"></a>
   <h4 id="Cosmos_Core_Memory_RAT_AllocPages_Cosmos_Core_Memory_RAT_PageType_System_UInt32_" data-uid="Cosmos.Core.Memory.RAT.AllocPages(Cosmos.Core.Memory.RAT.PageType,System.UInt32)">AllocPages(RAT.PageType, UInt32)</h4>
@@ -5085,7 +5176,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Memory_RAT_Free_System_UInt32_.md&amp;value=---%0Auid%3A%20Cosmos.Core.Memory.RAT.Free(System.UInt32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/Memory/RAT.cs/#L294">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/Memory/RAT.cs/#L324">View Source</a>
   </span>
   <a id="Cosmos_Core_Memory_RAT_Free_" data-uid="Cosmos.Core.Memory.RAT.Free*"></a>
   <h4 id="Cosmos_Core_Memory_RAT_Free_System_UInt32_" data-uid="Cosmos.Core.Memory.RAT.Free(System.UInt32)">Free(UInt32)</h4>
@@ -5119,7 +5210,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Memory_RAT_GetFirstRATIndex_System_Void__.md&amp;value=---%0Auid%3A%20Cosmos.Core.Memory.RAT.GetFirstRATIndex(System.Void*)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/Memory/RAT.cs/#L256">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/Memory/RAT.cs/#L286">View Source</a>
   </span>
   <a id="Cosmos_Core_Memory_RAT_GetFirstRATIndex_" data-uid="Cosmos.Core.Memory.RAT.GetFirstRATIndex*"></a>
   <h4 id="Cosmos_Core_Memory_RAT_GetFirstRATIndex_System_Void__" data-uid="Cosmos.Core.Memory.RAT.GetFirstRATIndex(System.Void*)">GetFirstRATIndex(Void*)</h4>
@@ -5185,7 +5276,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Memory_RAT_GetPageCount_System_Byte_.md&amp;value=---%0Auid%3A%20Cosmos.Core.Memory.RAT.GetPageCount(System.Byte)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/Memory/RAT.cs/#L161">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/Memory/RAT.cs/#L181">View Source</a>
   </span>
   <a id="Cosmos_Core_Memory_RAT_GetPageCount_" data-uid="Cosmos.Core.Memory.RAT.GetPageCount*"></a>
   <h4 id="Cosmos_Core_Memory_RAT_GetPageCount_System_Byte_" data-uid="Cosmos.Core.Memory.RAT.GetPageCount(System.Byte)">GetPageCount(Byte)</h4>
@@ -5235,7 +5326,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Memory_RAT_GetPagePtr_System_Void__.md&amp;value=---%0Auid%3A%20Cosmos.Core.Memory.RAT.GetPagePtr(System.Void*)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/Memory/RAT.cs/#L270">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/Memory/RAT.cs/#L300">View Source</a>
   </span>
   <a id="Cosmos_Core_Memory_RAT_GetPagePtr_" data-uid="Cosmos.Core.Memory.RAT.GetPagePtr*"></a>
   <h4 id="Cosmos_Core_Memory_RAT_GetPagePtr_System_Void__" data-uid="Cosmos.Core.Memory.RAT.GetPagePtr(System.Void*)">GetPagePtr(Void*)</h4>
@@ -5282,7 +5373,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Memory_RAT_GetPageType_System_Void__.md&amp;value=---%0Auid%3A%20Cosmos.Core.Memory.RAT.GetPageType(System.Void*)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/Memory/RAT.cs/#L281">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/Memory/RAT.cs/#L311">View Source</a>
   </span>
   <a id="Cosmos_Core_Memory_RAT_GetPageType_" data-uid="Cosmos.Core.Memory.RAT.GetPageType*"></a>
   <h4 id="Cosmos_Core_Memory_RAT_GetPageType_System_Void__" data-uid="Cosmos.Core.Memory.RAT.GetPageType(System.Void*)">GetPageType(Void*)</h4>
@@ -5348,7 +5439,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_Memory_RAT_Init_System_Byte__System_UInt32_.md&amp;value=---%0Auid%3A%20Cosmos.Core.Memory.RAT.Init(System.Byte*%2CSystem.UInt32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/Memory/RAT.cs/#L115">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/Memory/RAT.cs/#L131">View Source</a>
   </span>
   <a id="Cosmos_Core_Memory_RAT_Init_" data-uid="Cosmos.Core.Memory.RAT.Init*"></a>
   <h4 id="Cosmos_Core_Memory_RAT_Init_System_Byte__System_UInt32_" data-uid="Cosmos.Core.Memory.RAT.Init(System.Byte*,System.UInt32)">Init(Byte*, UInt32)</h4>
