@@ -2470,6 +2470,9 @@
                           <li class="">
                             <a href="Cosmos.System.Network.IPv4.IPPacket.html" title="IPPacket" class="">IPPacket</a>
                           </li>
+                          <li class="">
+                            <a href="Cosmos.System.Network.IPv4.OutgoingBuffer.html" title="OutgoingBuffer" class="">OutgoingBuffer</a>
+                          </li>
                         </ul>  </li>
                     <li class="">
                       <span class="expand-stub"></span>
@@ -4961,6 +4964,71 @@
       <tr>
         <td><span class="xref">System.IO.IOException</span></td>
         <td><p>Thrown on IO error.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.OverflowException</span></td>
+        <td><p>Thrown on fatal error.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Network_NetworkStack_HandlePacket_System_Byte___.md&amp;value=---%0Auid%3A%20Cosmos.System.Network.NetworkStack.HandlePacket(System.Byte%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Network/NetworkStack.cs/#L134">View Source</a>
+  </span>
+  <a id="Cosmos_System_Network_NetworkStack_HandlePacket_" data-uid="Cosmos.System.Network.NetworkStack.HandlePacket*"></a>
+  <h4 id="Cosmos_System_Network_NetworkStack_HandlePacket_System_Byte___" data-uid="Cosmos.System.Network.NetworkStack.HandlePacket(System.Byte[])">HandlePacket(Byte[])</h4>
+  <div class="markdown level1 summary"><p>Handle a network packet.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void HandlePacket(byte[] packetData)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">packetData</span></td>
+        <td><p>Packet data array.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown on fatal error.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td><p>Thrown on IO error.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown on fatal error.</p>
 </td>
       </tr>
       <tr>
