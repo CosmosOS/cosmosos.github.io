@@ -184,7 +184,7 @@
 <p>In this article we will discuss about Networking on Cosmos, how to use the Network Stack, send and receive packets. For now, available protocols are <strong>ARP</strong>, <strong>IPv4</strong>, <strong>TCP</strong>, <strong>UDP</strong>, <strong>ICMP</strong>, <strong>DHCP</strong> and <strong>DNS</strong>. Note that Cosmos devkit must be installed for this article.</p>
 <p>All protocols here don't necessary support every feature described by their RFC and may have some bugs or architecture issues, if you find bugs or something abnormal please <a href="https://github.com/CosmosOS/Cosmos/issues/new/choose">submit an issue</a> on our repository.</p>
 <p>Each protocol has a Client class which can be used to receive and send data. If a Receive() method is blocking, the method will timeout after 5 seconds or use the value optionally set by parameter. Please note that all finished connections should be closed using Close().</p>
-<p>Cosmos Network Stack won't use Classes and Functions that are under .NET Core. Everything described here will be under:</p>
+<p>The Cosmos Network Stack mainly not uses classes and functions that are under .NET Core (except TCP). Everything described here will be under:</p>
 <pre><code class="lang-csharp">using Cosmos.System.Network;
 </code></pre>
 <p>Before anything, a Network Configuration must be set (local machine IPv4 address, subnet mask and gateway). It can be manually set with IPConfig.Enable or dynamically set through a DHCP server. For DHCP, Cosmos will ask to the DHCP server (usually default gateway) for an address in your local network.</p>
@@ -200,26 +200,12 @@ IPConfig.Enable(nic, new Address(192, 168, 1, 69), new Address(255, 255, 255, 0)
     xClient.SendDiscoverPacket();
 }
 </code></pre>
-<h2 id="tcp">TCP</h2>
-<p>Like UDP, TCP has to create a client and call Connect() to specify the remote machine address before sending or receiving data.</p>
-<p>Server :</p>
-<pre><code class="lang-csharp">using(var xServer = new TcpListener(4242))
-{
-    /** Start server **/
-    xServer.Start();
-    
-    /** Accept incoming TCP connection **/
-    var client = xServer.AcceptTcpClient(); //blocking
-    
-    /** Stop server **/
-    xServer.Stop();
-
-    /** Send data **/
-    client.Send(Encoding.ASCII.GetBytes(message));
-}
+<h3 id="get-local-ip-address">Get local IP address</h3>
+<pre><code class="lang-csharp">Console.WriteLine(NetworkConfiguration.CurrentAddress.ToString());
 </code></pre>
-<p>Client :</p>
-<pre><code class="lang-csharp">using(var xClient = new TcpClient(4242))
+<h2 id="udp">UDP</h2>
+<p>Before playing with packets, we have to create a client and call Connect() to specify the remote machine address. After that the client will be able to send or listen for data.</p>
+<pre><code class="lang-csharp">using(var xClient = new UdpClient(4242))
 {
     xClient.Connect(new Address(192, 168, 1, 70), 4242);
 
@@ -230,6 +216,93 @@ IPConfig.Enable(nic, new Address(192, 168, 1, 69), new Address(255, 255, 255, 0)
     var endpoint = new EndPoint(Address.Zero, 0);
     var data = xClient.Receive(ref endpoint);  //set endpoint to remote machine IP:port
     var data2 = xClient.NonBlockingReceive(ref endpoint); //retrieve receive buffer without waiting
+}
+</code></pre>
+<h2 id="tcp">TCP</h2>
+<p>Unlike UDP, TCP is plugged with the dotnet framework. You won't have to use Cosmos.System.Network but System.Net.Sockets and System.Net. You can setup TCP network streams using TcpListener, TcpClient and NetworkStream, don't use the Stream class unless you know what you do.</p>
+<p>Server:</p>
+<pre><code class="lang-csharp">using System.Text;
+using System.Net.Sockets;
+using System.Net;
+
+class TcpServer
+{
+    private TcpListener tcpListener;
+    private int port;
+
+    public TcpServer(int port)
+    {
+        this.port = port;
+        var address = IPAddress.Any;
+        this.tcpListener = new TcpListener(address, port);
+    }
+
+    public void Start()
+    {
+        this.tcpListener.Start();
+
+        while (true)
+        {
+            /** Wait for new connections **/
+            TcpClient client = this.tcpListener.AcceptTcpClient();
+            HandleClientComm(client);
+            client.Close();
+        }
+    }
+
+    private void HandleClientComm(TcpClient client)
+    {
+        NetworkStream stream = client.GetStream();
+
+        byte[] buffer = new byte[client.ReceiveBufferSize];
+        int bytesRead;
+
+        while (true)
+        {
+            bytesRead = 0;
+
+            /** Receive data **/
+            bytesRead = stream.Read(buffer, 0, buffer.Length); // Blocks until a client sends a message
+
+            if (bytesRead == 0) // The client has disconnected from the server
+            {
+                break;
+            }
+
+            string received = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+
+            /** Send data **/
+            byte[] response = Encoding.ASCII.GetBytes(&quot;ok&quot;);
+            stream.Write(response, 0, response.Length);
+
+            // stream.Flush(); useless for now
+        }
+        stream.Close();
+    }
+}
+</code></pre>
+<p>Client :</p>
+<pre><code class="lang-csharp">string serverIp = &quot;192.168.1.63&quot;;
+int serverPort = 1312;
+
+using(TcpClient client = new TcpClient())
+{
+    /**Connect to server **/
+    client.Connect(serverIp, serverPort);
+    NetworkStream stream = client.GetStream();
+    
+    /** Send data **/
+    string messageToSend = &quot;Hello from CosmosOS!&quot;;
+    byte[] dataToSend = Encoding.ASCII.GetBytes(messageToSend);
+    stream.Write(dataToSend, 0, dataToSend.Length);
+    
+    /** Receive data **/
+    byte[] receivedData = new byte[client.ReceiveBufferSize];
+    int bytesRead = stream.Read(receivedData, 0, receivedData.Length);
+    string receivedMessage = Encoding.ASCII.GetString(receivedData, 0, bytesRead);
+    
+    /** Close data stream **/
+    stream.Close();
 }
 </code></pre>
 <h2 id="ftp">FTP</h2>
@@ -250,21 +323,6 @@ using(var xServer = new FtpServer(fs, &quot;0:\\&quot;))
 {
     /** Listen for new FTP client connections **/
     FtpServer.Listen();
-}
-</code></pre>
-<h2 id="udp">UDP</h2>
-<p>Before playing with packets, we have to create a client and call Connect() to specify the remote machine address. After that the client will be able to send or listen for data.</p>
-<pre><code class="lang-csharp">using(var xClient = new UdpClient(4242))
-{
-    xClient.Connect(new Address(192, 168, 1, 70), 4242);
-
-    /** Send data **/
-    xClient.Send(Encoding.ASCII.GetBytes(message));
-
-    /** Receive data **/
-    var endpoint = new EndPoint(Address.Zero, 0);
-    var data = xClient.Receive(ref endpoint);  //set endpoint to remote machine IP:port
-    var data2 = xClient.NonBlockingReceive(ref endpoint); //retrieve receive buffer without waiting
 }
 </code></pre>
 <h2 id="icmp">ICMP</h2>
@@ -293,10 +351,6 @@ using(var xServer = new FtpServer(fs, &quot;0:\\&quot;))
     /** Receive DNS Response **/
     Address destination = xClient.Receive(); //can set a timeout value
 }
-
-</code></pre>
-<h2 id="get-local-ip-address">Get local IP address</h2>
-<pre><code class="lang-csharp">Console.WriteLine(NetworkConfiguration.CurrentAddress.ToString());
 </code></pre>
 </article>
           </div>
