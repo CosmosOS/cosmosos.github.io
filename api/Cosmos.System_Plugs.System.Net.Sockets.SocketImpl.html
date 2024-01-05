@@ -4897,18 +4897,18 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Accept_System_Net_Sockets_Socket_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Accept(System.Net.Sockets.Socket)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Accept_System_Net_Sockets_Socket_Cosmos_System_Network_IPv4_TCP_Tcp__System_Net_EndPoint__System_Net_EndPoint__System_Net_EndPoint__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Accept(System.Net.Sockets.Socket%2CCosmos.System.Network.IPv4.TCP.Tcp%40%2CSystem.Net.EndPoint%40%2CSystem.Net.EndPoint%40%2CSystem.Net.EndPoint%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L88">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L94">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Accept_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Accept*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Accept_System_Net_Sockets_Socket_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Accept(System.Net.Sockets.Socket)">Accept(Socket)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Accept_System_Net_Sockets_Socket_Cosmos_System_Network_IPv4_TCP_Tcp__System_Net_EndPoint__System_Net_EndPoint__System_Net_EndPoint__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Accept(System.Net.Sockets.Socket,Cosmos.System.Network.IPv4.TCP.Tcp@,System.Net.EndPoint@,System.Net.EndPoint@,System.Net.EndPoint@)">Accept(Socket, ref Tcp, ref EndPoint, ref EndPoint, ref EndPoint)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Socket Accept(Socket aThis)</code></pre>
+    <pre><code class="lang-csharp hljs">public static Socket Accept(Socket aThis, ref Tcp StateMachine, ref EndPoint EndPoint, ref EndPoint _remoteEndPoint, ref EndPoint _localEndPoint)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4923,6 +4923,26 @@
       <tr>
         <td><span class="xref">System.Net.Sockets.Socket</span></td>
         <td><span class="parametername">aThis</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Network.IPv4.TCP.Tcp.html">Tcp</a></td>
+        <td><span class="parametername">StateMachine</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Net.EndPoint</span></td>
+        <td><span class="parametername">EndPoint</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Net.EndPoint</span></td>
+        <td><span class="parametername">_remoteEndPoint</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Net.EndPoint</span></td>
+        <td><span class="parametername">_localEndPoint</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -4944,18 +4964,18 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Bind_System_Net_Sockets_Socket_System_Net_EndPoint_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Bind(System.Net.Sockets.Socket%2CSystem.Net.EndPoint)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Bind_System_Net_Sockets_Socket_System_Net_EndPoint_System_Net_EndPoint__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Bind(System.Net.Sockets.Socket%2CSystem.Net.EndPoint%2CSystem.Net.EndPoint%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L78">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L81">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Bind_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Bind*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Bind_System_Net_Sockets_Socket_System_Net_EndPoint_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Bind(System.Net.Sockets.Socket,System.Net.EndPoint)">Bind(Socket, EndPoint)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Bind_System_Net_Sockets_Socket_System_Net_EndPoint_System_Net_EndPoint__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Bind(System.Net.Sockets.Socket,System.Net.EndPoint,System.Net.EndPoint@)">Bind(Socket, EndPoint, ref EndPoint)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Bind(Socket aThis, EndPoint localEP)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Bind(Socket aThis, EndPoint localEP, ref EndPoint EndPoint)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4977,22 +4997,27 @@
         <td><span class="parametername">localEP</span></td>
         <td></td>
       </tr>
+      <tr>
+        <td><span class="xref">System.Net.EndPoint</span></td>
+        <td><span class="parametername">EndPoint</span></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Close_System_Net_Sockets_Socket_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Close(System.Net.Sockets.Socket)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Close_System_Net_Sockets_Socket_Cosmos_System_Network_IPv4_TCP_Tcp__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Close(System.Net.Sockets.Socket%2CCosmos.System.Network.IPv4.TCP.Tcp%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L279">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L300">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Close_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Close*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Close_System_Net_Sockets_Socket_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Close(System.Net.Sockets.Socket)">Close(Socket)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Close_System_Net_Sockets_Socket_Cosmos_System_Network_IPv4_TCP_Tcp__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Close(System.Net.Sockets.Socket,Cosmos.System.Network.IPv4.TCP.Tcp@)">Close(Socket, ref Tcp)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Close(Socket aThis)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Close(Socket aThis, ref Tcp StateMachine)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5009,22 +5034,27 @@
         <td><span class="parametername">aThis</span></td>
         <td></td>
       </tr>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Network.IPv4.TCP.Tcp.html">Tcp</a></td>
+        <td><span class="parametername">StateMachine</span></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Close_System_Net_Sockets_Socket_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Close(System.Net.Sockets.Socket%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Close_System_Net_Sockets_Socket_System_Int32_Cosmos_System_Network_IPv4_TCP_Tcp__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Close(System.Net.Sockets.Socket%2CSystem.Int32%2CCosmos.System.Network.IPv4.TCP.Tcp%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L284">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L306">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Close_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Close*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Close_System_Net_Sockets_Socket_System_Int32_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Close(System.Net.Sockets.Socket,System.Int32)">Close(Socket, Int32)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Close_System_Net_Sockets_Socket_System_Int32_Cosmos_System_Network_IPv4_TCP_Tcp__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Close(System.Net.Sockets.Socket,System.Int32,Cosmos.System.Network.IPv4.TCP.Tcp@)">Close(Socket, Int32, ref Tcp)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Close(Socket aThis, int timeout)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Close(Socket aThis, int timeout, ref Tcp StateMachine)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5046,22 +5076,27 @@
         <td><span class="parametername">timeout</span></td>
         <td></td>
       </tr>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Network.IPv4.TCP.Tcp.html">Tcp</a></td>
+        <td><span class="parametername">StateMachine</span></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Connect_System_Net_Sockets_Socket_System_Net_IPAddress_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Connect(System.Net.Sockets.Socket%2CSystem.Net.IPAddress%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Connect_System_Net_Sockets_Socket_System_Net_IPAddress_System_Int32_Cosmos_System_Network_IPv4_TCP_Tcp__System_Net_EndPoint__System_Net_EndPoint__System_Net_EndPoint__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Connect(System.Net.Sockets.Socket%2CSystem.Net.IPAddress%2CSystem.Int32%2CCosmos.System.Network.IPv4.TCP.Tcp%40%2CSystem.Net.EndPoint%40%2CSystem.Net.EndPoint%40%2CSystem.Net.EndPoint%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L120">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L132">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Connect_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Connect*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Connect_System_Net_Sockets_Socket_System_Net_IPAddress_System_Int32_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Connect(System.Net.Sockets.Socket,System.Net.IPAddress,System.Int32)">Connect(Socket, IPAddress, Int32)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Connect_System_Net_Sockets_Socket_System_Net_IPAddress_System_Int32_Cosmos_System_Network_IPv4_TCP_Tcp__System_Net_EndPoint__System_Net_EndPoint__System_Net_EndPoint__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Connect(System.Net.Sockets.Socket,System.Net.IPAddress,System.Int32,Cosmos.System.Network.IPv4.TCP.Tcp@,System.Net.EndPoint@,System.Net.EndPoint@,System.Net.EndPoint@)">Connect(Socket, IPAddress, Int32, ref Tcp, ref EndPoint, ref EndPoint, ref EndPoint)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Connect(Socket aThis, IPAddress address, int port)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Connect(Socket aThis, IPAddress address, int port, ref Tcp StateMachine, ref EndPoint EndPoint, ref EndPoint _remoteEndPoint, ref EndPoint _localEndPoint)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5088,6 +5123,26 @@
         <td><span class="parametername">port</span></td>
         <td></td>
       </tr>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Network.IPv4.TCP.Tcp.html">Tcp</a></td>
+        <td><span class="parametername">StateMachine</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Net.EndPoint</span></td>
+        <td><span class="parametername">EndPoint</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Net.EndPoint</span></td>
+        <td><span class="parametername">_remoteEndPoint</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Net.EndPoint</span></td>
+        <td><span class="parametername">_localEndPoint</span></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
@@ -5095,7 +5150,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Ctor_System_Net_Sockets_Socket_System_Net_Sockets_AddressFamily_System_Net_Sockets_SocketType_System_Net_Sockets_ProtocolType_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Ctor(System.Net.Sockets.Socket%2CSystem.Net.Sockets.AddressFamily%2CSystem.Net.Sockets.SocketType%2CSystem.Net.Sockets.ProtocolType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L31">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L30">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Ctor_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Ctor*"></a>
   <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Ctor_System_Net_Sockets_Socket_System_Net_Sockets_AddressFamily_System_Net_Sockets_SocketType_System_Net_Sockets_ProtocolType_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Ctor(System.Net.Sockets.Socket,System.Net.Sockets.AddressFamily,System.Net.Sockets.SocketType,System.Net.Sockets.ProtocolType)">Ctor(Socket, AddressFamily, SocketType, ProtocolType)</h4>
@@ -5142,7 +5197,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Ctor_System_Net_Sockets_Socket_System_Net_Sockets_SocketType_System_Net_Sockets_ProtocolType_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Ctor(System.Net.Sockets.Socket%2CSystem.Net.Sockets.SocketType%2CSystem.Net.Sockets.ProtocolType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L26">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L25">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Ctor_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Ctor*"></a>
   <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Ctor_System_Net_Sockets_Socket_System_Net_Sockets_SocketType_System_Net_Sockets_ProtocolType_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Ctor(System.Net.Sockets.Socket,System.Net.Sockets.SocketType,System.Net.Sockets.ProtocolType)">Ctor(Socket, SocketType, ProtocolType)</h4>
@@ -5184,7 +5239,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Dispose_System_Net_Sockets_Socket_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Dispose(System.Net.Sockets.Socket)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L331">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L354">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Dispose_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Dispose*"></a>
   <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Dispose_System_Net_Sockets_Socket_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Dispose(System.Net.Sockets.Socket)">Dispose(Socket)</h4>
@@ -5213,18 +5268,18 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_get_Connected_System_Net_Sockets_Socket_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.get_Connected(System.Net.Sockets.Socket)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_get_Connected_System_Net_Sockets_Socket_Cosmos_System_Network_IPv4_TCP_Tcp__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.get_Connected(System.Net.Sockets.Socket%2CCosmos.System.Network.IPv4.TCP.Tcp%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L58">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L57">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_get_Connected_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.get_Connected*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_get_Connected_System_Net_Sockets_Socket_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.get_Connected(System.Net.Sockets.Socket)">get_Connected(Socket)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_get_Connected_System_Net_Sockets_Socket_Cosmos_System_Network_IPv4_TCP_Tcp__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.get_Connected(System.Net.Sockets.Socket,Cosmos.System.Network.IPv4.TCP.Tcp@)">get_Connected(Socket, ref Tcp)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static bool get_Connected(Socket aThis)</code></pre>
+    <pre><code class="lang-csharp hljs">public static bool get_Connected(Socket aThis, ref Tcp StateMachine)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5239,6 +5294,11 @@
       <tr>
         <td><span class="xref">System.Net.Sockets.Socket</span></td>
         <td><span class="parametername">aThis</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Network.IPv4.TCP.Tcp.html">Tcp</a></td>
+        <td><span class="parametername">StateMachine</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5260,18 +5320,18 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_get_LocalEndPoint_System_Net_Sockets_Socket_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.get_LocalEndPoint(System.Net.Sockets.Socket)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_get_LocalEndPoint_System_Net_Sockets_Socket_System_Net_EndPoint__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.get_LocalEndPoint(System.Net.Sockets.Socket%2CSystem.Net.EndPoint%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L63">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_get_LocalEndPoint_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.get_LocalEndPoint*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_get_LocalEndPoint_System_Net_Sockets_Socket_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.get_LocalEndPoint(System.Net.Sockets.Socket)">get_LocalEndPoint(Socket)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_get_LocalEndPoint_System_Net_Sockets_Socket_System_Net_EndPoint__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.get_LocalEndPoint(System.Net.Sockets.Socket,System.Net.EndPoint@)">get_LocalEndPoint(Socket, ref EndPoint)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static EndPoint get_LocalEndPoint(Socket aThis)</code></pre>
+    <pre><code class="lang-csharp hljs">public static EndPoint get_LocalEndPoint(Socket aThis, ref EndPoint _localEndPoint)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5286,6 +5346,11 @@
       <tr>
         <td><span class="xref">System.Net.Sockets.Socket</span></td>
         <td><span class="parametername">aThis</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Net.EndPoint</span></td>
+        <td><span class="parametername">_localEndPoint</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5307,18 +5372,18 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_get_RemoteEndPoint_System_Net_Sockets_Socket_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.get_RemoteEndPoint(System.Net.Sockets.Socket)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_get_RemoteEndPoint_System_Net_Sockets_Socket_System_Net_EndPoint__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.get_RemoteEndPoint(System.Net.Sockets.Socket%2CSystem.Net.EndPoint%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L68">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L69">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_get_RemoteEndPoint_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.get_RemoteEndPoint*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_get_RemoteEndPoint_System_Net_Sockets_Socket_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.get_RemoteEndPoint(System.Net.Sockets.Socket)">get_RemoteEndPoint(Socket)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_get_RemoteEndPoint_System_Net_Sockets_Socket_System_Net_EndPoint__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.get_RemoteEndPoint(System.Net.Sockets.Socket,System.Net.EndPoint@)">get_RemoteEndPoint(Socket, ref EndPoint)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static EndPoint get_RemoteEndPoint(Socket aThis)</code></pre>
+    <pre><code class="lang-csharp hljs">public static EndPoint get_RemoteEndPoint(Socket aThis, ref EndPoint _remoteEndPoint)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5333,6 +5398,11 @@
       <tr>
         <td><span class="xref">System.Net.Sockets.Socket</span></td>
         <td><span class="parametername">aThis</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Net.EndPoint</span></td>
+        <td><span class="parametername">_remoteEndPoint</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5354,18 +5424,18 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Listen_System_Net_Sockets_Socket_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Listen(System.Net.Sockets.Socket)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Listen_System_Net_Sockets_Socket_Cosmos_System_Network_IPv4_TCP_Tcp__System_Net_EndPoint__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Listen(System.Net.Sockets.Socket%2CCosmos.System.Network.IPv4.TCP.Tcp%40%2CSystem.Net.EndPoint%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L83">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L87">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Listen_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Listen*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Listen_System_Net_Sockets_Socket_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Listen(System.Net.Sockets.Socket)">Listen(Socket)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Listen_System_Net_Sockets_Socket_Cosmos_System_Network_IPv4_TCP_Tcp__System_Net_EndPoint__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Listen(System.Net.Sockets.Socket,Cosmos.System.Network.IPv4.TCP.Tcp@,System.Net.EndPoint@)">Listen(Socket, ref Tcp, ref EndPoint)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Listen(Socket aThis)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Listen(Socket aThis, ref Tcp StateMachine, ref EndPoint EndPoint)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5382,22 +5452,32 @@
         <td><span class="parametername">aThis</span></td>
         <td></td>
       </tr>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Network.IPv4.TCP.Tcp.html">Tcp</a></td>
+        <td><span class="parametername">StateMachine</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Net.EndPoint</span></td>
+        <td><span class="parametername">EndPoint</span></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Poll_System_Net_Sockets_Socket_System_Int32_System_Net_Sockets_SelectMode_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Poll(System.Net.Sockets.Socket%2CSystem.Int32%2CSystem.Net.Sockets.SelectMode)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Poll_System_Net_Sockets_Socket_System_Int32_System_Net_Sockets_SelectMode_Cosmos_System_Network_IPv4_TCP_Tcp__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Poll(System.Net.Sockets.Socket%2CSystem.Int32%2CSystem.Net.Sockets.SelectMode%2CCosmos.System.Network.IPv4.TCP.Tcp%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L73">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L75">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Poll_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Poll*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Poll_System_Net_Sockets_Socket_System_Int32_System_Net_Sockets_SelectMode_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Poll(System.Net.Sockets.Socket,System.Int32,System.Net.Sockets.SelectMode)">Poll(Socket, Int32, SelectMode)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Poll_System_Net_Sockets_Socket_System_Int32_System_Net_Sockets_SelectMode_Cosmos_System_Network_IPv4_TCP_Tcp__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Poll(System.Net.Sockets.Socket,System.Int32,System.Net.Sockets.SelectMode,Cosmos.System.Network.IPv4.TCP.Tcp@)">Poll(Socket, Int32, SelectMode, ref Tcp)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static bool Poll(Socket aThis, int microSeconds, SelectMode mode)</code></pre>
+    <pre><code class="lang-csharp hljs">public static bool Poll(Socket aThis, int microSeconds, SelectMode mode, ref Tcp StateMachine)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5424,6 +5504,11 @@
         <td><span class="parametername">mode</span></td>
         <td></td>
       </tr>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Network.IPv4.TCP.Tcp.html">Tcp</a></td>
+        <td><span class="parametername">StateMachine</span></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <h5 class="returns">Returns</h5>
@@ -5443,18 +5528,18 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Receive_System_Net_Sockets_Socket_System_Byte___System_Int32_System_Int32_System_Net_Sockets_SocketFlags_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Receive(System.Net.Sockets.Socket%2CSystem.Byte%5B%5D%2CSystem.Int32%2CSystem.Int32%2CSystem.Net.Sockets.SocketFlags)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Receive_System_Net_Sockets_Socket_System_Byte___System_Int32_System_Int32_System_Net_Sockets_SocketFlags_Cosmos_System_Network_IPv4_TCP_Tcp__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Receive(System.Net.Sockets.Socket%2CSystem.Byte%5B%5D%2CSystem.Int32%2CSystem.Int32%2CSystem.Net.Sockets.SocketFlags%2CCosmos.System.Network.IPv4.TCP.Tcp%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L252">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L272">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Receive_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Receive*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Receive_System_Net_Sockets_Socket_System_Byte___System_Int32_System_Int32_System_Net_Sockets_SocketFlags_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Receive(System.Net.Sockets.Socket,System.Byte[],System.Int32,System.Int32,System.Net.Sockets.SocketFlags)">Receive(Socket, Byte[], Int32, Int32, SocketFlags)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Receive_System_Net_Sockets_Socket_System_Byte___System_Int32_System_Int32_System_Net_Sockets_SocketFlags_Cosmos_System_Network_IPv4_TCP_Tcp__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Receive(System.Net.Sockets.Socket,System.Byte[],System.Int32,System.Int32,System.Net.Sockets.SocketFlags,Cosmos.System.Network.IPv4.TCP.Tcp@)">Receive(Socket, Byte[], Int32, Int32, SocketFlags, ref Tcp)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static int Receive(Socket aThis, byte[] buffer, int offset, int size, SocketFlags socketFlags)</code></pre>
+    <pre><code class="lang-csharp hljs">public static int Receive(Socket aThis, byte[] buffer, int offset, int size, SocketFlags socketFlags, ref Tcp StateMachine)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5491,6 +5576,11 @@
         <td><span class="parametername">socketFlags</span></td>
         <td></td>
       </tr>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Network.IPv4.TCP.Tcp.html">Tcp</a></td>
+        <td><span class="parametername">StateMachine</span></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <h5 class="returns">Returns</h5>
@@ -5510,18 +5600,18 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Receive_System_Net_Sockets_Socket_System_Span_System_Byte__System_Net_Sockets_SocketFlags_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Receive(System.Net.Sockets.Socket%2CSystem.Span%7BSystem.Byte%7D%2CSystem.Net.Sockets.SocketFlags)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Receive_System_Net_Sockets_Socket_System_Span_System_Byte__System_Net_Sockets_SocketFlags_Cosmos_System_Network_IPv4_TCP_Tcp__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Receive(System.Net.Sockets.Socket%2CSystem.Span%7BSystem.Byte%7D%2CSystem.Net.Sockets.SocketFlags%2CCosmos.System.Network.IPv4.TCP.Tcp%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L247">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L266">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Receive_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Receive*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Receive_System_Net_Sockets_Socket_System_Span_System_Byte__System_Net_Sockets_SocketFlags_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Receive(System.Net.Sockets.Socket,System.Span{System.Byte},System.Net.Sockets.SocketFlags)">Receive(Socket, Span&lt;Byte&gt;, SocketFlags)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Receive_System_Net_Sockets_Socket_System_Span_System_Byte__System_Net_Sockets_SocketFlags_Cosmos_System_Network_IPv4_TCP_Tcp__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Receive(System.Net.Sockets.Socket,System.Span{System.Byte},System.Net.Sockets.SocketFlags,Cosmos.System.Network.IPv4.TCP.Tcp@)">Receive(Socket, Span&lt;Byte&gt;, SocketFlags, ref Tcp)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static int Receive(Socket aThis, Span&lt;byte&gt; buffer, SocketFlags socketFlags)</code></pre>
+    <pre><code class="lang-csharp hljs">public static int Receive(Socket aThis, Span&lt;byte&gt; buffer, SocketFlags socketFlags, ref Tcp StateMachine)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5548,6 +5638,11 @@
         <td><span class="parametername">socketFlags</span></td>
         <td></td>
       </tr>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Network.IPv4.TCP.Tcp.html">Tcp</a></td>
+        <td><span class="parametername">StateMachine</span></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <h5 class="returns">Returns</h5>
@@ -5567,18 +5662,18 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Send_System_Net_Sockets_Socket_System_Byte___System_Int32_System_Int32_System_Net_Sockets_SocketFlags_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Send(System.Net.Sockets.Socket%2CSystem.Byte%5B%5D%2CSystem.Int32%2CSystem.Int32%2CSystem.Net.Sockets.SocketFlags)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Send_System_Net_Sockets_Socket_System_Byte___System_Int32_System_Int32_System_Net_Sockets_SocketFlags_Cosmos_System_Network_IPv4_TCP_Tcp__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Send(System.Net.Sockets.Socket%2CSystem.Byte%5B%5D%2CSystem.Int32%2CSystem.Int32%2CSystem.Net.Sockets.SocketFlags%2CCosmos.System.Network.IPv4.TCP.Tcp%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L171">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L188">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Send_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Send*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Send_System_Net_Sockets_Socket_System_Byte___System_Int32_System_Int32_System_Net_Sockets_SocketFlags_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Send(System.Net.Sockets.Socket,System.Byte[],System.Int32,System.Int32,System.Net.Sockets.SocketFlags)">Send(Socket, Byte[], Int32, Int32, SocketFlags)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Send_System_Net_Sockets_Socket_System_Byte___System_Int32_System_Int32_System_Net_Sockets_SocketFlags_Cosmos_System_Network_IPv4_TCP_Tcp__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Send(System.Net.Sockets.Socket,System.Byte[],System.Int32,System.Int32,System.Net.Sockets.SocketFlags,Cosmos.System.Network.IPv4.TCP.Tcp@)">Send(Socket, Byte[], Int32, Int32, SocketFlags, ref Tcp)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static int Send(Socket aThis, byte[] buffer, int offset, int size, SocketFlags socketFlags)</code></pre>
+    <pre><code class="lang-csharp hljs">public static int Send(Socket aThis, byte[] buffer, int offset, int size, SocketFlags socketFlags, ref Tcp StateMachine)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5615,6 +5710,11 @@
         <td><span class="parametername">socketFlags</span></td>
         <td></td>
       </tr>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Network.IPv4.TCP.Tcp.html">Tcp</a></td>
+        <td><span class="parametername">StateMachine</span></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <h5 class="returns">Returns</h5>
@@ -5634,18 +5734,18 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Send_System_Net_Sockets_Socket_System_ReadOnlySpan_System_Byte__System_Net_Sockets_SocketFlags_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Send(System.Net.Sockets.Socket%2CSystem.ReadOnlySpan%7BSystem.Byte%7D%2CSystem.Net.Sockets.SocketFlags)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Send_System_Net_Sockets_Socket_System_ReadOnlySpan_System_Byte__System_Net_Sockets_SocketFlags_Cosmos_System_Network_IPv4_TCP_Tcp__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Send(System.Net.Sockets.Socket%2CSystem.ReadOnlySpan%7BSystem.Byte%7D%2CSystem.Net.Sockets.SocketFlags%2CCosmos.System.Network.IPv4.TCP.Tcp%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L166">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/SocketImpl.cs/#L182">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Send_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Send*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Send_System_Net_Sockets_Socket_System_ReadOnlySpan_System_Byte__System_Net_Sockets_SocketFlags_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Send(System.Net.Sockets.Socket,System.ReadOnlySpan{System.Byte},System.Net.Sockets.SocketFlags)">Send(Socket, ReadOnlySpan&lt;Byte&gt;, SocketFlags)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_SocketImpl_Send_System_Net_Sockets_Socket_System_ReadOnlySpan_System_Byte__System_Net_Sockets_SocketFlags_Cosmos_System_Network_IPv4_TCP_Tcp__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.SocketImpl.Send(System.Net.Sockets.Socket,System.ReadOnlySpan{System.Byte},System.Net.Sockets.SocketFlags,Cosmos.System.Network.IPv4.TCP.Tcp@)">Send(Socket, ReadOnlySpan&lt;Byte&gt;, SocketFlags, ref Tcp)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static int Send(Socket aThis, ReadOnlySpan&lt;byte&gt; buffer, SocketFlags socketFlags)</code></pre>
+    <pre><code class="lang-csharp hljs">public static int Send(Socket aThis, ReadOnlySpan&lt;byte&gt; buffer, SocketFlags socketFlags, ref Tcp StateMachine)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5670,6 +5770,11 @@
       <tr>
         <td><span class="xref">System.Net.Sockets.SocketFlags</span></td>
         <td><span class="parametername">socketFlags</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Network.IPv4.TCP.Tcp.html">Tcp</a></td>
+        <td><span class="parametername">StateMachine</span></td>
         <td></td>
       </tr>
     </tbody>

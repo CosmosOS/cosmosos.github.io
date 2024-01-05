@@ -4897,18 +4897,18 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Connect_System_Net_Sockets_TcpClient_System_Net_IPAddress_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Connect(System.Net.Sockets.TcpClient%2CSystem.Net.IPAddress%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Connect_System_Net_Sockets_TcpClient_System_Net_IPAddress_System_Int32_System_Net_Sockets_Socket__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Connect(System.Net.Sockets.TcpClient%2CSystem.Net.IPAddress%2CSystem.Int32%2CSystem.Net.Sockets.Socket%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpClientImpl.cs/#L55">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpClientImpl.cs/#L57">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Connect_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Connect*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Connect_System_Net_Sockets_TcpClient_System_Net_IPAddress_System_Int32_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Connect(System.Net.Sockets.TcpClient,System.Net.IPAddress,System.Int32)">Connect(TcpClient, IPAddress, Int32)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Connect_System_Net_Sockets_TcpClient_System_Net_IPAddress_System_Int32_System_Net_Sockets_Socket__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Connect(System.Net.Sockets.TcpClient,System.Net.IPAddress,System.Int32,System.Net.Sockets.Socket@)">Connect(TcpClient, IPAddress, Int32, ref Socket)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Connect(TcpClient aThis, IPAddress address, int port)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Connect(TcpClient aThis, IPAddress address, int port, ref Socket _clientSocket)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4935,6 +4935,11 @@
         <td><span class="parametername">port</span></td>
         <td></td>
       </tr>
+      <tr>
+        <td><span class="xref">System.Net.Sockets.Socket</span></td>
+        <td><span class="parametername">_clientSocket</span></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
@@ -4942,7 +4947,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Connect_System_Net_Sockets_TcpClient_System_Net_IPAddress___System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Connect(System.Net.Sockets.TcpClient%2CSystem.Net.IPAddress%5B%5D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpClientImpl.cs/#L69">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpClientImpl.cs/#L73">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Connect_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Connect*"></a>
   <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Connect_System_Net_Sockets_TcpClient_System_Net_IPAddress___System_Int32_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Connect(System.Net.Sockets.TcpClient,System.Net.IPAddress[],System.Int32)">Connect(TcpClient, IPAddress[], Int32)</h4>
@@ -4981,18 +4986,18 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Connect_System_Net_Sockets_TcpClient_System_String_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Connect(System.Net.Sockets.TcpClient%2CSystem.String%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Connect_System_Net_Sockets_TcpClient_System_String_System_Int32_System_Net_Sockets_Socket__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Connect(System.Net.Sockets.TcpClient%2CSystem.String%2CSystem.Int32%2CSystem.Net.Sockets.Socket%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpClientImpl.cs/#L47">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpClientImpl.cs/#L48">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Connect_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Connect*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Connect_System_Net_Sockets_TcpClient_System_String_System_Int32_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Connect(System.Net.Sockets.TcpClient,System.String,System.Int32)">Connect(TcpClient, String, Int32)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Connect_System_Net_Sockets_TcpClient_System_String_System_Int32_System_Net_Sockets_Socket__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Connect(System.Net.Sockets.TcpClient,System.String,System.Int32,System.Net.Sockets.Socket@)">Connect(TcpClient, String, Int32, ref Socket)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Connect(TcpClient aThis, string hostname, int port)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Connect(TcpClient aThis, string hostname, int port, ref Socket _clientSocket)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5019,6 +5024,11 @@
         <td><span class="parametername">port</span></td>
         <td></td>
       </tr>
+      <tr>
+        <td><span class="xref">System.Net.Sockets.Socket</span></td>
+        <td><span class="parametername">_clientSocket</span></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
@@ -5026,7 +5036,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Ctor_System_Net_Sockets_TcpClient_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Ctor(System.Net.Sockets.TcpClient)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpClientImpl.cs/#L18">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpClientImpl.cs/#L15">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Ctor_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Ctor*"></a>
   <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Ctor_System_Net_Sockets_TcpClient_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Ctor(System.Net.Sockets.TcpClient)">Ctor(TcpClient)</h4>
@@ -5055,18 +5065,18 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Ctor_System_Net_Sockets_TcpClient_System_Net_Sockets_Socket_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Ctor(System.Net.Sockets.TcpClient%2CSystem.Net.Sockets.Socket)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Ctor_System_Net_Sockets_TcpClient_System_Net_Sockets_Socket_System_Net_Sockets_Socket__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Ctor(System.Net.Sockets.TcpClient%2CSystem.Net.Sockets.Socket%2CSystem.Net.Sockets.Socket%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpClientImpl.cs/#L27">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpClientImpl.cs/#L25">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Ctor_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Ctor*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Ctor_System_Net_Sockets_TcpClient_System_Net_Sockets_Socket_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Ctor(System.Net.Sockets.TcpClient,System.Net.Sockets.Socket)">Ctor(TcpClient, Socket)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Ctor_System_Net_Sockets_TcpClient_System_Net_Sockets_Socket_System_Net_Sockets_Socket__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Ctor(System.Net.Sockets.TcpClient,System.Net.Sockets.Socket,System.Net.Sockets.Socket@)">Ctor(TcpClient, Socket, ref Socket)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Ctor(TcpClient aThis, Socket acceptedSocket)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Ctor(TcpClient aThis, Socket acceptedSocket, ref Socket _clientSocket)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5088,22 +5098,27 @@
         <td><span class="parametername">acceptedSocket</span></td>
         <td></td>
       </tr>
+      <tr>
+        <td><span class="xref">System.Net.Sockets.Socket</span></td>
+        <td><span class="parametername">_clientSocket</span></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Ctor_System_Net_Sockets_TcpClient_System_String_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Ctor(System.Net.Sockets.TcpClient%2CSystem.String%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Ctor_System_Net_Sockets_TcpClient_System_String_System_Int32_System_Net_Sockets_Socket__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Ctor(System.Net.Sockets.TcpClient%2CSystem.String%2CSystem.Int32%2CSystem.Net.Sockets.Socket%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpClientImpl.cs/#L22">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpClientImpl.cs/#L19">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Ctor_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Ctor*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Ctor_System_Net_Sockets_TcpClient_System_String_System_Int32_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Ctor(System.Net.Sockets.TcpClient,System.String,System.Int32)">Ctor(TcpClient, String, Int32)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Ctor_System_Net_Sockets_TcpClient_System_String_System_Int32_System_Net_Sockets_Socket__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Ctor(System.Net.Sockets.TcpClient,System.String,System.Int32,System.Net.Sockets.Socket@)">Ctor(TcpClient, String, Int32, ref Socket)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Ctor(TcpClient aThis, string hostname, int port)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Ctor(TcpClient aThis, string hostname, int port, ref Socket _clientSocket)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5130,22 +5145,27 @@
         <td><span class="parametername">port</span></td>
         <td></td>
       </tr>
+      <tr>
+        <td><span class="xref">System.Net.Sockets.Socket</span></td>
+        <td><span class="parametername">_clientSocket</span></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Dispose_System_Net_Sockets_TcpClient_System_Boolean_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Dispose(System.Net.Sockets.TcpClient%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Dispose_System_Net_Sockets_TcpClient_System_Boolean_System_Net_Sockets_Socket__System_Net_Sockets_NetworkStream__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Dispose(System.Net.Sockets.TcpClient%2CSystem.Boolean%2CSystem.Net.Sockets.Socket%40%2CSystem.Net.Sockets.NetworkStream%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpClientImpl.cs/#L89">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpClientImpl.cs/#L95">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Dispose_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Dispose*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Dispose_System_Net_Sockets_TcpClient_System_Boolean_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Dispose(System.Net.Sockets.TcpClient,System.Boolean)">Dispose(TcpClient, Boolean)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_Dispose_System_Net_Sockets_TcpClient_System_Boolean_System_Net_Sockets_Socket__System_Net_Sockets_NetworkStream__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.Dispose(System.Net.Sockets.TcpClient,System.Boolean,System.Net.Sockets.Socket@,System.Net.Sockets.NetworkStream@)">Dispose(TcpClient, Boolean, ref Socket, ref NetworkStream)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Dispose(TcpClient aThis, bool disposing)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Dispose(TcpClient aThis, bool disposing, ref Socket _clientSocket, ref NetworkStream _dataStream)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5167,22 +5187,32 @@
         <td><span class="parametername">disposing</span></td>
         <td></td>
       </tr>
+      <tr>
+        <td><span class="xref">System.Net.Sockets.Socket</span></td>
+        <td><span class="parametername">_clientSocket</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Net.Sockets.NetworkStream</span></td>
+        <td><span class="parametername">_dataStream</span></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_get_Client_System_Net_Sockets_TcpClient_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.get_Client(System.Net.Sockets.TcpClient)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_get_Client_System_Net_Sockets_TcpClient_System_Net_Sockets_Socket__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.get_Client(System.Net.Sockets.TcpClient%2CSystem.Net.Sockets.Socket%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpClientImpl.cs/#L37">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_get_Client_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.get_Client*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_get_Client_System_Net_Sockets_TcpClient_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.get_Client(System.Net.Sockets.TcpClient)">get_Client(TcpClient)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_get_Client_System_Net_Sockets_TcpClient_System_Net_Sockets_Socket__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.get_Client(System.Net.Sockets.TcpClient,System.Net.Sockets.Socket@)">get_Client(TcpClient, ref Socket)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Socket get_Client(TcpClient aThis)</code></pre>
+    <pre><code class="lang-csharp hljs">public static Socket get_Client(TcpClient aThis, ref Socket _clientSocket)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5197,6 +5227,11 @@
       <tr>
         <td><span class="xref">System.Net.Sockets.TcpClient</span></td>
         <td><span class="parametername">aThis</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Net.Sockets.Socket</span></td>
+        <td><span class="parametername">_clientSocket</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5221,7 +5256,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_get_ReceiveBufferSize_System_Net_Sockets_TcpClient_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.get_ReceiveBufferSize(System.Net.Sockets.TcpClient)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpClientImpl.cs/#L42">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpClientImpl.cs/#L43">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_get_ReceiveBufferSize_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.get_ReceiveBufferSize*"></a>
   <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_get_ReceiveBufferSize_System_Net_Sockets_TcpClient_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.get_ReceiveBufferSize(System.Net.Sockets.TcpClient)">get_ReceiveBufferSize(TcpClient)</h4>
@@ -5265,18 +5300,18 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_GetStream_System_Net_Sockets_TcpClient_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.GetStream(System.Net.Sockets.TcpClient)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_GetStream_System_Net_Sockets_TcpClient_System_Net_Sockets_Socket__System_Net_Sockets_NetworkStream__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.GetStream(System.Net.Sockets.TcpClient%2CSystem.Net.Sockets.Socket%40%2CSystem.Net.Sockets.NetworkStream%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpClientImpl.cs/#L74">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpClientImpl.cs/#L78">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_GetStream_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.GetStream*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_GetStream_System_Net_Sockets_TcpClient_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.GetStream(System.Net.Sockets.TcpClient)">GetStream(TcpClient)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_GetStream_System_Net_Sockets_TcpClient_System_Net_Sockets_Socket__System_Net_Sockets_NetworkStream__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.GetStream(System.Net.Sockets.TcpClient,System.Net.Sockets.Socket@,System.Net.Sockets.NetworkStream@)">GetStream(TcpClient, ref Socket, ref NetworkStream)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static NetworkStream GetStream(TcpClient aThis)</code></pre>
+    <pre><code class="lang-csharp hljs">public static NetworkStream GetStream(TcpClient aThis, ref Socket _clientSocket, ref NetworkStream _dataStream)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5291,6 +5326,16 @@
       <tr>
         <td><span class="xref">System.Net.Sockets.TcpClient</span></td>
         <td><span class="parametername">aThis</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Net.Sockets.Socket</span></td>
+        <td><span class="parametername">_clientSocket</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Net.Sockets.NetworkStream</span></td>
+        <td><span class="parametername">_dataStream</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -5312,18 +5357,18 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_set_Client_System_Net_Sockets_TcpClient_System_Net_Sockets_Socket_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.set_Client(System.Net.Sockets.TcpClient%2CSystem.Net.Sockets.Socket)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_set_Client_System_Net_Sockets_TcpClient_System_Net_Sockets_Socket_System_Net_Sockets_Socket__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.set_Client(System.Net.Sockets.TcpClient%2CSystem.Net.Sockets.Socket%2CSystem.Net.Sockets.Socket%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpClientImpl.cs/#L32">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpClientImpl.cs/#L31">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_set_Client_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.set_Client*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_set_Client_System_Net_Sockets_TcpClient_System_Net_Sockets_Socket_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.set_Client(System.Net.Sockets.TcpClient,System.Net.Sockets.Socket)">set_Client(TcpClient, Socket)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpClientImpl_set_Client_System_Net_Sockets_TcpClient_System_Net_Sockets_Socket_System_Net_Sockets_Socket__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpClientImpl.set_Client(System.Net.Sockets.TcpClient,System.Net.Sockets.Socket,System.Net.Sockets.Socket@)">set_Client(TcpClient, Socket, ref Socket)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void set_Client(TcpClient aThis, Socket value)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void set_Client(TcpClient aThis, Socket value, ref Socket _clientSocket)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5343,6 +5388,11 @@
       <tr>
         <td><span class="xref">System.Net.Sockets.Socket</span></td>
         <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Net.Sockets.Socket</span></td>
+        <td><span class="parametername">_clientSocket</span></td>
         <td></td>
       </tr>
     </tbody>

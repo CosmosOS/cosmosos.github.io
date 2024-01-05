@@ -4897,18 +4897,18 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpListenerImpl_AcceptTcpClient_System_Net_Sockets_TcpListener_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpListenerImpl.AcceptTcpClient(System.Net.Sockets.TcpListener)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpListenerImpl_AcceptTcpClient_System_Net_Sockets_TcpListener_System_Net_Sockets_Socket__System_Net_IPEndPoint__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpListenerImpl.AcceptTcpClient(System.Net.Sockets.TcpListener%2CSystem.Net.Sockets.Socket%40%2CSystem.Net.IPEndPoint%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpListenerImpl.cs/#L55">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpListenerImpl.cs/#L58">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_TcpListenerImpl_AcceptTcpClient_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpListenerImpl.AcceptTcpClient*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpListenerImpl_AcceptTcpClient_System_Net_Sockets_TcpListener_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpListenerImpl.AcceptTcpClient(System.Net.Sockets.TcpListener)">AcceptTcpClient(TcpListener)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpListenerImpl_AcceptTcpClient_System_Net_Sockets_TcpListener_System_Net_Sockets_Socket__System_Net_IPEndPoint__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpListenerImpl.AcceptTcpClient(System.Net.Sockets.TcpListener,System.Net.Sockets.Socket@,System.Net.IPEndPoint@)">AcceptTcpClient(TcpListener, ref Socket, ref IPEndPoint)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static TcpClient AcceptTcpClient(TcpListener aThis)</code></pre>
+    <pre><code class="lang-csharp hljs">public static TcpClient AcceptTcpClient(TcpListener aThis, ref Socket _serverSocket, ref IPEndPoint _serverSocketEP)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4923,6 +4923,16 @@
       <tr>
         <td><span class="xref">System.Net.Sockets.TcpListener</span></td>
         <td><span class="parametername">aThis</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Net.Sockets.Socket</span></td>
+        <td><span class="parametername">_serverSocket</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Net.IPEndPoint</span></td>
+        <td><span class="parametername">_serverSocketEP</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -4944,18 +4954,18 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpListenerImpl_Ctor_System_Net_Sockets_TcpListener_System_Net_IPAddress_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpListenerImpl.Ctor(System.Net.Sockets.TcpListener%2CSystem.Net.IPAddress%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpListenerImpl_Ctor_System_Net_Sockets_TcpListener_System_Net_IPAddress_System_Int32_System_Net_Sockets_Socket__System_Net_IPEndPoint__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpListenerImpl.Ctor(System.Net.Sockets.TcpListener%2CSystem.Net.IPAddress%2CSystem.Int32%2CSystem.Net.Sockets.Socket%40%2CSystem.Net.IPEndPoint%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpListenerImpl.cs/#L28">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpListenerImpl.cs/#L27">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_TcpListenerImpl_Ctor_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpListenerImpl.Ctor*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpListenerImpl_Ctor_System_Net_Sockets_TcpListener_System_Net_IPAddress_System_Int32_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpListenerImpl.Ctor(System.Net.Sockets.TcpListener,System.Net.IPAddress,System.Int32)">Ctor(TcpListener, IPAddress, Int32)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpListenerImpl_Ctor_System_Net_Sockets_TcpListener_System_Net_IPAddress_System_Int32_System_Net_Sockets_Socket__System_Net_IPEndPoint__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpListenerImpl.Ctor(System.Net.Sockets.TcpListener,System.Net.IPAddress,System.Int32,System.Net.Sockets.Socket@,System.Net.IPEndPoint@)">Ctor(TcpListener, IPAddress, Int32, ref Socket, ref IPEndPoint)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Ctor(TcpListener aThis, IPAddress localaddr, int port)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Ctor(TcpListener aThis, IPAddress localaddr, int port, ref Socket _serverSocket, ref IPEndPoint _serverSocketEP)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4982,22 +4992,32 @@
         <td><span class="parametername">port</span></td>
         <td></td>
       </tr>
+      <tr>
+        <td><span class="xref">System.Net.Sockets.Socket</span></td>
+        <td><span class="parametername">_serverSocket</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Net.IPEndPoint</span></td>
+        <td><span class="parametername">_serverSocketEP</span></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpListenerImpl_Ctor_System_Net_Sockets_TcpListener_System_Net_IPEndPoint_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpListenerImpl.Ctor(System.Net.Sockets.TcpListener%2CSystem.Net.IPEndPoint)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpListenerImpl_Ctor_System_Net_Sockets_TcpListener_System_Net_IPEndPoint_System_Net_Sockets_Socket__System_Net_IPEndPoint__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpListenerImpl.Ctor(System.Net.Sockets.TcpListener%2CSystem.Net.IPEndPoint%2CSystem.Net.Sockets.Socket%40%2CSystem.Net.IPEndPoint%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpListenerImpl.cs/#L18">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpListenerImpl.cs/#L15">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_TcpListenerImpl_Ctor_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpListenerImpl.Ctor*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpListenerImpl_Ctor_System_Net_Sockets_TcpListener_System_Net_IPEndPoint_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpListenerImpl.Ctor(System.Net.Sockets.TcpListener,System.Net.IPEndPoint)">Ctor(TcpListener, IPEndPoint)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpListenerImpl_Ctor_System_Net_Sockets_TcpListener_System_Net_IPEndPoint_System_Net_Sockets_Socket__System_Net_IPEndPoint__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpListenerImpl.Ctor(System.Net.Sockets.TcpListener,System.Net.IPEndPoint,System.Net.Sockets.Socket@,System.Net.IPEndPoint@)">Ctor(TcpListener, IPEndPoint, ref Socket, ref IPEndPoint)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Ctor(TcpListener aThis, IPEndPoint localEP)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Ctor(TcpListener aThis, IPEndPoint localEP, ref Socket _serverSocket, ref IPEndPoint _serverSocketEP)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5019,22 +5039,32 @@
         <td><span class="parametername">localEP</span></td>
         <td></td>
       </tr>
+      <tr>
+        <td><span class="xref">System.Net.Sockets.Socket</span></td>
+        <td><span class="parametername">_serverSocket</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Net.IPEndPoint</span></td>
+        <td><span class="parametername">_serverSocketEP</span></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpListenerImpl_Start_System_Net_Sockets_TcpListener_.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpListenerImpl.Start(System.Net.Sockets.TcpListener)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Plugs_System_Net_Sockets_TcpListenerImpl_Start_System_Net_Sockets_TcpListener_System_Net_Sockets_Socket__System_Net_IPEndPoint__.md&amp;value=---%0Auid%3A%20Cosmos.System_Plugs.System.Net.Sockets.TcpListenerImpl.Start(System.Net.Sockets.TcpListener%2CSystem.Net.Sockets.Socket%40%2CSystem.Net.IPEndPoint%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpListenerImpl.cs/#L40">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2_Plugs/System/Net/Sockets/TcpListenerImpl.cs/#L41">View Source</a>
   </span>
   <a id="Cosmos_System_Plugs_System_Net_Sockets_TcpListenerImpl_Start_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpListenerImpl.Start*"></a>
-  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpListenerImpl_Start_System_Net_Sockets_TcpListener_" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpListenerImpl.Start(System.Net.Sockets.TcpListener)">Start(TcpListener)</h4>
+  <h4 id="Cosmos_System_Plugs_System_Net_Sockets_TcpListenerImpl_Start_System_Net_Sockets_TcpListener_System_Net_Sockets_Socket__System_Net_IPEndPoint__" data-uid="Cosmos.System_Plugs.System.Net.Sockets.TcpListenerImpl.Start(System.Net.Sockets.TcpListener,System.Net.Sockets.Socket@,System.Net.IPEndPoint@)">Start(TcpListener, ref Socket, ref IPEndPoint)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Start(TcpListener aThis)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Start(TcpListener aThis, ref Socket _serverSocket, ref IPEndPoint _serverSocketEP)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -5049,6 +5079,16 @@
       <tr>
         <td><span class="xref">System.Net.Sockets.TcpListener</span></td>
         <td><span class="parametername">aThis</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Net.Sockets.Socket</span></td>
+        <td><span class="parametername">_serverSocket</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Net.IPEndPoint</span></td>
+        <td><span class="parametername">_serverSocketEP</span></td>
         <td></td>
       </tr>
     </tbody>
