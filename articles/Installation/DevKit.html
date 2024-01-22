@@ -49,7 +49,7 @@
                           <a href="../../index.html" title="Home">Home</a>
                       </li>
                       <li>
-                          <a href="../../install.html" title="Install">Install</a>
+                          <a href="../../articles/Installation/UserKit.html" title="Install">Install</a>
                       </li>
                       <li>
                           <a href="https://gocosmos.org" title="Cosmos Website">Cosmos Website</a>
@@ -58,8 +58,20 @@
                           <a href="../../articles/GettingStarted.html" title="Articles">Articles</a>
                       </li>
                       <li>
-                          <a href="../../api/Cosmos.Build.Common.html" title="API Documentation">API Documentation</a>
-                      </li>
+                          <span class="expand-stub"></span>
+                          <a>API Documentation</a>
+                          
+                          <ul class="nav level2 navbar-nav">
+                                <li>
+                                    <a href="../../obj/api/cosmos" title="Cosmos">Cosmos</a>
+                                </li>
+                                <li>
+                                    <a href="../../obj/api/xsharp" title="X#">X#</a>
+                                </li>
+                                <li>
+                                    <a href="../../obj/api/il2cpu" title="IL2CPU">IL2CPU</a>
+                                </li>
+                          </ul>      </li>
                 </ul>    </div>
           </div>
         </nav>
@@ -110,6 +122,9 @@
                       <a class="">Installation</a>
                         
                         <ul class="nav level2">
+                          <li class="">
+                            <a href="../Installation/UserKit.html" title="User Kit" class="">User Kit</a>
+                          </li>
                           <li class="active">
                             <a href="../Installation/DevKit.html" title="Dev Kit" class="active">Dev Kit</a>
                           </li>
@@ -181,7 +196,8 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="dev-kit-installation">Dev Kit Installation</h1>
 
-<h3 id="prerequisites-for-windows">Prerequisites for Windows</h3>
+<h2 id="windows">Windows</h2>
+<h3 id="prerequisites">Prerequisites</h3>
 <ul>
 <li>(Free) source code of Development Kit from <a href="https://github.com/CosmosOS/Cosmos">Cosmos on GitHub</a>
 <ul>
@@ -191,15 +207,18 @@
 <li>(Free) <a href="https://visualstudio.microsoft.com/vs/">Visual Studio 2022 Community</a></li>
 <li>(Free) <a href="http://www.jrsoftware.org/isdl.php#qsp">InnoSetup</a>
 <ul>
-<li>This is required to build the setup kit which is used to build and install the Visual Studio integration libaries for Cosmos.
-<ul>
+<li>This is required to build the setup kit which is used to build and install the Visual Studio integration libaries for Cosmos.</li>
 <li>During install it will ask you about optional components to install. Be sure you check &quot;Install Inno Setup Preprocessor&quot;.</li>
 </ul>
 </li>
 </ul>
-</li>
+<h3 id="installation">Installation</h3>
+<ul>
+<li>Look in the downloaded sources and run <strong>install-VS2022.bat</strong> with admin privileges (UAC will ask for permission), needed for install in system directories.</li>
+<li>When the installation is complete, Visual Studio will automatically open and you may begin programming with your new, modified copy of Cosmos.</li>
 </ul>
-<h3 id="prerequisites-for-linux">Prerequisites for Linux</h3>
+<h2 id="linux">Linux</h2>
+<h3 id="prerequisites-1">Prerequisites</h3>
 <ul>
 <li>.NET SDK (6+): <a href="https://learn.microsoft.com/en-us/dotnet/core/install/linux">Download .NET SDK</a></li>
 <li>Make (<code>apt install make</code>)</li>
@@ -207,13 +226,19 @@
 <li>Xorriso (<code>apt install xorriso</code>)</li>
 <li>QEMU or any other virtual machine. See <a href="https://cosmosos.github.io/articles/Installation/Running.html">Running</a> for more information.</li>
 </ul>
-<h3 id="installation-on-windows">Installation on Windows</h3>
-<ul>
-<li>Look in the downloaded sources and run <strong>install-VS2022.bat</strong> with admin privileges (UAC will ask for permission), needed for install in system directories.</li>
-<li>When the installation is complete, Visual Studio will automatically open and you may begin programming with your new, modified copy of Cosmos.</li>
-</ul>
-<h3 id="installation-on-linux">Installation on Linux</h3>
+<h3 id="installation-1">Installation</h3>
 <p>Run <code>make</code> to build Cosmos. Cosmos will clone all the required repos, build itself, and install it and it's nuget packages to the system automatically.</p>
+<h2 id="notes--faq">notes / FAQ</h2>
+<h3 id="custom-cosmos-repos">custom cosmos repos</h3>
+<p>if you are using custom cosmos repos you will need to clone them all manually as the installer script will pull from <a href="https://github.com/CosmosOS/">https://github.com/CosmosOS/</a></p>
+<p>A tree diagram of the source should look like the following:</p>
+<img src="https://raw.githubusercontent.com/CosmosOS/Cosmos/master/Docs/images/Dir.png" width="200">
+<h3 id="get-stuck-pulling-the-git-repos">get stuck pulling the git repos</h3>
+<p>check if git is installed and in your path as we use git to pull the repos</p>
+<h3 id="i-just-updated-and-my-project-is-sill-using-the-old-version">i just updated and my project is sill using the old version</h3>
+<p>you may need to clear you nuget cache try <code>dotnet clean</code> to clear the project level cache</p>
+<h3 id="the-project-templates-are-not-showing-in-visual-studio">the project templates are not showing in visual studio</h3>
+<p>if you have more then 1 version of visual studio installed this can bug this follow &quot;dotnet Project Templates&quot; should fix it</p>
 <h3 id="dotnet-project-templates">dotnet Project Templates</h3>
 <p>If you are using linux or prefer not using Visual Studio for your projects, you can install the dotnet project template using <code>dotnet new --install ./source/templates/csharp/</code> assuming you are currently in the Cosmos base directory.
 After installing the template use <code>dotnet new cosmosCSKernel -n {name}</code> to create a new Cosmos Kernel project.
