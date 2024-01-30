@@ -1405,6 +1405,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.BlockDevice.ATA_PIO.yml",
       "output": {
@@ -1417,6 +1420,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.BlockDevice.Ata.BusPositionEnum.yml",
       "output": {
@@ -1429,6 +1435,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.BlockDevice.Ata.ControllerIdEnum.yml",
       "output": {
@@ -1456,6 +1465,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.BlockDevice.BlockDevice.yml",
       "output": {
@@ -1468,6 +1480,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.BlockDevice.BlockDeviceType.yml",
       "output": {
@@ -1480,6 +1495,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.BlockDevice.EBR.PartInfo.yml",
       "output": {
@@ -1522,6 +1540,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.BlockDevice.GPT.yml",
       "output": {
@@ -1534,6 +1555,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.BlockDevice.IDE.yml",
       "output": {
@@ -1594,6 +1618,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.BlockDevice.Ports.SATAPI.yml",
       "output": {
@@ -1606,6 +1633,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.BlockDevice.Ports.StoragePort.yml",
       "output": {
@@ -1618,6 +1648,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.BlockDevice.Ports.yml",
       "output": {
@@ -1630,6 +1663,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.BlockDevice.Registers.AHCISignature.yml",
       "output": {
@@ -1642,6 +1678,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.BlockDevice.Registers.ATACommands.yml",
       "output": {
@@ -1654,6 +1693,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.BlockDevice.Registers.ATADeviceStatus.yml",
       "output": {
@@ -1666,6 +1708,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.BlockDevice.Registers.Base.yml",
       "output": {
@@ -1678,6 +1723,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.BlockDevice.Registers.Bases.yml",
       "output": {
@@ -1714,9 +1762,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.BlockDevice.Registers.DeviceDetectionStatus.yml",
       "output": {
@@ -1729,9 +1774,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.BlockDevice.Registers.FISRegisterD2H.yml",
       "output": {
@@ -1834,6 +1876,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.BlockDevice.Registers.HBAPRDTEntry.yml",
       "output": {
@@ -1846,6 +1891,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.BlockDevice.Registers.InterfacePowerManagementStatus.yml",
       "output": {
@@ -1858,6 +1906,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.BlockDevice.Registers.InterruptEnable.yml",
       "output": {
@@ -1885,6 +1936,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.BlockDevice.Registers.PortRegisters.yml",
       "output": {
@@ -1897,6 +1951,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.BlockDevice.Registers.PortType.yml",
       "output": {
@@ -1932,7 +1989,7 @@
       "output": {
         ".html": {
           "relative_path": "api/cosmos/Cosmos.HAL.BlockDevice.html",
-          "hash": "ISWoWabprd0QYTXb/ILagrlkMNCrpbzVd87Z02Jsx2s="
+          "hash": "0vC6gWY3ZsciG/Q9VP3HzENinJ6edK3Wrn3IMMu6rAY="
         }
       },
       "is_incremental": false,
@@ -2119,6 +2176,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.Drivers.Network.E1000.TXDesc.yml",
       "output": {
@@ -2131,6 +2191,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.Drivers.Network.E1000.yml",
       "output": {
@@ -2143,9 +2206,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.Drivers.Network.E1000DeviceID.yml",
       "output": {
@@ -2158,9 +2218,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.Drivers.Network.RTL8139.yml",
       "output": {
@@ -2323,6 +2380,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.Drivers.Video.SVGAII.yml",
       "output": {
@@ -2335,6 +2395,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.Drivers.Video.VBEDriver.yml",
       "output": {
@@ -2412,7 +2475,7 @@
       "output": {
         ".html": {
           "relative_path": "api/cosmos/Cosmos.HAL.Drivers.Video.html",
-          "hash": "V0UQwwAz6M7CTsuwqs7HiI8XMyFPFjwRlV1DnLP8sxw="
+          "hash": "8Vmc3HJcE9cmfuHq+o354rKglgsuJLadlR6So3LDEoM="
         }
       },
       "is_incremental": false,
@@ -2455,6 +2518,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.MouseBase.MouseChangedEventHandler.yml",
       "output": {
@@ -2467,6 +2533,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.MouseBase.yml",
       "output": {
@@ -2479,6 +2548,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.Network.MACAddress.yml",
       "output": {
@@ -2491,6 +2563,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.Network.NetworkInit.yml",
       "output": {
@@ -2503,6 +2578,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.Network.yml",
       "output": {
@@ -2515,6 +2593,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.NetworkDevice.yml",
       "output": {
@@ -2527,6 +2608,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.PCI.yml",
       "output": {
@@ -2539,6 +2623,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.PCIBaseAddressBar.yml",
       "output": {
@@ -2551,6 +2638,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.PCIDevice.Config.yml",
       "output": {
@@ -2563,6 +2653,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.PCIDevice.DeviceClass.yml",
       "output": {
@@ -2575,6 +2668,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.PCIDevice.PCIBist.yml",
       "output": {
@@ -2602,9 +2698,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.PCIDevice.PCIHeaderType.yml",
       "output": {
@@ -2617,9 +2710,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.PCIDevice.PCIInterruptPIN.yml",
       "output": {
@@ -2632,6 +2722,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.PCIDevice.yml",
       "output": {
@@ -2644,6 +2737,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.PCIDeviceBridge.yml",
       "output": {
@@ -2668,9 +2764,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.PCIDeviceNormal.yml",
       "output": {
@@ -2683,6 +2776,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.PCSpeaker.yml",
       "output": {
@@ -2695,6 +2791,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.PIT.PITTimer.OnTrigger.yml",
       "output": {
@@ -2707,6 +2806,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.PIT.PITTimer.yml",
       "output": {
@@ -2719,6 +2821,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.PIT.yml",
       "output": {
@@ -2761,9 +2866,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.PS2Mouse.yml",
       "output": {
@@ -2806,9 +2908,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.RTC.yml",
       "output": {
@@ -2821,9 +2920,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.SerialPort.yml",
       "output": {
@@ -2836,9 +2932,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.SpeakerExtensions.yml",
       "output": {
@@ -2851,9 +2944,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.SubclassID.yml",
       "output": {
@@ -2866,9 +2956,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.TextScreen.yml",
       "output": {
@@ -2881,9 +2968,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.TextScreenBase.yml",
       "output": {
@@ -2896,9 +2980,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/cosmos/Cosmos.HAL.TextScreenHelpers.yml",
       "output": {
@@ -2928,7 +3009,7 @@
       "output": {
         ".html": {
           "relative_path": "api/cosmos/Cosmos.HAL.html",
-          "hash": "a5jhcHooOWIFxbDRfsd7PujlHIoOX4rkzHEVehBOXFw="
+          "hash": "khYCOL34C551ZAwdHRIVYIsC2r7ohOLlADnIuw334eU="
         }
       },
       "is_incremental": false,
@@ -8203,9 +8284,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.BlockDevice.ATA_PIO.yml",
       "output": {
@@ -8218,9 +8296,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.BlockDevice.Ata.BusPositionEnum.yml",
       "output": {
@@ -8233,9 +8308,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.BlockDevice.Ata.ControllerIdEnum.yml",
       "output": {
@@ -8260,9 +8332,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.BlockDevice.BlockDevice.yml",
       "output": {
@@ -8275,9 +8344,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.BlockDevice.BlockDeviceType.yml",
       "output": {
@@ -8290,9 +8356,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.BlockDevice.EBR.PartInfo.yml",
       "output": {
@@ -8329,9 +8392,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.BlockDevice.GPT.yml",
       "output": {
@@ -8344,9 +8404,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.BlockDevice.IDE.yml",
       "output": {
@@ -8419,9 +8476,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.BlockDevice.Ports.SATAPI.yml",
       "output": {
@@ -8434,9 +8488,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.BlockDevice.Ports.StoragePort.yml",
       "output": {
@@ -8449,9 +8500,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.BlockDevice.Ports.yml",
       "output": {
@@ -8464,9 +8512,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.BlockDevice.Registers.AHCISignature.yml",
       "output": {
@@ -8479,9 +8524,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.BlockDevice.Registers.ATACommands.yml",
       "output": {
@@ -8494,9 +8536,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.BlockDevice.Registers.ATADeviceStatus.yml",
       "output": {
@@ -8509,9 +8548,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.BlockDevice.Registers.Base.yml",
       "output": {
@@ -8524,9 +8560,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.BlockDevice.Registers.Bases.yml",
       "output": {
@@ -8569,6 +8602,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.BlockDevice.Registers.DeviceDetectionStatus.yml",
       "output": {
@@ -8581,6 +8617,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.BlockDevice.Registers.FISRegisterD2H.yml",
       "output": {
@@ -8665,9 +8704,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.BlockDevice.Registers.HBAPRDTEntry.yml",
       "output": {
@@ -8680,9 +8716,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.BlockDevice.Registers.InterfacePowerManagementStatus.yml",
       "output": {
@@ -8695,9 +8728,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.BlockDevice.Registers.InterruptEnable.yml",
       "output": {
@@ -8722,9 +8752,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.BlockDevice.Registers.PortRegisters.yml",
       "output": {
@@ -8737,9 +8764,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.BlockDevice.Registers.PortType.yml",
       "output": {
@@ -8769,7 +8793,7 @@
       "output": {
         ".html": {
           "relative_path": "api/plugs/Cosmos.HAL.BlockDevice.html",
-          "hash": "+ngFD9EwQq8qh7sfQUTMWSEYb8ThGLlq0ZeiGS2IKDY="
+          "hash": "j+OElM75E/ZYQMqsIVCWFD1gPICwwGqmVbFYUgMtLRU="
         }
       },
       "is_incremental": false,
@@ -8920,9 +8944,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.Drivers.Network.E1000.TXDesc.yml",
       "output": {
@@ -8935,9 +8956,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.Drivers.Network.E1000.yml",
       "output": {
@@ -8950,6 +8968,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.Drivers.Network.E1000DeviceID.yml",
       "output": {
@@ -8962,6 +8983,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.Drivers.Network.RTL8139.yml",
       "output": {
@@ -9094,9 +9118,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.Drivers.Video.SVGAII.yml",
       "output": {
@@ -9109,9 +9130,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.Drivers.Video.VBEDriver.yml",
       "output": {
@@ -9180,7 +9198,7 @@
       "output": {
         ".html": {
           "relative_path": "api/plugs/Cosmos.HAL.Drivers.Video.html",
-          "hash": "VbAhrgXLe43SlWePmtd0rOWZYbiO1sn5KIjCGe0QELs="
+          "hash": "FsEjK8cE6I/+zIQ1LgfJjdi7GS+hJ/4eLug/zXmL9n8="
         }
       },
       "is_incremental": false,
@@ -9232,9 +9250,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.MouseBase.MouseChangedEventHandler.yml",
       "output": {
@@ -9247,9 +9262,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.MouseBase.yml",
       "output": {
@@ -9262,9 +9274,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.Network.MACAddress.yml",
       "output": {
@@ -9277,9 +9286,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.Network.NetworkInit.yml",
       "output": {
@@ -9292,9 +9298,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.Network.yml",
       "output": {
@@ -9307,9 +9310,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.NetworkDevice.yml",
       "output": {
@@ -9322,9 +9322,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.PCI.yml",
       "output": {
@@ -9337,9 +9334,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.PCIBaseAddressBar.yml",
       "output": {
@@ -9352,9 +9346,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.PCIDevice.Config.yml",
       "output": {
@@ -9367,9 +9358,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.PCIDevice.DeviceClass.yml",
       "output": {
@@ -9382,9 +9370,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.PCIDevice.PCIBist.yml",
       "output": {
@@ -9409,6 +9394,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.PCIDevice.PCIHeaderType.yml",
       "output": {
@@ -9421,6 +9409,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.PCIDevice.PCIInterruptPIN.yml",
       "output": {
@@ -9433,9 +9424,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.PCIDevice.yml",
       "output": {
@@ -9448,9 +9436,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.PCIDeviceBridge.yml",
       "output": {
@@ -9478,6 +9463,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.PCIDeviceNormal.yml",
       "output": {
@@ -9490,9 +9478,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.PCSpeaker.yml",
       "output": {
@@ -9505,9 +9490,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.PIT.PITTimer.OnTrigger.yml",
       "output": {
@@ -9520,9 +9502,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.PIT.PITTimer.yml",
       "output": {
@@ -9535,9 +9514,6 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "DuplicateUids"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.PIT.yml",
       "output": {
@@ -9574,6 +9550,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.PS2Mouse.yml",
       "output": {
@@ -9610,6 +9589,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.RTC.yml",
       "output": {
@@ -9622,6 +9604,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.SerialPort.yml",
       "output": {
@@ -9634,6 +9619,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.SpeakerExtensions.yml",
       "output": {
@@ -9646,6 +9634,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.SubclassID.yml",
       "output": {
@@ -9658,6 +9649,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.TextScreen.yml",
       "output": {
@@ -9670,6 +9664,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.TextScreenBase.yml",
       "output": {
@@ -9682,6 +9679,9 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "DuplicateUids"
+      ],
       "type": "ManagedReference",
       "source_relative_path": "api/plugs/Cosmos.HAL.TextScreenHelpers.yml",
       "output": {
@@ -9717,7 +9717,7 @@
       "output": {
         ".html": {
           "relative_path": "api/plugs/Cosmos.HAL.html",
-          "hash": "mU6O69/Ug7Mcpq7MW/SPRWFKbkHL2MIPdEvC7PoRaRM="
+          "hash": "olC2070NxYgHB46ZwU5Ul3C6FCA3zjezEl0s9+P2xN0="
         }
       },
       "is_incremental": false,
@@ -15564,7 +15564,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/Installation/DevKit.html",
-          "hash": "gG65FXhKPdny/JfNIcYo2Q0gnvxKzruM+JF6aaC9l1Y="
+          "hash": "F88arkc0AuLCTRhBrLc52+j7JD7t+VpwYUMvwXdVu6I="
         }
       },
       "is_incremental": false,

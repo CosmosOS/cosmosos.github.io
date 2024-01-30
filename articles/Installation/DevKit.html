@@ -222,6 +222,19 @@
 </ul>
 <h3 id="installation-1">Installation</h3>
 <p>Run <code>make</code> to build Cosmos. Cosmos will clone all the required repos, build itself, and install it and it's nuget packages to the system automatically.</p>
+<h2 id="macos-apple-siliconintel">MacOS (Apple Silicon/Intel)</h2>
+<p>There is currently hard to build on Apple Silicon Devices. So are going to build DevKit on Docker (Virtual Environment Service).</p>
+<h3 id="prerequisites-2">Prerequisites</h3>
+<ul>
+<li>Docker(<code>brew cask install docker</code>)</li>
+<li>QEMU or any other virtual machine. See <a href="https://cosmosos.github.io/articles/Installation/Running.html">Running</a> for more information.</li>
+</ul>
+<h3 id="installation-2">Installation</h3>
+<p>First we need to set directory to the path of Cosmos source directory and build the Dockerfile:</p>
+<pre><code>cd /path/to/Cosmos/
+docker build -t cosmos .
+</code></pre>
+<p>This will take a while. If there is no error, you successfully installed Cosmos on a Virtual Environment!</p>
 <h2 id="notes--faq">notes / FAQ</h2>
 <h3 id="custom-cosmos-repos">custom cosmos repos</h3>
 <p>if you are using custom cosmos repos you will need to clone them all manually as the installer script will pull from <a href="https://github.com/CosmosOS/">https://github.com/CosmosOS/</a></p>
