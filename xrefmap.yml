@@ -6502,6 +6502,34 @@ references:
   commentId: N:Cosmos.Core_Plugs.System
   fullName: Cosmos.Core_Plugs.System
   nameWithType: Cosmos.Core_Plugs.System
+- uid: Cosmos.Core_Plugs.System.ActivatorImpl
+  name: ActivatorImpl
+  href: api/plugs/Cosmos.Core_Plugs.System.ActivatorImpl.html
+  commentId: T:Cosmos.Core_Plugs.System.ActivatorImpl
+  fullName: Cosmos.Core_Plugs.System.ActivatorImpl
+  nameWithType: ActivatorImpl
+- uid: Cosmos.Core_Plugs.System.ActivatorImpl.CreateInstance(Cosmos.Core.CosmosRuntimeType,System.Boolean,System.Boolean)
+  name: CreateInstance(CosmosRuntimeType, Boolean, Boolean)
+  href: api/plugs/Cosmos.Core_Plugs.System.ActivatorImpl.html#Cosmos_Core_Plugs_System_ActivatorImpl_CreateInstance_Cosmos_Core_CosmosRuntimeType_System_Boolean_System_Boolean_
+  commentId: M:Cosmos.Core_Plugs.System.ActivatorImpl.CreateInstance(Cosmos.Core.CosmosRuntimeType,System.Boolean,System.Boolean)
+  fullName: Cosmos.Core_Plugs.System.ActivatorImpl.CreateInstance(Cosmos.Core.CosmosRuntimeType, System.Boolean, System.Boolean)
+  nameWithType: ActivatorImpl.CreateInstance(CosmosRuntimeType, Boolean, Boolean)
+- uid: Cosmos.Core_Plugs.System.ActivatorImpl.CreateInstance*
+  name: CreateInstance
+  href: api/plugs/Cosmos.Core_Plugs.System.ActivatorImpl.html#Cosmos_Core_Plugs_System_ActivatorImpl_CreateInstance_
+  commentId: Overload:Cosmos.Core_Plugs.System.ActivatorImpl.CreateInstance
+  isSpec: "True"
+  fullName: Cosmos.Core_Plugs.System.ActivatorImpl.CreateInstance
+  nameWithType: ActivatorImpl.CreateInstance
+- uid: Cosmos.Core_Plugs.System.ActivatorImpl.CreateInstance``1
+  name: CreateInstance<T>()
+  href: api/plugs/Cosmos.Core_Plugs.System.ActivatorImpl.html#Cosmos_Core_Plugs_System_ActivatorImpl_CreateInstance__1
+  commentId: M:Cosmos.Core_Plugs.System.ActivatorImpl.CreateInstance``1
+  name.vb: CreateInstance(Of T)()
+  fullName: Cosmos.Core_Plugs.System.ActivatorImpl.CreateInstance<T>()
+  fullName.vb: Cosmos.Core_Plugs.System.ActivatorImpl.CreateInstance(Of T)()
+  nameWithType: ActivatorImpl.CreateInstance<T>()
+  nameWithType.vb: ActivatorImpl.CreateInstance(Of T)()
 - uid: Cosmos.Core_Plugs.System.ArrayImpl
   name: ArrayImpl
   href: api/plugs/Cosmos.Core_Plugs.System.ArrayImpl.html
