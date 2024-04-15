@@ -196,14 +196,14 @@
 <h2 id="memory-allocation">Memory Allocation</h2>
 <h3 id="usage">Usage</h3>
 <h4 id="allocation">Allocation</h4>
-<p>Usually users should be allocating memory indirectly by using <code>new</code> or other standard methods provided by .Net to allocate new objects. In the cases, where you want to allocate a managed block of memory, which is not part of a certain .Net type, a <code>ManagedMemoryBlock</code> or <code>byte[]</code> should suffice. If this is not sufficient, one can use <code>uint GCImplementation.AllocNewObject(uint aSize)</code> to allocate a region of <code>aSize</code> bytes. The returned uint contains the memory address and can be converted to pointer if required.</p>
-<p>One can manually free an object using <code>Heap.Free(void* aPtr)</code> or <code>GCImplementation.Free(object aObj)</code>. It is recommended to not manually free .Net objects unless you know what you are doing since Cosmos does not always recognise when it is accessing already freed memory and this can lead to very weird bugs.</p>
+<p>Usually, users should be allocating memory indirectly by using <code>new</code> or other standard methods provided by .Net to allocate new objects. In the cases, where you want to allocate a managed block of memory, which is not part of a certain .NET type, a <code>ManagedMemoryBlock</code> or <code>byte[]</code> should suffice. If this is not sufficient, one can use <code>uint GCImplementation.AllocNewObject(uint aSize)</code> to allocate a region of <code>aSize</code> bytes. The returned uint contains the memory address and can be converted to pointer if required.</p>
+<p>One can manually free an object using <code>Heap.Free(void* aPtr)</code> or <code>GCImplementation.Free(object aObj)</code>. It is recommended to not manually free .NET objects unless you know what you are doing, since Cosmos does not always recognise when it is accessing already freed memory. This can lead to very weird bugs.</p>
 <h4 id="information">Information</h4>
 <p>Cosmos provides a few methods to get information about the heap status:</p>
 <ul>
 <li><code>GCImplementation.GetAvailableRAM()</code> returns the size of the memory in MB available to the heap</li>
 <li><code>GCImplementation.GetUsedRAM()</code> provides a rough estimate of how many bytes are currently in use</li>
-<li><code>HeapSmall.GetAllocatedObjectCount()</code> returns the number of .Net objects currently allocated</li>
+<li><code>HeapSmall.GetAllocatedObjectCount()</code> returns the number of .NET objects are currently allocated</li>
 <li><code>RAT.GetPageCount(byte aType)</code> returns how many pages of a certain type are allocated. The different type definitions are stored in <code>RAT.PageType</code></li>
 </ul>
 <h3 id="internals">Internals</h3>
@@ -232,6 +232,7 @@ Note that if in future elements are reallocated, this will cause new pages in th
 <p>When <code>RAT.MinFreePages</code> is set to a positive value and the number of free pages (as tracked by <code>RAT.FreePageCount</code>) drops below this value, on page allocation <code>Heap.Collect</code> will automatically be called. Each time this happens the value in <code>RAT.GCTriggered</code> is incremented by one.</p>
 <h3 id="internals-1">Internals</h3>
 <p>The garbage collector uses the tracing approach, which means that during collection a graph of all reachable objects is created and all non-discovered objects are freed. The garbage collector will only check objects on pages which have a type where the <code>GCManaged</code> bit is set. The graph is created by starting from &quot;root&quot; objects which are either stored in static variables or part of the current stack. Each of these objects is &quot;marked&quot; and all objects referenced by this object are recursivly also &quot;marked&quot; and &quot;swept&quot;. This is done using the methods <code>void Heap.MarkAndSweepObject(void* aPtr)</code> for objects and <code>void Heap.SweepTypedObject(uint* obj, uint type)</code> for structures. For this to work each allocated object holds a 1bit flag if the object was discovered during the marking phase and a 7bit value counter for the number of static references it has. The number of static references an object has is updated using <code>void GCImplementation.IncRootCount(ushort* aPtr)</code> and similar methods, which are called from the Stsfld opcode.</p>
+<p><em>Last updated on 22 October 2023.</em></p>
 </article>
           </div>
           

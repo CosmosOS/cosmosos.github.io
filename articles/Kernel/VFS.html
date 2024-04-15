@@ -190,10 +190,10 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="file-system">File System</h1>
 
-<p>In this article we will discuss about using Cosmos VFS (virtual file system).
-Cosmos VFS and the VFS manager classes, let you manage your file system.</p>
-<p><strong>Attention</strong>: <strong>Always</strong> format your drive with Cosmos and <strong>only</strong> Cosmos if you plan to use it with Cosmos. Using any other tool such as Parted, FDisk (or any other tool) might lead to weird things when using that drive with Cosmos' VFS. Those tools are much more advanced and might format and read/write to the disk differently than Cosmos.
-<strong>WARNING!</strong>: Please do <strong>not</strong> try this on actual hardware! It may cause <strong>IRREPARBLE DAMAGE</strong> to your data. It is recommended to use a virtual machine like VMware, Hyper-V, just to name a few.</p>
+<p>In this article, we will discuss about using Cosmos VFS (virtual file system).
+Cosmos VFS and the VFSManager classes, let you manage your file system.</p>
+<p><strong>Attention</strong>: <strong>Always</strong> format your drive with Cosmos and <strong>only</strong> Cosmos if you plan to use it with Cosmos. Using any other tool such as Parted, FDisk, or any other tool might lead to weird things when using that drive with Cosmos' VFS. Those tools are much more advanced and might format and read/write to the disk differently than Cosmos.</p>
+<p><strong>WARNING!</strong>: Please do <strong>not</strong> try this on actual hardware! It may cause <strong>IRREPARBLE DAMAGE</strong> to your data. It is recommended to use a virtual machine like VMware or VirtualBox, just to name a few.</p>
 <p>First, we should create and initialize an instance of the VFS, this will initialize the partition and files-system lists, as well as register the new VFS.
 This is essential for using the VFS.</p>
 <p>We start with creating a global CosmosVFS, this line should appear outside of any function, and before the BeforeRun() function.</p>
@@ -202,10 +202,11 @@ This is essential for using the VFS.</p>
 <p>Next, we register our VFS at the VFS manager, this will initiate the VFS and make it usable, add this to your kernel's BeforeRun() function:</p>
 <pre><code class="lang-C#">Sys.FileSystem.VFS.VFSManager.RegisterVFS(fs);
 </code></pre>
-<p><strong>Note</strong>: From now on, we'll be using some plugged functions from <code>System.IO</code>, so be sure to use that reference to your code. Alright, now, let's get started over some useful functions:</p>
+<p><strong>Note</strong>: From now on, we'll be using some plugged functions from <code>System.IO</code>, so be sure to use that reference to your code. Now, let's get started over some useful functions:</p>
 <h2 id="format-disks">Format disks</h2>
 <p><strong>Note</strong>: You don't have to format your drive if you're debugging your Cosmos project with VMWare. The build will automatically add an already formatted FAT32 VMDK file for your convenience.</p>
-<p>You can get all available disks using <code>VFSManager.GetDisks()</code>. The methods to get information about the disk or format it can be found under the <a href="https://cosmosos.github.io/api/Cosmos.System.FileSystem.Disk.html">Disk</a> class. To format a disk use the <a href="https://cosmosos.github.io/api/Cosmos.System.FileSystem.Disk.html#Cosmos_System_FileSystem_Disk_FormatPartition_System_Int32_System_String_System_Boolean_"><code>FormatDisk(int index, string format, bool quick = true)</code></a>
+<p>You can get all available disks using <code>VFSManager.GetDisks()</code>. The methods to get information about the disk or format it can be found under the <a href="https://cosmosos.github.io/api/Cosmos.System.FileSystem.Disk.html">Disk</a> class.
+To format a disk use the <a href="https://cosmosos.github.io/api/Cosmos.System.FileSystem.Disk.html#Cosmos_System_FileSystem_Disk_FormatPartition_System_Int32_System_String_System_Boolean_"><code>FormatDisk(int index, string format, bool quick = true)</code></a>
 method.</p>
 <h2 id="get-available-free-space">Get available free space</h2>
 <p>We use this function to get the size of the available free space in our file system, in bytes.</p>
@@ -213,8 +214,8 @@ method.</p>
 Console.WriteLine(&quot;Available Free Space: &quot; + available_space);
 </code></pre>
 <p><img src="https://raw.githubusercontent.com/CosmosOS/Cosmos/master/Docs/articles/Kernel/images/File%20System%20Free%20Space.PNG" alt="Free Space"></p>
-<p>You have probably noticed the &quot;0:&quot; argument passed to this function, this is the id of the drive that we want to get available free space of.
-Cosmos using DOS drive naming system and this is why we use &quot;0&quot;.</p>
+<p>You have probably noticed the &quot;0:&quot; argument passed to this function, this is the ID of the drive that we want to get available free space of.
+Cosmos uses the DOS drive naming system, this is why we use &quot;0&quot;.</p>
 <p><strong>Attention</strong>: Typing &quot;0:/&quot; instead of &quot;0:\&quot; might lead to errors, you've been warned.</p>
 <h2 id="get-file-system-type">Get file system type</h2>
 <p>This will let us know what is the file system type that we are using.
@@ -223,7 +224,7 @@ You <strong>should</strong> be seeing &quot;FAT32&quot;, if you see other types 
 <pre><code class="lang-C#">var fs_type = fs.GetFileSystemType(@&quot;0:\&quot;);
 Console.WriteLine(&quot;File System Type: &quot; + fs_type);
 </code></pre>
-<h2 id="get-files-list">Get files list</h2>
+<h2 id="get-list-of-file">Get list of file</h2>
 <p>We start by getting a list of files, using:</p>
 <pre><code class="lang-C#">var files_list = Directory.GetFiles(@&quot;0:\&quot;);
 </code></pre>
@@ -234,7 +235,7 @@ Console.WriteLine(&quot;File System Type: &quot; + fs_type);
 }
 </code></pre>
 <p><img src="https://raw.githubusercontent.com/CosmosOS/Cosmos/master/Docs/articles/Kernel/images/File%20System%20Files%20List.PNG" alt="Files List"></p>
-<h2 id="get-directory-listing-files-and-directories">Get directory listing (Files and directories)</h2>
+<h2 id="get-directory-listing-files-and-other-directories">Get directory listing (files and other directories)</h2>
 <p>You can get files and directory listing by using this code:</p>
 <pre><code class="lang-C#">var files_list = Directory.GetFiles(@&quot;0:\&quot;);
 var directory_list = Directory.GetDirectories(@&quot;0:\&quot;);
@@ -283,11 +284,11 @@ catch (Exception e)
     Console.WriteLine(e.ToString());
 }
 </code></pre>
-<h2 id="create-a-new-directory">Create a new Directory</h2>
+<h2 id="create-a-new-directory">Create a new directory</h2>
 <p>Here is a example of code of creating a new directory:</p>
 <pre><code class="lang-C#">try
 {
-    Directory.Create(@&quot;0:\testing\&quot;);
+    Directory.Create(@&quot;0:\testdirectory\&quot;);
 }
 catch (Exception e)
 {
@@ -299,7 +300,7 @@ catch (Exception e)
 <pre><code class="lang-C#">try
 {
     File.Delete(@&quot;0:\testing.txt&quot;);
-    Directory.Delete(@&quot;0:\testing\&quot;);
+    Directory.Delete(@&quot;0:\testdirectory\&quot;);
 }
 catch (Exception e)
 {
@@ -320,7 +321,7 @@ catch (Exception e)
 }
 </code></pre>
 <h2 id="move-a-file">Move a file</h2>
-<p>Actually, File.Move() is not plugged in Cosmos, so you need to Copy the file and then delete the old file.
+<p>File.Move() is not currently plugged in Cosmos, so you need to copy the file and then delete the old file.
 Here is an example Method:</p>
 <pre><code class="lang-C#">public static void MoveFile(string file, string newpath)
 {
@@ -336,7 +337,7 @@ Here is an example Method:</p>
 }
 </code></pre>
 <h2 id="read-all-text-from-a-specific-file">Read all text from a specific file</h2>
-<p>Now we will read a specific file from a given path.<br>
+<p>Now, we will read a specific file from a given path.
 As usual, we'll do it in a try catch block.</p>
 <pre><code class="lang-C#">try
 {
@@ -349,7 +350,7 @@ catch (Exception e)
 </code></pre>
 <p><img src="https://raw.githubusercontent.com/CosmosOS/Cosmos/master/Docs/articles/Kernel/images/File%20System%20Read%20Specified%20File.PNG" alt="Read Specific File"></p>
 <h1 id="read-all-bytes-from-a-specific-file">Read All bytes from a specific file</h1>
-<p>As like the ReadAllText Method, ReadAllBytes should return all bytes the bytes from a file.</p>
+<p>As like the ReadAllText Method, ReadAllBytes should return all bytes the bytes from a file. You can use this to load files that include data and not just text.</p>
 <pre><code class="lang-C#">try
 {
     Console.WriteLine(File.ReadAllBytes(@&quot;0:\testing.txt&quot;));
@@ -359,6 +360,7 @@ catch (Exception e)
     Console.WriteLine(e.ToString());
 }
 </code></pre>
+<p><em>Last updated on 2 November 2023.</em></p>
 </article>
           </div>
           

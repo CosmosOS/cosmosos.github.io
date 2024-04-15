@@ -190,23 +190,23 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="running">Running</h1>
 
-<p>Cosmos supports running on any Intel x86 environment. However for debugging
+<p>Cosmos supports running on any Intel x86 environment. However, for debugging
 and ease of use, many virtual and physical setups have integrated support. If
 you do not see your environment, this does not mean Cosmos will not work. You
-can simply fall back to ISO which should work with any environment.</p>
+can simply fall back to ISO, which should work with any environment.</p>
 <h2 id="iso">ISO</h2>
 <p>The ISO option creates an ISO image of the Cosmos output. This ISO file can be
 mounted and booted by most virtualization technologies. In addition, a physical
 optical disk can be burned and used to boot physical hardware.</p>
 <h1 id="linuxposix">Linux/Posix</h1>
-<h3 id="disclaimer-this-article-assumes-that-you-are-using-a-debian-based-operating-system">DISCLAIMER: This article assumes that you are using a debian based operating system</h3>
+<p><strong>DISCLAIMER: This article assumes that you are using a Debian-based operating system!</strong></p>
 <h2 id="qemu">QEMU</h2>
-<p>Here you can use a generic run file, you can run it by using <code>sh run.sh -i &lt;ISO&gt; -m &lt;memory size&gt; -h &lt;hdd image&gt;</code>.
-It has to be at the root directory of the project</p>
+<p>Here you can use a generic run file, you can run it by using <code>sh run.sh -i &lt;ISO&gt; -m &lt;memory size&gt; -h &lt;hdd image&gt;</code>. It has to be at the root directory of the project.</p>
 <p>QEMU is required and can be installed with <code>apt-get install qemu-system</code>.</p>
-<p>To create an hdd image, you have to convert this <a href="https://github.com/CosmosOS/Cosmos/blob/master/Build/VMWare/Workstation/Filesystem.vmdk?raw=true">.vmdk</a> file to a .img wich can then be used by QEMU using the following command
+<p>To create an HDD image, you have to convert this <a href="https://github.com/CosmosOS/Cosmos/blob/master/Build/VMWare/Workstation/Filesystem.vmdk?raw=true">.vmdk</a> file to a .img, which can then be used by QEMU using the following command
 <code>qemu-img convert -f vmdk -O raw Filesystem.vmdk cosmos.img</code></p>
-<p><code>run.sh:</code></p>
+<p>Here is the run.sh:
+<code>run.sh:</code></p>
 <pre><code class="lang-sh">#!/bin/bash
 
 helpFunction()
@@ -242,8 +242,9 @@ dotnet build
 # Emulate the ISO
 qemu-system-x86_64 -boot d -cdrom $ISO -m $MEMORY_SIZE -hda $HDD_IMAGE
 </code></pre>
-<h2 id="virtualbox">Virtualbox</h2>
-<p>Create a virtual machine and use this <a href="https://github.com/CosmosOS/Cosmos/blob/master/Build/VMWare/Workstation/Filesystem.vmdk?raw=true">.vmdk</a> as HDD image</p>
+<h2 id="virtualbox">VirtualBox</h2>
+<p>Create a virtual machine and use this <a href="https://github.com/CosmosOS/Cosmos/blob/master/Build/VMWare/Workstation/Filesystem.vmdk?raw=true">.vmdk</a> as your HDD image.
+If you are utilizing audio, we recommend VirtualBox for the ability to use their AC97 driver.</p>
 <h1 id="windows">Windows</h1>
 <h2 id="vmware">VMWare</h2>
 <p>WMWare Workstation and VMWare Player are the preferred testing environments
@@ -254,24 +255,26 @@ the typical Cosmos developer provides more than enough functionality.</p>
 <h3 id="vmware-player">VMWare Player</h3>
 <p>VMWare Player can be downloaded <a href="https://www.vmware.com/go/getplayer-win">here</a>.</p>
 <h3 id="vmware-workstation">VMWare Workstation</h3>
-<p>VMWare Workstation can be downloaded for free trial <a href="https://www.vmware.com/go/getworkstation-win">here</a>.</p>
+<p>VMWare Workstation (paid version) can be downloaded for a free trial <a href="https://www.vmware.com/go/getworkstation-win">here</a>.</p>
 <h2 id="qemu-1">QEMU</h2>
-<p>Not officially supported at this time, but can be done. Just use the ISO option above with debugging turned off.</p>
+<p>QEMU is not officially supported for Cosmos at this time, but can be used. Just use the ISO option above with debugging turned off.
+If you want to use graphical mode in QEMU (Canvas or SVGA-II), ensure that VBE multiboot is enabled in your project settings of Cosmos.</p>
 <p>QEMU can be downloaded <a href="https://www.qemu.org/download/">here</a></p>
 <h2 id="bochs">Bochs</h2>
-<p>Bochs is officially supported.</p>
+<p>Bochs is officially supported for Cosmos. As Bochs is a full emulation software, results vary and are often times slower than other virtualization platforms.</p>
 <p>Bochs can be downloaded <a href="https://bochs.sourceforge.io/getcurrent.html">here</a></p>
 <h2 id="pxe">PXE</h2>
 <p>For PXE, no special software is required. Only an ethernet connection to your router. However, if you have a computer that does not support network booting, or if you must perform the action over WiFi, you may need to look at a PXE chainloader such as <a href="http://etherboot.org/wiki/">gPXE</a>.
 To run your Cosmos kernel in PXE you need to follow these steps:</p>
-<p>Step #1: disable Cosmos Remote Debugger, activate PXE and compilation in bin format.
+<p>Step #1: Disable Cosmos Remote Debugger, activate PXE and compile in bin format.
 Go to Properties and copy these settings:</p>
 <p><img src="https://user-images.githubusercontent.com/98218366/178479237-a22a7b5f-250e-432d-ba74-0da502e82f7b.png" alt="image"></p>
 <p>Boot the machine and connect it via Ethernet and will show this screen:</p>
 <p><img src="https://user-images.githubusercontent.com/98218366/178479800-c70faa5d-1fab-4da4-8f27-05eefee89b75.png" alt="image"></p>
-<p>Wait and your os will boot up.</p>
-<h2 id="hyper-v">Hyper-V</h2>
+<p>Wait and your OS will boot up.</p>
+<h2 id="hyper-v-virtualpc">Hyper-V, VirtualPC</h2>
 <p>Not supported at this time.</p>
+<p><em>Last updated on 24 March 2024.</em></p>
 </article>
           </div>
           

@@ -198,7 +198,7 @@
 <h3 id="what-does-it-do">What does it do?</h3>
 <p><code>Kernel.Start()</code> does quite a bit of stuff. First, it checks if <code>System.String.Empty</code> is null. If it is null, then it will just throw an exception. If it isn't, it just continues. After that check, <code>Kernel.Start()</code> initializes the hardware bootstrap, then calls <code>OnBoot()</code>.</p>
 <blockquote>
-<p>We have an article explaining what <code>OnBoot()</code> is.</p>
+<p>The next article explains what <code>OnBoot()</code> is.</p>
 </blockquote>
 <p>Then, <code>Kernel.Start()</code> calls your <code>BeforeRun()</code> method, after it finishes, <code>Kernel.Start()</code> enables the hardware interrupts. Then it simply does a <code>while (!mStopped)</code> loop with your <code>Run()</code> method. After that, it calls an optional method called <code>AfterRun()</code>. By default, <code>AfterRun()</code> is just empty, so don't worry about nulls or something like that. Then it finishes. All of that is also try/catched too with the <code>A kernel exception has occurred</code> message.</p>
 <h3 id="overriding-it">Overriding it</h3>
@@ -207,6 +207,7 @@
 <p>You override it the same way you do with other methods. An extremely simple base override in your Kernel would be: <code>protected override void Start() {}</code></p>
 </blockquote>
 <p>The default <code>Kernel.Start()</code> method is located in <code>Cosmos\source\Cosmos.System2\Kernel.cs</code>. You can copy it and make modifications with your Kernel override.</p>
+<p><em>Last updated on 20 May 2023.</em></p>
 </article>
           </div>
           

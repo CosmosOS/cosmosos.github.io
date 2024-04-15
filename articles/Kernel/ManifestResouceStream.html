@@ -190,21 +190,25 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="manifest-resource-streams">Manifest Resource Streams</h1>
 
-<p>Manifest Resource Streams allow you to include data from the files as byte arrays in your code. An example of its use is in the <a href="https://github.com/CosmosOS/Cosmos/blob/5973a3fae95c989dc13505184aff9a15aae9f65f/Demos/ZMachine/ZKernel/Kernel.cs#L19">ZMachine Demo</a></p>
+<p>Manifest Resource Streams allow you to include data from files as byte arrays in your code. An example of its use is in the <a href="https://github.com/CosmosOS/Cosmos/blob/5973a3fae95c989dc13505184aff9a15aae9f65f/Demos/ZMachine/ZKernel/Kernel.cs#L19">ZMachine Demo</a>.</p>
 <h2 id="how-to-use">How to use</h2>
 <ol>
-<li>Set for the the file you want to use <code>Build As: Embedded Resource</code> using the File Properties window in VS.
+<li>Set for the file you want to use <code>Build As: Embedded Resource</code> using the File Properties window in VS.
 <img src="https://user-images.githubusercontent.com/8559822/132468001-256b92d1-0b29-4db3-9ef5-3383bfdef023.png" alt="image"></li>
-<li>In the code reference the file using the following format (a static byte array with the attribute):</li>
+<li>In the code, reference the file using the following format (a static byte array with the attribute):</li>
 </ol>
 <pre><code>[ManifestResourceStream(ResourceName = &quot;{project_name}.{path}.{to}.{filename_with_extension}&quot;)] 
 static byte[] file;
 </code></pre>
-<p>The field <em>must</em> be static but the name of the field (file) can be changed. You will also need to add <code>using IL2CPU.API.Attribs;</code> to the code.
-For example, if the project is called Kernel and the file is <code>Data\Text.txt</code>, then <code>ResourceName = &quot;Kernel.Data.Text.txt&quot;</code>.</p>
+<p>The field <em>must</em> be static but the name of the field (file) can be changed. You will also need to add <code>using IL2CPU.API.Attribs;</code> to the code.</p>
+<p>For example, if the project is called Kernel and the file is <code>Data\Text.txt</code>, then <code>ResourceName = &quot;Kernel.Data.Text.txt&quot;</code>.</p>
 <ol start="3">
 <li>To access the data simply read from the byte array defined.</li>
 </ol>
+<pre><code class="lang-csharp">string fileContent = System.Text.Encoding.UTF8.GetString(file); //convert the byte array to string (assuming text data)
+Console.WriteLine(fileContent); //write it out
+</code></pre>
+<p><em>Last updated on 28 July 2023.</em></p>
 </article>
           </div>
           
