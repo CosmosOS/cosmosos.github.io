@@ -11451,12 +11451,12 @@ references:
   commentId: F:Cosmos.HAL.BlockDevice.BlockDevice.mBlockSize
   fullName: Cosmos.HAL.BlockDevice.BlockDevice.mBlockSize
   nameWithType: BlockDevice.mBlockSize
-- uid: Cosmos.HAL.BlockDevice.BlockDevice.NewBlockArray(System.UInt32)
-  name: NewBlockArray(UInt32)
-  href: api/cosmos/Cosmos.HAL.BlockDevice.BlockDevice.html#Cosmos_HAL_BlockDevice_BlockDevice_NewBlockArray_System_UInt32_
-  commentId: M:Cosmos.HAL.BlockDevice.BlockDevice.NewBlockArray(System.UInt32)
-  fullName: Cosmos.HAL.BlockDevice.BlockDevice.NewBlockArray(System.UInt32)
-  nameWithType: BlockDevice.NewBlockArray(UInt32)
+- uid: Cosmos.HAL.BlockDevice.BlockDevice.NewBlockArray(System.UInt64)
+  name: NewBlockArray(UInt64)
+  href: api/cosmos/Cosmos.HAL.BlockDevice.BlockDevice.html#Cosmos_HAL_BlockDevice_BlockDevice_NewBlockArray_System_UInt64_
+  commentId: M:Cosmos.HAL.BlockDevice.BlockDevice.NewBlockArray(System.UInt64)
+  fullName: Cosmos.HAL.BlockDevice.BlockDevice.NewBlockArray(System.UInt64)
+  nameWithType: BlockDevice.NewBlockArray(UInt64)
 - uid: Cosmos.HAL.BlockDevice.BlockDevice.NewBlockArray*
   name: NewBlockArray
   href: api/cosmos/Cosmos.HAL.BlockDevice.BlockDevice.html#Cosmos_HAL_BlockDevice_BlockDevice_NewBlockArray_
@@ -11555,15 +11555,15 @@ references:
   isSpec: "True"
   fullName: Cosmos.HAL.BlockDevice.EBR.EBR
   nameWithType: EBR.EBR
-- uid: Cosmos.HAL.BlockDevice.EBR.ParsePartition(System.Byte[],System.UInt32)
-  name: ParsePartition(Byte[], UInt32)
-  href: api/cosmos/Cosmos.HAL.BlockDevice.EBR.html#Cosmos_HAL_BlockDevice_EBR_ParsePartition_System_Byte___System_UInt32_
-  commentId: M:Cosmos.HAL.BlockDevice.EBR.ParsePartition(System.Byte[],System.UInt32)
-  name.vb: ParsePartition(Byte(), UInt32)
-  fullName: Cosmos.HAL.BlockDevice.EBR.ParsePartition(System.Byte[], System.UInt32)
-  fullName.vb: Cosmos.HAL.BlockDevice.EBR.ParsePartition(System.Byte(), System.UInt32)
-  nameWithType: EBR.ParsePartition(Byte[], UInt32)
-  nameWithType.vb: EBR.ParsePartition(Byte(), UInt32)
+- uid: Cosmos.HAL.BlockDevice.EBR.ParsePartition(System.Byte[],System.Int32)
+  name: ParsePartition(Byte[], Int32)
+  href: api/cosmos/Cosmos.HAL.BlockDevice.EBR.html#Cosmos_HAL_BlockDevice_EBR_ParsePartition_System_Byte___System_Int32_
+  commentId: M:Cosmos.HAL.BlockDevice.EBR.ParsePartition(System.Byte[],System.Int32)
+  name.vb: ParsePartition(Byte(), Int32)
+  fullName: Cosmos.HAL.BlockDevice.EBR.ParsePartition(System.Byte[], System.Int32)
+  fullName.vb: Cosmos.HAL.BlockDevice.EBR.ParsePartition(System.Byte(), System.Int32)
+  nameWithType: EBR.ParsePartition(Byte[], Int32)
+  nameWithType.vb: EBR.ParsePartition(Byte(), Int32)
 - uid: Cosmos.HAL.BlockDevice.EBR.ParsePartition*
   name: ParsePartition
   href: api/cosmos/Cosmos.HAL.BlockDevice.EBR.html#Cosmos_HAL_BlockDevice_EBR_ParsePartition_
@@ -11577,12 +11577,12 @@ references:
   commentId: T:Cosmos.HAL.BlockDevice.EBR.PartInfo
   fullName: Cosmos.HAL.BlockDevice.EBR.PartInfo
   nameWithType: EBR.PartInfo
-- uid: Cosmos.HAL.BlockDevice.EBR.PartInfo.#ctor(System.Byte,System.UInt32,System.UInt32)
-  name: PartInfo(Byte, UInt32, UInt32)
-  href: api/cosmos/Cosmos.HAL.BlockDevice.EBR.PartInfo.html#Cosmos_HAL_BlockDevice_EBR_PartInfo__ctor_System_Byte_System_UInt32_System_UInt32_
-  commentId: M:Cosmos.HAL.BlockDevice.EBR.PartInfo.#ctor(System.Byte,System.UInt32,System.UInt32)
-  fullName: Cosmos.HAL.BlockDevice.EBR.PartInfo.PartInfo(System.Byte, System.UInt32, System.UInt32)
-  nameWithType: EBR.PartInfo.PartInfo(Byte, UInt32, UInt32)
+- uid: Cosmos.HAL.BlockDevice.EBR.PartInfo.#ctor(System.Byte,System.UInt64,System.UInt64)
+  name: PartInfo(Byte, UInt64, UInt64)
+  href: api/cosmos/Cosmos.HAL.BlockDevice.EBR.PartInfo.html#Cosmos_HAL_BlockDevice_EBR_PartInfo__ctor_System_Byte_System_UInt64_System_UInt64_
+  commentId: M:Cosmos.HAL.BlockDevice.EBR.PartInfo.#ctor(System.Byte,System.UInt64,System.UInt64)
+  fullName: Cosmos.HAL.BlockDevice.EBR.PartInfo.PartInfo(System.Byte, System.UInt64, System.UInt64)
+  nameWithType: EBR.PartInfo.PartInfo(Byte, UInt64, UInt64)
 - uid: Cosmos.HAL.BlockDevice.EBR.PartInfo.#ctor*
   name: PartInfo
   href: api/cosmos/Cosmos.HAL.BlockDevice.EBR.PartInfo.html#Cosmos_HAL_BlockDevice_EBR_PartInfo__ctor_
@@ -11751,15 +11751,15 @@ references:
   commentId: F:Cosmos.HAL.BlockDevice.MBR.EBRLocation
   fullName: Cosmos.HAL.BlockDevice.MBR.EBRLocation
   nameWithType: MBR.EBRLocation
-- uid: Cosmos.HAL.BlockDevice.MBR.ParsePartition(System.Byte[],System.UInt32)
-  name: ParsePartition(Byte[], UInt32)
-  href: api/cosmos/Cosmos.HAL.BlockDevice.MBR.html#Cosmos_HAL_BlockDevice_MBR_ParsePartition_System_Byte___System_UInt32_
-  commentId: M:Cosmos.HAL.BlockDevice.MBR.ParsePartition(System.Byte[],System.UInt32)
-  name.vb: ParsePartition(Byte(), UInt32)
-  fullName: Cosmos.HAL.BlockDevice.MBR.ParsePartition(System.Byte[], System.UInt32)
-  fullName.vb: Cosmos.HAL.BlockDevice.MBR.ParsePartition(System.Byte(), System.UInt32)
-  nameWithType: MBR.ParsePartition(Byte[], UInt32)
-  nameWithType.vb: MBR.ParsePartition(Byte(), UInt32)
+- uid: Cosmos.HAL.BlockDevice.MBR.ParsePartition(System.Byte[],System.UInt64)
+  name: ParsePartition(Byte[], UInt64)
+  href: api/cosmos/Cosmos.HAL.BlockDevice.MBR.html#Cosmos_HAL_BlockDevice_MBR_ParsePartition_System_Byte___System_UInt64_
+  commentId: M:Cosmos.HAL.BlockDevice.MBR.ParsePartition(System.Byte[],System.UInt64)
+  name.vb: ParsePartition(Byte(), UInt64)
+  fullName: Cosmos.HAL.BlockDevice.MBR.ParsePartition(System.Byte[], System.UInt64)
+  fullName.vb: Cosmos.HAL.BlockDevice.MBR.ParsePartition(System.Byte(), System.UInt64)
+  nameWithType: MBR.ParsePartition(Byte[], UInt64)
+  nameWithType.vb: MBR.ParsePartition(Byte(), UInt64)
 - uid: Cosmos.HAL.BlockDevice.MBR.ParsePartition*
   name: ParsePartition
   href: api/cosmos/Cosmos.HAL.BlockDevice.MBR.html#Cosmos_HAL_BlockDevice_MBR_ParsePartition_
@@ -11773,12 +11773,12 @@ references:
   commentId: T:Cosmos.HAL.BlockDevice.MBR.PartInfo
   fullName: Cosmos.HAL.BlockDevice.MBR.PartInfo
   nameWithType: MBR.PartInfo
-- uid: Cosmos.HAL.BlockDevice.MBR.PartInfo.#ctor(System.Byte,System.UInt32,System.UInt32)
-  name: PartInfo(Byte, UInt32, UInt32)
-  href: api/cosmos/Cosmos.HAL.BlockDevice.MBR.PartInfo.html#Cosmos_HAL_BlockDevice_MBR_PartInfo__ctor_System_Byte_System_UInt32_System_UInt32_
-  commentId: M:Cosmos.HAL.BlockDevice.MBR.PartInfo.#ctor(System.Byte,System.UInt32,System.UInt32)
-  fullName: Cosmos.HAL.BlockDevice.MBR.PartInfo.PartInfo(System.Byte, System.UInt32, System.UInt32)
-  nameWithType: MBR.PartInfo.PartInfo(Byte, UInt32, UInt32)
+- uid: Cosmos.HAL.BlockDevice.MBR.PartInfo.#ctor(System.Byte,System.UInt64,System.UInt64)
+  name: PartInfo(Byte, UInt64, UInt64)
+  href: api/cosmos/Cosmos.HAL.BlockDevice.MBR.PartInfo.html#Cosmos_HAL_BlockDevice_MBR_PartInfo__ctor_System_Byte_System_UInt64_System_UInt64_
+  commentId: M:Cosmos.HAL.BlockDevice.MBR.PartInfo.#ctor(System.Byte,System.UInt64,System.UInt64)
+  fullName: Cosmos.HAL.BlockDevice.MBR.PartInfo.PartInfo(System.Byte, System.UInt64, System.UInt64)
+  nameWithType: MBR.PartInfo.PartInfo(Byte, UInt64, UInt64)
 - uid: Cosmos.HAL.BlockDevice.MBR.PartInfo.#ctor*
   name: PartInfo
   href: api/cosmos/Cosmos.HAL.BlockDevice.MBR.PartInfo.html#Cosmos_HAL_BlockDevice_MBR_PartInfo__ctor_
