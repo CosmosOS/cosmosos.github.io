@@ -36862,12 +36862,12 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.Canvas.DrawFilledEllipse
   nameWithType: Canvas.DrawFilledEllipse
-- uid: Cosmos.System.Graphics.Canvas.DrawFilledRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32)
-  name: DrawFilledRectangle(Color, Int32, Int32, Int32, Int32)
-  href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawFilledRectangle_System_Drawing_Color_System_Int32_System_Int32_System_Int32_System_Int32_
-  commentId: M:Cosmos.System.Graphics.Canvas.DrawFilledRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32)
-  fullName: Cosmos.System.Graphics.Canvas.DrawFilledRectangle(System.Drawing.Color, System.Int32, System.Int32, System.Int32, System.Int32)
-  nameWithType: Canvas.DrawFilledRectangle(Color, Int32, Int32, Int32, Int32)
+- uid: Cosmos.System.Graphics.Canvas.DrawFilledRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)
+  name: DrawFilledRectangle(Color, Int32, Int32, Int32, Int32, Boolean)
+  href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawFilledRectangle_System_Drawing_Color_System_Int32_System_Int32_System_Int32_System_Int32_System_Boolean_
+  commentId: M:Cosmos.System.Graphics.Canvas.DrawFilledRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)
+  fullName: Cosmos.System.Graphics.Canvas.DrawFilledRectangle(System.Drawing.Color, System.Int32, System.Int32, System.Int32, System.Int32, System.Boolean)
+  nameWithType: Canvas.DrawFilledRectangle(Color, Int32, Int32, Int32, Int32, Boolean)
 - uid: Cosmos.System.Graphics.Canvas.DrawFilledRectangle*
   name: DrawFilledRectangle
   href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawFilledRectangle_
@@ -36875,18 +36875,18 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.Canvas.DrawFilledRectangle
   nameWithType: Canvas.DrawFilledRectangle
-- uid: Cosmos.System.Graphics.Canvas.DrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32)
-  name: DrawImage(Image, Int32, Int32)
-  href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawImage_Cosmos_System_Graphics_Image_System_Int32_System_Int32_
-  commentId: M:Cosmos.System.Graphics.Canvas.DrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32)
-  fullName: Cosmos.System.Graphics.Canvas.DrawImage(Cosmos.System.Graphics.Image, System.Int32, System.Int32)
-  nameWithType: Canvas.DrawImage(Image, Int32, Int32)
-- uid: Cosmos.System.Graphics.Canvas.DrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32,System.Int32,System.Int32)
-  name: DrawImage(Image, Int32, Int32, Int32, Int32)
-  href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawImage_Cosmos_System_Graphics_Image_System_Int32_System_Int32_System_Int32_System_Int32_
-  commentId: M:Cosmos.System.Graphics.Canvas.DrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32,System.Int32,System.Int32)
-  fullName: Cosmos.System.Graphics.Canvas.DrawImage(Cosmos.System.Graphics.Image, System.Int32, System.Int32, System.Int32, System.Int32)
-  nameWithType: Canvas.DrawImage(Image, Int32, Int32, Int32, Int32)
+- uid: Cosmos.System.Graphics.Canvas.DrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32,System.Boolean)
+  name: DrawImage(Image, Int32, Int32, Boolean)
+  href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawImage_Cosmos_System_Graphics_Image_System_Int32_System_Int32_System_Boolean_
+  commentId: M:Cosmos.System.Graphics.Canvas.DrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32,System.Boolean)
+  fullName: Cosmos.System.Graphics.Canvas.DrawImage(Cosmos.System.Graphics.Image, System.Int32, System.Int32, System.Boolean)
+  nameWithType: Canvas.DrawImage(Image, Int32, Int32, Boolean)
+- uid: Cosmos.System.Graphics.Canvas.DrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)
+  name: DrawImage(Image, Int32, Int32, Int32, Int32, Boolean)
+  href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawImage_Cosmos_System_Graphics_Image_System_Int32_System_Int32_System_Int32_System_Int32_System_Boolean_
+  commentId: M:Cosmos.System.Graphics.Canvas.DrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)
+  fullName: Cosmos.System.Graphics.Canvas.DrawImage(Cosmos.System.Graphics.Image, System.Int32, System.Int32, System.Int32, System.Int32, System.Boolean)
+  nameWithType: Canvas.DrawImage(Image, Int32, Int32, Int32, Int32, Boolean)
 - uid: Cosmos.System.Graphics.Canvas.DrawImage*
   name: DrawImage
   href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawImage_
@@ -36894,12 +36894,12 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.Canvas.DrawImage
   nameWithType: Canvas.DrawImage
-- uid: Cosmos.System.Graphics.Canvas.DrawImageAlpha(Cosmos.System.Graphics.Image,System.Int32,System.Int32)
-  name: DrawImageAlpha(Image, Int32, Int32)
-  href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawImageAlpha_Cosmos_System_Graphics_Image_System_Int32_System_Int32_
-  commentId: M:Cosmos.System.Graphics.Canvas.DrawImageAlpha(Cosmos.System.Graphics.Image,System.Int32,System.Int32)
-  fullName: Cosmos.System.Graphics.Canvas.DrawImageAlpha(Cosmos.System.Graphics.Image, System.Int32, System.Int32)
-  nameWithType: Canvas.DrawImageAlpha(Image, Int32, Int32)
+- uid: Cosmos.System.Graphics.Canvas.DrawImageAlpha(Cosmos.System.Graphics.Image,System.Int32,System.Int32,System.Boolean)
+  name: DrawImageAlpha(Image, Int32, Int32, Boolean)
+  href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawImageAlpha_Cosmos_System_Graphics_Image_System_Int32_System_Int32_System_Boolean_
+  commentId: M:Cosmos.System.Graphics.Canvas.DrawImageAlpha(Cosmos.System.Graphics.Image,System.Int32,System.Int32,System.Boolean)
+  fullName: Cosmos.System.Graphics.Canvas.DrawImageAlpha(Cosmos.System.Graphics.Image, System.Int32, System.Int32, System.Boolean)
+  nameWithType: Canvas.DrawImageAlpha(Image, Int32, Int32, Boolean)
 - uid: Cosmos.System.Graphics.Canvas.DrawImageAlpha*
   name: DrawImageAlpha
   href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawImageAlpha_
@@ -37808,12 +37808,12 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.SVGAIICanvas.DrawChar
   nameWithType: SVGAIICanvas.DrawChar
-- uid: Cosmos.System.Graphics.SVGAIICanvas.DrawFilledRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32)
-  name: DrawFilledRectangle(Color, Int32, Int32, Int32, Int32)
-  href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_DrawFilledRectangle_System_Drawing_Color_System_Int32_System_Int32_System_Int32_System_Int32_
-  commentId: M:Cosmos.System.Graphics.SVGAIICanvas.DrawFilledRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32)
-  fullName: Cosmos.System.Graphics.SVGAIICanvas.DrawFilledRectangle(System.Drawing.Color, System.Int32, System.Int32, System.Int32, System.Int32)
-  nameWithType: SVGAIICanvas.DrawFilledRectangle(Color, Int32, Int32, Int32, Int32)
+- uid: Cosmos.System.Graphics.SVGAIICanvas.DrawFilledRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)
+  name: DrawFilledRectangle(Color, Int32, Int32, Int32, Int32, Boolean)
+  href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_DrawFilledRectangle_System_Drawing_Color_System_Int32_System_Int32_System_Int32_System_Int32_System_Boolean_
+  commentId: M:Cosmos.System.Graphics.SVGAIICanvas.DrawFilledRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)
+  fullName: Cosmos.System.Graphics.SVGAIICanvas.DrawFilledRectangle(System.Drawing.Color, System.Int32, System.Int32, System.Int32, System.Int32, System.Boolean)
+  nameWithType: SVGAIICanvas.DrawFilledRectangle(Color, Int32, Int32, Int32, Int32, Boolean)
 - uid: Cosmos.System.Graphics.SVGAIICanvas.DrawFilledRectangle*
   name: DrawFilledRectangle
   href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_DrawFilledRectangle_
@@ -37821,12 +37821,12 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.SVGAIICanvas.DrawFilledRectangle
   nameWithType: SVGAIICanvas.DrawFilledRectangle
-- uid: Cosmos.System.Graphics.SVGAIICanvas.DrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32)
-  name: DrawImage(Image, Int32, Int32)
-  href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_DrawImage_Cosmos_System_Graphics_Image_System_Int32_System_Int32_
-  commentId: M:Cosmos.System.Graphics.SVGAIICanvas.DrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32)
-  fullName: Cosmos.System.Graphics.SVGAIICanvas.DrawImage(Cosmos.System.Graphics.Image, System.Int32, System.Int32)
-  nameWithType: SVGAIICanvas.DrawImage(Image, Int32, Int32)
+- uid: Cosmos.System.Graphics.SVGAIICanvas.DrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32,System.Boolean)
+  name: DrawImage(Image, Int32, Int32, Boolean)
+  href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_DrawImage_Cosmos_System_Graphics_Image_System_Int32_System_Int32_System_Boolean_
+  commentId: M:Cosmos.System.Graphics.SVGAIICanvas.DrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32,System.Boolean)
+  fullName: Cosmos.System.Graphics.SVGAIICanvas.DrawImage(Cosmos.System.Graphics.Image, System.Int32, System.Int32, System.Boolean)
+  nameWithType: SVGAIICanvas.DrawImage(Image, Int32, Int32, Boolean)
 - uid: Cosmos.System.Graphics.SVGAIICanvas.DrawImage*
   name: DrawImage
   href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_DrawImage_
@@ -38050,12 +38050,12 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.VBECanvas.DrawArray
   nameWithType: VBECanvas.DrawArray
-- uid: Cosmos.System.Graphics.VBECanvas.DrawFilledRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32)
-  name: DrawFilledRectangle(Color, Int32, Int32, Int32, Int32)
-  href: api/cosmos/Cosmos.System.Graphics.VBECanvas.html#Cosmos_System_Graphics_VBECanvas_DrawFilledRectangle_System_Drawing_Color_System_Int32_System_Int32_System_Int32_System_Int32_
-  commentId: M:Cosmos.System.Graphics.VBECanvas.DrawFilledRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32)
-  fullName: Cosmos.System.Graphics.VBECanvas.DrawFilledRectangle(System.Drawing.Color, System.Int32, System.Int32, System.Int32, System.Int32)
-  nameWithType: VBECanvas.DrawFilledRectangle(Color, Int32, Int32, Int32, Int32)
+- uid: Cosmos.System.Graphics.VBECanvas.DrawFilledRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)
+  name: DrawFilledRectangle(Color, Int32, Int32, Int32, Int32, Boolean)
+  href: api/cosmos/Cosmos.System.Graphics.VBECanvas.html#Cosmos_System_Graphics_VBECanvas_DrawFilledRectangle_System_Drawing_Color_System_Int32_System_Int32_System_Int32_System_Int32_System_Boolean_
+  commentId: M:Cosmos.System.Graphics.VBECanvas.DrawFilledRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)
+  fullName: Cosmos.System.Graphics.VBECanvas.DrawFilledRectangle(System.Drawing.Color, System.Int32, System.Int32, System.Int32, System.Int32, System.Boolean)
+  nameWithType: VBECanvas.DrawFilledRectangle(Color, Int32, Int32, Int32, Int32, Boolean)
 - uid: Cosmos.System.Graphics.VBECanvas.DrawFilledRectangle*
   name: DrawFilledRectangle
   href: api/cosmos/Cosmos.System.Graphics.VBECanvas.html#Cosmos_System_Graphics_VBECanvas_DrawFilledRectangle_
@@ -38063,12 +38063,12 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.VBECanvas.DrawFilledRectangle
   nameWithType: VBECanvas.DrawFilledRectangle
-- uid: Cosmos.System.Graphics.VBECanvas.DrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32)
-  name: DrawImage(Image, Int32, Int32)
-  href: api/cosmos/Cosmos.System.Graphics.VBECanvas.html#Cosmos_System_Graphics_VBECanvas_DrawImage_Cosmos_System_Graphics_Image_System_Int32_System_Int32_
-  commentId: M:Cosmos.System.Graphics.VBECanvas.DrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32)
-  fullName: Cosmos.System.Graphics.VBECanvas.DrawImage(Cosmos.System.Graphics.Image, System.Int32, System.Int32)
-  nameWithType: VBECanvas.DrawImage(Image, Int32, Int32)
+- uid: Cosmos.System.Graphics.VBECanvas.DrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32,System.Boolean)
+  name: DrawImage(Image, Int32, Int32, Boolean)
+  href: api/cosmos/Cosmos.System.Graphics.VBECanvas.html#Cosmos_System_Graphics_VBECanvas_DrawImage_Cosmos_System_Graphics_Image_System_Int32_System_Int32_System_Boolean_
+  commentId: M:Cosmos.System.Graphics.VBECanvas.DrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32,System.Boolean)
+  fullName: Cosmos.System.Graphics.VBECanvas.DrawImage(Cosmos.System.Graphics.Image, System.Int32, System.Int32, System.Boolean)
+  nameWithType: VBECanvas.DrawImage(Image, Int32, Int32, Boolean)
 - uid: Cosmos.System.Graphics.VBECanvas.DrawImage*
   name: DrawImage
   href: api/cosmos/Cosmos.System.Graphics.VBECanvas.html#Cosmos_System_Graphics_VBECanvas_DrawImage_
@@ -38224,12 +38224,12 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.VGACanvas.Display
   nameWithType: VGACanvas.Display
-- uid: Cosmos.System.Graphics.VGACanvas.DrawFilledRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32)
-  name: DrawFilledRectangle(Color, Int32, Int32, Int32, Int32)
-  href: api/cosmos/Cosmos.System.Graphics.VGACanvas.html#Cosmos_System_Graphics_VGACanvas_DrawFilledRectangle_System_Drawing_Color_System_Int32_System_Int32_System_Int32_System_Int32_
-  commentId: M:Cosmos.System.Graphics.VGACanvas.DrawFilledRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32)
-  fullName: Cosmos.System.Graphics.VGACanvas.DrawFilledRectangle(System.Drawing.Color, System.Int32, System.Int32, System.Int32, System.Int32)
-  nameWithType: VGACanvas.DrawFilledRectangle(Color, Int32, Int32, Int32, Int32)
+- uid: Cosmos.System.Graphics.VGACanvas.DrawFilledRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)
+  name: DrawFilledRectangle(Color, Int32, Int32, Int32, Int32, Boolean)
+  href: api/cosmos/Cosmos.System.Graphics.VGACanvas.html#Cosmos_System_Graphics_VGACanvas_DrawFilledRectangle_System_Drawing_Color_System_Int32_System_Int32_System_Int32_System_Int32_System_Boolean_
+  commentId: M:Cosmos.System.Graphics.VGACanvas.DrawFilledRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)
+  fullName: Cosmos.System.Graphics.VGACanvas.DrawFilledRectangle(System.Drawing.Color, System.Int32, System.Int32, System.Int32, System.Int32, System.Boolean)
+  nameWithType: VGACanvas.DrawFilledRectangle(Color, Int32, Int32, Int32, Int32, Boolean)
 - uid: Cosmos.System.Graphics.VGACanvas.DrawFilledRectangle*
   name: DrawFilledRectangle
   href: api/cosmos/Cosmos.System.Graphics.VGACanvas.html#Cosmos_System_Graphics_VGACanvas_DrawFilledRectangle_
