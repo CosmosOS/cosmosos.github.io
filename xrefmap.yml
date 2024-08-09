@@ -47075,6 +47075,15 @@ references:
   isSpec: "True"
   fullName: Cosmos.System_Plugs.System.RandomImpl.Next
   nameWithType: RandomImpl.Next
+- uid: Cosmos.System_Plugs.System.RandomImpl.NextBytes(Random,Span{System.Byte})
+  name: NextBytes(Random, Span<Byte>)
+  href: api/plugs/Cosmos.System_Plugs.System.RandomImpl.html#Cosmos_System_Plugs_System_RandomImpl_NextBytes_Random_Span_System_Byte__
+  commentId: M:Cosmos.System_Plugs.System.RandomImpl.NextBytes(Random,Span{System.Byte})
+  name.vb: NextBytes(Random, Span(Of Byte))
+  fullName: Cosmos.System_Plugs.System.RandomImpl.NextBytes(Random, Span<System.Byte>)
+  fullName.vb: Cosmos.System_Plugs.System.RandomImpl.NextBytes(Random, Span(Of System.Byte))
+  nameWithType: RandomImpl.NextBytes(Random, Span<Byte>)
+  nameWithType.vb: RandomImpl.NextBytes(Random, Span(Of Byte))
 - uid: Cosmos.System_Plugs.System.RandomImpl.NextBytes(Random,System.Byte[])
   name: NextBytes(Random, Byte[])
   href: api/plugs/Cosmos.System_Plugs.System.RandomImpl.html#Cosmos_System_Plugs_System_RandomImpl_NextBytes_Random_System_Byte___
