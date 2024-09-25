@@ -2826,6 +2826,22 @@ references:
   isSpec: "True"
   fullName: Cosmos.Core.ManagedMemoryBlock.Fill
   nameWithType: ManagedMemoryBlock.Fill
+- uid: Cosmos.Core.ManagedMemoryBlock.Get(System.Int32,System.Int32[],System.Int32,System.Int32)
+  name: Get(Int32, Int32[], Int32, Int32)
+  href: api/cosmos/Cosmos.Core.ManagedMemoryBlock.html#Cosmos_Core_ManagedMemoryBlock_Get_System_Int32_System_Int32___System_Int32_System_Int32_
+  commentId: M:Cosmos.Core.ManagedMemoryBlock.Get(System.Int32,System.Int32[],System.Int32,System.Int32)
+  name.vb: Get(Int32, Int32(), Int32, Int32)
+  fullName: Cosmos.Core.ManagedMemoryBlock.Get(System.Int32, System.Int32[], System.Int32, System.Int32)
+  fullName.vb: Cosmos.Core.ManagedMemoryBlock.Get(System.Int32, System.Int32(), System.Int32, System.Int32)
+  nameWithType: ManagedMemoryBlock.Get(Int32, Int32[], Int32, Int32)
+  nameWithType.vb: ManagedMemoryBlock.Get(Int32, Int32(), Int32, Int32)
+- uid: Cosmos.Core.ManagedMemoryBlock.Get*
+  name: Get
+  href: api/cosmos/Cosmos.Core.ManagedMemoryBlock.html#Cosmos_Core_ManagedMemoryBlock_Get_
+  commentId: Overload:Cosmos.Core.ManagedMemoryBlock.Get
+  isSpec: "True"
+  fullName: Cosmos.Core.ManagedMemoryBlock.Get
+  nameWithType: ManagedMemoryBlock.Get
 - uid: Cosmos.Core.ManagedMemoryBlock.Item(System.UInt32)
   name: Item[UInt32]
   href: api/cosmos/Cosmos.Core.ManagedMemoryBlock.html#Cosmos_Core_ManagedMemoryBlock_Item_System_UInt32_
@@ -3721,6 +3737,31 @@ references:
   isSpec: "True"
   fullName: Cosmos.Core.MemoryBlock.Fill
   nameWithType: MemoryBlock.Fill
+- uid: Cosmos.Core.MemoryBlock.Get(System.Int32,System.Byte[],System.Int32,System.Int32)
+  name: Get(Int32, Byte[], Int32, Int32)
+  href: api/cosmos/Cosmos.Core.MemoryBlock.html#Cosmos_Core_MemoryBlock_Get_System_Int32_System_Byte___System_Int32_System_Int32_
+  commentId: M:Cosmos.Core.MemoryBlock.Get(System.Int32,System.Byte[],System.Int32,System.Int32)
+  name.vb: Get(Int32, Byte(), Int32, Int32)
+  fullName: Cosmos.Core.MemoryBlock.Get(System.Int32, System.Byte[], System.Int32, System.Int32)
+  fullName.vb: Cosmos.Core.MemoryBlock.Get(System.Int32, System.Byte(), System.Int32, System.Int32)
+  nameWithType: MemoryBlock.Get(Int32, Byte[], Int32, Int32)
+  nameWithType.vb: MemoryBlock.Get(Int32, Byte(), Int32, Int32)
+- uid: Cosmos.Core.MemoryBlock.Get(System.Int32,System.Int32[],System.Int32,System.Int32)
+  name: Get(Int32, Int32[], Int32, Int32)
+  href: api/cosmos/Cosmos.Core.MemoryBlock.html#Cosmos_Core_MemoryBlock_Get_System_Int32_System_Int32___System_Int32_System_Int32_
+  commentId: M:Cosmos.Core.MemoryBlock.Get(System.Int32,System.Int32[],System.Int32,System.Int32)
+  name.vb: Get(Int32, Int32(), Int32, Int32)
+  fullName: Cosmos.Core.MemoryBlock.Get(System.Int32, System.Int32[], System.Int32, System.Int32)
+  fullName.vb: Cosmos.Core.MemoryBlock.Get(System.Int32, System.Int32(), System.Int32, System.Int32)
+  nameWithType: MemoryBlock.Get(Int32, Int32[], Int32, Int32)
+  nameWithType.vb: MemoryBlock.Get(Int32, Int32(), Int32, Int32)
+- uid: Cosmos.Core.MemoryBlock.Get*
+  name: Get
+  href: api/cosmos/Cosmos.Core.MemoryBlock.html#Cosmos_Core_MemoryBlock_Get_
+  commentId: Overload:Cosmos.Core.MemoryBlock.Get
+  isSpec: "True"
+  fullName: Cosmos.Core.MemoryBlock.Get
+  nameWithType: MemoryBlock.Get
 - uid: Cosmos.Core.MemoryBlock.Item(System.UInt32)
   name: Item[UInt32]
   href: api/cosmos/Cosmos.Core.MemoryBlock.html#Cosmos_Core_MemoryBlock_Item_System_UInt32_
@@ -17557,6 +17598,15 @@ references:
   isSpec: "True"
   fullName: Cosmos.HAL.Drivers.Video.VBEDriver.DisableDisplay
   nameWithType: VBEDriver.DisableDisplay
+- uid: Cosmos.HAL.Drivers.Video.VBEDriver.GetVRAM(System.Int32,System.Int32[],System.Int32,System.Int32)
+  name: GetVRAM(Int32, Int32[], Int32, Int32)
+  href: api/cosmos/Cosmos.HAL.Drivers.Video.VBEDriver.html#Cosmos_HAL_Drivers_Video_VBEDriver_GetVRAM_System_Int32_System_Int32___System_Int32_System_Int32_
+  commentId: M:Cosmos.HAL.Drivers.Video.VBEDriver.GetVRAM(System.Int32,System.Int32[],System.Int32,System.Int32)
+  name.vb: GetVRAM(Int32, Int32(), Int32, Int32)
+  fullName: Cosmos.HAL.Drivers.Video.VBEDriver.GetVRAM(System.Int32, System.Int32[], System.Int32, System.Int32)
+  fullName.vb: Cosmos.HAL.Drivers.Video.VBEDriver.GetVRAM(System.Int32, System.Int32(), System.Int32, System.Int32)
+  nameWithType: VBEDriver.GetVRAM(Int32, Int32[], Int32, Int32)
+  nameWithType.vb: VBEDriver.GetVRAM(Int32, Int32(), Int32, Int32)
 - uid: Cosmos.HAL.Drivers.Video.VBEDriver.GetVRAM(System.UInt32)
   name: GetVRAM(UInt32)
   href: api/cosmos/Cosmos.HAL.Drivers.Video.VBEDriver.html#Cosmos_HAL_Drivers_Video_VBEDriver_GetVRAM_System_UInt32_
@@ -36729,6 +36779,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.Canvas.Clear
   nameWithType: Canvas.Clear
+- uid: Cosmos.System.Graphics.Canvas.CroppedDrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)
+  name: CroppedDrawImage(Image, Int32, Int32, Int32, Int32, Boolean)
+  href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_CroppedDrawImage_Cosmos_System_Graphics_Image_System_Int32_System_Int32_System_Int32_System_Int32_System_Boolean_
+  commentId: M:Cosmos.System.Graphics.Canvas.CroppedDrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)
+  fullName: Cosmos.System.Graphics.Canvas.CroppedDrawImage(Cosmos.System.Graphics.Image, System.Int32, System.Int32, System.Int32, System.Int32, System.Boolean)
+  nameWithType: Canvas.CroppedDrawImage(Image, Int32, Int32, Int32, Int32, Boolean)
+- uid: Cosmos.System.Graphics.Canvas.CroppedDrawImage*
+  name: CroppedDrawImage
+  href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_CroppedDrawImage_
+  commentId: Overload:Cosmos.System.Graphics.Canvas.CroppedDrawImage
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.Canvas.CroppedDrawImage
+  nameWithType: Canvas.CroppedDrawImage
 - uid: Cosmos.System.Graphics.Canvas.DefaultGraphicsMode
   name: DefaultGraphicsMode
   href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DefaultGraphicsMode
@@ -36790,6 +36853,24 @@ references:
   fullName.vb: Cosmos.System.Graphics.Canvas.DrawArray(System.Drawing.Color(), System.Int32, System.Int32, System.Int32, System.Int32)
   nameWithType: Canvas.DrawArray(Color[], Int32, Int32, Int32, Int32)
   nameWithType.vb: Canvas.DrawArray(Color(), Int32, Int32, Int32, Int32)
+- uid: Cosmos.System.Graphics.Canvas.DrawArray(System.Int32[],System.Int32,System.Int32,System.Int32,System.Int32)
+  name: DrawArray(Int32[], Int32, Int32, Int32, Int32)
+  href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawArray_System_Int32___System_Int32_System_Int32_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.Canvas.DrawArray(System.Int32[],System.Int32,System.Int32,System.Int32,System.Int32)
+  name.vb: DrawArray(Int32(), Int32, Int32, Int32, Int32)
+  fullName: Cosmos.System.Graphics.Canvas.DrawArray(System.Int32[], System.Int32, System.Int32, System.Int32, System.Int32)
+  fullName.vb: Cosmos.System.Graphics.Canvas.DrawArray(System.Int32(), System.Int32, System.Int32, System.Int32, System.Int32)
+  nameWithType: Canvas.DrawArray(Int32[], Int32, Int32, Int32, Int32)
+  nameWithType.vb: Canvas.DrawArray(Int32(), Int32, Int32, Int32, Int32)
+- uid: Cosmos.System.Graphics.Canvas.DrawArray(System.Int32[],System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)
+  name: DrawArray(Int32[], Int32, Int32, Int32, Int32, Int32)
+  href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawArray_System_Int32___System_Int32_System_Int32_System_Int32_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.Canvas.DrawArray(System.Int32[],System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)
+  name.vb: DrawArray(Int32(), Int32, Int32, Int32, Int32, Int32)
+  fullName: Cosmos.System.Graphics.Canvas.DrawArray(System.Int32[], System.Int32, System.Int32, System.Int32, System.Int32, System.Int32)
+  fullName.vb: Cosmos.System.Graphics.Canvas.DrawArray(System.Int32(), System.Int32, System.Int32, System.Int32, System.Int32, System.Int32)
+  nameWithType: Canvas.DrawArray(Int32[], Int32, Int32, Int32, Int32, Int32)
+  nameWithType.vb: Canvas.DrawArray(Int32(), Int32, Int32, Int32, Int32, Int32)
 - uid: Cosmos.System.Graphics.Canvas.DrawArray*
   name: DrawArray
   href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawArray_
@@ -36926,6 +37007,18 @@ references:
   commentId: M:Cosmos.System.Graphics.Canvas.DrawPoint(System.Drawing.Color,System.Int32,System.Int32)
   fullName: Cosmos.System.Graphics.Canvas.DrawPoint(System.Drawing.Color, System.Int32, System.Int32)
   nameWithType: Canvas.DrawPoint(Color, Int32, Int32)
+- uid: Cosmos.System.Graphics.Canvas.DrawPoint(System.Int32,System.Int32,System.Int32)
+  name: DrawPoint(Int32, Int32, Int32)
+  href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawPoint_System_Int32_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.Canvas.DrawPoint(System.Int32,System.Int32,System.Int32)
+  fullName: Cosmos.System.Graphics.Canvas.DrawPoint(System.Int32, System.Int32, System.Int32)
+  nameWithType: Canvas.DrawPoint(Int32, Int32, Int32)
+- uid: Cosmos.System.Graphics.Canvas.DrawPoint(System.UInt32,System.Int32,System.Int32)
+  name: DrawPoint(UInt32, Int32, Int32)
+  href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawPoint_System_UInt32_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.Canvas.DrawPoint(System.UInt32,System.Int32,System.Int32)
+  fullName: Cosmos.System.Graphics.Canvas.DrawPoint(System.UInt32, System.Int32, System.Int32)
+  nameWithType: Canvas.DrawPoint(UInt32, Int32, Int32)
 - uid: Cosmos.System.Graphics.Canvas.DrawPoint*
   name: DrawPoint
   href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawPoint_
@@ -37001,6 +37094,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.Canvas.DrawTriangle
   nameWithType: Canvas.DrawTriangle
+- uid: Cosmos.System.Graphics.Canvas.GetImage(System.Int32,System.Int32,System.Int32,System.Int32)
+  name: GetImage(Int32, Int32, Int32, Int32)
+  href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_GetImage_System_Int32_System_Int32_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.Canvas.GetImage(System.Int32,System.Int32,System.Int32,System.Int32)
+  fullName: Cosmos.System.Graphics.Canvas.GetImage(System.Int32, System.Int32, System.Int32, System.Int32)
+  nameWithType: Canvas.GetImage(Int32, Int32, Int32, Int32)
+- uid: Cosmos.System.Graphics.Canvas.GetImage*
+  name: GetImage
+  href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_GetImage_
+  commentId: Overload:Cosmos.System.Graphics.Canvas.GetImage
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.Canvas.GetImage
+  nameWithType: Canvas.GetImage
 - uid: Cosmos.System.Graphics.Canvas.GetPointColor(System.Int32,System.Int32)
   name: GetPointColor(Int32, Int32)
   href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_GetPointColor_System_Int32_System_Int32_
@@ -37014,6 +37120,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.Canvas.GetPointColor
   nameWithType: Canvas.GetPointColor
+- uid: Cosmos.System.Graphics.Canvas.GetRawPointColor(System.Int32,System.Int32)
+  name: GetRawPointColor(Int32, Int32)
+  href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_GetRawPointColor_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.Canvas.GetRawPointColor(System.Int32,System.Int32)
+  fullName: Cosmos.System.Graphics.Canvas.GetRawPointColor(System.Int32, System.Int32)
+  nameWithType: Canvas.GetRawPointColor(Int32, Int32)
+- uid: Cosmos.System.Graphics.Canvas.GetRawPointColor*
+  name: GetRawPointColor
+  href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_GetRawPointColor_
+  commentId: Overload:Cosmos.System.Graphics.Canvas.GetRawPointColor
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.Canvas.GetRawPointColor
+  nameWithType: Canvas.GetRawPointColor
 - uid: Cosmos.System.Graphics.Canvas.Mode
   name: Mode
   href: api/cosmos/Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_Mode
@@ -37756,6 +37875,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.SVGAIICanvas.CreateCursor
   nameWithType: SVGAIICanvas.CreateCursor
+- uid: Cosmos.System.Graphics.SVGAIICanvas.CroppedDrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)
+  name: CroppedDrawImage(Image, Int32, Int32, Int32, Int32, Boolean)
+  href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_CroppedDrawImage_Cosmos_System_Graphics_Image_System_Int32_System_Int32_System_Int32_System_Int32_System_Boolean_
+  commentId: M:Cosmos.System.Graphics.SVGAIICanvas.CroppedDrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)
+  fullName: Cosmos.System.Graphics.SVGAIICanvas.CroppedDrawImage(Cosmos.System.Graphics.Image, System.Int32, System.Int32, System.Int32, System.Int32, System.Boolean)
+  nameWithType: SVGAIICanvas.CroppedDrawImage(Image, Int32, Int32, Int32, Int32, Boolean)
+- uid: Cosmos.System.Graphics.SVGAIICanvas.CroppedDrawImage*
+  name: CroppedDrawImage
+  href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_CroppedDrawImage_
+  commentId: Overload:Cosmos.System.Graphics.SVGAIICanvas.CroppedDrawImage
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.SVGAIICanvas.CroppedDrawImage
+  nameWithType: SVGAIICanvas.CroppedDrawImage
 - uid: Cosmos.System.Graphics.SVGAIICanvas.DefaultGraphicsMode
   name: DefaultGraphicsMode
   href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_DefaultGraphicsMode
@@ -37795,6 +37927,40 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.SVGAIICanvas.Display
   nameWithType: SVGAIICanvas.Display
+- uid: Cosmos.System.Graphics.SVGAIICanvas.DrawArray(System.Drawing.Color[],System.Int32,System.Int32,System.Int32,System.Int32)
+  name: DrawArray(Color[], Int32, Int32, Int32, Int32)
+  href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_DrawArray_System_Drawing_Color___System_Int32_System_Int32_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.SVGAIICanvas.DrawArray(System.Drawing.Color[],System.Int32,System.Int32,System.Int32,System.Int32)
+  name.vb: DrawArray(Color(), Int32, Int32, Int32, Int32)
+  fullName: Cosmos.System.Graphics.SVGAIICanvas.DrawArray(System.Drawing.Color[], System.Int32, System.Int32, System.Int32, System.Int32)
+  fullName.vb: Cosmos.System.Graphics.SVGAIICanvas.DrawArray(System.Drawing.Color(), System.Int32, System.Int32, System.Int32, System.Int32)
+  nameWithType: SVGAIICanvas.DrawArray(Color[], Int32, Int32, Int32, Int32)
+  nameWithType.vb: SVGAIICanvas.DrawArray(Color(), Int32, Int32, Int32, Int32)
+- uid: Cosmos.System.Graphics.SVGAIICanvas.DrawArray(System.Int32[],System.Int32,System.Int32,System.Int32,System.Int32)
+  name: DrawArray(Int32[], Int32, Int32, Int32, Int32)
+  href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_DrawArray_System_Int32___System_Int32_System_Int32_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.SVGAIICanvas.DrawArray(System.Int32[],System.Int32,System.Int32,System.Int32,System.Int32)
+  name.vb: DrawArray(Int32(), Int32, Int32, Int32, Int32)
+  fullName: Cosmos.System.Graphics.SVGAIICanvas.DrawArray(System.Int32[], System.Int32, System.Int32, System.Int32, System.Int32)
+  fullName.vb: Cosmos.System.Graphics.SVGAIICanvas.DrawArray(System.Int32(), System.Int32, System.Int32, System.Int32, System.Int32)
+  nameWithType: SVGAIICanvas.DrawArray(Int32[], Int32, Int32, Int32, Int32)
+  nameWithType.vb: SVGAIICanvas.DrawArray(Int32(), Int32, Int32, Int32, Int32)
+- uid: Cosmos.System.Graphics.SVGAIICanvas.DrawArray(System.Int32[],System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)
+  name: DrawArray(Int32[], Int32, Int32, Int32, Int32, Int32)
+  href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_DrawArray_System_Int32___System_Int32_System_Int32_System_Int32_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.SVGAIICanvas.DrawArray(System.Int32[],System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)
+  name.vb: DrawArray(Int32(), Int32, Int32, Int32, Int32, Int32)
+  fullName: Cosmos.System.Graphics.SVGAIICanvas.DrawArray(System.Int32[], System.Int32, System.Int32, System.Int32, System.Int32, System.Int32)
+  fullName.vb: Cosmos.System.Graphics.SVGAIICanvas.DrawArray(System.Int32(), System.Int32, System.Int32, System.Int32, System.Int32, System.Int32)
+  nameWithType: SVGAIICanvas.DrawArray(Int32[], Int32, Int32, Int32, Int32, Int32)
+  nameWithType.vb: SVGAIICanvas.DrawArray(Int32(), Int32, Int32, Int32, Int32, Int32)
+- uid: Cosmos.System.Graphics.SVGAIICanvas.DrawArray*
+  name: DrawArray
+  href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_DrawArray_
+  commentId: Overload:Cosmos.System.Graphics.SVGAIICanvas.DrawArray
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.SVGAIICanvas.DrawArray
+  nameWithType: SVGAIICanvas.DrawArray
 - uid: Cosmos.System.Graphics.SVGAIICanvas.DrawChar(System.Char,Cosmos.System.Graphics.Fonts.Font,System.Drawing.Color,System.Int32,System.Int32)
   name: DrawChar(Char, Font, Color, Int32, Int32)
   href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_DrawChar_System_Char_Cosmos_System_Graphics_Fonts_Font_System_Drawing_Color_System_Int32_System_Int32_
@@ -37840,6 +38006,18 @@ references:
   commentId: M:Cosmos.System.Graphics.SVGAIICanvas.DrawPoint(System.Drawing.Color,System.Int32,System.Int32)
   fullName: Cosmos.System.Graphics.SVGAIICanvas.DrawPoint(System.Drawing.Color, System.Int32, System.Int32)
   nameWithType: SVGAIICanvas.DrawPoint(Color, Int32, Int32)
+- uid: Cosmos.System.Graphics.SVGAIICanvas.DrawPoint(System.Int32,System.Int32,System.Int32)
+  name: DrawPoint(Int32, Int32, Int32)
+  href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_DrawPoint_System_Int32_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.SVGAIICanvas.DrawPoint(System.Int32,System.Int32,System.Int32)
+  fullName: Cosmos.System.Graphics.SVGAIICanvas.DrawPoint(System.Int32, System.Int32, System.Int32)
+  nameWithType: SVGAIICanvas.DrawPoint(Int32, Int32, Int32)
+- uid: Cosmos.System.Graphics.SVGAIICanvas.DrawPoint(System.UInt32,System.Int32,System.Int32)
+  name: DrawPoint(UInt32, Int32, Int32)
+  href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_DrawPoint_System_UInt32_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.SVGAIICanvas.DrawPoint(System.UInt32,System.Int32,System.Int32)
+  fullName: Cosmos.System.Graphics.SVGAIICanvas.DrawPoint(System.UInt32, System.Int32, System.Int32)
+  nameWithType: SVGAIICanvas.DrawPoint(UInt32, Int32, Int32)
 - uid: Cosmos.System.Graphics.SVGAIICanvas.DrawPoint*
   name: DrawPoint
   href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_DrawPoint_
@@ -37847,6 +38025,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.SVGAIICanvas.DrawPoint
   nameWithType: SVGAIICanvas.DrawPoint
+- uid: Cosmos.System.Graphics.SVGAIICanvas.DrawRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32)
+  name: DrawRectangle(Color, Int32, Int32, Int32, Int32)
+  href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_DrawRectangle_System_Drawing_Color_System_Int32_System_Int32_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.SVGAIICanvas.DrawRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32)
+  fullName: Cosmos.System.Graphics.SVGAIICanvas.DrawRectangle(System.Drawing.Color, System.Int32, System.Int32, System.Int32, System.Int32)
+  nameWithType: SVGAIICanvas.DrawRectangle(Color, Int32, Int32, Int32, Int32)
+- uid: Cosmos.System.Graphics.SVGAIICanvas.DrawRectangle*
+  name: DrawRectangle
+  href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_DrawRectangle_
+  commentId: Overload:Cosmos.System.Graphics.SVGAIICanvas.DrawRectangle
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.SVGAIICanvas.DrawRectangle
+  nameWithType: SVGAIICanvas.DrawRectangle
 - uid: Cosmos.System.Graphics.SVGAIICanvas.DrawString(System.String,Cosmos.System.Graphics.Fonts.Font,System.Drawing.Color,System.Int32,System.Int32)
   name: DrawString(String, Font, Color, Int32, Int32)
   href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_DrawString_System_String_Cosmos_System_Graphics_Fonts_Font_System_Drawing_Color_System_Int32_System_Int32_
@@ -37860,6 +38051,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.SVGAIICanvas.DrawString
   nameWithType: SVGAIICanvas.DrawString
+- uid: Cosmos.System.Graphics.SVGAIICanvas.GetImage(System.Int32,System.Int32,System.Int32,System.Int32)
+  name: GetImage(Int32, Int32, Int32, Int32)
+  href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_GetImage_System_Int32_System_Int32_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.SVGAIICanvas.GetImage(System.Int32,System.Int32,System.Int32,System.Int32)
+  fullName: Cosmos.System.Graphics.SVGAIICanvas.GetImage(System.Int32, System.Int32, System.Int32, System.Int32)
+  nameWithType: SVGAIICanvas.GetImage(Int32, Int32, Int32, Int32)
+- uid: Cosmos.System.Graphics.SVGAIICanvas.GetImage*
+  name: GetImage
+  href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_GetImage_
+  commentId: Overload:Cosmos.System.Graphics.SVGAIICanvas.GetImage
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.SVGAIICanvas.GetImage
+  nameWithType: SVGAIICanvas.GetImage
 - uid: Cosmos.System.Graphics.SVGAIICanvas.GetPixel(System.Int32,System.Int32)
   name: GetPixel(Int32, Int32)
   href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_GetPixel_System_Int32_System_Int32_
@@ -37886,6 +38090,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.SVGAIICanvas.GetPointColor
   nameWithType: SVGAIICanvas.GetPointColor
+- uid: Cosmos.System.Graphics.SVGAIICanvas.GetRawPointColor(System.Int32,System.Int32)
+  name: GetRawPointColor(Int32, Int32)
+  href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_GetRawPointColor_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.SVGAIICanvas.GetRawPointColor(System.Int32,System.Int32)
+  fullName: Cosmos.System.Graphics.SVGAIICanvas.GetRawPointColor(System.Int32, System.Int32)
+  nameWithType: SVGAIICanvas.GetRawPointColor(Int32, Int32)
+- uid: Cosmos.System.Graphics.SVGAIICanvas.GetRawPointColor*
+  name: GetRawPointColor
+  href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_GetRawPointColor_
+  commentId: Overload:Cosmos.System.Graphics.SVGAIICanvas.GetRawPointColor
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.SVGAIICanvas.GetRawPointColor
+  nameWithType: SVGAIICanvas.GetRawPointColor
 - uid: Cosmos.System.Graphics.SVGAIICanvas.Mode
   name: Mode
   href: api/cosmos/Cosmos.System.Graphics.SVGAIICanvas.html#Cosmos_System_Graphics_SVGAIICanvas_Mode
@@ -37995,6 +38212,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.VBECanvas.Clear
   nameWithType: VBECanvas.Clear
+- uid: Cosmos.System.Graphics.VBECanvas.CroppedDrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)
+  name: CroppedDrawImage(Image, Int32, Int32, Int32, Int32, Boolean)
+  href: api/cosmos/Cosmos.System.Graphics.VBECanvas.html#Cosmos_System_Graphics_VBECanvas_CroppedDrawImage_Cosmos_System_Graphics_Image_System_Int32_System_Int32_System_Int32_System_Int32_System_Boolean_
+  commentId: M:Cosmos.System.Graphics.VBECanvas.CroppedDrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)
+  fullName: Cosmos.System.Graphics.VBECanvas.CroppedDrawImage(Cosmos.System.Graphics.Image, System.Int32, System.Int32, System.Int32, System.Int32, System.Boolean)
+  nameWithType: VBECanvas.CroppedDrawImage(Image, Int32, Int32, Int32, Int32, Boolean)
+- uid: Cosmos.System.Graphics.VBECanvas.CroppedDrawImage*
+  name: CroppedDrawImage
+  href: api/cosmos/Cosmos.System.Graphics.VBECanvas.html#Cosmos_System_Graphics_VBECanvas_CroppedDrawImage_
+  commentId: Overload:Cosmos.System.Graphics.VBECanvas.CroppedDrawImage
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.VBECanvas.CroppedDrawImage
+  nameWithType: VBECanvas.CroppedDrawImage
 - uid: Cosmos.System.Graphics.VBECanvas.DefaultGraphicsMode
   name: DefaultGraphicsMode
   href: api/cosmos/Cosmos.System.Graphics.VBECanvas.html#Cosmos_System_Graphics_VBECanvas_DefaultGraphicsMode
@@ -38043,6 +38273,24 @@ references:
   fullName.vb: Cosmos.System.Graphics.VBECanvas.DrawArray(System.Drawing.Color(), System.Int32, System.Int32, System.Int32, System.Int32)
   nameWithType: VBECanvas.DrawArray(Color[], Int32, Int32, Int32, Int32)
   nameWithType.vb: VBECanvas.DrawArray(Color(), Int32, Int32, Int32, Int32)
+- uid: Cosmos.System.Graphics.VBECanvas.DrawArray(System.Int32[],System.Int32,System.Int32,System.Int32,System.Int32)
+  name: DrawArray(Int32[], Int32, Int32, Int32, Int32)
+  href: api/cosmos/Cosmos.System.Graphics.VBECanvas.html#Cosmos_System_Graphics_VBECanvas_DrawArray_System_Int32___System_Int32_System_Int32_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.VBECanvas.DrawArray(System.Int32[],System.Int32,System.Int32,System.Int32,System.Int32)
+  name.vb: DrawArray(Int32(), Int32, Int32, Int32, Int32)
+  fullName: Cosmos.System.Graphics.VBECanvas.DrawArray(System.Int32[], System.Int32, System.Int32, System.Int32, System.Int32)
+  fullName.vb: Cosmos.System.Graphics.VBECanvas.DrawArray(System.Int32(), System.Int32, System.Int32, System.Int32, System.Int32)
+  nameWithType: VBECanvas.DrawArray(Int32[], Int32, Int32, Int32, Int32)
+  nameWithType.vb: VBECanvas.DrawArray(Int32(), Int32, Int32, Int32, Int32)
+- uid: Cosmos.System.Graphics.VBECanvas.DrawArray(System.Int32[],System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)
+  name: DrawArray(Int32[], Int32, Int32, Int32, Int32, Int32)
+  href: api/cosmos/Cosmos.System.Graphics.VBECanvas.html#Cosmos_System_Graphics_VBECanvas_DrawArray_System_Int32___System_Int32_System_Int32_System_Int32_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.VBECanvas.DrawArray(System.Int32[],System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)
+  name.vb: DrawArray(Int32(), Int32, Int32, Int32, Int32, Int32)
+  fullName: Cosmos.System.Graphics.VBECanvas.DrawArray(System.Int32[], System.Int32, System.Int32, System.Int32, System.Int32, System.Int32)
+  fullName.vb: Cosmos.System.Graphics.VBECanvas.DrawArray(System.Int32(), System.Int32, System.Int32, System.Int32, System.Int32, System.Int32)
+  nameWithType: VBECanvas.DrawArray(Int32[], Int32, Int32, Int32, Int32, Int32)
+  nameWithType.vb: VBECanvas.DrawArray(Int32(), Int32, Int32, Int32, Int32, Int32)
 - uid: Cosmos.System.Graphics.VBECanvas.DrawArray*
   name: DrawArray
   href: api/cosmos/Cosmos.System.Graphics.VBECanvas.html#Cosmos_System_Graphics_VBECanvas_DrawArray_
@@ -38082,6 +38330,18 @@ references:
   commentId: M:Cosmos.System.Graphics.VBECanvas.DrawPoint(System.Drawing.Color,System.Int32,System.Int32)
   fullName: Cosmos.System.Graphics.VBECanvas.DrawPoint(System.Drawing.Color, System.Int32, System.Int32)
   nameWithType: VBECanvas.DrawPoint(Color, Int32, Int32)
+- uid: Cosmos.System.Graphics.VBECanvas.DrawPoint(System.Int32,System.Int32,System.Int32)
+  name: DrawPoint(Int32, Int32, Int32)
+  href: api/cosmos/Cosmos.System.Graphics.VBECanvas.html#Cosmos_System_Graphics_VBECanvas_DrawPoint_System_Int32_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.VBECanvas.DrawPoint(System.Int32,System.Int32,System.Int32)
+  fullName: Cosmos.System.Graphics.VBECanvas.DrawPoint(System.Int32, System.Int32, System.Int32)
+  nameWithType: VBECanvas.DrawPoint(Int32, Int32, Int32)
+- uid: Cosmos.System.Graphics.VBECanvas.DrawPoint(System.UInt32,System.Int32,System.Int32)
+  name: DrawPoint(UInt32, Int32, Int32)
+  href: api/cosmos/Cosmos.System.Graphics.VBECanvas.html#Cosmos_System_Graphics_VBECanvas_DrawPoint_System_UInt32_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.VBECanvas.DrawPoint(System.UInt32,System.Int32,System.Int32)
+  fullName: Cosmos.System.Graphics.VBECanvas.DrawPoint(System.UInt32, System.Int32, System.Int32)
+  nameWithType: VBECanvas.DrawPoint(UInt32, Int32, Int32)
 - uid: Cosmos.System.Graphics.VBECanvas.DrawPoint*
   name: DrawPoint
   href: api/cosmos/Cosmos.System.Graphics.VBECanvas.html#Cosmos_System_Graphics_VBECanvas_DrawPoint_
@@ -38089,6 +38349,32 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.VBECanvas.DrawPoint
   nameWithType: VBECanvas.DrawPoint
+- uid: Cosmos.System.Graphics.VBECanvas.DrawRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32)
+  name: DrawRectangle(Color, Int32, Int32, Int32, Int32)
+  href: api/cosmos/Cosmos.System.Graphics.VBECanvas.html#Cosmos_System_Graphics_VBECanvas_DrawRectangle_System_Drawing_Color_System_Int32_System_Int32_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.VBECanvas.DrawRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32)
+  fullName: Cosmos.System.Graphics.VBECanvas.DrawRectangle(System.Drawing.Color, System.Int32, System.Int32, System.Int32, System.Int32)
+  nameWithType: VBECanvas.DrawRectangle(Color, Int32, Int32, Int32, Int32)
+- uid: Cosmos.System.Graphics.VBECanvas.DrawRectangle*
+  name: DrawRectangle
+  href: api/cosmos/Cosmos.System.Graphics.VBECanvas.html#Cosmos_System_Graphics_VBECanvas_DrawRectangle_
+  commentId: Overload:Cosmos.System.Graphics.VBECanvas.DrawRectangle
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.VBECanvas.DrawRectangle
+  nameWithType: VBECanvas.DrawRectangle
+- uid: Cosmos.System.Graphics.VBECanvas.GetImage(System.Int32,System.Int32,System.Int32,System.Int32)
+  name: GetImage(Int32, Int32, Int32, Int32)
+  href: api/cosmos/Cosmos.System.Graphics.VBECanvas.html#Cosmos_System_Graphics_VBECanvas_GetImage_System_Int32_System_Int32_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.VBECanvas.GetImage(System.Int32,System.Int32,System.Int32,System.Int32)
+  fullName: Cosmos.System.Graphics.VBECanvas.GetImage(System.Int32, System.Int32, System.Int32, System.Int32)
+  nameWithType: VBECanvas.GetImage(Int32, Int32, Int32, Int32)
+- uid: Cosmos.System.Graphics.VBECanvas.GetImage*
+  name: GetImage
+  href: api/cosmos/Cosmos.System.Graphics.VBECanvas.html#Cosmos_System_Graphics_VBECanvas_GetImage_
+  commentId: Overload:Cosmos.System.Graphics.VBECanvas.GetImage
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.VBECanvas.GetImage
+  nameWithType: VBECanvas.GetImage
 - uid: Cosmos.System.Graphics.VBECanvas.GetPointColor(System.Int32,System.Int32)
   name: GetPointColor(Int32, Int32)
   href: api/cosmos/Cosmos.System.Graphics.VBECanvas.html#Cosmos_System_Graphics_VBECanvas_GetPointColor_System_Int32_System_Int32_
@@ -38102,6 +38388,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.VBECanvas.GetPointColor
   nameWithType: VBECanvas.GetPointColor
+- uid: Cosmos.System.Graphics.VBECanvas.GetRawPointColor(System.Int32,System.Int32)
+  name: GetRawPointColor(Int32, Int32)
+  href: api/cosmos/Cosmos.System.Graphics.VBECanvas.html#Cosmos_System_Graphics_VBECanvas_GetRawPointColor_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.VBECanvas.GetRawPointColor(System.Int32,System.Int32)
+  fullName: Cosmos.System.Graphics.VBECanvas.GetRawPointColor(System.Int32, System.Int32)
+  nameWithType: VBECanvas.GetRawPointColor(Int32, Int32)
+- uid: Cosmos.System.Graphics.VBECanvas.GetRawPointColor*
+  name: GetRawPointColor
+  href: api/cosmos/Cosmos.System.Graphics.VBECanvas.html#Cosmos_System_Graphics_VBECanvas_GetRawPointColor_
+  commentId: Overload:Cosmos.System.Graphics.VBECanvas.GetRawPointColor
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.VBECanvas.GetRawPointColor
+  nameWithType: VBECanvas.GetRawPointColor
 - uid: Cosmos.System.Graphics.VBECanvas.Mode
   name: Mode
   href: api/cosmos/Cosmos.System.Graphics.VBECanvas.html#Cosmos_System_Graphics_VBECanvas_Mode
@@ -38243,6 +38542,12 @@ references:
   commentId: M:Cosmos.System.Graphics.VGACanvas.DrawPoint(System.Drawing.Color,System.Int32,System.Int32)
   fullName: Cosmos.System.Graphics.VGACanvas.DrawPoint(System.Drawing.Color, System.Int32, System.Int32)
   nameWithType: VGACanvas.DrawPoint(Color, Int32, Int32)
+- uid: Cosmos.System.Graphics.VGACanvas.DrawPoint(System.Int32,System.Int32,System.Int32)
+  name: DrawPoint(Int32, Int32, Int32)
+  href: api/cosmos/Cosmos.System.Graphics.VGACanvas.html#Cosmos_System_Graphics_VGACanvas_DrawPoint_System_Int32_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.VGACanvas.DrawPoint(System.Int32,System.Int32,System.Int32)
+  fullName: Cosmos.System.Graphics.VGACanvas.DrawPoint(System.Int32, System.Int32, System.Int32)
+  nameWithType: VGACanvas.DrawPoint(Int32, Int32, Int32)
 - uid: Cosmos.System.Graphics.VGACanvas.DrawPoint(System.UInt32,System.Int32,System.Int32)
   name: DrawPoint(UInt32, Int32, Int32)
   href: api/cosmos/Cosmos.System.Graphics.VGACanvas.html#Cosmos_System_Graphics_VGACanvas_DrawPoint_System_UInt32_System_Int32_System_Int32_
@@ -38256,6 +38561,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.VGACanvas.DrawPoint
   nameWithType: VGACanvas.DrawPoint
+- uid: Cosmos.System.Graphics.VGACanvas.DrawRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32)
+  name: DrawRectangle(Color, Int32, Int32, Int32, Int32)
+  href: api/cosmos/Cosmos.System.Graphics.VGACanvas.html#Cosmos_System_Graphics_VGACanvas_DrawRectangle_System_Drawing_Color_System_Int32_System_Int32_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.VGACanvas.DrawRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32)
+  fullName: Cosmos.System.Graphics.VGACanvas.DrawRectangle(System.Drawing.Color, System.Int32, System.Int32, System.Int32, System.Int32)
+  nameWithType: VGACanvas.DrawRectangle(Color, Int32, Int32, Int32, Int32)
+- uid: Cosmos.System.Graphics.VGACanvas.DrawRectangle*
+  name: DrawRectangle
+  href: api/cosmos/Cosmos.System.Graphics.VGACanvas.html#Cosmos_System_Graphics_VGACanvas_DrawRectangle_
+  commentId: Overload:Cosmos.System.Graphics.VGACanvas.DrawRectangle
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.VGACanvas.DrawRectangle
+  nameWithType: VGACanvas.DrawRectangle
 - uid: Cosmos.System.Graphics.VGACanvas.Enabled
   name: Enabled
   href: api/cosmos/Cosmos.System.Graphics.VGACanvas.html#Cosmos_System_Graphics_VGACanvas_Enabled
@@ -38282,6 +38600,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.System.Graphics.VGACanvas.GetPointColor
   nameWithType: VGACanvas.GetPointColor
+- uid: Cosmos.System.Graphics.VGACanvas.GetRawPointColor(System.Int32,System.Int32)
+  name: GetRawPointColor(Int32, Int32)
+  href: api/cosmos/Cosmos.System.Graphics.VGACanvas.html#Cosmos_System_Graphics_VGACanvas_GetRawPointColor_System_Int32_System_Int32_
+  commentId: M:Cosmos.System.Graphics.VGACanvas.GetRawPointColor(System.Int32,System.Int32)
+  fullName: Cosmos.System.Graphics.VGACanvas.GetRawPointColor(System.Int32, System.Int32)
+  nameWithType: VGACanvas.GetRawPointColor(Int32, Int32)
+- uid: Cosmos.System.Graphics.VGACanvas.GetRawPointColor*
+  name: GetRawPointColor
+  href: api/cosmos/Cosmos.System.Graphics.VGACanvas.html#Cosmos_System_Graphics_VGACanvas_GetRawPointColor_
+  commentId: Overload:Cosmos.System.Graphics.VGACanvas.GetRawPointColor
+  isSpec: "True"
+  fullName: Cosmos.System.Graphics.VGACanvas.GetRawPointColor
+  nameWithType: VGACanvas.GetRawPointColor
 - uid: Cosmos.System.Graphics.VGACanvas.Mode
   name: Mode
   href: api/cosmos/Cosmos.System.Graphics.VGACanvas.html#Cosmos_System_Graphics_VGACanvas_Mode

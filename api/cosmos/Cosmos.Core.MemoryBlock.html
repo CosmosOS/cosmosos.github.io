@@ -2296,10 +2296,114 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_MemoryBlock_Get_System_Int32_System_Byte___System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.Core.MemoryBlock.Get(System.Int32%2CSystem.Byte%5B%5D%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/MemoryBlock.cs/#L296">View Source</a>
+  </span>
+  <a id="Cosmos_Core_MemoryBlock_Get_" data-uid="Cosmos.Core.MemoryBlock.Get*"></a>
+  <h4 id="Cosmos_Core_MemoryBlock_Get_System_Int32_System_Byte___System_Int32_System_Int32_" data-uid="Cosmos.Core.MemoryBlock.Get(System.Int32,System.Byte[],System.Int32,System.Int32)">Get(Int32, Byte[], Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Copies a specified number of bytes from the memory block into an array.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Get(int aByteOffset, byte[] aData, int aIndex, int aCount)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aByteOffset</span></td>
+        <td><p>The byte offset in the memory block from where the copy starts.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">aData</span></td>
+        <td><p>The array where the data will be copied to.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aIndex</span></td>
+        <td><p>The starting index in the destination array.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aCount</span></td>
+        <td><p>The number of bytes to copy.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_MemoryBlock_Get_System_Int32_System_Int32___System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.Core.MemoryBlock.Get(System.Int32%2CSystem.Int32%5B%5D%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/MemoryBlock.cs/#L280">View Source</a>
+  </span>
+  <a id="Cosmos_Core_MemoryBlock_Get_" data-uid="Cosmos.Core.MemoryBlock.Get*"></a>
+  <h4 id="Cosmos_Core_MemoryBlock_Get_System_Int32_System_Int32___System_Int32_System_Int32_" data-uid="Cosmos.Core.MemoryBlock.Get(System.Int32,System.Int32[],System.Int32,System.Int32)">Get(Int32, Int32[], Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Copies data from the memory block to the specified array.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Get(int aByteOffset, int[] aData, int aIndex, int aCount)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aByteOffset</span></td>
+        <td><p>The byte offset in the memory block from which to start copying.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span>[]</td>
+        <td><span class="parametername">aData</span></td>
+        <td><p>The array into which data will be copied.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aIndex</span></td>
+        <td><p>The starting index in the array where data will be copied.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aCount</span></td>
+        <td><p>The number of elements to copy.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_MemoryBlock_MoveDown_System_UInt32_System_UInt32_System_UInt32_.md&amp;value=---%0Auid%3A%20Cosmos.Core.MemoryBlock.MoveDown(System.UInt32%2CSystem.UInt32%2CSystem.UInt32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/MemoryBlock.cs/#L279">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/MemoryBlock.cs/#L311">View Source</a>
   </span>
   <a id="Cosmos_Core_MemoryBlock_MoveDown_" data-uid="Cosmos.Core.MemoryBlock.MoveDown*"></a>
   <h4 id="Cosmos_Core_MemoryBlock_MoveDown_System_UInt32_System_UInt32_System_UInt32_" data-uid="Cosmos.Core.MemoryBlock.MoveDown(System.UInt32,System.UInt32,System.UInt32)">MoveDown(UInt32, UInt32, UInt32)</h4>
@@ -2345,7 +2449,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_MemoryBlock_MoveUp_System_UInt32_System_UInt32_System_UInt32_.md&amp;value=---%0Auid%3A%20Cosmos.Core.MemoryBlock.MoveUp(System.UInt32%2CSystem.UInt32%2CSystem.UInt32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/MemoryBlock.cs/#L295">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/MemoryBlock.cs/#L327">View Source</a>
   </span>
   <a id="Cosmos_Core_MemoryBlock_MoveUp_" data-uid="Cosmos.Core.MemoryBlock.MoveUp*"></a>
   <h4 id="Cosmos_Core_MemoryBlock_MoveUp_System_UInt32_System_UInt32_System_UInt32_" data-uid="Cosmos.Core.MemoryBlock.MoveUp(System.UInt32,System.UInt32,System.UInt32)">MoveUp(UInt32, UInt32, UInt32)</h4>
@@ -2410,7 +2514,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_MemoryBlock_Read16_System_UInt16___.md&amp;value=---%0Auid%3A%20Cosmos.Core.MemoryBlock.Read16(System.UInt16%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/MemoryBlock.cs/#L343">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/MemoryBlock.cs/#L375">View Source</a>
   </span>
   <a id="Cosmos_Core_MemoryBlock_Read16_" data-uid="Cosmos.Core.MemoryBlock.Read16*"></a>
   <h4 id="Cosmos_Core_MemoryBlock_Read16_System_UInt16___" data-uid="Cosmos.Core.MemoryBlock.Read16(System.UInt16[])">Read16(UInt16[])</h4>
@@ -2465,7 +2569,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_MemoryBlock_Read32_System_UInt32___.md&amp;value=---%0Auid%3A%20Cosmos.Core.MemoryBlock.Read32(System.UInt32%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/MemoryBlock.cs/#L379">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/MemoryBlock.cs/#L411">View Source</a>
   </span>
   <a id="Cosmos_Core_MemoryBlock_Read32_" data-uid="Cosmos.Core.MemoryBlock.Read32*"></a>
   <h4 id="Cosmos_Core_MemoryBlock_Read32_System_UInt32___" data-uid="Cosmos.Core.MemoryBlock.Read32(System.UInt32[])">Read32(UInt32[])</h4>
@@ -2520,7 +2624,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_MemoryBlock_Read8_System_Byte___.md&amp;value=---%0Auid%3A%20Cosmos.Core.MemoryBlock.Read8(System.Byte%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/MemoryBlock.cs/#L307">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/MemoryBlock.cs/#L339">View Source</a>
   </span>
   <a id="Cosmos_Core_MemoryBlock_Read8_" data-uid="Cosmos.Core.MemoryBlock.Read8*"></a>
   <h4 id="Cosmos_Core_MemoryBlock_Read8_System_Byte___" data-uid="Cosmos.Core.MemoryBlock.Read8(System.Byte[])">Read8(Byte[])</h4>
@@ -2575,7 +2679,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_MemoryBlock_ToArray.md&amp;value=---%0Auid%3A%20Cosmos.Core.MemoryBlock.ToArray%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/MemoryBlock.cs/#L432">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/MemoryBlock.cs/#L464">View Source</a>
   </span>
   <a id="Cosmos_Core_MemoryBlock_ToArray_" data-uid="Cosmos.Core.MemoryBlock.ToArray*"></a>
   <h4 id="Cosmos_Core_MemoryBlock_ToArray" data-uid="Cosmos.Core.MemoryBlock.ToArray">ToArray()</h4>
@@ -2607,7 +2711,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_MemoryBlock_ToArray_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.Core.MemoryBlock.ToArray(System.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/MemoryBlock.cs/#L417">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/MemoryBlock.cs/#L449">View Source</a>
   </span>
   <a id="Cosmos_Core_MemoryBlock_ToArray_" data-uid="Cosmos.Core.MemoryBlock.ToArray*"></a>
   <h4 id="Cosmos_Core_MemoryBlock_ToArray_System_Int32_System_Int32_System_Int32_" data-uid="Cosmos.Core.MemoryBlock.ToArray(System.Int32,System.Int32,System.Int32)">ToArray(Int32, Int32, Int32)</h4>
@@ -2669,7 +2773,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_MemoryBlock_Write16_System_UInt16___.md&amp;value=---%0Auid%3A%20Cosmos.Core.MemoryBlock.Write16(System.UInt16%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/MemoryBlock.cs/#L361">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/MemoryBlock.cs/#L393">View Source</a>
   </span>
   <a id="Cosmos_Core_MemoryBlock_Write16_" data-uid="Cosmos.Core.MemoryBlock.Write16*"></a>
   <h4 id="Cosmos_Core_MemoryBlock_Write16_System_UInt16___" data-uid="Cosmos.Core.MemoryBlock.Write16(System.UInt16[])">Write16(UInt16[])</h4>
@@ -2724,7 +2828,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_MemoryBlock_Write32_System_UInt32___.md&amp;value=---%0Auid%3A%20Cosmos.Core.MemoryBlock.Write32(System.UInt32%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/MemoryBlock.cs/#L397">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/MemoryBlock.cs/#L429">View Source</a>
   </span>
   <a id="Cosmos_Core_MemoryBlock_Write32_" data-uid="Cosmos.Core.MemoryBlock.Write32*"></a>
   <h4 id="Cosmos_Core_MemoryBlock_Write32_System_UInt32___" data-uid="Cosmos.Core.MemoryBlock.Write32(System.UInt32[])">Write32(UInt32[])</h4>
@@ -2779,7 +2883,7 @@
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_Core_MemoryBlock_Write8_System_Byte___.md&amp;value=---%0Auid%3A%20Cosmos.Core.MemoryBlock.Write8(System.Byte%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/MemoryBlock.cs/#L325">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.Core/MemoryBlock.cs/#L357">View Source</a>
   </span>
   <a id="Cosmos_Core_MemoryBlock_Write8_" data-uid="Cosmos.Core.MemoryBlock.Write8*"></a>
   <h4 id="Cosmos_Core_MemoryBlock_Write8_System_Byte___" data-uid="Cosmos.Core.MemoryBlock.Write8(System.Byte[])">Write8(Byte[])</h4>

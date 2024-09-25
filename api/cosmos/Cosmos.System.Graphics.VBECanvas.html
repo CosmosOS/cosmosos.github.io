@@ -1345,9 +1345,6 @@ implementations, meaning that it is not available on UEFI systems.</p>
       <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawSquare_System_Drawing_Color_System_Int32_System_Int32_System_Int32_">Canvas.DrawSquare(Color, Int32, Int32, Int32)</a>
     </div>
     <div>
-      <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawRectangle_System_Drawing_Color_System_Int32_System_Int32_System_Int32_System_Int32_">Canvas.DrawRectangle(Color, Int32, Int32, Int32, Int32)</a>
-    </div>
-    <div>
       <a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawTriangle_System_Drawing_Color_System_Int32_System_Int32_System_Int32_System_Int32_System_Int32_System_Int32_">Canvas.DrawTriangle(Color, Int32, Int32, Int32, Int32, Int32, Int32)</a>
     </div>
     <div>
@@ -1644,6 +1641,65 @@ HDTV:
   <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_Clear_System_Int32_">Canvas.Clear(Int32)</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_CroppedDrawImage_Cosmos_System_Graphics_Image_System_Int32_System_Int32_System_Int32_System_Int32_System_Boolean_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.CroppedDrawImage(Cosmos.System.Graphics.Image%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VBECanvas.cs/#L402">View Source</a>
+  </span>
+  <a id="Cosmos_System_Graphics_VBECanvas_CroppedDrawImage_" data-uid="Cosmos.System.Graphics.VBECanvas.CroppedDrawImage*"></a>
+  <h4 id="Cosmos_System_Graphics_VBECanvas_CroppedDrawImage_Cosmos_System_Graphics_Image_System_Int32_System_Int32_System_Int32_System_Int32_System_Boolean_" data-uid="Cosmos.System.Graphics.VBECanvas.CroppedDrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)">CroppedDrawImage(Image, Int32, Int32, Int32, Int32, Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void CroppedDrawImage(Image aImage, int aX, int aY, int aWidth, int aHeight, bool preventOffBoundPixels = true)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Graphics.Image.html">Image</a></td>
+        <td><span class="parametername">aImage</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aX</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aY</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aWidth</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aHeight</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">preventOffBoundPixels</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_CroppedDrawImage_Cosmos_System_Graphics_Image_System_Int32_System_Int32_System_Int32_System_Int32_System_Boolean_">Canvas.CroppedDrawImage(Image, Int32, Int32, Int32, Int32, Boolean)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_Disable.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.Disable%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
@@ -1664,7 +1720,7 @@ HDTV:
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_Display.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.Display%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VBECanvas.cs/#L292">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VBECanvas.cs/#L441">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_VBECanvas_Display_" data-uid="Cosmos.System.Graphics.VBECanvas.Display*"></a>
   <h4 id="Cosmos_System_Graphics_VBECanvas_Display" data-uid="Cosmos.System.Graphics.VBECanvas.Display">Display()</h4>
@@ -1681,7 +1737,7 @@ HDTV:
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_DrawArray_System_Drawing_Color___System_Int32_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.DrawArray(System.Drawing.Color%5B%5D%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VBECanvas.cs/#L237">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VBECanvas.cs/#L270">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_VBECanvas_DrawArray_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawArray*"></a>
   <h4 id="Cosmos_System_Graphics_VBECanvas_DrawArray_System_Drawing_Color___System_Int32_System_Int32_System_Int32_System_Int32_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawArray(System.Drawing.Color[],System.Int32,System.Int32,System.Int32,System.Int32)">DrawArray(Color[], Int32, Int32, Int32, Int32)</h4>
@@ -1732,10 +1788,123 @@ HDTV:
   <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawArray_System_Drawing_Color___System_Int32_System_Int32_System_Int32_System_Int32_">Canvas.DrawArray(Color[], Int32, Int32, Int32, Int32)</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_DrawArray_System_Int32___System_Int32_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.DrawArray(System.Int32%5B%5D%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VBECanvas.cs/#L284">View Source</a>
+  </span>
+  <a id="Cosmos_System_Graphics_VBECanvas_DrawArray_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawArray*"></a>
+  <h4 id="Cosmos_System_Graphics_VBECanvas_DrawArray_System_Int32___System_Int32_System_Int32_System_Int32_System_Int32_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawArray(System.Int32[],System.Int32,System.Int32,System.Int32,System.Int32)">DrawArray(Int32[], Int32, Int32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void DrawArray(int[] aColors, int aX, int aY, int aWidth, int aHeight)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span>[]</td>
+        <td><span class="parametername">aColors</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aX</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aY</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aWidth</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aHeight</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawArray_System_Int32___System_Int32_System_Int32_System_Int32_System_Int32_">Canvas.DrawArray(Int32[], Int32, Int32, Int32, Int32)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_DrawArray_System_Int32___System_Int32_System_Int32_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.DrawArray(System.Int32%5B%5D%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VBECanvas.cs/#L297">View Source</a>
+  </span>
+  <a id="Cosmos_System_Graphics_VBECanvas_DrawArray_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawArray*"></a>
+  <h4 id="Cosmos_System_Graphics_VBECanvas_DrawArray_System_Int32___System_Int32_System_Int32_System_Int32_System_Int32_System_Int32_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawArray(System.Int32[],System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">DrawArray(Int32[], Int32, Int32, Int32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void DrawArray(int[] aColors, int aX, int aY, int aWidth, int aHeight, int startIndex)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span>[]</td>
+        <td><span class="parametername">aColors</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aX</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aY</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aWidth</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aHeight</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">startIndex</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawArray_System_Int32___System_Int32_System_Int32_System_Int32_System_Int32_System_Int32_">Canvas.DrawArray(Int32[], Int32, Int32, Int32, Int32, Int32)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_DrawFilledRectangle_System_Drawing_Color_System_Int32_System_Int32_System_Int32_System_Int32_System_Boolean_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.DrawFilledRectangle(System.Drawing.Color%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VBECanvas.cs/#L251">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VBECanvas.cs/#L310">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_VBECanvas_DrawFilledRectangle_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawFilledRectangle*"></a>
   <h4 id="Cosmos_System_Graphics_VBECanvas_DrawFilledRectangle_System_Drawing_Color_System_Int32_System_Int32_System_Int32_System_Int32_System_Boolean_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawFilledRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)">DrawFilledRectangle(Color, Int32, Int32, Int32, Int32, Boolean)</h4>
@@ -1794,7 +1963,7 @@ HDTV:
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_DrawImage_Cosmos_System_Graphics_Image_System_Int32_System_Int32_System_Boolean_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.DrawImage(Cosmos.System.Graphics.Image%2CSystem.Int32%2CSystem.Int32%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VBECanvas.cs/#L264">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VBECanvas.cs/#L365">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_VBECanvas_DrawImage_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawImage*"></a>
   <h4 id="Cosmos_System_Graphics_VBECanvas_DrawImage_Cosmos_System_Graphics_Image_System_Int32_System_Int32_System_Boolean_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawImage(Cosmos.System.Graphics.Image,System.Int32,System.Int32,System.Boolean)">DrawImage(Image, Int32, Int32, Boolean)</h4>
@@ -1802,7 +1971,7 @@ HDTV:
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void DrawImage(Image aImage, int aX, int aY, bool preventOffBoundPixels = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public override void DrawImage(Image image, int x, int y, bool preventOffBoundPixels = true)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1816,17 +1985,17 @@ HDTV:
     <tbody>
       <tr>
         <td><a class="xref" href="Cosmos.System.Graphics.Image.html">Image</a></td>
-        <td><span class="parametername">aImage</span></td>
+        <td><span class="parametername">image</span></td>
         <td></td>
       </tr>
       <tr>
         <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">aX</span></td>
+        <td><span class="parametername">x</span></td>
         <td></td>
       </tr>
       <tr>
         <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">aY</span></td>
+        <td><span class="parametername">y</span></td>
         <td></td>
       </tr>
       <tr>
@@ -1884,10 +2053,216 @@ HDTV:
   <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawPoint_System_Drawing_Color_System_Int32_System_Int32_">Canvas.DrawPoint(Color, Int32, Int32)</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_DrawPoint_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.DrawPoint(System.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VBECanvas.cs/#L265">View Source</a>
+  </span>
+  <a id="Cosmos_System_Graphics_VBECanvas_DrawPoint_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawPoint*"></a>
+  <h4 id="Cosmos_System_Graphics_VBECanvas_DrawPoint_System_Int32_System_Int32_System_Int32_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawPoint(System.Int32,System.Int32,System.Int32)">DrawPoint(Int32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void DrawPoint(int aColor, int aX, int aY)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aColor</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aX</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aY</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawPoint_System_Int32_System_Int32_System_Int32_">Canvas.DrawPoint(Int32, Int32, Int32)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_DrawPoint_System_UInt32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.DrawPoint(System.UInt32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VBECanvas.cs/#L237">View Source</a>
+  </span>
+  <a id="Cosmos_System_Graphics_VBECanvas_DrawPoint_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawPoint*"></a>
+  <h4 id="Cosmos_System_Graphics_VBECanvas_DrawPoint_System_UInt32_System_Int32_System_Int32_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawPoint(System.UInt32,System.Int32,System.Int32)">DrawPoint(UInt32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void DrawPoint(uint aColor, int aX, int aY)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt32</span></td>
+        <td><span class="parametername">aColor</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aX</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aY</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawPoint_System_UInt32_System_Int32_System_Int32_">Canvas.DrawPoint(UInt32, Int32, Int32)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_DrawRectangle_System_Drawing_Color_System_Int32_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.DrawRectangle(System.Drawing.Color%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VBECanvas.cs/#L324">View Source</a>
+  </span>
+  <a id="Cosmos_System_Graphics_VBECanvas_DrawRectangle_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawRectangle*"></a>
+  <h4 id="Cosmos_System_Graphics_VBECanvas_DrawRectangle_System_Drawing_Color_System_Int32_System_Int32_System_Int32_System_Int32_" data-uid="Cosmos.System.Graphics.VBECanvas.DrawRectangle(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32)">DrawRectangle(Color, Int32, Int32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void DrawRectangle(Color color, int x, int y, int width, int height)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Drawing.Color</span></td>
+        <td><span class="parametername">color</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">x</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">y</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">width</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">height</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_DrawRectangle_System_Drawing_Color_System_Int32_System_Int32_System_Int32_System_Int32_">Canvas.DrawRectangle(Color, Int32, Int32, Int32, Int32)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_GetImage_System_Int32_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.GetImage(System.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VBECanvas.cs/#L460">View Source</a>
+  </span>
+  <a id="Cosmos_System_Graphics_VBECanvas_GetImage_" data-uid="Cosmos.System.Graphics.VBECanvas.GetImage*"></a>
+  <h4 id="Cosmos_System_Graphics_VBECanvas_GetImage_System_Int32_System_Int32_System_Int32_System_Int32_" data-uid="Cosmos.System.Graphics.VBECanvas.GetImage(System.Int32,System.Int32,System.Int32,System.Int32)">GetImage(Int32, Int32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Bitmap GetImage(int x, int y, int width, int height)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">x</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">y</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">width</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">height</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cosmos.System.Graphics.Bitmap.html">Bitmap</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_GetImage_System_Int32_System_Int32_System_Int32_System_Int32_">Canvas.GetImage(Int32, Int32, Int32, Int32)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_GetPointColor_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.GetPointColor(System.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VBECanvas.cs/#L299">View Source</a>
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VBECanvas.cs/#L448">View Source</a>
   </span>
   <a id="Cosmos_System_Graphics_VBECanvas_GetPointColor_" data-uid="Cosmos.System.Graphics.VBECanvas.GetPointColor*"></a>
   <h4 id="Cosmos_System_Graphics_VBECanvas_GetPointColor_System_Int32_System_Int32_" data-uid="Cosmos.System.Graphics.VBECanvas.GetPointColor(System.Int32,System.Int32)">GetPointColor(Int32, Int32)</h4>
@@ -1936,6 +2311,60 @@ HDTV:
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_GetPointColor_System_Int32_System_Int32_">Canvas.GetPointColor(Int32, Int32)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_GetRawPointColor_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.GetRawPointColor(System.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CosmosOS/Cosmos/blob/master/source/Cosmos.System2/Graphics/VBECanvas.cs/#L454">View Source</a>
+  </span>
+  <a id="Cosmos_System_Graphics_VBECanvas_GetRawPointColor_" data-uid="Cosmos.System.Graphics.VBECanvas.GetRawPointColor*"></a>
+  <h4 id="Cosmos_System_Graphics_VBECanvas_GetRawPointColor_System_Int32_System_Int32_" data-uid="Cosmos.System.Graphics.VBECanvas.GetRawPointColor(System.Int32,System.Int32)">GetRawPointColor(Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetRawPointColor(int aX, int aY)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aX</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">aY</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Cosmos.System.Graphics.Canvas.html#Cosmos_System_Graphics_Canvas_GetRawPointColor_System_Int32_System_Int32_">Canvas.GetRawPointColor(Int32, Int32)</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/CosmosOS/Cosmos/new/master/apiSpec/new?filename=Cosmos_System_Graphics_VBECanvas_Name.md&amp;value=---%0Auid%3A%20Cosmos.System.Graphics.VBECanvas.Name%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
