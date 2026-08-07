@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Namespace Cosmos.Kernel.Core.Bridge | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Namespace Cosmos.Kernel.Core.Bridge | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Cosmos.Kernel.Core.Bridge">
+
+  <h1 id="Cosmos_Kernel_Core_Bridge" data-uid="Cosmos.Kernel.Core.Bridge" class="text-break">Namespace Cosmos.Kernel.Core.Bridge</h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="markdown level0 remarks"></div>
+
+    <h3 id="classes">
+Classes
+</h3>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.Core.Bridge.AcpiMcfgNative.html">AcpiMcfgNative</a></dt>
+      <dd><p>Architecture-neutral ACPI MCFG import (PCI ECAM discovery).
+MADT lives in Cosmos.Kernel.Core.X64/Bridge/Import/AcpiMadtNative.cs;
+GIC info lives in Cosmos.Kernel.Core.ARM64/Bridge/Import/Gic/AcpiGicNative.cs.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.Core.Bridge.AcpiPmNative.html">AcpiPmNative</a></dt>
+      <dd></dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.Core.Bridge.BootNative.html">BootNative</a></dt>
+      <dd><p>Native imports for boot-time facts recorded by the C bootstrap (kmain.c).</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.Core.Bridge.ContextSwitchNative.html">ContextSwitchNative</a></dt>
+      <dd><p>Native imports for the low-level context switch primitives.
+Symbols are unified across architectures: Cosmos.Kernel.Native.X64
+(Interrupts.s) and Cosmos.Kernel.Native.ARM64 (ContextSwitch.s) both
+export the same names, so no arch gating is needed here.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.Core.Bridge.CpuNative.html">CpuNative</a></dt>
+      <dd></dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.Core.Bridge.EhFrameNative.html">EhFrameNative</a></dt>
+      <dd><p>Native imports for the linker-provided <code>.eh_frame</code> section bounds.
+<code>get_eh_frame_start</code> / <code>get_eh_frame_end</code> are exported by the C
+runtime (kmain.c) and resolve to the linker symbols on both architectures,
+so no arch gating is needed here.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.Core.Bridge.HeapNative.html">HeapNative</a></dt>
+      <dd><p>Bridge functions that let C library code allocate from the Cosmos heap.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.Core.Bridge.IrqNative.html">IrqNative</a></dt>
+      <dd><p>Native entry point invoked from the architecture-specific IRQ assembly stubs.
+Forwards straight into <a class="xref" href="Cosmos.Kernel.Core.CPU.InterruptManager.html#Cosmos_Kernel_Core_CPU_InterruptManager_Dispatch_Cosmos_Kernel_Core_CPU_IRQContext__">Dispatch(ref IRQContext)</a> — no indirection.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.Core.Bridge.KnobsNative.html">KnobsNative</a></dt>
+      <dd><p>Native import for the runtime-provided knob values table.
+Consumed by the AppContext plug.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.Core.Bridge.LimineNative.html">LimineNative</a></dt>
+      <dd><p>Wrapper for C code to access managed Limine data (RSDP address, HHDM offset).
+NOTE: This is a data accessor wrapper - C code gets managed data, then continues in C.
+We do NOT call C code from managed code - only provide data access.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.Core.Bridge.MemNative.html">MemNative</a></dt>
+      <dd><p>Bridge functions for memcpy / memcmp used by C library code.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.Core.Bridge.SerialNative.html">SerialNative</a></dt>
+      <dd><p>Bridge functions for C library code (ACPI, libc stubs) to call C# methods.
+NOTE: These are NOT called from C bootstrap (kmain.c) - only from library code.
+C bootstrap uses pure C implementations for clean architecture.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.Core.Bridge.SimdNative.html">SimdNative</a></dt>
+      <dd></dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.Core.Bridge.ThreadNative.html">ThreadNative</a></dt>
+      <dd><p>Stable native entry point used as the initial RIP/PC for freshly scheduled
+threads. The architecture-specific context-switch assembly returns (via iretq
+on x64 / eret on ARM64) into <a class="xref" href="Cosmos.Kernel.Core.Bridge.ThreadNative.html#Cosmos_Kernel_Core_Bridge_ThreadNative_EntryPointStub_System_IntPtr_">EntryPointStub(nint)</a>, which then calls
+the scheduler's managed entry implementation. Thread-start registration lives
+in SchedulerManager.RegisterThreadStart.</p>
+</dd>
+    </dl>
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

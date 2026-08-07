@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class VfsManager | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class VfsManager | Cosmos Gen 3 ">
+      
+      <meta name="description" content="Central entry point for registering filesystem drivers and resolving VFS paths. Path-level operations (current directory, create/unlink/rename/remove, virtual root) live in the VfsManager.Paths.cs partial.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Cosmos.Kernel.System.Vfs.VfsManager">
+
+
+
+  <h1 id="Cosmos_Kernel_System_Vfs_VfsManager" data-uid="Cosmos.Kernel.System.Vfs.VfsManager" class="text-break">
+Class VfsManager  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Cosmos.html">Cosmos</a>.<a class="xref" href="Cosmos.Kernel.html">Kernel</a>.<a class="xref" href="Cosmos.Kernel.System.html">System</a>.<a class="xref" href="Cosmos.Kernel.System.Vfs.html">Vfs</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Cosmos.Kernel.System.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Central entry point for registering filesystem drivers and resolving VFS paths.
+Path-level operations (current directory, create/unlink/rename/remove,
+virtual root) live in the <code>VfsManager.Paths.cs</code> partial.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class VfsManager</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">VfsManager</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Cosmos_Kernel_System_Vfs_VfsManager_CurrentDirectory_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.CurrentDirectory*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Vfs_VfsManager_CurrentDirectory" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.CurrentDirectory">
+  CurrentDirectory
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Kernel-wide current directory; always a normalized absolute path.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string CurrentDirectory { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Vfs_VfsManager_Mounts_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.Mounts*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Vfs_VfsManager_Mounts" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.Mounts">
+  Mounts
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>All currently active mounts in registration order.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IReadOnlyList&lt;VfsManager.VfsMount&gt; Mounts { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;<a class="xref" href="Cosmos.Kernel.System.Vfs.VfsManager.html">VfsManager</a>.<a class="xref" href="Cosmos.Kernel.System.Vfs.VfsManager.VfsMount.html">VfsMount</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Cosmos_Kernel_System_Vfs_VfsManager_GetVirtualRootEntries_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.GetVirtualRootEntries*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Vfs_VfsManager_GetVirtualRootEntries" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.GetVirtualRootEntries">
+  GetVirtualRootEntries()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>First path segments of all mount points — the directory names a
+listing of the virtual root shows while no filesystem is mounted at &quot;/&quot;.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string[] GetVirtualRootEntries()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>[]</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Vfs_VfsManager_IsMountPoint_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.IsMountPoint*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Vfs_VfsManager_IsMountPoint_System_String_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.IsMountPoint(System.String)">
+  IsMountPoint(string)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>True for &quot;/&quot; and for every active mount point.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool IsMountPoint(string fullPath)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>fullPath</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Vfs_VfsManager_MakeAbsolute_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.MakeAbsolute*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Vfs_VfsManager_MakeAbsolute_System_String_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.MakeAbsolute(System.String)">
+  MakeAbsolute(string?)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Anchors a relative path at <a class="xref" href="Cosmos.Kernel.System.Vfs.VfsManager.html#Cosmos_Kernel_System_Vfs_VfsManager_CurrentDirectory">CurrentDirectory</a> and strips
+trailing separators. Returns null for a null/empty input. Does not
+collapse <code>.</code>/<code>..</code> segments.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string? MakeAbsolute(string? path)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>path</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Vfs_VfsManager_MountCovers_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.MountCovers*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Vfs_VfsManager_MountCovers_System_String_System_String_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.MountCovers(System.String,System.String)">
+  MountCovers(string, string)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>True when <code class="paramref">mountPoint</code> (normalized: leading /, no
+trailing /) covers <code class="paramref">path</code> on a path-segment boundary
+— &quot;/mnt&quot; covers &quot;/mnt&quot; and &quot;/mnt/x&quot; but not &quot;/mntx&quot;.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool MountCovers(string mountPoint, string path)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>mountPoint</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>path</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Vfs_VfsManager_RegisterFilesystem_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.RegisterFilesystem*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Vfs_VfsManager_RegisterFilesystem_System_String_Cosmos_Kernel_HAL_Vfs_IVfsFilesystemType_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.RegisterFilesystem(System.String,Cosmos.Kernel.HAL.Vfs.IVfsFilesystemType)">
+  RegisterFilesystem(string, IVfsFilesystemType)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Register a filesystem driver by name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool RegisterFilesystem(string name, IVfsFilesystemType filesystemType)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>name</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>filesystemType</code> <a class="xref" href="Cosmos.Kernel.HAL.Vfs.IVfsFilesystemType.html">IVfsFilesystemType</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><code>true</code> when registration succeeds; <code>false</code> if name is invalid, driver is null, or already registered.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Vfs_VfsManager_SplitParentLeaf_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.SplitParentLeaf*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Vfs_VfsManager_SplitParentLeaf_System_String_System_String__System_String__" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.SplitParentLeaf(System.String,System.String@,System.String@)">
+  SplitParentLeaf(string, out string, out string)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Splits an absolute path into its parent path and leaf name
+(&quot;/mnt/dir/file&quot; → &quot;/mnt/dir&quot; + &quot;file&quot;; &quot;/file&quot; → &quot;/&quot; + &quot;file&quot;).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SplitParentLeaf(string fullPath, out string parentPath, out string leaf)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>fullPath</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>parentPath</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>leaf</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Vfs_VfsManager_TryCreateDirectory_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryCreateDirectory*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Vfs_VfsManager_TryCreateDirectory_System_String_Cosmos_Kernel_HAL_Vfs_ModeEnum_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryCreateDirectory(System.String,Cosmos.Kernel.HAL.Vfs.ModeEnum)">
+  TryCreateDirectory(string, ModeEnum)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Creates a directory at <code class="paramref">fullPath</code>; the parent
+directory must already exist on a mounted filesystem.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryCreateDirectory(string fullPath, ModeEnum permissions)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>fullPath</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>permissions</code> <a class="xref" href="Cosmos.Kernel.HAL.Vfs.ModeEnum.html">ModeEnum</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Vfs_VfsManager_TryCreateFile_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryCreateFile*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Vfs_VfsManager_TryCreateFile_System_String_Cosmos_Kernel_HAL_Vfs_ModeEnum_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryCreateFile(System.String,Cosmos.Kernel.HAL.Vfs.ModeEnum)">
+  TryCreateFile(string, ModeEnum)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Creates a regular file at <code class="paramref">fullPath</code>; the parent
+directory must already exist on a mounted filesystem.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryCreateFile(string fullPath, ModeEnum permissions)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>fullPath</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>permissions</code> <a class="xref" href="Cosmos.Kernel.HAL.Vfs.ModeEnum.html">ModeEnum</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Vfs_VfsManager_TryDestroy_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryDestroy*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Vfs_VfsManager_TryDestroy_System_String_System_ReadOnlySpan_System_Char__" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryDestroy(System.String,System.ReadOnlySpan{System.Char})">
+  TryDestroy(string, ReadOnlySpan&lt;char&gt;)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Wipe the filesystem signature on the backing store for a registered
+driver so it no longer mounts.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryDestroy(string name, ReadOnlySpan&lt;char&gt; source)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>name</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>source</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.readonlyspan-1">ReadOnlySpan</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.char">char</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Vfs_VfsManager_TryFormat_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryFormat*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Vfs_VfsManager_TryFormat_System_String_System_ReadOnlySpan_System_Char__Cosmos_Kernel_HAL_Vfs_IVfsFormatOptions_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryFormat(System.String,System.ReadOnlySpan{System.Char},Cosmos.Kernel.HAL.Vfs.IVfsFormatOptions)">
+  TryFormat(string, ReadOnlySpan&lt;char&gt;, IVfsFormatOptions?)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Format the backing store for a registered driver. The driver decides
+what <code class="paramref">source</code> means (partition index, injected device,
+etc.) and casts <code class="paramref">options</code> to its own option type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryFormat(string name, ReadOnlySpan&lt;char&gt; source, IVfsFormatOptions? options)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>name</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>source</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.readonlyspan-1">ReadOnlySpan</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.char">char</a>&gt;</dt>
+    <dd></dd>
+    <dt><code>options</code> <a class="xref" href="Cosmos.Kernel.HAL.Vfs.IVfsFormatOptions.html">IVfsFormatOptions</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Vfs_VfsManager_TryGetMount_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryGetMount*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Vfs_VfsManager_TryGetMount_System_String_Cosmos_Kernel_System_Vfs_VfsManager_VfsMount__" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryGetMount(System.String,Cosmos.Kernel.System.Vfs.VfsManager.VfsMount@)">
+  TryGetMount(string, out VfsMount?)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Retrieve a mount by its mount point.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryGetMount(string mountPoint, out VfsManager.VfsMount? mount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>mountPoint</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>mount</code> <a class="xref" href="Cosmos.Kernel.System.Vfs.VfsManager.html">VfsManager</a>.<a class="xref" href="Cosmos.Kernel.System.Vfs.VfsManager.VfsMount.html">VfsMount</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Vfs_VfsManager_TryMount_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryMount*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Vfs_VfsManager_TryMount_System_String_System_ReadOnlySpan_System_Char__Cosmos_Kernel_HAL_Vfs_MountFlags_System_String_Cosmos_Kernel_System_Vfs_VfsManager_VfsMount__" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryMount(System.String,System.ReadOnlySpan{System.Char},Cosmos.Kernel.HAL.Vfs.MountFlags,System.String,Cosmos.Kernel.System.Vfs.VfsManager.VfsMount@)">
+  TryMount(string, ReadOnlySpan&lt;char&gt;, MountFlags, string, out VfsMount?)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Mount a registered filesystem driver at a mount point.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryMount(string name, ReadOnlySpan&lt;char&gt; source, MountFlags flags, string mountPoint, out VfsManager.VfsMount? mount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>name</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>Registered filesystem name.</p>
+</dd>
+    <dt><code>source</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.readonlyspan-1">ReadOnlySpan</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.char">char</a>&gt;</dt>
+    <dd><p>Driver-specific backing store identifier.</p>
+</dd>
+    <dt><code>flags</code> <a class="xref" href="Cosmos.Kernel.HAL.Vfs.MountFlags.html">MountFlags</a></dt>
+    <dd><p>Mount flags.</p>
+</dd>
+    <dt><code>mountPoint</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>Mount point (normalized to leading /, no trailing /).</p>
+</dd>
+    <dt><code>mount</code> <a class="xref" href="Cosmos.Kernel.System.Vfs.VfsManager.html">VfsManager</a>.<a class="xref" href="Cosmos.Kernel.System.Vfs.VfsManager.VfsMount.html">VfsMount</a></dt>
+    <dd><p>Resulting mount data.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><code>true</code> on success, <code>false</code> if driver is missing or mount fails.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Vfs_VfsManager_TryOpenDirectory_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryOpenDirectory*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Vfs_VfsManager_TryOpenDirectory_System_String_Cosmos_Kernel_System_Vfs_IVfsDirectoryHandle__" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryOpenDirectory(System.String,Cosmos.Kernel.System.Vfs.IVfsDirectoryHandle@)">
+  TryOpenDirectory(string, out IVfsDirectoryHandle?)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Open a directory at the given path and return a managed handle wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryOpenDirectory(string path, out IVfsDirectoryHandle? directory)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>path</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>directory</code> <a class="xref" href="Cosmos.Kernel.System.Vfs.IVfsDirectoryHandle.html">IVfsDirectoryHandle</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Vfs_VfsManager_TryOpenFile_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryOpenFile*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Vfs_VfsManager_TryOpenFile_System_String_Cosmos_Kernel_System_Vfs_IVfsFileHandle__" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryOpenFile(System.String,Cosmos.Kernel.System.Vfs.IVfsFileHandle@)">
+  TryOpenFile(string, out IVfsFileHandle?)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Open a file at the given path and return a managed handle wrapper.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryOpenFile(string path, out IVfsFileHandle? file)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>path</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>file</code> <a class="xref" href="Cosmos.Kernel.System.Vfs.IVfsFileHandle.html">IVfsFileHandle</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Vfs_VfsManager_TryRemoveDirectory_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryRemoveDirectory*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Vfs_VfsManager_TryRemoveDirectory_System_String_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryRemoveDirectory(System.String)">
+  TryRemoveDirectory(string)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Removes the directory at <code class="paramref">fullPath</code> (driver enforces emptiness).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryRemoveDirectory(string fullPath)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>fullPath</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Vfs_VfsManager_TryRename_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryRename*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Vfs_VfsManager_TryRename_System_String_System_String_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryRename(System.String,System.String)">
+  TryRename(string, string)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Renames <code class="paramref">oldFullPath</code> to <code class="paramref">newFullPath</code>,
+replacing an existing destination of the same kind (an existing
+destination directory must be empty). Refuses mount points, renames
+into the source's own subtree, and cross-mount renames. The
+destination survives a failed rename, and a destination that is still
+open goes delete-pending instead of being dropped under its handles.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryRename(string oldFullPath, string newFullPath)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>oldFullPath</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>newFullPath</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Vfs_VfsManager_TrySetCurrentDirectory_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TrySetCurrentDirectory*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Vfs_VfsManager_TrySetCurrentDirectory_System_String_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TrySetCurrentDirectory(System.String)">
+  TrySetCurrentDirectory(string)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sets <a class="xref" href="Cosmos.Kernel.System.Vfs.VfsManager.html#Cosmos_Kernel_System_Vfs_VfsManager_CurrentDirectory">CurrentDirectory</a>; the target must exist and be a directory.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TrySetCurrentDirectory(string path)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>path</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Vfs_VfsManager_TryStat_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryStat*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Vfs_VfsManager_TryStat_System_String_Cosmos_Kernel_HAL_Vfs_VfsStat__" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryStat(System.String,Cosmos.Kernel.HAL.Vfs.VfsStat@)">
+  TryStat(string, out VfsStat)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Stats any node by absolute path. &quot;/&quot; always succeeds: when no mount
+covers it, a synthesized read-only directory stat is returned so the
+root exists even on a system with nothing mounted.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryStat(string fullPath, out VfsStat stat)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>fullPath</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>stat</code> <a class="xref" href="Cosmos.Kernel.HAL.Vfs.VfsStat.html">VfsStat</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Vfs_VfsManager_TryUnlink_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryUnlink*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Vfs_VfsManager_TryUnlink_System_String_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryUnlink(System.String)">
+  TryUnlink(string)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Removes the file at <code class="paramref">fullPath</code>. When open handles
+still reference the node the removal is deferred to the last close
+(delete-pending) instead — FAT-style drivers free the data clusters
+immediately on unlink, out from under any live handle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryUnlink(string fullPath)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>fullPath</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Vfs_VfsManager_TryUnmount_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryUnmount*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Vfs_VfsManager_TryUnmount_System_String_" data-uid="Cosmos.Kernel.System.Vfs.VfsManager.TryUnmount(System.String)">
+  TryUnmount(string)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Unmount the filesystem at <code class="paramref">mountPoint</code>: drops the
+superblock (which flushes per the driver's Drop semantics) and
+removes the mount from the table.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryUnmount(string mountPoint)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>mountPoint</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class ConditionVariable | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class ConditionVariable | Cosmos Gen 3 ">
+      
+      <meta name="description" content="A condition variable primitive for coordinating scheduler threads around state changes.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Cosmos.Kernel.Core.Scheduler.ConditionVariable">
+
+
+
+  <h1 id="Cosmos_Kernel_Core_Scheduler_ConditionVariable" data-uid="Cosmos.Kernel.Core.Scheduler.ConditionVariable" class="text-break">
+Class ConditionVariable  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Cosmos.html">Cosmos</a>.<a class="xref" href="Cosmos.Kernel.html">Kernel</a>.<a class="xref" href="Cosmos.Kernel.Core.html">Core</a>.<a class="xref" href="Cosmos.Kernel.Core.Scheduler.html">Scheduler</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Cosmos.Kernel.Core.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>A condition variable primitive for coordinating scheduler threads around state changes.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class ConditionVariable : IDisposable</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">ConditionVariable</span></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist implements">
+    <dt>Implements</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
+    </dd>
+  </dl>
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="Cosmos_Kernel_Core_Scheduler_ConditionVariable__ctor_" data-uid="Cosmos.Kernel.Core.Scheduler.ConditionVariable.#ctor*"></a>
+
+  <h3 id="Cosmos_Kernel_Core_Scheduler_ConditionVariable__ctor" data-uid="Cosmos.Kernel.Core.Scheduler.ConditionVariable.#ctor">
+  ConditionVariable()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Creates a new condition variable instance.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ConditionVariable()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Cosmos_Kernel_Core_Scheduler_ConditionVariable_WaitingThreadCount_" data-uid="Cosmos.Kernel.Core.Scheduler.ConditionVariable.WaitingThreadCount*"></a>
+
+  <h3 id="Cosmos_Kernel_Core_Scheduler_ConditionVariable_WaitingThreadCount" data-uid="Cosmos.Kernel.Core.Scheduler.ConditionVariable.WaitingThreadCount">
+  WaitingThreadCount
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the number of waiting threads.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int WaitingThreadCount { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Cosmos_Kernel_Core_Scheduler_ConditionVariable_Dispose_" data-uid="Cosmos.Kernel.Core.Scheduler.ConditionVariable.Dispose*"></a>
+
+  <h3 id="Cosmos_Kernel_Core_Scheduler_ConditionVariable_Dispose" data-uid="Cosmos.Kernel.Core.Scheduler.ConditionVariable.Dispose">
+  Dispose()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_Core_Scheduler_ConditionVariable_Signal_" data-uid="Cosmos.Kernel.Core.Scheduler.ConditionVariable.Signal*"></a>
+
+  <h3 id="Cosmos_Kernel_Core_Scheduler_ConditionVariable_Signal" data-uid="Cosmos.Kernel.Core.Scheduler.ConditionVariable.Signal">
+  Signal()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Signals one waiting thread, if there isn't any waiting thread then do nothing.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Signal()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_Core_Scheduler_ConditionVariable_SignalAll_" data-uid="Cosmos.Kernel.Core.Scheduler.ConditionVariable.SignalAll*"></a>
+
+  <h3 id="Cosmos_Kernel_Core_Scheduler_ConditionVariable_SignalAll" data-uid="Cosmos.Kernel.Core.Scheduler.ConditionVariable.SignalAll">
+  SignalAll()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Signals all waiting threads, if there isn't any waiting thread then do nothing.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SignalAll()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_Core_Scheduler_ConditionVariable_Wait_" data-uid="Cosmos.Kernel.Core.Scheduler.ConditionVariable.Wait*"></a>
+
+  <h3 id="Cosmos_Kernel_Core_Scheduler_ConditionVariable_Wait_Cosmos_Kernel_Core_Scheduler_Mutex_" data-uid="Cosmos.Kernel.Core.Scheduler.ConditionVariable.Wait(Cosmos.Kernel.Core.Scheduler.Mutex)">
+  Wait(Mutex)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Waits for a condition to be signaled. The associated mutex must be held by the calling thread.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Wait(Mutex mutex)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>mutex</code> <a class="xref" href="Cosmos.Kernel.Core.Scheduler.Mutex.html">Mutex</a></dt>
+    <dd><p>The mutex protecting the condition.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="Cosmos_Kernel_Core_Scheduler_ConditionVariable_Wait_Cosmos_Kernel_Core_Scheduler_Mutex__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method releases the mutex while the thread is blocked and re-acquires it before returning.
+Waiter-list insertion, the mutex release, and the park form one IRQ-off section so a Signal
+can only ever observe a fully parked thread. The mutex must be released before BlockThread
+(a Blocked thread still holding it could never be signaled), but inside the scope: releasing
+with interrupts enabled re-opens the lost-wakeup window (#357) — the release hands the mutex
+to a waiter and requests a reschedule, so the very next IRQ exit can run the new owner, whose
+Signal readies this still-Running thread; the subsequent BlockThread then buries the wakeup
+forever. Same shape as Mutex.Acquire / InterruptEvent.WaitCore (eab7e338).</p>
+</div>
+
+
+
+
+  <a id="Cosmos_Kernel_Core_Scheduler_ConditionVariable_WaitTimeout_" data-uid="Cosmos.Kernel.Core.Scheduler.ConditionVariable.WaitTimeout*"></a>
+
+  <h3 id="Cosmos_Kernel_Core_Scheduler_ConditionVariable_WaitTimeout_Cosmos_Kernel_Core_Scheduler_Mutex_System_UInt32_" data-uid="Cosmos.Kernel.Core.Scheduler.ConditionVariable.WaitTimeout(Cosmos.Kernel.Core.Scheduler.Mutex,System.UInt32)">
+  WaitTimeout(Mutex, uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Waits for a condition with a timeout.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool WaitTimeout(Mutex mutex, uint timeoutMs)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>mutex</code> <a class="xref" href="Cosmos.Kernel.Core.Scheduler.Mutex.html">Mutex</a></dt>
+    <dd><p>The mutex protecting the condition.</p>
+</dd>
+    <dt><code>timeoutMs</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd><p>Timeout in milliseconds.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>true if signaled, false if timeout occurred.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
