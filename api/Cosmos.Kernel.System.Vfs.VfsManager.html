@@ -162,7 +162,8 @@ virtual root) live in the <code>VfsManager.Paths.cs</code> partial.</p>
   
   </h3>
 
-  <div class="markdown level1 summary"><p>All currently active mounts in registration order.</p>
+  <div class="markdown level1 summary"><p>All currently active mounts in registration order. The list returned
+never changes; read the property again for a newer one.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -907,9 +908,9 @@ immediately on unlink, out from under any live handle.</p>
   
   </h3>
 
-  <div class="markdown level1 summary"><p>Unmount the filesystem at <code class="paramref">mountPoint</code>: drops the
-superblock (which flushes per the driver's Drop semantics) and
-removes the mount from the table.</p>
+  <div class="markdown level1 summary"><p>Unmount the filesystem at <code class="paramref">mountPoint</code>: removes the
+mount from the table, then drops the superblock (which flushes per
+the driver's Drop semantics).</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -928,7 +929,8 @@ removes the mount from the table.</p>
     <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
     <dd><p><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> when no mount sits at
 <code class="paramref">mountPoint</code> once it is normalized. A driver whose
-Drop fails does not report it here.</p>
+Drop fails does not report it here, and an exception its flush
+throws reaches the caller with the mount already removed.</p>
 </dd>
   </dl>
 

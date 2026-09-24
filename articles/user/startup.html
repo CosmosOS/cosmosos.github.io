@@ -148,7 +148,7 @@ kmain()           native C bootstrap (Cosmos.Kernel/Bootstrap/kmain.c)
 <ol>
 <li><strong>Cosmos.Kernel.Core</strong>: carves the heap out of the Limine memory map, initializes the garbage collector, then registers the type system (statics, eager static constructors, module initializers). Nothing allocates before this step.</li>
 <li><strong>The runtime's own initializers</strong> (<code>System.Private.CoreLib</code> and its companions): the preallocated <code>OutOfMemoryException</code>, the class constructor runner, the type loader and reflection callbacks, stack trace metadata. The class constructor runner is created here, so a static field whose type has a lazy static constructor can be read from this step on and not before.</li>
-<li><strong>Cosmos.Kernel.HAL</strong>: platform HAL, the interrupt controller, PCI enumeration over ECAM, platform hardware (APIC/GIC, device drivers such as the NIC), and the AHCI/NVMe storage controllers.</li>
+<li><strong>Cosmos.Kernel.HAL</strong>: platform HAL, the interrupt controller, PCI enumeration over ECAM, platform hardware (APIC/GIC, device drivers such as the NIC), the USB host controllers with their keyboard and mass storage drivers, and the AHCI/NVMe storage controllers.</li>
 <li><strong>Cosmos.Kernel</strong>: CPU exception handlers and the scheduler (one idle thread per CPU, preemption on a 10 ms quantum).</li>
 <li><strong>Cosmos.Kernel.System</strong>: the service managers <code>TimerManager</code>, <code>KeyboardManager</code>, <code>MouseManager</code>, <code>NetworkManager</code>, <code>StorageManager</code>.</li>
 </ol>
@@ -175,7 +175,7 @@ public static class CosmosEntryPoint
 <p><code>Cosmos.Kernel.System.Kernel</code> is the abstract base class of every user kernel. Its <code>Start()</code> drives the whole lifecycle:</p>
 <ol>
 <li>Calls <code>OnBoot()</code>, whose default implementation initializes the graphical <code>KernelConsole</code>, which is what makes <code>Console.WriteLine</code> work.</li>
-<li>Enables hardware interrupts (everything before this point ran with interrupts off).</li>
+<li>Enables hardware interrupts (everything before this point ran with interrupts off), then starts the USB hot-plug thread, which needs the scheduler's timer ticking.</li>
 <li>Turns off the early-boot text renderer: up to here, the boot log you see on screen is the serial log mirrored by a minimal framebuffer writer; from now on the screen belongs to <code>Console</code> and the <a href="graphics.html">Canvas</a>.</li>
 <li>Calls <code>BeforeRun()</code> once.</li>
 <li>Calls <code>Run()</code> in a loop until <code>Stop()</code> is called.</li>

@@ -134,13 +134,19 @@ Unlike Gen2, where you talked to <code>CosmosVFS</code> and a plugged subset of 
   &lt;CosmosEnableStorage&gt;true&lt;/CosmosEnableStorage&gt;
 &lt;/PropertyGroup&gt;
 </code></pre>
-<p>At boot the kernel initializes <code>StorageManager</code>, which registers every AHCI and NVMe device it finds and scans their MBR/GPT partition tables into <code>StorageManager.Partitions</code>.</p>
+<p>At boot the kernel initializes <code>StorageManager</code>, which registers every AHCI, NVMe and USB mass storage device it finds and scans their MBR/GPT partition tables into <code>StorageManager.Partitions</code>. USB sticks and disks come up as <code>usb0</code>, <code>usb1</code>, ... after the internal disks, so the first internal disk stays the primary device.</p>
+<p>USB disks can also be plugged in and pulled out while the kernel runs. One plugged in is registered and scanned like a disk found at boot, under the lowest <code>usbN</code> name free. One pulled out leaves <code>StorageManager.Devices</code> and <code>StorageManager.Partitions</code>, the mounts made on its partitions with the <code>Partition</code> overload of <code>TryMount</code> (below) are detached, and files still open on it fail with <code>IOException</code>. A mount made from a source string names no disk, so it stays, and fails its I/O the same way. A detached mount is not flushed, since the disk is gone, so call <code>VfsManager.TryUnmount</code> before pulling a disk out. Both lists can change between two reads while a USB disk comes or goes: read <code>Devices</code> or <code>Partitions</code> once and index that copy.</p>
 <p>To give your kernel a disk in QEMU, attach an image with <code>cosmos run</code>:</p>
 <pre><code class="lang-console">$ qemu-img create disk.img 64M
 $ cosmos run --disk disk.img            # attached as an AHCI disk (default)
 $ cosmos run --disk disk.img,nvme       # or as an NVMe namespace
+$ cosmos run --disk disk.img,usb        # or as a USB stick on an xHCI controller
 </code></pre>
-<p><code>--disk</code> is repeatable if you want several drives.</p>
+<p><code>--disk</code> is repeatable if you want several drives. A <code>usb</code> disk also gives the machine its xHCI controller, <code>usbxhci0</code>, which lets you plug another stick in and pull it out while the kernel runs, from the QEMU monitor (Ctrl+Alt+2 in the QEMU window):</p>
+<pre><code class="lang-console">(qemu) drive_add 0 if=none,id=stick,file=stick.img,format=raw
+(qemu) device_add usb-storage,drive=stick,id=stick,bus=usbxhci0.0
+(qemu) device_del stick
+</code></pre>
 <h2 id="register-a-filesystem-driver-and-mount-it">Register a filesystem driver and mount it</h2>
 <p>These are the <code>using</code>s the snippets below rely on:</p>
 <pre><code class="lang-csharp">using System.IO;
@@ -476,7 +482,7 @@ Directory.SetCurrentDirectory(&quot;/&quot;);
 <li>FAT is the only filesystem driver today; the <code>IVfsFilesystemType</code> interface is what a new driver implements.</li>
 </ul>
 <h2 id="how-it-works">How it works</h2>
-<p>Your code calls the stock BCL, which bottoms out in the Unix PAL (<code>Interop.Sys.*</code> P/Invokes). Those ~45 entry points are <a href="../dev/plugs.html">plugged</a> in <code>Cosmos.Kernel.Plugs</code>: a file-descriptor table adapts the PAL contract (fds, dir streams, PAL errnos) and delegates to <code>VfsManager</code>, which owns path resolution, the mount table, the current directory and open-handle semantics, and dispatches to the mounted filesystem driver, which reads and writes an <code>IBlockDevice</code> (AHCI or NVMe via <code>StorageManager</code>, RAM via <code>MemoryBlockDevice</code>).</p>
+<p>Your code calls the stock BCL, which bottoms out in the Unix PAL (<code>Interop.Sys.*</code> P/Invokes). Those ~45 entry points are <a href="../dev/plugs.html">plugged</a> in <code>Cosmos.Kernel.Plugs</code>: a file-descriptor table adapts the PAL contract (fds, dir streams, PAL errnos) and delegates to <code>VfsManager</code>, which owns path resolution, the mount table, the current directory and open-handle semantics, and dispatches to the mounted filesystem driver, which reads and writes an <code>IBlockDevice</code> (AHCI, NVMe or USB mass storage via <code>StorageManager</code>, RAM via <code>MemoryBlockDevice</code>).</p>
 <pre><code>File / Directory / FileStream          (stock BCL)
         │
 Interop.Sys.* PAL calls                (stock BCL, plugged)
@@ -487,7 +493,7 @@ VfsManager                             (mounts, paths, CWD, open handles)
         │
 IVfsFilesystemType / IVfsSuperblock    (FAT driver)
         │
-IBlockDevice                           (AHCI, NVMe, MemoryBlockDevice)
+IBlockDevice                           (AHCI, NVMe, USB, MemoryBlockDevice)
 </code></pre>
 
 </article>

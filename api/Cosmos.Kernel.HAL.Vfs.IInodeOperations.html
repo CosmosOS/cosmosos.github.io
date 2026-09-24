@@ -535,6 +535,48 @@ the file; fields without a corresponding flag are ignored.</p>
 
 
 
+  <a id="Cosmos_Kernel_HAL_Vfs_IInodeOperations_TryReadLink_" data-uid="Cosmos.Kernel.HAL.Vfs.IInodeOperations.TryReadLink*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_Vfs_IInodeOperations_TryReadLink_Cosmos_Kernel_HAL_Vfs_IVfsInode_System_String__" data-uid="Cosmos.Kernel.HAL.Vfs.IInodeOperations.TryReadLink(Cosmos.Kernel.HAL.Vfs.IVfsInode,System.String@)">
+  TryReadLink(IVfsInode, out string?)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Read the target of a symbolic link.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool TryReadLink(IVfsInode symlink, out string? target)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>symlink</code> <a class="xref" href="Cosmos.Kernel.HAL.Vfs.IVfsInode.html">IVfsInode</a></dt>
+    <dd><p>Inode of the symbolic link.</p>
+</dd>
+    <dt><code>target</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>Link target on success.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>true when <code class="paramref">symlink</code> is a symbolic link and the target was read.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Cosmos_Kernel_HAL_Vfs_IInodeOperations_Unlink_" data-uid="Cosmos.Kernel.HAL.Vfs.IInodeOperations.Unlink*"></a>
 
   <h3 id="Cosmos_Kernel_HAL_Vfs_IInodeOperations_Unlink_Cosmos_Kernel_HAL_Vfs_IVfsInode_System_ReadOnlySpan_System_Char__" data-uid="Cosmos.Kernel.HAL.Vfs.IInodeOperations.Unlink(Cosmos.Kernel.HAL.Vfs.IVfsInode,System.ReadOnlySpan{System.Char})">

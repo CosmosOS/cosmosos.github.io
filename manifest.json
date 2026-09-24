@@ -530,6 +530,48 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType",
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.yml\" sourcestartlinenumber=\"1\">ext2 driver entry point. Pluggable into the VFS via <code>VfsManager.RegisterFilesystem</code>.\nMirrors <code>FatFilesystemType</code> construction.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.System.Filesystems.Ext2.Ext2FormatOptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.System.Filesystems.Ext2.Ext2FormatOptions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.System.Filesystems.Ext2.Ext2FormatOptions",
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.System.Filesystems.Ext2.Ext2FormatOptions.yml\" sourcestartlinenumber=\"1\">Parameters for <xref href=\"Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.TryFormat(System.ReadOnlySpan%7bSystem.Char%7d%2cCosmos.Kernel.HAL.Vfs.IVfsFormatOptions)\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.System.Filesystems.Ext2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.System.Filesystems.Ext2.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.System.Filesystems.Ext2",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Cosmos.Kernel.System.Filesystems.Fat.FatBootSector.yml",
       "output": {
         ".html": {
@@ -596,6 +638,20 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "Cosmos.Kernel.System.Filesystems.Fat",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.System.Filesystems.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.System.Filesystems.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": null,
       "Summary": null
     },
     {
@@ -1996,7 +2052,7 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "Cosmos.Kernel.System.Storage.StorageManager",
-      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.System.Storage.StorageManager.yml\" sourcestartlinenumber=\"1\">Manages block storage devices.</p>\n"
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.System.Storage.StorageManager.yml\" sourcestartlinenumber=\"1\">Manages block storage devices. The tables change after boot too, when a\nUSB disk is plugged in or pulled out, from the USB hot-plug thread: each\nis replaced whole on every change, so a list read from\n<xref href=\"Cosmos.Kernel.System.Storage.StorageManager.Devices\" data-throw-if-not-resolved=\"false\"></xref>, <xref href=\"Cosmos.Kernel.System.Storage.StorageManager.Partitions\" data-throw-if-not-resolved=\"false\"></xref> or\n<xref href=\"Cosmos.Kernel.System.Storage.StorageManager.GetPartitions(Cosmos.Kernel.HAL.Interfaces.Devices.IBlockDevice)\" data-throw-if-not-resolved=\"false\"></xref> never changes under its reader. Read it once\nand index that copy: a second read may be a newer table.</p>\n"
     },
     {
       "type": "ManagedReference",

@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class StorageManager | Cosmos Gen 3 ">
       
-      <meta name="description" content="Manages block storage devices.">
+      <meta name="description" content="Manages block storage devices. The tables change after boot too, when a USB disk is plugged in or pulled out, from the USB hot-plug thread: each is replaced whole on every change, so a list read from ,  or  never changes under its reader. Read it once and index that copy: a second read may be a newer table.">
       <link rel="icon" href="../images/favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -97,7 +97,12 @@ Class StorageManager
   <dl><dt>Assembly</dt><dd>Cosmos.Kernel.System.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"><p>Manages block storage devices.</p>
+  <div class="markdown summary"><p>Manages block storage devices. The tables change after boot too, when a
+USB disk is plugged in or pulled out, from the USB hot-plug thread: each
+is replaced whole on every change, so a list read from
+<a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_Devices">Devices</a>, <a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_Partitions">Partitions</a> or
+<a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_GetPartitions_Cosmos_Kernel_HAL_Interfaces_Devices_IBlockDevice_">GetPartitions(IBlockDevice)</a> never changes under its reader. Read it once
+and index that copy: a second read may be a newer table.</p>
 </div>
   <div class="markdown conceptual"></div>
 

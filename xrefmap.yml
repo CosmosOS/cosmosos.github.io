@@ -1186,6 +1186,22 @@ references:
   isSpec: "True"
   fullName: Cosmos.Kernel.HAL.Vfs.IInodeOperations.Symlink
   nameWithType: IInodeOperations.Symlink
+- uid: Cosmos.Kernel.HAL.Vfs.IInodeOperations.TryReadLink(Cosmos.Kernel.HAL.Vfs.IVfsInode,System.String@)
+  name: TryReadLink(IVfsInode, out string?)
+  href: api/Cosmos.Kernel.HAL.Vfs.IInodeOperations.html#Cosmos_Kernel_HAL_Vfs_IInodeOperations_TryReadLink_Cosmos_Kernel_HAL_Vfs_IVfsInode_System_String__
+  commentId: M:Cosmos.Kernel.HAL.Vfs.IInodeOperations.TryReadLink(Cosmos.Kernel.HAL.Vfs.IVfsInode,System.String@)
+  name.vb: TryReadLink(IVfsInode, String)
+  fullName: Cosmos.Kernel.HAL.Vfs.IInodeOperations.TryReadLink(Cosmos.Kernel.HAL.Vfs.IVfsInode, out string?)
+  fullName.vb: Cosmos.Kernel.HAL.Vfs.IInodeOperations.TryReadLink(Cosmos.Kernel.HAL.Vfs.IVfsInode, String)
+  nameWithType: IInodeOperations.TryReadLink(IVfsInode, out string?)
+  nameWithType.vb: IInodeOperations.TryReadLink(IVfsInode, String)
+- uid: Cosmos.Kernel.HAL.Vfs.IInodeOperations.TryReadLink*
+  name: TryReadLink
+  href: api/Cosmos.Kernel.HAL.Vfs.IInodeOperations.html#Cosmos_Kernel_HAL_Vfs_IInodeOperations_TryReadLink_
+  commentId: Overload:Cosmos.Kernel.HAL.Vfs.IInodeOperations.TryReadLink
+  isSpec: "True"
+  fullName: Cosmos.Kernel.HAL.Vfs.IInodeOperations.TryReadLink
+  nameWithType: IInodeOperations.TryReadLink
 - uid: Cosmos.Kernel.HAL.Vfs.IInodeOperations.Unlink(Cosmos.Kernel.HAL.Vfs.IVfsInode,System.ReadOnlySpan{System.Char})
   name: Unlink(IVfsInode, ReadOnlySpan<char>)
   href: api/Cosmos.Kernel.HAL.Vfs.IInodeOperations.html#Cosmos_Kernel_HAL_Vfs_IInodeOperations_Unlink_Cosmos_Kernel_HAL_Vfs_IVfsInode_System_ReadOnlySpan_System_Char__
@@ -2597,6 +2613,129 @@ references:
   commentId: F:Cosmos.Kernel.System.Diagnostics.ThreadKillResult.RefusedIdle
   fullName: Cosmos.Kernel.System.Diagnostics.ThreadKillResult.RefusedIdle
   nameWithType: ThreadKillResult.RefusedIdle
+- uid: Cosmos.Kernel.System.Filesystems
+  name: Cosmos.Kernel.System.Filesystems
+  href: api/Cosmos.Kernel.System.Filesystems.html
+- uid: Cosmos.Kernel.System.Filesystems.Ext2
+  name: Cosmos.Kernel.System.Filesystems.Ext2
+  href: api/Cosmos.Kernel.System.Filesystems.Ext2.html
+  commentId: N:Cosmos.Kernel.System.Filesystems.Ext2
+  fullName: Cosmos.Kernel.System.Filesystems.Ext2
+  nameWithType: Cosmos.Kernel.System.Filesystems.Ext2
+- uid: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType
+  name: Ext2FilesystemType
+  href: api/Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.html
+  commentId: T:Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType
+  fullName: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType
+  nameWithType: Ext2FilesystemType
+- uid: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.#ctor
+  name: Ext2FilesystemType()
+  href: api/Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.html#Cosmos_Kernel_System_Filesystems_Ext2_Ext2FilesystemType__ctor
+  commentId: M:Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.#ctor
+  name.vb: New()
+  fullName: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.Ext2FilesystemType()
+  fullName.vb: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.New()
+  nameWithType: Ext2FilesystemType.Ext2FilesystemType()
+  nameWithType.vb: Ext2FilesystemType.New()
+- uid: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.#ctor(Cosmos.Kernel.HAL.Interfaces.Devices.IBlockDevice)
+  name: Ext2FilesystemType(IBlockDevice)
+  href: api/Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.html#Cosmos_Kernel_System_Filesystems_Ext2_Ext2FilesystemType__ctor_Cosmos_Kernel_HAL_Interfaces_Devices_IBlockDevice_
+  commentId: M:Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.#ctor(Cosmos.Kernel.HAL.Interfaces.Devices.IBlockDevice)
+  name.vb: New(IBlockDevice)
+  fullName: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.Ext2FilesystemType(Cosmos.Kernel.HAL.Interfaces.Devices.IBlockDevice)
+  fullName.vb: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.New(Cosmos.Kernel.HAL.Interfaces.Devices.IBlockDevice)
+  nameWithType: Ext2FilesystemType.Ext2FilesystemType(IBlockDevice)
+  nameWithType.vb: Ext2FilesystemType.New(IBlockDevice)
+- uid: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.#ctor*
+  name: Ext2FilesystemType
+  href: api/Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.html#Cosmos_Kernel_System_Filesystems_Ext2_Ext2FilesystemType__ctor_
+  commentId: Overload:Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.Ext2FilesystemType
+  fullName.vb: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.New
+  nameWithType: Ext2FilesystemType.Ext2FilesystemType
+  nameWithType.vb: Ext2FilesystemType.New
+- uid: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.TryDestroy(System.ReadOnlySpan{System.Char})
+  name: TryDestroy(ReadOnlySpan<char>)
+  href: api/Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.html#Cosmos_Kernel_System_Filesystems_Ext2_Ext2FilesystemType_TryDestroy_System_ReadOnlySpan_System_Char__
+  commentId: M:Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.TryDestroy(System.ReadOnlySpan{System.Char})
+  name.vb: TryDestroy(ReadOnlySpan(Of Char))
+  fullName: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.TryDestroy(System.ReadOnlySpan<char>)
+  fullName.vb: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.TryDestroy(System.ReadOnlySpan(Of Char))
+  nameWithType: Ext2FilesystemType.TryDestroy(ReadOnlySpan<char>)
+  nameWithType.vb: Ext2FilesystemType.TryDestroy(ReadOnlySpan(Of Char))
+- uid: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.TryDestroy*
+  name: TryDestroy
+  href: api/Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.html#Cosmos_Kernel_System_Filesystems_Ext2_Ext2FilesystemType_TryDestroy_
+  commentId: Overload:Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.TryDestroy
+  isSpec: "True"
+  fullName: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.TryDestroy
+  nameWithType: Ext2FilesystemType.TryDestroy
+- uid: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.TryFormat(System.ReadOnlySpan{System.Char},Cosmos.Kernel.HAL.Vfs.IVfsFormatOptions)
+  name: TryFormat(ReadOnlySpan<char>, IVfsFormatOptions?)
+  href: api/Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.html#Cosmos_Kernel_System_Filesystems_Ext2_Ext2FilesystemType_TryFormat_System_ReadOnlySpan_System_Char__Cosmos_Kernel_HAL_Vfs_IVfsFormatOptions_
+  commentId: M:Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.TryFormat(System.ReadOnlySpan{System.Char},Cosmos.Kernel.HAL.Vfs.IVfsFormatOptions)
+  name.vb: TryFormat(ReadOnlySpan(Of Char), IVfsFormatOptions)
+  fullName: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.TryFormat(System.ReadOnlySpan<char>, Cosmos.Kernel.HAL.Vfs.IVfsFormatOptions?)
+  fullName.vb: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.TryFormat(System.ReadOnlySpan(Of Char), Cosmos.Kernel.HAL.Vfs.IVfsFormatOptions)
+  nameWithType: Ext2FilesystemType.TryFormat(ReadOnlySpan<char>, IVfsFormatOptions?)
+  nameWithType.vb: Ext2FilesystemType.TryFormat(ReadOnlySpan(Of Char), IVfsFormatOptions)
+- uid: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.TryFormat*
+  name: TryFormat
+  href: api/Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.html#Cosmos_Kernel_System_Filesystems_Ext2_Ext2FilesystemType_TryFormat_
+  commentId: Overload:Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.TryFormat
+  isSpec: "True"
+  fullName: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.TryFormat
+  nameWithType: Ext2FilesystemType.TryFormat
+- uid: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.TryMount(System.ReadOnlySpan{System.Char},Cosmos.Kernel.HAL.Vfs.MountFlags,Cosmos.Kernel.HAL.Vfs.IVfsSuperblock@)
+  name: TryMount(ReadOnlySpan<char>, MountFlags, out IVfsSuperblock?)
+  href: api/Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.html#Cosmos_Kernel_System_Filesystems_Ext2_Ext2FilesystemType_TryMount_System_ReadOnlySpan_System_Char__Cosmos_Kernel_HAL_Vfs_MountFlags_Cosmos_Kernel_HAL_Vfs_IVfsSuperblock__
+  commentId: M:Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.TryMount(System.ReadOnlySpan{System.Char},Cosmos.Kernel.HAL.Vfs.MountFlags,Cosmos.Kernel.HAL.Vfs.IVfsSuperblock@)
+  name.vb: TryMount(ReadOnlySpan(Of Char), MountFlags, IVfsSuperblock)
+  fullName: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.TryMount(System.ReadOnlySpan<char>, Cosmos.Kernel.HAL.Vfs.MountFlags, out Cosmos.Kernel.HAL.Vfs.IVfsSuperblock?)
+  fullName.vb: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.TryMount(System.ReadOnlySpan(Of Char), Cosmos.Kernel.HAL.Vfs.MountFlags, Cosmos.Kernel.HAL.Vfs.IVfsSuperblock)
+  nameWithType: Ext2FilesystemType.TryMount(ReadOnlySpan<char>, MountFlags, out IVfsSuperblock?)
+  nameWithType.vb: Ext2FilesystemType.TryMount(ReadOnlySpan(Of Char), MountFlags, IVfsSuperblock)
+- uid: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.TryMount*
+  name: TryMount
+  href: api/Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.html#Cosmos_Kernel_System_Filesystems_Ext2_Ext2FilesystemType_TryMount_
+  commentId: Overload:Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.TryMount
+  isSpec: "True"
+  fullName: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FilesystemType.TryMount
+  nameWithType: Ext2FilesystemType.TryMount
+- uid: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FormatOptions
+  name: Ext2FormatOptions
+  href: api/Cosmos.Kernel.System.Filesystems.Ext2.Ext2FormatOptions.html
+  commentId: T:Cosmos.Kernel.System.Filesystems.Ext2.Ext2FormatOptions
+  fullName: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FormatOptions
+  nameWithType: Ext2FormatOptions
+- uid: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FormatOptions.BlockSize
+  name: BlockSize
+  href: api/Cosmos.Kernel.System.Filesystems.Ext2.Ext2FormatOptions.html#Cosmos_Kernel_System_Filesystems_Ext2_Ext2FormatOptions_BlockSize
+  commentId: P:Cosmos.Kernel.System.Filesystems.Ext2.Ext2FormatOptions.BlockSize
+  fullName: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FormatOptions.BlockSize
+  nameWithType: Ext2FormatOptions.BlockSize
+- uid: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FormatOptions.BlockSize*
+  name: BlockSize
+  href: api/Cosmos.Kernel.System.Filesystems.Ext2.Ext2FormatOptions.html#Cosmos_Kernel_System_Filesystems_Ext2_Ext2FormatOptions_BlockSize_
+  commentId: Overload:Cosmos.Kernel.System.Filesystems.Ext2.Ext2FormatOptions.BlockSize
+  isSpec: "True"
+  fullName: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FormatOptions.BlockSize
+  nameWithType: Ext2FormatOptions.BlockSize
+- uid: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FormatOptions.VolumeLabel
+  name: VolumeLabel
+  href: api/Cosmos.Kernel.System.Filesystems.Ext2.Ext2FormatOptions.html#Cosmos_Kernel_System_Filesystems_Ext2_Ext2FormatOptions_VolumeLabel
+  commentId: P:Cosmos.Kernel.System.Filesystems.Ext2.Ext2FormatOptions.VolumeLabel
+  fullName: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FormatOptions.VolumeLabel
+  nameWithType: Ext2FormatOptions.VolumeLabel
+- uid: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FormatOptions.VolumeLabel*
+  name: VolumeLabel
+  href: api/Cosmos.Kernel.System.Filesystems.Ext2.Ext2FormatOptions.html#Cosmos_Kernel_System_Filesystems_Ext2_Ext2FormatOptions_VolumeLabel_
+  commentId: Overload:Cosmos.Kernel.System.Filesystems.Ext2.Ext2FormatOptions.VolumeLabel
+  isSpec: "True"
+  fullName: Cosmos.Kernel.System.Filesystems.Ext2.Ext2FormatOptions.VolumeLabel
+  nameWithType: Ext2FormatOptions.VolumeLabel
 - uid: Cosmos.Kernel.System.Filesystems.Fat
   name: Cosmos.Kernel.System.Filesystems.Fat
   href: api/Cosmos.Kernel.System.Filesystems.Fat.html

@@ -90,7 +90,7 @@
 <p>NativeAOT-Patcher has two complementary testing layers: <strong>unit tests</strong> that run in the host process, for the build-time toolchain (patcher, scanner, analyzer) and for kernel library logic that needs no hardware, and <strong>kernel integration tests</strong> that run compiled kernel images inside QEMU and report results over a binary UART protocol.</p>
 <hr>
 <h2 id="unit-tests">Unit Tests</h2>
-<p>Unit tests live in the <code>tests/Cosmos.Tests.*</code> projects (xunit) and in <code>src/tests/Cosmos.Kernel.Tests.System</code> (NUnit), and are run with the standard .NET test runner. They do not require QEMU or any special infrastructure.</p>
+<p>Unit tests live in the <code>tests/Cosmos.Tests.*</code> projects (xunit) and in <code>src/tests/Cosmos.Kernel.Tests.System</code> (NUnit), and are run with the standard .NET test runner. They do not require QEMU or any special infrastructure. CI runs each of them as its own job of the <code>.NET Tests</code> workflow (<code>.github/workflows/dotnet.yml</code>) on every push and pull request.</p>
 <h3 id="running-unit-tests">Running Unit Tests</h3>
 <pre><code class="lang-bash">dotnet test tests/Cosmos.Tests.Patcher            # one toolchain project
 dotnet test src/tests/Cosmos.Kernel.Tests.System   # the kernel library tests
@@ -378,7 +378,7 @@ ALL TESTS PASSED
 </ul>
 <p>After the final <code>TestSuiteEnd</code> message the kernel also sends an 8-byte termination marker (<code>0xDE 0xAD 0xBE 0xEF 0xCA 0xFE 0xBA 0xBE</code>) so the engine can kill QEMU immediately without waiting for the full timeout.</p>
 <h3 id="commands-kernel--host-ds2vs">Commands (Kernel → Host, <code>Ds2Vs</code>)</h3>
-<p>Test-runner-specific commands occupy the range <strong>100-106</strong>. The original CosmosOS debug commands (0-25) are also defined but are not used by the test runner.</p>
+<p>Test-runner-specific commands occupy the range <strong>100-109</strong>. The original CosmosOS debug commands (0-25) are also defined but are not used by the test runner.</p>
 <table>
 <thead>
 <tr>
@@ -431,6 +431,24 @@ ALL TESTS PASSED
 <td><code>[ArchId: 1][CpuCount: 1]</code></td>
 <td>Sent on kernel startup (arch IDs: 1=x86, 2=x64, 3=ARM32, 4=ARM64)</td>
 </tr>
+<tr>
+<td><code>CoverageData</code></td>
+<td>107</td>
+<td><code>[HitCount: 2 LE][MethodId: 2 LE]...</code></td>
+<td>Sent after the suite ends by a kernel built with coverage</td>
+</tr>
+<tr>
+<td><code>TestDestructiveReached</code></td>
+<td>108</td>
+<td><code>[TestNumber: 2 LE]</code></td>
+<td>Sent by <code>TR.RunDestructive</code> right before an action that never returns (reboot, shutdown)</td>
+</tr>
+<tr>
+<td><code>HostRequest</code></td>
+<td>109</td>
+<td><code>[Request: ASCII]</code></td>
+<td>Asks the engine to change the machine under the running guest (see below)</td>
+</tr>
 </tbody>
 </table>
 <h3 id="message-flow">Message Flow</h3>
@@ -448,6 +466,27 @@ ALL TESTS PASSED
 <h3 id="parser">Parser</h3>
 <p><code>tests/Cosmos.TestRunner.Engine/Protocol/UartMessageParser.cs</code> reads the raw UART log captured by QEMU (<code>uart-output.log</code>), scans byte-by-byte for the magic signature, validates the command byte and length, then dispatches to the appropriate parse helper.</p>
 <p>Corruption detection: the <code>TestSuiteEnd</code> payload is validated by checking <code>total == passed + failed</code>. If this invariant does not hold (e.g. due to a timer-interrupt interleave corrupting UART bytes), the end message is ignored and results fall back to the individually tracked counters.</p>
+<h3 id="host-requests">Host Requests</h3>
+<p>A test calls <code>TR.RequestHost(request)</code> when it needs the machine changed under it, and the engine carries the request out through QEMU's QMP monitor as soon as the frame shows up on the UART:</p>
+<table>
+<thead>
+<tr>
+<th>Request</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>usb-unplug [n]</code></td>
+<td>Pulls USB stick <code>n</code> (0 by default) off the xHCI controller</td>
+</tr>
+<tr>
+<td><code>usb-plug [n]</code></td>
+<td>Plugs it back in, on the same disk image</td>
+</tr>
+</tbody>
+</table>
+<p>Nothing replies. The test waits for the change itself, and must see it within 10 s: that long without a protocol message and the engine takes the kernel for hung. Only a profile that attaches a USB disk launches QEMU with a monitor; the engine logs and drops a request from any other. The Storage suite's <code>UsbHotPlug_*</code> tests are the example.</p>
 <h3 id="host--kernel-commands-vs2ds">Host → Kernel Commands (<code>Vs2Ds</code>)</h3>
 <p>The test runner currently does not send commands to the kernel. The <code>Vs2Ds</code> class (<code>Noop=0</code>, <code>Continue=4</code>, <code>Ping=17</code>) is inherited from the CosmosOS debug connector and reserved for future use.</p>
 <hr>
