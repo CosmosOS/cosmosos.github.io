@@ -257,7 +257,7 @@
     register slot: saved register location,
     stack slot: base register + offset&quot;]
     RESOLVE --&gt; MARK[&quot;For each reported ref:
-    interior: GetParentObject() via brick table,
+    interior: GetParentObject() walks its segment,
     then TryMarkRoot()&quot;]
     STEP --&gt; UNWIND
     MARK --&gt; UNWIND[&quot;UnwindOneFrameWithCFI():
@@ -267,7 +267,7 @@
 <p>Per reported slot, the callback (<code>PreciseRootTrampoline</code>) does one of two things:</p>
 <ul>
 <li>A plain reference is passed to <code>TryMarkRoot</code> directly; the usual heap-range and <code>MethodTable</code> checks are harmless belt and braces on a precisely reported root.</li>
-<li>A slot flagged <code>GC_CALL_INTERIOR</code> holds a pointer into the middle of an object (a byref, a span's reference). The callback resolves it to the containing object with <code>GetParentObject</code>, through the owning segment's <a href="garbage-collector.html#brick-table">brick table</a>; the step-by-step mechanism is in <a href="garbage-collector.html#interior-pointers">Garbage Collector: Interior pointers</a>. This is the fix for objects reachable only through a byref (issue <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/384">#384</a>).</li>
+<li>A slot flagged <code>GC_CALL_INTERIOR</code> holds a pointer into the middle of an object (a byref, a span's reference). The callback resolves it to the containing object with <code>GetParentObject</code>, which finds the segment holding the address in either chain and walks it from its first object; the step-by-step mechanism is in <a href="garbage-collector.html#interior-pointers">Garbage Collector: Interior pointers</a>. The slot's <code>GC_CALL_PINNED</code> flag plays no part: it says the slot is a pinned local (a <code>fixed</code> statement's), not which heap the object is on. An address that lies in no object marks nothing. This is the fix for objects reachable only through a byref (issue <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/384">#384</a>).</li>
 </ul>
 <p>Frames without GCInfo come in two kinds. A hand-written asm trampoline that still carries <code>.cfi</code> directives (<code>RhpCallCatchFunclet</code>, <code>RhpCallFilterFunclet</code>, <code>RhpThrowEx</code>) is stepped through reporting nothing: the managed frames on either side cover its register save locations, and the in-flight exception object stays reported because managed frames deeper on the stack (the funclet body's exception local, the managed dispatcher <code>RhThrowEx</code> that the stub calls) hold it in slots their own GCInfo describes. A frame with no CFI at all (interrupt entry stubs, the bootloader) ends the walk: the scanner conservatively scans the remaining stack range and stops rather than crashing. The same conservative tail runs if the unwinder fails mid-walk or a method's slot table overflows the decoder's fixed buffer. Two exits are harsher: an unwound frame that fails the sanity checks (an IP of zero, a stack pointer that does not increase or leaves the stack) or a walk that exhausts its 256-frame cap stops the scan with no conservative tail, and any older frames go unscanned for that collection.</p>
 <p><a href="gc-concepts/funclet.html">Funclet</a> frames (catch, filter, and finally bodies) carry no GCInfo of their own. Their LSDA header redirects to the main method's record, and the code offset is resolved against the main method's start, so the funclet is scanned with the parent's slot table on the frame it actually runs on. Filter funclets run mid-throw, so the parent's untracked slots may be stale there and are not reported (<code>NoReportUntracked</code>); catch and finally funclets report them normally, and marking is idempotent, so double-reporting with the parent frame is harmless.</p>
@@ -330,7 +330,7 @@
 <tr>
 <td>Tests</td>
 <td><code>tests/Kernels/Cosmos.Kernel.Tests.GarbageCollector</code></td>
-<td><code>GC_GcInfoDecoder</code>, <code>GC_PreciseStackScan</code>, <code>GC_FuncletNoFalseRoot</code>, <code>GC_FuncletNoCrashOnAllocInCatch</code>, <code>GC_StackScanPaddingStress</code>, <code>GC_InteriorPointerRoot</code></td>
+<td><code>GC_GcInfoDecoder</code>, <code>GC_PreciseStackScan</code>, <code>GC_FuncletNoFalseRoot</code>, <code>GC_FuncletNoCrashOnAllocInCatch</code>, <code>GC_StackScanPaddingStress</code>, <code>GC_InteriorPointerRoot</code>, <code>GC_InteriorPointerRootMidTlab</code>, <code>GC_InteriorPointerRootPinnedHeap</code>, <code>GC_InteriorPointerRootFixed</code></td>
 </tr>
 <tr>
 <td>Hijack stub</td>
