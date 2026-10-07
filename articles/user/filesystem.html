@@ -107,7 +107,7 @@ Unlike Gen2, where you talked to <code>CosmosVFS</code> and a plugged subset of 
 <tr>
 <td>Setup</td>
 <td><code>CosmosVFS</code> + <code>VFSManager.RegisterVFS</code></td>
-<td><code>VfsManager.RegisterFilesystem</code> + <code>VfsManager.TryMount</code></td>
+<td><code>VfsManager.RegisterFileSystem</code> + <code>VfsManager.TryMount</code></td>
 </tr>
 <tr>
 <td>API surface</td>
@@ -134,13 +134,15 @@ Unlike Gen2, where you talked to <code>CosmosVFS</code> and a plugged subset of 
   &lt;CosmosEnableStorage&gt;true&lt;/CosmosEnableStorage&gt;
 &lt;/PropertyGroup&gt;
 </code></pre>
-<p>At boot the kernel initializes <code>StorageManager</code>, which registers every AHCI, NVMe and USB mass storage device it finds and scans their MBR/GPT partition tables into <code>StorageManager.Partitions</code>. USB sticks and disks come up as <code>usb0</code>, <code>usb1</code>, ... after the internal disks, so the first internal disk stays the primary device.</p>
-<p>USB disks can also be plugged in and pulled out while the kernel runs. One plugged in is registered and scanned like a disk found at boot, under the lowest <code>usbN</code> name free. One pulled out leaves <code>StorageManager.Devices</code> and <code>StorageManager.Partitions</code>, the mounts made on its partitions with the <code>Partition</code> overload of <code>TryMount</code> (below) are detached, and files still open on it fail with <code>IOException</code>. A mount made from a source string names no disk, so it stays, and fails its I/O the same way. A detached mount is not flushed, since the disk is gone, so call <code>VfsManager.TryUnmount</code> before pulling a disk out. Both lists can change between two reads while a USB disk comes or goes: read <code>Devices</code> or <code>Partitions</code> once and index that copy.</p>
+<p>At boot the kernel initializes <code>StorageManager</code>, which installs its consumer of the <a href="drivers.html">driver kit</a>'s block devices. The kit's AHCI, NVMe, virtio-blk and USB mass storage drivers then publish every SATA disk (<code>sata0</code>, <code>sata1</code>, ...), every NVMe namespace (<code>nvme0n1</code>, ...), every virtio-blk disk (<code>vblk0</code>, ...) and every USB stick (<code>usb0</code>, <code>usb1</code>, ...) they find during the driver stage, and the manager registers each one as it is published and scans its MBR/GPT partition table into <code>StorageManager.Partitions</code> before the publish returns. USB sticks need <code>CosmosEnableUsb</code>, which is on by default whenever <code>CosmosEnableStorage</code> is, and setting it to <code>false</code> keeps AHCI and NVMe disks and drops USB ones along with the xHCI driver. The manager keeps its tables in one order, which decides the primary device: by node path, <code>pci:</code> before <code>usb:</code> before <code>virtio:</code>, in <code>Devices</code>, in <code>Partitions</code> and as <code>PrimaryDevice</code>; a disk the kernel registered itself after every kit disk; then registration order. So an internal disk on a PCI controller is the primary over a USB stick present at boot whichever registered first, and a kit disk arriving after a USB stick moves ahead of it and renumbers <code>Partitions</code>, which is why a mount by <code>Partition</code> (below) is preferred to one by index string.</p>
+<p>USB disks, and virtio-blk disks behind a PCI Express hot-plug slot, can also be plugged in and pulled out while the kernel runs. One plugged in is published by the kit and registered and scanned like a disk found at boot, under the lowest <code>usbN</code> or <code>vblkN</code> name free. One pulled out is withdrawn: it leaves <code>StorageManager.Devices</code> and <code>StorageManager.Partitions</code>, the mounts made on its partitions with the <code>Partition</code> overload of <code>TryMount</code> (below) are detached, and files still open on it fail with <code>IOException</code> (the USB mass storage driver throws <code>IOException(&quot;USB device detached&quot;)</code> and the virtio-blk driver <code>IOException(&quot;virtio-blk device detached&quot;)</code>, as the NVMe driver throws <code>IOException</code> while it detaches); a disk whose driver's memory the kit has released fails with the kit's <code>InvalidOperationException</code> instead, since the ring does not wrap the driver's device. A mount made from a source string names no disk, so it stays, and fails its I/O the same way. A detached mount is not flushed, since the disk is gone, so call <code>VfsManager.TryUnmount</code> before pulling a disk out. Both lists can change between two reads while a USB or virtio-blk disk comes or goes, from the kit worker: read <code>Devices</code> or <code>Partitions</code> once and index that copy.</p>
 <p>To give your kernel a disk in QEMU, attach an image with <code>cosmos run</code>:</p>
 <pre><code class="lang-console">$ qemu-img create disk.img 64M
 $ cosmos run --disk disk.img            # attached as an AHCI disk (default)
 $ cosmos run --disk disk.img,nvme       # or as an NVMe namespace
 $ cosmos run --disk disk.img,usb        # or as a USB stick on an xHCI controller
+$ cosmos run --disk disk.img,virtio-blk # or as a virtio-blk-pci function
+$ cosmos run --disk disk.img,virtio-blk-mmio # or, on arm64, in the virt machine's virtio-mmio window
 </code></pre>
 <p><code>--disk</code> is repeatable if you want several drives. A <code>usb</code> disk also gives the machine its xHCI controller, <code>usbxhci0</code>, which lets you plug another stick in and pull it out while the kernel runs, from the QEMU monitor (Ctrl+Alt+2 in the QEMU window):</p>
 <pre><code class="lang-console">(qemu) drive_add 0 if=none,id=stick,file=stick.img,format=raw
@@ -150,18 +152,17 @@ $ cosmos run --disk disk.img,usb        # or as a USB stick on an xHCI controlle
 <h2 id="register-a-filesystem-driver-and-mount-it">Register a filesystem driver and mount it</h2>
 <p>These are the <code>using</code>s the snippets below rely on:</p>
 <pre><code class="lang-csharp">using System.IO;
+using Cosmos.Kernel.HAL.Devices.Storage;
+using Cosmos.Kernel.System.FileSystem;
+using Cosmos.Kernel.System.FileSystem.Fat;
 using Cosmos.Kernel.System.Storage;
-using Cosmos.Kernel.System.Vfs;
-using Cosmos.Kernel.System.Filesystems.Fat;
-using Cosmos.Kernel.HAL.Interfaces.Devices;
-using Cosmos.Kernel.HAL.Vfs;
 </code></pre>
-<p>Two of those five are HAL namespaces, and that is deliberate. <code>Cosmos.Kernel.HAL.Vfs</code> holds the VFS vocabulary that drivers and callers share: the contracts a filesystem driver implements (<code>IVfsFilesystemType</code>, <code>IVfsSuperblock</code>, <code>IVfsInode</code>, <code>IVfsOpenFile</code> and their operations interfaces) and the flag, mode and metadata types every mount, create and stat call names (<code>MountFlags</code>, <code>VfsMode</code>, <code>VfsStat</code>, <code>VfsStatFs</code>, <code>SetAttrFlags</code>, <code>SeekWhence</code>, <code>VfsTimespec</code>). That is why <code>MountFlags.None</code> appears in a kernel's <code>BeforeRun()</code>. <code>Cosmos.Kernel.System.Vfs</code> holds the manager and the handles, <code>VfsManager</code> plus <code>IVfsNodeHandle</code>, <code>IVfsFileHandle</code> and <code>IVfsDirectoryHandle</code>, and the handles are typed in the shared vocabulary, so <code>IVfsNodeHandle.Inode</code> gives you a <code>Cosmos.Kernel.HAL.Vfs.IVfsInode</code>. The vocabulary sits in the lower assembly because the reference graph runs <code>Cosmos.Kernel.System</code> to <code>Cosmos.Kernel.HAL</code> to <code>Cosmos.Kernel.HAL.Interfaces</code>, never the other way.</p>
-<p><code>Cosmos.Kernel.HAL.Interfaces.Devices</code> is needed only by the RAM-disk snippet further down, which implements <code>IBlockDevice</code>. Drop that and mounting a real partition takes four.</p>
+<p><code>Cosmos.Kernel.System.FileSystem</code> holds the whole VFS in one namespace: the manager and what it hands out (<code>VfsManager</code>, <code>VfsMount</code>, <code>IVfsNodeHandle</code>, <code>IVfsFileHandle</code> and <code>IVfsDirectoryHandle</code>), the contracts a filesystem driver implements (<code>IVfsFileSystemType</code>, <code>IVfsSuperblock</code>, <code>IVfsInode</code>, <code>IVfsOpenFile</code> and their operations interfaces), and the flag, mode and metadata types every mount, create and stat call names (<code>MountFlags</code>, <code>VfsMode</code>, <code>VfsStat</code>, <code>VfsStatFs</code>, <code>SetAttrFlags</code>, <code>SeekWhence</code>, <code>VfsTimespec</code>). That is why <code>MountFlags.None</code> appears in a kernel's <code>BeforeRun()</code> under the same <code>using</code> as <code>VfsManager</code>, and why the <code>IVfsInode</code> that <code>IVfsNodeHandle.Inode</code> gives you needs no other <code>using</code>. Filesystem drivers sit one level down, a namespace each: the FAT driver's <code>FatFileSystemType</code> and <code>FatFormatOptions</code> are in <code>Cosmos.Kernel.System.FileSystem.Fat</code>.</p>
+<p><code>Cosmos.Kernel.HAL.Devices.Storage</code> is needed only by the RAM-disk snippet further down, which implements <code>IBlockDevice</code>. Drop that and mounting a real partition takes the three <code>Cosmos.Kernel.System</code> ones.</p>
 <p>First, register a FAT driver under a name of your choice, then mount a partition at a mount point. Add this to your kernel's <code>BeforeRun()</code>:</p>
-<pre><code class="lang-csharp">FatFilesystemType fat = new();
+<pre><code class="lang-csharp">FatFileSystemType fat = new();
 
-if (!VfsManager.RegisterFilesystem(&quot;fat&quot;, fat))
+if (!VfsManager.RegisterFileSystem(&quot;fat&quot;, fat))
 {
     Console.WriteLine(&quot;The name \&quot;fat\&quot; is already registered.&quot;);
     return;
@@ -173,12 +174,12 @@ if (StorageManager.Partitions.Count == 0)
     return;
 }
 
-if (VfsManager.TryMount(&quot;fat&quot;, StorageManager.Partitions[0], MountFlags.None, &quot;/mnt&quot;, out VfsManager.VfsMount? mount))
+if (VfsManager.TryMount(&quot;fat&quot;, StorageManager.Partitions[0], MountFlags.None, &quot;/mnt&quot;, out VfsMount? mount))
 {
     Console.WriteLine(&quot;Mounted &quot; + mount.Name + &quot; at &quot; + mount.MountPoint);
 }
 </code></pre>
-<p><code>Partitions</code> is empty before storage is scanned, when no disk is attached, and when storage is compiled out, so index it only after checking <code>Count</code>. Every call above returns whether it worked: <code>RegisterFilesystem</code> refuses a name already in use, and <code>TryMount</code> refuses a source the driver does not recognize.</p>
+<p><code>Partitions</code> is empty before storage is scanned, when no disk is attached, and when storage is compiled out, so index it only after checking <code>Count</code>. Every call above returns whether it worked: <code>RegisterFileSystem</code> refuses a name already in use, and <code>TryMount</code> refuses a source the driver does not recognize.</p>
 <p><code>StorageManager.GetPartitions(device)</code> lists the partitions of one disk, numbered the way a user numbers them; <code>StorageManager.Partitions</code> is the flat list across every disk.</p>
 <p>There is a second spelling, <code>VfsManager.TryMount(&quot;fat&quot;, &quot;0&quot;, ...)</code>, where <code>source</code> is a driver-specific string. Every driver accepts one, and the FAT driver reads it as an index into <code>StorageManager.Partitions</code>. Prefer the <code>Partition</code> overload: creating or deleting a partition renumbers that list, so an index held across a rescan can come to name a different partition.</p>
 <!-- screenshot: kernel console right after boot showing the "Mounted fat partition 0 at /mnt" line -->
@@ -186,7 +187,7 @@ if (VfsManager.TryMount(&quot;fat&quot;, StorageManager.Partitions[0], MountFlag
 <p>From this point on, everything under <code>/mnt</code> is served by the FAT driver, and everything in this article is plain <code>System.IO</code>.</p>
 <p><strong>Note</strong>: <code>/</code> itself is a <em>virtual root</em>. It always exists, even with nothing mounted, and enumerating it lists the mount points. You cannot create files directly in it (<code>IOException</code>, read-only file system); create them under a mount point like <code>/mnt</code>.</p>
 <h3 id="alternative-a-ram-disk">Alternative: a RAM disk</h3>
-<p>For quick experiments you don't need a disk image at all. A block device is just an <code>IBlockDevice</code> (from <code>Cosmos.Kernel.HAL.Interfaces.Devices</code>), and a RAM-backed one fits in a few lines; this is exactly what the kernel test suites use:</p>
+<p>For quick experiments you don't need a disk image at all. A block device is just an <code>IBlockDevice</code> (from <code>Cosmos.Kernel.HAL.Devices.Storage</code>), and a RAM-backed one fits in a few lines; this is exactly what the kernel test suites use:</p>
 <pre><code class="lang-csharp">internal sealed class MemoryBlockDevice : IBlockDevice
 {
     private readonly byte[] _storage;
@@ -214,9 +215,9 @@ if (VfsManager.TryMount(&quot;fat&quot;, StorageManager.Partitions[0], MountFlag
 </code></pre>
 <p>The FAT driver accepts an injected device directly. Register it as usual and leave <code>source</code> empty: with a device already in hand the driver has nothing to look up.</p>
 <pre><code class="lang-csharp">MemoryBlockDevice ramDisk = new(&quot;RAMDISK&quot;, 512, 65536);   // 32 MiB
-FatFilesystemType fat = new(ramDisk);
+FatFileSystemType fat = new(ramDisk);
 
-if (!VfsManager.RegisterFilesystem(&quot;ramfat&quot;, fat)
+if (!VfsManager.RegisterFileSystem(&quot;ramfat&quot;, fat)
     || !VfsManager.TryFormat(&quot;ramfat&quot;, &quot;&quot;, new FatFormatOptions { Type = FatType.Fat16 })
     || !VfsManager.TryMount(&quot;ramfat&quot;, &quot;&quot;, MountFlags.None, &quot;/mnt&quot;, out _))
 {
@@ -297,7 +298,7 @@ if (StorageManager.Partitions.Count == 0
 <p>Formatting is refused while the source is mounted: unmount first with <code>VfsManager.TryUnmount(&quot;/mnt&quot;)</code>.</p>
 <h2 id="list-mounted-volumes">List mounted volumes</h2>
 <p><code>VfsManager.Mounts</code> is the mount table. Each entry tells you the driver name, the backing source and the mount point:</p>
-<pre><code class="lang-csharp">foreach (VfsManager.VfsMount m in VfsManager.Mounts)
+<pre><code class="lang-csharp">foreach (VfsMount m in VfsManager.Mounts)
 {
     Console.WriteLine(m.MountPoint + &quot; -&gt; &quot; + m.Name + &quot; (source &quot; + m.Source + &quot;)&quot;);
 }
@@ -309,7 +310,7 @@ if (StorageManager.Partitions.Count == 0
 <p><code>VfsManager.TryStatFs</code> reports a mount's block accounting. Free space is the available block count times the block size:</p>
 <pre><code class="lang-csharp">if (VfsManager.TryStatFs(&quot;/mnt&quot;, out VfsStatFs stats))
 {
-    ulong freeBytes = stats.Bavail * stats.BlockSize;
+    ulong freeBytes = stats.AvailableBlocks * stats.BlockSize;
     ulong totalBytes = stats.Blocks * stats.BlockSize;
     Console.WriteLine(freeBytes + &quot; of &quot; + totalBytes + &quot; bytes free&quot;);
 }
@@ -479,10 +480,10 @@ Directory.SetCurrentDirectory(&quot;/&quot;);
 <li>Symbolic links and hard links are not supported (<code>ENOTSUP</code>/<code>EPERM</code> under the hood; the BCL surfaces <code>IOException</code>).</li>
 <li>File timestamps are not persisted yet (<code>File.SetLastWriteTime</code> is accepted but a FAT timestamp lands later).</li>
 <li><code>DriveInfo</code> is not wired up yet; use <code>VfsManager.TryStatFs</code> for free-space queries.</li>
-<li>FAT is the only filesystem driver today; the <code>IVfsFilesystemType</code> interface is what a new driver implements.</li>
+<li>FAT is the only filesystem driver the kernel suites cover; an ext2 driver, <code>Ext2FileSystemType</code> in <code>Cosmos.Kernel.System.FileSystem.Ext2</code>, ships beside it and is tested on the host only. The <code>IVfsFileSystemType</code> interface is what a new driver implements.</li>
 </ul>
 <h2 id="how-it-works">How it works</h2>
-<p>Your code calls the stock BCL, which bottoms out in the Unix PAL (<code>Interop.Sys.*</code> P/Invokes). Those ~45 entry points are <a href="../dev/plugs.html">plugged</a> in <code>Cosmos.Kernel.Plugs</code>: a file-descriptor table adapts the PAL contract (fds, dir streams, PAL errnos) and delegates to <code>VfsManager</code>, which owns path resolution, the mount table, the current directory and open-handle semantics, and dispatches to the mounted filesystem driver, which reads and writes an <code>IBlockDevice</code> (AHCI, NVMe or USB mass storage via <code>StorageManager</code>, RAM via <code>MemoryBlockDevice</code>).</p>
+<p>Your code calls the stock BCL, which bottoms out in the Unix PAL (<code>Interop.Sys.*</code> P/Invokes). Those ~45 entry points are <a href="../dev/plugs.html">plugged</a> in <code>Cosmos.Kernel.Plugs</code>: a file-descriptor table adapts the PAL contract (fds, dir streams, PAL errnos) and delegates to <code>VfsManager</code>, which owns path resolution, the mount table, the current directory and open-handle semantics, and dispatches to the mounted filesystem driver, which reads and writes an <code>IBlockDevice</code> (a SATA disk, an NVMe namespace, a virtio-blk disk or a USB mass storage unit published by the driver kit's <code>AhciDriver</code>, <code>NvmeDriver</code>, <code>VirtioBlkDriver</code> or <code>UsbMassStorageDriver</code>, all via <code>StorageManager</code>; RAM via <code>MemoryBlockDevice</code>).</p>
 <pre><code>File / Directory / FileStream          (stock BCL)
         │
 Interop.Sys.* PAL calls                (stock BCL, plugged)
@@ -491,9 +492,9 @@ FileDescriptorTable                    (Cosmos.Kernel.Plugs: fds, dir streams, e
         │
 VfsManager                             (mounts, paths, CWD, open handles)
         │
-IVfsFilesystemType / IVfsSuperblock    (FAT driver)
+IVfsFileSystemType / IVfsSuperblock    (FAT driver)
         │
-IBlockDevice                           (AHCI, NVMe, USB, MemoryBlockDevice)
+IBlockDevice                           (the kit's AHCI, NVMe, virtio-blk and USB mass storage drivers, MemoryBlockDevice)
 </code></pre>
 
 </article>

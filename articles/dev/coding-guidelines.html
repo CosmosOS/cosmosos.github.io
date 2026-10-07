@@ -111,22 +111,22 @@
 <hr>
 <h2 id="1-project-architecture">1. Project Architecture</h2>
 <h3 id="layer-dependency-rules">Layer Dependency Rules</h3>
-<p>The project is split into strict layers. Dependencies flow <strong>downward only</strong>. These rules are <strong>enforced at compile time</strong> by the <code>LayerAnalyzer</code> Roslyn analyzer in <code>Cosmos.Build.Analyzer.Patcher</code>.</p>
+<p>The project is split into strict layers. Dependencies flow <strong>downward only</strong>. These rules are <strong>enforced at compile time</strong> by the <code>LayerAnalyzer</code> Roslyn analyzer in <code>Cosmos.Build.Analyzer.Patcher</code>, which judges a project on the types and members its code names, not on the reference list restore builds, and reports each assembly used across a boundary once, at its first use. A user kernel, and a driver assembly (<code>&lt;CosmosDriverAssembly&gt;true&lt;/CosmosDriverAssembly&gt;</code>, see <a href="public-api.html">Public API Tracking</a>), may also name what <code>Cosmos.Kernel.HAL</code> offers: the driver kit seam and the device contracts (<code>IBlockDevice</code>, <code>MacAddress</code>).</p>
 <pre><code>User Kernel (DevKernel, test kernels)
+Cosmos.Kernel.Drivers (the shipped drivers, a driver assembly held to the User layer)
     └── Cosmos.Kernel.System        ← high-level OS APIs (Console, Graphics, Network)
-         └── Cosmos.Kernel.HAL      ← hardware abstraction (shared logic)
-              ├── Cosmos.Kernel.HAL.X64        ← x64-specific HAL implementations
-              ├── Cosmos.Kernel.HAL.ARM64      ← ARM64-specific HAL implementations
-              └── Cosmos.Kernel.HAL.Interfaces ← pure interfaces, no implementations
-                   └── Cosmos.Kernel.Core   ← low-level runtime (memory, scheduler, serial)
-                        ├── Cosmos.Kernel.Native.X64       ← x64 assembly (.s)
-                        ├── Cosmos.Kernel.Native.ARM64     ← ARM64 assembly (.s)
-                        └── Cosmos.Kernel.Native.MultiArch ← cross-platform native C code (ACPI, libc stubs)
+         └── Cosmos.Kernel.HAL      ← hardware abstraction (shared logic, boot and device contracts)
+              ├── Cosmos.Kernel.HAL.X64        ← x64 platform code (machine description, line routing, PIT, RTC)
+              ├── Cosmos.Kernel.HAL.ARM64      ← ARM64 platform code (machine description, line routing, generic timer, RTC)
+              └── Cosmos.Kernel.Core   ← low-level runtime (memory, scheduler, serial)
+                   ├── Cosmos.Kernel.Native.X64       ← x64 assembly (.s)
+                   ├── Cosmos.Kernel.Native.ARM64     ← ARM64 assembly (.s)
+                   └── Cosmos.Kernel.Native.MultiArch ← cross-platform native C code (ACPI, libc stubs)
 </code></pre>
 <p>For the full dependency graph, project descriptions, and rules, see <a href="kernel-project-layout.html">Kernel Project Layout</a>.</p>
 <h3 id="when-to-create-a-new-project">When to Create a New Project</h3>
 <ul>
-<li>New hardware device category → new interface in <code>Cosmos.Kernel.HAL.Interfaces</code>, implementations in <code>Cosmos.Kernel.HAL.X64</code>/<code>Cosmos.Kernel.HAL.ARM64</code>. Cross-platform HAL devices go to <code>Cosmos.Kernel.HAL</code>.</li>
+<li>New hardware the kit's buses reach (a PCI function, a virtio device, a USB interface, a PS/2 port, a platform node) → a <code>[Driver]</code> class in <code>Cosmos.Kernel.Drivers</code>, written over the public seam (<a href="../user/drivers.html">Writing a Driver</a>); the aggregator carries the package, so every kernel gets it. A new bus kind → an identity, a match, an access object and a path in the kit. Cross-platform HAL code goes to <code>Cosmos.Kernel.HAL</code>, platform code to <code>Cosmos.Kernel.HAL.X64</code>/<code>Cosmos.Kernel.HAL.ARM64</code>.</li>
 <li>New OS-level feature, user API exposed → in <code>Cosmos.Kernel.System</code>.</li>
 <li>New low-level runtime concern → in <code>Cosmos.Kernel.Core</code>.</li>
 </ul>
@@ -144,7 +144,7 @@
 <tbody>
 <tr>
 <td>Namespace</td>
-<td><code>Cosmos.Kernel.{Layer}.{Category}</code></td>
+<td><code>Cosmos.Kernel.{Layer}.{Category}</code> (the project, then its folders)</td>
 <td><code>Cosmos.Kernel.Core.Scheduler</code></td>
 </tr>
 <tr>
@@ -204,6 +204,7 @@
 </tr>
 </tbody>
 </table>
+<p>In <code>Cosmos.Kernel.System.Diagnostics</code> a suffix says what a type is: a <code>*Diagnostics</code> type is the static diagnostic view of one subsystem (<code>DriverDiagnostics</code>, <code>SchedulerDiagnostics</code>, <code>MemoryDiagnostics</code>), which mostly reads but may act (<code>SchedulerDiagnostics.RequestKill</code>, <code>MemoryDiagnostics.Collect</code>), and an <code>*Info</code> type is a readonly snapshot struct such a view hands out (<code>DriverInfo</code>, <code>DeviceNodeInfo</code>, <code>KernelThreadInfo</code>). See <a href="public-api.html#naming">Public API Tracking</a>.</p>
 <h3 id="avoid">Avoid</h3>
 <ul>
 <li>Hungarian notation (<code>m_</code>, <code>p_</code>, <code>g_</code>), use <code>_</code> prefix for private fields only.</li>
@@ -250,14 +251,124 @@ top-level interface and each one declares that interface and nothing else.</p>
 &lt;/ItemGroup&gt;
 </code></pre>
 <p>This is only allowed now in <code>Cosmos.Kernel.Core</code> but this may change in the future.</p>
+<h3 id="namespaces-follow-folders">Namespaces Follow Folders</h3>
+<p>A file's namespace is its project's name followed by the folders between
+the project and the file: <code>Cosmos.Kernel.Core/Scheduler/SchedulerThread.cs</code>
+declares <code>Cosmos.Kernel.Core.Scheduler</code>. The build enforces it with IDE0130
+at error for every <code>src/Cosmos.Kernel*</code> project, the test kernels, the
+host-side unit tests in <code>tests/Cosmos.Kernel.Tests.System</code> and
+<code>examples/DevKernel</code>, so <code>dotnet build</code> fails on a file that drifts (the
+format CI checks the projects in <code>nativeaot-patcher.slnx</code>, which leaves out
+the test kernels). Move the file or fix the namespace rather than adding an
+exemption. The exemptions, each with its reason, close <code>.editorconfig</code>:
+names ILC matches by full name (each <code>LibraryInitializer</code>,
+<code>EagerStaticClassConstructionAttribute</code>, <code>Core/Runtime/Stdllib.cs</code>), the
+source generators' <code>IsExternalInit</code> (the C# compiler's init-accessor
+marker, which must live in <code>System.Runtime.CompilerServices</code>), the
+<code>Bridge/Import</code> and <code>Bridge/Export</code> folders, whose files share the
+project's <code>Bridge</code> namespace, the vendored code under
+<code>Cosmos.Kernel.System/ThirdParty/</code> and the dotnet/runtime mirrors under
+<code>Cosmos.Kernel.Core/Runtime/Internal/</code>. IDE0130 does not check a namespace
+holding a partial type split across files (every <code>[LibraryImport]</code> class)
+or a nested namespace; those follow the rule unchecked.</p>
+<h3 id="driver-folders">Driver Folders</h3>
+<p><code>Cosmos.Kernel.Drivers</code> keeps each driver three folders deep, bus kind, then
+category, then driver, and each file's namespace follows its folder:</p>
+<pre><code>Cosmos.Kernel.Drivers/
+  Pci/                       ← the bus kind the driver matches on (PciMatch)
+    Bus/                     ← a bus driver: its binding publishes child nodes
+      Xhci/
+        XhciDriver.cs        ← Cosmos.Kernel.Drivers.Pci.Bus.Xhci
+    Storage/                 ← otherwise, what it publishes (a block device)
+      Nvme/
+        NvmeDriver.cs
+  Virtio/
+    Display/
+      VirtioGpu/
+        VirtioGpuDriver.cs   ← Cosmos.Kernel.Drivers.Virtio.Display.VirtioGpu
+</code></pre>
+<p>The bus kind is the one the driver matches on, named after its match type:
+<code>Pci</code>, <code>Platform</code>, <code>Ps2</code>, <code>Usb</code> or <code>Virtio</code>. The category is <code>Bus</code> for a bus
+driver and otherwise names what the driver publishes: <code>Display</code>, <code>Input</code> (a
+keyboard or pointer), <code>Network</code> or <code>Storage</code> (a block device). The driver
+folder is the class name without <code>Driver</code>, unless a type inside the folder
+already has that name, since a namespace must not share its name with one of
+its types: the transport drivers sit in <code>VirtioPci</code> and <code>VirtioMmio</code>, beside
+their <code>VirtioPciTransport</code> and <code>VirtioMmioTransport</code> classes. A driver's
+state, protocol and vocabulary types stay in its folder, in subfolders when
+there are many (<code>VmwareSvga/Enums</code>, <code>VmwareSvga/Structs</code>). The namespace is
+part of the full type name that <code>CosmosDriverExclude</code> names and that the
+manifest sorts by (<a href="build/driver-manifest.html">Driver Manifest</a>), so moving a
+driver changes both.</p>
+<h3 id="hal-folders">HAL Folders</h3>
+<p><code>Cosmos.Kernel.HAL</code> gives each concept one top-level folder, and no folder
+name appears twice in the tree:</p>
+<pre><code>Cosmos.Kernel.HAL/
+  Experimentals.cs           ← the seam's diagnostic ID (COSMOS0003)
+  Boot/                      ← internal: IPlatformInitializer, PlatformHAL
+  Timers/                    ← internal: TickSource, TimerEntry
+  Internal/                  ← the LibraryInitializer ILC finds by full name
+  Devices/                   ← what a device is, a folder per category
+    Display/                 ← IDisplay, its facets, DisplayMode, DisplaySink, DisplayConsumer, FirmwareDisplay
+    Input/
+    Network/                 ← INetworkInterface, NetworkSink, NetworkConsumer, MacAddress
+    Storage/                 ← IBlockDevice, BlockConsumer
+  DriverKit/                 ← how a driver finds and binds a device
+    Driver.cs                ← the driver and its binding: matching, probing, the node tree
+    DeviceBinding.cs
+    Resources/               ← what a binding hands out: RegisterWindow, DeviceRegion, DmaBuffer
+    Interrupts/              ← InterruptSource, InterruptHandle, InterruptHandler, InterruptContext
+    Threading/               ← DeviceLock, DeviceEvent, DriverThread, WorkItem
+    Buses/
+      Pci/                   ← PciIdentity, PciMatch, PciAccess, PciLineInterruptSource, …
+      Usb/
+    Engine/                  ← internal: DeviceRegistry, DriverEngine, Arbitration, DriverLog
+</code></pre>
+<p>A device category under <code>Devices/</code> holds everything about its kind: the
+contract a driver implements, its facets and vocabulary, the sink the
+driver reports through (the block kind has none) and the ring's internal
+consumer, which learns of each device's arrival and departure and receives
+its reports. The categories are the ones <code>Cosmos.Kernel.Drivers</code> files its
+drivers under (<a href="#driver-folders">Driver Folders</a>), less <code>Bus</code>. <code>Display/</code>
+also holds <code>FirmwareDisplay</code>, the display the engine publishes over the boot
+framebuffer that Core's <code>BootFirmware</code> read. HAL has no firmware folder:
+reading what the bootloader and the firmware hand over takes pointers, so it
+is Core's (<a href="#unsafe-code">Unsafe Code</a>).</p>
+<p>The <code>DriverKit/</code> root holds the driver and its binding: <code>Driver</code> and its
+attribute, the registry, <code>DeviceBinding</code>, the node tree with its identity
+and match bases, and the probe and detach vocabulary. What a binding hands
+a driver sits one folder down, by concern: <code>Resources/</code> for the ways to
+reach the hardware (resources, register windows, mapped regions, DMA
+buffers), <code>Interrupts/</code> for the sources and the handler contract, and
+<code>Threading/</code> for the locks, events, threads and work items a driver
+synchronizes with. A driver names the root and then the folders it uses.</p>
+<p>A bus kind under <code>DriverKit/Buses/</code> gives each role the same name in every
+folder: <code>&lt;Bus&gt;Identity</code>, <code>&lt;Bus&gt;Match</code>, <code>&lt;Bus&gt;Access</code> when a driver reaches
+the device through the bus (the platform bus has none: a platform driver
+maps its node's resources, and only the PCI host node carries an access
+object, the PCI folder's <code>PciHostAccess</code>), <code>&lt;Bus&gt;InterruptSource</code> when the
+bus delivers its own interrupts (on PCI and the platform bus the name also
+says how: <code>PciLineInterruptSource</code>, <code>PciMessageInterruptSource</code>,
+<code>PlatformLineInterruptSource</code>), and the bus's own vocabulary beside them.
+The base class a bus's host implements for the kit keeps the name its
+specification uses (<code>Ps2Controller</code>, <code>UsbHostController</code>,
+<code>VirtioTransport</code>) rather than a suffix shared across buses; the platform
+bus's is <code>PlatformLineRouting</code>, which the machine description implements.</p>
+<p>Stability is marked on each type, not by folder. Every public HAL type
+carries <code>[Experimental(Experimentals.DriverKitSeamDiagId)]</code> except the two
+stable contracts, <code>IBlockDevice</code> and <code>MacAddress</code>, and the
+<code>CosmosGuardHalPromotion</code> target in the HAL project fails the build when any
+other public type loses the attribute
+(<a href="public-api.html#the-policy">Public API Tracking</a>).</p>
 <h3 id="member-order">Member Order</h3>
 <p>There is no separator convention to follow. Four garbage-collector files carry
 <code>// --- Section Name ---</code> headers, written three weeks before this page was,
-and one driver file was later written to match them. The other 353 non-vendored
-files in the four tracked assemblies do not, no file has ever been converted,
-and no analyzer checks it. Neither is there a member order to describe: across
-131 types with three or more kinds of member there are 93 distinct orders, and
-the best-fitting single order covers 43 of them.</p>
+and the display driver files in <code>Cosmos.Kernel.Drivers</code> were later written to
+match them. The other 353 non-vendored files in the four tracked assemblies do
+not, no file has ever been converted, and no analyzer checks it. Neither is
+there a member order to describe: across 131 types with three or more kinds of
+member there are 93 distinct orders, and the best-fitting single order covers
+43 of them.</p>
 <p>Two orderings are still worth following, because a reader checks them inside
 one screen:</p>
 <ul>
@@ -267,17 +378,18 @@ first method.</li>
 static factory sits with the constructors it stands in for.</li>
 </ul>
 <p>If you want a model for the full separator form in a new file,
-<code>Cosmos.Kernel.HAL/Devices/Network/VirtioNet.cs</code> is the one file that
-demonstrates it. Do not convert an existing file to it.</p>
+<code>Cosmos.Kernel.Drivers/Virtio/Display/VirtioGpu/VirtioGpuDriver.cs</code> is the
+file that demonstrates it. Do not convert an existing file to it.</p>
 <h3 id="using-directives">Using Directives</h3>
 <ul>
 <li>Place <code>using</code> directives <strong>outside</strong> the namespace.</li>
 <li>Sort <code>System</code> namespaces first.</li>
 <li>Use file-scoped namespaces (eg. <code>namespace Cosmos.Kernel.Core.Scheduler;</code>).
-The vendored trees (BigGustave, SharpZipLib, LunarFonts) and the
-dotnet/runtime mirrors keep the block form so they stay diffable against
-upstream, and <code>Core/Runtime/Stdllib.cs</code> cannot take the file-scoped form
-at all: it declares four namespaces, one of them nested, which is CS8955.</li>
+The vendored trees under <code>ThirdParty/</code> (BigGustave, SharpZipLib,
+LunarFonts) and the dotnet/runtime mirrors keep the block form so they
+stay diffable against upstream, and <code>Core/Runtime/Stdllib.cs</code> cannot take
+the file-scoped form at all: it declares four namespaces, one of them
+nested, which is CS8955.</li>
 </ul>
 <hr>
 <h2 id="4-class--type-design">4. Class &amp; Type Design</h2>
@@ -288,11 +400,11 @@ at all: it declares four namespaces, one of them nested, which is CS8955.</li>
 <pre><code class="lang-csharp">// Simple manager: no underlying instance to expose
 public static class TimerManager
 {
-    private static ITimerDevice? s_timer;
+    private static TickSource? s_tickSource;
 
-    public static bool IsInitialized =&gt; s_timer is not null;
+    public static bool IsInitialized =&gt; s_tickSource is not null;
 
-    internal static void RegisterTimer(ITimerDevice timer) { ... }
+    internal static void RegisterTickSource(TickSource tickSource) { ... }
     public static void Wait(uint ms) { ... }
 }
 
@@ -339,22 +451,41 @@ public enum ThreadFlags
 }
 </code></pre>
 <h3 id="types-compared-by-value">Types Compared by Value</h3>
-<p>A type whose identity is its content (<code>Address</code>, <code>MACAddress</code>, <code>Mode</code>) is <code>sealed</code>, keeps its state in get-only members set by the constructor, and implements <code>IEquatable&lt;T&gt;</code> beside <code>Equals(object?)</code> and <code>GetHashCode()</code>. The three agree: two instances that are <code>Equals</code> hash alike, and <code>GetHashCode</code> never throws. Ordering, where it exists, is <code>IComparable&lt;T&gt;</code>, never the non-generic <code>IComparable</code>. A caller who needs the bytes gets a <code>ReadOnlySpan&lt;byte&gt;</code>; the backing array is never handed out, because a caller who can write it changes the identity behind every dictionary keyed on the value.</p>
+<p>A type whose identity is its content (<code>Address</code>, <code>MacAddress</code>, <code>Mode</code>) is <code>sealed</code>, keeps its state in get-only members set by the constructor, and implements <code>IEquatable&lt;T&gt;</code> beside <code>Equals(object?)</code> and <code>GetHashCode()</code>. The three agree: two instances that are <code>Equals</code> hash alike, and <code>GetHashCode</code> never throws. Ordering, where it exists, is <code>IComparable&lt;T&gt;</code>, never the non-generic <code>IComparable</code>. A caller who needs the bytes gets a <code>ReadOnlySpan&lt;byte&gt;</code>; the backing array is never handed out, because a caller who can write it changes the identity behind every dictionary keyed on the value.</p>
 <pre><code class="lang-csharp">public sealed class Address : IComparable&lt;Address&gt;, IEquatable&lt;Address&gt;
 {
     public ImmutableArray&lt;byte&gt; Parts { get; }
 
     public Address(ReadOnlySpan&lt;byte&gt; buffer) { ... }
 
-    public ReadOnlySpan&lt;byte&gt; ToSpan() =&gt; Parts.AsSpan();
-    public bool Equals(Address? other) =&gt; other is not null &amp;&amp; Parts.SequenceEqual(other.Parts);
-    public override bool Equals(object? obj) =&gt; Equals(obj as Address);
-    public override int GetHashCode() =&gt; HashCode.Combine(Id);
-    public int CompareTo(Address? other) =&gt; other is null ? 1 : Id.CompareTo(other.Id);
+    public ReadOnlySpan&lt;byte&gt; ToSpan()
+    {
+        return Parts.AsSpan();
+    }
+
+    public bool Equals(Address? other)
+    {
+        return other is not null &amp;&amp; Parts.SequenceEqual(other.Parts);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as Address);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Id);
+    }
+
+    public int CompareTo(Address? other)
+    {
+        return other is null ? 1 : Id.CompareTo(other.Id);
+    }
 }
 </code></pre>
 <h3 id="registered-instances">Registered Instances</h3>
-<p>When the subsystem must see every live instance (<code>Tcp.Connections</code>), the constructor is private and a static factory creates and registers the instance (<code>Tcp.CreateConnection</code>). The registry stays private, and removal disposes the instance so what it rented goes back to its pool.</p>
+<p>When the subsystem must see every live instance (<code>TcpConnection.Connections</code>), the constructor is private and a static factory creates and registers the instance (<code>TcpConnection.CreateConnection</code>). The registry stays private, and removal disposes the instance so what it rented goes back to its pool.</p>
 <hr>
 <h2 id="5-kernel-lifecycle">5. Kernel Lifecycle</h2>
 <h3 id="user-kernel-pattern">User Kernel Pattern</h3>
@@ -395,7 +526,7 @@ public class Kernel : Cosmos.Kernel.System.Kernel
 <hr>
 <h2 id="6-hal-architecture">6. HAL Architecture</h2>
 <h3 id="interface-driven-hal">Interface-Driven HAL</h3>
-<p>All hardware interaction goes through interfaces. Implementations are registered at boot:</p>
+<p>Platform services go through interfaces. Implementations are registered at boot:</p>
 <pre><code class="lang-csharp">// Interface (Cosmos.Kernel.Core, internal: no kernel registers or obtains one)
 internal interface ICpuOps
 {
@@ -407,29 +538,54 @@ internal interface ICpuOps
 // Implementation (Cosmos.Kernel.HAL.X64)
 public class X64CpuOps : ICpuOps
 {
-    public void Halt() =&gt; Native.Cpu.Halt();
+    public void Halt()
+    {
+        Native.Cpu.Halt();
+    }
+
     // ...
 }
 </code></pre>
 <h3 id="platform-initializer-pattern">Platform Initializer Pattern</h3>
-<p>Each architecture provides a factory that creates all platform-specific components. The factory, the contract and everything it returns are internal to the HAL: a kernel never installs one.</p>
+<p>Each architecture provides a factory that creates all platform-specific components. The factory, the contract and everything it returns are internal to the HAL: a kernel never installs one. The initializer is also the machine description: it publishes the root platform nodes a bus driver binds, from the sources the platform knows: ACPI's tables, the device tree the bootloader handed over, or a per-machine table; and it holds no device driver.</p>
 <pre><code class="lang-csharp">internal class X64PlatformInitializer : IPlatformInitializer
 {
     public string PlatformName =&gt; &quot;x86-64&quot;;
     public PlatformArchitecture Architecture =&gt; PlatformArchitecture.X64;
 
-    public IPortIO CreatePortIO() =&gt; new X64PortIO();
-    public ICpuOps CreateCpuOps() =&gt; new X64CpuOps();
-    public IInterruptController CreateInterruptController() =&gt; new X64InterruptController();
-    public ITimerDevice CreateTimer() =&gt; new X64Timer();
-    public IKeyboardDevice[] GetKeyboardDevices() =&gt; [new PS2Keyboard()];
-    public IMouseDevice[] GetMouseDevices() =&gt; [new PS2Mouse()];
-    public INetworkDevice? GetNetworkDevice() =&gt; /* PCI probe */ null;
-    public uint GetCpuCount() =&gt; /* ACPI/MADT */ 1;
+    public IPortIO CreatePortIO()
+    {
+        return new X64PortIO();
+    }
+
+    public ICpuOps CreateCpuOps()
+    {
+        return new X64CpuOps();
+    }
+
+    public IInterruptController CreateInterruptController()
+    {
+        return new X64InterruptController();
+    }
+
+    public TickSource CreateTickSource()
+    {
+        return new PIT();
+    }
+
+    public void PublishPlatformNodes()
+    {
+        // the 8042 and the PCI host, with their port ranges and lines
+    }
+
+    public uint GetCpuCount()
+    {
+        return /* ACPI/MADT */ 1;
+    }
 
     public void InitializeHardware()
     {
-        // PCI, ACPI, APIC initialization
+        // ACPI, APIC, timers
     }
 
     public void StartSchedulerTimer(uint quantumMs)
@@ -439,12 +595,13 @@ public class X64CpuOps : ICpuOps
 }
 </code></pre>
 <h3 id="adding-a-new-device">Adding a New Device</h3>
+<p>Write a <code>[Driver]</code> class in <code>Cosmos.Kernel.Drivers</code> over the kit and publish the device through its binding (<a href="../user/drivers.html">Writing a Driver</a>). When the device sits on a bus the kit does not know:</p>
 <ol>
-<li>Define the interface in <code>Cosmos.Kernel.HAL.Interfaces/Devices/</code>.</li>
-<li>Implement in <code>Cosmos.Kernel.HAL.X64/</code> and <code>Cosmos.Kernel.HAL.ARM64/</code>.</li>
-<li>Add factory method to <code>IPlatformInitializer</code>.</li>
-<li>Register during <code>InitializeHardware()</code> or via the platform initializer.</li>
+<li>Add the bus kind to the kit, in its own folder under <code>DriverKit/Buses/</code>: an identity, a match, an access object when a driver reaches the device through the bus, an interrupt source when the bus delivers its own interrupts, and a path format (<a href="#hal-folders">HAL Folders</a>).</li>
+<li>Publish its nodes from the machine description (<code>PublishPlatformNodes</code>) or from a bus driver (<code>PublishChild</code>).</li>
+<li>Write the leaf driver over the access object.</li>
 </ol>
+<p>Nothing goes into <code>Cosmos.Kernel.HAL.X64</code> or <code>Cosmos.Kernel.HAL.ARM64</code> but platform code. The device tree parser is Core code under <code>Cosmos.Kernel.Core/Firmware</code>, beside the other readers of what the firmware hands over; the ARM64 description only reads it.</p>
 <h3 id="hal-registration">HAL Registration</h3>
 <pre><code class="lang-csharp">// At boot (from the library initializer, or from OnBoot):
 PlatformHAL.Initialize(new X64PlatformInitializer());
@@ -563,7 +720,32 @@ private static partial ulong NativeReadTSC();
 <hr>
 <h2 id="10-memory--safety">10. Memory &amp; Safety</h2>
 <h3 id="unsafe-code">Unsafe Code</h3>
-<p>Unsafe code is allowed (<code>&lt;AllowUnsafeBlocks&gt;true&lt;/AllowUnsafeBlocks&gt;</code>) but should be contained in <code>Cosmos.Kernel.Core</code>:</p>
+<p>Unsafe code lives in <code>Cosmos.Kernel.Core</code> and its architecture projects
+(<code>Cosmos.Kernel.Core.X64</code>, <code>Cosmos.Kernel.Core.ARM64</code>), and in the pieces
+outside the layers (<code>Cosmos.Kernel.Boot.Limine</code>, <code>Cosmos.Kernel.Plugs</code>,
+<code>Cosmos.Kernel.Debug</code> and the <code>Cosmos.Kernel</code> aggregator).
+<code>Cosmos.Kernel.HAL</code>, its platform projects, <code>Cosmos.Kernel.System</code> and
+<code>Cosmos.Kernel.Drivers</code> compile with
+<code>&lt;AllowUnsafeBlocks&gt;false&lt;/AllowUnsafeBlocks&gt;</code>, so the compiler refuses a
+pointer there. What those layers need from memory, Core hands out by
+address:</p>
+<ul>
+<li><code>MemoryBlock</code> (<code>Core/Memory/</code>, the gen2 type) is a view over memory at an
+address: <code>Span</code> and <code>AsSpan&lt;T&gt;</code> read and write it.
+<code>PageAllocator.AllocBlock</code> hands out pages as a block and
+<code>PageAllocator.Free(MemoryBlock)</code> takes them back. A kit resource
+(<code>DeviceRegion</code>, <code>DmaBuffer</code>) holds a block and refuses its span once its
+binding is torn down.</li>
+<li><code>AddressSpace.HhdmOffset</code> is Limine's higher-half offset, read in one place.</li>
+<li><code>Core/Firmware/</code> reads what the bootloader and the firmware hand over: the
+framebuffer, the device tree, the boot time, the ACPI MCFG entry and the
+EFI clock (<code>BootFirmware</code>, <code>DeviceTree</code>, <code>AcpiMcfg</code>, <code>EfiRtc</code>).</li>
+</ul>
+<p>A structure the device reads in place, such as a virtqueue ring, is reached
+through <code>MemoryMarshal.Cast</code> and <code>MemoryMarshal.AsRef</code> over such a span, with
+<code>Volatile.Read</code> for a field the device writes. When a layer above Core needs
+what only a pointer gives, the fix is a Core entry point, not an <code>unsafe</code>
+block. Inside Core, keep <code>unsafe</code> to where it is needed:</p>
 <pre><code class="lang-csharp">// Good: unsafe scoped to where needed
 public static unsafe void WriteString(string str)
 {
@@ -579,7 +761,10 @@ public static unsafe void WriteString(string str)
 // Good: unsafe class for types that inherently work with pointers
 public unsafe class Thread : SchedulerExtensible
 {
-    public ThreadContext* GetContext() =&gt; (ThreadContext*)StackPointer;
+    public ThreadContext* GetContext()
+    {
+        return (ThreadContext*)StackPointer;
+    }
 }
 </code></pre>
 <h3 id="memory-allocation">Memory Allocation</h3>
@@ -625,7 +810,7 @@ List&lt;int&gt; list = new();  // uses RhAllocateNewArray under the hood
 </tr>
 </tbody>
 </table>
-<p>A rented array is at least as long as requested, not exactly as long, so the owner tracks the length and offset it uses and exposes the live part as a <code>ReadOnlySpan&lt;T&gt;</code>, never the array. <code>Tcp</code> is the model: <code>_data</code>, <code>_dataOffset</code> and <code>_dataLength</code> behind <code>Data =&gt; _data.AsSpan().Slice(_dataOffset, _dataLength)</code>, with <code>AppendToData</code> writing in place while the rented array has room and <code>Dispose</code> returning it.</p>
+<p>A rented array is at least as long as requested, not exactly as long, so the owner tracks the length and offset it uses and exposes the live part as a <code>ReadOnlySpan&lt;T&gt;</code>, never the array. <code>TcpConnection</code> is the model: <code>_data</code>, <code>_dataOffset</code> and <code>_dataLength</code> behind <code>Data =&gt; _data.AsSpan().Slice(_dataOffset, _dataLength)</code>, with <code>AppendToData</code> writing in place while the rented array has room and <code>Dispose</code> returning it.</p>
 <h3 id="critical-sections">Critical Sections</h3>
 <pre><code class="lang-csharp">// Preferred: scoped interrupt disable
 using (InternalCpu.DisableInterruptsScope())
@@ -764,7 +949,11 @@ ObjectDisposedException.ThrowIf(_disposed, this);
 <p>A member that can return <code>null</code> is declared with <code>?</code>: never hide it behind <code>!</code> to preserve an old signature. Conversely, do not add runtime null checks for values the annotations already guarantee: no <code>if (buffer == null) throw</code> on a non-nullable parameter, no <code>?? &quot;fallback&quot;</code> on a non-nullable return.</p>
 <pre><code class="lang-csharp">// Declare what can actually be null: callers are forced to handle it
 public static IScheduler? Current =&gt; _currentScheduler;
-public static PerCpuState? GetCpuState(uint cpuId) =&gt; _cpuStates?[cpuId];
+
+public static PerCpuState? GetCpuState(uint cpuId)
+{
+    return _cpuStates?[cpuId];
+}
 
 // Prefer a sentinel over a nullable field when null and empty mean the same thing
 private byte[] _window = [];                 // not: private byte[]? _window;
@@ -798,8 +987,13 @@ public static void CreateThread(uint cpuId, Thread thread)
 <pre><code class="lang-csharp">Address source = IPConfig.FindNetwork(destination)
     ?? throw new InvalidOperationException(&quot;No network route to destination&quot;);
 
-public MACAddress MacAddress =&gt; _macAddress
-    ?? throw new InvalidOperationException($&quot;{nameof(_macAddress)} is null&quot;);
+public MacAddress MacAddress
+{
+    get
+    {
+        return _macAddress ?? throw new InvalidOperationException($&quot;{nameof(_macAddress)} is null&quot;);
+    }
+}
 </code></pre>
 <h3 id="constructors">Constructors</h3>
 <p>Every constructor must leave all non-nullable members initialized. Delete unused parameterless constructors instead of letting them poison the type:</p>
@@ -820,9 +1014,8 @@ internal IcmpPacket()
 <pre><code class="lang-csharp">// File-scoped namespaces
 namespace Cosmos.Kernel.Core.Scheduler;
 
-// Expression-bodied members for trivial implementations
+// Expression bodies for a property, indexer or accessor that fits on one line
 public string PlatformName =&gt; &quot;x86-64&quot;;
-public void Halt() =&gt; Native.Cpu.Halt();
 
 // Pattern matching
 switch (args[i])
@@ -848,7 +1041,7 @@ if (device?.BlockSize is not &gt; 0)
 Address ip = config?.Address ?? defaultAddress;
 
 // Collection expressions
-public IKeyboardDevice[] GetKeyboardDevices() =&gt; [new PS2Keyboard()];
+DeviceResource[] resources = [DeviceResource.PortRange(0x60, 1), DeviceResource.PortRange(0x64, 1)];
 
 // Target-typed new
 Thread thread = new();
@@ -884,7 +1077,7 @@ if (!s_clients.TryGetValue(port, out UdpClient? client))
 {
     return;
 }
-s_registeredTypes.TryAdd(name, filesystemType);
+s_registeredTypes.TryAdd(name, fileSystemType);
 cache[id] = mac;                        // upsert: no ContainsKey first
 
 // readonly on every field assigned only at its declaration or in a constructor
@@ -894,7 +1087,7 @@ private static readonly ArrayPool&lt;byte&gt; s_arrayPool = ArrayPool&lt;byte&gt
 // Auto-property over a field behind a pass-through accessor
 public static KernelConsole? Default { get; private set; }
 </code></pre>
-<p>Three limits on the last two. <code>readonly</code> on a field of a mutable struct type (<code>SpinLock</code>) is wrong: every method call would act on a defensive copy, and the lock would never be taken. The analyzer behind <code>dotnet_style_readonly_field</code> does not know which struct methods mutate, so its suggestion is taken for reference types and for structs with no mutating members only. A field a plug reaches by name (<code>[FieldAccess]</code>) stays a field: an auto-property's backing field has a compiler-generated name. And a static initializer that allocates is a class constructor, which runs on first touch through a lock that needs a current thread: a type read during device bring-up (<code>MACAddress.None</code> in the virtio-net driver) keeps its lazily filled statics, with a comment saying why.</p>
+<p>Three limits on the last two. <code>readonly</code> on a field of a mutable struct type (<code>SpinLock</code>) is wrong: every method call would act on a defensive copy, and the lock would never be taken. The analyzer behind <code>dotnet_style_readonly_field</code> does not know which struct methods mutate, so its suggestion is taken for reference types and for structs with no mutating members only. A field a plug reaches by name (<code>[FieldAccess]</code>) stays a field: an auto-property's backing field has a compiler-generated name. And a static initializer that allocates is a class constructor, which runs on first touch through a lock that needs a current thread: a type reachable from device bring-up (<code>MacAddress</code>, whose <code>None</code> and <code>Broadcast</code> any driver may read) keeps its lazily filled statics, with a comment saying why.</p>
 <h3 id="avoid-1">Avoid</h3>
 <pre><code class="lang-csharp">// Don't use var when type isn't obvious
 var x = GetValue();           // Bad: what type is x?
@@ -922,6 +1115,26 @@ if (ptr == null)                  // Good
     return;
 }
 
+// Don't give a method, constructor, operator or local function an expression body
+public void Halt() =&gt; Native.Cpu.Halt();     // Bad
+
+public void Halt()                           // Good
+{
+    Native.Cpu.Halt();
+}
+
+// Don't wrap an expression body: past one line, a property takes a get block
+public bool IsFixedRoot =&gt;                   // Bad
+    Parent is null &amp;&amp; Superblock.Boot.Type != FatType.Fat32;
+
+public bool IsFixedRoot                      // Good
+{
+    get
+    {
+        return Parent is null &amp;&amp; Superblock.Boot.Type != FatType.Fat32;
+    }
+}
+
 // Don't compare a bool to a literal
 if (applied == false)             // Bad
 if (!applied)                     // Good
@@ -935,13 +1148,18 @@ if (map.ContainsKey(key))         // Bad: two lookups
 <blockquote>
 <p>Braces are enforced by <code>.editorconfig</code> (<code>csharp_prefer_braces = true:error</code>) and by CI (<code>dotnet format style --severity error</code>).</p>
 </blockquote>
+<p>Methods, constructors, operators and local functions take a block body, even for a single statement: a wrapped <code>=&gt;</code> hides where the body starts. A property, indexer or accessor uses <code>=&gt;</code> only when the whole member fits on one line, and a lambda keeps its <code>=&gt;</code>. The vendored trees under <code>ThirdParty/</code> follow this rule too, and each one's README lists the members it changed. <code>.editorconfig</code> records this in the <code>csharp_style_expression_bodied_*</code> options at <code>silent</code>, so CI does not enforce it.</p>
 <h3 id="feature-switches">Feature Switches</h3>
 <p>Use <code>[FeatureSwitchDefinition]</code> for compile-time feature toggling (trimmed by NativeAOT linker). All feature flags live in <code>Cosmos.Kernel.Core.CosmosFeatures</code>:</p>
 <pre><code class="lang-csharp">// In CosmosFeatures.cs: one property per feature
 [FeatureSwitchDefinition(&quot;Cosmos.Kernel.HAL.Interrupts.Enabled&quot;)]
-public static bool InterruptsEnabled =&gt;
-    AppContext.TryGetSwitch(&quot;Cosmos.Kernel.HAL.Interrupts.Enabled&quot;, out bool enabled)
-        ? enabled : true;
+public static bool InterruptsEnabled
+{
+    get
+    {
+        return AppContext.TryGetSwitch(&quot;Cosmos.Kernel.HAL.Interrupts.Enabled&quot;, out bool enabled) ? enabled : true;
+    }
+}
 
 // The ILC linker trims the dead branch entirely
 if (CosmosFeatures.KeyboardEnabled)
@@ -1003,19 +1221,19 @@ contextAddr = (contextAddr + 0xF) &amp; ~(nuint)0xF;
 <p>Commented-out code is deleted; the history keeps it. A <code>TODO</code> names what is missing and why it can wait; a doubt about the code (<code>// is this correct?</code>) is an issue, not a comment. A member with an empty body is not a placeholder: it is not written until it does something.</p>
 <h2 id="16-testing">16. Testing</h2>
 <p>For the full testing guide (unit tests, kernel integration tests, UART protocol, CI, writing test kernels), see <a href="testing.html">Testing</a>.</p>
-<p>Logic that needs no hardware (<code>Tcp</code> receive-buffer arithmetic, address parsing) is unit-tested in the host process from <code>src/tests/Cosmos.Kernel.Tests.System</code> (NUnit): one nested fixture per member under test, named after it, test names of the form <code>WhenX_AndY_ResultZ</code>, and <code>[TestCase(..., ExpectedResult = ...)]</code> for value tables. The project holds an <code>InternalsVisibleTo</code> grant from <code>Cosmos.Kernel.System</code>.</p>
+<p>Logic that needs no hardware (<code>TcpConnection</code> receive-buffer arithmetic, address parsing) is unit-tested in the host process from <code>tests/Cosmos.Kernel.Tests.System</code> (NUnit): one nested fixture per member under test, named after it, test names of the form <code>WhenX_AndY_ResultZ</code>, and <code>[TestCase(..., ExpectedResult = ...)]</code> for value tables. The project holds an <code>InternalsVisibleTo</code> grant from <code>Cosmos.Kernel.System</code>.</p>
 <p><strong>Code coverage:</strong> Add the <code>run-coverage</code> label to a PR to trigger the coverage CI. It runs the kernel test suites and outputs which code paths are covered by the integration tests.</p>
 <hr>
 <h2 id="17-public-api-surface">17. Public API Surface</h2>
 <p>Three rules decide what is <code>public</code> (the full policy and its mechanisms live in <a href="public-api.html">Public API Tracking</a>):</p>
 <ol>
-<li><strong>One supported ring.</strong> <code>Cosmos.Kernel.System</code> is the API kernels program against, plus the contract types its signatures expose (the <code>HAL.Interfaces</code> device interfaces, the <code>HAL.Vfs</code> contracts, Core's platform interfaces). Only that surface is tracked, documented, and covered by deprecation cycles.</li>
+<li><strong>One supported ring.</strong> <code>Cosmos.Kernel.System</code> is the API kernels program against, plus the contract types its signatures expose (the HAL's device contracts <code>IBlockDevice</code> and <code>MacAddress</code>, Core's platform interfaces). Only that surface is tracked, documented, and covered by deprecation cycles.</li>
 <li><strong>Chosen experimental seams.</strong> An extension point outside the ring is opened deliberately and marked <code>[Experimental(&quot;COSMOSxxxx&quot;)]</code>: usable now, no compatibility promise, promoted by removing the attribute. Never open a seam by just making something public.</li>
 <li><strong>Everything else is <code>internal</code>.</strong> Visibility is not the extension mechanism. First-party assemblies and white-box test kernels use <code>InternalsVisibleTo</code>; external code uses <code>[UnsafeAccessor]</code> (<a href="accessing-internals.html">Accessing internals</a>) at its own risk.</li>
 </ol>
 <p>Practical rules that follow:</p>
 <pre><code class="lang-csharp">// Good: new user-facing capability lands as a Cosmos.Kernel.System facade
-public static class MemoryInfo { public static ulong FreePages =&gt; PageAllocator.FreePageCount; }
+public static class MemoryDiagnostics { public static ulong FreePages =&gt; PageAllocator.FreePageCount; }
 
 // Bad: making the Core type public so a kernel can reach it
 public static class PageAllocator { ... }

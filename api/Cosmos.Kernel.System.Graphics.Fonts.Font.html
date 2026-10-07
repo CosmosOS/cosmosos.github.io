@@ -178,10 +178,10 @@ Class Font
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>width</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
-    <dd><p>The width of a single character in pixels</p>
+    <dd><p>The width of a single character in pixels.</p>
 </dd>
     <dt><code>height</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
-    <dd><p>The height of a single character in pixels</p>
+    <dd><p>The height of a single character in pixels.</p>
 </dd>
     <dt><code>data</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]</dt>
     <dd><p>The raw pixel data.</p>
@@ -310,7 +310,7 @@ Class Font
   
   </h3>
 
-  <div class="markdown level1 summary"><p>Converts a byte to its byte address.</p>
+  <div class="markdown level1 summary"><p>Tests whether one bit of a glyph row byte is set.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -321,15 +321,18 @@ Class Font
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>byteToConvert</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
-    <dd></dd>
+    <dd><p>The glyph row byte to test.</p>
+</dd>
     <dt><code>bitToReturn</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
-    <dd></dd>
+    <dd><p>The bit to test, counted from 1 at the most significant bit to 8 at the least significant.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd></dd>
+    <dd><p><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> when the bit is set, so the pixel it stands for is drawn.</p>
+</dd>
   </dl>
 
 

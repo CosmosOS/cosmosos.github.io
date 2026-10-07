@@ -372,7 +372,7 @@ public static bool IsInitialized { get; }</code></pre>
   
   </h3>
 
-  <div class="markdown level1 summary"><p>Initializes the default (global) console on the hardware framebuffer.
+  <div class="markdown level1 summary"><p>Initializes the default (global) console on the primary display.
 Idempotent: a second call leaves the existing console in place, so a
 kernel that overrides <a class="xref" href="Cosmos.Kernel.System.Kernel.html#Cosmos_Kernel_System_Kernel_OnBoot">OnBoot()</a> may call this whether
 or not it also called <code>base.OnBoot()</code>.</p>
@@ -389,7 +389,8 @@ public static bool Initialize()</code></pre>
   <dl class="parameters">
     <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
     <dd><p>True when <a class="xref" href="Cosmos.Kernel.System.Graphics.KernelConsole.html#Cosmos_Kernel_System_Graphics_KernelConsole_Default">Default</a> is available, false when
-graphics are compiled out.</p>
+graphics are compiled out, no display is published, or the display
+has no mode.</p>
 </dd>
   </dl>
 

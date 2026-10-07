@@ -120,7 +120,7 @@
 </tr>
 <tr>
 <td>Resolution</td>
-<td>The timer device tick</td>
+<td>The tick source's period</td>
 <td>The scheduler tick</td>
 </tr>
 <tr>
@@ -146,11 +146,10 @@
 </code></pre>
 <p>These are the <code>using</code>s the snippets below rely on:</p>
 <pre><code class="lang-csharp">using System;
-using Cosmos.Kernel.HAL.Interfaces.Devices;
 using Cosmos.Kernel.System.Diagnostics;
-using Cosmos.Kernel.System.Timer;
+using Cosmos.Kernel.System.Timers;
 </code></pre>
-<p>The timer device is found and registered at boot, so <code>TimerManager</code> is ready as soon as your kernel runs. <code>TimerManager.IsEnabled</code> answers the compile-time question and <code>TimerManager.IsInitialized</code> the runtime one.</p>
+<p>The tick source is found and registered at boot, so <code>TimerManager</code> is ready as soon as your kernel runs. <code>TimerManager.IsEnabled</code> answers the compile-time question and <code>TimerManager.IsInitialized</code> the runtime one.</p>
 <hr>
 <h2 id="waiting">Waiting</h2>
 <p><code>TimerManager.Wait</code> blocks the calling thread for a number of milliseconds. It is the simplest thing on this page and the one most kernels reach for, usually to pace a poll loop:</p>
@@ -177,23 +176,23 @@ TimerManager.Cancel(blink);
 </code></pre>
 <p>The handle is read-only: <code>TimeoutNs</code>, <code>Recurring</code> and <code>IsActive</code> are what a caller can ask about a pending timer. Hand it back to <code>Cancel</code> to stop it. <code>Cancel</code> returns <code>true</code> only when the timer was still pending, so calling it twice, or on a one-shot that has already fired, is not an error.</p>
 <p><strong>The callback runs in interrupt context.</strong> It must not block, must not allocate, and must not take a lock, because the thread it interrupted may be holding one. It must also not let an exception escape: nothing above the interrupt dispatch catches one, and the kernel halts.</p>
-<p><code>Schedule</code> and <code>ScheduleRecurring</code> return <code>null</code> when the timer is compiled out or no device registered, which is why the handle is nullable. <code>Cancel</code> accepts null and answers <code>false</code>.</p>
+<p><code>Schedule</code> and <code>ScheduleRecurring</code> return <code>null</code> when the timer is compiled out or no tick source is registered, which is why the handle is nullable. <code>Cancel</code> accepts null and answers <code>false</code>.</p>
 <hr>
 <h2 id="running-a-callback-that-needs-to-do-real-work">Running a callback that needs to do real work</h2>
 <p>Anything the paragraph above forbids belongs on an alarm. <code>AlarmManager</code> keeps its own kernel thread and runs callbacks there, so an alarm callback may block, allocate, use scheduler primitives and take locks:</p>
 <pre><code class="lang-csharp">ulong id = AlarmManager.ScheduleRecurring(
-    () =&gt; Console.WriteLine(&quot;free pages: &quot; + MemoryInfo.FreePages),
+    () =&gt; Console.WriteLine(&quot;free pages: &quot; + MemoryDiagnostics.FreePages),
     TimeSpan.FromSeconds(5));
 
 /* ... later ... */
 AlarmManager.Cancel(id);
 </code></pre>
-<p>The shape is deliberately the same as <code>TimerManager</code>'s so that switching between them is one word. What differs is what you get back: an alarm belongs to the alarm system rather than to a device registry, so it is identified by a <code>ulong</code> id. Zero means the alarm was not scheduled, which happens when the scheduler is not running or the period is not positive.</p>
+<p>The shape is deliberately the same as <code>TimerManager</code>'s so that switching between them is one word. What differs is what you get back: an alarm belongs to the alarm system rather than to a tick source's registry, so it is identified by a <code>ulong</code> id. Zero means the alarm was not scheduled, which happens when the scheduler is not running or the period is not positive.</p>
 <p><strong>The scheduling calls themselves are thread-context only.</strong> Every <code>AlarmManager</code> member takes the alarm list's mutex and parks if it is held. Calling one from an interrupt handler parks inside the handler and hangs, and a <code>TimerManager</code> callback is an interrupt handler. The <code>TimerManager</code> members mask interrupts instead of parking and carry no such restriction, so a timer callback that needs to do real work should signal a thread rather than schedule an alarm.</p>
 <p>A recurring alarm's period restarts when the callback fires, not when it returns, so a callback that runs longer than its period leaves the next firing already due.</p>
 <hr>
 <h2 id="changing-the-tick-rate">Changing the tick rate</h2>
-<p><code>TimerManager.Frequency</code> reads and writes the timer device's tick rate in hertz. Each device divides a fixed counter, so each accepts a bounded range: 19 Hz to 1193180 Hz on the x64 PIT, and 1 Hz up to <code>CNTFRQ_EL0</code> on the ARM64 generic timer. A value outside its device's range throws <code>ArgumentOutOfRangeException</code> rather than being quietly ignored:</p>
+<p><code>TimerManager.Frequency</code> reads and writes the tick source's rate in hertz. Each tick source divides a fixed counter, so each accepts a bounded range: 19 Hz to 1193180 Hz on the x64 PIT, and 1 Hz up to <code>CNTFRQ_EL0</code> on the ARM64 generic timer. A value outside its range throws <code>ArgumentOutOfRangeException</code> rather than being quietly ignored:</p>
 <pre><code class="lang-csharp">Console.WriteLine(&quot;timer runs at &quot; + TimerManager.Frequency + &quot; Hz&quot;);
 TimerManager.Frequency = 1000;
 </code></pre>

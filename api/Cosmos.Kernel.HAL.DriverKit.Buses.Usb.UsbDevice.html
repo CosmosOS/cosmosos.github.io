@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class UsbDevice | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class UsbDevice | Cosmos Gen 3 ">
+      
+      <meta name="description" content="One USB function behind one port: the host created it when it addressed the port (an xHCI slot) and derives from it to carry its per-device state and the transfer primitives; the enumeration core fills the identity it read from the descriptors. A host implements the protected members; the kit calls them through the internal ones, so a class driver holding a reference can reach none of them and goes through its  instead.">
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice">
+
+
+
+  <h1 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice" class="text-break">
+Class UsbDevice  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><span class="xref">Cosmos</span>.<a class="xref" href="Cosmos.Kernel.html">Kernel</a>.<a class="xref" href="Cosmos.Kernel.HAL.html">HAL</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.html">DriverKit</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.html">Buses</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.html">Usb</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Cosmos.Kernel.HAL.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>One USB function behind one port: the host created it when it addressed
+the port (an xHCI slot) and derives from it to carry its per-device
+state and the transfer primitives; the enumeration core fills the
+identity it read from the descriptors. A host implements the protected
+members; the kit calls them through the internal ones, so a class driver
+holding a reference can reach none of them and goes through its
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbAccess.html">UsbAccess</a> instead.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Experimental(&quot;COSMOS0003&quot;)]
+public abstract class UsbDevice</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">UsbDevice</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice__ctor_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.#ctor*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice__ctor_Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbHostController_Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_System_Byte_Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbSpeed_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.#ctor(Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbHostController,Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice,System.Byte,Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbSpeed)">
+  UsbDevice(UsbHostController, UsbDevice?, byte, UsbSpeed)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Creates the kit half of a device the host addressed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected UsbDevice(UsbHostController host, UsbDevice? parent, byte portNumber, UsbSpeed speed)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>host</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbHostController.html">UsbHostController</a></dt>
+    <dd><p>The host controller that addressed it.</p>
+</dd>
+    <dt><code>parent</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.html">UsbDevice</a></dt>
+    <dd><p>The hub it hangs off, or null for a device on a root port.</p>
+</dd>
+    <dt><code>portNumber</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd><p>The 1-based port number on <code class="paramref">parent</code>, or the root port number.</p>
+</dd>
+    <dt><code>speed</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbSpeed.html">UsbSpeed</a></dt>
+    <dd><p>The speed the port reported.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_ConfigurationValue_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.ConfigurationValue*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_ConfigurationValue" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.ConfigurationValue">
+  ConfigurationValue
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>bConfigurationValue of the first configuration, the one the kit selects; written by the enumeration core.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte ConfigurationValue { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_DeviceClass_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.DeviceClass*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_DeviceClass" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.DeviceClass">
+  DeviceClass
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>bDeviceClass, written by the enumeration core.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte DeviceClass { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_DeviceProtocol_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.DeviceProtocol*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_DeviceProtocol" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.DeviceProtocol">
+  DeviceProtocol
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>bDeviceProtocol, written by the enumeration core.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte DeviceProtocol { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_DeviceSubclass_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.DeviceSubclass*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_DeviceSubclass" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.DeviceSubclass">
+  DeviceSubclass
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>bDeviceSubClass, written by the enumeration core.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte DeviceSubclass { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_Host_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.Host*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_Host" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.Host">
+  Host
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The host controller that addressed the device.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public UsbHostController Host { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbHostController.html">UsbHostController</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_HubDepth_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.HubDepth*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_HubDepth" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.HubDepth">
+  HubDepth
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Number of hubs between this device and its root port.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int HubDepth { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_IsDisconnected_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.IsDisconnected*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_IsDisconnected" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.IsDisconnected">
+  IsDisconnected
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>True once the device left the bus, or is being released. From then on
+every transfer returns <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbTransferStatus.html#Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbTransferStatus_Disconnected">Disconnected</a>
+and one already waiting stops waiting. Any context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsDisconnected { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_MaxPacketSize0_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.MaxPacketSize0*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_MaxPacketSize0" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.MaxPacketSize0">
+  MaxPacketSize0
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>bMaxPacketSize0 in bytes, set by the host while addressing the device.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ushort MaxPacketSize0 { get; protected set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_Parent_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.Parent*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_Parent" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.Parent">
+  Parent
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The hub this device is attached to, or null for a device on a root port.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public UsbDevice? Parent { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.html">UsbDevice</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_PortNumber_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.PortNumber*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_PortNumber" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.PortNumber">
+  PortNumber
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Port number on <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.html#Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_Parent">Parent</a>, or the root port number when there is no parent.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte PortNumber { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_ProductId_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.ProductId*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_ProductId" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.ProductId">
+  ProductId
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>idProduct, written by the enumeration core.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ushort ProductId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_RootPortNumber_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.RootPortNumber*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_RootPortNumber" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.RootPortNumber">
+  RootPortNumber
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The root hub port the device's branch of the tree hangs off.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte RootPortNumber { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_Speed_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.Speed*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_Speed" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.Speed">
+  Speed
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The speed the device was attached at.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public UsbSpeed Speed { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbSpeed.html">UsbSpeed</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_VendorId_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.VendorId*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_VendorId" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.VendorId">
+  VendorId
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>idVendor, written by the enumeration core.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ushort VendorId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_BulkInCore_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.BulkInCore*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_BulkInCore_Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbPipe_System_Span_System_Byte__System_Int32__" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.BulkInCore(Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbPipe,System.Span{System.Byte},System.Int32@)">
+  BulkInCore(UsbPipe, Span&lt;byte&gt;, out int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Reads from an open bulk IN pipe and waits. Thread context, one
+transfer per pipe at a time (the caller serializes); ends early on a
+short packet.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract UsbTransferStatus BulkInCore(UsbPipe pipe, Span&lt;byte&gt; data, out int transferred)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>pipe</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbPipe.html">UsbPipe</a></dt>
+    <dd><p>A bulk IN pipe of this device.</p>
+</dd>
+    <dt><code>data</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.span-1">Span</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>&gt;</dt>
+    <dd><p>Receives the data; its length is the most the transfer reads.</p>
+</dd>
+    <dt><code>transferred</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>Bytes received, set on failure too.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbTransferStatus.html">UsbTransferStatus</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_BulkOutCore_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.BulkOutCore*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_BulkOutCore_Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbPipe_System_ReadOnlySpan_System_Byte__System_Int32__" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.BulkOutCore(Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbPipe,System.ReadOnlySpan{System.Byte},System.Int32@)">
+  BulkOutCore(UsbPipe, ReadOnlySpan&lt;byte&gt;, out int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Writes <code class="paramref">data</code> to an open bulk OUT pipe and waits.
+Thread context, one transfer per pipe at a time (the caller
+serializes); ends early on a short packet.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract UsbTransferStatus BulkOutCore(UsbPipe pipe, ReadOnlySpan&lt;byte&gt; data, out int transferred)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>pipe</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbPipe.html">UsbPipe</a></dt>
+    <dd><p>A bulk OUT pipe of this device.</p>
+</dd>
+    <dt><code>data</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.readonlyspan-1">ReadOnlySpan</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>&gt;</dt>
+    <dd><p>The data to send.</p>
+</dd>
+    <dt><code>transferred</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>Bytes the device accepted, set on failure too.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbTransferStatus.html">UsbTransferStatus</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_ClosePipeCore_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.ClosePipeCore*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_ClosePipeCore_Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbPipe_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.ClosePipeCore(Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbPipe)">
+  ClosePipeCore(UsbPipe)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Stops the endpoint, drops its context and marks the pipe closed;
+on a disconnected device only the state is dropped. Thread context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract void ClosePipeCore(UsbPipe pipe)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>pipe</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbPipe.html">UsbPipe</a></dt>
+    <dd><p>A pipe this device opened.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_ConfigureAsHubCore_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.ConfigureAsHubCore*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_ConfigureAsHubCore_System_Byte_System_Byte_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.ConfigureAsHubCore(System.Byte,System.Byte)">
+  ConfigureAsHubCore(byte, byte)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Tells the host controller this device is a hub, so it can route
+transactions to the devices behind it. Thread context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract bool ConfigureAsHubCore(byte portCount, byte thinkTime)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>portCount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd><p>bNbrPorts from the hub descriptor.</p>
+</dd>
+    <dt><code>thinkTime</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd><p>TT think time from wHubCharacteristics bits 6:5 (high-speed hubs only).</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_ControlTransferCore_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.ControlTransferCore*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_ControlTransferCore_Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbSetupPacket_System_Span_System_Byte__" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.ControlTransferCore(Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbSetupPacket,System.Span{System.Byte})">
+  ControlTransferCore(UsbSetupPacket, Span&lt;byte&gt;)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Runs a control transfer on the default pipe and waits for it. Thread
+context; the data span is the OUT data or the IN buffer; one control
+transfer per device at a time (the kit serializes them).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract UsbTransferStatus ControlTransferCore(UsbSetupPacket setup, Span&lt;byte&gt; data)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>setup</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbSetupPacket.html">UsbSetupPacket</a></dt>
+    <dd><p>The request; its Length is the data stage size.</p>
+</dd>
+    <dt><code>data</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.span-1">Span</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>&gt;</dt>
+    <dd><p>At least <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbSetupPacket.html#Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbSetupPacket_Length">Length</a> bytes.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbTransferStatus.html">UsbTransferStatus</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_MarkDisconnected_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.MarkDisconnected*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_MarkDisconnected" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.MarkDisconnected">
+  MarkDisconnected()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Any context, allocation-free: every transfer to the device returns
+Disconnected from here on and one already waiting stops waiting. The
+host calls it from its port change handler when a root port loses its
+connection; the kit calls it for a whole subtree at detach.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void MarkDisconnected()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_OnDisconnectedCore_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.OnDisconnectedCore*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_OnDisconnectedCore" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.OnDisconnectedCore">
+  OnDisconnectedCore()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Any context, allocation-free, under no lock: called by
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.html#Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_MarkDisconnected">MarkDisconnected()</a> on the first transition so the host
+wakes every thread waiting on a transfer or command of this device;
+the waiter re-reads <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.html#Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_IsDisconnected">IsDisconnected</a> and returns
+Disconnected.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract void OnDisconnectedCore()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_OpenBulkPipeCore_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.OpenBulkPipeCore*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_OpenBulkPipeCore_Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbEndpoint_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.OpenBulkPipeCore(Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbEndpoint)">
+  OpenBulkPipeCore(UsbEndpoint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Configures a bulk endpoint, either direction. Thread context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract UsbPipe? OpenBulkPipeCore(UsbEndpoint endpoint)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>endpoint</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbEndpoint.html">UsbEndpoint</a></dt>
+    <dd><p>A bulk endpoint of this device.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbPipe.html">UsbPipe</a></dt>
+    <dd><p>The pipe; null when the controller refused.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_OpenInterruptPipeCore_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.OpenInterruptPipeCore*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_OpenInterruptPipeCore_Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbEndpoint_Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbReportHandler_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.OpenInterruptPipeCore(Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbEndpoint,Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbReportHandler)">
+  OpenInterruptPipeCore(UsbEndpoint, UsbReportHandler)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Configures an interrupt IN endpoint and keeps transfers queued on it
+until the pipe is closed, handing every completed one to
+<code class="paramref">handler</code>. Thread context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract UsbPipe? OpenInterruptPipeCore(UsbEndpoint endpoint, UsbReportHandler handler)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>endpoint</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbEndpoint.html">UsbEndpoint</a></dt>
+    <dd><p>An interrupt IN endpoint of this device.</p>
+</dd>
+    <dt><code>handler</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbReportHandler.html">UsbReportHandler</a></dt>
+    <dd><p>Receives each report.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbPipe.html">UsbPipe</a></dt>
+    <dd><p>The pipe; null when the controller refused.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_ResetEndpointCore_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.ResetEndpointCore*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbDevice_ResetEndpointCore_Cosmos_Kernel_HAL_DriverKit_Buses_Usb_UsbPipe_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.ResetEndpointCore(Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbPipe)">
+  ResetEndpointCore(UsbPipe)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The host half of CLEAR_FEATURE(ENDPOINT_HALT): returns the host side
+of the pipe to its initial state, nothing queued and the data toggle
+back to DATA0. Thread context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract bool ResetEndpointCore(UsbPipe pipe)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>pipe</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbPipe.html">UsbPipe</a></dt>
+    <dd><p>A pipe of this device.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

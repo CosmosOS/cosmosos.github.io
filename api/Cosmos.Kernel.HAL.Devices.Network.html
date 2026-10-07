@@ -95,18 +95,23 @@
 Classes
 </h3>
     <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Network.MACAddress.html">MACAddress</a></dt>
-      <dd></dd>
-    </dl>
-    <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Network.NetworkDevice.html">NetworkDevice</a></dt>
-      <dd><p>Abstract base class for all network devices.</p>
+      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Network.MacAddress.html">MacAddress</a></dt>
+      <dd><p>A 48-bit Ethernet MAC address.</p>
 </dd>
     </dl>
     <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Network.VirtioNet.html">VirtioNet</a></dt>
-      <dd><p>VirtIO network device driver. Transport-agnostic: works over virtio MMIO
-(QEMU virt virtio-net-device) and virtio PCI (virtio-net-pci) alike.</p>
+      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Network.NetworkSink.html">NetworkSink</a></dt>
+      <dd><p>Where a network driver reports frames and link changes, returned by
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.html#Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishNetwork_Cosmos_Kernel_HAL_Devices_Network_INetworkInterface_">PublishNetwork(INetworkInterface)</a>. Kit-owned; see <a class="xref" href="Cosmos.Kernel.HAL.Devices.Input.KeyboardSink.html">KeyboardSink</a>.
+Allocation-free; any context.</p>
+</dd>
+    </dl>
+    <h3 id="interfaces">
+Interfaces
+</h3>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Network.INetworkInterface.html">INetworkInterface</a></dt>
+      <dd><p>What a network driver implements and hands to <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.html#Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishNetwork_Cosmos_Kernel_HAL_Devices_Network_INetworkInterface_">PublishNetwork(INetworkInterface)</a>. Called by the ring in thread context.</p>
 </dd>
     </dl>
 

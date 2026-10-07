@@ -120,7 +120,7 @@ translated to the host LBA space by adding <a class="xref" href="Cosmos.Kernel.S
   <dl class="typelist implements">
     <dt>Implements</dt>
     <dd>
-      <div><a class="xref" href="Cosmos.Kernel.HAL.Interfaces.Devices.IBlockDevice.html">IBlockDevice</a></div>
+      <div><a class="xref" href="Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice.html">IBlockDevice</a></div>
     </dd>
   </dl>
 
@@ -159,7 +159,7 @@ translated to the host LBA space by adding <a class="xref" href="Cosmos.Kernel.S
 
   <a id="Cosmos_Kernel_System_Storage_Partition__ctor_" data-uid="Cosmos.Kernel.System.Storage.Partition.#ctor*"></a>
 
-  <h3 id="Cosmos_Kernel_System_Storage_Partition__ctor_Cosmos_Kernel_HAL_Interfaces_Devices_IBlockDevice_System_UInt64_System_UInt64_System_String_" data-uid="Cosmos.Kernel.System.Storage.Partition.#ctor(Cosmos.Kernel.HAL.Interfaces.Devices.IBlockDevice,System.UInt64,System.UInt64,System.String)">
+  <h3 id="Cosmos_Kernel_System_Storage_Partition__ctor_Cosmos_Kernel_HAL_Devices_Storage_IBlockDevice_System_UInt64_System_UInt64_System_String_" data-uid="Cosmos.Kernel.System.Storage.Partition.#ctor(Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice,System.UInt64,System.UInt64,System.String)">
   Partition(IBlockDevice, ulong, ulong, string)
   
   </h3>
@@ -174,7 +174,7 @@ translated to the host LBA space by adding <a class="xref" href="Cosmos.Kernel.S
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>host</code> <a class="xref" href="Cosmos.Kernel.HAL.Interfaces.Devices.IBlockDevice.html">IBlockDevice</a></dt>
+    <dt><code>host</code> <a class="xref" href="Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice.html">IBlockDevice</a></dt>
     <dd><p>The disk this partition lives on.</p>
 </dd>
     <dt><code>startSector</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a></dt>
@@ -294,7 +294,7 @@ translated to the host LBA space by adding <a class="xref" href="Cosmos.Kernel.S
 
   <h4 class="section">Property Value</h4>
   <dl class="parameters">
-    <dt><a class="xref" href="Cosmos.Kernel.HAL.Interfaces.Devices.IBlockDevice.html">IBlockDevice</a></dt>
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice.html">IBlockDevice</a></dt>
     <dd></dd>
   </dl>
 
@@ -426,7 +426,7 @@ writes are durable. No-op on devices without a volatile cache.</p>
     <dd><p>Number of blocks to read.</p>
 </dd>
     <dt><code>data</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.span-1">Span</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>&gt;</dt>
-    <dd><p>Destination buffer; must be at least <code class="paramref">blockCount</code> * <a class="xref" href="Cosmos.Kernel.HAL.Interfaces.Devices.IBlockDevice.html#Cosmos_Kernel_HAL_Interfaces_Devices_IBlockDevice_BlockSize">BlockSize</a> bytes.</p>
+    <dd><p>Destination buffer; must be at least <code class="paramref">blockCount</code> * <a class="xref" href="Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice.html#Cosmos_Kernel_HAL_Devices_Storage_IBlockDevice_BlockSize">BlockSize</a> bytes.</p>
 </dd>
   </dl>
 
@@ -450,7 +450,7 @@ writes are durable. No-op on devices without a volatile cache.</p>
 
   <div class="markdown level1 summary"><p>Write whole blocks starting at <code class="paramref">blockNo</code> from <code class="paramref">data</code>.
 Completion means the device accepted the write; durability against
-power loss is only guaranteed after <a class="xref" href="Cosmos.Kernel.HAL.Interfaces.Devices.IBlockDevice.html#Cosmos_Kernel_HAL_Interfaces_Devices_IBlockDevice_Flush">Flush()</a> returns.</p>
+power loss is only guaranteed after <a class="xref" href="Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice.html#Cosmos_Kernel_HAL_Devices_Storage_IBlockDevice_Flush">Flush()</a> returns.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -467,7 +467,7 @@ power loss is only guaranteed after <a class="xref" href="Cosmos.Kernel.HAL.Inte
     <dd><p>Number of blocks to write.</p>
 </dd>
     <dt><code>data</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.readonlyspan-1">ReadOnlySpan</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>&gt;</dt>
-    <dd><p>Source buffer; must be at least <code class="paramref">blockCount</code> * <a class="xref" href="Cosmos.Kernel.HAL.Interfaces.Devices.IBlockDevice.html#Cosmos_Kernel_HAL_Interfaces_Devices_IBlockDevice_BlockSize">BlockSize</a> bytes.</p>
+    <dd><p>Source buffer; must be at least <code class="paramref">blockCount</code> * <a class="xref" href="Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice.html#Cosmos_Kernel_HAL_Devices_Storage_IBlockDevice_BlockSize">BlockSize</a> bytes.</p>
 </dd>
   </dl>
 

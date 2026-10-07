@@ -161,7 +161,7 @@ public interface IScheduler</code></pre>
   </h3>
 
   <div class="markdown level1 summary"><p>Display name for this policy, used in boot logs and reported on the
-ring as <code>SchedulerInfo.SchedulerName</code>.</p>
+ring as <code>SchedulerDiagnostics.SchedulerName</code>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -236,7 +236,7 @@ Dormant until SMP lands: nothing calls it today.</p>
 
   <div class="markdown level1 summary"><p>Report a thread's current priority in the same policy-defined units
 <a class="xref" href="Cosmos.Kernel.Core.Scheduler.IScheduler.html#Cosmos_Kernel_Core_Scheduler_IScheduler_SetPriority_Cosmos_Kernel_Core_Scheduler_PerCpuState_Cosmos_Kernel_Core_Scheduler_SchedulerThread_System_Int64_">SetPriority(PerCpuState, SchedulerThread, long)</a> takes. Called from thread context with no
-guard at all, on every thread snapshot the <code>SchedulerInfo</code> facade
+guard at all, on every thread snapshot the <code>SchedulerDiagnostics</code> facade
 takes, so it must not mutate anything and must mask itself if it reads
 something a tick can be rewriting.</p>
 </div>
@@ -278,7 +278,7 @@ something a tick can be rewriting.</p>
   </h3>
 
   <div class="markdown level1 summary"><p>Report how many threads are waiting in the run structure. Read-only
-introspection for the <code>SchedulerInfo</code> facade, called from thread
+introspection for the <code>SchedulerDiagnostics</code> facade, called from thread
 context with no guard, so guard it yourself with
 <a class="xref" href="Cosmos.Kernel.Core.Scheduler.SchedulerManager.html#Cosmos_Kernel_Core_Scheduler_SchedulerManager_MaskInterrupts">MaskInterrupts()</a> if a concurrent tick
 could be mutating the structure underneath it. Masking inside the hook
@@ -647,12 +647,11 @@ twice for one thread, so guard against inserting it twice.</p>
   
   </h3>
 
-  <div class="markdown level1 summary"><p>Re-insert a thread that gave up the CPU while still runnable. Called
-from an explicit yield in thread context with interrupts masked, and
-from the preemption path in interrupt context, where it runs
-<em>after</em> <a class="xref" href="Cosmos.Kernel.Core.Scheduler.IScheduler.html#Cosmos_Kernel_Core_Scheduler_IScheduler_PickNext_Cosmos_Kernel_Core_Scheduler_PerCpuState_">PickNext(PerCpuState)</a> has already chosen the
-replacement: the outgoing thread is not a candidate for the switch it
-is being preempted by.</p>
+  <div class="markdown level1 summary"><p>Re-insert a thread that gave up the CPU while still runnable, whether
+preempted or yielding. Called in interrupt context by the switch that
+takes the thread off the CPU, <em>after</em> <a class="xref" href="Cosmos.Kernel.Core.Scheduler.IScheduler.html#Cosmos_Kernel_Core_Scheduler_IScheduler_PickNext_Cosmos_Kernel_Core_Scheduler_PerCpuState_">PickNext(PerCpuState)</a>
+has already chosen the replacement: the outgoing thread is not a
+candidate for the switch it is leaving by.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 

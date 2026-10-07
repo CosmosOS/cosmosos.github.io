@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class SchedulerThread | Cosmos Gen 3 ">
       
-      <meta name="description" content="Thread Control Block for scheduling. A kernel that only wants to read thread state does not come here: SchedulerInfo on the ring hands out a KernelThreadInfo snapshot of the fields that survive an unlocked read, and reaching this type means acknowledging the seam&#39;s diagnostic first.">
+      <meta name="description" content="Thread Control Block for scheduling. A kernel that only wants to read thread state does not come here: SchedulerDiagnostics on the ring hands out a KernelThreadInfo snapshot of the fields that survive an unlocked read, and reaching this type means acknowledging the seam&#39;s diagnostic first.">
       <link rel="icon" href="../images/favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -98,7 +98,7 @@ Class SchedulerThread
   </div>
 
   <div class="markdown summary"><p>Thread Control Block for scheduling. A kernel that only wants to read
-thread state does not come here: <code>SchedulerInfo</code> on the ring hands
+thread state does not come here: <code>SchedulerDiagnostics</code> on the ring hands
 out a <code>KernelThreadInfo</code> snapshot of the fields that survive an
 unlocked read, and reaching this type means acknowledging the seam's
 diagnostic first.</p>

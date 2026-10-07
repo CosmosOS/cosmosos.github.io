@@ -220,7 +220,7 @@ Class Bitmap
     <dd><ul><li>Thrown if header is not from a BMP.</li><li>Info header size has the wrong value.</li><li>Number of planes is not 1.</li><li>Total Image Size is smaller than pure image size.</li></ul>
 </dd>
     <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.notimplementedexception">NotImplementedException</a></dt>
-    <dd><p>Thrown if pixelsize is other then 32 / 24 or the file compressed.</p>
+    <dd><p>Thrown if the pixel size is other than 32 / 24 or the file is compressed.</p>
 </dd>
   </dl>
 
@@ -314,7 +314,7 @@ representing the pixels.</p>
   <h4 class="section">Exceptions</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.notimplementedexception">NotImplementedException</a></dt>
-    <dd><p>Thrown if color depth is not 32.</p>
+    <dd><p>Thrown if color depth is not 24 or 32.</p>
 </dd>
     <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.overflowexception">OverflowException</a></dt>
     <dd><p>Thrown if bitmap size is bigger than Int32.MaxValue.</p>
@@ -389,7 +389,7 @@ representing the pixels.</p>
     <dd><ul><li>Thrown if header is not from a BMP.</li><li>Info header size has the wrong value.</li><li>Number of planes is not 1. Can not read file.</li><li>Total Image Size is smaller than pure image size.</li></ul>
 </dd>
     <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.notimplementedexception">NotImplementedException</a></dt>
-    <dd><p>Thrown if pixelsize is other then 32 / 24 or the file compressed.</p>
+    <dd><p>Thrown if the pixel size is other than 32 / 24 or the file is compressed.</p>
 </dd>
     <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.security.securityexception">SecurityException</a></dt>
     <dd><p>Thrown if the caller does not have permissions to read / write the file.</p>

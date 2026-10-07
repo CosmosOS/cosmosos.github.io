@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Driver Manifest | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Driver Manifest | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/build/driver-manifest.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="driver-manifest">Driver Manifest</h1>
+
+<p>Every Cosmos kernel gets two generated files from <code>Cosmos.Kernel.SourceGenerators</code>: the entry point, and the driver manifest. This page describes the manifest: which <code>[Driver]</code> classes the build registers, in what order, how a kernel project keeps one out or opts one in, and what the generator reports when it cannot do what a class asks. For where the manifest runs in the boot sequence, see <a href="../../user/startup.html">Startup</a>.</p>
+<h2 id="what-is-generated">What is generated</h2>
+<p>Each file has its own generator. <code>CosmosEntryPointGenerator</code> writes the entry point from the <code>CosmosKernelClass</code> property alone, so editing the kernel's sources or its driver policy leaves it cached; <code>DriverManifestGenerator</code> writes the manifest from the drivers it finds and the policy. When the property is empty neither file is generated. When it is set, the entry point always calls the manifest first. The call is explicit, not a module initializer, so the drivers are registered in manifest order, right before the kernel starts:</p>
+<pre><code class="lang-csharp">// &lt;auto-generated/&gt; CosmosEntryPoint.g.cs
+public static class CosmosEntryPoint
+{
+    public static void Main()
+    {
+        global::Cosmos.Kernel.System.Internal.DriverManifest.Register();
+        global::Cosmos.Kernel.System.Internal.KernelEntry.Start(new global::MyOS.Kernel());
+    }
+}
+</code></pre>
+<pre><code class="lang-csharp">// &lt;auto-generated/&gt; DriverManifest.g.cs
+// The driver registry is on the experimental driver kit seam (COSMOS0003).
+// This file is generated, so it acknowledges the seam for itself alone;
+// a driver this kernel declares still meets the diagnostic in its own code.
+#pragma warning disable COSMOS0003
+internal static class DriverManifest
+{
+    public static void Register()
+    {
+        global::Cosmos.Kernel.HAL.DriverKit.DriverRegistry.Register(new global::MyOS.Drivers.BoardDriver());
+        if (global::Cosmos.Kernel.System.KernelFeatures.Network)
+        {
+            global::Cosmos.Kernel.HAL.DriverKit.DriverRegistry.Register(new global::Acme.Drivers.AcmeNicDriver());
+        }
+    }
+}
+</code></pre>
+<p>One <code>Register</code> call per driver, each constructing the driver with its parameterless constructor. The manifest is generated even when no driver survives; its <code>Register</code> body is then empty. The registry it calls is on the kit's experimental seam, and the drivers <code>Cosmos.Kernel</code> ships put a call in every kernel's manifest, so the file opens by disabling the seam's diagnostic id for itself: the kernel author did not write it, and a kernel that has not suppressed the id (see <a href="#visibility">Visibility</a>) still compiles.</p>
+<p>With <code>EmitCompilerGeneratedFiles</code> on, which <code>Cosmos.Sdk</code> sets by default, both files are written under the intermediate directory, one folder per generator:</p>
+<pre><code>$(IntermediateOutputPath)/generated/Cosmos.Kernel.SourceGenerators/
+    Cosmos.Kernel.SourceGenerators.CosmosEntryPointGenerator/CosmosEntryPoint.g.cs
+    Cosmos.Kernel.SourceGenerators.DriverManifestGenerator/DriverManifest.g.cs
+</code></pre>
+<p>Reading <code>DriverManifest.g.cs</code> there is the quickest way to check which drivers a kernel carries.</p>
+<h2 id="how-drivers-are-found">How drivers are found</h2>
+<p>A driver is a class marked <code>[Cosmos.Kernel.HAL.DriverKit.Driver]</code>. The generator looks in two places and keeps their order fixed, because manifest position is the last arbitration key when two drivers of equal priority and specificity match the same device:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Which classes</th>
+<th>Order</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The kernel project itself</td>
+<td>Every marked class the assembly can construct from its top level (a private nested class is reported with <code>COSMOSGEN001</code> and left out)</td>
+<td>By file path (ordinal), then by position in the file</td>
+</tr>
+<tr>
+<td>Referenced assemblies that reference <code>Cosmos.Kernel.HAL</code> (or are it)</td>
+<td>Marked classes the kernel assembly can see: public ones, and internal ones under an <code>InternalsVisibleTo</code> grant</td>
+<td>By assembly name, then by full type name, both ordinal</td>
+</tr>
+</tbody>
+</table>
+<p>The kernel's own drivers come first, then the referenced ones. An assembly that does not reference <code>Cosmos.Kernel.HAL</code> is not searched: it cannot carry the attribute.</p>
+<p>The drivers Cosmos ships take the second path. <code>Cosmos.Kernel.Drivers</code> holds <code>PciHostDriver</code>, <code>PcieRootPortDriver</code> and <code>VirtioPciTransportDriver</code> (under the <code>Pci</code> feature), <code>E1000EDriver</code> and <code>VirtioNetDriver</code> (under <code>Network</code>), <code>VirtioGpuDriver</code> and <code>VmwareSvgaDriver</code> (under <code>Graphics</code>), <code>AhciDriver</code>, <code>NvmeDriver</code> and <code>VirtioBlkDriver</code> (under <code>Storage</code>), <code>XhciDriver</code>, <code>UsbHubDriver</code>, <code>UsbKeyboardDriver</code> and <code>UsbMassStorageDriver</code> (under <code>Usb</code>), <code>Ps2KeyboardDriver</code> (under <code>Keyboard</code>), <code>Ps2MouseDriver</code> (under <code>Mouse</code>), and <code>VirtioMmioTransportDriver</code>, <code>VirtioInputDriver</code> and <code>I8042Driver</code> (no feature), and the <code>Cosmos.Kernel</code> aggregator every kernel references carries the package, so all nineteen are in every kernel's manifest after its own drivers, ordered by their full type names, without the kernel referencing the package itself. A shipped driver's full name carries its bus kind, category and driver folder (<code>Cosmos.Kernel.Drivers.Pci.Storage.Nvme.NvmeDriver</code>), so that order groups them by bus kind (<code>Pci</code>, <code>Platform</code>, <code>Ps2</code>, <code>Usb</code>, <code>Virtio</code>) and, within one, by category.</p>
+<p>To be registered a class must be concrete (not abstract, not static), non-generic, derive from <code>Cosmos.Kernel.HAL.DriverKit.Driver</code>, and have a parameterless constructor the kernel assembly can call. A marked class that fails one of these is reported (<code>COSMOSGEN001</code>) and left out.</p>
+<h2 id="feature-guards">Feature guards</h2>
+<p><code>[Driver(Feature = DriverFeature.Network)]</code> ties the registration to a feature switch. The generator wraps the <code>Register</code> call in an <code>if</code> on the <code>Cosmos.Kernel.System.KernelFeatures</code> property of the same name, one property per <code>if</code> and nothing else in the condition, which is the shape ILC folds to a constant. A kernel that sets <code>CosmosEnableNetwork</code> to <code>false</code> then never constructs the driver, and everything only that driver references is trimmed with it.</p>
+<p>The <code>DriverFeature</code> enum members mirror the <code>KernelFeatures</code> properties by name (<code>Interrupts</code>, <code>Uart</code>, <code>Pci</code>, <code>Timer</code>, <code>Keyboard</code>, <code>Mouse</code>, <code>Network</code>, <code>Storage</code>, <code>Fat</code>, <code>Graphics</code>, <code>Scheduler</code>, <code>Usb</code>); <code>None</code> emits no guard. The generator resolves the property in the kernel's compilation, so a member without a property is a build error (<code>COSMOSGEN003</code>) rather than a manifest that does not compile. A host test in <code>tests/Cosmos.Tests.SourceGenerators</code> keeps the two lists in step.</p>
+<h2 id="policy-excluding-and-opting-in">Policy: excluding and opting in</h2>
+<p>A kernel project shapes its manifest with two item types:</p>
+<pre><code class="lang-xml">&lt;ItemGroup&gt;
+  &lt;!-- Drop a driver the build would otherwise register. --&gt;
+  &lt;CosmosDriverExclude Include=&quot;Acme.Drivers.AcmeNicDriver&quot; /&gt;
+  &lt;!-- Register a driver declared [Driver(Default = false)]. --&gt;
+  &lt;CosmosDriverInclude Include=&quot;Acme.Drivers.ExperimentalGpu&quot; /&gt;
+&lt;/ItemGroup&gt;
+</code></pre>
+<p>Names are full type names in C# form, without <code>global::</code>, with nested types joined by dots (<code>MyOS.Drivers.Bus.Child</code>). A shipped driver is excluded the same way, by its full type name: <code>&lt;CosmosDriverExclude Include=&quot;Cosmos.Kernel.Drivers.Pci.Network.E1000E.E1000EDriver&quot; /&gt;</code> keeps the Intel driver out of the manifest. An excluded driver is dropped whatever its <code>Default</code>. A driver with <code>Default = false</code> is registered only when a <code>CosmosDriverInclude</code> item names it. An item that matches no <code>[Driver]</code> class the kernel can see is reported (<code>COSMOSGEN002</code>), which is how a stale or misspelled entry shows up.</p>
+<p>Policy is applied before validation: a driver the kernel excludes or does not opt into is never reported, so the diagnostics below describe what the manifest would register.</p>
+<h2 id="diagnostics">Diagnostics</h2>
+<table>
+<thead>
+<tr>
+<th>Id</th>
+<th>Severity</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>COSMOSGEN001</code></td>
+<td>Warning</td>
+<td>A <code>[Driver]</code> class is left out: it is abstract, static, generic, does not derive from <code>Driver</code>, has no parameterless constructor the kernel assembly can call, or is not accessible from the kernel assembly. The message names the reason.</td>
+</tr>
+<tr>
+<td><code>COSMOSGEN002</code></td>
+<td>Warning</td>
+<td>A <code>CosmosDriverExclude</code> or <code>CosmosDriverInclude</code> item matches no <code>[Driver]</code> class visible to the kernel.</td>
+</tr>
+<tr>
+<td><code>COSMOSGEN003</code></td>
+<td>Error</td>
+<td>A <code>[Driver]</code> names a <code>DriverFeature</code> member with no <code>KernelFeatures</code> property of that name, so the registration cannot be guarded.</td>
+</tr>
+</tbody>
+</table>
+<p>The rules are listed in <code>src/Cosmos.Kernel.SourceGenerators/AnalyzerReleases.Unshipped.md</code>, the release tracking format the Roslyn analyzers package expects.</p>
+<h2 id="build-plumbing">Build plumbing</h2>
+<p>The generators read three build properties, made visible to them by <code>CompilerVisibleProperty</code> items in <code>Cosmos.Kernel.SourceGenerators.props</code> (shipped in the generator package); the entry point generator reads <code>CosmosKernelClass</code> alone, the manifest generator all three:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Set by</th>
+<th>Read as</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CosmosKernelClass</code></td>
+<td>The kernel project, or <code>Sdk.props</code> from <code>RootNamespace</code></td>
+<td><code>build_property.CosmosKernelClass</code></td>
+</tr>
+<tr>
+<td><code>CosmosDriverExcludeList</code></td>
+<td>The <code>CosmosCollectDriverPolicy</code> target in <code>Sdk.targets</code>, joining the <code>CosmosDriverExclude</code> items</td>
+<td><code>build_property.CosmosDriverExcludeList</code></td>
+</tr>
+<tr>
+<td><code>CosmosDriverIncludeList</code></td>
+<td>The same target, joining the <code>CosmosDriverInclude</code> items</td>
+<td><code>build_property.CosmosDriverIncludeList</code></td>
+</tr>
+</tbody>
+</table>
+<p>Two details of that target are worth knowing when touching it. The items are joined inside a target rather than in an evaluation-time <code>PropertyGroup</code>, because an item reference does not expand there; the target runs <code>BeforeTargets=&quot;GenerateMSBuildEditorConfigFileCore&quot;</code>, which is the step that writes the compiler's editorconfig. And the separator is a comma: the compiler reads that file as an editorconfig, where a semicolon starts a comment, so a semicolon-joined list would be cut after its first name.</p>
+<h2 id="visibility">Visibility</h2>
+<p>The kit is public, under the experimental seam <code>COSMOS0003</code>: <code>Driver</code>, <code>DriverAttribute</code>, <code>DriverRegistry</code> and every other type under <code>Cosmos.Kernel.HAL.DriverKit</code> carry <code>[Experimental(&quot;COSMOS0003&quot;)]</code>, so a kernel or a library that declares a <code>[Driver]</code> class suppresses that id in its <code>.csproj</code>, and a driver library also declares itself a driver assembly:</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;NoWarn&gt;$(NoWarn);COSMOS0003&lt;/NoWarn&gt;
+  &lt;!-- A class library of drivers only: held to the public surface by the analyzer. --&gt;
+  &lt;CosmosDriverAssembly&gt;true&lt;/CosmosDriverAssembly&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p>A kernel that declares no driver of its own needs no suppression: the generated manifest disables the id for itself, since its author did not write it, and that is the only place such a kernel names the kit. The suppression is for the driver code a kernel or a library declares. <a href="../../user/drivers.html">Writing a Driver</a> covers the kit and the project lines from the driver author's side; <a href="../public-api.html">Public API Tracking</a> covers what a driver assembly is held to.</p>
+<h2 id="testing">Testing</h2>
+<p><code>tests/Cosmos.Tests.SourceGenerators</code> runs both generators on the host against in-memory compilations, with stubs standing in for the kit and the ring, and checks the generated text and the diagnostics exactly; <code>CachingTests</code> checks that adding a driver regenerates the manifest and leaves the entry point cached:</p>
+<pre><code class="lang-bash">dotnet test tests/Cosmos.Tests.SourceGenerators -c Debug
+</code></pre>
+<p>CI runs it as the <code>source-generator-tests</code> job of <code>.github/workflows/dotnet.yml</code>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/build/driver-manifest.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

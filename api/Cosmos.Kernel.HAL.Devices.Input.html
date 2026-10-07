@@ -95,33 +95,44 @@
 Classes
 </h3>
     <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Input.KeyboardDevice.html">KeyboardDevice</a></dt>
-      <dd><p>Abstract base class for all keyboard devices.</p>
+      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Input.KeyboardSink.html">KeyboardSink</a></dt>
+      <dd><p>Where a keyboard driver reports keys, returned by
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.html#Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishKeyboard_Cosmos_Kernel_HAL_Devices_Input_IKeyboard_">PublishKeyboard(IKeyboard)</a>. Kit-owned: it finds the
+ring's keyboard consumer at call time and drops the report when the device
+was withdrawn or nobody listens. Allocation-free; any context.</p>
 </dd>
     </dl>
     <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Input.MouseDevice.html">MouseDevice</a></dt>
-      <dd><p>Abstract base class for all mouse devices.</p>
+      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Input.PointerSink.html">PointerSink</a></dt>
+      <dd><p>Where a pointer driver reports movement, returned by
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.html#Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishPointer_Cosmos_Kernel_HAL_Devices_Input_IPointer_">PublishPointer(IPointer)</a>. Kit-owned; see <a class="xref" href="Cosmos.Kernel.HAL.Devices.Input.KeyboardSink.html">KeyboardSink</a>.
+Allocation-free; any context.</p>
 </dd>
     </dl>
-    <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Input.VirtioKeyboard.html">VirtioKeyboard</a></dt>
-      <dd><p>Virtio-input keyboard driver. Transport-agnostic: works over virtio MMIO
-(QEMU virt) and virtio PCI (q35 virtio-keyboard-pci) alike.</p>
-</dd>
-    </dl>
-    <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Input.VirtioMouse.html">VirtioMouse</a></dt>
-      <dd><p>Virtio-input mouse driver. Transport-agnostic: works over virtio MMIO
-(QEMU virt) and virtio PCI (q35 virtio-mouse-pci) alike.</p>
-</dd>
-    </dl>
-    <h3 id="delegates">
-Delegates
+    <h3 id="interfaces">
+Interfaces
 </h3>
     <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Input.MouseEventHandler.html">MouseEventHandler</a></dt>
-      <dd><p>Delegate for handling mouse events.</p>
+      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Input.IKeyboard.html">IKeyboard</a></dt>
+      <dd><p>What a keyboard driver implements and hands to <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.html#Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishKeyboard_Cosmos_Kernel_HAL_Devices_Input_IKeyboard_">PublishKeyboard(IKeyboard)</a>. Called by the ring in thread context.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Input.IPointer.html">IPointer</a></dt>
+      <dd><p>What a pointer driver implements and hands to <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.html#Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishPointer_Cosmos_Kernel_HAL_Devices_Input_IPointer_">PublishPointer(IPointer)</a>.</p>
+</dd>
+    </dl>
+    <h3 id="enums">
+Enums
+</h3>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Input.KeyboardLeds.html">KeyboardLeds</a></dt>
+      <dd><p>Keyboard indicator lights.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Input.PointerButtons.html">PointerButtons</a></dt>
+      <dd><p>Pointer buttons, as a set.</p>
 </dd>
     </dl>
 

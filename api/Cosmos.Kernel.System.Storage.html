@@ -118,7 +118,7 @@ currently exposes).</p>
     <dl class="jumplist">
       <dt><a class="xref" href="Cosmos.Kernel.System.Storage.Mbr.html">Mbr</a></dt>
       <dd><p>MBR (Master Boot Record) partition table parser / writer. Operates on
-any <a class="xref" href="Cosmos.Kernel.HAL.Interfaces.Devices.IBlockDevice.html">IBlockDevice</a> with 512-byte sectors.</p>
+any <a class="xref" href="Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice.html">IBlockDevice</a> with 512-byte sectors.</p>
 </dd>
     </dl>
     <dl class="jumplist">
@@ -136,18 +136,36 @@ translated to the host LBA space by adding <a class="xref" href="Cosmos.Kernel.S
       <dt><a class="xref" href="Cosmos.Kernel.System.Storage.PartitionManager.html">PartitionManager</a></dt>
       <dd><p>High-level partition lifecycle (create / delete / resize / move) on top
 of <a class="xref" href="Cosmos.Kernel.System.Storage.Mbr.html">Mbr</a> and <a class="xref" href="Cosmos.Kernel.System.Storage.Gpt.html">Gpt</a>. Auto-detects the table type
-per call. <a class="xref" href="Cosmos.Kernel.System.Storage.PartitionManager.html#Cosmos_Kernel_System_Storage_PartitionManager_MoveWithData_Cosmos_Kernel_HAL_Interfaces_Devices_IBlockDevice_Cosmos_Kernel_System_Storage_PartitionManager_PartitionLocation_System_UInt64_">MoveWithData(IBlockDevice, PartitionLocation, ulong)</a> physically copies sectors before
+per call. <a class="xref" href="Cosmos.Kernel.System.Storage.PartitionManager.html#Cosmos_Kernel_System_Storage_PartitionManager_MoveWithData_Cosmos_Kernel_HAL_Devices_Storage_IBlockDevice_Cosmos_Kernel_System_Storage_PartitionManager_PartitionLocation_System_UInt64_">MoveWithData(IBlockDevice, PartitionLocation, ulong)</a> physically copies sectors before
 rewriting the table; the other operations are pure table edits.</p>
 </dd>
     </dl>
     <dl class="jumplist">
       <dt><a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html">StorageManager</a></dt>
-      <dd><p>Manages block storage devices. The tables change after boot too, when a
-USB disk is plugged in or pulled out, from the USB hot-plug thread: each
-is replaced whole on every change, so a list read from
-<a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_Devices">Devices</a>, <a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_Partitions">Partitions</a> or
-<a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_GetPartitions_Cosmos_Kernel_HAL_Interfaces_Devices_IBlockDevice_">GetPartitions(IBlockDevice)</a> never changes under its reader. Read it once
-and index that copy: a second read may be a newer table.</p>
+      <dd><p>Manages block storage devices. A disk reaches the manager one of two
+ways: a driver kit driver publishes it and the manager's
+<span class="xref">Cosmos.Kernel.System.Storage.KitBlockConsumer</span> registers it (the AHCI, NVMe, virtio-blk
+and USB mass storage drivers), or it is handed to
+<a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_RegisterDevice_Cosmos_Kernel_HAL_Devices_Storage_IBlockDevice_">RegisterDevice(IBlockDevice)</a> directly by the kernel. Every registration
+scans the disk for partitions. The tables change after boot too, when a
+USB disk, or a virtio-blk disk behind a PCI Express hot-plug slot, is
+plugged in or pulled out, from the kit worker in a probe or a teardown: each is
+replaced whole on every change, so a list read from <a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_Devices">Devices</a>,
+<a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_Partitions">Partitions</a> or <a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_GetPartitions_Cosmos_Kernel_HAL_Devices_Storage_IBlockDevice_">GetPartitions(IBlockDevice)</a> never changes
+under its reader. Read it once and index that copy: a second read may be
+a newer table.</p>
+<p>
+The tables are kept in one order, which decides the primary device: a
+kit disk before a hand-registered one; among kit disks the smaller node
+path by ordinal comparison (<code>pci:</code> before <code>usb:</code> before
+<code>virtio:</code>), and among equal paths the earlier registered; among
+hand-registered disks the earlier registered. So an internal disk on a
+PCI controller comes before a USB stick present at boot whichever
+registered first, and a kit disk arriving after a USB stick moves ahead
+of it and renumbers <a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_Partitions">Partitions</a>, which is why a mount by
+<a class="xref" href="Cosmos.Kernel.System.Storage.Partition.html">Partition</a> keeps its partition where a mount by index
+string keeps its index.
+</p>
 </dd>
     </dl>
     <h3 id="structs">

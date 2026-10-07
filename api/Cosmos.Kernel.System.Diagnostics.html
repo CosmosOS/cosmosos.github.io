@@ -95,6 +95,37 @@
 Classes
 </h3>
     <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html">DriverDiagnostics</a></dt>
+      <dd><p>Diagnostic view of the driver kit: whether the engine has started and how
+it runs, the driver manifest, the device tree with every offer made for
+each node, and the devices drivers have published. All reads are
+allocation-free and safe to poll from a monitor loop; the snapshot structs
+copy references out. Snapshots are taken without locking the kit, so a
+node or device whose offer, teardown or withdrawal is running on the kit
+worker may read one job stale.</p>
+<p>
+Three shapes report "nothing there", and which one a member uses follows
+from what it is. A plain read answers with its own empty value, so
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_IsStarted">IsStarted</a> and <a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_HasWorker">HasWorker</a> are false and
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_DeviceCount">DeviceCount</a> and <a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_GetTotalHeldResourceCount">GetTotalHeldResourceCount()</a> are 0
+before the engine starts, with no separate error channel.
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_DriverCount">DriverCount</a> and <a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_NodeCount">NodeCount</a> can be non-zero
+before then: the manifest registers its drivers ahead of the start, and a
+bus may publish nodes ahead of it, which sit pending until the start
+offers them. A read that must hand back a whole snapshot
+cannot express absence in the snapshot itself, so
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetDriver_System_Int32_Cosmos_Kernel_System_Diagnostics_DriverInfo__">TryGetDriver(int, out DriverInfo)</a>, <a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetNode_System_Int32_Cosmos_Kernel_System_Diagnostics_DeviceNodeInfo__">TryGetNode(int, out DeviceNodeInfo)</a>,
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetOffer_System_Int32_System_Int32_Cosmos_Kernel_System_Diagnostics_DeviceOfferInfo__">TryGetOffer(int, int, out DeviceOfferInfo)</a> and <a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetDevice_System_Int32_Cosmos_Kernel_System_Diagnostics_PublishedDeviceInfo__">TryGetDevice(int, out PublishedDeviceInfo)</a> are
+<code>Try</code> members and the bool carries that answer: false for an index
+out of range, which before the start is every device and offer index,
+while a driver or node index can already be valid then, as said above.
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_GetTotalHeldResourceCount">GetTotalHeldResourceCount()</a> is a method because it adds the
+counts up on every call rather than handing back a value the kit holds.
+Nothing here acts on the kit, so nothing throws.
+</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
       <dt><a class="xref" href="Cosmos.Kernel.System.Diagnostics.Log.html">Log</a></dt>
       <dd><p>Kernel debug log, written to the platform serial port (COM1 on x64,
 PL011 on ARM64). This is the supported way for kernels to emit debug
@@ -105,7 +136,7 @@ strings and numbers, and usable from the earliest phase of
 </dd>
     </dl>
     <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.System.Diagnostics.MemoryInfo.html">MemoryInfo</a></dt>
+      <dt><a class="xref" href="Cosmos.Kernel.System.Diagnostics.MemoryDiagnostics.html">MemoryDiagnostics</a></dt>
       <dd><p>Diagnostic view of the kernel's physical-memory and garbage-collector
 statistics, plus a forced collection. Every figure is a property, and
 each is a plain field read with no allocation, so they are safe to poll
@@ -117,7 +148,7 @@ Managed-heap figures beyond these counters come from the BCL
 </dd>
     </dl>
     <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.System.Diagnostics.SchedulerInfo.html">SchedulerInfo</a></dt>
+      <dt><a class="xref" href="Cosmos.Kernel.System.Diagnostics.SchedulerDiagnostics.html">SchedulerDiagnostics</a></dt>
       <dd><p>Diagnostic view of the kernel scheduler: feature and lifecycle state,
 per-CPU thread tables, and the global thread registry, plus a request
 to terminate a thread by ID. All reads are allocation-free and safe to
@@ -126,13 +157,13 @@ rescheduled concurrently may be one tick stale.</p>
 <p>
 Three shapes report "nothing there", and which one a member uses follows
 from what it is. A plain read answers with its own empty value, so
-<a class="xref" href="Cosmos.Kernel.System.Diagnostics.SchedulerInfo.html#Cosmos_Kernel_System_Diagnostics_SchedulerInfo_CpuCount">CpuCount</a>, <a class="xref" href="Cosmos.Kernel.System.Diagnostics.SchedulerInfo.html#Cosmos_Kernel_System_Diagnostics_SchedulerInfo_ThreadCount">ThreadCount</a>,
-<a class="xref" href="Cosmos.Kernel.System.Diagnostics.SchedulerInfo.html#Cosmos_Kernel_System_Diagnostics_SchedulerInfo_ThreadSlotCount">ThreadSlotCount</a>, <a class="xref" href="Cosmos.Kernel.System.Diagnostics.SchedulerInfo.html#Cosmos_Kernel_System_Diagnostics_SchedulerInfo_TickPeriodNs">TickPeriodNs</a>,
-<a class="xref" href="Cosmos.Kernel.System.Diagnostics.SchedulerInfo.html#Cosmos_Kernel_System_Diagnostics_SchedulerInfo_BusyCpuTimeNs">BusyCpuTimeNs</a> and <a class="xref" href="Cosmos.Kernel.System.Diagnostics.SchedulerInfo.html#Cosmos_Kernel_System_Diagnostics_SchedulerInfo_GetRunQueueCount_System_UInt32_">GetRunQueueCount(uint)</a> are 0 and
-<a class="xref" href="Cosmos.Kernel.System.Diagnostics.SchedulerInfo.html#Cosmos_Kernel_System_Diagnostics_SchedulerInfo_SchedulerName">SchedulerName</a> is null before the scheduler exists, with no
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.SchedulerDiagnostics.html#Cosmos_Kernel_System_Diagnostics_SchedulerDiagnostics_CpuCount">CpuCount</a>, <a class="xref" href="Cosmos.Kernel.System.Diagnostics.SchedulerDiagnostics.html#Cosmos_Kernel_System_Diagnostics_SchedulerDiagnostics_ThreadCount">ThreadCount</a>,
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.SchedulerDiagnostics.html#Cosmos_Kernel_System_Diagnostics_SchedulerDiagnostics_ThreadSlotCount">ThreadSlotCount</a>, <a class="xref" href="Cosmos.Kernel.System.Diagnostics.SchedulerDiagnostics.html#Cosmos_Kernel_System_Diagnostics_SchedulerDiagnostics_TickPeriodNs">TickPeriodNs</a>,
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.SchedulerDiagnostics.html#Cosmos_Kernel_System_Diagnostics_SchedulerDiagnostics_BusyCpuTimeNs">BusyCpuTimeNs</a> and <a class="xref" href="Cosmos.Kernel.System.Diagnostics.SchedulerDiagnostics.html#Cosmos_Kernel_System_Diagnostics_SchedulerDiagnostics_GetRunQueueCount_System_UInt32_">GetRunQueueCount(uint)</a> are 0 and
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.SchedulerDiagnostics.html#Cosmos_Kernel_System_Diagnostics_SchedulerDiagnostics_SchedulerName">SchedulerName</a> is null before the scheduler exists, with no
 separate error channel. A read that must hand back a whole snapshot cannot
 express absence in the snapshot itself, so it is a <code>Try</code> and the bool
-carries that answer. <a class="xref" href="Cosmos.Kernel.System.Diagnostics.SchedulerInfo.html#Cosmos_Kernel_System_Diagnostics_SchedulerInfo_RequestKill_System_UInt32_">RequestKill(uint)</a> is the one member that acts
+carries that answer. <a class="xref" href="Cosmos.Kernel.System.Diagnostics.SchedulerDiagnostics.html#Cosmos_Kernel_System_Diagnostics_SchedulerDiagnostics_RequestKill_System_UInt32_">RequestKill(uint)</a> is the one member that acts
 rather than reads, and a bool would not tell a caller which of five things
 happened, so it returns <a class="xref" href="Cosmos.Kernel.System.Diagnostics.ThreadKillResult.html">ThreadKillResult</a>; that enum is its
 failure channel as well, and it reports
@@ -145,9 +176,44 @@ scheduler is compiled out.
 Structs
 </h3>
     <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.System.Diagnostics.DeviceNodeInfo.html">DeviceNodeInfo</a></dt>
+      <dd><p>Point-in-time snapshot of one device node in the driver kit's tree,
+produced by <a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetNode_System_Int32_Cosmos_Kernel_System_Diagnostics_DeviceNodeInfo__">TryGetNode(int, out DeviceNodeInfo)</a>. The snapshot is taken
+without locking the kit, so a node whose offer or teardown is running on
+the kit worker may read one job stale: its state and the counts that
+depend on its binding can lag the log by one line.</p>
+<p>
+It carries what a monitor can render off an unlocked read: identity,
+state, the driver that holds it, and counts. The offers themselves are
+reached by index through <a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetOffer_System_Int32_System_Int32_Cosmos_Kernel_System_Diagnostics_DeviceOfferInfo__">TryGetOffer(int, int, out DeviceOfferInfo)</a>, bounded by
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DeviceNodeInfo.html#Cosmos_Kernel_System_Diagnostics_DeviceNodeInfo_OfferCount">OfferCount</a>; <a class="xref" href="Cosmos.Kernel.System.Diagnostics.DeviceNodeInfo.html#Cosmos_Kernel_System_Diagnostics_DeviceNodeInfo_ResourceCount">ResourceCount</a> and
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DeviceNodeInfo.html#Cosmos_Kernel_System_Diagnostics_DeviceNodeInfo_InterruptCount">InterruptCount</a> are counts only.
+</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.System.Diagnostics.DeviceOfferInfo.html">DeviceOfferInfo</a></dt>
+      <dd><p>One offer of a device node to a driver and how it ended, produced by
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetOffer_System_Int32_System_Int32_Cosmos_Kernel_System_Diagnostics_DeviceOfferInfo__">TryGetOffer(int, int, out DeviceOfferInfo)</a>. A node's offers are recorded in
+the order they were made, so walking them from index 0 replays the
+arbitration: which drivers were tried, in what order, and why each one
+passed. Offers are written once, when the node is offered, and never
+change afterwards.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverInfo.html">DriverInfo</a></dt>
+      <dd><p>One entry of the driver manifest, produced by
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetDriver_System_Int32_Cosmos_Kernel_System_Diagnostics_DriverInfo__">TryGetDriver(int, out DriverInfo)</a>. The index it was read at is its
+manifest position, which is the last arbitration key: when two drivers
+match a node with the same priority and the same specificity, the one
+earlier in the manifest is offered first.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
       <dt><a class="xref" href="Cosmos.Kernel.System.Diagnostics.KernelThreadInfo.html">KernelThreadInfo</a></dt>
       <dd><p>Point-in-time snapshot of one kernel thread, produced by
-<a class="xref" href="Cosmos.Kernel.System.Diagnostics.SchedulerInfo.html">SchedulerInfo</a>. The snapshot is taken without locking the
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.SchedulerDiagnostics.html">SchedulerDiagnostics</a>. The snapshot is taken without locking the
 scheduler, so fields of a thread that is being rescheduled concurrently
 may be one tick stale.</p>
 <p>
@@ -164,18 +230,49 @@ to state a unit the seam leaves to its own docs:
 </p>
 </dd>
     </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.System.Diagnostics.PublishedDeviceInfo.html">PublishedDeviceInfo</a></dt>
+      <dd><p>Point-in-time snapshot of one device a driver published, produced by
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetDevice_System_Int32_Cosmos_Kernel_System_Diagnostics_PublishedDeviceInfo__">TryGetDevice(int, out PublishedDeviceInfo)</a>. A withdrawn device leaves the
+list, but the snapshot is taken without locking the kit, so a device being
+withdrawn concurrently may still be listed for one job; <a class="xref" href="Cosmos.Kernel.System.Diagnostics.PublishedDeviceInfo.html#Cosmos_Kernel_System_Diagnostics_PublishedDeviceInfo_IsWithdrawn">IsWithdrawn</a>
+tells that case apart.</p>
+</dd>
+    </dl>
     <h3 id="enums">
 Enums
 </h3>
     <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.System.Diagnostics.DeviceNodeState.html">DeviceNodeState</a></dt>
+      <dd><p>Where a device node is in its life, as reported by
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html">DriverDiagnostics</a>. A node enters the tree pending, is offered to
+the matching drivers once, ends up bound or unbound, and stays listed
+as retracted after its bus took it away.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.System.Diagnostics.DeviceOfferOutcome.html">DeviceOfferOutcome</a></dt>
+      <dd><p>How one offer of a device node to a driver ended, as reported by
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetOffer_System_Int32_System_Int32_Cosmos_Kernel_System_Diagnostics_DeviceOfferInfo__">TryGetOffer(int, int, out DeviceOfferInfo)</a>.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
       <dt><a class="xref" href="Cosmos.Kernel.System.Diagnostics.KernelThreadState.html">KernelThreadState</a></dt>
       <dd><p>Lifecycle state of a kernel thread as reported by
-<a class="xref" href="Cosmos.Kernel.System.Diagnostics.SchedulerInfo.html">SchedulerInfo</a>.</p>
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.SchedulerDiagnostics.html">SchedulerDiagnostics</a>.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.System.Diagnostics.PublishedDeviceKind.html">PublishedDeviceKind</a></dt>
+      <dd><p>The kind of a device a driver published, as reported by
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetDevice_System_Int32_Cosmos_Kernel_System_Diagnostics_PublishedDeviceInfo__">TryGetDevice(int, out PublishedDeviceInfo)</a>. The set is closed: each kind is
+one contract a driver implements and one consumer slot the kernel's
+manager of that kind occupies.</p>
 </dd>
     </dl>
     <dl class="jumplist">
       <dt><a class="xref" href="Cosmos.Kernel.System.Diagnostics.ThreadKillResult.html">ThreadKillResult</a></dt>
-      <dd><p>Outcome of <a class="xref" href="Cosmos.Kernel.System.Diagnostics.SchedulerInfo.html#Cosmos_Kernel_System_Diagnostics_SchedulerInfo_RequestKill_System_UInt32_">RequestKill(uint)</a>.</p>
+      <dd><p>Outcome of <a class="xref" href="Cosmos.Kernel.System.Diagnostics.SchedulerDiagnostics.html#Cosmos_Kernel_System_Diagnostics_SchedulerDiagnostics_RequestKill_System_UInt32_">RequestKill(uint)</a>.</p>
 </dd>
     </dl>
 

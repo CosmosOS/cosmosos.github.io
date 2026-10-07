@@ -121,7 +121,7 @@
 <tr>
 <td>NIC drivers</td>
 <td>RTL8168, E1000, PCNET</td>
-<td>Intel E1000E (x64), virtio-net (x64 PCI + ARM64 MMIO)</td>
+<td>Intel E1000E over the driver kit (any machine with a PCI host node; QEMU's default q35 NIC on x64), virtio-net over the driver kit (PCI on both architectures, MMIO on ARM64)</td>
 </tr>
 </tbody>
 </table>
@@ -132,23 +132,19 @@
   &lt;CosmosEnableNetwork&gt;true&lt;/CosmosEnableNetwork&gt;
 &lt;/PropertyGroup&gt;
 </code></pre>
-<p>At boot the kernel detects the NIC and registers it with <code>NetworkManager</code>. On x64 both <strong>Intel E1000E</strong> (QEMU's default q35 NIC, preferred when present) and <strong>virtio-net-pci</strong> are supported, so <code>cosmos run</code> needs no extra flags. On ARM64 attach a virtio NIC explicitly:</p>
+<p>At boot a NIC reaches <code>NetworkManager</code> through the driver kit, whichever it is; both drivers ship in <code>Cosmos.Kernel.Drivers</code>, which every kernel carries. An <strong>Intel E1000E</strong> is bound by <code>E1000EDriver</code>: the PCI host driver publishes the function, the driver brings it up and publishes an interface named <code>e1000e</code>, and the manager's consumer registers it (<a href="drivers.html#pci-devices">Writing a Driver</a>). A <strong>virtio-net</strong> device is bound by <code>VirtioNetDriver</code> over either transport: the virtio PCI transport driver publishes a virtio node beneath the function, the virtio MMIO transport driver one beneath the virt machine's slot, and the same leaf driver binds both and publishes an interface named <code>virtio-net</code> (<a href="drivers.html#virtio-devices">Virtio devices</a>). The first interface a kit driver publishes is the primary, in the order the driver stage binds them. On x64 <code>cosmos run</code> needs no extra flags: QEMU's q35 default NIC is an e1000e. On ARM64 attach a virtio NIC explicitly:</p>
 <pre><code class="lang-console">$ cosmos run                          # x64: default e1000e NIC, user-mode networking
-$ cosmos run --nic virtio-net-pci     # x64: virtio NIC over PCI
+$ cosmos run --nic virtio-net-pci     # x64 or arm64: virtio NIC over PCI
 $ cosmos run --nic virtio-net-device  # arm64: virtio NIC over MMIO
 </code></pre>
-<p>Virtio-pci devices deliver interrupts via MSI-X, which on ARM64 requires a GICv3 ITS (<code>-M virt,gic-version=3</code>); <code>cosmos run</code> launches ARM64 with QEMU's default GICv2, so use the MMIO variant there.</p>
+<p>A virtio PCI function delivers its interrupts as MSI-X messages, which on ARM64 the GICv3 ITS routes (<code>-M virt,gic-version=3</code>); <code>cosmos run</code> launches ARM64 with QEMU's default GICv2, which has no ITS, so there the PCI NIC is published with no interrupt entry and <code>VirtioNetDriver</code> runs it polled, draining its receive queue every 50 ms. <code>--nic virtio-net-pci</code> therefore works on the default ARM64 launch too, while the MMIO NIC runs on its GIC line and is the interrupt-driven choice there.</p>
 <p>With QEMU <em>user-mode networking</em> (the default), your kernel lives in a private <code>10.0.2.0/24</code> network: the host is reachable at <strong>10.0.2.2</strong>, QEMU's built-in DHCP server assigns addresses, and outbound UDP/TCP is NATed to the real network.</p>
 <p>These are the <code>using</code>s the snippets below rely on:</p>
 <pre><code class="lang-csharp">using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using Cosmos.Kernel.System.Network;
-using Cosmos.Kernel.System.Network.Config;
-using Cosmos.Kernel.System.Network.DNS;
-using Cosmos.Kernel.System.Network.IPv4;
-using Cosmos.Kernel.System.Network.IPv4.DHCP;
-using Cosmos.Kernel.System.Timer;
+using Cosmos.Kernel.System.Timers;
 </code></pre>
 <h2 id="the-network-device">The network device</h2>
 <p><code>NetworkManager</code> owns the detected NICs. Check that a device is there and ready before configuring anything:</p>
@@ -174,7 +170,7 @@ if (second.IsValid)
 }
 </code></pre>
 <p>A <code>NetworkAdapter</code> is a handle, not the device: it carries the registration index, so a default-constructed one names nothing and <code>IsValid</code> is false. <code>GetAdapter</code> answers with such a handle for an index no device occupies, which is why the assignment above is guarded: the <code>Primary</code> setter throws <code>ArgumentException</code> on a handle that names nothing, and QEMU gives the kernel a single NIC by default, so <code>GetAdapter(1)</code> names nothing there.</p>
-<!-- screenshot: console showing "Device: Intel E1000E", the MAC, "Link up: True", "Ready: True" -->
+<!-- screenshot: console showing "Device: e1000e", the MAC, "Link up: True", "Ready: True" -->
 <p><img src="images/network-device.png" alt="Network Device"></p>
 <h2 id="configure-ipv4">Configure IPv4</h2>
 <p>Like on any operating system, the kernel needs an IPv4 configuration (address, subnet mask, gateway) before it can talk to the network. It can be obtained dynamically through DHCP or set manually.</p>
@@ -235,7 +231,7 @@ Icmpv6Client ping = new();
 ping.Connect(new Address6(0xFEC0_0000, 0, 0, 2));               // QEMU user networking answers on fec0::2
 ping.SendEcho();
 
-EndPoint from = new(Address6.Zero, 0);
+Cosmos.Kernel.System.Network.EndPoint from = new(Address6.Zero, 0);
 int elapsedMs = ping.Receive(ref from, 5000);                  // -1 on timeout
 ping.Close();
 </code></pre>
@@ -277,10 +273,8 @@ ping.Close();
 </table>
 <p>What IPv6 does not cover yet: addresses beyond link-local (Router Advertisements are ignored, no SLAAC or DHCPv6, so only on-link destinations are reachable), and <code>AddressFamily.InterNetworkV6</code> on the .NET socket classes.</p>
 <h2 id="udp">UDP</h2>
-<p>UDP uses the standard .NET <code>UdpClient</code>, no Cosmos-specific classes. Sends go out immediately; for receives, poll <code>Available</code> (a receive with nothing pending would block):</p>
-<pre><code class="lang-csharp">using System.Net.Sockets;
-
-var udpClient = new UdpClient(4242);
+<p>UDP goes through the standard .NET <code>System.Net.Sockets.UdpClient</code>; no Cosmos-specific class is needed. <code>Cosmos.Kernel.System.Network</code> has a <code>UdpClient</code> of its own (the packet-level client), so with both namespaces imported, as above, name the .NET one in full. Sends go out immediately; for receives, poll <code>Available</code> (a receive with nothing pending would block):</p>
+<pre><code class="lang-csharp">var udpClient = new System.Net.Sockets.UdpClient(4242);
 
 /* Send data: 10.0.2.2 is the host under QEMU user networking */
 byte[] message = Encoding.ASCII.GetBytes(&quot;Hello from CosmosOS!&quot;);
@@ -385,7 +379,9 @@ if (address != null)
 dnsClient.Close();
 </code></pre>
 <p>DNS is one protocol at both IP versions, so <code>DnsClient</code> serves both. Two things vary independently: the server address passed to <code>Connect</code> decides which version carries the query, and the record type passed to <code>SendQuery</code> decides which address family the answer holds. An IPv4 query can ask for an IPv6 address, and the reverse:</p>
-<pre><code class="lang-csharp">/* Ask for the IPv6 address, over whichever version reaches the server */
+<pre><code class="lang-csharp">using Cosmos.Kernel.System.Network.Protocols.Dns;   // DnsRecordType, part of the packet seam (COSMOS0002)
+
+/* Ask for the IPv6 address, over whichever version reaches the server */
 dnsClient.SendQuery(&quot;github.com&quot;, DnsRecordType.AAAA);
 
 /* Every address record for the name, after any CNAME chain */
@@ -423,6 +419,7 @@ List&lt;Address&gt;? all = dnsClient.ReceiveAll(5000);
 </tr>
 </tbody>
 </table>
+<p>The packet types make up the <code>Cosmos.Kernel.System.Network.Protocols</code> subtree: <code>EthernetPacket</code> and <code>InternetPacket</code> at its root, then one namespace per protocol (<code>Arp</code>, <code>Dns</code>, <code>IPv4</code> with <code>IPv4.Dhcp</code> under it, <code>Tcp</code>, <code>Udp</code>). The transmit, inject and client members stay on their stable types in <code>Cosmos.Kernel.System.Network</code>.</p>
 <p>The seam is for building and reading the packet types the stack already
 speaks, not for adding new ones: their wire fields, header checksum helpers
 and the <code>InitializeFields</code> parse hook are internal to the stack, so a kernel
@@ -432,15 +429,16 @@ not derive from <code>IPPacket</code>; they hold the packet that carries them in
 <code>Network</code> property, typed as the version-neutral <code>InternetPacket</code>. Build one
 by passing two addresses of the same version, and hand <code>packet.Network</code> to
 <code>NetworkStack.Send</code>:</p>
-<pre><code class="lang-csharp">UdpPacket datagram = new UdpPacket(localIp, remoteIp, 5000, 4242, payload);
+<pre><code class="lang-csharp">using Cosmos.Kernel.System.Network.Protocols.Udp;
+
+UdpPacket datagram = new UdpPacket(localIp, remoteIp, 5000, 4242, payload);
 NetworkStack.Send(datagram.Network);
 </code></pre>
 <p>A mismatched pair of addresses throws <code>ArgumentException</code> rather than
 truncating one of them.</p>
 <p>A crafted echo request, correlated with its reply by the identifier and sequence number the caller chose:</p>
 <pre><code class="lang-csharp">using Cosmos.Kernel.System.Network;
-using Cosmos.Kernel.System.Network.Config;
-using Cosmos.Kernel.System.Network.IPv4;
+using Cosmos.Kernel.System.Network.Protocols.IPv4;
 
 IPConfig? config = NetworkManager.Primary.IPConfig;
 if (config is null)
@@ -488,20 +486,21 @@ icmp.Close();
 <li>IPv6 stops at the link. There is a link-local address, Neighbor Discovery, ICMPv6 echo, and UDP and TCP now ride IPv6 through the same packet classes as IPv4, but there is no routing table, so every destination has to be on the link. No SLAAC or DHCPv6, no address configuration beyond the link-local address, and <code>IPAddress</code> stays IPv4-only in the socket plugs, so the standard .NET socket classes reach IPv4 only.</li>
 <li>No TLS, so no <code>HttpClient</code>/HTTPS: raw TCP only.</li>
 <li>Several NICs are registered and configured, and outbound packets are routed by matching the source address against each interface's configuration, so <code>NetworkManager.Primary</code> decides only where the unrouted helpers (<code>NetworkManager.Send</code>, the no-handle <code>IPConfig.Enable</code>) go.</li>
+<li>An interface the driver kit withdraws leaves the manager's table, but its IP configuration is not removed and <code>NetworkAdapter</code> handles stay positional, so a handle taken before the withdrawal may name the device that moved into its slot.</li>
 <li>Half-close is not supported: <code>Close()</code> on an established TCP connection expects the peer to answer the FIN handshake within 5 seconds and throws if it keeps the connection open.</li>
 <li>On the Cosmos <code>UdpClient</code> and <code>IcmpClient</code>, <code>Close()</code> and <code>Dispose()</code> are not the same door. <code>Close()</code> stops delivery to the client and an <code>IcmpClient</code> reopens with another <code>Connect()</code>; <code>Dispose()</code> (including the one a <code>using</code> block runs) retires the client for good, and every other member throws <code>ObjectDisposedException</code> afterwards.</li>
 </ul>
 <h2 id="how-it-works">How it works</h2>
-<p>Your code calls the standard .NET socket classes, whose PAL bottoms out in <code>Socket</code>-level <a href="../dev/plugs.html">plugs</a> in <code>Cosmos.Kernel.Plugs</code> (<code>SocketPlug</code>, <code>TcpClientPlug</code>, <code>TcpListenerPlug</code>, <code>UdpClientPlug</code>, <code>NetworkStreamPlug</code>, and <code>NameResolutionPalPlug</code> for <code>Dns</code>). Those delegate to the Cosmos network stack (the TCP state machine and UDP layer over both IP versions, with ARP and Ethernet under IPv4 and ICMPv6 and Neighbor Discovery under IPv6), which sends and receives frames through the <code>NetworkDevice</code> driver registered with <code>NetworkManager</code>. The Cosmos <code>DhcpClient</code> and <code>DnsClient</code> sit directly on the Cosmos UDP layer, <code>DhcpClient</code> over IPv4 only.</p>
+<p>Your code calls the standard .NET socket classes, whose PAL bottoms out in <code>Socket</code>-level <a href="../dev/plugs.html">plugs</a> in <code>Cosmos.Kernel.Plugs</code> (<code>SocketPlug</code>, <code>TcpClientPlug</code>, <code>TcpListenerPlug</code>, <code>UdpClientPlug</code>, <code>NetworkStreamPlug</code>, and <code>NameResolutionPalPlug</code> for <code>Dns</code>). Those delegate to the Cosmos network stack (the TCP state machine and UDP layer over both IP versions, with ARP and Ethernet under IPv4 and ICMPv6 and Neighbor Discovery under IPv6), which sends and receives frames through the network device registered with <code>NetworkManager</code>: an interface a driver kit driver published, the E1000E's or the virtio-net's. A frame the kit driver receives is handed to the stack on the kit's worker thread, with interrupts disabled for the handler's duration. The Cosmos <code>DhcpClient</code> and <code>DnsClient</code> sit directly on the Cosmos UDP layer, <code>DhcpClient</code> over IPv4 only.</p>
 <pre><code>TcpClient / TcpListener / UdpClient / NetworkStream     (stock BCL)
         │
 Socket plugs                                            (Cosmos.Kernel.Plugs)
         │
-Cosmos TCP state machine / UDP                          (Cosmos.Kernel.System.Network.IPv4)
+Cosmos TCP state machine / UDP                          (Cosmos.Kernel.System.Network)
         │                                    DhcpClient / DnsClient ride UDP directly
 IPv4 / ARP and IPv6 / Neighbor Discovery / Ethernet
         │
-NetworkDevice driver                                    (Intel E1000E, virtio-net)
+Network device                                          (e1000e or virtio-net, over the driver kit)
 </code></pre>
 
 </article>

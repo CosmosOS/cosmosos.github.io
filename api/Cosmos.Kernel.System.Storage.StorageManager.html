@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class StorageManager | Cosmos Gen 3 ">
       
-      <meta name="description" content="Manages block storage devices. The tables change after boot too, when a USB disk is plugged in or pulled out, from the USB hot-plug thread: each is replaced whole on every change, so a list read from ,  or  never changes under its reader. Read it once and index that copy: a second read may be a newer table.">
+      <meta name="description" content="Manages block storage devices. A disk reaches the manager one of two ways: a driver kit driver publishes it and the manager&#39;s  registers it (the AHCI, NVMe, virtio-blk and USB mass storage drivers), or it is handed to  directly by the kernel. Every registration scans the disk for partitions. The tables change after boot too, when a USB disk, or a virtio-blk disk behind a PCI Express hot-plug slot, is plugged in or pulled out, from the kit worker in a probe or a teardown: each is replaced whole on every change, so a list read from ,  or  never changes under its reader. Read it once and index that copy: a second read may be a newer table.  The tables are kept in one order, which decides the primary device: a kit disk before a hand-registered one; among kit disks the smaller node path by ordinal comparison (pci: before usb: before virtio:), and among equal paths the earlier registered; among hand-registered disks the earlier registered. So an internal disk on a PCI controller comes before a USB stick present at boot whichever registered first, and a kit disk arriving after a USB stick moves ahead of it and renumbers , which is why a mount by  keeps its partition where a mount by index string keeps its index.">
       <link rel="icon" href="../images/favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -97,12 +97,30 @@ Class StorageManager
   <dl><dt>Assembly</dt><dd>Cosmos.Kernel.System.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"><p>Manages block storage devices. The tables change after boot too, when a
-USB disk is plugged in or pulled out, from the USB hot-plug thread: each
-is replaced whole on every change, so a list read from
-<a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_Devices">Devices</a>, <a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_Partitions">Partitions</a> or
-<a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_GetPartitions_Cosmos_Kernel_HAL_Interfaces_Devices_IBlockDevice_">GetPartitions(IBlockDevice)</a> never changes under its reader. Read it once
-and index that copy: a second read may be a newer table.</p>
+  <div class="markdown summary"><p>Manages block storage devices. A disk reaches the manager one of two
+ways: a driver kit driver publishes it and the manager's
+<span class="xref">Cosmos.Kernel.System.Storage.KitBlockConsumer</span> registers it (the AHCI, NVMe, virtio-blk
+and USB mass storage drivers), or it is handed to
+<a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_RegisterDevice_Cosmos_Kernel_HAL_Devices_Storage_IBlockDevice_">RegisterDevice(IBlockDevice)</a> directly by the kernel. Every registration
+scans the disk for partitions. The tables change after boot too, when a
+USB disk, or a virtio-blk disk behind a PCI Express hot-plug slot, is
+plugged in or pulled out, from the kit worker in a probe or a teardown: each is
+replaced whole on every change, so a list read from <a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_Devices">Devices</a>,
+<a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_Partitions">Partitions</a> or <a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_GetPartitions_Cosmos_Kernel_HAL_Devices_Storage_IBlockDevice_">GetPartitions(IBlockDevice)</a> never changes
+under its reader. Read it once and index that copy: a second read may be
+a newer table.</p>
+<p>
+The tables are kept in one order, which decides the primary device: a
+kit disk before a hand-registered one; among kit disks the smaller node
+path by ordinal comparison (<code>pci:</code> before <code>usb:</code> before
+<code>virtio:</code>), and among equal paths the earlier registered; among
+hand-registered disks the earlier registered. So an internal disk on a
+PCI controller comes before a USB stick present at boot whichever
+registered first, and a kit disk arriving after a USB stick moves ahead
+of it and renumbers <a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_Partitions">Partitions</a>, which is why a mount by
+<a class="xref" href="Cosmos.Kernel.System.Storage.Partition.html">Partition</a> keeps its partition where a mount by index
+string keeps its index.
+</p>
 </div>
   <div class="markdown conceptual"></div>
 
@@ -197,8 +215,9 @@ and index that copy: a second read may be a newer table.</p>
   
   </h3>
 
-  <div class="markdown level1 summary"><p>Every registered block device, in registration order. Empty before
-initialization and when storage support is compiled out.</p>
+  <div class="markdown level1 summary"><p>Every registered block device, in the manager's order: kit disks by
+node path, then hand-registered disks in registration order. Empty
+before initialization and when storage support is compiled out.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -212,7 +231,7 @@ initialization and when storage support is compiled out.</p>
 
   <h4 class="section">Property Value</h4>
   <dl class="parameters">
-    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;<a class="xref" href="Cosmos.Kernel.HAL.Interfaces.Devices.IBlockDevice.html">IBlockDevice</a>&gt;</dt>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;<a class="xref" href="Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice.html">IBlockDevice</a>&gt;</dt>
     <dd></dd>
   </dl>
 
@@ -295,10 +314,11 @@ the device table exist.</p>
   
   </h3>
 
-  <div class="markdown level1 summary"><p>Partitions discovered across every registered device. Each entry is
-itself an <a class="xref" href="Cosmos.Kernel.HAL.Interfaces.Devices.IBlockDevice.html">IBlockDevice</a> rooted at the partition's
-starting LBA, so filesystem drivers consume them without knowing
-whether the host disk is GPT-, MBR-, or unpartitioned.</p>
+  <div class="markdown level1 summary"><p>Partitions discovered across every registered device, grouped by
+device in the order of <a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_Devices">Devices</a>. Each entry is itself an
+<a class="xref" href="Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice.html">IBlockDevice</a> rooted at the partition's starting LBA, so
+filesystem drivers consume them without knowing whether the host disk
+is GPT-, MBR-, or unpartitioned.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -330,9 +350,11 @@ whether the host disk is GPT-, MBR-, or unpartitioned.</p>
   
   </h3>
 
-  <div class="markdown level1 summary"><p>Gets the primary block device (first one registered), or
-<a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> when storage is compiled out or no device
-registered at boot.</p>
+  <div class="markdown level1 summary"><p>Gets the primary block device: the first entry of <a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_Devices">Devices</a>
+in the manager's order (a kit disk before a hand-registered one, the
+lowest node path among kit disks, then registration order), or
+<a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> when storage is compiled out or no device is
+registered.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -346,7 +368,7 @@ registered at boot.</p>
 
   <h4 class="section">Property Value</h4>
   <dl class="parameters">
-    <dt><a class="xref" href="Cosmos.Kernel.HAL.Interfaces.Devices.IBlockDevice.html">IBlockDevice</a></dt>
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice.html">IBlockDevice</a></dt>
     <dd></dd>
   </dl>
 
@@ -385,7 +407,7 @@ registered at boot.</p>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
-    <dt><a class="xref" href="Cosmos.Kernel.HAL.Interfaces.Devices.IBlockDevice.html">IBlockDevice</a></dt>
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice.html">IBlockDevice</a></dt>
     <dd><p>The block device, or null when the index names none and when
 storage support is disabled.</p>
 </dd>
@@ -403,7 +425,7 @@ storage support is disabled.</p>
 
   <a id="Cosmos_Kernel_System_Storage_StorageManager_GetPartitions_" data-uid="Cosmos.Kernel.System.Storage.StorageManager.GetPartitions*"></a>
 
-  <h3 id="Cosmos_Kernel_System_Storage_StorageManager_GetPartitions_Cosmos_Kernel_HAL_Interfaces_Devices_IBlockDevice_" data-uid="Cosmos.Kernel.System.Storage.StorageManager.GetPartitions(Cosmos.Kernel.HAL.Interfaces.Devices.IBlockDevice)">
+  <h3 id="Cosmos_Kernel_System_Storage_StorageManager_GetPartitions_Cosmos_Kernel_HAL_Devices_Storage_IBlockDevice_" data-uid="Cosmos.Kernel.System.Storage.StorageManager.GetPartitions(Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice)">
   GetPartitions(IBlockDevice)
   
   </h3>
@@ -411,7 +433,9 @@ storage support is disabled.</p>
   <div class="markdown level1 summary"><p>The partitions discovered on one device, in on-disk order, so a kernel
 can number them per disk the way a user does. A partition's position in
 this list is its index on <code class="paramref">device</code>. Empty when the
-device has no partition table or is not registered.</p>
+device has no partition table or is not registered. Allocation-free:
+the list is the entry's own array, replaced whole by a rescan, so a
+caller's copy never changes under it.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -421,7 +445,7 @@ device has no partition table or is not registered.</p>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>device</code> <a class="xref" href="Cosmos.Kernel.HAL.Interfaces.Devices.IBlockDevice.html">IBlockDevice</a></dt>
+    <dt><code>device</code> <a class="xref" href="Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice.html">IBlockDevice</a></dt>
     <dd><p>The device to list the partitions of.</p>
 </dd>
   </dl>
@@ -444,14 +468,17 @@ device has no partition table or is not registered.</p>
 
   <a id="Cosmos_Kernel_System_Storage_StorageManager_RegisterDevice_" data-uid="Cosmos.Kernel.System.Storage.StorageManager.RegisterDevice*"></a>
 
-  <h3 id="Cosmos_Kernel_System_Storage_StorageManager_RegisterDevice_Cosmos_Kernel_HAL_Interfaces_Devices_IBlockDevice_" data-uid="Cosmos.Kernel.System.Storage.StorageManager.RegisterDevice(Cosmos.Kernel.HAL.Interfaces.Devices.IBlockDevice)">
+  <h3 id="Cosmos_Kernel_System_Storage_StorageManager_RegisterDevice_Cosmos_Kernel_HAL_Devices_Storage_IBlockDevice_" data-uid="Cosmos.Kernel.System.Storage.StorageManager.RegisterDevice(Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice)">
   RegisterDevice(IBlockDevice)
   
   </h3>
 
   <div class="markdown level1 summary"><p>Registers a block device with the manager and scans it for a GPT or
 MBR partition table. Discovered partitions are appended to
-<a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_Partitions">Partitions</a>.</p>
+<a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_Partitions">Partitions</a>. A device already registered, or one more
+than the manager holds, is silently ignored. Thread context: the boot
+thread or a kernel's own thread; the scan reads the disk before the
+lock.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -461,7 +488,7 @@ MBR partition table. Discovered partitions are appended to
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>device</code> <a class="xref" href="Cosmos.Kernel.HAL.Interfaces.Devices.IBlockDevice.html">IBlockDevice</a></dt>
+    <dt><code>device</code> <a class="xref" href="Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice.html">IBlockDevice</a></dt>
     <dd><p>The block device to register.</p>
 </dd>
   </dl>
@@ -485,7 +512,7 @@ MBR partition table. Discovered partitions are appended to
 
   <a id="Cosmos_Kernel_System_Storage_StorageManager_RescanPartitions_" data-uid="Cosmos.Kernel.System.Storage.StorageManager.RescanPartitions*"></a>
 
-  <h3 id="Cosmos_Kernel_System_Storage_StorageManager_RescanPartitions_Cosmos_Kernel_HAL_Interfaces_Devices_IBlockDevice_" data-uid="Cosmos.Kernel.System.Storage.StorageManager.RescanPartitions(Cosmos.Kernel.HAL.Interfaces.Devices.IBlockDevice)">
+  <h3 id="Cosmos_Kernel_System_Storage_StorageManager_RescanPartitions_Cosmos_Kernel_HAL_Devices_Storage_IBlockDevice_" data-uid="Cosmos.Kernel.System.Storage.StorageManager.RescanPartitions(Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice)">
   RescanPartitions(IBlockDevice)
   
   </h3>
@@ -493,7 +520,9 @@ MBR partition table. Discovered partitions are appended to
   <div class="markdown level1 summary"><p>Re-scan a previously-registered device for a partition table.
 Existing partitions belonging to that host are dropped first, so
 callers that just wrote a new layout (tests, formatting tools) get
-a clean partition list.</p>
+a clean partition list. The device keeps its place in
+<a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_Devices">Devices</a>. Thread context: a kernel's own thread or a
+test; the scan reads the disk before the lock.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -503,7 +532,7 @@ a clean partition list.</p>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>device</code> <a class="xref" href="Cosmos.Kernel.HAL.Interfaces.Devices.IBlockDevice.html">IBlockDevice</a></dt>
+    <dt><code>device</code> <a class="xref" href="Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice.html">IBlockDevice</a></dt>
     <dd><p>The registered device to re-scan.</p>
 </dd>
   </dl>

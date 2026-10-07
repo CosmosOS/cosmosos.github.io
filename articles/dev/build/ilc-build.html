@@ -150,9 +150,14 @@
 <td><code>ResolveIlcPath</code></td>
 </tr>
 <tr>
-<td><code>CompileWithIlc</code></td>
-<td>Runs <code>ilc</code> using the response file to emit a native object file.</td>
+<td><code>CheckIlcCache</code></td>
+<td>Hashes the inputs, the references and the response file and compares the hash with the one of the last compilation.</td>
 <td><code>WriteIlcRsp</code></td>
+</tr>
+<tr>
+<td><code>CompileWithIlc</code></td>
+<td>Runs <code>ilc</code> using the response file to emit a native object file, unless <code>CheckIlcCache</code> found the object up to date.</td>
+<td><code>WriteIlcRsp</code>, <code>CheckIlcCache</code></td>
 </tr>
 </tbody>
 </table>
@@ -161,7 +166,8 @@
 <ol>
 <li><strong>ResolveIlcPath</strong> uses <code>GetPackageDirectory</code> to find the <code>runtime.&lt;RID&gt;.Microsoft.DotNet.ILCompiler</code> package and sets <code>IlcToolsPath</code>.</li>
 <li><strong>WriteIlcRsp</strong> creates <code>$(IlcIntermediateOutputPath)$(AssemblyName).ilc.rsp</code>, gathering patched assemblies from <code>$(IntermediateOutputPath)/cosmos</code>, references from <code>cosmos/ref</code>, and ILCompiler options such as <code>--runtimeknob</code> and <code>--feature</code> flags.</li>
-<li><strong>CompileWithIlc</strong> executes <code>ilc</code> with the generated response file, producing <code>$(AssemblyName).o</code> in <code>$(IlcIntermediateOutputPath)</code>.</li>
+<li><strong>CheckIlcCache</strong> computes one SHA-256 over the input assemblies, the reference assemblies and the response file, and compares it with <code>.ilc-hash</code> from the last compilation. The response file is part of the key on purpose: a feature switch flipped in the kernel's <code>.csproj</code> changes no assembly, only the <code>--runtimeknob</code> arguments in the response file, and a key over the assemblies alone would keep the object compiled for the old value.</li>
+<li><strong>CompileWithIlc</strong> executes <code>ilc</code> with the generated response file, producing <code>$(AssemblyName).o</code> in <code>$(IlcIntermediateOutputPath)</code>, and writes the new hash. When the hash matched, the step is skipped and the log says <code>ILC cache hit</code>.</li>
 <li>The native binary is ready for further packaging, such as bootloader integration.</li>
 </ol>
 <hr>
@@ -169,6 +175,7 @@
 <ul>
 <li>Response file: <code>$(IntermediateOutputPath)/cosmos/native/$(AssemblyName).ilc.rsp</code> listing inputs, references, and ILCompiler options.</li>
 <li>Native object: <code>$(IntermediateOutputPath)/cosmos/native/$(AssemblyName).o</code> produced by <code>CompileWithIlc</code> for linking.</li>
+<li>Cache key: <code>$(IntermediateOutputPath)/cosmos/native/.ilc-hash</code>, the hash of the inputs the object was compiled from.</li>
 </ul>
 <p>Notes:</p>
 <ul>

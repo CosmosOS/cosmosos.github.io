@@ -90,19 +90,19 @@
 <td><a href="https://github.com/EliotJones/BigGustave">BigGustave</a></td>
 <td>Unlicense</td>
 <td>PNG decoding (<code>Cosmos.Kernel.System.Graphics.Png</code>)</td>
-<td><code>src/Cosmos.Kernel.System/Graphics/Images/BigGustave/</code></td>
+<td><code>src/Cosmos.Kernel.System/ThirdParty/BigGustave/</code></td>
 </tr>
 <tr>
 <td><a href="https://github.com/icsharpcode/SharpZipLib">SharpZipLib</a></td>
 <td>MIT</td>
 <td>Managed DEFLATE/zlib decompression for the PNG decoder</td>
-<td><code>src/Cosmos.Kernel.System/IO/Compression/SharpZipLib/</code></td>
+<td><code>src/Cosmos.Kernel.System/ThirdParty/SharpZipLib/</code></td>
 </tr>
 <tr>
 <td><a href="https://github.com/Relfos/LunarFonts">LunarFonts</a></td>
 <td>MIT</td>
 <td>TrueType loading and rasterization (<code>TrueTypeFont</code>)</td>
-<td><code>src/Cosmos.Kernel.System/Graphics/Fonts/TrueType/LunarFonts/</code></td>
+<td><code>src/Cosmos.Kernel.System/ThirdParty/LunarFonts/</code></td>
 </tr>
 <tr>
 <td><a href="https://github.com/fcambus/spleen">Spleen</a></td>
@@ -113,13 +113,13 @@
 <tr>
 <td><a href="https://github.com/Samma2009/Cosm3D">Cosm3D</a></td>
 <td>MIT</td>
-<td>VMWareSVGAII Canvas driver (<code>Cosmos.Kernel.HAL.Devices.Graphic.SVGAII</code>)</td>
-<td></td>
+<td>The SVGA3D command layer and canvas of the VMware SVGA II display driver (<code>Cosmos.Kernel.Drivers.Pci.Display.VmwareSvga.VmwareSvga3D</code>, <code>VmwareSvgaCanvas3D</code>)</td>
+<td><code>src/Cosmos.Kernel.Drivers/Pci/Display/VmwareSvga/</code>: <code>VmwareSvga3D.cs</code>, <code>VmwareSvgaCanvas3D.cs</code> and the <code>Enums/</code> and <code>Structs/</code> vocabulary</td>
 </tr>
 </tbody>
 </table>
 <p>The PNG integration follows <a href="https://github.com/Szymekk44/CosmosPNG">CosmosPNG</a> (Unlicense), which first brought BigGustave to Cosmos Gen2, and the TrueType integration follows <a href="https://github.com/GoldenretriverYT/CosmosTTF">CosmosTTF</a> (MIT), which first brought LunarFonts there.</p>
-<p>The SvgaII integration originates from a gen3 port of <a href="https://github.com/Samma2009/Cosm3D">Cosm3D</a> (an implementation of the <a href="https://sourceforge.net/projects/vmware-svga">3D SvgaII spec by VMware</a>), with the port itself based on the gen2 SvgaII driver.</p>
+<p>The VMware SVGA II integration originates from a gen3 port of <a href="https://github.com/Samma2009/Cosm3D">Cosm3D</a> (an implementation of the <a href="https://sourceforge.net/projects/vmware-svga">3D SVGA II spec by VMware</a>), with the port itself based on the gen2 SVGA II driver; it lives in <code>Cosmos.Kernel.Drivers</code> as <code>VmwareSvgaDriver</code> over the driver kit.</p>
 <h2 id="shipped-binaries-and-dependencies">Shipped binaries and dependencies</h2>
 <table>
 <thead>

@@ -111,7 +111,7 @@
 <td>Driver support</td>
 <td>✅</td>
 <td>✅</td>
-<td>PCI and MMIO</td>
+<td>PCI and MMIO over the driver kit; the platform bus seeded from ACPI, the device tree (ARM64) or the machine's table; PCI Express hot-plug on root ports</td>
 </tr>
 <tr>
 <td>Garbage Collection</td>
@@ -159,7 +159,7 @@
 <td>Cosmos Graphic Subsystem</td>
 <td>✅</td>
 <td>✅</td>
-<td>UEFI GOP framebuffer via Limine only.</td>
+<td>The firmware framebuffer via Limine, plus the virtio-gpu and VMware SVGA II display drivers over the driver kit (SVGA3D on the latter).</td>
 </tr>
 <tr>
 <td>Network interface</td>
@@ -177,13 +177,13 @@
 <td>Keyboard Input</td>
 <td>✅</td>
 <td>✅</td>
-<td></td>
+<td>PS/2 (x64), virtio and USB keyboards, all as driver kit drivers</td>
 </tr>
 <tr>
 <td>Mouse Input</td>
 <td>✅</td>
 <td>✅</td>
-<td></td>
+<td>PS/2 (x64) and virtio mice, both as driver kit drivers</td>
 </tr>
 <tr>
 <td>Audio interface</td>
@@ -237,7 +237,7 @@
 <tr>
 <td><strong>USB Support</strong></td>
 <td>✅</td>
-<td>xHCI host controller with hubs and hot-plug (x64 + ARM64). HID boot keyboard and mass storage (Bulk-Only Transport). No USB mouse or EHCI yet.</td>
+<td>xHCI host controller with hubs and hot-plug (x64 + ARM64) as driver kit drivers, with the HID boot keyboard and mass storage (Bulk-Only Transport) class drivers. No USB mouse or EHCI yet.</td>
 </tr>
 </tbody>
 </table>
@@ -271,6 +271,16 @@
 <td><strong>Code execution</strong></td>
 <td>❌ Not Started</td>
 <td>Userland WASM VM</td>
+</tr>
+<tr>
+<td><strong>The GIC, the ITS and the clocks from the device tree</strong></td>
+<td>❌ Not Started</td>
+<td>Today the ARM64 interrupt controller comes from ACPI or the virt defaults, so an acpi=off boot has no MSI; the platform bus already reads the tree. x64 never has one.</td>
+</tr>
+<tr>
+<td><strong>PCI hot-plug beyond native PCI Express slots</strong></td>
+<td>❌ Not Started</td>
+<td>ACPI (GPE) hot-plug, which QEMU uses on q35's root ports without the ICH9-LPC global and on conventional PCI bridges; downstream switch ports are matched but untested.</td>
 </tr>
 </tbody>
 </table>

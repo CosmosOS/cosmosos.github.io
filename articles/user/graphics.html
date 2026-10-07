@@ -106,7 +106,7 @@
 <tr>
 <td>Video drivers</td>
 <td>VBE, VGA, VMWare SVGA II</td>
-<td>Limine-provided framebuffer (x64 and ARM64)</td>
+<td>The firmware framebuffer Limine hands over (x64 and ARM64), plus the display drivers the driver kit publishes: virtio-gpu and VMware SVGA II</td>
 </tr>
 <tr>
 <td><code>Display()</code></td>
@@ -116,7 +116,7 @@
 <tr>
 <td>Video mode</td>
 <td>Switchable at runtime</td>
-<td>Fixed at boot by the bootloader</td>
+<td>Switchable on a display that offers <code>IDisplayModes</code> (the VMware SVGA II adapter); fixed at boot otherwise</td>
 </tr>
 <tr>
 <td>Text console</td>
@@ -144,25 +144,27 @@ using System.IO;
 using System.Numerics;
 using Cosmos.Kernel.System.Graphics;
 using Cosmos.Kernel.System.Graphics.Fonts;
-using Cosmos.Kernel.System.Mouse;
+using Cosmos.Kernel.System.Graphics.Rendering3D;
+using Cosmos.Kernel.System.Input;
 </code></pre>
 <h2 id="getting-a-canvas">Getting a canvas</h2>
-<p><code>Canvas.GetFullScreen()</code> returns the canvas backed by the screen, the framebuffer the bootloader set up at boot:</p>
+<p><code>Canvas.GetFullScreen()</code> returns the canvas on the primary display the driver kit found: the framebuffer the bootloader set up at boot, or the display a display driver published. <code>Name</code> says which, as the driver's name followed by the display's, <code>firmware framebuffer</code> on the boot framebuffer:</p>
 <pre><code class="lang-csharp">Canvas canvas = Canvas.GetFullScreen();
 
 Console.WriteLine(&quot;Canvas:     &quot; + canvas.Name);
 Console.WriteLine(&quot;Resolution: &quot; + canvas.Width + &quot;x&quot; + canvas.Height);
 Console.WriteLine(&quot;Refresh:    &quot; + canvas.RefreshRate + &quot; Hz&quot;);
 </code></pre>
-<!-- screenshot: console showing "Canvas: GopCanvas", the resolution and refresh rate -->
+<!-- screenshot: console showing "Canvas: firmware framebuffer", the resolution and refresh rate -->
 <p><img src="images/graphics-canvas.png" alt="Getting a canvas"></p>
 <p>Four things to know before you start drawing:</p>
 <ul>
-<li><strong>The resolution is fixed at boot.</strong> Unlike Gen2, requesting a different <code>Mode</code> does not reprogram the video card: the canvas always has the resolution the bootloader chose. Use <code>canvas.Width</code> and <code>canvas.Height</code> instead of assuming one.</li>
-<li><strong>Nothing appears until you call <code>Display()</code>.</strong> The canvas is double-buffered: every drawing call goes to a back buffer, and <code>Display()</code> swaps the finished frame to video memory. Draw the whole frame, then call <code>Display()</code> once; that is also what keeps animations flicker-free.</li>
+<li><strong>The resolution is fixed at boot unless the display switches modes.</strong> On the firmware framebuffer and on virtio-gpu, requesting a different <code>Mode</code> does not reprogram anything: the request is ignored and the canvas keeps the resolution the display is in. A display that offers <code>IDisplayModes</code>, the VMware SVGA II adapter today, is switched by <code>Canvas.GetFullScreen(Mode)</code>, which throws <code>ArgumentOutOfRangeException</code> for a mode the display refuses. Use <code>canvas.Width</code> and <code>canvas.Height</code> instead of assuming one either way.</li>
+<li><strong>Nothing appears until you call <code>Display()</code>.</strong> The canvas is double-buffered: every drawing call goes to a back buffer, and <code>Display()</code> copies the finished frame into the display's framebuffer and asks the display to flush it. Draw the whole frame, then call <code>Display()</code> once; that is also what keeps animations flicker-free.</li>
 <li><strong>Drawing outside the canvas is safe.</strong> Every primitive clips: pixels outside <code>0..Width-1</code> and <code>0..Height-1</code> are dropped, a shape that straddles an edge is drawn up to it, and nothing throws. Coordinates never need clamping before a call.</li>
 <li><strong><code>Console</code> shares the screen with you.</strong> There is no separate text mode: <code>Console.WriteLine</code> is itself rendered on the full-screen canvas (and calls <code>Display()</code> on every write). Once you start drawing, stop writing to <code>Console</code>: the next write would paint text right over your graphics. This also means an uncaught exception prints over whatever you drew, which, unlike Gen2 where the screen just froze, at least tells you what went wrong.</li>
 </ul>
+<p>The canvas is cached: every <code>GetFullScreen()</code> call returns the same one until <code>DisableFullScreen()</code>. A canvas whose display was withdrawn (its driver unbound, or the firmware display retired after a driver took over the adapter) is the one exception: <code>Display()</code> copies nothing on it, and the next <code>GetFullScreen()</code> or <code>GetFullScreen(Mode)</code> replaces it with a canvas on the display that is primary now.</p>
 <h2 id="drawing-shapes">Drawing shapes</h2>
 <p>The canvas offers the classic set of primitives (points, lines, rectangles, circles, ellipses, arcs, triangles and polygons), most in outlined and filled variants:</p>
 <pre><code class="lang-csharp">Canvas canvas = Canvas.GetFullScreen();
@@ -280,6 +282,7 @@ canvas.DrawImage(bitmap, 100, 150, 128, 128);
 
 canvas.Display();
 </code></pre>
+<p>Two rules decide what happens to a pixel's alpha. The unscaled draws, <code>DrawImage(image, x, y)</code>, <code>CroppedDrawImage</code>, <code>DrawArray</code> and <code>DrawCanvas</code>, copy pixels row by row into the canvas, alpha channel included, with no blending: they are the fast path, and what they draw replaces what was there. The scaled overload <code>DrawImage(image, x, y, width, height)</code> and <code>DrawImageAlpha</code> draw pixel by pixel and blend: a translucent pixel blends over the canvas and a transparent one leaves it alone.</p>
 <p>More usefully, <code>Bitmap</code> can load an uncompressed 24-bit or 32-bit <strong>BMP file</strong> through standard <code>System.IO</code>, for example from a FAT disk mounted as shown in the <a href="filesystem.html">File System</a> article:</p>
 <pre><code class="lang-csharp">/* logo.bmp is a 24-bit BMP on the FAT partition mounted at /mnt */
 Bitmap logo = new Bitmap(@&quot;/mnt/logo.bmp&quot;);
@@ -292,7 +295,7 @@ canvas.Display();
 </code></pre>
 <!-- screenshot: the 2x2 bitmap raw and scaled, plus the logo loaded from disk centered on screen -->
 <p><img src="images/graphics-images.png" alt="Drawing images"></p>
-<p><strong>PNG</strong> files work the same way through the <code>Png</code> class, also an <code>Image</code>, so it goes wherever a <code>Bitmap</code> goes. The whole format is supported (grayscale, truecolor and palette, with or without alpha, interlaced or not), decoded by pure managed code (see the <a href="../../credits.html">Credits</a> page). Transparent pixels blend with what is already on the canvas:</p>
+<p><strong>PNG</strong> files work the same way through the <code>Png</code> class, also an <code>Image</code>, so it goes wherever a <code>Bitmap</code> goes. The whole format is supported (grayscale, truecolor and palette, with or without alpha, interlaced or not), decoded by pure managed code (see the <a href="../../credits.html">Credits</a> page). Drawn through the scaled overload, its transparent pixels blend with what is already on the canvas:</p>
 <pre><code class="lang-csharp">/* logo.png is a PNG with transparency on the FAT partition mounted at /mnt */
 Png logo = new Png(&quot;/mnt/logo.png&quot;);
 
@@ -305,7 +308,7 @@ canvas.Display();
 </code></pre>
 <!-- screenshot: the Cosmos logo PNG decoded from disk, scaled and alpha-blended over the background -->
 <p><img src="images/graphics-png.png" alt="Drawing a PNG"></p>
-<p><code>DrawImageAlpha</code> draws with per-pixel alpha blending, and <code>canvas.GetImage(x, y, width, height)</code> does the reverse: it copies a region of the canvas back into a <code>Bitmap</code>.</p>
+<p><code>DrawImageAlpha</code> draws unscaled with per-pixel alpha blending, and <code>canvas.GetImage(x, y, width, height)</code> does the reverse: it copies a region of the canvas back into a <code>Bitmap</code>.</p>
 <h2 id="off-screen-canvases">Off-screen canvases</h2>
 <p>A <code>Canvas</code> does not have to be the screen. Constructing one with a size gives you a memory-backed canvas with the exact same drawing API: compose a tile or sprite once, then blit it to the screen with <code>DrawCanvas</code> as many times as you like:</p>
 <pre><code class="lang-csharp">Canvas canvas = Canvas.GetFullScreen();
@@ -331,15 +334,15 @@ canvas.Display();
 Color color = canvas.GetPointColor(69, 69);   // Color.Red
 </code></pre>
 <h2 id="3d-rendering">3D rendering</h2>
-<p>3D is reachable on one display device only: the VMware SVGA II adapter, and only when it negotiates SVGA3D during FIFO initialization. Every other path, the UEFI framebuffer <code>cosmos run</code> boots on both architectures included, hands back a plain <code>Canvas</code>. QEMU's <code>vmware-svga</code> exposes no 3D capability either, so in practice this means real VMware Workstation or ESXi.</p>
+<p>3D is reachable when the primary display implements <code>ICanvas3DFactory</code>, the facet a display driver puts on its display when the device renders 3D; <code>Canvas.GetFullScreen()</code> asks the display for it and, when it is there, hands back the driver's own <code>Canvas3D</code>. One shipped driver does so today: <code>VmwareSvgaDriver</code>, for the VMware SVGA II adapter, and only when the adapter negotiates SVGA3D during FIFO initialization. Every other display, the firmware framebuffer <code>cosmos run</code> boots on both architectures and virtio-gpu included, hands back a plain <code>Canvas</code>. QEMU's <code>vmware-svga</code> never negotiates 3D either, so in practice this means real VMware Workstation or ESXi.</p>
 <p>The virtual machine also has to present the adapter in its pre guest-backed form. Once it advertises <code>SVGA_CAP_GBOBJECTS</code>, 3D capabilities move to a register interface the driver does not speak, the 3D version in the FIFO stays 0 and the canvas comes back 2D. Lowering the hardware compatibility level of the machine is what keeps the adapter on the older model. This pair works on VMware Workstation 25:</p>
 <pre><code>virtualHW.version = &quot;10&quot;
 mks.enable3D = &quot;TRUE&quot;
 </code></pre>
-<p>The version where an adapter starts advertising guest-backed objects belongs to the VMware build, so check the outcome rather than trusting a number. The kernel prints it on the serial port at boot:</p>
-<pre><code>[SVGAII] SVGA3D: fifocaps 0x77F hw 0x20001 rev 0x20001 caps0 0xBA enabled
+<p>The version where an adapter starts advertising guest-backed objects belongs to the VMware build, so check the outcome rather than trusting a number. The driver prints it on the serial port when it binds the adapter:</p>
+<pre><code>[Drivers] pci:0000:00:01.0 VmwareSvgaDriver: 640x480x32 disabled, caps 0x3, svga3d none, vram 16 MiB, fifo 64 KiB
 </code></pre>
-<p><code>disabled</code> there means <code>Canvas.GetFullScreen()</code> will hand back a plain <code>Canvas</code>; lower the compatibility level until the line reads <code>enabled</code>.</p>
+<p><code>svga3d none</code> there means <code>Canvas.GetFullScreen()</code> will hand back a plain <code>Canvas</code>; lower the compatibility level until the line carries a version instead, <code>svga3d 2.1</code> for the hardware version <code>0x20001</code> the older model reports. The first field is the scanout as the firmware left it, <code>disabled</code> on QEMU until the console programs a mode.</p>
 <p>Because the capability is only known at runtime, there is no <code>GetFullScreen3D</code>. A kernel acquires the canvas the usual way and tests what it got:</p>
 <pre><code class="lang-csharp">Canvas canvas = Canvas.GetFullScreen();
 
@@ -353,8 +356,8 @@ if (canvas is Canvas3D canvas3D)
     canvas3D.Display();
 }
 </code></pre>
-<p><code>Canvas3D</code> is a <code>Canvas</code>, so every 2D call still works on it and <code>Display()</code> presents the frame either way. Meshes come from <code>CreateMesh</code> and textures from <code>CreateTexture(Image)</code>; <code>DrawMesh(mesh, world)</code> places one with a transform. Disposing a texture releases its device memory, and <code>DrawMesh</code> rejects a mesh that still maps it.</p>
-<p>A kernel cannot implement <code>Canvas3D</code> itself. Its constructor is <code>private protected</code> and both implementations are internal, so the abstract members on it are call targets, not an extension contract.</p>
+<p>The 3D types, <code>Canvas3D</code>, <code>Camera3D</code>, <code>Mesh</code>, <code>MeshTopology</code>, <code>Texture</code> and <code>ICanvas3DFactory</code>, live in <code>Cosmos.Kernel.System.Graphics.Rendering3D</code>, which the <code>using</code>s at the top of this page import beside the 2D namespace. <code>Canvas3D</code> is a <code>Canvas</code>, so every 2D call still works on it and <code>Display()</code> presents the frame either way. Meshes come from <code>CreateMesh</code> and textures from <code>CreateTexture(Image)</code>; <code>DrawMesh(mesh, world)</code> places one with a transform. Disposing a texture releases its device memory, and <code>DrawMesh</code> rejects a mesh that still maps it.</p>
+<p>A display driver can implement <code>Canvas3D</code>: its constructor takes the <code>DisplayDevice</code> the canvas draws on, and a driver package derives from it, builds its render targets from <code>Width</code> and <code>Height</code>, recreates them in <code>OnModeChanged</code>, presents the scene in an override of <code>Display()</code> (falling back to the base for a 2D frame) and releases everything in <code>Disable()</code>, keeping its per-resource state in the <code>Mesh</code> and <code>Texture</code> handles through the protected helpers. The SVGA driver's canvas in <code>Cosmos.Kernel.Drivers</code> is written that way, over the public seam, and a kernel reaches it only as a <code>Canvas3D</code>. A kernel that wants 3D uses <code>Canvas.GetFullScreen()</code>.</p>
 <h3 id="a-cube-the-mouse-rolls">A cube the mouse rolls</h3>
 <p>The DevKernel <code>cube</code> command builds a whole scene from those calls: a mesh with one color per face, the ground grid, and a flat triangle that points where the mouse pushes. The pointer drives the roll, so the further it sits from the center of the screen, the faster the cube rolls that way.</p>
 <pre><code class="lang-csharp">if (Canvas.GetFullScreen() is not Canvas3D canvas3D)
@@ -448,19 +451,24 @@ while (true)
 <p>The full demo, cube mesh and direction arrow included, is <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/examples/DevKernel/Graphics/SpinningCubeDemo.cs">SpinningCubeDemo.cs</a>.</p>
 <h2 id="current-limitations">Current limitations</h2>
 <ul>
-<li>Only 32-bit color depth is supported end to end; BMP loading additionally accepts 24-bit files.</li>
-<li>The video mode cannot be changed at runtime: the framebuffer resolution is whatever the bootloader negotiated at boot.</li>
+<li>Only 32-bit color depth is supported end to end; BMP loading additionally accepts 24-bit files. A display in another depth is listed but receives nothing, logged once as <code>[Display] firmware framebuffer: 16 bits per pixel is not supported, nothing is drawn</code>.</li>
+<li>The video mode can be changed only on a display that offers <code>IDisplayModes</code>, the VMware SVGA II adapter today; the firmware framebuffer and virtio-gpu stay in the mode they booted in.</li>
 <li>Supported image formats are BMP (uncompressed, 24 or 32 bpp) and PNG; there is no JPEG support.</li>
-<li>No hardware acceleration on the framebuffer path: every 2D primitive is drawn pixel by pixel by the CPU.</li>
-<li><code>Canvas.DisableFullScreen()</code> exists but there is no VGA text mode to fall back to on UEFI machines.</li>
+<li>No hardware acceleration on the 2D path: every 2D primitive is drawn pixel by pixel by the CPU into the back buffer, on every display.</li>
+<li><code>Canvas.DisableFullScreen()</code> only drops the cached canvas, after releasing what a 3D canvas holds on the device; the display stays in its mode, since there is no text mode to return to.</li>
 </ul>
 <h2 id="how-it-works">How it works</h2>
-<p><code>Canvas.GetFullScreen()</code> returns the canvas for whichever display device the kernel found. Everywhere except a VMware SVGA II adapter that is the framebuffer the <a href="https://limine-bootloader.org/">Limine</a> bootloader requests from the firmware (UEFI GOP) before handing control to the kernel; on that adapter it is the canvas driving the device, which is a <code>Canvas3D</code> when the adapter negotiates 3D (see <a href="#3d-rendering">3D rendering</a>). This is why the same code works unmodified on x64 and ARM64: the kernel never touches a video card directly. Drawing calls land in a back buffer in ordinary memory; <code>Display()</code> copies the whole back buffer into the mapped framebuffer in one go. The kernel console (<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.System/Graphics/KernelConsole.cs"><code>KernelConsole</code></a>) renders <code>Console</code> output onto that same canvas with the default PSF font, calling <code>Display()</code> after every write.</p>
+<p><code>Canvas.GetFullScreen()</code> returns the canvas on the primary display of <code>DisplayManager</code>, the ring's list of every display the <a href="drivers.html">driver kit</a> published. The framebuffer the <a href="https://limine-bootloader.org/">Limine</a> bootloader requests from the firmware (UEFI GOP) before handing control to the kernel is the first of them, the firmware display named <code>framebuffer</code>, published by the kit's engine before any driver runs; a display driver that binds an adapter publishes its own, <code>virtio-gpu</code> or <code>vmware-svga</code>, which the manager prefers over the firmware one. When the driver took over the very adapter the firmware framebuffer sits in, as the SVGA driver does, the kit retires the firmware display, and a kernel that would rather keep it excludes the driver from its manifest. The canvas is the framework <code>Canvas</code> over the display, or the driver's <code>Canvas3D</code> when the display implements <code>ICanvas3DFactory</code> (see <a href="#3d-rendering">3D rendering</a>). This is why the same code works unmodified on x64 and ARM64, and on every display: the canvas never touches a video card directly. Drawing calls land in a back buffer in ordinary memory; <code>Display()</code> copies the back buffer into the display's framebuffer, row by row and clipped to the mode the display is in, then calls the display's <code>Flush</code>, a no-op on the firmware framebuffer and a transfer command on virtio-gpu. The kernel console (<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.System/Graphics/KernelConsole.cs"><code>KernelConsole</code></a>) renders <code>Console</code> output onto that same canvas with the default PSF font, calling <code>Display()</code> after every write.</p>
 <pre><code>Canvas API (shapes, text, images)      (Cosmos.Kernel.System.Graphics)
         │
 Full-screen canvas ── shared with ── KernelConsole (Console output)
         │
-Back buffer ──── Display() ────▶ framebuffer mapped by Limine (UEFI GOP, x64 &amp; ARM64)
+Back buffer ──── Display() ────▶ the primary display's framebuffer, then Flush()
+                                        │
+                              DisplayManager (primary first)
+                                        │
+                     driver kit: the firmware display &quot;framebuffer&quot; (Limine, x64 &amp; ARM64)
+                                 or a driver's display (virtio-gpu, vmware-svga)
 </code></pre>
 
 </article>

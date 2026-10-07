@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Struct PciBar | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Struct PciBar | Cosmos Gen 3 ">
+      
+      <meta name="description" content="One base address register of a PCI function as the host sized it at describe time: what the slot decodes, where, and how much. The six slots are always reported; the upper half of a 64-bit register and a slot with no register behind it are unassigned with length 0; an implemented register nobody has assigned yet is unassigned with the length its mask decoded, which is what the kit&#39;s placement for a function arriving behind a hot-plug slot uses. The resource at the same index on the node is the mappable form.">
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciBar">
+
+
+
+  <h1 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciBar" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciBar" class="text-break">
+Struct PciBar  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><span class="xref">Cosmos</span>.<a class="xref" href="Cosmos.Kernel.html">Kernel</a>.<a class="xref" href="Cosmos.Kernel.HAL.html">HAL</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.html">DriverKit</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.html">Buses</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.html">Pci</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Cosmos.Kernel.HAL.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>One base address register of a PCI function as the host sized it at
+describe time: what the slot decodes, where, and how much. The six
+slots are always reported; the upper half of a 64-bit register and a
+slot with no register behind it are unassigned with length 0; an
+implemented register nobody has assigned yet is unassigned with the
+length its mask decoded, which is what the kit's placement for a
+function arriving behind a hot-plug slot uses. The resource at the same
+index on the node is the mappable form.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Experimental(&quot;COSMOS0003&quot;)]
+public readonly struct PciBar</code></pre>
+  </div>
+
+
+
+
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetype.equals">ValueType.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetype.gethashcode">ValueType.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetype.tostring">ValueType.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciBar_Base_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciBar.Base*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciBar_Base" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciBar.Base">
+  Base
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Physical address of a memory window, or the first port of an I/O range.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ulong Base { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciBar_Index_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciBar.Index*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciBar_Index" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciBar.Index">
+  Index
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The slot, 0 to 5: register offset 0x10 + 4 * Index.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Index { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciBar_Is64Bit_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciBar.Is64Bit*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciBar_Is64Bit" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciBar.Is64Bit">
+  Is64Bit
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>True for a 64-bit memory register, whose upper half sits in the next slot.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Is64Bit { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciBar_IsAssigned_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciBar.IsAssigned*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciBar_IsAssigned" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciBar.IsAssigned">
+  IsAssigned
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>True when the register decodes something: a non-zero base and a non-zero size.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsAssigned { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciBar_IsIo_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciBar.IsIo*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciBar_IsIo" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciBar.IsIo">
+  IsIo
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>True for an I/O port range, false for a memory window.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsIo { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciBar_IsPrefetchable_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciBar.IsPrefetchable*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciBar_IsPrefetchable" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciBar.IsPrefetchable">
+  IsPrefetchable
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>True when the memory window is marked prefetchable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsPrefetchable { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciBar_Length_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciBar.Length*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciBar_Length" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciBar.Length">
+  Length
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Bytes of a memory window, or ports of an I/O range: the decoded size, 0 only for an empty slot or the upper half of a 64-bit register.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ulong Length { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

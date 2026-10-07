@@ -87,9 +87,12 @@
 <li><a href="articles/user/startup.html">Kernel Startup</a>: the boot chain and the <code>BeforeRun</code>/<code>Run</code>/<code>AfterRun</code> lifecycle.</li>
 <li><a href="articles/user/filesystem.html">File System</a>: mount a disk and use the standard .NET <code>System.IO</code> API (<code>File</code>, <code>Directory</code>, streams).</li>
 <li><a href="articles/user/network.html">Network</a>: DHCP, UDP and TCP through the standard .NET <code>System.Net.Sockets</code> API, plus DNS.</li>
+<li><a href="articles/user/timers.html">Timers and Alarms</a>: block for a while, or run a callback later from the timer interrupt (<code>TimerManager</code>) or a kernel thread (<code>AlarmManager</code>).</li>
 <li><a href="articles/user/graphics.html">Graphics</a>: draw shapes, text and images on the screen with the Canvas API.</li>
 <li><a href="articles/user/keyboard.html">Keyboard</a>: read lines, key events and layouts through <code>Console</code> and <code>KeyboardManager</code>.</li>
 <li><a href="articles/user/mouse.html">Mouse</a>: pointer position, buttons and scroll wheel through <code>MouseManager</code>.</li>
+<li><a href="articles/user/drivers.html">Writing a Driver</a>: match a driver to a device, reach the hardware, hand the kernel a device, and test it without hardware.</li>
+<li><a href="articles/user/scheduler-plugging.html">Writing a Scheduler</a>: how to implement and install a scheduling policy.</li>
 <li><a href="articles/user/debugging.html">Debugging with VSCode and QEMU</a>: set breakpoints in your kernel with remote GDB.</li>
 </ul>
 <h2 id="contributor-docs">Contributor Docs</h2>
@@ -105,10 +108,10 @@
 <li><a href="articles/dev/garbage-collector-gcinfo.html">Garbage Collector - Precise Stack Scan</a>: how GCInfo makes the triggering thread's stack scan exact.</li>
 <li><a href="articles/dev/garbage-collector-glossary.html">Garbage Collector - Glossary</a>: background notes on the GC concepts the articles build on.</li>
 <li><a href="articles/dev/scheduler.html">Scheduler</a>: the preemptive, pluggable scheduler.</li>
-<li><a href="articles/dev/scheduler-plugging.html">Scheduler - Writing a Scheduler</a>: how to implement and install a scheduling policy.</li>
 <li><a href="articles/dev/scheduler-glossary.html">Scheduler - Glossary</a>: background notes on the scheduling concepts the article builds on.</li>
 <li><a href="articles/dev/build/kernel-compilation-steps.html">Kernel Compilation Steps</a>: C# to bootable ISO, end to end.</li>
 <li><a href="articles/dev/build/asm-build.html">Cosmos.Build.Asm</a>, <a href="articles/dev/build/gcc-build.html">Cosmos.Build.GCC</a>, <a href="articles/dev/build/patcher-build.html">Cosmos.Build.Patcher</a>, <a href="articles/dev/build/ilc-build.html">Cosmos.Build.Ilc</a>: the build pipeline components.</li>
+<li><a href="articles/dev/build/driver-manifest.html">Driver Manifest</a>: which <code>[Driver]</code> classes the build registers, in what order, and how a kernel keeps one out or opts one in.</li>
 </ul>
 <h2 id="cross-referencing">Cross-referencing</h2>
 <p>The API reference publishes a DocFX cross-reference map at <a href="https://cosmosos.github.io/xrefmap.yml"><code>/xrefmap.yml</code></a>, covering every documented namespace, type and member. Another DocFX site consumes it by adding that URL to the <code>xref</code> list of its own <code>docfx.json</code>:</p>

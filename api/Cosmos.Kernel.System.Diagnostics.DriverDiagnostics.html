@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class DriverDiagnostics | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class DriverDiagnostics | Cosmos Gen 3 ">
+      
+      <meta name="description" content="Diagnostic view of the driver kit: whether the engine has started and how it runs, the driver manifest, the device tree with every offer made for each node, and the devices drivers have published. All reads are allocation-free and safe to poll from a monitor loop; the snapshot structs copy references out. Snapshots are taken without locking the kit, so a node or device whose offer, teardown or withdrawal is running on the kit worker may read one job stale.  Three shapes report &quot;nothing there&quot;, and which one a member uses follows from what it is. A plain read answers with its own empty value, so  and  are false and  and  are 0 before the engine starts, with no separate error channel.  and  can be non-zero before then: the manifest registers its drivers ahead of the start, and a bus may publish nodes ahead of it, which sit pending until the start offers them. A read that must hand back a whole snapshot cannot express absence in the snapshot itself, so , ,  and  are Try members and the bool carries that answer: false for an index out of range, which before the start is every device and offer index, while a driver or node index can already be valid then, as said above.  is a method because it adds the counts up on every call rather than handing back a value the kit holds. Nothing here acts on the kit, so nothing throws.">
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics">
+
+
+
+  <h1 id="Cosmos_Kernel_System_Diagnostics_DriverDiagnostics" data-uid="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics" class="text-break">
+Class DriverDiagnostics  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><span class="xref">Cosmos</span>.<a class="xref" href="Cosmos.Kernel.html">Kernel</a>.<a class="xref" href="Cosmos.Kernel.System.html">System</a>.<a class="xref" href="Cosmos.Kernel.System.Diagnostics.html">Diagnostics</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Cosmos.Kernel.System.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Diagnostic view of the driver kit: whether the engine has started and how
+it runs, the driver manifest, the device tree with every offer made for
+each node, and the devices drivers have published. All reads are
+allocation-free and safe to poll from a monitor loop; the snapshot structs
+copy references out. Snapshots are taken without locking the kit, so a
+node or device whose offer, teardown or withdrawal is running on the kit
+worker may read one job stale.</p>
+<p>
+Three shapes report "nothing there", and which one a member uses follows
+from what it is. A plain read answers with its own empty value, so
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_IsStarted">IsStarted</a> and <a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_HasWorker">HasWorker</a> are false and
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_DeviceCount">DeviceCount</a> and <a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_GetTotalHeldResourceCount">GetTotalHeldResourceCount()</a> are 0
+before the engine starts, with no separate error channel.
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_DriverCount">DriverCount</a> and <a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_NodeCount">NodeCount</a> can be non-zero
+before then: the manifest registers its drivers ahead of the start, and a
+bus may publish nodes ahead of it, which sit pending until the start
+offers them. A read that must hand back a whole snapshot
+cannot express absence in the snapshot itself, so
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetDriver_System_Int32_Cosmos_Kernel_System_Diagnostics_DriverInfo__">TryGetDriver(int, out DriverInfo)</a>, <a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetNode_System_Int32_Cosmos_Kernel_System_Diagnostics_DeviceNodeInfo__">TryGetNode(int, out DeviceNodeInfo)</a>,
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetOffer_System_Int32_System_Int32_Cosmos_Kernel_System_Diagnostics_DeviceOfferInfo__">TryGetOffer(int, int, out DeviceOfferInfo)</a> and <a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetDevice_System_Int32_Cosmos_Kernel_System_Diagnostics_PublishedDeviceInfo__">TryGetDevice(int, out PublishedDeviceInfo)</a> are
+<code>Try</code> members and the bool carries that answer: false for an index
+out of range, which before the start is every device and offer index,
+while a driver or node index can already be valid then, as said above.
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_GetTotalHeldResourceCount">GetTotalHeldResourceCount()</a> is a method because it adds the
+counts up on every call rather than handing back a value the kit holds.
+Nothing here acts on the kit, so nothing throws.
+</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class DriverDiagnostics</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">DriverDiagnostics</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_DeviceCount_" data-uid="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.DeviceCount*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_DeviceCount" data-uid="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.DeviceCount">
+  DeviceCount
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Number of devices currently published by drivers, and the bound for
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetDevice_System_Int32_Cosmos_Kernel_System_Diagnostics_PublishedDeviceInfo__">TryGetDevice(int, out PublishedDeviceInfo)</a>. A withdrawn device leaves the list, so the
+positions after it shift down by one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int DeviceCount { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_DriverCount_" data-uid="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.DriverCount*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_DriverCount" data-uid="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.DriverCount">
+  DriverCount
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Number of drivers in the manifest, and the bound for
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetDriver_System_Int32_Cosmos_Kernel_System_Diagnostics_DriverInfo__">TryGetDriver(int, out DriverInfo)</a>. Filled by the generated manifest before
+the kernel starts, so it may be non-zero before <a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_IsStarted">IsStarted</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int DriverCount { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_HasWorker_" data-uid="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.HasWorker*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_HasWorker" data-uid="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.HasWorker">
+  HasWorker
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Whether a kit worker thread runs probes, teardowns and work items.
+False before the engine starts and in inline mode, where the thread
+that publishes or retracts a node drains the queue itself, work items
+cannot be scheduled, and no periodic work runs.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool HasWorker { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_IsStarted_" data-uid="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.IsStarted*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_IsStarted" data-uid="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.IsStarted">
+  IsStarted
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Whether the driver engine has started: the manifest was logged, the
+worker started or inline mode was settled for, and every node
+published before then was offered.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool IsStarted { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_NodeCount_" data-uid="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.NodeCount*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_NodeCount" data-uid="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.NodeCount">
+  NodeCount
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Number of nodes in the tree, and the bound for the node index of
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetNode_System_Int32_Cosmos_Kernel_System_Diagnostics_DeviceNodeInfo__">TryGetNode(int, out DeviceNodeInfo)</a> and <a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetOffer_System_Int32_System_Int32_Cosmos_Kernel_System_Diagnostics_DeviceOfferInfo__">TryGetOffer(int, int, out DeviceOfferInfo)</a>. A retracted
+node leaves the list, so the positions after it shift down by one,
+as a withdrawn device does in <a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_DeviceCount">DeviceCount</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int NodeCount { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_GetTotalHeldResourceCount_" data-uid="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.GetTotalHeldResourceCount*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_GetTotalHeldResourceCount" data-uid="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.GetTotalHeldResourceCount">
+  GetTotalHeldResourceCount()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Kit resources held by every bound node's binding, summed: register
+windows, regions, DMA buffers, interrupt handles, work items, periodic
+work, events, threads and USB pipes. Nodes in any other state contribute nothing;
+what a retraction could not take back is per node, in
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DeviceNodeInfo.html#Cosmos_Kernel_System_Diagnostics_DeviceNodeInfo_LeakedResourceCount">LeakedResourceCount</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int GetTotalHeldResourceCount()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetDevice_" data-uid="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.TryGetDevice*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetDevice_System_Int32_Cosmos_Kernel_System_Diagnostics_PublishedDeviceInfo__" data-uid="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.TryGetDevice(System.Int32,Cosmos.Kernel.System.Diagnostics.PublishedDeviceInfo@)">
+  TryGetDevice(int, out PublishedDeviceInfo)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Snapshots one published device.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryGetDevice(int index, out PublishedDeviceInfo info)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>Position in the published list, from 0 to <a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_DeviceCount">DeviceCount</a>
+exclusive. A withdrawal between the count and this read, or between two
+reads, shifts the positions after it, so a walk can miss a device; the
+list is for display, not for deciding anything.</p>
+</dd>
+    <dt><code>info</code> <a class="xref" href="Cosmos.Kernel.System.Diagnostics.PublishedDeviceInfo.html">PublishedDeviceInfo</a></dt>
+    <dd><p>Snapshot of the device at that position.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> when the index is out of range.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetDriver_" data-uid="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.TryGetDriver*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetDriver_System_Int32_Cosmos_Kernel_System_Diagnostics_DriverInfo__" data-uid="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.TryGetDriver(System.Int32,Cosmos.Kernel.System.Diagnostics.DriverInfo@)">
+  TryGetDriver(int, out DriverInfo)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Snapshots one entry of the driver manifest.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryGetDriver(int index, out DriverInfo info)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>Manifest position, from 0 to <a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_DriverCount">DriverCount</a> exclusive.</p>
+</dd>
+    <dt><code>info</code> <a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverInfo.html">DriverInfo</a></dt>
+    <dd><p>Snapshot of the driver at that position.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> when the index is out of range.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetNode_" data-uid="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.TryGetNode*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetNode_System_Int32_Cosmos_Kernel_System_Diagnostics_DeviceNodeInfo__" data-uid="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.TryGetNode(System.Int32,Cosmos.Kernel.System.Diagnostics.DeviceNodeInfo@)">
+  TryGetNode(int, out DeviceNodeInfo)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Snapshots one node of the device tree.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryGetNode(int index, out DeviceNodeInfo info)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>Publication position, from 0 to <a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_NodeCount">NodeCount</a> exclusive.</p>
+</dd>
+    <dt><code>info</code> <a class="xref" href="Cosmos.Kernel.System.Diagnostics.DeviceNodeInfo.html">DeviceNodeInfo</a></dt>
+    <dd><p>Snapshot of the node at that position.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> when the index is out of range.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetOffer_" data-uid="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.TryGetOffer*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_TryGetOffer_System_Int32_System_Int32_Cosmos_Kernel_System_Diagnostics_DeviceOfferInfo__" data-uid="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.TryGetOffer(System.Int32,System.Int32,Cosmos.Kernel.System.Diagnostics.DeviceOfferInfo@)">
+  TryGetOffer(int, int, out DeviceOfferInfo)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Snapshots one offer made for a node. Offers are recorded in the order
+they were made and never change afterwards, so a walk from 0 to
+<a class="xref" href="Cosmos.Kernel.System.Diagnostics.DeviceNodeInfo.html#Cosmos_Kernel_System_Diagnostics_DeviceNodeInfo_OfferCount">OfferCount</a> replays the node's arbitration.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryGetOffer(int nodeIndex, int offerIndex, out DeviceOfferInfo info)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>nodeIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>Publication position of the node, from 0 to <a class="xref" href="Cosmos.Kernel.System.Diagnostics.DriverDiagnostics.html#Cosmos_Kernel_System_Diagnostics_DriverDiagnostics_NodeCount">NodeCount</a> exclusive.</p>
+</dd>
+    <dt><code>offerIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>Offer position, from 0 to the node's <a class="xref" href="Cosmos.Kernel.System.Diagnostics.DeviceNodeInfo.html#Cosmos_Kernel_System_Diagnostics_DeviceNodeInfo_OfferCount">OfferCount</a> exclusive.</p>
+</dd>
+    <dt><code>info</code> <a class="xref" href="Cosmos.Kernel.System.Diagnostics.DeviceOfferInfo.html">DeviceOfferInfo</a></dt>
+    <dd><p>Snapshot of the offer.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> when either index is out of range.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

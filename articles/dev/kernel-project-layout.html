@@ -91,15 +91,14 @@
 <h2 id="dependency-graph">Dependency Graph</h2>
 <pre><code class="lang-mermaid">flowchart LR;
 	UsersKernel--&gt;Cosmos.Kernel.System;
+    Cosmos.Kernel.Drivers--&gt;Cosmos.Kernel.System;
+    Cosmos.Kernel.Drivers--&gt;Cosmos.Kernel.HAL;
     Cosmos.Kernel.System--&gt;Cosmos.Kernel.HAL;
 	Cosmos.Kernel.Plugs--&gt;Cosmos.Kernel.System;
     Cosmos.Kernel.Plugs--&gt;Cosmos.Kernel.HAL;
     Cosmos.Kernel.Plugs--&gt;Cosmos.Kernel.Core;
-    Cosmos.Kernel.HAL--&gt;Cosmos.Kernel.HAL.Interfaces;
     Cosmos.Kernel.HAL.ARM64--&gt;Cosmos.Kernel.HAL;
     Cosmos.Kernel.HAL.X64--&gt;Cosmos.Kernel.HAL;
-	Cosmos.Kernel.HAL.ARM64--&gt;Cosmos.Kernel.HAL.Interfaces;
-	Cosmos.Kernel.HAL.X64--&gt;Cosmos.Kernel.HAL.Interfaces;
 	Cosmos.Kernel.HAL.ARM64--&gt;Cosmos.Kernel.Core;
 	Cosmos.Kernel.HAL.X64--&gt;Cosmos.Kernel.Core;
 	Cosmos.Kernel.HAL--&gt;Cosmos.Kernel.Core;
@@ -118,27 +117,27 @@
 <tbody>
 <tr>
 <td><strong>Cosmos.Kernel.System</strong></td>
-<td>High-level OS APIs: Console, Graphics, Network, Timer, Mouse. The layer user kernels interact with.</td>
+<td>High-level OS APIs: Console, FileSystem (the VFS with the FAT and ext2 filesystems), Graphics (with the opt-in 3D types under <code>Graphics.Rendering3D</code>), Input, Network (with the experimental packet seam under <code>Network.Protocols</code>), Timers. The layer user kernels interact with.</td>
+</tr>
+<tr>
+<td><strong>Cosmos.Kernel.Drivers</strong></td>
+<td>The nineteen drivers Cosmos ships over the driver kit: the PCI host and PCI Express root port drivers, the Intel E1000E driver, the virtio PCI and MMIO transport drivers, the virtio-net and virtio-input drivers, the two display drivers, <code>VirtioGpuDriver</code> and <code>VmwareSvgaDriver</code> (with its SVGA3D command layer and <code>Canvas3D</code>), the three block drivers, <code>AhciDriver</code>, <code>NvmeDriver</code> and the virtio leaf <code>VirtioBlkDriver</code>, whose disks the storage manager consumes, the USB drivers: <code>XhciDriver</code> with the hub, HID boot keyboard and mass storage class drivers, and the PS/2 drivers: <code>I8042Driver</code> with <code>Ps2KeyboardDriver</code> and <code>Ps2MouseDriver</code>. Each driver sits in a bus kind / category / driver folder, and its namespace follows the folder (<a href="coding-guidelines.html#driver-folders">Driver Folders</a>): <code>Pci/</code> (<code>Bus/PcieRootPort</code>, <code>Bus/VirtioPci</code>, <code>Bus/Xhci</code>, <code>Display/VmwareSvga</code>, <code>Network/E1000E</code>, <code>Storage/Ahci</code>, <code>Storage/Nvme</code>), <code>Platform/Bus/</code> (<code>I8042</code>, <code>PciHost</code>, <code>VirtioMmio</code>), <code>Ps2/Input/</code> (<code>Ps2Keyboard</code>, <code>Ps2Mouse</code>), <code>Usb/</code> (<code>Bus/UsbHub</code>, <code>Input/UsbKeyboard</code>, <code>Storage/UsbMassStorage</code>) and <code>Virtio/</code> (<code>Display/VirtioGpu</code>, <code>Input/VirtioInput</code>, <code>Network/VirtioNet</code>, <code>Storage/VirtioBlk</code>), so the xHCI driver is <code>Cosmos.Kernel.Drivers.Pci.Bus.Xhci.XhciDriver</code>. A User-layer driver assembly (<code>CosmosDriverAssembly</code>), held by the layer analyzer to what a kernel author can name, with no <code>InternalsVisibleTo</code> grant from any project; one RID-less <code>lib/net10.0</code> package, since it holds no architecture-specific code. Referenced by Cosmos.Kernel, so every kernel carries its drivers in the manifest.</td>
 </tr>
 <tr>
 <td><strong>Cosmos.Kernel.HAL</strong></td>
-<td>Hardware Abstraction Layer: shared logic, platform registration (<code>PlatformHAL</code>), device managers, arch-independent drivers (AHCI, NVMe, virtio, xHCI with the USB class drivers).</td>
-</tr>
-<tr>
-<td><strong>Cosmos.Kernel.HAL.Interfaces</strong></td>
-<td>Pure interfaces, no implementations. Public: <code>IBlockDevice</code>, which kernels implement and drive directly, <code>MACAddress</code>, and <code>SoftwareTimer</code> as a read-only handle. Internal: the boot contract <code>IPlatformInitializer</code>, <code>IGraphicDevice</code>, the input, timer and network devices, and <code>SoftwareTimer</code>'s construction and tick members.</td>
+<td>Hardware Abstraction Layer: shared logic, the platform contracts, all internal (<code>Boot/</code>: the boot contract <code>IPlatformInitializer</code> and platform registration <code>PlatformHAL</code>; <code>Timers/</code>: the tick source base with its timer entries (each <code>SoftwareTimer</code> handle in <strong>System</strong> wraps one)), the device categories (<code>Devices/</code>: <code>Display/</code> (with the display facets), <code>Input/</code>, <code>Network/</code> and <code>Storage/</code>, each holding the kind's contract and vocabulary, the sink a driver reports through (the block kind has none) and the ring's internal consumer; <code>IBlockDevice</code>, which kernels implement and drive directly, and <code>MacAddress</code> are the stable ones), the driver kit (<code>DriverKit/</code>, with the driver and its binding at its root, what a binding hands out under <code>Resources/</code>, <code>Interrupts/</code> and <code>Threading/</code>, its six bus kinds under <code>DriverKit/Buses/</code> (synthetic, platform, PCI, virtio, USB and PS/2, a folder each), and its internal registry and engine under <code>DriverKit/Engine/</code>). The firmware display the kit publishes over the boot framebuffer sits with the display kind. No unsafe code (<a href="coding-guidelines.html#unsafe-code">Unsafe Code</a>). <a href="coding-guidelines.html#hal-folders">HAL Folders</a> gives the rules for its folders.</td>
 </tr>
 <tr>
 <td><strong>Cosmos.Kernel.HAL.X64</strong></td>
-<td>x86-64 HAL implementations (PCI, APIC, PS/2, ACPI, etc.).</td>
+<td>x86-64 platform code: the machine description (the 8042 and PCI host nodes), the I/O APIC line routing, the PIT and the CMOS RTC. No device driver.</td>
 </tr>
 <tr>
 <td><strong>Cosmos.Kernel.HAL.ARM64</strong></td>
-<td>ARM64 HAL implementations (GIC, PL011, generic timer, etc.).</td>
+<td>ARM64 platform code: the machine description (the ECAM host and the virtio-mmio slots, from ACPI's MCFG, the device tree or the virt machine's table), the GIC line routing, the generic timer and the PL031 RTC. No device driver.</td>
 </tr>
 <tr>
 <td><strong>Cosmos.Kernel.Core</strong></td>
-<td>Low-level runtime: memory management, GC, scheduler, serial I/O, panic handler.</td>
+<td>Low-level runtime: memory management, GC, scheduler, serial I/O, panic handler, and what the bootloader and the firmware hand over (<code>Firmware/</code>: the boot framebuffer, the device tree parser the ARM64 description reads, the boot time, the bridge to the ACPI MCFG table the native boot code parses, and the clock read through the UEFI runtime services). The kernel layer that holds the unsafe code: the layers above reach memory through its address-based entry points (<code>MemoryBlock</code> with <code>PageAllocator.AllocBlock</code>, <code>AddressSpace.HhdmOffset</code>).</td>
 </tr>
 <tr>
 <td><strong>Cosmos.Kernel.Native.X64</strong></td>
@@ -162,7 +161,7 @@
 </tr>
 <tr>
 <td><strong>Cosmos.Kernel</strong></td>
-<td>The aggregator every kernel references. Pulls in Boot.Limine, Core, HAL, HAL.Interfaces, Plugs and System, ships the <code>kmain</code> bootstrap C sources, and holds the library initializer that wires up the CPU exception handlers and the scheduler. No public types.</td>
+<td>The aggregator every kernel references. Pulls in Boot.Limine, Core, Drivers, HAL, Plugs and System, ships the <code>kmain</code> bootstrap C sources, and holds the library initializer that wires up the CPU exception handlers and the scheduler. No public types.</td>
 </tr>
 </tbody>
 </table>
@@ -210,9 +209,11 @@
 <li><strong>Never</strong> reference upward (Core must not reference HAL or System)</li>
 <li><strong>Never</strong> reference a platform-specific HAL project from Core</li>
 <li>Cross-cutting concerns (memory, scheduler, serial) go in <strong>Core</strong></li>
-<li>Platform-specific implementations go in <strong>HAL.X64</strong> / <strong>HAL.ARM64</strong></li>
+<li>Unsafe code goes in <strong>Core</strong>: HAL, HAL.X64, HAL.ARM64, System and Drivers compile with <code>AllowUnsafeBlocks=false</code>, and what they need from memory or the firmware is a Core entry point</li>
+<li>Platform code (machine descriptions, interrupt line routing, tick sources, firmware clocks) goes in <strong>HAL.X64</strong> / <strong>HAL.ARM64</strong>; device drivers go in <strong>Cosmos.Kernel.Drivers</strong> over the kit</li>
 <li>User-facing APIs go in <strong>System</strong></li>
-<li>All hardware interfaces are defined in <strong>HAL.Interfaces</strong></li>
+<li>The hardware contracts the ring still shares (<code>IBlockDevice</code>, <code>MacAddress</code>) are defined in <strong>HAL</strong>, outside the kit's experimental seam; the other device kind types beside them under <code>Devices/</code> are on the seam, and the network device the stack drives is internal to <strong>System</strong></li>
+<li>A driver written over the driver kit for a device the kit's buses reach goes in <strong>Drivers</strong>, which references only System and HAL and never the arch assemblies</li>
 </ul>
 <p>For coding style and implementation patterns, see <a href="coding-guidelines.html">Coding Guidelines</a>.</p>
 

@@ -201,7 +201,7 @@ public static void HandlePacket(byte[] packetData, int length)</code></pre>
   </h3>
 
   <div class="markdown level1 summary"><p>Removes all IP configurations, clearing the stack's address and MAC
-maps with them. The counterpart of <a class="xref" href="Cosmos.Kernel.System.Network.Config.IPConfig.html#Cosmos_Kernel_System_Network_Config_IPConfig_Enable_Cosmos_Kernel_System_Network_Address_Cosmos_Kernel_System_Network_Address_Cosmos_Kernel_System_Network_Address_">Enable(Address, Address, Address)</a>.</p>
+maps with them. The counterpart of <a class="xref" href="Cosmos.Kernel.System.Network.IPConfig.html#Cosmos_Kernel_System_Network_IPConfig_Enable_Cosmos_Kernel_System_Network_Address_Cosmos_Kernel_System_Network_Address_Cosmos_Kernel_System_Network_Address_">Enable(Address, Address, Address)</a>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -223,7 +223,7 @@ maps with them. The counterpart of <a class="xref" href="Cosmos.Kernel.System.Ne
 
   <a id="Cosmos_Kernel_System_Network_NetworkStack_Send_" data-uid="Cosmos.Kernel.System.Network.NetworkStack.Send*"></a>
 
-  <h3 id="Cosmos_Kernel_System_Network_NetworkStack_Send_Cosmos_Kernel_System_Network_InternetPacket_" data-uid="Cosmos.Kernel.System.Network.NetworkStack.Send(Cosmos.Kernel.System.Network.InternetPacket)">
+  <h3 id="Cosmos_Kernel_System_Network_NetworkStack_Send_Cosmos_Kernel_System_Network_Protocols_InternetPacket_" data-uid="Cosmos.Kernel.System.Network.NetworkStack.Send(Cosmos.Kernel.System.Network.Protocols.InternetPacket)">
   Send(InternetPacket)
   
   </h3>
@@ -242,7 +242,7 @@ public static bool Send(InternetPacket packet)</code></pre>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>packet</code> <a class="xref" href="Cosmos.Kernel.System.Network.InternetPacket.html">InternetPacket</a></dt>
+    <dt><code>packet</code> <a class="xref" href="Cosmos.Kernel.System.Network.Protocols.InternetPacket.html">InternetPacket</a></dt>
     <dd><p>A built packet, typically created through one of the
 packet type constructors. A transport packet passes its
 <code>Network</code> property here.</p>

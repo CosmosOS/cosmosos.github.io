@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class Kernel | Cosmos Gen 3 ">
       
-      <meta name="description" content="Base class for all Cosmos user kernels. Provides the BeforeRun/Run/AfterRun lifecycle pattern.">
+      <meta name="description" content="Base class for all Cosmos user kernels. Provides the // lifecycle pattern.">
       <link rel="icon" href="../images/favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -98,7 +98,7 @@ Class Kernel
   </div>
 
   <div class="markdown summary"><p>Base class for all Cosmos user kernels.
-Provides the BeforeRun/Run/AfterRun lifecycle pattern.</p>
+Provides the <a class="xref" href="Cosmos.Kernel.System.Kernel.html#Cosmos_Kernel_System_Kernel_BeforeRun">BeforeRun()</a>/<a class="xref" href="Cosmos.Kernel.System.Kernel.html#Cosmos_Kernel_System_Kernel_Run">Run()</a>/<a class="xref" href="Cosmos.Kernel.System.Kernel.html#Cosmos_Kernel_System_Kernel_AfterRun">AfterRun()</a> lifecycle pattern.</p>
 </div>
   <div class="markdown conceptual"></div>
 
@@ -220,6 +220,45 @@ Provides the BeforeRun/Run/AfterRun lifecycle pattern.</p>
 </h2>
 
 
+  <a id="Cosmos_Kernel_System_Kernel_Current_" data-uid="Cosmos.Kernel.System.Kernel.Current*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Kernel_Current" data-uid="Cosmos.Kernel.System.Kernel.Current">
+  Current
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The running kernel: the instance the generated entry point registered
+before calling its <a class="xref" href="Cosmos.Kernel.System.Kernel.html#Cosmos_Kernel_System_Kernel_Start">Start()</a>, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>
+before then. Code that runs from <a class="xref" href="Cosmos.Kernel.System.Kernel.html#Cosmos_Kernel_System_Kernel_Start">Start()</a> onwards,
+<a class="xref" href="Cosmos.Kernel.System.Kernel.html#Cosmos_Kernel_System_Kernel_OnBoot">OnBoot()</a>, <a class="xref" href="Cosmos.Kernel.System.Kernel.html#Cosmos_Kernel_System_Kernel_BeforeRun">BeforeRun()</a> and <a class="xref" href="Cosmos.Kernel.System.Kernel.html#Cosmos_Kernel_System_Kernel_Run">Run()</a>
+included, always sees one, so static code with no instance at hand
+reaches the kernel here, for example to call <a class="xref" href="Cosmos.Kernel.System.Kernel.html#Cosmos_Kernel_System_Kernel_Stop">Stop()</a>. The
+kernel's own constructor runs before the registration and sees
+<a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Kernel? Current { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.System.Kernel.html">Kernel</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Cosmos_Kernel_System_Kernel_Started_" data-uid="Cosmos.Kernel.System.Kernel.Started*"></a>
 
   <h3 id="Cosmos_Kernel_System_Kernel_Started" data-uid="Cosmos.Kernel.System.Kernel.Started">
@@ -227,7 +266,7 @@ Provides the BeforeRun/Run/AfterRun lifecycle pattern.</p>
   
   </h3>
 
-  <div class="markdown level1 summary"><p>True once BeforeRun has completed and the Run loop is active.</p>
+  <div class="markdown level1 summary"><p>True once <a class="xref" href="Cosmos.Kernel.System.Kernel.html#Cosmos_Kernel_System_Kernel_BeforeRun">BeforeRun()</a> has completed and the <a class="xref" href="Cosmos.Kernel.System.Kernel.html#Cosmos_Kernel_System_Kernel_Run">Run()</a> loop is active.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -353,8 +392,12 @@ Override to perform one-time setup.</p>
   
   </h3>
 
-  <div class="markdown level1 summary"><p>Called once during boot, before BeforeRun().
-Override to customize system initialization.</p>
+  <div class="markdown level1 summary"><p>Called once during boot, before <a class="xref" href="Cosmos.Kernel.System.Kernel.html#Cosmos_Kernel_System_Kernel_BeforeRun">BeforeRun()</a>, with interrupts enabled
+and the driver stage complete. The default brings up the graphical
+<a class="xref" href="Cosmos.Kernel.System.Graphics.KernelConsole.html">KernelConsole</a>, which is what makes <code>Console.WriteLine</code>
+draw to the screen; every other subsystem is already up by this point,
+since the library initializer wires the managers to the HAL before any
+managed code runs. Override to customize system initialization.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -409,8 +452,12 @@ Override to implement your kernel's main logic.</p>
   
   </h3>
 
-  <div class="markdown level1 summary"><p>Starts the kernel lifecycle.
-Called by the generated entry point.</p>
+  <div class="markdown level1 summary"><p>Starts the kernel lifecycle. Called by the generated entry point.
+Interrupts are enabled and the driver stage runs first, returning
+once every node, the children a bus driver published from its probe
+included, has been offered, so <a class="xref" href="Cosmos.Kernel.System.Kernel.html#Cosmos_Kernel_System_Kernel_OnBoot">OnBoot()</a> and everything
+after it see the devices the kernel's drivers bound; a kernel that
+overrides this method owns that whole sequence.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 

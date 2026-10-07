@@ -148,34 +148,38 @@ kmain()           native C bootstrap (Cosmos.Kernel/Bootstrap/kmain.c)
 <ol>
 <li><strong>Cosmos.Kernel.Core</strong>: carves the heap out of the Limine memory map, initializes the garbage collector, then registers the type system (statics, eager static constructors, module initializers). Nothing allocates before this step.</li>
 <li><strong>The runtime's own initializers</strong> (<code>System.Private.CoreLib</code> and its companions): the preallocated <code>OutOfMemoryException</code>, the class constructor runner, the type loader and reflection callbacks, stack trace metadata. The class constructor runner is created here, so a static field whose type has a lazy static constructor can be read from this step on and not before.</li>
-<li><strong>Cosmos.Kernel.HAL</strong>: platform HAL, the interrupt controller, PCI enumeration over ECAM, platform hardware (APIC/GIC, device drivers such as the NIC), the USB host controllers with their keyboard and mass storage drivers, and the AHCI/NVMe storage controllers.</li>
+<li><strong>Cosmos.Kernel.HAL</strong>: platform HAL; the device tree the bootloader handed over, if any, is recorded (<code>[Firmware] Device tree at 0x..., N bytes</code>, or <code>[Firmware] No device tree</code> on q35 and on an ACPI boot of the virt machine); the interrupt controller, platform hardware (APIC/GIC, timers), then the machine's root platform nodes are published into the driver kit right after <code>InitializeHardware</code> (on x64 the 8042 keyboard controller, <code>platform:i8042@60</code>, then the PCI host, <code>platform:pci@cf8</code>; on ARM64 the ECAM host from MCFG or from the device tree and one <code>platform:virtio_mmio@...</code> node per occupied slot, from the device tree or the virt machine's window, whatever the switches say), where they wait for the driver stage. The 8042, AHCI, NVMe and xHCI controllers are not brought up here: their drivers live in the driver kit and bind them during the driver stage. Last, whenever graphics are on, interrupts or not, the framebuffer Limine handed over is recorded (<code>[KERNEL]   - Recording the firmware framebuffer...</code>) for the driver stage to publish as the firmware display.</li>
 <li><strong>Cosmos.Kernel</strong>: CPU exception handlers and the scheduler (one idle thread per CPU, preemption on a 10 ms quantum).</li>
-<li><strong>Cosmos.Kernel.System</strong>: the service managers <code>TimerManager</code>, <code>KeyboardManager</code>, <code>MouseManager</code>, <code>NetworkManager</code>, <code>StorageManager</code>.</li>
+<li><strong>Cosmos.Kernel.System</strong>: the service managers <code>TimerManager</code>, <code>KeyboardManager</code>, <code>MouseManager</code>, <code>NetworkManager</code>, <code>DisplayManager</code>, <code>StorageManager</code>. <code>KeyboardManager</code>, <code>MouseManager</code>, <code>NetworkManager</code>, <code>DisplayManager</code> and <code>StorageManager</code> each install their driver kit consumer here, before the driver stage, so a keyboard, a pointer, an interface, a display or a disk a kit driver publishes reaches its manager, and so does the firmware display the driver stage publishes first; no platform network device is registered here, and the first interface a kit driver publishes becomes the primary. No platform keyboard or mouse is registered here either: the PS/2 devices arrive through the consumers during the driver stage, like every other input device. The storage manager's disks all arrive through its consumer during the driver stage.</li>
 </ol>
-<p>Every step in 3-5 is gated by a feature switch (<code>CosmosEnableInterrupts</code>, <code>CosmosEnablePCI</code>, <code>CosmosEnableTimer</code>, <code>CosmosEnableKeyboard</code>, <code>CosmosEnableMouse</code>, <code>CosmosEnableNetwork</code>, <code>CosmosEnableStorage</code>, <code>CosmosEnableGraphics</code>, <code>CosmosEnableScheduler</code>, all <code>true</code> by default). Set one to <code>false</code> in your <code>.csproj</code> and the corresponding subsystem is skipped here and compiled out of the kernel.</p>
+<p>Every step in 3-5 is gated by a feature switch (<code>CosmosEnableInterrupts</code>, <code>CosmosEnablePCI</code>, <code>CosmosEnableTimer</code>, <code>CosmosEnableKeyboard</code>, <code>CosmosEnableMouse</code>, <code>CosmosEnableNetwork</code>, <code>CosmosEnableStorage</code>, <code>CosmosEnableGraphics</code>, <code>CosmosEnableScheduler</code>, all <code>true</code> by default, and <code>CosmosEnableUsb</code>, on by default whenever the keyboard or the storage switch is). Set one to <code>false</code> in your <code>.csproj</code> and the corresponding subsystem is skipped here and compiled out of the kernel.</p>
 <h2 id="the-generated-entry-point">The generated entry point</h2>
 <p>You never write a <code>Main</code> for a Cosmos kernel. The SDK ships a source generator that emits it from the <code>CosmosKernelClass</code> project property:</p>
-<pre><code class="lang-csharp">// Auto-generated: CosmosEntryPoint.g.cs
+<pre><code class="lang-csharp">// &lt;auto-generated/&gt; CosmosEntryPoint.g.cs
+namespace Cosmos.Kernel.System.Internal;
+
 public static class CosmosEntryPoint
 {
     public static void Main()
     {
-        Cosmos.Kernel.System.Global.RegisterKernel(new MyOS.Kernel());
-        Cosmos.Kernel.System.Global.StartKernel();
+        global::Cosmos.Kernel.System.Internal.DriverManifest.Register();
+        global::Cosmos.Kernel.System.Internal.KernelEntry.Start(new global::MyOS.Kernel());
     }
 }
 </code></pre>
+<p><code>DriverManifest</code> is the second generated file: the list of driver classes the kernel carries, registered before the kernel starts so the driver stage in <code>Start()</code> can offer them devices. A kernel with no drivers of its own still carries the nineteen Cosmos ships in <code>Cosmos.Kernel.Drivers</code>: the PCI host driver, the PCI Express root port driver, the Intel E1000E driver, the virtio PCI and MMIO transport drivers, the virtio-net, virtio-input and virtio-blk drivers, the two display drivers, virtio-gpu and VMware SVGA II, the two storage drivers, AHCI and NVMe, the four USB drivers, the xHCI host controller with the hub, HID boot keyboard and mass storage class drivers, and the three PS/2 drivers, the 8042 controller with the keyboard and mouse class drivers, sixteen of them behind a feature switch (the USB four behind <code>CosmosEnableUsb</code>, the PS/2 keyboard and mouse behind <code>CosmosEnableKeyboard</code> and <code>CosmosEnableMouse</code>). The <a href="../dev/build/driver-manifest.html">driver manifest</a> page describes how the list is built and how a project excludes or opts into a driver.</p>
 <p><code>CosmosKernelClass</code> defaults to <code>&lt;RootNamespace&gt;.Kernel</code>, so a class named <code>Kernel</code> in your project's root namespace is picked up automatically. To use a different type, set it explicitly:</p>
 <pre><code class="lang-xml">&lt;PropertyGroup&gt;
   &lt;CosmosKernelClass&gt;MyOS.Boot.MyKernel&lt;/CosmosKernelClass&gt;
 &lt;/PropertyGroup&gt;
 </code></pre>
-<p><code>Global.StartKernel()</code> then calls <code>Start()</code> on the registered instance.</p>
+<p><code>KernelEntry.Start</code> then registers that instance as <code>Kernel.Current</code> and calls its <code>Start()</code>. <code>KernelEntry</code> is boot plumbing for this generated code only, public because the code compiles into your kernel's assembly; your own code never calls it.</p>
 <h2 id="syskernelstart">Sys.Kernel.Start()</h2>
 <p><code>Cosmos.Kernel.System.Kernel</code> is the abstract base class of every user kernel. Its <code>Start()</code> drives the whole lifecycle:</p>
 <ol>
-<li>Calls <code>OnBoot()</code>, whose default implementation initializes the graphical <code>KernelConsole</code>, which is what makes <code>Console.WriteLine</code> work.</li>
-<li>Enables hardware interrupts (everything before this point ran with interrupts off), then starts the USB hot-plug thread, which needs the scheduler's timer ticking.</li>
+<li>Enables hardware interrupts (everything before this point ran with interrupts off).</li>
+<li>Runs the driver stage: the kit logs its manifest, publishes the firmware framebuffer recorded in phase 3 as the firmware display (the display manager's primary until a display driver publishes one), and then the drivers listed in the kernel's manifest are offered every node the buses have published, the platform nodes seeded in phase 3 first (the 8042 driver publishes its two PS/2 port nodes from its probe, and the keyboard and mouse drivers bind them during the stage), then every PCI function the PCI host driver found and every one a root port driver found behind its hot-plug slot, then every virtio device a transport driver published beneath a function or a slot, and the step returns once each node, children included, has been offered; the AHCI, NVMe, virtio-blk and USB mass storage drivers publish the disks they find here (the xHCI driver enumerates its root ports inside its probe, so a stick present at boot is published during the stage too), and the storage manager registers and scans each one inside the publish, so <code>StorageManager.Partitions</code> is filled by the time the step returns. The xHCI driver's hot-plug thread, started inside its probe, follows the devices plugged in or pulled out from then on; it needs the scheduler. The root port driver's slot thread does the same for a device plugged into or pulled out of a PCI Express hot-plug slot, placing the registers of one that arrives; it needs the scheduler too.</li>
+<li>Calls <code>OnBoot()</code>, whose default implementation initializes the graphical <code>KernelConsole</code> on whatever display is primary by then, which is what makes <code>Console.WriteLine</code> work.</li>
 <li>Turns off the early-boot text renderer: up to here, the boot log you see on screen is the serial log mirrored by a minimal framebuffer writer; from now on the screen belongs to <code>Console</code> and the <a href="graphics.html">Canvas</a>.</li>
 <li>Calls <code>BeforeRun()</code> once.</li>
 <li>Calls <code>Run()</code> in a loop until <code>Stop()</code> is called.</li>
@@ -183,7 +187,7 @@ public static class CosmosEntryPoint
 <li>Halts the CPU. There is no operating system to return to: a kernel never exits.</li>
 </ol>
 <h2 id="stopping-the-machine">Stopping the machine</h2>
-<p>Step 7 above is where a kernel ends up on its own. <code>Power</code> is how you get there deliberately, and the three members differ in how far they go:</p>
+<p>Step 8 above is where a kernel ends up on its own. <code>Power</code> is how you get there deliberately, and the three members differ in how far they go:</p>
 <pre><code class="lang-csharp">using Cosmos.Kernel.System;
 
 Power.Halt();      // park this CPU until an interrupt wakes it
@@ -193,8 +197,10 @@ Power.Shutdown();  // power off; does not return
 <p><code>Halt()</code> is the one that returns. It parks the CPU rather than spinning, so it is what an idle loop should call instead of <code>while (true) { }</code>, which burns a core and, on a single-CPU kernel, keeps the scheduler from making progress.</p>
 <p><code>Reboot()</code> and <code>Shutdown()</code> do not return on success. Both route through the platform's power operations, and where the firmware offers none they fall back to parking the CPU forever rather than continuing, which is why the compiler treats them as never returning.</p>
 <p>To end the main loop without ending the machine, call <code>Stop()</code> on your kernel. <code>Run()</code> stops being called, <code>AfterRun()</code> runs once, and the CPU halts.</p>
-<p>Static code that has no <code>this</code> to call it on reaches the running instance through <code>Global.CurrentKernel</code>, which the generated entry point sets before your kernel starts:</p>
-<pre><code class="lang-csharp">Global.CurrentKernel?.Stop();
+<p>Static code that has no <code>this</code> to call it on reaches the running instance through <code>Kernel.Current</code>, which the generated entry point sets before your kernel starts (it is <code>null</code> until then, in your kernel's constructor included):</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.System;
+
+Kernel.Current?.Stop();
 </code></pre>
 <h2 id="a-minimal-kernel">A minimal kernel</h2>
 <pre><code class="lang-csharp">using System;
@@ -226,7 +232,7 @@ public class Kernel : Sys.Kernel
 </ul>
 <p>An uncaught exception inside <code>Run()</code> propagates out of the loop, so wrap the body in <code>try</code>/<code>catch</code> if a command failing should not take the kernel down.</p>
 <h2 id="customizing-startup">Customizing startup</h2>
-<p><code>OnBoot()</code> runs <em>before</em> interrupts are enabled and before the console exists, the right place for early hardware setup:</p>
+<p><code>OnBoot()</code> runs before the console exists, the right place for early setup of your own. Interrupts are already enabled and the driver stage has run, so a device a driver bound is usable from here on; code that must run with interrupts off belongs in an override of <code>Start()</code> itself:</p>
 <pre><code class="lang-csharp">protected override void OnBoot()
 {
     base.OnBoot();   // keep the KernelConsole setup; drop this line to boot headless
@@ -234,7 +240,7 @@ public class Kernel : Sys.Kernel
     // your early initialization here
 }
 </code></pre>
-<p>A headless kernel that later wants <code>Console</code> output calls <code>KernelConsole.Initialize()</code> itself: it is the only route on the ring, <code>Console.WriteLine</code> does not bring the console up on its own. The call is idempotent, so it is safe whether or not <code>base.OnBoot()</code> already ran, and it returns <code>false</code> when graphics are compiled out.</p>
+<p>A headless kernel that later wants <code>Console</code> output calls <code>KernelConsole.Initialize()</code> itself: it is the only route on the ring, <code>Console.WriteLine</code> does not bring the console up on its own. The call is idempotent, so it is safe whether or not <code>base.OnBoot()</code> already ran, and it returns <code>false</code> when graphics are compiled out, no display is published, or the display has no mode.</p>
 <p>For total control you can override <code>Start()</code> itself and take over the lifecycle: the default implementation in <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.System/Kernel.cs"><code>Cosmos.Kernel.System/Kernel.cs</code></a> is small and a good starting point to copy from.</p>
 <h2 id="the-kernel-command-line">The kernel command line</h2>
 <p>Limine passes a command line to the kernel: the <code>cmdline:</code> entry of the <code>Bootloader/limine.conf</code> file in your kernel project. It comes out the standard way:</p>
@@ -257,17 +263,39 @@ public class Kernel : Sys.Kernel
 [KERNEL]   - Initializing heap...
 [KERNEL]   - Initializing garbage collector...
 [KERNEL]   - Initializing HAL...
+[KERNEL]   - Recording the firmware device tree...
+[Firmware] No device tree
 [KERNEL]   - Initializing interrupts...
-[KERNEL]   - Initializing PCI...
-[KERNEL]   - Initializing AHCI...
+[KERNEL]   - Initializing platform hardware...
+[KERNEL]   - Publishing platform nodes...
+[KERNEL]   - Recording the firmware framebuffer...
 [KERNEL]   - Initializing scheduler...
 [KMAIN] Phase 4: User kernel
-[Global] Registering kernel
-[Kernel] Calling OnBoot()...
+[KernelEntry] Registering kernel
 [Kernel] Enabling interrupts...
+[Kernel] Starting drivers...
+[Drivers] manifest: PcieRootPortDriver(prio 0) VirtioPciTransportDriver(prio 0) XhciDriver(prio 0) VmwareSvgaDriver(prio 0) E1000EDriver(prio 0) AhciDriver(prio 0) NvmeDriver(prio 0) I8042Driver(prio 0) PciHostDriver(prio 0) VirtioMmioTransportDriver(prio 0) Ps2KeyboardDriver(prio 0) Ps2MouseDriver(prio 0) UsbHubDriver(prio 0) UsbKeyboardDriver(prio 0) UsbMassStorageDriver(prio 0) VirtioGpuDriver(prio 0) VirtioInputDriver(prio 0) VirtioNetDriver(prio 0) VirtioBlkDriver(prio 0)
+[Display] primary: firmware &quot;framebuffer&quot; (the only display)
+[Drivers] firmware published display &quot;framebuffer&quot; (consumed)
+[Drivers] engine started, worker thread
+...
+[StorageManager] sata0 registered by AhciDriver (primary)
+[Drivers] pci:0000:00:03.0 AhciDriver published block &quot;sata0&quot; (consumed)
+...
+[Kernel] Calling OnBoot()...
 [Kernel] Calling BeforeRun()...
 [Kernel] Entering main loop...
 [Kernel] Calling Run()...
+</code></pre>
+<p>The two <code>sata0</code> lines appear when a disk is attached (<code>cosmos run --disk disk.img</code>): the kit's AHCI driver publishes it during the driver stage, and the storage manager registers it inside the publish, scanning its partitions, which is why the manager's line comes before the kit's. A USB stick (<code>cosmos run --disk disk.img,usb</code>) shows the xHCI driver's lines in their place: the device the root port scan found inside the probe, the controller line, then the stick's interface node offered to the mass storage driver and its disk registered inside that probe:</p>
+<pre><code>[Drivers] pci:0000:00:03.0 XhciDriver: usb 1-1: 46f4:0001 SuperSpeed, 1 interface(s)
+[Drivers] pci:0000:00:03.0 XhciDriver: version 0x100, 64 slots, 8 ports, 32-byte contexts, 0 scratchpad buffers, events via message interrupt, 1 device(s)
+[Drivers] pci:0000:00:03.0 offer XhciDriver -&gt; bound
+[Drivers] usb:1-1:0 UsbMassStorageDriver: usb0 (LUN 0): QEMU QEMU HARDDISK, 524288 blocks of 512 bytes
+[StorageManager] usb0 registered by UsbMassStorageDriver (primary)
+[Drivers] usb:1-1:0 UsbMassStorageDriver published block &quot;usb0&quot; (consumed)
+[Drivers] usb:1-1:0 UsbMassStorageDriver: 1 unit(s), max LUN 0
+[Drivers] usb:1-1:0 offer UsbMassStorageDriver -&gt; bound
 </code></pre>
 <p>For interactive debugging on top of the serial log, see <a href="debugging.html">Debugging with VSCode and QEMU</a>.</p>
 

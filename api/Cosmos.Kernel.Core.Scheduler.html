@@ -112,7 +112,7 @@ Classes
     <dl class="jumplist">
       <dt><a class="xref" href="Cosmos.Kernel.Core.Scheduler.SchedulerThread.html">SchedulerThread</a></dt>
       <dd><p>Thread Control Block for scheduling. A kernel that only wants to read
-thread state does not come here: <code>SchedulerInfo</code> on the ring hands
+thread state does not come here: <code>SchedulerDiagnostics</code> on the ring hands
 out a <code>KernelThreadInfo</code> snapshot of the fields that survive an
 unlocked read, and reaching this type means acknowledging the seam's
 diagnostic first.</p>
