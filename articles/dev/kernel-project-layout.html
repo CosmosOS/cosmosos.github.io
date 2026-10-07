@@ -137,7 +137,7 @@
 </tr>
 <tr>
 <td><strong>Cosmos.Kernel.Core</strong></td>
-<td>Low-level runtime: memory management, GC, scheduler, serial I/O, panic handler, and what the bootloader and the firmware hand over (<code>Firmware/</code>: the boot framebuffer, the device tree parser the ARM64 description reads, the boot time, the bridge to the ACPI MCFG table the native boot code parses, and the clock read through the UEFI runtime services). The kernel layer that holds the unsafe code: the layers above reach memory through its address-based entry points (<code>MemoryBlock</code> with <code>PageAllocator.AllocBlock</code>, <code>AddressSpace.HhdmOffset</code>).</td>
+<td>Low-level runtime: memory management, GC, scheduler, serial I/O, panic handler, the kernel CSPRNG behind <code>RandomNumberGenerator</code> (<a href="../user/random.html">Random numbers</a>), and what the bootloader and the firmware hand over (<code>Firmware/</code>: the boot framebuffer, the device tree parser the ARM64 description reads, the boot time, the bridge to the ACPI MCFG table the native boot code parses, and the clock read through the UEFI runtime services). The kernel layer that holds the unsafe code: the layers above reach memory through its address-based entry points (<code>MemoryBlock</code> with <code>PageAllocator.AllocBlock</code>, <code>AddressSpace.HhdmOffset</code>).</td>
 </tr>
 <tr>
 <td><strong>Cosmos.Kernel.Native.X64</strong></td>
