@@ -198,6 +198,7 @@ while (true)
 <!-- video: the inspector loop printing Key/Char/Modifiers for letters, Shift+B, Shift+5, Ctrl+A, Alt+X, F1, F12, LeftArrow and Space -->
 <p><video src="images/keyboard-readkey.mp4" controls autoplay muted loop playsinline style="max-width:100%"></video></p>
 <p>The standard <code>Console.ReadKey()</code> also works and returns a regular <code>ConsoleKeyInfo</code>; the <code>ReadKey(true)</code> overload suppresses the echo. It is a thin wrapper over <code>KeyboardManager.ReadKey()</code>, so use whichever fits your code.</p>
+<p>Once a kernel opens a second console session, the keyboard types into the session on the display, and both <code>Console</code> and <code>KeyboardManager</code> read the keys of the calling thread's session (<a href="sessions.html">Console Sessions and Telnet</a>).</p>
 <h2 id="polling-without-blocking">Polling without blocking</h2>
 <p>A render loop cannot afford to block on <code>ReadKey()</code>. <code>KeyboardManager.TryReadKey()</code> dequeues a pending key press and returns <code>false</code> when there is none, so the frame goes on. Here it drives a square over a canvas from the <a href="graphics.html">Graphics</a> article:</p>
 <pre><code class="lang-csharp">Canvas canvas = Canvas.GetFullScreen();

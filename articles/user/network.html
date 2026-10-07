@@ -349,7 +349,8 @@ stream.Write(buffer, 0, bytesRead);
 client.Close();
 listener.Stop();
 </code></pre>
-<p>To reach a listener inside QEMU user networking from your host, forward a host port to the guest. With plain QEMU that is <code>-nic user,model=e1000e,hostfwd=tcp::4444-:4444</code>, then connect to <code>localhost:4444</code> on the host.</p>
+<p>To reach a listener inside QEMU user networking from your host, forward a host port to the guest with <code>cosmos run --hostfwd tcp::4444-:4444</code> (repeatable; plain QEMU spells it <code>-nic user,model=e1000e,hostfwd=tcp::4444-:4444</code>), then connect to <code>localhost:4444</code> on the host.</p>
+<p>For an interactive shell over the network, the <a href="https://github.com/CosmosOS/Cosmos.Network.Telnet">Cosmos.Network.Telnet</a> package's <code>TelnetServer</code> gives every client a console session of its own (<a href="sessions.html">Console Sessions and Telnet</a>).</p>
 <!-- screenshot: console showing "Listening on port 4444...", "Client connected!" and the received message -->
 <p><img src="images/network-tcp-server.png" alt="TCP Server"></p>
 <h2 id="dns">DNS</h2>

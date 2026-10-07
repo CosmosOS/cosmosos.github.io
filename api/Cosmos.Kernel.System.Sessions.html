@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Namespace Cosmos.Kernel.System | Cosmos Gen 3 </title>
+      <title>Namespace Cosmos.Kernel.System.Sessions | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Namespace Cosmos.Kernel.System | Cosmos Gen 3 ">
+      <meta name="title" content="Namespace Cosmos.Kernel.System.Sessions | Cosmos Gen 3 ">
       
       
       <link rel="icon" href="../images/favicon.ico">
@@ -84,72 +84,32 @@
           <nav id="breadcrumb"></nav>
         </div>
 
-        <article data-uid="Cosmos.Kernel.System">
+        <article data-uid="Cosmos.Kernel.System.Sessions">
 
-  <h1 id="Cosmos_Kernel_System" data-uid="Cosmos.Kernel.System" class="text-break">Namespace Cosmos.Kernel.System</h1>
+  <h1 id="Cosmos_Kernel_System_Sessions" data-uid="Cosmos.Kernel.System.Sessions" class="text-break">Namespace Cosmos.Kernel.System.Sessions</h1>
   <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
   <div class="markdown level0 remarks"></div>
 
-    <h3 id="namespaces">
-Namespaces
-</h3>
-    <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.System.Audio.html">Cosmos.Kernel.System.Audio</a></dt>
-      <dd></dd>
-    </dl>
-    <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.System.Diagnostics.html">Cosmos.Kernel.System.Diagnostics</a></dt>
-      <dd></dd>
-    </dl>
-    <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.System.FileSystem.html">Cosmos.Kernel.System.FileSystem</a></dt>
-      <dd></dd>
-    </dl>
-    <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.System.Graphics.html">Cosmos.Kernel.System.Graphics</a></dt>
-      <dd></dd>
-    </dl>
-    <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.System.Input.html">Cosmos.Kernel.System.Input</a></dt>
-      <dd></dd>
-    </dl>
-    <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.System.Network.html">Cosmos.Kernel.System.Network</a></dt>
-      <dd></dd>
-    </dl>
-    <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.System.Sessions.html">Cosmos.Kernel.System.Sessions</a></dt>
-      <dd></dd>
-    </dl>
-    <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.System.Storage.html">Cosmos.Kernel.System.Storage</a></dt>
-      <dd></dd>
-    </dl>
-    <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.System.Timers.html">Cosmos.Kernel.System.Timers</a></dt>
-      <dd></dd>
-    </dl>
     <h3 id="classes">
 Classes
 </h3>
     <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.System.Kernel.html">Kernel</a></dt>
-      <dd><p>Base class for all Cosmos user kernels.
-Provides the <a class="xref" href="Cosmos.Kernel.System.Kernel.html#Cosmos_Kernel_System_Kernel_BeforeRun">BeforeRun()</a>/<a class="xref" href="Cosmos.Kernel.System.Kernel.html#Cosmos_Kernel_System_Kernel_Run">Run()</a>/<a class="xref" href="Cosmos.Kernel.System.Kernel.html#Cosmos_Kernel_System_Kernel_AfterRun">AfterRun()</a> lifecycle pattern.</p>
+      <dt><a class="xref" href="Cosmos.Kernel.System.Sessions.ConsoleSession.html">ConsoleSession</a></dt>
+      <dd><p>One console that <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.console">Console</a> can be bound to: a screen, and the
+keys typed at it. The local virtual consoles and the connections of a
+remote terminal server, such as the Cosmos.Network.Telnet package's, are
+all sessions. <a class="xref" href="Cosmos.Kernel.System.Sessions.SessionManager.html">SessionManager</a> numbers them, shows one of
+them on the display, and binds every thread to one, so the same
+<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.console">Console</a> calls read and write whichever session the calling
+thread belongs to.</p>
 </dd>
     </dl>
     <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.System.KernelFeatures.html">KernelFeatures</a></dt>
-      <dd><p>Read-only view of the kernel feature switches, one per
-<code>CosmosEnable*</code> MSBuild property. Each flag reports whether the
-corresponding subsystem is compiled into this kernel; ILC folds the
-flags to constants, so guarded code is trimmed when a feature is off.</p>
-</dd>
-    </dl>
-    <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.System.Power.html">Power</a></dt>
-      <dd><p>User-facing power-management API. Routes through the platform HAL.</p>
+      <dt><a class="xref" href="Cosmos.Kernel.System.Sessions.SessionManager.html">SessionManager</a></dt>
+      <dd><p>Keeps the console sessions: numbers them, shows one on the display, and
+binds each thread to one, which is what <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.console">Console</a> reads and
+writes on that thread.</p>
 </dd>
     </dl>
 

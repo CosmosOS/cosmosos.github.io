@@ -3779,6 +3779,48 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.System.Sessions.ConsoleSession.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.System.Sessions.ConsoleSession.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.System.Sessions.ConsoleSession",
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.System.Sessions.ConsoleSession.yml\" sourcestartlinenumber=\"1\">One console that <xref href=\"System.Console\" data-throw-if-not-resolved=\"false\"></xref> can be bound to: a screen, and the\nkeys typed at it. The local virtual consoles and the connections of a\nremote terminal server, such as the Cosmos.Network.Telnet package's, are\nall sessions. <xref href=\"Cosmos.Kernel.System.Sessions.SessionManager\" data-throw-if-not-resolved=\"false\"></xref> numbers them, shows one of\nthem on the display, and binds every thread to one, so the same\n<xref href=\"System.Console\" data-throw-if-not-resolved=\"false\"></xref> calls read and write whichever session the calling\nthread belongs to.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.System.Sessions.SessionManager.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.System.Sessions.SessionManager.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.System.Sessions.SessionManager",
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.System.Sessions.SessionManager.yml\" sourcestartlinenumber=\"1\">Keeps the console sessions: numbers them, shows one on the display, and\nbinds each thread to one, which is what <xref href=\"System.Console\" data-throw-if-not-resolved=\"false\"></xref> reads and\nwrites on that thread.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.System.Sessions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.System.Sessions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.System.Sessions",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Cosmos.Kernel.System.Storage.Ebr.yml",
       "output": {
         ".html": {
@@ -4923,6 +4965,16 @@
       "output": {
         ".html": {
           "relative_path": "articles/user/scheduler-plugging.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/user/sessions.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/user/sessions.html"
         }
       },
       "version": ""
