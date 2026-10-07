@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Audio | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Audio | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/audio.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="audio">Audio</h1>
+
+<p>In this article, we will discuss audio on Cosmos Gen3: how to find the sound card, play a tone, play a WAV file and generate sound of your own. Sound goes out through an <strong>Intel High Definition Audio</strong> controller, the audio standard of PC chipsets since 2004 and the sound card QEMU emulates as <code>intel-hda</code>.</p>
+<p>The main differences if you come from Gen2:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Gen2</th>
+<th>Gen3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Audio API</td>
+<td><code>Cosmos.System.Audio</code></td>
+<td><code>Cosmos.Kernel.System.Audio</code></td>
+</tr>
+<tr>
+<td>Sound card drivers</td>
+<td>AC97</td>
+<td>Intel HD Audio over the driver kit (x64 and ARM64)</td>
+</tr>
+<tr>
+<td>Setup</td>
+<td>An <code>AudioManager</code> with a <code>Stream</code> and an <code>Output</code>, then <code>Enable()</code></td>
+<td>None: the driver kit publishes the output at boot, and <code>AudioManager.Play(stream)</code> plays through it</td>
+</tr>
+<tr>
+<td>Mixing</td>
+<td><code>AudioMixer</code> over several streams</td>
+<td>One stream per output at a time</td>
+</tr>
+<tr>
+<td><code>Console.Beep</code></td>
+<td>PC speaker</td>
+<td>A square wave through the sound card</td>
+</tr>
+<tr>
+<td>WAV files</td>
+<td><code>MemoryAudioStream.FromWave</code></td>
+<td><code>MemoryAudioStream.FromWave</code>, plus <code>WaveAudioStream</code>, which streams a file off a volume</td>
+</tr>
+<tr>
+<td>Playback</td>
+<td>In the background once <code>Enable()</code> ran</td>
+<td>On the calling thread with <code>AudioManager.Play</code>, or on a thread of its own with <code>AudioManager.TryStartPlayback</code></td>
+</tr>
+</tbody>
+</table>
+<p>If you find bugs or something abnormal, please <a href="https://github.com/CosmosOS/Cosmos/issues/new/choose">submit an issue</a> on our repository.</p>
+<h2 id="enable-audio-in-your-kernel">Enable audio in your kernel</h2>
+<p>Audio support is behind a feature switch. Make sure your kernel's <code>.csproj</code> does not turn it off (it defaults to <code>true</code>):</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;CosmosEnableAudio&gt;true&lt;/CosmosEnableAudio&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p>The sound card is a PCI function, so turning <code>CosmosEnablePCI</code> off, or <code>CosmosEnableInterrupts</code>, which turns PCI off with it, turns audio off as well.</p>
+<p>At boot a sound card reaches <code>AudioManager</code> through the <a href="drivers.html">driver kit</a>, like a NIC reaches <code>NetworkManager</code>. <code>HdAudioDriver</code>, shipped in <code>Cosmos.Kernel.Drivers</code>, binds every PCI function of class <code>04.03.00</code>, the HD Audio controller class, so the one driver covers any controller that follows the specification rather than a list of device ids. It finds a converter and an output pin on the codec behind the controller and publishes an output named <code>hda</code>, which the manager lists as its primary. QEMU attaches no sound card by default, so ask <code>cosmos run</code> for one, on either architecture:</p>
+<pre><code class="lang-console">$ cosmos run --audio intel-hda        # the ICH6 HD Audio controller, the one the test suite runs on
+$ cosmos run --audio ich9-intel-hda   # the ICH9 one
+</code></pre>
+<p>An HD Audio controller is a bus rather than a sound card on its own: the codec that turns samples into sound sits behind it, so <code>cosmos run</code> attaches QEMU's <code>hda-duplex</code> codec beside the controller. The sound plays on your host through QEMU's default audio backend (PipeWire, PulseAudio, ALSA, CoreAudio or DirectSound, depending on the host).</p>
+<p>The serial log shows the driver binding the controller:</p>
+<pre><code>[Audio] primary: HdAudioDriver &quot;hda&quot;
+[Drivers] pci:0000:00:02.0 HdAudioDriver published device &quot;hda&quot; (consumed)
+[Drivers] pci:0000:00:02.0 HdAudioDriver: version 1.0, codec 0 converter 2 pin 3, stream 4 (4 in, 4 out), 48 kHz stereo 16-bit, line 11
+</code></pre>
+<p>The last field says whether the controller's interrupt line reached the driver. It reads <code>line 11</code> above, on an x64 machine with no NIC. It reads <code>no line</code> on ARM64, where the kit routes no PCI legacy line, and on x64 next to the default e1000e NIC, which holds the line the controller shares with it. Either way the output plays the same: the player tracks the stream engine's position rather than waiting for the interrupt.</p>
+<p>These are the <code>using</code>s the snippets below rely on:</p>
+<pre><code class="lang-csharp">using System.IO;
+using Cosmos.Kernel.HAL.Devices.Audio;   // AudioFormat, for the sound you generate (COSMOS0003)
+using Cosmos.Kernel.System.Audio;
+using Cosmos.Kernel.System.FileSystem;
+using Cosmos.Kernel.System.Timers;
+</code></pre>
+<h2 id="the-audio-output">The audio output</h2>
+<p><code>AudioManager</code> owns the outputs the driver kit published. Check that one is there before playing anything:</p>
+<pre><code class="lang-csharp">if (!AudioManager.IsEnabled)
+{
+    Console.WriteLine(&quot;Audio is compiled out (CosmosEnableAudio=false)&quot;);
+    return;
+}
+
+AudioDevice? output = AudioManager.Primary;
+if (output is null)
+{
+    Console.WriteLine(&quot;No audio output: attach one with cosmos run --audio intel-hda&quot;);
+    return;
+}
+
+Console.WriteLine(&quot;Output:  &quot; + output.Name + &quot; (&quot; + output.DriverName + &quot;)&quot;);
+Console.WriteLine(&quot;Node:    &quot; + output.NodePath);
+Console.WriteLine(&quot;Format:  &quot; + output.SampleRate + &quot; Hz, &quot; + output.Format.Channels + &quot; ch, &quot;
+    + (output.Format.ChannelSize * 8) + &quot;-bit&quot;);
+</code></pre>
+<!-- screenshot: console showing "Output: hda (HdAudioDriver)", the pci node path and "Format: 48000 Hz, 2 ch, 16-bit" -->
+<p><img src="images/audio-output.png" alt="The audio output"></p>
+<p>An <code>AudioDevice</code> reports the format it is programmed for (48 kHz signed 16-bit stereo until something plays at another rate), whether its stream engine <code>IsRunning</code>, and the <code>Player</code> feeding it now, <code>null</code> while it is idle. Once the kit withdraws the output, <code>IsWithdrawn</code> turns true and every call on it does nothing.</p>
+<p>With more than one sound card, enumerate them. The list is kept in node-path order, primary first, so the primary does not depend on which driver probed first:</p>
+<pre><code class="lang-csharp">for (int i = 0; i &lt; AudioManager.Count; i++)
+{
+    if (AudioManager.TryGet(i, out AudioDevice? device))
+    {
+        Console.WriteLine($&quot;[{i}] {device.Name}  {device.NodePath}&quot;);
+    }
+}
+</code></pre>
+<p><code>AudioManager.Play</code> and <code>AudioManager.TryStartPlayback</code> always use the primary. To play on another output, hand it to an <code>AudioPlayer</code> or to <code>AudioPlayback.TryStart</code> (both below).</p>
+<h2 id="playing-a-tone">Playing a tone</h2>
+<p>The quickest way to make a sound needs no file and no setup: <code>Console.Beep</code>, which the kernel plugs onto the primary output.</p>
+<pre><code class="lang-csharp">/* The Windows default: 800 Hz for 200 ms */
+Console.Beep();
+
+/* A C major scale, a quarter of a second per note */
+int[] notes = { 262, 294, 330, 349, 392, 440, 494, 523 };
+foreach (int note in notes)
+{
+    Console.Beep(note, 250);
+}
+</code></pre>
+<p>The tone is a square wave at a quarter of full scale, and the call returns once it has played, as it does on Windows. It also refuses the same arguments Windows refuses: a pitch below 37 Hz or above 32767 Hz, or a duration of zero or less, throws <code>ArgumentOutOfRangeException</code>. When there is nothing to play on (no output published, audio compiled out, or another playback holding the output), it returns at once and plays nothing.</p>
+<p>.NET marks <code>Console.Beep(int, int)</code> as Windows-only, so the call raises the <code>CA1416</code> platform warning. The kernel implements it anyway; suppress the warning around the call, or for the whole project:</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;NoWarn&gt;$(NoWarn);CA1416&lt;/NoWarn&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<h2 id="playing-a-wav-file">Playing a WAV file</h2>
+<p><code>MemoryAudioStream.FromWave</code> reads a <code>.wav</code> file that is already in memory, and <code>AudioManager.Play</code> plays it through the primary output, returning once the last frame has played:</p>
+<pre><code class="lang-csharp">/* chime.wav is a 16-bit stereo PCM file on the FAT partition mounted at /mnt */
+MemoryAudioStream chime = MemoryAudioStream.FromWave(File.ReadAllBytes(&quot;/mnt/chime.wav&quot;));
+
+if (!AudioManager.Play(chime))
+{
+    Console.WriteLine(&quot;No output, or the output refused the file's format&quot;);
+}
+</code></pre>
+<p><code>FromWave</code> throws <code>ArgumentException</code> for a file that is not an uncompressed PCM RIFF/WAVE. The reader walks the file's chunk list, so a file carrying <code>LIST</code> or <code>fact</code> chunks before its samples reads like any other. <code>Play</code> returns <code>false</code> when no output is published or when the output refuses the stream's format.</p>
+<p>That last case matters, because the reader understands more than the sound card plays:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>The WAV reader accepts</th>
+<th>The HD Audio output plays</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Encoding</td>
+<td>PCM and <code>WAVE_FORMAT_EXTENSIBLE</code></td>
+<td>Signed PCM</td>
+</tr>
+<tr>
+<td>Bits per sample</td>
+<td>8, 16, 24, 32</td>
+<td>16</td>
+</tr>
+<tr>
+<td>Channels</td>
+<td>1 to 255</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Sample rate</td>
+<td>Any</td>
+<td>8, 9.6, 11.025, 12, 16, 22.05, 24, 32, 44.1, 48, 88.2, 96, 144, 176.4 and 192 kHz</td>
+</tr>
+</tbody>
+</table>
+<p>Nothing is converted or resampled on the way: a mono, 8-bit or 24-bit file is refused rather than played at the wrong speed or pitch. Convert it on your host before copying it over, for example with <a href="https://ffmpeg.org/">FFmpeg</a>, which also decodes MP3, OGG and FLAC:</p>
+<pre><code class="lang-console">$ ffmpeg -i song.mp3 -ac 2 -ar 48000 -c:a pcm_s16le song.wav
+</code></pre>
+<p>A sound is just a file, so the easiest way to ship one is on the FAT disk from the <a href="filesystem.html">File System</a> article, under a FAT-friendly name. A kernel that runs the FTP server from the <a href="network.html#ftp-server">Network</a> article can also receive one from the host while it runs: <code>curl -T song.wav ftp://localhost:2121/</code>.</p>
+<h2 id="playing-in-the-background">Playing in the background</h2>
+<p><code>FromWave</code> holds the whole file in memory and <code>Play</code> holds the caller for the length of the audio, which suits a short chime. For a song, stream the file off the volume with <code>WaveAudioStream</code>, a block at a time in a fixed amount of memory, and play it on a thread of its own with <code>AudioManager.TryStartPlayback</code>, so the kernel keeps running while it plays:</p>
+<pre><code class="lang-csharp">if (!VfsManager.TryOpenFile(&quot;/mnt/song.wav&quot;, out IVfsFileHandle? file))
+{
+    Console.WriteLine(&quot;File not found&quot;);
+    return;
+}
+
+if (!WaveAudioStream.TryOpen(file, out WaveAudioStream? song))
+{
+    Console.WriteLine(&quot;Not a PCM .wav file&quot;);
+    file.Dispose();
+    return;
+}
+
+uint seconds = song.Length / song.SampleRate;
+Console.WriteLine(&quot;Playing &quot; + seconds + &quot; s of audio&quot;);
+
+/* The playback thread reads the file as it plays, and disposes of it when it is done */
+if (!AudioManager.TryStartPlayback(song, file, out AudioPlayback? playback))
+{
+    Console.WriteLine(&quot;No output, the output is busy, or no scheduler to run the playback on&quot;);
+    file.Dispose();
+    return;
+}
+</code></pre>
+<p>The second argument is whatever the stream reads from: the playback disposes of it once its thread is done, so the file handle goes with the playback and the caller forgets it. When <code>TryStartPlayback</code> returns <code>false</code>, nothing was started and the handle is still the caller's to close. Pass <code>null</code> for a stream that needs nothing released.</p>
+<p><code>WaveAudioStream</code> is a <code>SeekableAudioStream</code>, so it reports its <code>Length</code> and its <code>Position</code> in frames, and <code>Rewind()</code> or a new <code>Position</code> moves it. The <code>AudioPlayback</code> reports where the playback has got to, and <code>Stop()</code> ends it early:</p>
+<pre><code class="lang-csharp">while (playback.IsPlaying)
+{
+    Console.WriteLine((song.Position / song.SampleRate) + &quot; s of &quot; + seconds + &quot; s&quot;);
+
+    if (Console.KeyAvailable &amp;&amp; Console.ReadKey(true).Key == ConsoleKey.Escape)
+    {
+        /* Returns at once; the state turns Stopped shortly after */
+        playback.Stop();
+    }
+
+    TimerManager.Wait(500);
+}
+
+if (playback.State == AudioPlaybackState.Completed)
+{
+    Console.WriteLine(&quot;Played to the end&quot;);
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th><code>State</code></th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Playing</code></td>
+<td>The thread is still feeding the output</td>
+</tr>
+<tr>
+<td><code>Completed</code></td>
+<td>The stream was played to its end</td>
+</tr>
+<tr>
+<td><code>Stopped</code></td>
+<td><code>Stop()</code> ended it early; what the output still held was dropped</td>
+</tr>
+<tr>
+<td><code>Failed</code></td>
+<td>The output refused the stream's format, was withdrawn or stopped taking frames, or reading the stream threw; a thrown exception is written to the serial log as <code>[Audio] playback failed: ...</code></td>
+</tr>
+</tbody>
+</table>
+<p>Three things to know about background playback:</p>
+<ul>
+<li><strong>It needs the scheduler.</strong> Without <code>CosmosEnableScheduler</code> there is no second thread to play on and <code>TryStartPlayback</code> returns <code>false</code>. <code>AudioManager.Play(stream)</code> plays the same stream on the calling thread instead.</li>
+<li><strong>One playback per output.</strong> A playback claims the output from the moment <code>TryStartPlayback</code> returns <code>true</code> until it ends, so a second <code>TryStartPlayback</code>, a <code>Play</code> or a <code>Console.Beep</code> meanwhile is refused. Code that does not hold the <code>AudioPlayback</code> stops whatever is playing with <code>AudioManager.Primary?.Player?.RequestStop()</code>.</li>
+<li><strong>Leave the volume alone while it plays.</strong> The playback thread reads the file while the rest of the kernel runs, and the filesystem layer has no locking of its own. Writing to the same volume until <code>IsPlaying</code> turns false is asking for trouble.</li>
+</ul>
+<p><code>Position</code> counts the frames read from the stream, which run ahead of what you hear by the frames already queued in the sound card's buffer, about a tenth of a second at 48 kHz.</p>
+<h2 id="generating-sound">Generating sound</h2>
+<p>Samples you compute yourself play the same way. The format of a stream is an <code>AudioFormat</code>: bits per channel, channels per frame and whether samples are signed, with <code>AudioFormat.Stereo16</code> the one the HD Audio output plays. A frame interleaves one sample per channel, left then right, each sample a little-endian signed 16-bit value.</p>
+<p><code>AudioFormat</code> and <code>AudioBitDepth</code> belong to the driver kit's experimental seam, so naming them is a build error carrying the <code>COSMOS0003</code> diagnostic (<a href="../dev/public-api.html">Public API Tracking</a>) until the kernel project acknowledges the missing compatibility promise. Reading a format, as <code>output.Format.Channels</code> does above, needs nothing:</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;NoWarn&gt;$(NoWarn);COSMOS0003&lt;/NoWarn&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p>For a short sound, fill a buffer and wrap it in a <code>MemoryAudioStream</code>:</p>
+<pre><code class="lang-csharp">const uint SampleRate = 48000;
+AudioFormat format = AudioFormat.Stereo16;
+
+/* One second of a 440 Hz sine wave, at a quarter of full scale */
+int frames = (int)SampleRate;
+byte[] data = new byte[frames * format.FrameSize];
+
+for (int i = 0; i &lt; frames; i++)
+{
+    short sample = (short)(Math.Sin(2 * Math.PI * 440 * i / SampleRate) * 8192);
+
+    Span&lt;byte&gt; frame = data.AsSpan(i * format.FrameSize, format.FrameSize);
+    BitConverter.TryWriteBytes(frame, sample);       // left
+    BitConverter.TryWriteBytes(frame[2..], sample);  // right
+}
+
+AudioManager.Play(new MemoryAudioStream(format, SampleRate, data));
+</code></pre>
+<p>A long or endless sound is better computed as it is read, so it costs no memory: derive from <code>AudioStream</code> and fill the buffer the player hands to <code>Read</code>. The base class carries no length on purpose, so a stream can play forever, as a synthesizer, a mixer of your own or a game's soundtrack does:</p>
+<pre><code class="lang-csharp">/* A sine wave worked out as it is read: it costs no memory and never runs out */
+internal sealed class SineStream : AudioStream
+{
+    private const uint Rate = 48000;
+
+    private readonly double _step;
+    private double _phase;
+
+    public SineStream(double frequency)
+    {
+        _step = 2 * Math.PI * frequency / Rate;
+    }
+
+    public override AudioFormat Format =&gt; AudioFormat.Stereo16;
+
+    public override uint SampleRate =&gt; Rate;
+
+    public override bool Depleted =&gt; false;
+
+    public override int Read(Span&lt;byte&gt; destination)
+    {
+        int frameSize = Format.FrameSize;
+        int frames = destination.Length / frameSize;
+
+        for (int i = 0; i &lt; frames; i++)
+        {
+            short sample = (short)(Math.Sin(_phase) * 8192);
+
+            Span&lt;byte&gt; frame = destination.Slice(i * frameSize, frameSize);
+            BitConverter.TryWriteBytes(frame, sample);
+            BitConverter.TryWriteBytes(frame[2..], sample);
+
+            _phase += _step;
+            if (_phase &gt;= 2 * Math.PI)
+            {
+                _phase -= 2 * Math.PI;
+            }
+        }
+
+        return frames * frameSize;
+    }
+}
+</code></pre>
+<p><code>Read</code> returns the bytes it wrote, always a whole number of frames, and the player stops reading once <code>Depleted</code> turns <code>true</code> or <code>Read</code> returns <code>0</code>. A stream that never runs out has to be stopped, so play it in the background:</p>
+<pre><code class="lang-csharp">if (AudioManager.TryStartPlayback(new SineStream(440), null, out AudioPlayback? playback))
+{
+    TimerManager.Wait(2000);
+    playback.Stop();
+}
+</code></pre>
+<h2 id="writing-frames-yourself">Writing frames yourself</h2>
+<p>The player is a convenience over <code>AudioDevice</code>, which a kernel can also drive directly, for instance from a game loop that mixes its own sound effects. The device takes frames into a cyclic buffer that its stream engine drains on the codec's clock: <code>Write</code> copies whatever fits and returns the bytes it took, <code>0</code> when the buffer is full, and never blocks.</p>
+<pre><code class="lang-csharp">AudioDevice? output = AudioManager.Primary;
+if (output is null || output.Player is not null || !output.TrySetFormat(AudioFormat.Stereo16, 48000))
+{
+    return;
+}
+
+SineStream source = new(440);
+byte[] chunk = new byte[4096];
+output.Start();
+
+/* 500 chunks of 1024 frames: about ten seconds */
+for (int pass = 0; pass &lt; 500; pass++)
+{
+    int length = source.Read(chunk);
+    int written = 0;
+    while (written &lt; length)
+    {
+        int took = output.Write(chunk.AsSpan(written, length - written));
+        if (took == 0)
+        {
+            /* The buffer is full: the codec is playing what it has */
+            TimerManager.Wait(5);
+            continue;
+        }
+
+        written += took;
+    }
+}
+
+output.Stop();
+</code></pre>
+<p>The rules the device holds you to:</p>
+<ul>
+<li><code>TrySetFormat</code> works only while the device is stopped; a running device keeps the format it has and returns <code>false</code>.</li>
+<li>Keep it fed. Silence plays while the buffer is empty after <code>Start()</code>, but the buffer is cyclic, so a writer that falls behind for long hears old frames come round again.</li>
+<li><code>Stop()</code> drops whatever the buffer still holds. To hear the tail of a sound, write a buffer's worth of silence after it first (<code>WritableBytes</code> right after <code>TrySetFormat</code> tells you how much that is), which is what the player does.</li>
+<li>Writing directly claims nothing. Check <code>Player</code> is <code>null</code> before you start; a <code>Play</code> or <code>Console.Beep</code> arriving while you write is refused, because the running device refuses its format change.</li>
+</ul>
+<h2 id="trying-it-in-the-devkernel">Trying it in the DevKernel</h2>
+<p>The DevKernel has four audio commands, written over the calls in this article (<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/examples/DevKernel/Commands/AudioCommands.cs">AudioCommands.cs</a>):</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>audio</code></td>
+<td>Lists every output with its driver, node, format and what it is playing (<code>12s of 180s</code>)</td>
+</tr>
+<tr>
+<td><code>beep [hz] [ms]</code></td>
+<td>Plays a tone through <code>Console.Beep</code>, 800 Hz for 200 ms by default</td>
+</tr>
+<tr>
+<td><code>play &lt;path&gt;</code></td>
+<td>Streams a <code>.wav</code> off a mounted volume in the background</td>
+</tr>
+<tr>
+<td><code>stop</code></td>
+<td>Stops whatever is playing</td>
+</tr>
+</tbody>
+</table>
+<p>Its <code>.cosmos/config.json</code> attaches an <code>intel-hda</code> controller and an NVMe disk and forwards the FTP ports, so a file uploaded with <code>ftpd</code> (see <a href="network.html#ftp-server">FTP server</a>) plays with <code>play</code>.</p>
+<!-- video: the DevKernel listing the hda output with "audio", playing a song with "play /mnt/song.wav" while "audio" shows its progress, then "stop" -->
+<p><video src="images/audio-play.mp4" controls playsinline style="max-width:100%"></video></p>
+<h2 id="current-limitations">Current limitations</h2>
+<ul>
+<li>Intel HD Audio is the only sound card driver: no AC97, Sound Blaster, virtio-sound or USB audio, and no PC speaker. Without an HD Audio controller, <code>Console.Beep</code> returns at once and plays nothing.</li>
+<li>Playback only. Nothing records: the codec's inputs, including the line-in of QEMU's <code>hda-duplex</code>, are left unused.</li>
+<li>One format: signed 16-bit stereo, at the rates in the table above. Streams in another layout or at another rate are refused rather than converted or resampled.</li>
+<li>No mixer: an output plays one stream at a time, and a second playback, <code>Play</code> or <code>Console.Beep</code> is refused until it ends.</li>
+<li>No volume control. The driver opens the codec's amplifiers to full gain; scale your samples to play quieter.</li>
+<li>The driver plays through the first converter and the first pin able to output on the first codec that has both. On a machine with several jacks that may not be the one you are listening to, and a computer's HDMI or DisplayPort audio, when it is a separate HD Audio controller, is published as an output of its own that can sort first.</li>
+<li>WAV is the only file format the kernel reads; there is no MP3, OGG or FLAC decoder.</li>
+</ul>
+<h2 id="how-it-works">How it works</h2>
+<p>At boot the library initializer installs the audio manager's consumer of the <a href="drivers.html">driver kit</a> before the driver stage runs, so the manager sees every output a driver publishes. <code>HdAudioDriver</code> binds the controller's PCI function, resets it, brings up the command and response rings the codecs are spoken to through, and walks each codec's widgets for an output converter and a pin that can drive an output. It points the pin at the converter, opens their amplifiers, turns on the external amplifier many laptops need for their speakers, programs the first output stream over a 16 KiB cyclic DMA buffer split into four 4 KiB periods, and publishes the output as <code>hda</code> (any driver can publish one: <a href="drivers.html#publishing-a-device">Publishing a device</a>).</p>
+<p><code>AudioPlayer</code> does the playing, whether <code>AudioManager.Play</code>, a background <code>AudioPlayback</code> or the <code>Console.Beep</code> plug (which plays a generated square wave) started it. It claims the output, programs it for the stream's format and rate, starts the stream engine and reads the stream 1024 frames at a time into a staging buffer, writing each into the device's buffer as room comes free. The device works the room out from the engine's own position, which is why the player needs no interrupt, and keeps the period just ahead of the writer silent, so a writer that falls briefly behind underruns into silence. The completion interrupt, where the line connects, only tells the manager that room came free. When the buffer is full the player waits 5 ms, as a scheduler sleep on a thread the scheduler owns and on the timer otherwise, and gives up once a whole second passes without the device taking anything. At the end of the stream it writes one buffer of silence, so the last frames reach the codec before the engine stops.</p>
+<pre><code>Console.Beep / AudioManager.Play / AudioManager.TryStartPlayback
+        │
+AudioStream ── WaveAudioStream (a volume), MemoryAudioStream, your own   (Cosmos.Kernel.System.Audio)
+        │  read 1024 frames at a time
+AudioPlayer ── claims the output, writes what fits, waits 5 ms when full
+        │
+AudioManager ── AudioDevice (primary first)
+        │
+driver kit: IAudioOutput &quot;hda&quot;                                           (HdAudioDriver, Cosmos.Kernel.Drivers)
+        │  16 KiB cyclic DMA buffer, drained on the codec's clock
+HD Audio controller → codec converter → pin → speakers (or QEMU's audio backend)
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/audio.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

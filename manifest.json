@@ -4591,6 +4591,16 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "articles/user/audio.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/user/audio.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "articles/user/debugging.md",
       "output": {
         ".html": {
@@ -4625,6 +4635,26 @@
       "output": {
         ".html": {
           "relative_path": "articles/user/graphics.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/user/images/audio-output.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/user/images/audio-output.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/user/images/audio-play.mp4",
+      "output": {
+        "resource": {
+          "relative_path": "articles/user/images/audio-play.mp4"
         }
       },
       "version": ""

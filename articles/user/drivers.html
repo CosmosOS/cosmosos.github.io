@@ -587,9 +587,15 @@ public bool Transmit(ReadOnlySpan&lt;byte&gt; frame)
 <td><code>PublishDisplay</code></td>
 <td><code>DisplaySink.ModeChanged()</code></td>
 </tr>
+<tr>
+<td>Audio</td>
+<td><code>IAudioOutput</code> (<code>Name</code>, <code>Format</code>, <code>SampleRate</code>, <code>TrySetFormat</code>, <code>Start</code>, <code>Stop</code>, <code>Write</code>)</td>
+<td><code>PublishAudio</code></td>
+<td><code>AudioSink.BufferCompleted()</code>, <code>FormatChanged()</code></td>
+</tr>
 </tbody>
 </table>
-<p>Each kind's types are in its category's namespace under <code>Cosmos.Kernel.HAL.Devices</code>, the same categories as the drivers' folders: the keyboard and pointer types in <code>Cosmos.Kernel.HAL.Devices.Input</code>; the network ones in <code>Cosmos.Kernel.HAL.Devices.Network</code>, beside <code>MacAddress</code>, the type <code>INetworkInterface.MacAddress</code> returns; the display ones in <code>Cosmos.Kernel.HAL.Devices.Display</code>; and <code>IBlockDevice</code> in <code>Cosmos.Kernel.HAL.Devices.Storage</code>.</p>
+<p>Each kind's types are in its category's namespace under <code>Cosmos.Kernel.HAL.Devices</code>, the same categories as the drivers' folders: the keyboard and pointer types in <code>Cosmos.Kernel.HAL.Devices.Input</code>; the network ones in <code>Cosmos.Kernel.HAL.Devices.Network</code>, beside <code>MacAddress</code>, the type <code>INetworkInterface.MacAddress</code> returns; the display ones in <code>Cosmos.Kernel.HAL.Devices.Display</code>; the audio ones in <code>Cosmos.Kernel.HAL.Devices.Audio</code>, beside <code>AudioFormat</code>; and <code>IBlockDevice</code> in <code>Cosmos.Kernel.HAL.Devices.Storage</code>.</p>
 <p>The kernel's manager for that kind picks the device up as soon as it is published, and teardown withdraws it before releasing anything else. Sinks never allocate, and drop reports once the device is withdrawn.</p>
 <p>With a <code>NicState</code> state object implementing <code>INetworkInterface</code>, the probe publishes it and keeps the sink it gets back:</p>
 <pre><code class="lang-csharp">// In Probe:
@@ -609,8 +615,9 @@ Sink?.Receive(frame);
 <li><strong>Network</strong>: call <code>NetworkSink.Receive</code> from thread context, never from the handler; hand received frames to a work item.</li>
 <li><strong>Block</strong>: <code>PublishBlockDevice</code> registers the disk with <code>StorageManager</code> and scans its partitions before returning, so the device must be ready. If the manager refuses it, the probe fails.</li>
 <li><strong>Display</strong>: publish the display as you found it; <code>Mode</code> is empty until something sets one, and <code>Framebuffer</code> is <code>null</code> when the CPU cannot draw into it. The same object may also implement <code>IDisplayModes</code> to switch modes and <code>IHardwareCursor</code> for a hardware cursor. The bootloader's framebuffer is published as the firmware display at boot, and withdrawn when a driver binds the PCI function it lives in.</li>
+<li><strong>Audio</strong>: <code>Write</code> copies whole frames into the device's buffer, as many as fit, and never blocks; a short write is how the device says it is full. <code>BufferCompleted</code> may be called from the interrupt handler.</li>
 </ul>
-<p>See <a href="graphics.html">Graphics</a> and <a href="filesystem.html">File System</a> for the consuming side.</p>
+<p>See <a href="graphics.html">Graphics</a>, <a href="audio.html">Audio</a> and <a href="filesystem.html">File System</a> for the consuming side.</p>
 <h3 id="publishing-child-nodes">Publishing child nodes</h3>
 <p>A bus driver publishes the devices it finds as child nodes: <code>binding.PublishChild(identity, resources, interrupts, access)</code> adds one beneath its node, to be offered to drivers like any other, and <code>binding.RetractChild(child, hardwarePresent)</code> removes it. Children go away with their parent, and their drivers see <code>DetachCause.ParentRetracted</code>.</p>
 <p>A bus driver either uses a bus kind the kit defines (the virtio transports publish <code>VirtioIdentity</code> nodes) or brings its own identity and match pair:</p>
