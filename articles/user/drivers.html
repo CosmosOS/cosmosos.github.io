@@ -791,7 +791,7 @@ private readonly DeviceMatch[] _matches =
     new PciMatch(classCode: 0x02),                      // every network controller: specificity 1
 ];
 </code></pre>
-<p>A match must set at least one field. Prefer the device ids you tested over a class match: the shipped E1000E matches six Intel device ids and nothing else.</p>
+<p>A match must set at least one field. Prefer the device ids you tested over a class match: the shipped E1000E matches eight Intel device ids and nothing else.</p>
 <h3 id="the-access-object">The access object</h3>
 <p><code>binding.Node.Access&lt;PciAccess&gt;()</code> reaches the function's configuration space:</p>
 <ul>
