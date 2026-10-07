@@ -13378,15 +13378,15 @@ references:
   isSpec: "True"
   fullName: Cosmos.Kernel.System.Graphics.Canvas.CopyPixels
   nameWithType: Canvas.CopyPixels
-- uid: Cosmos.Kernel.System.Graphics.Canvas.CroppedDrawImage(Cosmos.Kernel.System.Graphics.Image,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)
-  name: CroppedDrawImage(Image, int, int, int, int, bool)
-  href: api/Cosmos.Kernel.System.Graphics.Canvas.html#Cosmos_Kernel_System_Graphics_Canvas_CroppedDrawImage_Cosmos_Kernel_System_Graphics_Image_System_Int32_System_Int32_System_Int32_System_Int32_System_Boolean_
-  commentId: M:Cosmos.Kernel.System.Graphics.Canvas.CroppedDrawImage(Cosmos.Kernel.System.Graphics.Image,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)
-  name.vb: CroppedDrawImage(Image, Integer, Integer, Integer, Integer, Boolean)
-  fullName: Cosmos.Kernel.System.Graphics.Canvas.CroppedDrawImage(Cosmos.Kernel.System.Graphics.Image, int, int, int, int, bool)
-  fullName.vb: Cosmos.Kernel.System.Graphics.Canvas.CroppedDrawImage(Cosmos.Kernel.System.Graphics.Image, Integer, Integer, Integer, Integer, Boolean)
-  nameWithType: Canvas.CroppedDrawImage(Image, int, int, int, int, bool)
-  nameWithType.vb: Canvas.CroppedDrawImage(Image, Integer, Integer, Integer, Integer, Boolean)
+- uid: Cosmos.Kernel.System.Graphics.Canvas.CroppedDrawImage(Cosmos.Kernel.System.Graphics.Image,System.Int32,System.Int32,System.Int32,System.Int32,System.Byte)
+  name: CroppedDrawImage(Image, int, int, int, int, byte)
+  href: api/Cosmos.Kernel.System.Graphics.Canvas.html#Cosmos_Kernel_System_Graphics_Canvas_CroppedDrawImage_Cosmos_Kernel_System_Graphics_Image_System_Int32_System_Int32_System_Int32_System_Int32_System_Byte_
+  commentId: M:Cosmos.Kernel.System.Graphics.Canvas.CroppedDrawImage(Cosmos.Kernel.System.Graphics.Image,System.Int32,System.Int32,System.Int32,System.Int32,System.Byte)
+  name.vb: CroppedDrawImage(Image, Integer, Integer, Integer, Integer, Byte)
+  fullName: Cosmos.Kernel.System.Graphics.Canvas.CroppedDrawImage(Cosmos.Kernel.System.Graphics.Image, int, int, int, int, byte)
+  fullName.vb: Cosmos.Kernel.System.Graphics.Canvas.CroppedDrawImage(Cosmos.Kernel.System.Graphics.Image, Integer, Integer, Integer, Integer, Byte)
+  nameWithType: Canvas.CroppedDrawImage(Image, int, int, int, int, byte)
+  nameWithType.vb: Canvas.CroppedDrawImage(Image, Integer, Integer, Integer, Integer, Byte)
 - uid: Cosmos.Kernel.System.Graphics.Canvas.CroppedDrawImage*
   name: CroppedDrawImage
   href: api/Cosmos.Kernel.System.Graphics.Canvas.html#Cosmos_Kernel_System_Graphics_Canvas_CroppedDrawImage_
@@ -13496,15 +13496,24 @@ references:
   isSpec: "True"
   fullName: Cosmos.Kernel.System.Graphics.Canvas.DrawArray
   nameWithType: Canvas.DrawArray
-- uid: Cosmos.Kernel.System.Graphics.Canvas.DrawCanvas(Cosmos.Kernel.System.Graphics.Canvas,System.Int32,System.Int32)
-  name: DrawCanvas(Canvas, int, int)
-  href: api/Cosmos.Kernel.System.Graphics.Canvas.html#Cosmos_Kernel_System_Graphics_Canvas_DrawCanvas_Cosmos_Kernel_System_Graphics_Canvas_System_Int32_System_Int32_
-  commentId: M:Cosmos.Kernel.System.Graphics.Canvas.DrawCanvas(Cosmos.Kernel.System.Graphics.Canvas,System.Int32,System.Int32)
-  name.vb: DrawCanvas(Canvas, Integer, Integer)
-  fullName: Cosmos.Kernel.System.Graphics.Canvas.DrawCanvas(Cosmos.Kernel.System.Graphics.Canvas, int, int)
-  fullName.vb: Cosmos.Kernel.System.Graphics.Canvas.DrawCanvas(Cosmos.Kernel.System.Graphics.Canvas, Integer, Integer)
-  nameWithType: Canvas.DrawCanvas(Canvas, int, int)
-  nameWithType.vb: Canvas.DrawCanvas(Canvas, Integer, Integer)
+- uid: Cosmos.Kernel.System.Graphics.Canvas.DrawCanvas(Cosmos.Kernel.System.Graphics.Canvas,System.Int32,System.Int32,System.Byte)
+  name: DrawCanvas(Canvas, int, int, byte)
+  href: api/Cosmos.Kernel.System.Graphics.Canvas.html#Cosmos_Kernel_System_Graphics_Canvas_DrawCanvas_Cosmos_Kernel_System_Graphics_Canvas_System_Int32_System_Int32_System_Byte_
+  commentId: M:Cosmos.Kernel.System.Graphics.Canvas.DrawCanvas(Cosmos.Kernel.System.Graphics.Canvas,System.Int32,System.Int32,System.Byte)
+  name.vb: DrawCanvas(Canvas, Integer, Integer, Byte)
+  fullName: Cosmos.Kernel.System.Graphics.Canvas.DrawCanvas(Cosmos.Kernel.System.Graphics.Canvas, int, int, byte)
+  fullName.vb: Cosmos.Kernel.System.Graphics.Canvas.DrawCanvas(Cosmos.Kernel.System.Graphics.Canvas, Integer, Integer, Byte)
+  nameWithType: Canvas.DrawCanvas(Canvas, int, int, byte)
+  nameWithType.vb: Canvas.DrawCanvas(Canvas, Integer, Integer, Byte)
+- uid: Cosmos.Kernel.System.Graphics.Canvas.DrawCanvas(Cosmos.Kernel.System.Graphics.Canvas,System.Int32,System.Int32,System.Int32,System.Int32,System.Byte)
+  name: DrawCanvas(Canvas, int, int, int, int, byte)
+  href: api/Cosmos.Kernel.System.Graphics.Canvas.html#Cosmos_Kernel_System_Graphics_Canvas_DrawCanvas_Cosmos_Kernel_System_Graphics_Canvas_System_Int32_System_Int32_System_Int32_System_Int32_System_Byte_
+  commentId: M:Cosmos.Kernel.System.Graphics.Canvas.DrawCanvas(Cosmos.Kernel.System.Graphics.Canvas,System.Int32,System.Int32,System.Int32,System.Int32,System.Byte)
+  name.vb: DrawCanvas(Canvas, Integer, Integer, Integer, Integer, Byte)
+  fullName: Cosmos.Kernel.System.Graphics.Canvas.DrawCanvas(Cosmos.Kernel.System.Graphics.Canvas, int, int, int, int, byte)
+  fullName.vb: Cosmos.Kernel.System.Graphics.Canvas.DrawCanvas(Cosmos.Kernel.System.Graphics.Canvas, Integer, Integer, Integer, Integer, Byte)
+  nameWithType: Canvas.DrawCanvas(Canvas, int, int, int, int, byte)
+  nameWithType.vb: Canvas.DrawCanvas(Canvas, Integer, Integer, Integer, Integer, Byte)
 - uid: Cosmos.Kernel.System.Graphics.Canvas.DrawCanvas*
   name: DrawCanvas
   href: api/Cosmos.Kernel.System.Graphics.Canvas.html#Cosmos_Kernel_System_Graphics_Canvas_DrawCanvas_
@@ -13608,24 +13617,33 @@ references:
   isSpec: "True"
   fullName: Cosmos.Kernel.System.Graphics.Canvas.DrawFilledRectangle
   nameWithType: Canvas.DrawFilledRectangle
-- uid: Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image,System.Int32,System.Int32,System.Boolean)
-  name: DrawImage(Image, int, int, bool)
-  href: api/Cosmos.Kernel.System.Graphics.Canvas.html#Cosmos_Kernel_System_Graphics_Canvas_DrawImage_Cosmos_Kernel_System_Graphics_Image_System_Int32_System_Int32_System_Boolean_
-  commentId: M:Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image,System.Int32,System.Int32,System.Boolean)
-  name.vb: DrawImage(Image, Integer, Integer, Boolean)
-  fullName: Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image, int, int, bool)
-  fullName.vb: Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image, Integer, Integer, Boolean)
-  nameWithType: Canvas.DrawImage(Image, int, int, bool)
-  nameWithType.vb: Canvas.DrawImage(Image, Integer, Integer, Boolean)
-- uid: Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)
-  name: DrawImage(Image, int, int, int, int, bool)
-  href: api/Cosmos.Kernel.System.Graphics.Canvas.html#Cosmos_Kernel_System_Graphics_Canvas_DrawImage_Cosmos_Kernel_System_Graphics_Image_System_Int32_System_Int32_System_Int32_System_Int32_System_Boolean_
-  commentId: M:Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)
-  name.vb: DrawImage(Image, Integer, Integer, Integer, Integer, Boolean)
-  fullName: Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image, int, int, int, int, bool)
-  fullName.vb: Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image, Integer, Integer, Integer, Integer, Boolean)
-  nameWithType: Canvas.DrawImage(Image, int, int, int, int, bool)
-  nameWithType.vb: Canvas.DrawImage(Image, Integer, Integer, Integer, Integer, Boolean)
+- uid: Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image,System.Drawing.Rectangle,System.Drawing.Rectangle,System.Byte)
+  name: DrawImage(Image, Rectangle, Rectangle, byte)
+  href: api/Cosmos.Kernel.System.Graphics.Canvas.html#Cosmos_Kernel_System_Graphics_Canvas_DrawImage_Cosmos_Kernel_System_Graphics_Image_System_Drawing_Rectangle_System_Drawing_Rectangle_System_Byte_
+  commentId: M:Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image,System.Drawing.Rectangle,System.Drawing.Rectangle,System.Byte)
+  name.vb: DrawImage(Image, Rectangle, Rectangle, Byte)
+  fullName: Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image, System.Drawing.Rectangle, System.Drawing.Rectangle, byte)
+  fullName.vb: Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image, System.Drawing.Rectangle, System.Drawing.Rectangle, Byte)
+  nameWithType: Canvas.DrawImage(Image, Rectangle, Rectangle, byte)
+  nameWithType.vb: Canvas.DrawImage(Image, Rectangle, Rectangle, Byte)
+- uid: Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image,System.Int32,System.Int32,System.Byte)
+  name: DrawImage(Image, int, int, byte)
+  href: api/Cosmos.Kernel.System.Graphics.Canvas.html#Cosmos_Kernel_System_Graphics_Canvas_DrawImage_Cosmos_Kernel_System_Graphics_Image_System_Int32_System_Int32_System_Byte_
+  commentId: M:Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image,System.Int32,System.Int32,System.Byte)
+  name.vb: DrawImage(Image, Integer, Integer, Byte)
+  fullName: Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image, int, int, byte)
+  fullName.vb: Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image, Integer, Integer, Byte)
+  nameWithType: Canvas.DrawImage(Image, int, int, byte)
+  nameWithType.vb: Canvas.DrawImage(Image, Integer, Integer, Byte)
+- uid: Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image,System.Int32,System.Int32,System.Int32,System.Int32,System.Byte)
+  name: DrawImage(Image, int, int, int, int, byte)
+  href: api/Cosmos.Kernel.System.Graphics.Canvas.html#Cosmos_Kernel_System_Graphics_Canvas_DrawImage_Cosmos_Kernel_System_Graphics_Image_System_Int32_System_Int32_System_Int32_System_Int32_System_Byte_
+  commentId: M:Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image,System.Int32,System.Int32,System.Int32,System.Int32,System.Byte)
+  name.vb: DrawImage(Image, Integer, Integer, Integer, Integer, Byte)
+  fullName: Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image, int, int, int, int, byte)
+  fullName.vb: Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image, Integer, Integer, Integer, Integer, Byte)
+  nameWithType: Canvas.DrawImage(Image, int, int, int, int, byte)
+  nameWithType.vb: Canvas.DrawImage(Image, Integer, Integer, Integer, Integer, Byte)
 - uid: Cosmos.Kernel.System.Graphics.Canvas.DrawImage*
   name: DrawImage
   href: api/Cosmos.Kernel.System.Graphics.Canvas.html#Cosmos_Kernel_System_Graphics_Canvas_DrawImage_
@@ -13633,22 +13651,6 @@ references:
   isSpec: "True"
   fullName: Cosmos.Kernel.System.Graphics.Canvas.DrawImage
   nameWithType: Canvas.DrawImage
-- uid: Cosmos.Kernel.System.Graphics.Canvas.DrawImageAlpha(Cosmos.Kernel.System.Graphics.Image,System.Int32,System.Int32,System.Boolean)
-  name: DrawImageAlpha(Image, int, int, bool)
-  href: api/Cosmos.Kernel.System.Graphics.Canvas.html#Cosmos_Kernel_System_Graphics_Canvas_DrawImageAlpha_Cosmos_Kernel_System_Graphics_Image_System_Int32_System_Int32_System_Boolean_
-  commentId: M:Cosmos.Kernel.System.Graphics.Canvas.DrawImageAlpha(Cosmos.Kernel.System.Graphics.Image,System.Int32,System.Int32,System.Boolean)
-  name.vb: DrawImageAlpha(Image, Integer, Integer, Boolean)
-  fullName: Cosmos.Kernel.System.Graphics.Canvas.DrawImageAlpha(Cosmos.Kernel.System.Graphics.Image, int, int, bool)
-  fullName.vb: Cosmos.Kernel.System.Graphics.Canvas.DrawImageAlpha(Cosmos.Kernel.System.Graphics.Image, Integer, Integer, Boolean)
-  nameWithType: Canvas.DrawImageAlpha(Image, int, int, bool)
-  nameWithType.vb: Canvas.DrawImageAlpha(Image, Integer, Integer, Boolean)
-- uid: Cosmos.Kernel.System.Graphics.Canvas.DrawImageAlpha*
-  name: DrawImageAlpha
-  href: api/Cosmos.Kernel.System.Graphics.Canvas.html#Cosmos_Kernel_System_Graphics_Canvas_DrawImageAlpha_
-  commentId: Overload:Cosmos.Kernel.System.Graphics.Canvas.DrawImageAlpha
-  isSpec: "True"
-  fullName: Cosmos.Kernel.System.Graphics.Canvas.DrawImageAlpha
-  nameWithType: Canvas.DrawImageAlpha
 - uid: Cosmos.Kernel.System.Graphics.Canvas.DrawLine(System.Drawing.Color,System.Int32,System.Int32,System.Int32,System.Int32)
   name: DrawLine(Color, int, int, int, int)
   href: api/Cosmos.Kernel.System.Graphics.Canvas.html#Cosmos_Kernel_System_Graphics_Canvas_DrawLine_System_Drawing_Color_System_Int32_System_Int32_System_Int32_System_Int32_

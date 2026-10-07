@@ -164,6 +164,17 @@ for a display that renders 3D.</p>
 up to it, and nothing throws for a coordinate, so coordinates never need
 clamping before a call. A canvas whose display has no mode is zero-sized:
 every primitive clips everything, and nothing throws.</p>
+<p>
+The image and canvas draws (<code>DrawImage</code>, <a class="xref" href="Cosmos.Kernel.System.Graphics.Canvas.html#Cosmos_Kernel_System_Graphics_Canvas_CroppedDrawImage_Cosmos_Kernel_System_Graphics_Image_System_Int32_System_Int32_System_Int32_System_Int32_System_Byte_">CroppedDrawImage(Image, int, int, int, int, byte)</a>,
+<code>DrawCanvas</code>) lay each pixel over the canvas by its alpha times the
+draw's <code>opacity</code>, 255 by default: an opaque pixel at full opacity
+replaces what is there, a transparent one leaves it alone, and one in
+between is blended (source over, straight alpha). Over an opaque pixel
+the result stays opaque; over a translucent or transparent one, as on an
+off-screen canvas cleared to <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.drawing.color.transparent">Transparent</a>, the alphas
+combine, so that canvas can be drawn as a layer later. <code>DrawArray</code>
+is the one draw that copies pixels raw, alpha included.
+</p>
 </div>
 
 
@@ -731,19 +742,20 @@ follows the same rule as <code>memmove</code>.</p>
 
   <a id="Cosmos_Kernel_System_Graphics_Canvas_CroppedDrawImage_" data-uid="Cosmos.Kernel.System.Graphics.Canvas.CroppedDrawImage*"></a>
 
-  <h3 id="Cosmos_Kernel_System_Graphics_Canvas_CroppedDrawImage_Cosmos_Kernel_System_Graphics_Image_System_Int32_System_Int32_System_Int32_System_Int32_System_Boolean_" data-uid="Cosmos.Kernel.System.Graphics.Canvas.CroppedDrawImage(Cosmos.Kernel.System.Graphics.Image,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)">
-  CroppedDrawImage(Image, int, int, int, int, bool)
+  <h3 id="Cosmos_Kernel_System_Graphics_Canvas_CroppedDrawImage_Cosmos_Kernel_System_Graphics_Image_System_Int32_System_Int32_System_Int32_System_Int32_System_Byte_" data-uid="Cosmos.Kernel.System.Graphics.Canvas.CroppedDrawImage(Cosmos.Kernel.System.Graphics.Image,System.Int32,System.Int32,System.Int32,System.Int32,System.Byte)">
+  CroppedDrawImage(Image, int, int, int, int, byte)
   
   </h3>
 
-  <div class="markdown level1 summary"><p>Draws the given image at the specified coordinates, cropping the image
-to fit within the maximum width and height, as row copies of its
-pixels: no blending.</p>
+  <div class="markdown level1 summary"><p>Draws the given image at the specified coordinates, cropped to
+<code class="paramref">maxWidth</code> by <code class="paramref">maxHeight</code>, each pixel
+laid over the canvas by its alpha times <code class="paramref">opacity</code>
+(see the remarks on <a class="xref" href="Cosmos.Kernel.System.Graphics.Canvas.html">Canvas</a>).</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void CroppedDrawImage(Image image, int x, int y, int maxWidth, int maxHeight, bool preventOffBoundPixels = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual void CroppedDrawImage(Image image, int x, int y, int maxWidth, int maxHeight, byte opacity = 255)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -763,8 +775,8 @@ pixels: no blending.</p>
     <dt><code>maxHeight</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
     <dd><p>The maximum height to display the image. If the image exceeds this height, it will be cropped.</p>
 </dd>
-    <dt><code>preventOffBoundPixels</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd><p>Kept for callers written against the earlier contract; the canvas always clips.</p>
+    <dt><code>opacity</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd><p>The opacity of the whole image, from 0 (nothing is drawn) to 255 (its pixels' own alpha).</p>
 </dd>
   </dl>
 
@@ -979,7 +991,8 @@ coordinates, converting each color to ARGB and copying it raw: no blending.</p>
   </h3>
 
   <div class="markdown level1 summary"><p>Draws an array of raw ARGB pixels to the canvas, starting at the given
-coordinates, as row copies: no blending.</p>
+coordinates, as row copies: no blending, what it draws replaces what
+was there, alpha included.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -1025,7 +1038,8 @@ coordinates, as row copies: no blending.</p>
   </h3>
 
   <div class="markdown level1 summary"><p>Draws an array of raw ARGB pixels to the canvas, starting at the given
-coordinates, as row copies: no blending.</p>
+coordinates, as row copies: no blending, what it draws replaces what
+was there, alpha included.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -1068,18 +1082,19 @@ coordinates, as row copies: no blending.</p>
 
   <a id="Cosmos_Kernel_System_Graphics_Canvas_DrawCanvas_" data-uid="Cosmos.Kernel.System.Graphics.Canvas.DrawCanvas*"></a>
 
-  <h3 id="Cosmos_Kernel_System_Graphics_Canvas_DrawCanvas_Cosmos_Kernel_System_Graphics_Canvas_System_Int32_System_Int32_" data-uid="Cosmos.Kernel.System.Graphics.Canvas.DrawCanvas(Cosmos.Kernel.System.Graphics.Canvas,System.Int32,System.Int32)">
-  DrawCanvas(Canvas, int, int)
+  <h3 id="Cosmos_Kernel_System_Graphics_Canvas_DrawCanvas_Cosmos_Kernel_System_Graphics_Canvas_System_Int32_System_Int32_System_Byte_" data-uid="Cosmos.Kernel.System.Graphics.Canvas.DrawCanvas(Cosmos.Kernel.System.Graphics.Canvas,System.Int32,System.Int32,System.Byte)">
+  DrawCanvas(Canvas, int, int, byte)
   
   </h3>
 
-  <div class="markdown level1 summary"><p>Draws another canvas onto this one at the specified position, as row
-copies of its buffer: no blending.</p>
+  <div class="markdown level1 summary"><p>Draws another canvas onto this one at the specified position, each
+pixel laid over this canvas by its alpha times <code class="paramref">opacity</code>
+(see the remarks on <a class="xref" href="Cosmos.Kernel.System.Graphics.Canvas.html">Canvas</a>).</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void DrawCanvas(Canvas canvas, int x, int y)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual void DrawCanvas(Canvas canvas, int x, int y, byte opacity = 255)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1093,6 +1108,9 @@ copies of its buffer: no blending.</p>
     <dt><code>y</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
     <dd><p>The Y coordinate on this canvas.</p>
 </dd>
+    <dt><code>opacity</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd><p>The opacity of the whole source, from 0 (nothing is drawn) to 255 (its pixels' own alpha).</p>
+</dd>
   </dl>
 
 
@@ -1103,6 +1121,66 @@ copies of its buffer: no blending.</p>
 
 
 
+
+
+
+  <a id="Cosmos_Kernel_System_Graphics_Canvas_DrawCanvas_" data-uid="Cosmos.Kernel.System.Graphics.Canvas.DrawCanvas*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Graphics_Canvas_DrawCanvas_Cosmos_Kernel_System_Graphics_Canvas_System_Int32_System_Int32_System_Int32_System_Int32_System_Byte_" data-uid="Cosmos.Kernel.System.Graphics.Canvas.DrawCanvas(Cosmos.Kernel.System.Graphics.Canvas,System.Int32,System.Int32,System.Int32,System.Int32,System.Byte)">
+  DrawCanvas(Canvas, int, int, int, int, byte)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Draws another canvas onto this one stretched to
+<code class="paramref">width</code> by <code class="paramref">height</code>, nearest
+neighbour, each pixel laid over this canvas by its alpha times
+<code class="paramref">opacity</code> (see the remarks on <a class="xref" href="Cosmos.Kernel.System.Graphics.Canvas.html">Canvas</a>).
+Allocates nothing, and a row that repeats an opaque row above it is
+copied from that row, so presenting a smaller off-screen canvas on the
+screen at 150% or 200% costs little more than a plain blit.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void DrawCanvas(Canvas canvas, int x, int y, int width, int height, byte opacity = 255)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>canvas</code> <a class="xref" href="Cosmos.Kernel.System.Graphics.Canvas.html">Canvas</a></dt>
+    <dd><p>The source canvas to draw; not this canvas.</p>
+</dd>
+    <dt><code>x</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The X coordinate on this canvas.</p>
+</dd>
+    <dt><code>y</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The Y coordinate on this canvas.</p>
+</dd>
+    <dt><code>width</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The width the source is stretched to; nothing is drawn when it is not positive.</p>
+</dd>
+    <dt><code>height</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The height the source is stretched to; nothing is drawn when it is not positive.</p>
+</dd>
+    <dt><code>opacity</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd><p>The opacity of the whole source, from 0 (nothing is drawn) to 255 (its pixels' own alpha).</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></dt>
+    <dd><p><code class="paramref">canvas</code> is this canvas.</p>
+</dd>
+  </dl>
 
 
 
@@ -1377,18 +1455,23 @@ primitive follows.</p>
 
   <a id="Cosmos_Kernel_System_Graphics_Canvas_DrawImage_" data-uid="Cosmos.Kernel.System.Graphics.Canvas.DrawImage*"></a>
 
-  <h3 id="Cosmos_Kernel_System_Graphics_Canvas_DrawImage_Cosmos_Kernel_System_Graphics_Image_System_Int32_System_Int32_System_Boolean_" data-uid="Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image,System.Int32,System.Int32,System.Boolean)">
-  DrawImage(Image, int, int, bool)
+  <h3 id="Cosmos_Kernel_System_Graphics_Canvas_DrawImage_Cosmos_Kernel_System_Graphics_Image_System_Drawing_Rectangle_System_Drawing_Rectangle_System_Byte_" data-uid="Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image,System.Drawing.Rectangle,System.Drawing.Rectangle,System.Byte)">
+  DrawImage(Image, Rectangle, Rectangle, byte)
   
   </h3>
 
-  <div class="markdown level1 summary"><p>Draws the given image at the specified coordinates, as row copies of
-its pixels: no blending. <a class="xref" href="Cosmos.Kernel.System.Graphics.Canvas.html#Cosmos_Kernel_System_Graphics_Canvas_DrawImageAlpha_Cosmos_Kernel_System_Graphics_Image_System_Int32_System_Int32_System_Boolean_">DrawImageAlpha(Image, int, int, bool)</a> blends.</p>
+  <div class="markdown level1 summary"><p>Draws the <code class="paramref">source</code> region of an image stretched over
+the <code class="paramref">destination</code> rectangle, nearest neighbour, each
+pixel laid over the canvas by its alpha times <code class="paramref">opacity</code>
+(see the remarks on <a class="xref" href="Cosmos.Kernel.System.Graphics.Canvas.html">Canvas</a>): the draw a nine-slice frame
+is made of. Allocates nothing. The part of <code class="paramref">source</code>
+outside the image draws nothing, and the stretch keeps the proportions
+of the whole of <code class="paramref">source</code>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void DrawImage(Image image, int x, int y, bool preventOffBoundPixels = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual void DrawImage(Image image, Rectangle destination, Rectangle source, byte opacity = 255)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1396,14 +1479,14 @@ its pixels: no blending. <a class="xref" href="Cosmos.Kernel.System.Graphics.Can
     <dt><code>image</code> <a class="xref" href="Cosmos.Kernel.System.Graphics.Image.html">Image</a></dt>
     <dd><p>The image to draw.</p>
 </dd>
-    <dt><code>x</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
-    <dd><p>The origin X coordinate.</p>
+    <dt><code>destination</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.drawing.rectangle">Rectangle</a></dt>
+    <dd><p>Where on the canvas the region lands, and the size it is stretched to; nothing is drawn when it is empty.</p>
 </dd>
-    <dt><code>y</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
-    <dd><p>The origin Y coordinate.</p>
+    <dt><code>source</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.drawing.rectangle">Rectangle</a></dt>
+    <dd><p>The region of the image to draw, in image pixels; nothing is drawn when it is empty.</p>
 </dd>
-    <dt><code>preventOffBoundPixels</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd><p>Kept for callers written against the earlier contract; the canvas always clips.</p>
+    <dt><code>opacity</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd><p>The opacity of the whole region, from 0 (nothing is drawn) to 255 (its pixels' own alpha).</p>
 </dd>
   </dl>
 
@@ -1420,19 +1503,19 @@ its pixels: no blending. <a class="xref" href="Cosmos.Kernel.System.Graphics.Can
 
   <a id="Cosmos_Kernel_System_Graphics_Canvas_DrawImage_" data-uid="Cosmos.Kernel.System.Graphics.Canvas.DrawImage*"></a>
 
-  <h3 id="Cosmos_Kernel_System_Graphics_Canvas_DrawImage_Cosmos_Kernel_System_Graphics_Image_System_Int32_System_Int32_System_Int32_System_Int32_System_Boolean_" data-uid="Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)">
-  DrawImage(Image, int, int, int, int, bool)
+  <h3 id="Cosmos_Kernel_System_Graphics_Canvas_DrawImage_Cosmos_Kernel_System_Graphics_Image_System_Int32_System_Int32_System_Byte_" data-uid="Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image,System.Int32,System.Int32,System.Byte)">
+  DrawImage(Image, int, int, byte)
   
   </h3>
 
-  <div class="markdown level1 summary"><p>Draws a bitmap, applying scaling to the given image. The scaled pixels
-are drawn through <a class="xref" href="Cosmos.Kernel.System.Graphics.Canvas.html#Cosmos_Kernel_System_Graphics_Canvas_DrawPoint_System_Drawing_Color_System_Int32_System_Int32_">DrawPoint(Color, int, int)</a>, so a
-translucent pixel blends over what is there.</p>
+  <div class="markdown level1 summary"><p>Draws the given image at the specified coordinates, each pixel laid
+over the canvas by its alpha times <code class="paramref">opacity</code> (see the
+remarks on <a class="xref" href="Cosmos.Kernel.System.Graphics.Canvas.html">Canvas</a>).</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void DrawImage(Image image, int x, int y, int w, int h, bool preventOffBoundPixels = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual void DrawImage(Image image, int x, int y, byte opacity = 255)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1441,19 +1524,13 @@ translucent pixel blends over what is there.</p>
     <dd><p>The image to draw.</p>
 </dd>
     <dt><code>x</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
-    <dd><p>The X coordinate.</p>
+    <dd><p>The origin X coordinate.</p>
 </dd>
     <dt><code>y</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
-    <dd><p>The Y coordinate.</p>
+    <dd><p>The origin Y coordinate.</p>
 </dd>
-    <dt><code>w</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
-    <dd><p>The desired width to scale the image to before drawing.</p>
-</dd>
-    <dt><code>h</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
-    <dd><p>The desired height to scale the image to before drawing</p>
-</dd>
-    <dt><code>preventOffBoundPixels</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd><p>Prevents drawing outside the bounds of the canvas.</p>
+    <dt><code>opacity</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd><p>The opacity of the whole image, from 0 (nothing is drawn) to 255 (its pixels' own alpha).</p>
 </dd>
   </dl>
 
@@ -1468,21 +1545,22 @@ translucent pixel blends over what is there.</p>
 
 
 
-  <a id="Cosmos_Kernel_System_Graphics_Canvas_DrawImageAlpha_" data-uid="Cosmos.Kernel.System.Graphics.Canvas.DrawImageAlpha*"></a>
+  <a id="Cosmos_Kernel_System_Graphics_Canvas_DrawImage_" data-uid="Cosmos.Kernel.System.Graphics.Canvas.DrawImage*"></a>
 
-  <h3 id="Cosmos_Kernel_System_Graphics_Canvas_DrawImageAlpha_Cosmos_Kernel_System_Graphics_Image_System_Int32_System_Int32_System_Boolean_" data-uid="Cosmos.Kernel.System.Graphics.Canvas.DrawImageAlpha(Cosmos.Kernel.System.Graphics.Image,System.Int32,System.Int32,System.Boolean)">
-  DrawImageAlpha(Image, int, int, bool)
+  <h3 id="Cosmos_Kernel_System_Graphics_Canvas_DrawImage_Cosmos_Kernel_System_Graphics_Image_System_Int32_System_Int32_System_Int32_System_Int32_System_Byte_" data-uid="Cosmos.Kernel.System.Graphics.Canvas.DrawImage(Cosmos.Kernel.System.Graphics.Image,System.Int32,System.Int32,System.Int32,System.Int32,System.Byte)">
+  DrawImage(Image, int, int, int, int, byte)
   
   </h3>
 
-  <div class="markdown level1 summary"><p>Draws an image with alpha blending: every pixel goes through
-<a class="xref" href="Cosmos.Kernel.System.Graphics.Canvas.html#Cosmos_Kernel_System_Graphics_Canvas_DrawPoint_System_Drawing_Color_System_Int32_System_Int32_">DrawPoint(Color, int, int)</a>, so a translucent pixel
-blends over what is there and a transparent one leaves it alone.</p>
+  <div class="markdown level1 summary"><p>Draws an image stretched to <code class="paramref">width</code> by
+<code class="paramref">height</code>, nearest neighbour, each pixel laid over the
+canvas by its alpha times <code class="paramref">opacity</code> (see the remarks
+on <a class="xref" href="Cosmos.Kernel.System.Graphics.Canvas.html">Canvas</a>). Allocates nothing.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void DrawImageAlpha(Image image, int x, int y, bool preventOffBoundPixels = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual void DrawImage(Image image, int x, int y, int width, int height, byte opacity = 255)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1496,8 +1574,14 @@ blends over what is there and a transparent one leaves it alone.</p>
     <dt><code>y</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
     <dd><p>The Y coordinate.</p>
 </dd>
-    <dt><code>preventOffBoundPixels</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd><p>Prevents drawing outside the bounds of the canvas.</p>
+    <dt><code>width</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The width the image is stretched to; nothing is drawn when it is not positive.</p>
+</dd>
+    <dt><code>height</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The height the image is stretched to; nothing is drawn when it is not positive.</p>
+</dd>
+    <dt><code>opacity</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd><p>The opacity of the whole image, from 0 (nothing is drawn) to 255 (its pixels' own alpha).</p>
 </dd>
   </dl>
 
@@ -1568,7 +1652,8 @@ blends over what is there and a transparent one leaves it alone.</p>
   </h3>
 
   <div class="markdown level1 summary"><p>Sets the pixel at the given coordinates to the specified <code class="paramref">color</code>,
-blending it over the existing pixel when it is translucent.</p>
+blending it over the existing pixel when it is translucent, as the
+image and canvas draws do.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -1607,7 +1692,7 @@ blending it over the existing pixel when it is translucent.</p>
   
   </h3>
 
-  <div class="markdown level1 summary"><p>Sets the pixel at the given coordinates to the specified <code class="paramref">color</code>. without ToArgb()</p>
+  <div class="markdown level1 summary"><p>Sets the pixel at the given coordinates to the specified <code class="paramref">color</code>, without ToArgb().</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 

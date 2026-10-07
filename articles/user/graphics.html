@@ -282,7 +282,7 @@ canvas.DrawImage(bitmap, 100, 150, 128, 128);
 
 canvas.Display();
 </code></pre>
-<p>Two rules decide what happens to a pixel's alpha. The unscaled draws, <code>DrawImage(image, x, y)</code>, <code>CroppedDrawImage</code>, <code>DrawArray</code> and <code>DrawCanvas</code>, copy pixels row by row into the canvas, alpha channel included, with no blending: they are the fast path, and what they draw replaces what was there. The scaled overload <code>DrawImage(image, x, y, width, height)</code> and <code>DrawImageAlpha</code> draw pixel by pixel and blend: a translucent pixel blends over the canvas and a transparent one leaves it alone.</p>
+<p>Every image and canvas draw (<code>DrawImage</code>, <code>CroppedDrawImage</code> and <code>DrawCanvas</code>, plain or stretched) lays each pixel over the canvas by its alpha: an opaque pixel replaces what is there, a transparent one leaves it alone, and one in between mixes the two colors, the result staying opaque over an opaque canvas. Each of them takes an optional last argument, <code>opacity</code>, from 0 (nothing is drawn) to the default 255 (the pixels' own alpha), that fades the whole draw. Over a pixel that is itself translucent or transparent the alphas combine, so an off-screen canvas cleared to <code>Color.Transparent</code> collects what is drawn on it with its transparency intact, ready to be drawn as a layer (see <a href="#off-screen-canvases">Off-screen canvases</a>). A translucent <code>DrawPoint</code> blends the same way. <code>DrawArray</code> is the one draw that copies pixels raw, alpha included, replacing what was there. None of these draws allocate.</p>
 <p>More usefully, <code>Bitmap</code> can load an uncompressed 24-bit or 32-bit <strong>BMP file</strong> through standard <code>System.IO</code>, for example from a FAT disk mounted as shown in the <a href="filesystem.html">File System</a> article:</p>
 <pre><code class="lang-csharp">/* logo.bmp is a 24-bit BMP on the FAT partition mounted at /mnt */
 Bitmap logo = new Bitmap(@&quot;/mnt/logo.bmp&quot;);
@@ -295,7 +295,7 @@ canvas.Display();
 </code></pre>
 <!-- screenshot: the 2x2 bitmap raw and scaled, plus the logo loaded from disk centered on screen -->
 <p><img src="images/graphics-images.png" alt="Drawing images"></p>
-<p><strong>PNG</strong> files work the same way through the <code>Png</code> class, also an <code>Image</code>, so it goes wherever a <code>Bitmap</code> goes. The whole format is supported (grayscale, truecolor and palette, with or without alpha, interlaced or not), decoded by pure managed code (see the <a href="../../credits.html">Credits</a> page). Drawn through the scaled overload, its transparent pixels blend with what is already on the canvas:</p>
+<p><strong>PNG</strong> files work the same way through the <code>Png</code> class, also an <code>Image</code>, so it goes wherever a <code>Bitmap</code> goes. The whole format is supported (grayscale, truecolor and palette, with or without alpha, interlaced or not), decoded by pure managed code (see the <a href="../../credits.html">Credits</a> page). Its transparent pixels blend with what is already on the canvas:</p>
 <pre><code class="lang-csharp">/* logo.png is a PNG with transparency on the FAT partition mounted at /mnt */
 Png logo = new Png(&quot;/mnt/logo.png&quot;);
 
@@ -308,7 +308,7 @@ canvas.Display();
 </code></pre>
 <!-- screenshot: the Cosmos logo PNG decoded from disk, scaled and alpha-blended over the background -->
 <p><img src="images/graphics-png.png" alt="Drawing a PNG"></p>
-<p><code>DrawImageAlpha</code> draws unscaled with per-pixel alpha blending, and <code>canvas.GetImage(x, y, width, height)</code> does the reverse: it copies a region of the canvas back into a <code>Bitmap</code>.</p>
+<p>A 32-bit BMP whose fourth byte is 0 in every pixel, as many writers save one, has no alpha: it loads opaque. <code>DrawImage(image, destination, source)</code> stretches only the <code>source</code> region of the image over the <code>destination</code> rectangle, both <code>System.Drawing.Rectangle</code>s, which is what a window frame cut from one skin image into corners, edges and a middle (a nine-slice frame) is drawn with. <code>canvas.GetImage(x, y, width, height)</code> does the reverse of a draw: it copies a region of the canvas back into a <code>Bitmap</code>.</p>
 <h2 id="off-screen-canvases">Off-screen canvases</h2>
 <p>A <code>Canvas</code> does not have to be the screen. Constructing one with a size gives you a memory-backed canvas with the exact same drawing API: compose a tile or sprite once, then blit it to the screen with <code>DrawCanvas</code> as many times as you like:</p>
 <pre><code class="lang-csharp">Canvas canvas = Canvas.GetFullScreen();
@@ -328,6 +328,25 @@ canvas.Display();
 </code></pre>
 <!-- screenshot: the composed 220x220 tile blitted in the middle of the screen -->
 <p><img src="images/graphics-offscreen.png" alt="Off-screen canvas"></p>
+<p>The tile above is opaque, so it lands as a square. To compose layers instead, as a window manager does, clear the off-screen canvas to <code>Color.Transparent</code> and draw on it: <code>DrawCanvas</code> then lets its transparent pixels show what is under them, blends its translucent ones, and fades the whole layer by the optional <code>opacity</code>:</p>
+<pre><code class="lang-csharp">/* A window with a translucent title bar, faded to 80% over the desktop */
+Canvas window = new Canvas(300, 200);
+window.Clear(Color.Transparent);
+window.DrawFilledRectangle(Color.FromArgb(160, 0, 0, 128), 0, 0, 300, 24);
+window.DrawFilledRectangle(Color.Silver, 0, 24, 300, 176);
+
+canvas.DrawCanvas(window, 100, 100, 204);
+</code></pre>
+<p><code>DrawCanvas(canvas, x, y, width, height)</code> stretches the source to <code>width</code> by <code>height</code>, nearest neighbour, without allocating. Drawing a whole interface on a smaller off-screen canvas and stretching it onto the screen once per frame is how to scale it to 150% or 200%: a 1280x720 canvas stretched to 1920x1080 is 150%, and a row that repeats an opaque row above it is copied rather than sampled again:</p>
+<pre><code class="lang-csharp">Canvas screen = Canvas.GetFullScreen();
+Canvas ui = new Canvas(screen.Width * 2 / 3, screen.Height * 2 / 3);
+
+/* ...draw the interface on ui at its own size... */
+
+screen.DrawCanvas(ui, 0, 0, screen.Width, screen.Height);
+screen.Display();
+</code></pre>
+<p>Pointer coordinates then need the same scale: <code>MouseManager.SetScreenSize(ui.Width, ui.Height)</code> makes the mouse report positions on <code>ui</code> rather than on the screen.</p>
 <h2 id="reading-pixels-back">Reading pixels back</h2>
 <p><code>GetPointColor</code> returns the color of a pixel already on the canvas:</p>
 <pre><code class="lang-csharp">canvas.DrawPoint(Color.Red, 69, 69);
