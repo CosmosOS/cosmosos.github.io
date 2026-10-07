@@ -289,8 +289,8 @@ category, then driver, and each file's namespace follows its folder:</p>
 </code></pre>
 <p>The bus kind is the one the driver matches on, named after its match type:
 <code>Pci</code>, <code>Platform</code>, <code>Ps2</code>, <code>Usb</code> or <code>Virtio</code>. The category is <code>Bus</code> for a bus
-driver and otherwise names what the driver publishes: <code>Display</code>, <code>Input</code> (a
-keyboard or pointer), <code>Network</code> or <code>Storage</code> (a block device). The driver
+driver and otherwise names what the driver publishes: <code>Audio</code>, <code>Display</code>,
+<code>Input</code> (a keyboard or pointer), <code>Network</code> or <code>Storage</code> (a block device). The driver
 folder is the class name without <code>Driver</code>, unless a type inside the folder
 already has that name, since a namespace must not share its name with one of
 its types: the transport drivers sit in <code>VirtioPci</code> and <code>VirtioMmio</code>, beside
@@ -309,6 +309,7 @@ name appears twice in the tree:</p>
   Timers/                    ← internal: TickSource, TimerEntry
   Internal/                  ← the LibraryInitializer ILC finds by full name
   Devices/                   ← what a device is, a folder per category
+    Audio/                   ← IAudioOutput, AudioFormat, AudioSink, AudioConsumer
     Display/                 ← IDisplay, its facets, DisplayMode, DisplaySink, DisplayConsumer, FirmwareDisplay
     Input/
     Network/                 ← INetworkInterface, NetworkSink, NetworkConsumer, MacAddress

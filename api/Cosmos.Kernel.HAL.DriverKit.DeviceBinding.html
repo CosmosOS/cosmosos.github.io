@@ -694,6 +694,51 @@ port range becomes a window over <code>in</code> and <code>out</code>.</p>
 
 
 
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishAudio_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.PublishAudio*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishAudio_Cosmos_Kernel_HAL_Devices_Audio_IAudioOutput_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.PublishAudio(Cosmos.Kernel.HAL.Devices.Audio.IAudioOutput)">
+  PublishAudio(IAudioOutput)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Publishes an audio output under <a class="xref" href="Cosmos.Kernel.HAL.Devices.Audio.IAudioOutput.html#Cosmos_Kernel_HAL_Devices_Audio_IAudioOutput_Name">Name</a>. The ring's audio manager, when present, receives it at once.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public AudioSink PublishAudio(IAudioOutput output)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>output</code> <a class="xref" href="Cosmos.Kernel.HAL.Devices.Audio.IAudioOutput.html">IAudioOutput</a></dt>
+    <dd><p>The driver's audio output contract.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Audio.AudioSink.html">AudioSink</a></dt>
+    <dd><p>The sink the driver reports buffer completions and format changes to.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The binding is being torn down, or the caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
   <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishBlockDevice_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.PublishBlockDevice*"></a>
 
   <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishBlockDevice_Cosmos_Kernel_HAL_Devices_Storage_IBlockDevice_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.PublishBlockDevice(Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice)">

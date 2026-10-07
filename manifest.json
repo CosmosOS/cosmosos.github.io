@@ -139,6 +139,76 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.HAL.Devices.Audio.AudioBitDepth.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.HAL.Devices.Audio.AudioBitDepth.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.HAL.Devices.Audio.AudioBitDepth",
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.HAL.Devices.Audio.AudioBitDepth.yml\" sourcestartlinenumber=\"1\">Bits per sample in one channel. The value is the channel's size in\nbytes, so <code>(int)depth</code> is what a stride calculation needs.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.HAL.Devices.Audio.AudioFormat.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.HAL.Devices.Audio.AudioFormat.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.HAL.Devices.Audio.AudioFormat",
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.HAL.Devices.Audio.AudioFormat.yml\" sourcestartlinenumber=\"1\">The layout of one audio frame: how many bits a channel holds, how many\nchannels a frame interleaves, and whether the samples are signed. A\nformat is not a rate: <xref href=\"Cosmos.Kernel.HAL.Devices.Audio.IAudioOutput.SampleRate\" data-throw-if-not-resolved=\"false\"></xref> carries that,\nbecause the same layout plays at every rate the codec accepts.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.HAL.Devices.Audio.AudioSink.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.HAL.Devices.Audio.AudioSink.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.HAL.Devices.Audio.AudioSink",
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.HAL.Devices.Audio.AudioSink.yml\" sourcestartlinenumber=\"1\">Where an audio driver reports that it drained a buffer or changed\nformat, returned by <xref href=\"Cosmos.Kernel.HAL.DriverKit.DeviceBinding.PublishAudio(Cosmos.Kernel.HAL.Devices.Audio.IAudioOutput)\" data-throw-if-not-resolved=\"false\"></xref>. Kit-owned;\nsee <xref href=\"Cosmos.Kernel.HAL.Devices.Input.KeyboardSink\" data-throw-if-not-resolved=\"false\"></xref>. Allocation-free; any context, so the\ndriver may report a completion straight from its interrupt handler.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.HAL.Devices.Audio.IAudioOutput.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.HAL.Devices.Audio.IAudioOutput.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.HAL.Devices.Audio.IAudioOutput",
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.HAL.Devices.Audio.IAudioOutput.yml\" sourcestartlinenumber=\"1\">What an audio output driver implements and hands to\n<xref href=\"Cosmos.Kernel.HAL.DriverKit.DeviceBinding.PublishAudio(Cosmos.Kernel.HAL.Devices.Audio.IAudioOutput)\" data-throw-if-not-resolved=\"false\"></xref>. The kernel pushes frames in\nwith <xref href=\"Cosmos.Kernel.HAL.Devices.Audio.IAudioOutput.Write(System.ReadOnlySpan%7bSystem.Byte%7d)\" data-throw-if-not-resolved=\"false\"></xref> and the device drains them on its own clock,\nthe mirror of <xref href=\"Cosmos.Kernel.HAL.Devices.Network.INetworkInterface.Transmit(System.ReadOnlySpan%7bSystem.Byte%7d)\" data-throw-if-not-resolved=\"false\"></xref>: the driver owns\nthe ring, the caller never blocks on it, and a short write is how the\ndevice says it is full. The driver reports the room it frees through\n<xref href=\"Cosmos.Kernel.HAL.Devices.Audio.AudioSink.BufferCompleted\" data-throw-if-not-resolved=\"false\"></xref>. Called by the ring in thread\ncontext.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.HAL.Devices.Audio.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.HAL.Devices.Audio.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.HAL.Devices.Audio",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Cosmos.Kernel.HAL.Devices.Display.DisplayMode.yml",
       "output": {
         ".html": {
@@ -1633,6 +1703,160 @@
       "Uid": null,
       "IsMRef": true,
       "Title": null,
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.System.Audio.AudioDevice.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.System.Audio.AudioDevice.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.System.Audio.AudioDevice",
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.System.Audio.AudioDevice.yml\" sourcestartlinenumber=\"1\">One published audio output as the ring sees it: the name the driver gave\nit, which driver published it, where it sits in the device tree, and its\nformat read live from the driver. Created by\n<xref href=\"Cosmos.Kernel.System.Audio.KitAudioConsumer\" data-throw-if-not-resolved=\"false\"></xref> when the kit publishes an output and kept\nin <xref href=\"Cosmos.Kernel.System.Audio.AudioManager\" data-throw-if-not-resolved=\"false\"></xref>'s list until it is withdrawn. Once\nwithdrawn every call is a no-op and the format reads empty; the identity\nmembers are copied at creation, so they stay readable.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.System.Audio.AudioManager.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.System.Audio.AudioManager.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.System.Audio.AudioManager",
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.System.Audio.AudioManager.yml\" sourcestartlinenumber=\"1\">The audio outputs the kit published, and which one is primary. Every\noutput a kit driver publishes is listed by the manager's\n<xref href=\"Cosmos.Kernel.System.Audio.KitAudioConsumer\" data-throw-if-not-resolved=\"false\"></xref> from the kit worker and dropped when it is\nwithdrawn. <xref href=\"Cosmos.Kernel.System.Audio.AudioManager.Play(Cosmos.Kernel.System.Audio.AudioStream)\" data-throw-if-not-resolved=\"false\"></xref> is the short way to put a stream through\nthe primary output. Reads answer honestly before <xref href=\"Cosmos.Kernel.System.Audio.AudioManager.Initialize\" data-throw-if-not-resolved=\"false\"></xref>\nran and when audio is compiled out: 0, null, false.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.System.Audio.AudioPlayback.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.System.Audio.AudioPlayback.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.System.Audio.AudioPlayback",
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.System.Audio.AudioPlayback.yml\" sourcestartlinenumber=\"1\">An <xref href=\"Cosmos.Kernel.System.Audio.AudioPlayer\" data-throw-if-not-resolved=\"false\"></xref> running on a thread of its own, so the caller\ngets on with its work while the audio plays. The thread wakes a few times\nper ring to top the device up and sleeps in between, which is why a kernel\nkeeps its console, its timers and its drivers while a file plays.</p>\n<p>Needs the scheduler running: without it there is no second thread to\nput this on and <xref href=\"Cosmos.Kernel.System.Audio.AudioPlayback.TryStart(Cosmos.Kernel.System.Audio.AudioDevice%2cCosmos.Kernel.System.Audio.AudioStream%2cSystem.IDisposable%2cCosmos.Kernel.System.Audio.AudioPlayback%40)\" data-throw-if-not-resolved=\"false\"></xref> says so, leaving the caller to play\nthe stream inline through <xref href=\"Cosmos.Kernel.System.Audio.AudioPlayer.Play(Cosmos.Kernel.System.Audio.AudioStream)\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n<p>The stream is read from the playback thread from here on. A stream\nover a filesystem is therefore read while the rest of the kernel runs,\nand the filesystem layer has no locking of its own: a caller that streams\noff a volume should leave that volume alone until the playback ends.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.System.Audio.AudioPlaybackState.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.System.Audio.AudioPlaybackState.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.System.Audio.AudioPlaybackState",
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.System.Audio.AudioPlaybackState.yml\" sourcestartlinenumber=\"1\">Where a background <xref href=\"Cosmos.Kernel.System.Audio.AudioPlayback\" data-throw-if-not-resolved=\"false\"></xref> has got to.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.System.Audio.AudioPlayer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.System.Audio.AudioPlayer.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.System.Audio.AudioPlayer",
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.System.Audio.AudioPlayer.yml\" sourcestartlinenumber=\"1\">Pushes an <xref href=\"Cosmos.Kernel.System.Audio.AudioStream\" data-throw-if-not-resolved=\"false\"></xref> into an <xref href=\"Cosmos.Kernel.System.Audio.AudioDevice\" data-throw-if-not-resolved=\"false\"></xref>\nuntil the stream runs out. The device owns the ring and drains it on the\ncodec's clock; the player only keeps it fed, which is why it neither\nallocates per buffer nor runs from an interrupt.</p>\n<p>Thread context: <xref href=\"Cosmos.Kernel.System.Audio.AudioPlayer.Play(Cosmos.Kernel.System.Audio.AudioStream)\" data-throw-if-not-resolved=\"false\"></xref> blocks for the length of the\naudio, and claims the output for as long as it runs, so two players\ncannot interleave frames into one ring.\n<xref href=\"Cosmos.Kernel.System.Audio.AudioPlayback.TryStart(Cosmos.Kernel.System.Audio.AudioDevice%2cCosmos.Kernel.System.Audio.AudioStream%2cSystem.IDisposable%2cCosmos.Kernel.System.Audio.AudioPlayback%40)\" data-throw-if-not-resolved=\"false\"></xref> runs it on a thread of its own for a\ncaller that must stay responsive; <xref href=\"Cosmos.Kernel.System.Audio.AudioPlayer.RequestStop\" data-throw-if-not-resolved=\"false\"></xref> ends it early\nand is safe from any context.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.System.Audio.AudioStream.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.System.Audio.AudioStream.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.System.Audio.AudioStream",
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.System.Audio.AudioStream.yml\" sourcestartlinenumber=\"1\">A source of interleaved audio frames. The base class carries no length\nand no position on purpose: a stream may be endless, as a mixer or a\ncapture device is. <xref href=\"Cosmos.Kernel.System.Audio.SeekableAudioStream\" data-throw-if-not-resolved=\"false\"></xref> adds both for the\nfinite ones.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.System.Audio.MemoryAudioStream.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.System.Audio.MemoryAudioStream.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.System.Audio.MemoryAudioStream",
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.System.Audio.MemoryAudioStream.yml\" sourcestartlinenumber=\"1\">A finite stream over frames already in memory, and the RIFF/WAVE reader\nthat builds one from a <code>.wav</code> file. Only uncompressed LPCM is read,\nwhich is what a <code>.wav</code> almost always carries.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.System.Audio.SeekableAudioStream.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.System.Audio.SeekableAudioStream.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.System.Audio.SeekableAudioStream",
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.System.Audio.SeekableAudioStream.yml\" sourcestartlinenumber=\"1\">A finite audio stream whose position can be read and moved.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.System.Audio.WaveAudioStream.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.System.Audio.WaveAudioStream.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.System.Audio.WaveAudioStream",
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.System.Audio.WaveAudioStream.yml\" sourcestartlinenumber=\"1\">A RIFF/WAVE stream read straight off a volume, a block at a time. The\nchunk list is walked over the file handle rather than over a buffer, so\nnothing larger than one chunk header is held to find the frames, and a\nfile of any size plays in a fixed amount of memory. The handle stays open\nfor the life of the stream and belongs to whoever opened it.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.System.Audio.WaveHeader.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.System.Audio.WaveHeader.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.System.Audio.WaveHeader",
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.System.Audio.WaveHeader.yml\" sourcestartlinenumber=\"1\">What the reader needs out of a RIFF/WAVE file's chunk list: the frame\nlayout, the rate, and where the frames themselves begin and end. A\n<code>.wav</code> is a chunk list rather than a fixed header, so the chunks\nbetween <code>fmt </code> and <code>data</code> are walked rather than assumed away:\na file carrying a <code>LIST</code> or <code>fact</code> chunk reads like any other.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.System.Audio.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.System.Audio.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.System.Audio",
       "Summary": null
     },
     {

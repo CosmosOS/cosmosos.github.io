@@ -2,11 +2,11 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Namespace Cosmos.Kernel.HAL.Devices | Cosmos Gen 3 </title>
+      <title>Enum AudioPlaybackState | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Namespace Cosmos.Kernel.HAL.Devices | Cosmos Gen 3 ">
+      <meta name="title" content="Enum AudioPlaybackState | Cosmos Gen 3 ">
       
-      
+      <meta name="description" content="Where a background  has got to.">
       <link rel="icon" href="../images/favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -84,36 +84,59 @@
           <nav id="breadcrumb"></nav>
         </div>
 
-        <article data-uid="Cosmos.Kernel.HAL.Devices">
+        <article data-uid="Cosmos.Kernel.System.Audio.AudioPlaybackState">
 
-  <h1 id="Cosmos_Kernel_HAL_Devices" data-uid="Cosmos.Kernel.HAL.Devices" class="text-break">Namespace Cosmos.Kernel.HAL.Devices</h1>
-  <div class="markdown level0 summary"></div>
-  <div class="markdown level0 conceptual"></div>
-  <div class="markdown level0 remarks"></div>
 
-    <h3 id="namespaces">
-Namespaces
-</h3>
-    <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Audio.html">Cosmos.Kernel.HAL.Devices.Audio</a></dt>
-      <dd></dd>
-    </dl>
-    <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Display.html">Cosmos.Kernel.HAL.Devices.Display</a></dt>
-      <dd></dd>
-    </dl>
-    <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Input.html">Cosmos.Kernel.HAL.Devices.Input</a></dt>
-      <dd></dd>
-    </dl>
-    <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Network.html">Cosmos.Kernel.HAL.Devices.Network</a></dt>
-      <dd></dd>
-    </dl>
-    <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Storage.html">Cosmos.Kernel.HAL.Devices.Storage</a></dt>
-      <dd></dd>
-    </dl>
+
+
+  <h1 id="Cosmos_Kernel_System_Audio_AudioPlaybackState" data-uid="Cosmos.Kernel.System.Audio.AudioPlaybackState" class="text-break">
+Enum AudioPlaybackState  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><span class="xref">Cosmos</span>.<a class="xref" href="Cosmos.Kernel.html">Kernel</a>.<a class="xref" href="Cosmos.Kernel.System.html">System</a>.<a class="xref" href="Cosmos.Kernel.System.Audio.html">Audio</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Cosmos.Kernel.System.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Where a background <a class="xref" href="Cosmos.Kernel.System.Audio.AudioPlayback.html">AudioPlayback</a> has got to.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public enum AudioPlaybackState : byte</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+  <h2 id="fields">Fields
+</h2>
+  <dl class="parameters">
+    <dt id="Cosmos_Kernel_System_Audio_AudioPlaybackState_Completed"><code>Completed = 1</code></dt>
+  
+  <dd><p>The stream was played to its end and the output drained it.</p>
+</dd>
+    <dt id="Cosmos_Kernel_System_Audio_AudioPlaybackState_Failed"><code>Failed = 3</code></dt>
+  
+  <dd><p>The output refused the stream's format, was withdrawn or busy, or
+reading the stream threw. Nothing, or only part of the stream, played.</p>
+</dd>
+    <dt id="Cosmos_Kernel_System_Audio_AudioPlaybackState_Playing"><code>Playing = 0</code></dt>
+  
+  <dd><p>The thread is still feeding the output.</p>
+</dd>
+    <dt id="Cosmos_Kernel_System_Audio_AudioPlaybackState_Stopped"><code>Stopped = 2</code></dt>
+  
+  <dd><p><a class="xref" href="Cosmos.Kernel.System.Audio.AudioPlayback.html#Cosmos_Kernel_System_Audio_AudioPlayback_Stop">Stop()</a> ended it early, so what the ring
+still held was dropped rather than played.</p>
+</dd>
+  </dl>
+
 
 
 </article>

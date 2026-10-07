@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Namespace Cosmos.Kernel.HAL.Devices | Cosmos Gen 3 </title>
+      <title>Namespace Cosmos.Kernel.HAL.Devices.Audio | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Namespace Cosmos.Kernel.HAL.Devices | Cosmos Gen 3 ">
+      <meta name="title" content="Namespace Cosmos.Kernel.HAL.Devices.Audio | Cosmos Gen 3 ">
       
       
       <link rel="icon" href="../images/favicon.ico">
@@ -84,35 +84,58 @@
           <nav id="breadcrumb"></nav>
         </div>
 
-        <article data-uid="Cosmos.Kernel.HAL.Devices">
+        <article data-uid="Cosmos.Kernel.HAL.Devices.Audio">
 
-  <h1 id="Cosmos_Kernel_HAL_Devices" data-uid="Cosmos.Kernel.HAL.Devices" class="text-break">Namespace Cosmos.Kernel.HAL.Devices</h1>
+  <h1 id="Cosmos_Kernel_HAL_Devices_Audio" data-uid="Cosmos.Kernel.HAL.Devices.Audio" class="text-break">Namespace Cosmos.Kernel.HAL.Devices.Audio</h1>
   <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
   <div class="markdown level0 remarks"></div>
 
-    <h3 id="namespaces">
-Namespaces
+    <h3 id="classes">
+Classes
 </h3>
     <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Audio.html">Cosmos.Kernel.HAL.Devices.Audio</a></dt>
-      <dd></dd>
+      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Audio.AudioSink.html">AudioSink</a></dt>
+      <dd><p>Where an audio driver reports that it drained a buffer or changed
+format, returned by <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.html#Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishAudio_Cosmos_Kernel_HAL_Devices_Audio_IAudioOutput_">PublishAudio(IAudioOutput)</a>. Kit-owned;
+see <a class="xref" href="Cosmos.Kernel.HAL.Devices.Input.KeyboardSink.html">KeyboardSink</a>. Allocation-free; any context, so the
+driver may report a completion straight from its interrupt handler.</p>
+</dd>
     </dl>
+    <h3 id="structs">
+Structs
+</h3>
     <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Display.html">Cosmos.Kernel.HAL.Devices.Display</a></dt>
-      <dd></dd>
+      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Audio.AudioFormat.html">AudioFormat</a></dt>
+      <dd><p>The layout of one audio frame: how many bits a channel holds, how many
+channels a frame interleaves, and whether the samples are signed. A
+format is not a rate: <a class="xref" href="Cosmos.Kernel.HAL.Devices.Audio.IAudioOutput.html#Cosmos_Kernel_HAL_Devices_Audio_IAudioOutput_SampleRate">SampleRate</a> carries that,
+because the same layout plays at every rate the codec accepts.</p>
+</dd>
     </dl>
+    <h3 id="interfaces">
+Interfaces
+</h3>
     <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Input.html">Cosmos.Kernel.HAL.Devices.Input</a></dt>
-      <dd></dd>
+      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Audio.IAudioOutput.html">IAudioOutput</a></dt>
+      <dd><p>What an audio output driver implements and hands to
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.html#Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishAudio_Cosmos_Kernel_HAL_Devices_Audio_IAudioOutput_">PublishAudio(IAudioOutput)</a>. The kernel pushes frames in
+with <a class="xref" href="Cosmos.Kernel.HAL.Devices.Audio.IAudioOutput.html#Cosmos_Kernel_HAL_Devices_Audio_IAudioOutput_Write_System_ReadOnlySpan_System_Byte__">Write(ReadOnlySpan&lt;byte&gt;)</a> and the device drains them on its own clock,
+the mirror of <a class="xref" href="Cosmos.Kernel.HAL.Devices.Network.INetworkInterface.html#Cosmos_Kernel_HAL_Devices_Network_INetworkInterface_Transmit_System_ReadOnlySpan_System_Byte__">Transmit(ReadOnlySpan&lt;byte&gt;)</a>: the driver owns
+the ring, the caller never blocks on it, and a short write is how the
+device says it is full. The driver reports the room it frees through
+<a class="xref" href="Cosmos.Kernel.HAL.Devices.Audio.AudioSink.html#Cosmos_Kernel_HAL_Devices_Audio_AudioSink_BufferCompleted">BufferCompleted()</a>. Called by the ring in thread
+context.</p>
+</dd>
     </dl>
+    <h3 id="enums">
+Enums
+</h3>
     <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Network.html">Cosmos.Kernel.HAL.Devices.Network</a></dt>
-      <dd></dd>
-    </dl>
-    <dl class="jumplist">
-      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Storage.html">Cosmos.Kernel.HAL.Devices.Storage</a></dt>
-      <dd></dd>
+      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Audio.AudioBitDepth.html">AudioBitDepth</a></dt>
+      <dd><p>Bits per sample in one channel. The value is the channel's size in
+bytes, so <code>(int)depth</code> is what a stride calculation needs.</p>
+</dd>
     </dl>
 
 

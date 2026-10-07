@@ -2,11 +2,11 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Enum DriverFeature | Cosmos Gen 3 </title>
+      <title>Class AudioSink | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Enum DriverFeature | Cosmos Gen 3 ">
+      <meta name="title" content="Class AudioSink | Cosmos Gen 3 ">
       
-      <meta name="description" content="A kernel feature switch a driver can be tied to through . The manifest generator registers such a driver only when the matching CosmosEnable* property is on, so a kernel that turns the feature off never carries the driver. The members mirror the properties of Cosmos.Kernel.System.KernelFeatures by name; a host-side test keeps the two lists equal.">
+      <meta name="description" content="Where an audio driver reports that it drained a buffer or changed format, returned by . Kit-owned; see . Allocation-free; any context, so the driver may report a completion straight from its interrupt handler.">
       <link rel="icon" href="../images/favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -84,32 +84,89 @@
           <nav id="breadcrumb"></nav>
         </div>
 
-        <article data-uid="Cosmos.Kernel.HAL.DriverKit.DriverFeature">
+        <article data-uid="Cosmos.Kernel.HAL.Devices.Audio.AudioSink">
 
 
 
-
-  <h1 id="Cosmos_Kernel_HAL_DriverKit_DriverFeature" data-uid="Cosmos.Kernel.HAL.DriverKit.DriverFeature" class="text-break">
-Enum DriverFeature  
+  <h1 id="Cosmos_Kernel_HAL_Devices_Audio_AudioSink" data-uid="Cosmos.Kernel.HAL.Devices.Audio.AudioSink" class="text-break">
+Class AudioSink  
   </h1>
 
   <div class="facts text-secondary">
-    <dl><dt>Namespace</dt><dd><span class="xref">Cosmos</span>.<a class="xref" href="Cosmos.Kernel.html">Kernel</a>.<a class="xref" href="Cosmos.Kernel.HAL.html">HAL</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.html">DriverKit</a></dd></dl>
+    <dl><dt>Namespace</dt><dd><span class="xref">Cosmos</span>.<a class="xref" href="Cosmos.Kernel.html">Kernel</a>.<a class="xref" href="Cosmos.Kernel.HAL.html">HAL</a>.<a class="xref" href="Cosmos.Kernel.HAL.Devices.html">Devices</a>.<a class="xref" href="Cosmos.Kernel.HAL.Devices.Audio.html">Audio</a></dd></dl>
   <dl><dt>Assembly</dt><dd>Cosmos.Kernel.HAL.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"><p>A kernel feature switch a driver can be tied to through
-<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DriverAttribute.html#Cosmos_Kernel_HAL_DriverKit_DriverAttribute_Feature">Feature</a>. The manifest generator registers
-such a driver only when the matching <code>CosmosEnable*</code> property is on,
-so a kernel that turns the feature off never carries the driver. The
-members mirror the properties of <code>Cosmos.Kernel.System.KernelFeatures</code>
-by name; a host-side test keeps the two lists equal.</p>
+  <div class="markdown summary"><p>Where an audio driver reports that it drained a buffer or changed
+format, returned by <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.html#Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishAudio_Cosmos_Kernel_HAL_Devices_Audio_IAudioOutput_">PublishAudio(IAudioOutput)</a>. Kit-owned;
+see <a class="xref" href="Cosmos.Kernel.HAL.Devices.Input.KeyboardSink.html">KeyboardSink</a>. Allocation-free; any context, so the
+driver may report a completion straight from its interrupt handler.</p>
 </div>
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[Experimental(&quot;COSMOS0003&quot;)]
-public enum DriverFeature</code></pre>
+public sealed class AudioSink</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">AudioSink</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_Devices_Audio_AudioSink_BufferCompleted_" data-uid="Cosmos.Kernel.HAL.Devices.Audio.AudioSink.BufferCompleted*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_Devices_Audio_AudioSink_BufferCompleted" data-uid="Cosmos.Kernel.HAL.Devices.Audio.AudioSink.BufferCompleted">
+  BufferCompleted()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Reports that the device finished a buffer, so the ring has room the writer can use.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void BufferCompleted()</code></pre>
   </div>
 
 
@@ -120,66 +177,35 @@ public enum DriverFeature</code></pre>
 
 
 
-  <h2 id="fields">Fields
-</h2>
-  <dl class="parameters">
-    <dt id="Cosmos_Kernel_HAL_DriverKit_DriverFeature_Audio"><code>Audio = 13</code></dt>
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_Devices_Audio_AudioSink_FormatChanged_" data-uid="Cosmos.Kernel.HAL.Devices.Audio.AudioSink.FormatChanged*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_Devices_Audio_AudioSink_FormatChanged" data-uid="Cosmos.Kernel.HAL.Devices.Audio.AudioSink.FormatChanged">
+  FormatChanged()
   
-  <dd><p><code>CosmosEnableAudio</code>.</p>
-</dd>
-    <dt id="Cosmos_Kernel_HAL_DriverKit_DriverFeature_Fat"><code>Fat = 9</code></dt>
-  
-  <dd><p><code>CosmosEnableFat</code>.</p>
-</dd>
-    <dt id="Cosmos_Kernel_HAL_DriverKit_DriverFeature_Graphics"><code>Graphics = 10</code></dt>
-  
-  <dd><p><code>CosmosEnableGraphics</code>.</p>
-</dd>
-    <dt id="Cosmos_Kernel_HAL_DriverKit_DriverFeature_Interrupts"><code>Interrupts = 1</code></dt>
-  
-  <dd><p><code>CosmosEnableInterrupts</code>.</p>
-</dd>
-    <dt id="Cosmos_Kernel_HAL_DriverKit_DriverFeature_Keyboard"><code>Keyboard = 5</code></dt>
-  
-  <dd><p><code>CosmosEnableKeyboard</code>.</p>
-</dd>
-    <dt id="Cosmos_Kernel_HAL_DriverKit_DriverFeature_Mouse"><code>Mouse = 6</code></dt>
-  
-  <dd><p><code>CosmosEnableMouse</code>.</p>
-</dd>
-    <dt id="Cosmos_Kernel_HAL_DriverKit_DriverFeature_Network"><code>Network = 7</code></dt>
-  
-  <dd><p><code>CosmosEnableNetwork</code>.</p>
-</dd>
-    <dt id="Cosmos_Kernel_HAL_DriverKit_DriverFeature_None"><code>None = 0</code></dt>
-  
-  <dd><p>No feature: the driver is registered in every kernel that carries its assembly.</p>
-</dd>
-    <dt id="Cosmos_Kernel_HAL_DriverKit_DriverFeature_Pci"><code>Pci = 3</code></dt>
-  
-  <dd><p><code>CosmosEnablePCI</code>.</p>
-</dd>
-    <dt id="Cosmos_Kernel_HAL_DriverKit_DriverFeature_Scheduler"><code>Scheduler = 11</code></dt>
-  
-  <dd><p><code>CosmosEnableScheduler</code>.</p>
-</dd>
-    <dt id="Cosmos_Kernel_HAL_DriverKit_DriverFeature_Storage"><code>Storage = 8</code></dt>
-  
-  <dd><p><code>CosmosEnableStorage</code>.</p>
-</dd>
-    <dt id="Cosmos_Kernel_HAL_DriverKit_DriverFeature_Timer"><code>Timer = 4</code></dt>
-  
-  <dd><p><code>CosmosEnableTimer</code>.</p>
-</dd>
-    <dt id="Cosmos_Kernel_HAL_DriverKit_DriverFeature_Uart"><code>Uart = 2</code></dt>
-  
-  <dd><p><code>CosmosEnableUART</code>.</p>
-</dd>
-    <dt id="Cosmos_Kernel_HAL_DriverKit_DriverFeature_Usb"><code>Usb = 12</code></dt>
-  
-  <dd><p><code>CosmosEnableUsb</code>.</p>
-</dd>
-  </dl>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Reports that <a class="xref" href="Cosmos.Kernel.HAL.Devices.Audio.IAudioOutput.html#Cosmos_Kernel_HAL_Devices_Audio_IAudioOutput_Format">Format</a> or <a class="xref" href="Cosmos.Kernel.HAL.Devices.Audio.IAudioOutput.html#Cosmos_Kernel_HAL_Devices_Audio_IAudioOutput_SampleRate">SampleRate</a> changed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void FormatChanged()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
 
 
 
