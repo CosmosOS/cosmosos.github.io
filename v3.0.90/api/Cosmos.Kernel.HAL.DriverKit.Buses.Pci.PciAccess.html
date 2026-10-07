@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class PciAccess | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class PciAccess | Cosmos Gen 3 ">
+      
+      <meta name="description" content="The access object of a PCI node: the function&#39;s configuration space, its sized base address registers, its capability list and the Command register bits a driver turns on. Behind it, for the kit only, the bus hooks: the function is quiesced before the first driver sees it (bus mastering off, legacy line disabled, a firmware-enabled MSI-X masked and disabled), quiesced again after each probe that did not bind, before the probe&#39;s memory is freed, restored as firmware left it when nobody binds, and quiesced once more after a binding is torn down. A bound driver owns the state from its probe on and enables what it needs. For a bridge it also carries the secondary and subordinate bus and, for a hot-plug slot, the describe of the functions behind it with the kit&#39;s one resource assignment. Any context and allocation-free except , which is thread context and allocates the description.">
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess">
+
+
+
+  <h1 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess" class="text-break">
+Class PciAccess  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><span class="xref">Cosmos</span>.<a class="xref" href="Cosmos.Kernel.html">Kernel</a>.<a class="xref" href="Cosmos.Kernel.HAL.html">HAL</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.html">DriverKit</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.html">Buses</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.html">Pci</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Cosmos.Kernel.HAL.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>The access object of a PCI node: the function's configuration space,
+its sized base address registers, its capability list and the Command
+register bits a driver turns on. Behind it, for the kit only, the bus
+hooks: the function is quiesced before the first driver sees it (bus
+mastering off, legacy line disabled, a firmware-enabled MSI-X masked
+and disabled), quiesced again after each probe that did not bind, before
+the probe's memory is freed, restored as firmware left it when nobody
+binds, and quiesced once more after a binding is torn down. A bound
+driver owns the state from its probe on and enables what it needs. For
+a bridge it also carries the secondary and subordinate bus and, for a
+hot-plug slot, the describe of the functions behind it with the kit's
+one resource assignment. Any context and allocation-free except
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.html#Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_TryDescribeChild_System_Byte_System_Byte_System_Boolean_Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciFunctionDescription__">TryDescribeChild(byte, byte, bool, out PciFunctionDescription)</a>, which is thread context and allocates
+the description.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Experimental(&quot;COSMOS0003&quot;)]
+public sealed class PciAccess</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">PciAccess</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_Bars_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.Bars*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_Bars" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.Bars">
+  Bars
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The six base address registers as the kit sized them (and, behind a hot-plug slot, placed them); the resource at the same index is the mappable form.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ReadOnlySpan&lt;PciBar&gt; Bars { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.readonlyspan-1">ReadOnlySpan</a>&lt;<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciBar.html">PciBar</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_InterruptLine_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.InterruptLine*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_InterruptLine" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.InterruptLine">
+  InterruptLine
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The interrupt line register at 0x3C as firmware wrote it, read at describe time.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte InterruptLine { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_InterruptPin_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.InterruptPin*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_InterruptPin" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.InterruptPin">
+  InterruptPin
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The interrupt pin register at 0x3D, read at describe time: 0 for none, 1 to 4 for INTA to INTD.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte InterruptPin { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_IsHotPlugSlot_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.IsHotPlugSlot*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_IsHotPlugSlot" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.IsHotPlugSlot">
+  IsHotPlugSlot
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>True for a PCI Express root port or downstream port that implements
+a hot-plug capable slot: the host driver does not walk its secondary
+bus, the port driver does. Decided once at describe time. Any
+context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsHotPlugSlot { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_IsMsiXCapable_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.IsMsiXCapable*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_IsMsiXCapable" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.IsMsiXCapable">
+  IsMsiXCapable
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>True when the function has an MSI-X capability.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsMsiXCapable { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_MessageInterruptCount_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.MessageInterruptCount*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_MessageInterruptCount" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.MessageInterruptCount">
+  MessageInterruptCount
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The MSI-X table size (Message Control's table size plus one), or 0 without the capability.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int MessageInterruptCount { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_SecondaryBus_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.SecondaryBus*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_SecondaryBus" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.SecondaryBus">
+  SecondaryBus
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The secondary bus number of a type 1 header (a PCI-to-PCI bridge, a
+root port), read live; 0 for any other header type. Any context;
+allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte SecondaryBus { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_SubordinateBus_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.SubordinateBus*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_SubordinateBus" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.SubordinateBus">
+  SubordinateBus
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The subordinate bus number of a type 1 header (a PCI-to-PCI bridge,
+a root port): the highest bus behind it, read live; 0 for any other
+header type. Any context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte SubordinateBus { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_EnableBusMastering_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.EnableBusMastering*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_EnableBusMastering_System_Boolean_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.EnableBusMastering(System.Boolean)">
+  EnableBusMastering(bool)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Turns bus mastering on or off: a read-modify-write of Command under the mechanism's lock. Any context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void EnableBusMastering(bool enable)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>enable</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>True to let the function initiate DMA.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_EnableIoSpace_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.EnableIoSpace*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_EnableIoSpace_System_Boolean_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.EnableIoSpace(System.Boolean)">
+  EnableIoSpace(bool)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Turns I/O space decoding on or off: a read-modify-write of Command under the mechanism's lock. Any context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void EnableIoSpace(bool enable)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>enable</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>True to let the function decode its port ranges.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_EnableMemorySpace_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.EnableMemorySpace*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_EnableMemorySpace_System_Boolean_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.EnableMemorySpace(System.Boolean)">
+  EnableMemorySpace(bool)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Turns memory space decoding on or off: a read-modify-write of Command under the mechanism's lock. Any context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void EnableMemorySpace(bool enable)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>enable</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>True to let the function decode its memory windows.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_FindCapability_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.FindCapability*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_FindCapability_System_Byte_System_Byte_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.FindCapability(System.Byte,System.Byte)">
+  FindCapability(byte, byte)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Walks the capability list for <code class="paramref">capabilityId</code>: from
+the capabilities pointer, or from the entry after
+<code class="paramref">after</code> to find the next one of the same id. The
+walk is bounded to 48 entries, so a malformed list ends. Any
+context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte FindCapability(byte capabilityId, byte after = 0)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>capabilityId</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd><p>The capability id to look for.</p>
+</dd>
+    <dt><code>after</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd><p>The offset of a capability the walk starts after, or 0 for the head of the list.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd><p>The capability's offset, or 0 when absent.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_ReadConfig16_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.ReadConfig16*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_ReadConfig16_System_UInt16_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.ReadConfig16(System.UInt16)">
+  ReadConfig16(ushort)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Reads one word of this function's configuration space. Any context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ushort ReadConfig16(ushort offset)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>offset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd><p>The register offset, even.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p><code class="paramref">offset</code> is odd or past the mechanism's size.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_ReadConfig32_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.ReadConfig32*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_ReadConfig32_System_UInt16_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.ReadConfig32(System.UInt16)">
+  ReadConfig32(ushort)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Reads one dword of this function's configuration space. Any context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public uint ReadConfig32(ushort offset)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>offset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd><p>The register offset, dword aligned.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p><code class="paramref">offset</code> is not dword aligned or past the mechanism's size.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_ReadConfig8_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.ReadConfig8*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_ReadConfig8_System_UInt16_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.ReadConfig8(System.UInt16)">
+  ReadConfig8(ushort)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Reads one byte of this function's configuration space. Any context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte ReadConfig8(ushort offset)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>offset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd><p>The register offset.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p><code class="paramref">offset</code> is past the mechanism's size (256 for the port mechanism, 4096 for ECAM).</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_TryDescribeChild_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.TryDescribeChild*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_TryDescribeChild_System_Byte_System_Byte_System_Boolean_Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciFunctionDescription__" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.TryDescribeChild(System.Byte,System.Byte,System.Boolean,Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciFunctionDescription@)">
+  TryDescribeChild(byte, byte, bool, out PciFunctionDescription)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Reads a function on this bridge's secondary bus and builds what the
+bridge's driver publishes for it, exactly as the host's
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciHostAccess.html#Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciHostAccess_TryDescribeFunction_System_Byte_System_Byte_System_Byte_Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciFunctionDescription__">TryDescribeFunction(byte, byte, byte, out PciFunctionDescription)</a> does; with
+<code class="paramref">assignResources</code>, every implemented base address
+register firmware or the kit did not assign is placed inside the
+bridge's windows, the registers written and the function's memory
+(and I/O when a port range was placed) decoding enabled. Describing
+function 0 starts a new placement pass over the bridge's windows,
+above every register firmware assigned to the device's other
+functions; functions 1 to 7 continue above it. Thread context;
+allocates the description.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryDescribeChild(byte device, byte function, bool assignResources, out PciFunctionDescription description)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>device</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd><p>The device on the secondary bus, 0 to 31.</p>
+</dd>
+    <dt><code>function</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd><p>The function, 0 to 7.</p>
+</dd>
+    <dt><code>assignResources</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>True to place the function's unassigned registers inside the bridge's windows.</p>
+</dd>
+    <dt><code>description</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciFunctionDescription.html">PciFunctionDescription</a></dt>
+    <dd><p>What to publish; default when nothing was described.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>False when this is not a type 1 header, when <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.html#Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_SecondaryBus">SecondaryBus</a>
+is 0, at most this function's own bus, or above the host's last bus,
+or when the vendor id reads 0xFFFF or 0x0000 (an empty or powered-off
+slot).</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p>The device or function number is too large.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_WriteConfig16_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.WriteConfig16*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_WriteConfig16_System_UInt16_System_UInt16_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.WriteConfig16(System.UInt16,System.UInt16)">
+  WriteConfig16(ushort, ushort)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Writes one word of this function's configuration space. Any context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void WriteConfig16(ushort offset, ushort value)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>offset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd><p>The register offset, even.</p>
+</dd>
+    <dt><code>value</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd><p>The value.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p><code class="paramref">offset</code> is odd or past the mechanism's size.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_WriteConfig32_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.WriteConfig32*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_WriteConfig32_System_UInt16_System_UInt32_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.WriteConfig32(System.UInt16,System.UInt32)">
+  WriteConfig32(ushort, uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Writes one dword of this function's configuration space. Any context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void WriteConfig32(ushort offset, uint value)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>offset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd><p>The register offset, dword aligned.</p>
+</dd>
+    <dt><code>value</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd><p>The value.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p><code class="paramref">offset</code> is not dword aligned or past the mechanism's size.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_WriteConfig8_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.WriteConfig8*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_WriteConfig8_System_UInt16_System_Byte_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.WriteConfig8(System.UInt16,System.Byte)">
+  WriteConfig8(ushort, byte)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Writes one byte of this function's configuration space. Any context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void WriteConfig8(ushort offset, byte value)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>offset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd><p>The register offset.</p>
+</dd>
+    <dt><code>value</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd><p>The value.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p><code class="paramref">offset</code> is past the mechanism's size.</p>
+</dd>
+  </dl>
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

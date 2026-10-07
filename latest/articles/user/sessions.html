@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Console Sessions and Telnet | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Console Sessions and Telnet | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.90/docs/articles/user/sessions.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="console-sessions-and-telnet">Console Sessions and Telnet</h1>
+
+<p>In this article, we will discuss console sessions on Cosmos Gen3: running several shells side by side on the local display, switching between them the way Linux switches ttys, and serving a shell to remote terminals over Telnet.</p>
+<p>A console session is one console that <code>System.Console</code> can be bound to: a screen, and the keys typed at it. <code>Console</code> follows the calling thread. A thread started on a session reads that session's keys and writes to its screen, so the same <code>Console.ReadLine()</code> and <code>Console.WriteLine()</code> code runs unchanged on every session, local or remote.</p>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Keys from</th>
+<th>Screen shown on</th>
+<th>Created by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Primary console, <code>tty1</code></td>
+<td>Local keyboard</td>
+<td>The display</td>
+<td>The kernel, on <code>KernelConsole.Default</code></td>
+</tr>
+<tr>
+<td>Virtual console, <code>tty2</code> onward</td>
+<td>Local keyboard</td>
+<td>The display, while it is the active session</td>
+<td><code>SessionManager.CreateVirtualConsole()</code></td>
+</tr>
+<tr>
+<td>Telnet session</td>
+<td>The Telnet client</td>
+<td>The client's terminal, and the display while it is the active session</td>
+<td><code>TelnetServer</code> of the <a href="https://github.com/CosmosOS/Cosmos.Network.Telnet">Cosmos.Network.Telnet</a> package, one per connection</td>
+</tr>
+</tbody>
+</table>
+<p>The snippets below rely on <code>using Cosmos.Kernel.System.Sessions;</code>.</p>
+<p>Sessions need the scheduler (<code>CosmosEnableScheduler</code>), since every session other than the primary console runs on a thread of its own. They also need the kernel console, since every screen is a grid on the display's canvas. The Telnet server also needs networking (<code>CosmosEnableNetwork</code>).</p>
+<h2 id="the-primary-console">The primary console</h2>
+<p><code>tty1</code> is the console every kernel already has. The kernel's main loop (<code>Run()</code>) runs on it, so does every thread that was not started on another session, and it cannot be closed. A kernel that never opens a session behaves exactly as before: <code>Console</code> and <code>KeyboardManager</code> read the keyboard directly.</p>
+<h2 id="virtual-consoles">Virtual consoles</h2>
+<p><code>SessionManager.CreateVirtualConsole()</code> opens a local console the size of the primary one. It starts hidden, and <code>SessionManager.Start</code> starts a thread on it:</p>
+<pre><code class="lang-csharp">ConsoleSession session = SessionManager.CreateVirtualConsole();
+
+SessionManager.Start(session, () =&gt;
+{
+    Console.WriteLine(&quot;Hello from &quot; + session.Name);
+
+    while (Console.ReadLine() is { } line)
+    {
+        Console.WriteLine(&quot;You typed: &quot; + line);
+    }
+});
+</code></pre>
+<p>The thread's <code>Console</code> is the session. When the body returns, the session closes: a virtual console goes away, and a remote session hangs up. An exception that escapes the body is logged to the serial port and ends the session the same way.</p>
+<p>Threads the body starts are not bound to the session: their <code>Console</code> is the primary console. Bind them with <code>SessionManager.Start</code> if they should write to the session.</p>
+<h2 id="switching-sessions">Switching sessions</h2>
+<p>Sessions are numbered from 1 to 12 (<code>SessionManager.MaxSessions</code>), and the number is also the function key that shows it:</p>
+<table>
+<thead>
+<tr>
+<th>Keys</th>
+<th>Shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Alt+F1 … Alt+F12</td>
+<td>Session 1 … 12</td>
+</tr>
+<tr>
+<td>Alt+Left, Alt+Right</td>
+<td>The previous or next open session</td>
+</tr>
+</tbody>
+</table>
+<p>The session on the display is <code>SessionManager.Active</code>. The local keyboard types into it, whether it is local or remote, so you can take over a Telnet session from the machine itself. From code:</p>
+<pre><code class="lang-csharp">foreach (ConsoleSession session in SessionManager.GetSessions())
+{
+    Console.WriteLine(session.Id + &quot;  &quot; + session.Name + (session.IsActive ? &quot;  (on the display)&quot; : &quot;&quot;));
+}
+
+SessionManager.Switch(2);   // show tty2
+</code></pre>
+<p>Once a second session exists, the keyboard is routed: each key goes straight to the session on the display. From then on the read members of <code>KeyboardManager</code> (<code>KeyAvailable</code>, <code>TryReadKey</code>, <code>ReadKey</code>, <code>Peek</code>) read the calling thread's session too, like <code>Console</code>.</p>
+<p>When QEMU runs in a window, the host desktop may catch Alt with a function key before the guest sees it; Alt+F4 in particular can close the window. Alt with the arrows, or <code>SessionManager.Switch</code> from a shell command, avoid that.</p>
+<h2 id="serving-a-shell-over-telnet">Serving a shell over Telnet</h2>
+<p>The Telnet server is a package of its own, <a href="https://github.com/CosmosOS/Cosmos.Network.Telnet">Cosmos.Network.Telnet</a>. Add it to your kernel:</p>
+<pre><code class="lang-xml">&lt;ItemGroup&gt;
+    &lt;PackageReference Include=&quot;Cosmos.Network.Telnet&quot; Version=&quot;1.0.0&quot; /&gt;
+&lt;/ItemGroup&gt;
+</code></pre>
+<p><code>TelnetServer</code> listens on a TCP port and gives every client a session of its own, with a thread that runs the shell you pass in:</p>
+<pre><code class="lang-csharp">using Cosmos.Network.Telnet;
+
+TelnetServer server = new(session =&gt;
+{
+    Console.WriteLine(&quot;Welcome, &quot; + session.Name);
+
+    while (Console.ReadLine() is { } line &amp;&amp; line != &quot;exit&quot;)
+    {
+        Console.WriteLine(&quot;You typed: &quot; + line);
+    }
+});
+
+server.Start();   // port 23 by default: new TelnetServer(shell, 2323) picks another
+</code></pre>
+<p><code>Start()</code> returns at once; the server accepts connections on its own thread until <code>Stop()</code>, which leaves the sessions already open connected. Set <code>Log</code> to receive a line for every connection, disconnection and failure, for example <code>Log = message =&gt; Cosmos.Kernel.System.Diagnostics.Log.WriteString(message + &quot;\n&quot;)</code>. The network must be configured, by DHCP or by hand (<a href="network.html#configure-ipv4">Network</a>), for a client to reach it.</p>
+<p>The server negotiates the way a terminal expects:</p>
+<ul>
+<li>It echoes what is typed and suppresses go-ahead, which puts the client in character-at-a-time mode, so the line editor works remotely: arrows, Home and End, Backspace and Delete.</li>
+<li>It asks for the window size (NAWS), so the session's <code>Console.WindowWidth</code> and <code>WindowHeight</code> are the client's, and follow it when the window is resized.</li>
+<li>Output is sent as VT100 sequences: colours, cursor moves and <code>Console.Clear()</code> show on the client as they do on the display.</li>
+</ul>
+<p>Under QEMU user networking, forward a host port to the guest's port 23, then connect from the host:</p>
+<pre><code>$ cosmos run --nic e1000e --hostfwd tcp::2323-:23
+$ telnet localhost 2323
+</code></pre>
+<p>With plain QEMU, the forward is an option of the user-mode NIC: <code>-nic user,model=e1000e,hostfwd=tcp::2323-:23</code>.</p>
+<div class="WARNING">
+<h5>Warning</h5>
+<p>Telnet sends everything in the clear, and the server asks for no password: anyone who reaches the port gets a shell. Serve it on a network you trust, such as QEMU's private user network.</p>
+</div>
+<h2 id="in-the-devkernel">In the DevKernel</h2>
+<p>The DevKernel opens <code>tty2</code> to <code>tty4</code> at boot, each with a shell of its own, and has these commands:</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sessions</code> (<code>who</code>)</td>
+<td>Lists the sessions: <code>*</code> marks the one on the display, <code>&gt;</code> your own</td>
+</tr>
+<tr>
+<td><code>tty</code></td>
+<td>Shows which session the shell runs on</td>
+</tr>
+<tr>
+<td><code>chvt &lt;n&gt;</code></td>
+<td>Shows session <code>n</code> on the display</td>
+</tr>
+<tr>
+<td><code>openvt</code></td>
+<td>Opens another virtual console with a shell</td>
+</tr>
+<tr>
+<td><code>telnetd [port\|stop]</code></td>
+<td>Starts the Telnet server, on port 23 by default, or stops it</td>
+</tr>
+<tr>
+<td><code>exit</code> (<code>logout</code>)</td>
+<td>Closes the session the shell runs on; the primary console stays</td>
+</tr>
+</tbody>
+</table>
+<h2 id="current-limitations">Current limitations</h2>
+<ul>
+<li>There is no login: a Telnet client gets a shell as soon as it connects.</li>
+<li>There is no SSH yet. Telnet is a first transport over the same sessions; SSH needs a key exchange, a cipher and a random source the kernel does not have.</li>
+<li>The TCP stack does not retransmit. On QEMU's user network nothing is lost, but on a real network a lost segment stalls the session.</li>
+<li>A session's screen lives on the display's canvas, so a kernel without a display has no sessions, remote ones included.</li>
+<li>Ctrl+C reaches the session as a key; nothing interrupts a running command.</li>
+</ul>
+<h2 id="remote-sessions-in-a-library">Remote sessions in a library</h2>
+<p>A server for another kind of remote terminal is a class derived from <code>ConsoleSession</code>, the way the Telnet server's is:</p>
+<ul>
+<li>The <code>ConsoleSession(int cols, int rows)</code> constructor gives the session its screen, hidden until it is shown. Override <code>Name</code>, the name it is listed under, and <code>IsRemote</code>, true.</li>
+<li><code>EnqueueInput(KeyEvent)</code> queues a key the terminal sent and wakes the session's reader; it may be called from any thread. <code>Resize(cols, rows)</code> follows the terminal's window.</li>
+<li>The <code>On</code> hooks report every change to send to the terminal: <code>OnWritten</code> for each character, <code>OnCleared</code>, <code>OnCursorMoved</code>, <code>OnCursorVisibilityChanged</code>, <code>OnColorsChanged</code>, with <code>CursorLeft</code>, <code>CursorTop</code>, <code>ExplicitForeground</code> and <code>ExplicitBackground</code> to read the state from. They run inside the change, with interrupts masked: record what changed and return, without blocking or doing I/O. <code>OnFlush</code> and <code>OnClosed</code> run unmasked.</li>
+<li><code>SessionManager.TryRegister(session)</code> lists the session, then <code>SessionManager.Start(session, body)</code> runs a thread on it.</li>
+</ul>
+<p>The kernel's sockets are not safe to use from two threads at once, so the Telnet server reads and writes all its connections on one thread of its own: its hooks append to a buffer that thread sends.</p>
+<h2 id="how-it-works">How it works</h2>
+<p>Every session keeps its screen as a <code>KernelConsole</code> grid on the display's canvas. Only the grid of the active session paints the canvas; the others keep their cells up to date and repaint the whole display when shown. A Telnet session also sends every change to its client as it happens: each character, and the escape sequence for each cursor move and colour change, taken from the grid. The two therefore agree on where every line wraps: the grid wraps as soon as a line is full, and the session ends the line explicitly on the client.</p>
+<p>A session's reader blocks on an <code>InterruptEvent</code> that is signalled when a key is queued for it. Keys come either from the keyboard's decoder, which queues them on the active session, possibly in interrupt context, or from a remote session's server: the Telnet server's thread looks at its connections every 10 ms while they are idle, and queues the keys a client sent. A switch key wakes a thread that is otherwise blocked. The primary console's reader runs on the scheduler's idle thread, so it waits for the next interrupt instead of blocking, as the keyboard always did.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.90/docs/articles/user/sessions.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

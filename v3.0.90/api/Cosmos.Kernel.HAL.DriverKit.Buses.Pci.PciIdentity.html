@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class PciIdentity | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class PciIdentity | Cosmos Gen 3 ">
+      
+      <meta name="description" content="The identity of a PCI function as its configuration header states it: where it is (segment, bus, device, function) and what it is (vendor, device, subsystem, class, revision, header layout). Read once by the host that described the function; never changes. Path is pci:ssss:bb:dd.f, all hexadecimal.">
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity">
+
+
+
+  <h1 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity" class="text-break">
+Class PciIdentity  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><span class="xref">Cosmos</span>.<a class="xref" href="Cosmos.Kernel.html">Kernel</a>.<a class="xref" href="Cosmos.Kernel.HAL.html">HAL</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.html">DriverKit</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.html">Buses</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.html">Pci</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Cosmos.Kernel.HAL.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>The identity of a PCI function as its configuration header states it:
+where it is (segment, bus, device, function) and what it is (vendor,
+device, subsystem, class, revision, header layout). Read once by the
+host that described the function; never changes. Path is
+<code>pci:ssss:bb:dd.f</code>, all hexadecimal.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Experimental(&quot;COSMOS0003&quot;)]
+public sealed class PciIdentity : DeviceIdentity</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceIdentity.html">DeviceIdentity</a></div>
+      <div><span class="xref">PciIdentity</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_Address_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.Address*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_Address" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.Address">
+  Address
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The device's address on its bus, in the bus's own notation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string Address { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_Bus_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.Bus*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_Bus" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.Bus">
+  Bus
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The bus number.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte Bus { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_BusName_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.BusName*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_BusName" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.BusName">
+  BusName
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The bus the device sits on: &quot;synthetic&quot;, &quot;platform&quot;, &quot;pci&quot;, &quot;virtio&quot;, &quot;usb&quot;, &quot;ps2&quot;.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string BusName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_ClassCode_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.ClassCode*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_ClassCode" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.ClassCode">
+  ClassCode
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The base class code at offset 0x0B.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte ClassCode { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_Device_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.Device*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_Device" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.Device">
+  Device
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The device number on the bus, 0 to 31.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte Device { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_DeviceId_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.DeviceId*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_DeviceId" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.DeviceId">
+  DeviceId
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The device id at offset 0x02.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ushort DeviceId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_Function_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.Function*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_Function" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.Function">
+  Function
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The function number of the device, 0 to 7.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte Function { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_HeaderType_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.HeaderType*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_HeaderType" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.HeaderType">
+  HeaderType
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The header layout: 0 for a device, 1 for a PCI-to-PCI bridge, 2 for a CardBus bridge; the multi-function bit is stripped.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte HeaderType { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_ProgIf_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.ProgIf*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_ProgIf" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.ProgIf">
+  ProgIf
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The programming interface at offset 0x09.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte ProgIf { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_Revision_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.Revision*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_Revision" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.Revision">
+  Revision
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The revision id at offset 0x08.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte Revision { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_Segment_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.Segment*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_Segment" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.Segment">
+  Segment
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The PCI segment group the function's host serves.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ushort Segment { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_Subclass_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.Subclass*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_Subclass" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.Subclass">
+  Subclass
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The subclass at offset 0x0A.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte Subclass { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_SubsystemId_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.SubsystemId*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_SubsystemId" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.SubsystemId">
+  SubsystemId
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The subsystem id at offset 0x2E of a type 0 header; zero for the other header types.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ushort SubsystemId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_SubsystemVendorId_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.SubsystemVendorId*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_SubsystemVendorId" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.SubsystemVendorId">
+  SubsystemVendorId
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The subsystem vendor id at offset 0x2C of a type 0 header; zero for the other header types.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ushort SubsystemVendorId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_VendorId_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.VendorId*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_VendorId" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.VendorId">
+  VendorId
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The vendor id at offset 0x00.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ushort VendorId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_Describe_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.Describe*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciIdentity_Describe" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.Describe">
+  Describe()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The identity in words, for the log and the diagnostics view: &quot;vendor 8086 device 100e class 02&quot;.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string Describe()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

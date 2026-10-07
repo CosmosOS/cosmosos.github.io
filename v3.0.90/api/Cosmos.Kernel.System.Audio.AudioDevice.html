@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class AudioDevice | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class AudioDevice | Cosmos Gen 3 ">
+      
+      <meta name="description" content="One published audio output as the ring sees it: the name the driver gave it, which driver published it, where it sits in the device tree, and its format read live from the driver. Created by  when the kit publishes an output and kept in &#39;s list until it is withdrawn. Once withdrawn every call is a no-op and the format reads empty; the identity members are copied at creation, so they stay readable.">
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Cosmos.Kernel.System.Audio.AudioDevice">
+
+
+
+  <h1 id="Cosmos_Kernel_System_Audio_AudioDevice" data-uid="Cosmos.Kernel.System.Audio.AudioDevice" class="text-break">
+Class AudioDevice  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><span class="xref">Cosmos</span>.<a class="xref" href="Cosmos.Kernel.html">Kernel</a>.<a class="xref" href="Cosmos.Kernel.System.html">System</a>.<a class="xref" href="Cosmos.Kernel.System.Audio.html">Audio</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Cosmos.Kernel.System.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>One published audio output as the ring sees it: the name the driver gave
+it, which driver published it, where it sits in the device tree, and its
+format read live from the driver. Created by
+<span class="xref">Cosmos.Kernel.System.Audio.KitAudioConsumer</span> when the kit publishes an output and kept
+in <a class="xref" href="Cosmos.Kernel.System.Audio.AudioManager.html">AudioManager</a>'s list until it is withdrawn. Once
+withdrawn every call is a no-op and the format reads empty; the identity
+members are copied at creation, so they stay readable.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class AudioDevice</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">AudioDevice</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Cosmos_Kernel_System_Audio_AudioDevice_DriverName_" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.DriverName*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Audio_AudioDevice_DriverName" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.DriverName">
+  DriverName
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The class name of the driver that published the output.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string DriverName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Audio_AudioDevice_Format_" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.Format*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Audio_AudioDevice_Format" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.Format">
+  Format
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The frame layout the device is programmed for; empty once withdrawn.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public AudioFormat Format { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Audio.AudioFormat.html">AudioFormat</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Audio_AudioDevice_IsRunning_" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.IsRunning*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Audio_AudioDevice_IsRunning" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.IsRunning">
+  IsRunning
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>True while the device is drawing frames out of its ring.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsRunning { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Audio_AudioDevice_IsWithdrawn_" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.IsWithdrawn*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Audio_AudioDevice_IsWithdrawn" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.IsWithdrawn">
+  IsWithdrawn
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>True once the kit withdrew the output; every call below is then a no-op.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsWithdrawn { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Audio_AudioDevice_Name_" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.Name*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Audio_AudioDevice_Name" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.Name">
+  Name
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The driver's name for the output: <code>hda</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Name { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Audio_AudioDevice_NodePath_" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.NodePath*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Audio_AudioDevice_NodePath" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.NodePath">
+  NodePath
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The path of the device tree node the publishing driver bound.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string? NodePath { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Audio_AudioDevice_Player_" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.Player*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Audio_AudioDevice_Player" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.Player">
+  Player
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The player feeding this output now, or null when it is idle. What a
+caller stops through <a class="xref" href="Cosmos.Kernel.System.Audio.AudioPlayer.html#Cosmos_Kernel_System_Audio_AudioPlayer_RequestStop">RequestStop()</a> and reads
+progress from. Any context; the answer is a snapshot, and it reads
+null for the moment between a claim and the claiming player being
+recorded.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public AudioPlayer? Player { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.System.Audio.AudioPlayer.html">AudioPlayer</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Audio_AudioDevice_SampleRate_" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.SampleRate*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Audio_AudioDevice_SampleRate" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.SampleRate">
+  SampleRate
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Frames per second the device is programmed for; 0 once withdrawn.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public uint SampleRate { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Audio_AudioDevice_WritableBytes_" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.WritableBytes*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Audio_AudioDevice_WritableBytes" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.WritableBytes">
+  WritableBytes
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Bytes <a class="xref" href="Cosmos.Kernel.System.Audio.AudioDevice.html#Cosmos_Kernel_System_Audio_AudioDevice_Write_System_ReadOnlySpan_System_Byte__">Write(ReadOnlySpan&lt;byte&gt;)</a> would accept right now; 0 once withdrawn.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int WritableBytes { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Cosmos_Kernel_System_Audio_AudioDevice_Start_" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.Start*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Audio_AudioDevice_Start" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.Start">
+  Start()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Starts the stream. Silence plays while the ring is empty.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Start()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Audio_AudioDevice_Stop_" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.Stop*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Audio_AudioDevice_Stop" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.Stop">
+  Stop()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Stops the stream and drops whatever the ring still holds.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Stop()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Audio_AudioDevice_TrySetFormat_" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.TrySetFormat*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Audio_AudioDevice_TrySetFormat_Cosmos_Kernel_HAL_Devices_Audio_AudioFormat_System_UInt32_" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.TrySetFormat(Cosmos.Kernel.HAL.Devices.Audio.AudioFormat,System.UInt32)">
+  TrySetFormat(AudioFormat, uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Whether the device accepts this layout and rate.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TrySetFormat(AudioFormat format, uint sampleRate)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>format</code> <a class="xref" href="Cosmos.Kernel.HAL.Devices.Audio.AudioFormat.html">AudioFormat</a></dt>
+    <dd><p>The frame layout wanted.</p>
+</dd>
+    <dt><code>sampleRate</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd><p>Frames per second wanted.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>False when the device refuses the pair or is withdrawn; nothing changed.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Audio_AudioDevice_Write_" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.Write*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Audio_AudioDevice_Write_System_ReadOnlySpan_System_Byte__" data-uid="Cosmos.Kernel.System.Audio.AudioDevice.Write(System.ReadOnlySpan{System.Byte})">
+  Write(ReadOnlySpan&lt;byte&gt;)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Copies as much of <code class="paramref">frames</code> into the device's ring as fits.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Write(ReadOnlySpan&lt;byte&gt; frames)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>frames</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.readonlyspan-1">ReadOnlySpan</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>&gt;</dt>
+    <dd><p>Interleaved frames in <a class="xref" href="Cosmos.Kernel.System.Audio.AudioDevice.html#Cosmos_Kernel_System_Audio_AudioDevice_Format">Format</a>.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>Bytes taken, 0 when the ring is full or the device is withdrawn.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

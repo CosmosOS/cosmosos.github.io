@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class DeviceBinding | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class DeviceBinding | Cosmos Gen 3 ">
+      
+      <meta name="description" content="A driver&#39;s handle on one device, created for each offer and kept while the driver is bound. Everything a driver acquires goes through it and is written to its ledger: windows, regions, DMA memory, interrupts, events, work items, periodic work, threads, USB pipes, published devices, child nodes. When the driver declines, fails, or the device goes away, the kit releases the ledger in a fixed order and the driver frees nothing itself. A  is the one thing on the ledger that is nothing to release: it is recorded for the diagnostics only.  Every member here is thread context: probe, work items, driver threads. Called from an interrupt handler, a member stops with an exception naming itself (in a synthetic dispatch) or a panic (in a real interrupt). Once  is true no new resource can be acquired.">
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding">
+
+
+
+  <h1 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding" class="text-break">
+Class DeviceBinding  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><span class="xref">Cosmos</span>.<a class="xref" href="Cosmos.Kernel.html">Kernel</a>.<a class="xref" href="Cosmos.Kernel.HAL.html">HAL</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.html">DriverKit</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Cosmos.Kernel.HAL.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>A driver's handle on one device, created for each offer and kept while
+the driver is bound. Everything a driver acquires goes through it and is
+written to its ledger: windows, regions, DMA memory, interrupts, events,
+work items, periodic work, threads, USB pipes, published devices, child
+nodes. When
+the driver declines, fails, or the device goes away, the kit releases the
+ledger in a fixed order and the driver frees nothing itself. A
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Threading.DeviceLock.html">DeviceLock</a> is the one thing on the ledger that is nothing
+to release: it is recorded for the diagnostics only.</p>
+<p>
+Every member here is thread context: probe, work items, driver threads.
+Called from an interrupt handler, a member stops with an exception naming
+itself (in a synthetic dispatch) or a panic (in a real interrupt). Once
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.html#Cosmos_Kernel_HAL_DriverKit_DeviceBinding_IsDetaching">IsDetaching</a> is true no new resource can be acquired.
+</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Experimental(&quot;COSMOS0003&quot;)]
+public sealed class DeviceBinding</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">DeviceBinding</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_DetachEvent_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.DetachEvent*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_DetachEvent" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.DetachEvent">
+  DetachEvent
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Cancelled when teardown begins, like every event of the binding, so a
+thread waiting on it (or on any of them) wakes, finds
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.html#Cosmos_Kernel_HAL_DriverKit_DeviceBinding_IsDetaching">IsDetaching</a> true, and returns.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DeviceEvent DetachEvent { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Threading.DeviceEvent.html">DeviceEvent</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_Driver_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.Driver*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_Driver" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.Driver">
+  Driver
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The driver offered the device.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Driver Driver { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Driver.html">Driver</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_DriverState_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.DriverState*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_DriverState" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.DriverState">
+  DriverState
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The driver's own per-device state, set during <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Driver.html#Cosmos_Kernel_HAL_DriverKit_Driver_Probe_Cosmos_Kernel_HAL_DriverKit_DeviceBinding_">Probe(DeviceBinding)</a>
+and read back in work items, threads and <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Driver.html#Cosmos_Kernel_HAL_DriverKit_Driver_OnDetach_Cosmos_Kernel_HAL_DriverKit_DeviceBinding_Cosmos_Kernel_HAL_DriverKit_DetachReason_">OnDetach(DeviceBinding, DetachReason)</a>.
+The driver instance is shared across devices; this slot is not.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object? DriverState { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_IsDetaching_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.IsDetaching*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_IsDetaching" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.IsDetaching">
+  IsDetaching
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>True from the first moment of teardown. Driver threads loop on it;
+acquiring members refuse once it is set.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsDetaching { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_Node_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.Node*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_Node" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.Node">
+  Node
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The device.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DeviceNode Node { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceNode.html">DeviceNode</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_AllocateDma_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.AllocateDma*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_AllocateDma_System_Int32_System_Int32_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.AllocateDma(System.Int32,System.Int32)">
+  AllocateDma(int, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Allocates zeroed, physically contiguous DMA memory the device can
+address anywhere in physical memory.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DmaBuffer AllocateDma(int length, int alignment)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>length</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>Bytes wanted, at least one.</p>
+</dd>
+    <dt><code>alignment</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>Alignment of the first byte, a power of two; less than a page is raised to the page.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Resources.DmaBuffer.html">DmaBuffer</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p><code class="paramref">length</code> is not positive or <code class="paramref">alignment</code> is not a power of two.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>No pages left, the binding is being torn down, or the caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_CreateEvent_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.CreateEvent*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_CreateEvent" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.CreateEvent">
+  CreateEvent()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Creates an event a handler signals and a thread waits on through <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.html#Cosmos_Kernel_HAL_DriverKit_DeviceBinding_Wait_Cosmos_Kernel_HAL_DriverKit_Threading_DeviceEvent_System_UInt32_">Wait(DeviceEvent, uint)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DeviceEvent CreateEvent()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Threading.DeviceEvent.html">DeviceEvent</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The binding is being torn down, or the caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_CreateLock_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.CreateLock*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_CreateLock" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.CreateLock">
+  CreateLock()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Creates a lock for a device entered from more than one context at
+once; see <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Threading.DeviceLock.html">DeviceLock</a>. Recorded for the diagnostics
+only: it holds no resource, is not counted among them and needs no
+release.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DeviceLock CreateLock()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Threading.DeviceLock.html">DeviceLock</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The binding is being torn down, or the caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_CreateWorkItem_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.CreateWorkItem*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_CreateWorkItem_System_Action_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.CreateWorkItem(System.Action)">
+  CreateWorkItem(Action)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Creates a work item that runs <code class="paramref">callback</code> on the kit worker when scheduled.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public WorkItem CreateWorkItem(Action callback)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>callback</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.action">Action</a></dt>
+    <dd><p>The work; thread context.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Threading.WorkItem.html">WorkItem</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The binding is being torn down, or the caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_Delay_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.Delay*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_Delay_System_UInt32_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.Delay(System.UInt32)">
+  Delay(uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Busy-waits for <code class="paramref">microseconds</code>, for a register that needs a moment.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Delay(uint microseconds)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>microseconds</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd><p>How long.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_Log_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.Log*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_Log_System_String_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.Log(System.String)">
+  Log(string)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Writes one line to the kit log: <code>[Drivers] path driver: message</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Log(string message)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>message</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The message.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_MapRegion_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.MapRegion*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_MapRegion_System_Int32_Cosmos_Kernel_HAL_DriverKit_Resources_RegionCaching_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.MapRegion(System.Int32,Cosmos.Kernel.HAL.DriverKit.Resources.RegionCaching)">
+  MapRegion(int, RegionCaching)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Maps a resource as bulk memory: a framebuffer, a queue, a descriptor
+area. A memory window is mapped as device memory whatever
+<code class="paramref">caching</code> asks for, until a platform offers
+write-combining; a RAM window keeps the kernel's normal mapping.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DeviceRegion MapRegion(int resourceIndex, RegionCaching caching)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>resourceIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>Index into <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceNode.html#Cosmos_Kernel_HAL_DriverKit_DeviceNode_Resources">Resources</a>; not a port range.</p>
+</dd>
+    <dt><code>caching</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Resources.RegionCaching.html">RegionCaching</a></dt>
+    <dd><p>The caching the driver wants; recorded on the region.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Resources.DeviceRegion.html">DeviceRegion</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p>No such resource.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></dt>
+    <dd><p>The resource is a port range.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The slot is unassigned (<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Resources.DeviceResource.html#Cosmos_Kernel_HAL_DriverKit_Resources_DeviceResource_None">None</a>), the window overlaps the kernel heap, cannot be mapped, the binding is being torn down, or the caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_MapRegisters_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.MapRegisters*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_MapRegisters_System_Int32_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.MapRegisters(System.Int32)">
+  MapRegisters(int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Maps a resource as registers. A memory window is mapped as device
+memory; a RAM window is reached through the kernel's own mapping; a
+port range becomes a window over <code>in</code> and <code>out</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RegisterWindow MapRegisters(int resourceIndex)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>resourceIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>Index into <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceNode.html#Cosmos_Kernel_HAL_DriverKit_DeviceNode_Resources">Resources</a>.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Resources.RegisterWindow.html">RegisterWindow</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p>No such resource.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.platformnotsupportedexception">PlatformNotSupportedException</a></dt>
+    <dd><p>A port range on an architecture without port I/O.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The slot is unassigned (<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Resources.DeviceResource.html#Cosmos_Kernel_HAL_DriverKit_Resources_DeviceResource_None">None</a>), the window overlaps the kernel heap, cannot be mapped, the binding is being torn down, or the caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishAudio_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.PublishAudio*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishAudio_Cosmos_Kernel_HAL_Devices_Audio_IAudioOutput_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.PublishAudio(Cosmos.Kernel.HAL.Devices.Audio.IAudioOutput)">
+  PublishAudio(IAudioOutput)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Publishes an audio output under <a class="xref" href="Cosmos.Kernel.HAL.Devices.Audio.IAudioOutput.html#Cosmos_Kernel_HAL_Devices_Audio_IAudioOutput_Name">Name</a>. The ring's audio manager, when present, receives it at once.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public AudioSink PublishAudio(IAudioOutput output)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>output</code> <a class="xref" href="Cosmos.Kernel.HAL.Devices.Audio.IAudioOutput.html">IAudioOutput</a></dt>
+    <dd><p>The driver's audio output contract.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Audio.AudioSink.html">AudioSink</a></dt>
+    <dd><p>The sink the driver reports buffer completions and format changes to.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The binding is being torn down, or the caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishBlockDevice_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.PublishBlockDevice*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishBlockDevice_Cosmos_Kernel_HAL_Devices_Storage_IBlockDevice_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.PublishBlockDevice(Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice)">
+  PublishBlockDevice(IBlockDevice)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Publishes a block device. Block devices report nothing, so there is no sink.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void PublishBlockDevice(IBlockDevice device)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>device</code> <a class="xref" href="Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice.html">IBlockDevice</a></dt>
+    <dd><p>The driver's block device.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The binding is being torn down, or the caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishChild_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.PublishChild*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishChild_Cosmos_Kernel_HAL_DriverKit_DeviceIdentity_Cosmos_Kernel_HAL_DriverKit_Resources_DeviceResource___Cosmos_Kernel_HAL_DriverKit_Interrupts_InterruptSource___System_Object_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.PublishChild(Cosmos.Kernel.HAL.DriverKit.DeviceIdentity,Cosmos.Kernel.HAL.DriverKit.Resources.DeviceResource[],Cosmos.Kernel.HAL.DriverKit.Interrupts.InterruptSource[],System.Object)">
+  PublishChild(DeviceIdentity, DeviceResource[], InterruptSource[], object?)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Puts a device the driver found on its bus into the tree beneath this
+node, to be offered to drivers. From the worker (a probe, a work item)
+the offer is queued behind the current job; from a driver thread it
+completes before this returns. Retracted with this node.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DeviceNode PublishChild(DeviceIdentity identity, DeviceResource[] resources, InterruptSource[] interrupts, object? access)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>identity</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceIdentity.html">DeviceIdentity</a></dt>
+    <dd><p>What the bus knows about the device.</p>
+</dd>
+    <dt><code>resources</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Resources.DeviceResource.html">DeviceResource</a>[]</dt>
+    <dd><p>Its windows and port ranges.</p>
+</dd>
+    <dt><code>interrupts</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Interrupts.InterruptSource.html">InterruptSource</a>[]</dt>
+    <dd><p>Its interrupt sources.</p>
+</dd>
+    <dt><code>access</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></dt>
+    <dd><p>The bus's access object for it, or null.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceNode.html">DeviceNode</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The binding is being torn down, or the caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishDisplay_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.PublishDisplay*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishDisplay_Cosmos_Kernel_HAL_Devices_Display_IDisplay_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.PublishDisplay(Cosmos.Kernel.HAL.Devices.Display.IDisplay)">
+  PublishDisplay(IDisplay)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Publishes a display under <a class="xref" href="Cosmos.Kernel.HAL.Devices.Display.IDisplay.html#Cosmos_Kernel_HAL_Devices_Display_IDisplay_Name">Name</a>. The ring's display manager, when present, receives it at once.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DisplaySink PublishDisplay(IDisplay display)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>display</code> <a class="xref" href="Cosmos.Kernel.HAL.Devices.Display.IDisplay.html">IDisplay</a></dt>
+    <dd><p>The driver's display contract.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Display.DisplaySink.html">DisplaySink</a></dt>
+    <dd><p>The sink the driver reports mode changes to.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The binding is being torn down, or the caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishKeyboard_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.PublishKeyboard*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishKeyboard_Cosmos_Kernel_HAL_Devices_Input_IKeyboard_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.PublishKeyboard(Cosmos.Kernel.HAL.Devices.Input.IKeyboard)">
+  PublishKeyboard(IKeyboard)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Publishes a keyboard. The ring's keyboard manager, when present, receives it at once.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public KeyboardSink PublishKeyboard(IKeyboard keyboard)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>keyboard</code> <a class="xref" href="Cosmos.Kernel.HAL.Devices.Input.IKeyboard.html">IKeyboard</a></dt>
+    <dd><p>The driver's keyboard contract.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Input.KeyboardSink.html">KeyboardSink</a></dt>
+    <dd><p>The sink the driver reports keys to.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The binding is being torn down, or the caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishNetwork_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.PublishNetwork*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishNetwork_Cosmos_Kernel_HAL_Devices_Network_INetworkInterface_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.PublishNetwork(Cosmos.Kernel.HAL.Devices.Network.INetworkInterface)">
+  PublishNetwork(INetworkInterface)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Publishes a network interface.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public NetworkSink PublishNetwork(INetworkInterface network)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>network</code> <a class="xref" href="Cosmos.Kernel.HAL.Devices.Network.INetworkInterface.html">INetworkInterface</a></dt>
+    <dd><p>The driver's interface contract.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Network.NetworkSink.html">NetworkSink</a></dt>
+    <dd><p>The sink the driver reports frames and link changes to.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The binding is being torn down, or the caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishPointer_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.PublishPointer*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishPointer_Cosmos_Kernel_HAL_Devices_Input_IPointer_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.PublishPointer(Cosmos.Kernel.HAL.Devices.Input.IPointer)">
+  PublishPointer(IPointer)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Publishes a pointer.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PointerSink PublishPointer(IPointer pointer)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>pointer</code> <a class="xref" href="Cosmos.Kernel.HAL.Devices.Input.IPointer.html">IPointer</a></dt>
+    <dd><p>The driver's pointer contract.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Input.PointerSink.html">PointerSink</a></dt>
+    <dd><p>The sink the driver reports movement to.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The binding is being torn down, or the caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_RetractChild_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.RetractChild*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_RetractChild_Cosmos_Kernel_HAL_DriverKit_DeviceNode_System_Boolean_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.RetractChild(Cosmos.Kernel.HAL.DriverKit.DeviceNode,System.Boolean)">
+  RetractChild(DeviceNode, bool)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Takes a child this node published out of the tree, tearing down its
+binding. Same context rule as <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.html#Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishChild_Cosmos_Kernel_HAL_DriverKit_DeviceIdentity_Cosmos_Kernel_HAL_DriverKit_Resources_DeviceResource___Cosmos_Kernel_HAL_DriverKit_Interrupts_InterruptSource___System_Object_">PublishChild(DeviceIdentity, DeviceResource[], InterruptSource[], object?)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void RetractChild(DeviceNode child, bool hardwarePresent)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>child</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceNode.html">DeviceNode</a></dt>
+    <dd><p>A node from <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.html#Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishChild_Cosmos_Kernel_HAL_DriverKit_DeviceIdentity_Cosmos_Kernel_HAL_DriverKit_Resources_DeviceResource___Cosmos_Kernel_HAL_DriverKit_Interrupts_InterruptSource___System_Object_">PublishChild(DeviceIdentity, DeviceResource[], InterruptSource[], object?)</a>.</p>
+</dd>
+    <dt><code>hardwarePresent</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>Whether the child's hardware is still there to be quiesced.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></dt>
+    <dd><p><code class="paramref">child</code> is not a child of this node.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_Sleep_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.Sleep*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_Sleep_System_UInt32_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.Sleep(System.UInt32)">
+  Sleep(uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gives up the CPU for <code class="paramref">milliseconds</code>: a scheduler
+sleep on a driver thread or the worker, a busy wait without a scheduler.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Sleep(uint milliseconds)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>milliseconds</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd><p>How long.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_TryAllocateDma_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.TryAllocateDma*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_TryAllocateDma_System_Int32_System_Int32_Cosmos_Kernel_HAL_DriverKit_Resources_DmaConstraints_Cosmos_Kernel_HAL_DriverKit_Resources_DmaBuffer__" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.TryAllocateDma(System.Int32,System.Int32,Cosmos.Kernel.HAL.DriverKit.Resources.DmaConstraints,Cosmos.Kernel.HAL.DriverKit.Resources.DmaBuffer@)">
+  TryAllocateDma(int, int, DmaConstraints, out DmaBuffer?)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.html#Cosmos_Kernel_HAL_DriverKit_DeviceBinding_AllocateDma_System_Int32_System_Int32_">AllocateDma(int, int)</a> for a device with addressing limits: fails
+instead of throwing when the memory the allocator has does not meet
+<code class="paramref">constraints</code>, so the driver can decline.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryAllocateDma(int length, int alignment, DmaConstraints constraints, out DmaBuffer? buffer)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>length</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>Bytes wanted, at least one.</p>
+</dd>
+    <dt><code>alignment</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>Alignment of the first byte, a power of two.</p>
+</dd>
+    <dt><code>constraints</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Resources.DmaConstraints.html">DmaConstraints</a></dt>
+    <dd><p>What the device can address.</p>
+</dd>
+    <dt><code>buffer</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Resources.DmaBuffer.html">DmaBuffer</a></dt>
+    <dd><p>The buffer, when allocated.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>False when no memory meeting the constraints is available.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p><code class="paramref">length</code> is not positive or <code class="paramref">alignment</code> is not a power of two.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The binding is being torn down, or the caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_TryRequestInterrupt_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.TryRequestInterrupt*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_TryRequestInterrupt_Cosmos_Kernel_HAL_DriverKit_Interrupts_InterruptSource_Cosmos_Kernel_HAL_DriverKit_Interrupts_InterruptHandler_Cosmos_Kernel_HAL_DriverKit_Interrupts_InterruptHandle__" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.TryRequestInterrupt(Cosmos.Kernel.HAL.DriverKit.Interrupts.InterruptSource,Cosmos.Kernel.HAL.DriverKit.Interrupts.InterruptHandler,Cosmos.Kernel.HAL.DriverKit.Interrupts.InterruptHandle@)">
+  TryRequestInterrupt(InterruptSource, InterruptHandler, out InterruptHandle?)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Connects <code class="paramref">handler</code> to one of the node's interrupt
+sources. The handler is live from the moment this returns true, so the
+driver arms the device only afterwards.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryRequestInterrupt(InterruptSource source, InterruptHandler handler, out InterruptHandle? handle)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>source</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Interrupts.InterruptSource.html">InterruptSource</a></dt>
+    <dd><p>One of <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceNode.html#Cosmos_Kernel_HAL_DriverKit_DeviceNode_Interrupts">Interrupts</a>.</p>
+</dd>
+    <dt><code>handler</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Interrupts.InterruptHandler.html">InterruptHandler</a></dt>
+    <dd><p>The handler; interrupt context.</p>
+</dd>
+    <dt><code>handle</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Interrupts.InterruptHandle.html">InterruptHandle</a></dt>
+    <dd><p>The connection, for masking and unmasking.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>False when the platform cannot deliver the source; nothing is recorded then.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></dt>
+    <dd><p><code class="paramref">source</code> belongs to another node.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The binding is being torn down, or the caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_TrySchedulePeriodic_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.TrySchedulePeriodic*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_TrySchedulePeriodic_System_UInt32_Cosmos_Kernel_HAL_DriverKit_Threading_WorkItem_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.TrySchedulePeriodic(System.UInt32,Cosmos.Kernel.HAL.DriverKit.Threading.WorkItem)">
+  TrySchedulePeriodic(uint, WorkItem)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Schedules <code class="paramref">item</code> every <code class="paramref">intervalMilliseconds</code>
+from the platform timer, until teardown. The interval is rounded to the
+timer's tick, which is tens of milliseconds on some platforms.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TrySchedulePeriodic(uint intervalMilliseconds, WorkItem item)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>intervalMilliseconds</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd><p>The period.</p>
+</dd>
+    <dt><code>item</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Threading.WorkItem.html">WorkItem</a></dt>
+    <dd><p>A work item of this binding.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>False when the kernel has no platform timer (<code>CosmosEnableTimer</code> off) or no kit worker (<code>CosmosEnableScheduler</code> off).</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The binding is being torn down, or the caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_TryStartThread_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.TryStartThread*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_TryStartThread_System_String_System_Action_Cosmos_Kernel_HAL_DriverKit_Threading_DriverThread__" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.TryStartThread(System.String,System.Action,Cosmos.Kernel.HAL.DriverKit.Threading.DriverThread@)">
+  TryStartThread(string, Action, out DriverThread?)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Starts a thread that runs <code class="paramref">entry</code>. The body loops on
+the binding's events and returns once <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.html#Cosmos_Kernel_HAL_DriverKit_DeviceBinding_IsDetaching">IsDetaching</a> is
+true; teardown waits <span class="xref">Cosmos.Kernel.HAL.DriverKit.DeviceBinding.JoinTimeoutMilliseconds</span> for it.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryStartThread(string name, Action entry, out DriverThread? thread)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>name</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The thread's name, for the log.</p>
+</dd>
+    <dt><code>entry</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.action">Action</a></dt>
+    <dd><p>The thread's body.</p>
+</dd>
+    <dt><code>thread</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Threading.DriverThread.html">DriverThread</a></dt>
+    <dd><p>The started thread.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>False when the scheduler is not running (<code>CosmosEnableScheduler</code> off) or the thread did not start.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The binding is being torn down, or the caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_Wait_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.Wait*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_DeviceBinding_Wait_Cosmos_Kernel_HAL_DriverKit_Threading_DeviceEvent_System_UInt32_" data-uid="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.Wait(Cosmos.Kernel.HAL.DriverKit.Threading.DeviceEvent,System.UInt32)">
+  Wait(DeviceEvent, uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Waits for <code class="paramref">evt</code> to be signaled, up to <code class="paramref">timeoutMilliseconds</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Wait(DeviceEvent evt, uint timeoutMilliseconds)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>evt</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Threading.DeviceEvent.html">DeviceEvent</a></dt>
+    <dd><p>An event of this binding.</p>
+</dd>
+    <dt><code>timeoutMilliseconds</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd><p>Longest time to wait.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>True when a signal was consumed; false on timeout, or at once when the binding is being torn down.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
