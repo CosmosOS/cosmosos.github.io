@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class AudioManager | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class AudioManager | Cosmos Gen 3 ">
+      
+      <meta name="description" content="The audio outputs the kit published, and which one is primary. Every output a kit driver publishes is listed by the manager&#39;s  from the kit worker and dropped when it is withdrawn.  is the short way to put a stream through the primary output. Reads answer honestly before  ran and when audio is compiled out: 0, null, false.">
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Cosmos.Kernel.System.Audio.AudioManager">
+
+
+
+  <h1 id="Cosmos_Kernel_System_Audio_AudioManager" data-uid="Cosmos.Kernel.System.Audio.AudioManager" class="text-break">
+Class AudioManager  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><span class="xref">Cosmos</span>.<a class="xref" href="Cosmos.Kernel.html">Kernel</a>.<a class="xref" href="Cosmos.Kernel.System.html">System</a>.<a class="xref" href="Cosmos.Kernel.System.Audio.html">Audio</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Cosmos.Kernel.System.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>The audio outputs the kit published, and which one is primary. Every
+output a kit driver publishes is listed by the manager's
+<span class="xref">Cosmos.Kernel.System.Audio.KitAudioConsumer</span> from the kit worker and dropped when it is
+withdrawn. <a class="xref" href="Cosmos.Kernel.System.Audio.AudioManager.html#Cosmos_Kernel_System_Audio_AudioManager_Play_Cosmos_Kernel_System_Audio_AudioStream_">Play(AudioStream)</a> is the short way to put a stream through
+the primary output. Reads answer honestly before <span class="xref">Cosmos.Kernel.System.Audio.AudioManager.Initialize()</span>
+ran and when audio is compiled out: 0, null, false.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class AudioManager</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">AudioManager</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Cosmos_Kernel_System_Audio_AudioManager_Count_" data-uid="Cosmos.Kernel.System.Audio.AudioManager.Count*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Audio_AudioManager_Count" data-uid="Cosmos.Kernel.System.Audio.AudioManager.Count">
+  Count
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>How many outputs are published now. Any context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int Count { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Audio_AudioManager_IsEnabled_" data-uid="Cosmos.Kernel.System.Audio.AudioManager.IsEnabled*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Audio_AudioManager_IsEnabled" data-uid="Cosmos.Kernel.System.Audio.AudioManager.IsEnabled">
+  IsEnabled
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Whether audio support is compiled into this kernel.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool IsEnabled { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Audio_AudioManager_Primary_" data-uid="Cosmos.Kernel.System.Audio.AudioManager.Primary*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Audio_AudioManager_Primary" data-uid="Cosmos.Kernel.System.Audio.AudioManager.Primary">
+  Primary
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The primary output, or null when none is published. Any context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static AudioDevice? Primary { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.System.Audio.AudioDevice.html">AudioDevice</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Cosmos_Kernel_System_Audio_AudioManager_Play_" data-uid="Cosmos.Kernel.System.Audio.AudioManager.Play*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Audio_AudioManager_Play_Cosmos_Kernel_System_Audio_AudioStream_" data-uid="Cosmos.Kernel.System.Audio.AudioManager.Play(Cosmos.Kernel.System.Audio.AudioStream)">
+  Play(AudioStream)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Plays a stream through the primary output and returns once the
+stream is depleted and the device has drained it. Thread context:
+the call blocks for the length of the audio, which
+<a class="xref" href="Cosmos.Kernel.System.Audio.AudioManager.html#Cosmos_Kernel_System_Audio_AudioManager_TryStartPlayback_Cosmos_Kernel_System_Audio_AudioStream_System_IDisposable_Cosmos_Kernel_System_Audio_AudioPlayback__">TryStartPlayback(AudioStream, IDisposable?, out AudioPlayback?)</a> does not.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool Play(AudioStream stream)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>stream</code> <a class="xref" href="Cosmos.Kernel.System.Audio.AudioStream.html">AudioStream</a></dt>
+    <dd><p>The frames to play.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>False when no output is published, or the primary refuses the stream's format.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Audio_AudioManager_TryGet_" data-uid="Cosmos.Kernel.System.Audio.AudioManager.TryGet*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Audio_AudioManager_TryGet_System_Int32_Cosmos_Kernel_System_Audio_AudioDevice__" data-uid="Cosmos.Kernel.System.Audio.AudioManager.TryGet(System.Int32,Cosmos.Kernel.System.Audio.AudioDevice@)">
+  TryGet(int, out AudioDevice?)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The output at <code class="paramref">index</code> in the manager's list (primary first). Any context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryGet(int index, out AudioDevice? device)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>Position, from 0 to <a class="xref" href="Cosmos.Kernel.System.Audio.AudioManager.html#Cosmos_Kernel_System_Audio_AudioManager_Count">Count</a> exclusive.</p>
+</dd>
+    <dt><code>device</code> <a class="xref" href="Cosmos.Kernel.System.Audio.AudioDevice.html">AudioDevice</a></dt>
+    <dd><p>The output at that position.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>False when the index is out of range, which before <span class="xref">Cosmos.Kernel.System.Audio.AudioManager.Initialize()</span> ran is every index.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Audio_AudioManager_TryStartPlayback_" data-uid="Cosmos.Kernel.System.Audio.AudioManager.TryStartPlayback*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Audio_AudioManager_TryStartPlayback_Cosmos_Kernel_System_Audio_AudioStream_System_IDisposable_Cosmos_Kernel_System_Audio_AudioPlayback__" data-uid="Cosmos.Kernel.System.Audio.AudioManager.TryStartPlayback(Cosmos.Kernel.System.Audio.AudioStream,System.IDisposable,Cosmos.Kernel.System.Audio.AudioPlayback@)">
+  TryStartPlayback(AudioStream, IDisposable?, out AudioPlayback?)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Starts a thread that plays a stream through the primary output and
+returns as soon as it is running, so the caller stays responsive
+while the audio plays. <a class="xref" href="Cosmos.Kernel.System.Audio.AudioPlayback.html#Cosmos_Kernel_System_Audio_AudioPlayback_TryStart_Cosmos_Kernel_System_Audio_AudioDevice_Cosmos_Kernel_System_Audio_AudioStream_System_IDisposable_Cosmos_Kernel_System_Audio_AudioPlayback__">TryStart(AudioDevice, AudioStream, IDisposable?, out AudioPlayback?)</a> carries
+the rules, including what <code class="paramref">owned</code> is for.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryStartPlayback(AudioStream stream, IDisposable? owned, out AudioPlayback? playback)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>stream</code> <a class="xref" href="Cosmos.Kernel.System.Audio.AudioStream.html">AudioStream</a></dt>
+    <dd><p>The frames to play, read from the new thread from here on.</p>
+</dd>
+    <dt><code>owned</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></dt>
+    <dd><p>What the stream reads from, disposed once the thread is done with it, or null.</p>
+</dd>
+    <dt><code>playback</code> <a class="xref" href="Cosmos.Kernel.System.Audio.AudioPlayback.html">AudioPlayback</a></dt>
+    <dd><p>The playback, for stopping it and following it.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>False when no output is published, the primary is withdrawn or already
+playing, or there is no scheduler to run the thread on; nothing was
+started. <a class="xref" href="Cosmos.Kernel.System.Audio.AudioManager.html#Cosmos_Kernel_System_Audio_AudioManager_Play_Cosmos_Kernel_System_Audio_AudioStream_">Play(AudioStream)</a> plays the stream on the calling thread
+instead.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
