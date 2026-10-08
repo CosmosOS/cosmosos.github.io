@@ -124,7 +124,7 @@
 </tr>
 <tr>
 <td>USB</td>
-<td><code>UsbHubDriver</code>, <code>UsbKeyboardDriver</code>, <code>UsbMassStorageDriver</code></td>
+<td><code>UsbHubDriver</code>, <code>UsbKeyboardDriver</code>, <code>UsbMouseDriver</code>, <code>UsbMassStorageDriver</code></td>
 </tr>
 <tr>
 <td>PS/2</td>
@@ -1010,7 +1010,7 @@ public override void OnDetach(DeviceBinding binding, DetachReason reason)
 </table>
 <p>A USB stick is handled by <code>UsbMassStorageDriver</code> (<a href="#the-usb-class-drivers">The USB class drivers</a>). Every disk is registered with <code>StorageManager</code> when it is published.</p>
 <h2 id="usb-devices">USB devices</h2>
-<p>A USB node is one interface of a USB device, published by the host controller driver for a device on a root port, or by the hub driver for a device behind a hub. It has no resources, no interrupt sources and a <code>UsbAccess</code> for everything a class driver does. A device with several interfaces gives several nodes. A class driver never sees the controller or the hubs above it; the shipped <code>UsbKeyboardDriver</code> and <code>UsbMassStorageDriver</code> are good models.</p>
+<p>A USB node is one interface of a USB device, published by the host controller driver for a device on a root port, or by the hub driver for a device behind a hub. It has no resources, no interrupt sources and a <code>UsbAccess</code> for everything a class driver does. A device with several interfaces gives several nodes. A class driver never sees the controller or the hubs above it; the shipped <code>UsbKeyboardDriver</code>, <code>UsbMouseDriver</code> and <code>UsbMassStorageDriver</code> are good models.</p>
 <h3 id="usb-identity-and-match">USB identity and match</h3>
 <p><code>UsbIdentity</code> holds the device's <code>VendorId</code>, <code>ProductId</code> and class, and the interface's class, subclass and protocol. The node path is the port chain and the interface number: <code>usb:1-1:0</code> is interface 0 of the device on root port 1 of the first controller, and <code>usb:1-2.1:0</code> a device on port 1 of a hub plugged into root port 2.</p>
 <p><code>UsbMatch</code> works like <code>PciMatch</code>: every field given must be equal, and the specificity is the number of fields given. A class driver usually matches the interface class, subclass and protocol:</p>
@@ -1086,6 +1086,11 @@ public void OnReport(ReadOnlySpan&lt;byte&gt; report)
 <td><code>UsbKeyboardDriver</code></td>
 <td>HID boot keyboards</td>
 <td>a keyboard, <code>usb-keyboard</code></td>
+</tr>
+<tr>
+<td><code>UsbMouseDriver</code></td>
+<td>HID boot mice</td>
+<td>a pointer, <code>usb-mouse</code></td>
 </tr>
 <tr>
 <td><code>UsbMassStorageDriver</code></td>
