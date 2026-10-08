@@ -317,6 +317,7 @@ Console.WriteLine(&quot;Received '&quot; + Encoding.ASCII.GetString(buffer, 0, b
 
 tcpClient.Close();
 </code></pre>
+<p><code>Read</code> waits for data as it does in .NET: it returns once bytes have arrived, and 0 only once the peer has closed the connection, so the <code>DataAvailable</code> loop is optional. Set <code>ReadTimeout</code> (the socket's <code>ReceiveTimeout</code>) to bound the wait, past which <code>Read</code> throws an <code>IOException</code>.</p>
 <!-- screenshot: console showing the TCP echo received back from the host -->
 <p><img src="images/network-tcp-client.png" alt="TCP Client"></p>
 <h2 id="tcp-server">TCP server</h2>
