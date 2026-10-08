@@ -116,7 +116,7 @@
 </tr>
 <tr>
 <td>PCI</td>
-<td><code>PcieRootPortDriver</code>, <code>VirtioPciTransportDriver</code>, <code>XhciDriver</code>, <code>E1000EDriver</code>, <code>AhciDriver</code>, <code>NvmeDriver</code>, <code>VmwareSvgaDriver</code>, <code>AmdDcnDriver</code></td>
+<td><code>PcieRootPortDriver</code>, <code>VirtioPciTransportDriver</code>, <code>XhciDriver</code>, <code>E1000EDriver</code>, <code>AhciDriver</code>, <code>NvmeDriver</code>, <code>VmwareSvgaDriver</code>, <code>AmdDcnDriver</code>, <code>IntelGraphicsDriver</code></td>
 </tr>
 <tr>
 <td>Virtio</td>
@@ -426,7 +426,7 @@ pixels[0] = 0x00FF0000;
 <li><code>RegionCaching.WriteCombining</code> for a framebuffer: writes are grouped into bursts, which is much faster for drawing pixels.</li>
 <li><code>RegionCaching.Normal</code> for ordinary RAM shared with the device.</li>
 </ul>
-<p>Today every memory window is mapped as <code>Device</code>, whatever you ask. Pick the right value anyway: the kit records it and will apply it once the platform supports it.</p>
+<p>On x64, <code>WriteCombining</code> is applied to every 2 MiB block the region covers whole; a block it shares with something else stays <code>Device</code>. Every other choice, and every choice on ARM64, is mapped as <code>Device</code> today. Pick the right value anyway: the kit records it and will apply it once the platform supports it.</p>
 <h3 id="dma-memory">DMA memory</h3>
 <p><code>binding.AllocateDma(length, alignment)</code> returns a <code>DmaBuffer</code>: zeroed, physically contiguous memory, with <code>PhysicalAddress</code> for the device and <code>Span</code> for the CPU.</p>
 <p>DMA memory usually holds a <strong>ring</strong>: a fixed array of descriptors that the driver and the device use as a circular queue. Each descriptor points at a data buffer and says who owns it. The driver fills descriptors, hands them to the device and writes a register (the doorbell) to say new ones are ready; the device processes them in order, marks each one done, and wraps back to the first after the last. A network card, for example, has a receive ring the device fills with incoming frames and a transmit ring the driver fills with outgoing ones.</p>
@@ -983,6 +983,11 @@ public override void OnDetach(DeviceBinding binding, DetachReason reason)
 <td><code>AmdDcnDriver</code></td>
 <td>AMD DCN 3.1.5, the integrated Radeon graphics of Ryzen 7000 (Raphael, Dragon Range) and Ryzen 9000 (Granite Ridge) processors, PCI</td>
 <td>Keeps the mode the UEFI firmware set (no mode switching); flips between three frames in VRAM at the vertical update, so nothing tears, and draws a hardware cursor; replaces the firmware framebuffer, which lives in its VRAM. A legacy (CSM) boot, a laptop in discrete-GPU-only mode, or a surface it cannot draw into makes it decline, with the reason recorded on the offer, where <code>DriverDiagnostics</code> reports it</td>
+</tr>
+<tr>
+<td><code>IntelGraphicsDriver</code></td>
+<td>The integrated graphics of Intel Core processors from the 2nd generation (Sandy Bridge, HD Graphics 2000 and 3000) to the 14th (Raptor Lake, UHD and Iris Xe Graphics), PCI</td>
+<td>Keeps the mode the UEFI firmware set (no mode switching); flips between three frames in stolen memory at the vertical blank, so nothing tears, and draws a hardware cursor; replaces the firmware framebuffer, which it reaches through the GPU's aperture. A legacy (CSM) boot, a surface it cannot draw into, or a device id outside the table it shares with Linux's i915 makes it decline; too little stolen memory after the firmware's surface leaves it drawing without flipping or without a cursor, which the bind log says</td>
 </tr>
 </tbody>
 </table>
