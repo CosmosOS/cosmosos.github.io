@@ -258,7 +258,13 @@
 <td><code>Sleep</code></td>
 <td>via <code>MarkSleeping</code></td>
 <td></td>
-<td>then halts once, only if still <code>Sleeping</code></td>
+<td>then <code>Park</code></td>
+</tr>
+<tr>
+<td><code>Park</code></td>
+<td>none</td>
+<td>none</td>
+<td>sets <code>_needReschedule</code> and raises the controller's reschedule interrupt; returns once the thread runs again (see <a href="#parking">Parking</a>)</td>
 </tr>
 <tr>
 <td><code>YieldThread</code></td>
@@ -352,6 +358,27 @@
 <p>The staging itself is two writes into native globals: the new-thread flag first, then the target stack pointer (<code>_context_switch_target_rsp</code>; nonzero means switch). Every one of the 256 interrupt vectors checks that global on exit, so any interrupt can carry out a staged switch, not just the timer. The staging variables are single globals, one more thing that pins the kernel to one CPU for now.</p>
 <h3 id="waking-from-an-interrupt-handler">Waking from an interrupt handler</h3>
 <p>Device interrupt handlers wake threads too: the NVMe driver's message interrupt handler signals a driver kit <code>DeviceEvent</code>, an <a href="#interruptevent"><code>InterruptEvent</code></a> underneath, whose waiter must run. The tick path alone would leave that thread queued for up to a full quantum, so wake-ups take a shortcut. <code>ReadyThread</code> (and <code>BlockThread</code> and <code>YieldThread</code>) set a per-CPU <code>_needReschedule</code> flag, and the interrupt dispatcher calls <code>ReschedulePendingFromIrq</code> when a handled hardware interrupt exits: if the flag is set and no switch is already staged for this interrupt, it runs <code>ScheduleFromInterrupt</code> right there, on the device interrupt's own exit path. The already-staged check matters: the timer handler may have staged a switch during the same interrupt, and a second <code>ScheduleFromInterrupt</code> would save this frame's stack pointer into a thread whose real context lives elsewhere.</p>
+<h3 id="parking">Parking</h3>
+<p>A thread that blocks or sleeps gives the CPU away through <code>SchedulerManager.Park</code>, called after its state flip, once its IRQ-off scope is disposed. <code>Park</code> sets <code>_needReschedule</code> and raises the controller's reschedule interrupt on the current CPU (<code>IInterruptController.TryRaiseReschedule</code>). Its handler does nothing: the interrupt only exists for its exit, which runs <code>ReschedulePendingFromIrq</code> and switches to the next thread.</p>
+<table>
+<thead>
+<tr>
+<th>Architecture</th>
+<th>Reschedule interrupt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x64</td>
+<td>Local APIC self-IPI, vector <code>0xF0</code></td>
+</tr>
+<tr>
+<td>ARM64</td>
+<td>SGI 8, through <code>ICC_SGI1R_EL1</code> on GICv3 or <code>GICD_SGIR</code> on GICv2</td>
+</tr>
+</tbody>
+</table>
+<p><code>Park</code> then waits until the state leaves <code>Blocked</code> or <code>Sleeping</code>, which happens once a wake readied the thread and the scheduler ran it again, or at once when the wake landed before the switch. Halting instead left the CPU idle for the rest of the tick every time a thread blocked. The idle thread, and any thread parking before the controller can raise the interrupt, still halt.</p>
 <h3 id="what-there-is-not-a-voluntary-switch">What there is not: a voluntary switch</h3>
 <p><code>SchedulerManager.Schedule</code> and <code>ContextSwitch.Switch</code> exist in the tree but have no callers, and neither can complete a synchronous switch: they only <em>stage</em> a target stack pointer, the staged switch is consumed on an interrupt exit, and a voluntary caller has no interrupt-saved register frame for that exit to restore (<code>Schedule</code>'s helper does not even save the outgoing stack pointer). The one voluntary-yield entry that works, the runtime's <code>RhYield</code> behind <code>Thread.Yield</code>, borrows the interrupt path instead: <code>YieldThread</code> sets <code>_needReschedule</code>, so the next hardware interrupt exit switches even when the quantum has not run out, and returns at once. That switch picks the replacement first and re-queues the yielding thread through <code>OnThreadYield</code> afterwards, exactly as a preemption does, so the thread is never queued while it still runs. The caller does not wait for the switch, and <code>Thread.Yield</code> always reports that no other thread ran: waiting would cost every call up to a tick, while CoreLib calls <code>Thread.Yield</code> once per spin of its spin-then-block loops (on one CPU, an idle thread pool worker spins 70 times before it parks, and <code>Thread.Start</code> spins until the new thread reports started). Halting until the switch made those loops last 70 ticks. A true synchronous switch would need its own save path (the equivalent of the IRQ stub's, entered from a call instead of an interrupt), which does not exist yet.</p>
 <hr>
@@ -445,15 +472,15 @@
     C --&gt; D[&quot;BlockThread / MarkSleeping (state flips while IRQs are still masked)&quot;]
     D --&gt; E[&quot;Dispose the scope (interrupts back on: a pending wake can land now)&quot;]
     E --&gt; F{&quot;Still Blocked / Sleeping?&quot;}
-    F --&gt;|yes| G[&quot;Halt until an interrupt&quot;]
+    F --&gt;|yes| G[&quot;Park: raise the reschedule interrupt, run the next thread&quot;]
     F --&gt;|no| H[&quot;Already woken: continue&quot;]
 </code></pre>
 <ol>
 <li><strong>One atomic section.</strong> Queue insertion, any covering release, and the state flip happen inside a single <code>AcquireIrqSafe</code> scope. A wake cannot interleave, because the signal side needs the same lock and interrupts are masked.</li>
-<li><strong>State-guarded halt.</strong> The halt after the scope is conditional on the thread still being parked. A wake that lands in the window between scope exit and halt flips the state back to <code>Ready</code>, and the guard sees it; an unconditional halt would sleep through it.</li>
+<li><strong>State-guarded park.</strong> <code>Park</code> after the scope acts only while the thread is still parked. A wake that lands in the window between scope exit and the switch flips the state back to <code>Ready</code>, and the guard sees it; an unconditional halt would sleep through it.</li>
 <li><strong>Membership-based results.</strong> For timed waits, &quot;was I signaled or did I time out&quot; is answered by wait-queue membership, not by flags: a signal removes the thread from the queue, so after waking, still-in-queue means timeout (and the thread removes its own stale entry so a later signal cannot be spent on it).</li>
 </ol>
-<p><code>MarkSleeping</code> exists as a separate entry precisely for rule 1: <code>Sleep</code> is <code>MarkSleeping</code> plus its own guarded halt, but <code>ConditionVariable.WaitTimeout</code> needs the state flip inside <em>its</em> lock scope, so it calls <code>MarkSleeping</code> there and halts itself afterwards.</p>
+<p><code>MarkSleeping</code> exists as a separate entry precisely for rule 1: <code>Sleep</code> is <code>MarkSleeping</code> plus <code>Park</code>, but <code>ConditionVariable.WaitTimeout</code> needs the state flip inside <em>its</em> lock scope, so it calls <code>MarkSleeping</code> there and <code>Park</code> afterwards.</p>
 <h3 id="mutex">Mutex</h3>
 <p><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/Mutex.cs"><code>Mutex</code></a> is a recursive blocking lock: an owner reference, a recursion depth, and a FIFO wait list. A contended acquire parks by the protocol above on the first failed attempt; there is no spin-then-park stage. Release at depth zero performs a <strong>direct hand-off</strong>: still under the lock, it dequeues the head waiter and makes it the owner before readying it, so a running thread cannot barge in and retake the mutex during the waiter's wake-up latency. The woken waiter recognizes the hand-off (it owns the mutex it never explicitly acquired) and returns.</p>
 <p>Two special cases: the idle thread never parks (blocking it would just get it re-picked as the idle fallback), so it spin-acquires with interrupts enabled between attempts. And with no thread context at all (scheduler off or not yet ready), <code>Acquire</code>/<code>Release</code> are no-ops and <code>TryAcquire</code> succeeds, so early-boot code can run through mutex-protected paths.</p>
