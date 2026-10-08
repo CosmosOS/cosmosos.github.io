@@ -106,7 +106,7 @@
 <tr>
 <td>Video drivers</td>
 <td>VBE, VGA, VMWare SVGA II</td>
-<td>The firmware framebuffer Limine hands over (x64 and ARM64), plus the display drivers the driver kit publishes: virtio-gpu and VMware SVGA II</td>
+<td>The firmware framebuffer Limine hands over (x64 and ARM64), plus the display drivers the driver kit publishes: virtio-gpu, VMware SVGA II and AMD DCN 3.1.5 (the Radeon graphics of Ryzen 7000 and 9000 processors)</td>
 </tr>
 <tr>
 <td><code>Display()</code></td>
@@ -477,7 +477,7 @@ while (true)
 <li><code>Canvas.DisableFullScreen()</code> only drops the cached canvas, after releasing what a 3D canvas holds on the device; the display stays in its mode, since there is no text mode to return to.</li>
 </ul>
 <h2 id="how-it-works">How it works</h2>
-<p><code>Canvas.GetFullScreen()</code> returns the canvas on the primary display of <code>DisplayManager</code>, the ring's list of every display the <a href="drivers.html">driver kit</a> published. The framebuffer the <a href="https://limine-bootloader.org/">Limine</a> bootloader requests from the firmware (UEFI GOP) before handing control to the kernel is the first of them, the firmware display named <code>framebuffer</code>, published by the kit's engine before any driver runs; a display driver that binds an adapter publishes its own, <code>virtio-gpu</code> or <code>vmware-svga</code>, which the manager prefers over the firmware one. When the driver took over the very adapter the firmware framebuffer sits in, as the SVGA driver does, the kit retires the firmware display, and a kernel that would rather keep it excludes the driver from its manifest. The canvas is the framework <code>Canvas</code> over the display, or the driver's <code>Canvas3D</code> when the display implements <code>ICanvas3DFactory</code> (see <a href="#3d-rendering">3D rendering</a>). This is why the same code works unmodified on x64 and ARM64, and on every display: the canvas never touches a video card directly. Drawing calls land in a back buffer in ordinary memory; <code>Display()</code> copies the back buffer into the display's framebuffer, row by row and clipped to the mode the display is in, then calls the display's <code>Flush</code>, a no-op on the firmware framebuffer and a transfer command on virtio-gpu. The kernel console (<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.System/Graphics/KernelConsole.cs"><code>KernelConsole</code></a>) renders <code>Console</code> output onto that same canvas with the default PSF font, calling <code>Display()</code> after every write.</p>
+<p><code>Canvas.GetFullScreen()</code> returns the canvas on the primary display of <code>DisplayManager</code>, the ring's list of every display the <a href="drivers.html">driver kit</a> published. The framebuffer the <a href="https://limine-bootloader.org/">Limine</a> bootloader requests from the firmware (UEFI GOP) before handing control to the kernel is the first of them, the firmware display named <code>framebuffer</code>, published by the kit's engine before any driver runs; a display driver that binds an adapter publishes its own, <code>virtio-gpu</code>, <code>vmware-svga</code> or <code>amd-dcn</code>, which the manager prefers over the firmware one. When the driver took over the very adapter the firmware framebuffer sits in, as the SVGA and AMD drivers do, the kit retires the firmware display, and a kernel that would rather keep it excludes the driver from its manifest. The canvas is the framework <code>Canvas</code> over the display, or the driver's <code>Canvas3D</code> when the display implements <code>ICanvas3DFactory</code> (see <a href="#3d-rendering">3D rendering</a>). This is why the same code works unmodified on x64 and ARM64, and on every display: the canvas never touches a video card directly. Drawing calls land in a back buffer in ordinary memory; <code>Display()</code> copies the back buffer into the display's framebuffer, row by row and clipped to the mode the display is in, then calls the display's <code>Flush</code>, a no-op on the firmware framebuffer, a transfer command on virtio-gpu and a page flip at the next vertical update on amd-dcn. The kernel console (<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.System/Graphics/KernelConsole.cs"><code>KernelConsole</code></a>) renders <code>Console</code> output onto that same canvas with the default PSF font, calling <code>Display()</code> after every write.</p>
 <pre><code>Canvas API (shapes, text, images)      (Cosmos.Kernel.System.Graphics)
         │
 Full-screen canvas ── shared with ── KernelConsole (Console output)
@@ -487,7 +487,7 @@ Back buffer ──── Display() ────▶ the primary display's framebu
                               DisplayManager (primary first)
                                         │
                      driver kit: the firmware display &quot;framebuffer&quot; (Limine, x64 &amp; ARM64)
-                                 or a driver's display (virtio-gpu, vmware-svga)
+                                 or a driver's display (virtio-gpu, vmware-svga, amd-dcn)
 </code></pre>
 
 </article>

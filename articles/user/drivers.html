@@ -116,7 +116,7 @@
 </tr>
 <tr>
 <td>PCI</td>
-<td><code>PcieRootPortDriver</code>, <code>VirtioPciTransportDriver</code>, <code>XhciDriver</code>, <code>E1000EDriver</code>, <code>AhciDriver</code>, <code>NvmeDriver</code>, <code>VmwareSvgaDriver</code></td>
+<td><code>PcieRootPortDriver</code>, <code>VirtioPciTransportDriver</code>, <code>XhciDriver</code>, <code>E1000EDriver</code>, <code>AhciDriver</code>, <code>NvmeDriver</code>, <code>VmwareSvgaDriver</code>, <code>AmdDcnDriver</code></td>
 </tr>
 <tr>
 <td>Virtio</td>
@@ -978,6 +978,11 @@ public override void OnDetach(DeviceBinding binding, DetachReason reason)
 <td><code>VmwareSvgaDriver</code></td>
 <td>VMware SVGA II, PCI, x64 only</td>
 <td>Switches modes and draws a hardware cursor; replaces the firmware framebuffer, which lives in its VRAM</td>
+</tr>
+<tr>
+<td><code>AmdDcnDriver</code></td>
+<td>AMD DCN 3.1.5, the integrated Radeon graphics of Ryzen 7000 (Raphael, Dragon Range) and Ryzen 9000 (Granite Ridge) processors, PCI</td>
+<td>Keeps the mode the UEFI firmware set (no mode switching); flips between three frames in VRAM at the vertical update, so nothing tears, and draws a hardware cursor; replaces the firmware framebuffer, which lives in its VRAM. A legacy (CSM) boot, a laptop in discrete-GPU-only mode, or a surface it cannot draw into makes it decline, with the reason recorded on the offer, where <code>DriverDiagnostics</code> reports it</td>
 </tr>
 </tbody>
 </table>
