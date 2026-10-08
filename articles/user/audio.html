@@ -455,37 +455,6 @@ output.Stop();
 <li><code>Stop()</code> drops whatever the buffer still holds. To hear the tail of a sound, write a buffer's worth of silence after it first (<code>WritableBytes</code> right after <code>TrySetFormat</code> tells you how much that is), which is what the player does.</li>
 <li>Writing directly claims nothing. Check <code>Player</code> is <code>null</code> before you start; a <code>Play</code> or <code>Console.Beep</code> arriving while you write is refused, because the running device refuses its format change.</li>
 </ul>
-<h2 id="trying-it-in-the-devkernel">Trying it in the DevKernel</h2>
-<p>The DevKernel has four audio commands, written over the calls in this article (<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/examples/DevKernel/Commands/AudioCommands.cs">AudioCommands.cs</a>):</p>
-<table>
-<thead>
-<tr>
-<th>Command</th>
-<th>What it does</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>audio</code></td>
-<td>Lists every output with its driver, node, format and what it is playing (<code>12s of 180s</code>)</td>
-</tr>
-<tr>
-<td><code>beep [hz] [ms]</code></td>
-<td>Plays a tone through <code>Console.Beep</code>, 800 Hz for 200 ms by default</td>
-</tr>
-<tr>
-<td><code>play &lt;path&gt;</code></td>
-<td>Streams a <code>.wav</code> off a mounted volume in the background</td>
-</tr>
-<tr>
-<td><code>stop</code></td>
-<td>Stops whatever is playing</td>
-</tr>
-</tbody>
-</table>
-<p>Its <code>.cosmos/config.json</code> attaches an <code>intel-hda</code> controller and an NVMe disk and forwards the FTP ports, so a file uploaded with <code>ftpd</code> (see <a href="network.html#ftp-server">FTP server</a>) plays with <code>play</code>.</p>
-<!-- video: the DevKernel listing the hda output with "audio", playing a song with "play /mnt/song.wav" while "audio" shows its progress, then "stop" -->
-<p><video src="images/audio-play.mp4" controls playsinline style="max-width:100%"></video></p>
 <h2 id="current-limitations">Current limitations</h2>
 <ul>
 <li>Intel HD Audio is the only sound card driver: no AC97, Sound Blaster, virtio-sound or USB audio, and no PC speaker. Without an HD Audio controller, <code>Console.Beep</code> returns at once and plays nothing.</li>

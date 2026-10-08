@@ -130,7 +130,6 @@
 <li>Open the <strong>Run and Debug</strong> view and select <strong>Debug x64 Kernel</strong> (or <strong>Debug ARM64 Kernel</strong>).</li>
 <li>Press F5. The pre-launch task builds the kernel, starts QEMU with <code>-s -S</code> (GDB server, frozen at startup), and the debugger attaches. Execution stops at your breakpoints.</li>
 </ol>
-<p>The configuration names above are what the template generates. When working on the framework repository itself, the equivalent configurations are named <strong>Debug x64 DevKernel</strong> / <strong>Debug ARM64 DevKernel</strong>.</p>
 <hr>
 <h2 id="serial-log">Serial log</h2>
 <p>Every kernel boot phase logs to the serial port (COM1 on x64, PL011 on ARM64), which <code>cosmos run</code> connects to your terminal. When a kernel does not come up, or crashes before the debugger is useful, the serial log is the first thing to read; see <a href="startup.html">Kernel Startup</a> for a phase-by-phase walkthrough and how to symbolicate crash addresses.</p>

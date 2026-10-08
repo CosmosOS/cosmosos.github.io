@@ -206,42 +206,6 @@ $ telnet localhost 2323
 <h5>Warning</h5>
 <p>Telnet sends everything in the clear, and the server asks for no password: anyone who reaches the port gets a shell. Serve it on a network you trust, such as QEMU's private user network.</p>
 </div>
-<h2 id="in-the-devkernel">In the DevKernel</h2>
-<p>The DevKernel opens <code>tty2</code> to <code>tty4</code> at boot, each with a shell of its own, and has these commands:</p>
-<table>
-<thead>
-<tr>
-<th>Command</th>
-<th>Does</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>sessions</code> (<code>who</code>)</td>
-<td>Lists the sessions: <code>*</code> marks the one on the display, <code>&gt;</code> your own</td>
-</tr>
-<tr>
-<td><code>tty</code></td>
-<td>Shows which session the shell runs on</td>
-</tr>
-<tr>
-<td><code>chvt &lt;n&gt;</code></td>
-<td>Shows session <code>n</code> on the display</td>
-</tr>
-<tr>
-<td><code>openvt</code></td>
-<td>Opens another virtual console with a shell</td>
-</tr>
-<tr>
-<td><code>telnetd [port\|stop]</code></td>
-<td>Starts the Telnet server, on port 23 by default, or stops it</td>
-</tr>
-<tr>
-<td><code>exit</code> (<code>logout</code>)</td>
-<td>Closes the session the shell runs on; the primary console stays</td>
-</tr>
-</tbody>
-</table>
 <h2 id="current-limitations">Current limitations</h2>
 <ul>
 <li>There is no login: a Telnet client gets a shell as soon as it connects.</li>

@@ -378,7 +378,7 @@ if (canvas is Canvas3D canvas3D)
 <p>The 3D types, <code>Canvas3D</code>, <code>Camera3D</code>, <code>Mesh</code>, <code>MeshTopology</code>, <code>Texture</code> and <code>ICanvas3DFactory</code>, live in <code>Cosmos.Kernel.System.Graphics.Rendering3D</code>, which the <code>using</code>s at the top of this page import beside the 2D namespace. <code>Canvas3D</code> is a <code>Canvas</code>, so every 2D call still works on it and <code>Display()</code> presents the frame either way. Meshes come from <code>CreateMesh</code> and textures from <code>CreateTexture(Image)</code>; <code>DrawMesh(mesh, world)</code> places one with a transform. Disposing a texture releases its device memory, and <code>DrawMesh</code> rejects a mesh that still maps it.</p>
 <p>A display driver can implement <code>Canvas3D</code>: its constructor takes the <code>DisplayDevice</code> the canvas draws on, and a driver package derives from it, builds its render targets from <code>Width</code> and <code>Height</code>, recreates them in <code>OnModeChanged</code>, presents the scene in an override of <code>Display()</code> (falling back to the base for a 2D frame) and releases everything in <code>Disable()</code>, keeping its per-resource state in the <code>Mesh</code> and <code>Texture</code> handles through the protected helpers. The SVGA driver's canvas in <code>Cosmos.Kernel.Drivers</code> is written that way, over the public seam, and a kernel reaches it only as a <code>Canvas3D</code>. A kernel that wants 3D uses <code>Canvas.GetFullScreen()</code>.</p>
 <h3 id="a-cube-the-mouse-rolls">A cube the mouse rolls</h3>
-<p>The DevKernel <code>cube</code> command builds a whole scene from those calls: a mesh with one color per face, the ground grid, and a flat triangle that points where the mouse pushes. The pointer drives the roll, so the further it sits from the center of the screen, the faster the cube rolls that way.</p>
+<p>Those calls are enough for a whole scene: a mesh with one color per face over the ground grid. The pointer drives the roll, so the further it sits from the center of the screen, the faster the cube rolls that way.</p>
 <pre><code class="lang-csharp">if (Canvas.GetFullScreen() is not Canvas3D canvas3D)
 {
     Console.WriteLine(&quot;This display device has no 3D.&quot;);
@@ -467,7 +467,6 @@ while (true)
 </code></pre>
 <!-- video: the cube spinning above the grid, then rolling right, left, toward the camera and away as the mouse is pushed to each edge of the screen, the arrow on the ground showing the push direction -->
 <p><video src="images/graphics-3d-cube.mp4" controls autoplay muted loop playsinline style="max-width:100%"></video></p>
-<p>The full demo, cube mesh and direction arrow included, is <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/examples/DevKernel/Graphics/SpinningCubeDemo.cs">SpinningCubeDemo.cs</a>.</p>
 <h2 id="current-limitations">Current limitations</h2>
 <ul>
 <li>Only 32-bit color depth is supported end to end; BMP loading additionally accepts 24-bit files. A display in another depth is listed but receives nothing, logged once as <code>[Display] firmware framebuffer: 16 bits per pixel is not supported, nothing is drawn</code>.</li>
