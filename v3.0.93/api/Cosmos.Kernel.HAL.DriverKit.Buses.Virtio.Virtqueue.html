@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class Virtqueue | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class Virtqueue | Cosmos Gen 3 ">
+      
+      <meta name="description" content="A split virtqueue (virtio specification section 2.6) over DMA memory the leaf&#39;s binding owns, created by . Not thread-safe: the driver serializes its use, with a  between its transmit path and its drain. Every member is allocation-free, so a handler may pop used buffers; the members that touch the rings order them with the DMA barriers. Dead once the binding that created it was torn down: every ring member throws  from then on, in every build, as  does, so a consumer that kept a reference across a withdrawal gets the exception and never a write into freed pages. The kit never rounds a size: queue sizes are powers of two by the specification, and QEMU offers 256 or 1024.">
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue">
+
+
+
+  <h1 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue" class="text-break">
+Class Virtqueue  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><span class="xref">Cosmos</span>.<a class="xref" href="Cosmos.Kernel.html">Kernel</a>.<a class="xref" href="Cosmos.Kernel.HAL.html">HAL</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.html">DriverKit</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.html">Buses</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.html">Virtio</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Cosmos.Kernel.HAL.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>A split virtqueue (virtio specification section 2.6) over DMA memory the
+leaf's binding owns, created by <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.html#Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_TryCreateQueue_Cosmos_Kernel_HAL_DriverKit_DeviceBinding_System_UInt16_System_UInt16_Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue__">TryCreateQueue(DeviceBinding, ushort, ushort, out Virtqueue?)</a>.
+Not thread-safe: the driver serializes its use, with a
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Threading.DeviceLock.html">DeviceLock</a> between its transmit path and its drain. Every
+member is allocation-free, so a handler may pop used buffers; the
+members that touch the rings order them with the DMA barriers. Dead
+once the binding that created it was torn down: every ring member
+throws <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a> from then on, in every
+build, as <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Resources.DmaBuffer.html#Cosmos_Kernel_HAL_DriverKit_Resources_DmaBuffer_Span">Span</a> does, so a consumer that kept a
+reference across a withdrawal gets the exception and never a write into
+freed pages. The kit never rounds a size: queue sizes are powers of two
+by the specification, and QEMU offers 256 or 1024.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Experimental(&quot;COSMOS0003&quot;)]
+public sealed class Virtqueue</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">Virtqueue</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_DroppedUsedElements_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.DroppedUsedElements*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_DroppedUsedElements" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.DroppedUsedElements">
+  DroppedUsedElements
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Used elements whose id was at or above <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.html#Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_Size">Size</a>, dropped by <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.html#Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_TryTakeUsed_System_UInt16__System_UInt32__">TryTakeUsed(out ushort, out uint)</a> rather than indexed. Any context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int DroppedUsedElements { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_FreeDescriptorCount_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.FreeDescriptorCount*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_FreeDescriptorCount" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.FreeDescriptorCount">
+  FreeDescriptorCount
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>How many descriptors are not allocated. Any context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int FreeDescriptorCount { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_HasUsed_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.HasUsed*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_HasUsed" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.HasUsed">
+  HasUsed
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>True when the device has returned a buffer the driver has not taken.
+No DMA read barrier: for a work item loop that returns, not a spin; a leaf
+that must wait waits on its interrupt or spins with
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Resources.DmaBuffer.html#Cosmos_Kernel_HAL_DriverKit_Resources_DmaBuffer_ReadBarrier">ReadBarrier()</a>. Interrupt context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool HasUsed { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The binding that created the queue was torn down.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_Index_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.Index*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_Index" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.Index">
+  Index
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The queue's index on its device.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ushort Index { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_Size_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.Size*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_Size" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.Size">
+  Size
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>How many descriptors the queue has; also the length of each ring.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ushort Size { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_FreeDescriptor_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.FreeDescriptor*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_FreeDescriptor_System_UInt16_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.FreeDescriptor(System.UInt16)">
+  FreeDescriptor(ushort)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Puts a descriptor back on the free list. Managed state only; any context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void FreeDescriptor(ushort index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd><p>A descriptor <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.html#Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_TryAllocateDescriptor_System_UInt16__">TryAllocateDescriptor(out ushort)</a> handed out.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p><code class="paramref">index</code> is at or above <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.html#Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_Size">Size</a>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_Notify_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.Notify*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_Notify" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.Notify">
+  Notify()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Rings the doorbell: a write barrier, then the transport's notify.
+Always notifies (no VIRTQ_USED_F_NO_NOTIFY check). A leaf notifies
+only after <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.html#Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_SetDriverOk">SetDriverOk()</a>; submitting before
+it is fine. Interrupt context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Notify()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The binding that created the queue was torn down.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_SetDescriptor_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.SetDescriptor*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_SetDescriptor_System_UInt16_System_UInt64_System_UInt32_Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtqueueDescriptorFlags_System_UInt16_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.SetDescriptor(System.UInt16,System.UInt64,System.UInt32,Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtqueueDescriptorFlags,System.UInt16)">
+  SetDescriptor(ushort, ulong, uint, VirtqueueDescriptorFlags, ushort)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Fills one descriptor. Interrupt context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetDescriptor(ushort index, ulong physicalAddress, uint length, VirtqueueDescriptorFlags flags, ushort next = 0)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd><p>The descriptor.</p>
+</dd>
+    <dt><code>physicalAddress</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a></dt>
+    <dd><p>The buffer's physical address.</p>
+</dd>
+    <dt><code>length</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd><p>The buffer's length in bytes.</p>
+</dd>
+    <dt><code>flags</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtqueueDescriptorFlags.html">VirtqueueDescriptorFlags</a></dt>
+    <dd><p>Whether the device writes the buffer, and whether the chain continues.</p>
+</dd>
+    <dt><code>next</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd><p>The next descriptor of the chain, read only with <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtqueueDescriptorFlags.html#Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtqueueDescriptorFlags_Next">Next</a>.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p><code class="paramref">index</code> is at or above <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.html#Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_Size">Size</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The binding that created the queue was torn down.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_Submit_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.Submit*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_Submit_System_UInt16_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.Submit(System.UInt16)">
+  Submit(ushort)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Offers the chain starting at <code class="paramref">head</code> to the device:
+the head goes into the available ring, a write barrier orders it
+after the descriptors, then the ring's index advances. The device
+is not told; a leaf calls <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.html#Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_Notify">Notify()</a> for that, and only
+after DRIVER_OK. Interrupt context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Submit(ushort head)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>head</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd><p>The first descriptor of the chain.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p><code class="paramref">head</code> is at or above <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.html#Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_Size">Size</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The binding that created the queue was torn down.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_TryAllocateDescriptor_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.TryAllocateDescriptor*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_TryAllocateDescriptor_System_UInt16__" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.TryAllocateDescriptor(System.UInt16@)">
+  TryAllocateDescriptor(out ushort)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Takes a descriptor off the free list. Managed state only; any context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryAllocateDescriptor(out ushort index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd><p>The descriptor, when one was free.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>False when every descriptor is allocated.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_TryTakeUsed_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.TryTakeUsed*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_TryTakeUsed_System_UInt16__System_UInt32__" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.TryTakeUsed(System.UInt16@,System.UInt32@)">
+  TryTakeUsed(out ushort, out uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Takes the next buffer the device returned. An element whose id is at
+or above <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.html#Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_Size">Size</a> is out of contract: it is skipped, counted
+in <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.html#Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_DroppedUsedElements">DroppedUsedElements</a>, and the next one is looked at,
+with no log and no exception, since the kit cancels a work item that
+throws and the drain would never run again. Interrupt context;
+allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryTakeUsed(out ushort id, out uint length)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>id</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd><p>The head descriptor of the chain the device finished.</p>
+</dd>
+    <dt><code>length</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd><p>How many bytes the device wrote into the chain.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>False when no valid used element remains.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The binding that created the queue was torn down.</p>
+</dd>
+  </dl>
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
