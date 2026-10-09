@@ -1693,6 +1693,34 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.HAL.Structures.RingBuffer-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.HAL.Structures.RingBuffer-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.HAL.Structures.RingBuffer<T>",
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.HAL.Structures.RingBuffer-1.yml\" sourcestartlinenumber=\"1\">A fixed capacity circular buffer of <code class=\"typeparamref\">T</code> values.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.HAL.Structures.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.HAL.Structures.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.HAL.Structures",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Cosmos.Kernel.HAL.yml",
       "output": {
         ".html": {

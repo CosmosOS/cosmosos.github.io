@@ -90,13 +90,14 @@
 <h2 id="prerequisites">Prerequisites</h2>
 <ul>
 <li><a href="https://dotnet.microsoft.com/download">.NET SDK 10.0</a> or later</li>
-<li><a href="https://code.visualstudio.com/">Visual Studio Code</a></li>
+<li>An IDE with its Cosmos extension: <a href="https://code.visualstudio.com/">Visual Studio Code</a>, <a href="https://visualstudio.microsoft.com/">Visual Studio</a> or <a href="https://www.jetbrains.com/rider/">JetBrains Rider</a> (see <a href="#ide-extensions">IDE Extensions</a>)</li>
 <li><a href="https://brew.sh/">Homebrew</a> on macOS</li>
 </ul>
 <h2 id="windows">Windows</h2>
 <p>Download and run the latest installer from the <a href="https://github.com/CosmosOS/Cosmos/releases">Releases</a> page:</p>
 <pre><code>CosmosSetup-&lt;version&gt;-windows.exe
 </code></pre>
+<p>The installer looks for VS Code, Visual Studio and Rider and offers to install the Cosmos extension in each one it finds (see <a href="#ide-extensions">IDE Extensions</a>). Visual Studio must be closed, and the Visual Studio extension asks for administrator rights because it installs for all users. Rider is found only once it has been started at least once.</p>
 <p>After installation, open a new terminal and verify:</p>
 <pre><code class="lang-powershell">cosmos check
 </code></pre>
@@ -178,6 +179,34 @@ codesign --force --deep --sign - ~/.cosmos/tools/qemu/qemu-system-x86_64.real
 cosmos run -a arm64
 </code></pre>
 <p>If a build failed before Rosetta 2 was installed, delete the project's <code>obj/</code> folder before building again.</p>
+<h2 id="ide-extensions">IDE Extensions</h2>
+<p>Each extension creates, builds, runs and debugs a kernel from the IDE, and can check and install the toolchain itself.</p>
+<table>
+<thead>
+<tr>
+<th>IDE</th>
+<th>Extension</th>
+<th>Install</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Visual Studio Code</td>
+<td><a href="https://github.com/CosmosOS/CosmosVsCodeExtension">CosmosVsCodeExtension</a></td>
+<td>The Windows installer or <code>cosmos install</code></td>
+</tr>
+<tr>
+<td>Visual Studio 2026 (or 2022 17.14+)</td>
+<td><a href="https://github.com/CosmosOS/CosmosVsExtension">CosmosVsExtension</a></td>
+<td>The Windows installer, or the <code>.vsix</code> from the <a href="https://github.com/CosmosOS/CosmosVsExtension/releases">releases page</a></td>
+</tr>
+<tr>
+<td>JetBrains Rider 2025.3+</td>
+<td><a href="https://github.com/CosmosOS/CosmosRiderExtension">CosmosRiderExtension</a></td>
+<td>The Windows installer, or the plugin from the <a href="https://github.com/CosmosOS/CosmosRiderExtension/releases">releases page</a></td>
+</tr>
+</tbody>
+</table>
 <h2 id="quick-start">Quick Start</h2>
 <p>Once installed, see <a href="startup.html">Kernel Startup</a> to create your first kernel and learn the boot flow.</p>
 

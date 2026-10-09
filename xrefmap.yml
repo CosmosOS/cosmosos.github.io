@@ -8706,6 +8706,144 @@ references:
   isSpec: "True"
   fullName: Cosmos.Kernel.HAL.DriverKit.Threading.WorkItem.Schedule
   nameWithType: WorkItem.Schedule
+- uid: Cosmos.Kernel.HAL.Structures
+  name: Cosmos.Kernel.HAL.Structures
+  href: api/Cosmos.Kernel.HAL.Structures.html
+  commentId: N:Cosmos.Kernel.HAL.Structures
+  fullName: Cosmos.Kernel.HAL.Structures
+  nameWithType: Cosmos.Kernel.HAL.Structures
+- uid: Cosmos.Kernel.HAL.Structures.RingBuffer`1
+  name: RingBuffer<T>
+  href: api/Cosmos.Kernel.HAL.Structures.RingBuffer-1.html
+  commentId: T:Cosmos.Kernel.HAL.Structures.RingBuffer`1
+  name.vb: RingBuffer(Of T)
+  fullName: Cosmos.Kernel.HAL.Structures.RingBuffer<T>
+  fullName.vb: Cosmos.Kernel.HAL.Structures.RingBuffer(Of T)
+  nameWithType: RingBuffer<T>
+  nameWithType.vb: RingBuffer(Of T)
+- uid: Cosmos.Kernel.HAL.Structures.RingBuffer`1.#ctor(System.UInt64)
+  name: RingBuffer(ulong)
+  href: api/Cosmos.Kernel.HAL.Structures.RingBuffer-1.html#Cosmos_Kernel_HAL_Structures_RingBuffer_1__ctor_System_UInt64_
+  commentId: M:Cosmos.Kernel.HAL.Structures.RingBuffer`1.#ctor(System.UInt64)
+  name.vb: New(ULong)
+  fullName: Cosmos.Kernel.HAL.Structures.RingBuffer<T>.RingBuffer(ulong)
+  fullName.vb: Cosmos.Kernel.HAL.Structures.RingBuffer(Of T).New(ULong)
+  nameWithType: RingBuffer<T>.RingBuffer(ulong)
+  nameWithType.vb: RingBuffer(Of T).New(ULong)
+- uid: Cosmos.Kernel.HAL.Structures.RingBuffer`1.#ctor*
+  name: RingBuffer
+  href: api/Cosmos.Kernel.HAL.Structures.RingBuffer-1.html#Cosmos_Kernel_HAL_Structures_RingBuffer_1__ctor_
+  commentId: Overload:Cosmos.Kernel.HAL.Structures.RingBuffer`1.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: Cosmos.Kernel.HAL.Structures.RingBuffer<T>.RingBuffer
+  fullName.vb: Cosmos.Kernel.HAL.Structures.RingBuffer(Of T).New
+  nameWithType: RingBuffer<T>.RingBuffer
+  nameWithType.vb: RingBuffer(Of T).New
+- uid: Cosmos.Kernel.HAL.Structures.RingBuffer`1.Clear
+  name: Clear()
+  href: api/Cosmos.Kernel.HAL.Structures.RingBuffer-1.html#Cosmos_Kernel_HAL_Structures_RingBuffer_1_Clear
+  commentId: M:Cosmos.Kernel.HAL.Structures.RingBuffer`1.Clear
+  fullName: Cosmos.Kernel.HAL.Structures.RingBuffer<T>.Clear()
+  fullName.vb: Cosmos.Kernel.HAL.Structures.RingBuffer(Of T).Clear()
+  nameWithType: RingBuffer<T>.Clear()
+  nameWithType.vb: RingBuffer(Of T).Clear()
+- uid: Cosmos.Kernel.HAL.Structures.RingBuffer`1.Clear*
+  name: Clear
+  href: api/Cosmos.Kernel.HAL.Structures.RingBuffer-1.html#Cosmos_Kernel_HAL_Structures_RingBuffer_1_Clear_
+  commentId: Overload:Cosmos.Kernel.HAL.Structures.RingBuffer`1.Clear
+  isSpec: "True"
+  fullName: Cosmos.Kernel.HAL.Structures.RingBuffer<T>.Clear
+  fullName.vb: Cosmos.Kernel.HAL.Structures.RingBuffer(Of T).Clear
+  nameWithType: RingBuffer<T>.Clear
+  nameWithType.vb: RingBuffer(Of T).Clear
+- uid: Cosmos.Kernel.HAL.Structures.RingBuffer`1.Count
+  name: Count
+  href: api/Cosmos.Kernel.HAL.Structures.RingBuffer-1.html#Cosmos_Kernel_HAL_Structures_RingBuffer_1_Count
+  commentId: P:Cosmos.Kernel.HAL.Structures.RingBuffer`1.Count
+  fullName: Cosmos.Kernel.HAL.Structures.RingBuffer<T>.Count
+  fullName.vb: Cosmos.Kernel.HAL.Structures.RingBuffer(Of T).Count
+  nameWithType: RingBuffer<T>.Count
+  nameWithType.vb: RingBuffer(Of T).Count
+- uid: Cosmos.Kernel.HAL.Structures.RingBuffer`1.Count*
+  name: Count
+  href: api/Cosmos.Kernel.HAL.Structures.RingBuffer-1.html#Cosmos_Kernel_HAL_Structures_RingBuffer_1_Count_
+  commentId: Overload:Cosmos.Kernel.HAL.Structures.RingBuffer`1.Count
+  isSpec: "True"
+  fullName: Cosmos.Kernel.HAL.Structures.RingBuffer<T>.Count
+  fullName.vb: Cosmos.Kernel.HAL.Structures.RingBuffer(Of T).Count
+  nameWithType: RingBuffer<T>.Count
+  nameWithType.vb: RingBuffer(Of T).Count
+- uid: Cosmos.Kernel.HAL.Structures.RingBuffer`1.GetEnumerator
+  name: GetEnumerator()
+  href: api/Cosmos.Kernel.HAL.Structures.RingBuffer-1.html#Cosmos_Kernel_HAL_Structures_RingBuffer_1_GetEnumerator
+  commentId: M:Cosmos.Kernel.HAL.Structures.RingBuffer`1.GetEnumerator
+  fullName: Cosmos.Kernel.HAL.Structures.RingBuffer<T>.GetEnumerator()
+  fullName.vb: Cosmos.Kernel.HAL.Structures.RingBuffer(Of T).GetEnumerator()
+  nameWithType: RingBuffer<T>.GetEnumerator()
+  nameWithType.vb: RingBuffer(Of T).GetEnumerator()
+- uid: Cosmos.Kernel.HAL.Structures.RingBuffer`1.GetEnumerator*
+  name: GetEnumerator
+  href: api/Cosmos.Kernel.HAL.Structures.RingBuffer-1.html#Cosmos_Kernel_HAL_Structures_RingBuffer_1_GetEnumerator_
+  commentId: Overload:Cosmos.Kernel.HAL.Structures.RingBuffer`1.GetEnumerator
+  isSpec: "True"
+  fullName: Cosmos.Kernel.HAL.Structures.RingBuffer<T>.GetEnumerator
+  fullName.vb: Cosmos.Kernel.HAL.Structures.RingBuffer(Of T).GetEnumerator
+  nameWithType: RingBuffer<T>.GetEnumerator
+  nameWithType.vb: RingBuffer(Of T).GetEnumerator
+- uid: Cosmos.Kernel.HAL.Structures.RingBuffer`1.Peek(`0@)
+  name: Peek(out T?)
+  href: api/Cosmos.Kernel.HAL.Structures.RingBuffer-1.html#Cosmos_Kernel_HAL_Structures_RingBuffer_1_Peek__0__
+  commentId: M:Cosmos.Kernel.HAL.Structures.RingBuffer`1.Peek(`0@)
+  name.vb: Peek(T)
+  fullName: Cosmos.Kernel.HAL.Structures.RingBuffer<T>.Peek(out T?)
+  fullName.vb: Cosmos.Kernel.HAL.Structures.RingBuffer(Of T).Peek(T)
+  nameWithType: RingBuffer<T>.Peek(out T?)
+  nameWithType.vb: RingBuffer(Of T).Peek(T)
+- uid: Cosmos.Kernel.HAL.Structures.RingBuffer`1.Peek*
+  name: Peek
+  href: api/Cosmos.Kernel.HAL.Structures.RingBuffer-1.html#Cosmos_Kernel_HAL_Structures_RingBuffer_1_Peek_
+  commentId: Overload:Cosmos.Kernel.HAL.Structures.RingBuffer`1.Peek
+  isSpec: "True"
+  fullName: Cosmos.Kernel.HAL.Structures.RingBuffer<T>.Peek
+  fullName.vb: Cosmos.Kernel.HAL.Structures.RingBuffer(Of T).Peek
+  nameWithType: RingBuffer<T>.Peek
+  nameWithType.vb: RingBuffer(Of T).Peek
+- uid: Cosmos.Kernel.HAL.Structures.RingBuffer`1.Pop(`0@)
+  name: Pop(out T?)
+  href: api/Cosmos.Kernel.HAL.Structures.RingBuffer-1.html#Cosmos_Kernel_HAL_Structures_RingBuffer_1_Pop__0__
+  commentId: M:Cosmos.Kernel.HAL.Structures.RingBuffer`1.Pop(`0@)
+  name.vb: Pop(T)
+  fullName: Cosmos.Kernel.HAL.Structures.RingBuffer<T>.Pop(out T?)
+  fullName.vb: Cosmos.Kernel.HAL.Structures.RingBuffer(Of T).Pop(T)
+  nameWithType: RingBuffer<T>.Pop(out T?)
+  nameWithType.vb: RingBuffer(Of T).Pop(T)
+- uid: Cosmos.Kernel.HAL.Structures.RingBuffer`1.Pop*
+  name: Pop
+  href: api/Cosmos.Kernel.HAL.Structures.RingBuffer-1.html#Cosmos_Kernel_HAL_Structures_RingBuffer_1_Pop_
+  commentId: Overload:Cosmos.Kernel.HAL.Structures.RingBuffer`1.Pop
+  isSpec: "True"
+  fullName: Cosmos.Kernel.HAL.Structures.RingBuffer<T>.Pop
+  fullName.vb: Cosmos.Kernel.HAL.Structures.RingBuffer(Of T).Pop
+  nameWithType: RingBuffer<T>.Pop
+  nameWithType.vb: RingBuffer(Of T).Pop
+- uid: Cosmos.Kernel.HAL.Structures.RingBuffer`1.Push(`0)
+  name: Push(T)
+  href: api/Cosmos.Kernel.HAL.Structures.RingBuffer-1.html#Cosmos_Kernel_HAL_Structures_RingBuffer_1_Push__0_
+  commentId: M:Cosmos.Kernel.HAL.Structures.RingBuffer`1.Push(`0)
+  fullName: Cosmos.Kernel.HAL.Structures.RingBuffer<T>.Push(T)
+  fullName.vb: Cosmos.Kernel.HAL.Structures.RingBuffer(Of T).Push(T)
+  nameWithType: RingBuffer<T>.Push(T)
+  nameWithType.vb: RingBuffer(Of T).Push(T)
+- uid: Cosmos.Kernel.HAL.Structures.RingBuffer`1.Push*
+  name: Push
+  href: api/Cosmos.Kernel.HAL.Structures.RingBuffer-1.html#Cosmos_Kernel_HAL_Structures_RingBuffer_1_Push_
+  commentId: Overload:Cosmos.Kernel.HAL.Structures.RingBuffer`1.Push
+  isSpec: "True"
+  fullName: Cosmos.Kernel.HAL.Structures.RingBuffer<T>.Push
+  fullName.vb: Cosmos.Kernel.HAL.Structures.RingBuffer(Of T).Push
+  nameWithType: RingBuffer<T>.Push
+  nameWithType.vb: RingBuffer(Of T).Push
 - uid: Cosmos.Kernel.System
   name: Cosmos.Kernel.System
   href: api/Cosmos.Kernel.System.html
@@ -19273,6 +19411,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.Kernel.System.Network.MaskedAddress.Equals
   nameWithType: MaskedAddress.Equals
+- uid: Cosmos.Kernel.System.Network.MaskedAddress.GetHashCode
+  name: GetHashCode()
+  href: api/Cosmos.Kernel.System.Network.MaskedAddress.html#Cosmos_Kernel_System_Network_MaskedAddress_GetHashCode
+  commentId: M:Cosmos.Kernel.System.Network.MaskedAddress.GetHashCode
+  fullName: Cosmos.Kernel.System.Network.MaskedAddress.GetHashCode()
+  nameWithType: MaskedAddress.GetHashCode()
+- uid: Cosmos.Kernel.System.Network.MaskedAddress.GetHashCode*
+  name: GetHashCode
+  href: api/Cosmos.Kernel.System.Network.MaskedAddress.html#Cosmos_Kernel_System_Network_MaskedAddress_GetHashCode_
+  commentId: Overload:Cosmos.Kernel.System.Network.MaskedAddress.GetHashCode
+  isSpec: "True"
+  fullName: Cosmos.Kernel.System.Network.MaskedAddress.GetHashCode
+  nameWithType: MaskedAddress.GetHashCode
 - uid: Cosmos.Kernel.System.Network.MaskedAddress.Item(System.Int32)
   name: this[int]
   href: api/Cosmos.Kernel.System.Network.MaskedAddress.html#Cosmos_Kernel_System_Network_MaskedAddress_Item_System_Int32_
