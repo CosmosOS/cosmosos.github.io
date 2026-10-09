@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class MacAddress | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class MacAddress | Cosmos Gen 3 ">
+      
+      <meta name="description" content="A 48-bit Ethernet MAC address.">
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Cosmos.Kernel.HAL.Devices.Network.MacAddress">
+
+
+
+  <h1 id="Cosmos_Kernel_HAL_Devices_Network_MacAddress" data-uid="Cosmos.Kernel.HAL.Devices.Network.MacAddress" class="text-break">
+Class MacAddress  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><span class="xref">Cosmos</span>.<a class="xref" href="Cosmos.Kernel.html">Kernel</a>.<a class="xref" href="Cosmos.Kernel.HAL.html">HAL</a>.<a class="xref" href="Cosmos.Kernel.HAL.Devices.html">Devices</a>.<a class="xref" href="Cosmos.Kernel.HAL.Devices.Network.html">Network</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Cosmos.Kernel.HAL.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>A 48-bit Ethernet MAC address.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class MacAddress : IComparable&lt;MacAddress&gt;, IEquatable&lt;MacAddress&gt;</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">MacAddress</span></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist implements">
+    <dt>Implements</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.icomparable-1">IComparable</a>&lt;<a class="xref" href="Cosmos.Kernel.HAL.Devices.Network.MacAddress.html">MacAddress</a>&gt;</div>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="Cosmos.Kernel.HAL.Devices.Network.MacAddress.html">MacAddress</a>&gt;</div>
+    </dd>
+  </dl>
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_Devices_Network_MacAddress__ctor_" data-uid="Cosmos.Kernel.HAL.Devices.Network.MacAddress.#ctor*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_Devices_Network_MacAddress__ctor_Cosmos_Kernel_HAL_Devices_Network_MacAddress_" data-uid="Cosmos.Kernel.HAL.Devices.Network.MacAddress.#ctor(Cosmos.Kernel.HAL.Devices.Network.MacAddress)">
+  MacAddress(MacAddress)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Create a copy of an existing MAC address.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MacAddress(MacAddress m)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>m</code> <a class="xref" href="Cosmos.Kernel.HAL.Devices.Network.MacAddress.html">MacAddress</a></dt>
+    <dd><p>MAC address to copy.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_Devices_Network_MacAddress__ctor_" data-uid="Cosmos.Kernel.HAL.Devices.Network.MacAddress.#ctor*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_Devices_Network_MacAddress__ctor_System_Byte___" data-uid="Cosmos.Kernel.HAL.Devices.Network.MacAddress.#ctor(System.Byte[])">
+  MacAddress(byte[])
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Create a MAC address from a 6-byte array.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MacAddress(byte[] address)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>address</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]</dt>
+    <dd><p>The six address bytes, most significant first.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_Devices_Network_MacAddress__ctor_" data-uid="Cosmos.Kernel.HAL.Devices.Network.MacAddress.#ctor*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_Devices_Network_MacAddress__ctor_System_Byte___System_Int32_" data-uid="Cosmos.Kernel.HAL.Devices.Network.MacAddress.#ctor(System.Byte[],System.Int32)">
+  MacAddress(byte[], int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Create a MAC address from a byte buffer starting at the specified offset.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MacAddress(byte[] buffer, int offset)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>buffer</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]</dt>
+    <dd><p>Byte buffer holding the six address bytes.</p>
+</dd>
+    <dt><code>offset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>Offset in <code class="paramref">buffer</code> of the most significant byte.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_Devices_Network_MacAddress_Broadcast_" data-uid="Cosmos.Kernel.HAL.Devices.Network.MacAddress.Broadcast*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_Devices_Network_MacAddress_Broadcast" data-uid="Cosmos.Kernel.HAL.Devices.Network.MacAddress.Broadcast">
+  Broadcast
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The broadcast address (FF:FF:FF:FF:FF:FF).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MacAddress Broadcast { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Network.MacAddress.html">MacAddress</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_Devices_Network_MacAddress_None_" data-uid="Cosmos.Kernel.HAL.Devices.Network.MacAddress.None*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_Devices_Network_MacAddress_None" data-uid="Cosmos.Kernel.HAL.Devices.Network.MacAddress.None">
+  None
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The all-zero address (00:00:00:00:00:00), used when no address is assigned.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MacAddress None { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Network.MacAddress.html">MacAddress</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_Devices_Network_MacAddress_CompareTo_" data-uid="Cosmos.Kernel.HAL.Devices.Network.MacAddress.CompareTo*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_Devices_Network_MacAddress_CompareTo_Cosmos_Kernel_HAL_Devices_Network_MacAddress_" data-uid="Cosmos.Kernel.HAL.Devices.Network.MacAddress.CompareTo(Cosmos.Kernel.HAL.Devices.Network.MacAddress)">
+  CompareTo(MacAddress?)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Compare this address to another MAC address, byte by byte from the
+most significant byte.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int CompareTo(MacAddress? other)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>other</code> <a class="xref" href="Cosmos.Kernel.HAL.Devices.Network.MacAddress.html">MacAddress</a></dt>
+    <dd><p>MAC address to compare against, or null.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>Negative, zero, or positive following the ordering of the first differing byte. Null orders before any address.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_Devices_Network_MacAddress_Equals_" data-uid="Cosmos.Kernel.HAL.Devices.Network.MacAddress.Equals*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_Devices_Network_MacAddress_Equals_Cosmos_Kernel_HAL_Devices_Network_MacAddress_" data-uid="Cosmos.Kernel.HAL.Devices.Network.MacAddress.Equals(Cosmos.Kernel.HAL.Devices.Network.MacAddress)">
+  Equals(MacAddress?)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Check whether another MAC address holds the same six bytes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Equals(MacAddress? other)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>other</code> <a class="xref" href="Cosmos.Kernel.HAL.Devices.Network.MacAddress.html">MacAddress</a></dt>
+    <dd><p>MAC address to compare against, or null.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>True when <code class="paramref">other</code> holds the same six bytes, false otherwise and for null.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_Devices_Network_MacAddress_Equals_" data-uid="Cosmos.Kernel.HAL.Devices.Network.MacAddress.Equals*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_Devices_Network_MacAddress_Equals_System_Object_" data-uid="Cosmos.Kernel.HAL.Devices.Network.MacAddress.Equals(System.Object)">
+  Equals(object?)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Check whether another object is a MAC address holding the same six bytes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object? obj)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>obj</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></dt>
+    <dd><p>Object to compare against.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>True when <code class="paramref">obj</code> is a <a class="xref" href="Cosmos.Kernel.HAL.Devices.Network.MacAddress.html">MacAddress</a> with the same six bytes, false for anything else including null.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_Devices_Network_MacAddress_GetHashCode_" data-uid="Cosmos.Kernel.HAL.Devices.Network.MacAddress.GetHashCode*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_Devices_Network_MacAddress_GetHashCode" data-uid="Cosmos.Kernel.HAL.Devices.Network.MacAddress.GetHashCode">
+  GetHashCode()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Get a hash code derived from the six address bytes, consistent with
+<a class="xref" href="Cosmos.Kernel.HAL.Devices.Network.MacAddress.html#Cosmos_Kernel_HAL_Devices_Network_MacAddress_Equals_System_Object_">Equals(object?)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>Hash code for this address.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_Devices_Network_MacAddress_ToString_" data-uid="Cosmos.Kernel.HAL.Devices.Network.MacAddress.ToString*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_Devices_Network_MacAddress_ToString" data-uid="Cosmos.Kernel.HAL.Devices.Network.MacAddress.ToString">
+  ToString()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Format the address as six colon-separated hex byte pairs
+(e.g. &quot;52:54:00:12:34:56&quot;).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The address in colon-separated hex notation.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
