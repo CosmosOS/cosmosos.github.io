@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Writing a Driver | Cosmos Gen 3 </title>
+      <title>Writing a driver | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Writing a Driver | Cosmos Gen 3 ">
+      <meta name="title" content="Writing a driver | Cosmos Gen 3 ">
       
       
       <link rel="icon" href="../../images/favicon.ico">
@@ -85,23 +85,22 @@
         </div>
 
         <article data-uid="">
-<h1 id="writing-a-driver">Writing a Driver</h1>
+<h1 id="writing-a-driver">Writing a driver</h1>
 
 <p>In this article, we will discuss how to write a device driver for Cosmos Gen3: how a driver is matched to a device, how it reaches the hardware, how it hands the kernel a device, and how it is tested without hardware.</p>
+<p>Every kernel already carries the shipped drivers listed under <a href="#what-the-kit-supports">What the kit supports</a>, so you write a driver when your hardware is not among them. One rule shapes the whole kit: a driver reaches the hardware and the kernel only through its binding, and the binding records everything the driver acquires, so that the kit, not the driver, gives it back. The first half of this page follows one driver from matching to teardown; the second half takes each bus in turn, then the shipped device drivers; the last sections show how to watch drivers at run time, test one without hardware, and ship one as a library. Each linked term has a short background note in the <a href="driver-glossary.html">driver glossary</a>.</p>
 <p>If you find bugs or something abnormal, please <a href="https://github.com/CosmosOS/Cosmos/issues/new/choose">submit an issue</a> on our repository.</p>
+<hr>
 <h2 id="experimental-status">Experimental status</h2>
-<p>The driver kit is experimental: every public type under <code>Cosmos.Kernel.HAL.DriverKit</code> and <code>Cosmos.Kernel.HAL.Devices</code>, but the stable <code>IBlockDevice</code> and <code>MacAddress</code>, carries <code>[Experimental(&quot;COSMOS0003&quot;)]</code>. You can use them today, but they may change until they are promoted to the stable API. Referencing one is a build error until your project acknowledges it:</p>
+<p>The driver kit is experimental: every public type under <code>Cosmos.Kernel.HAL.DriverKit</code> and <code>Cosmos.Kernel.HAL.Devices</code>, except the stable <code>IBlockDevice</code> and <code>MacAddress</code>, carries <code>[Experimental(&quot;COSMOS0003&quot;)]</code>. You can use them today, but they may change until they are promoted to the stable API. Referencing one is a build error until your project acknowledges it:</p>
 <pre><code class="lang-xml">&lt;PropertyGroup&gt;
   &lt;NoWarn&gt;$(NoWarn);COSMOS0003&lt;/NoWarn&gt;
 &lt;/PropertyGroup&gt;
 </code></pre>
 <p>See <a href="../dev/public-api.html">Public API Tracking</a> for how experimental APIs are promoted.</p>
-<p>What the kit supports today:</p>
-<ul>
-<li><strong>Bus kinds</strong>: platform, PCI, virtio, USB and PS/2 for real hardware, plus the synthetic bus for tests (<a href="#testing-a-driver-over-the-synthetic-bus">Testing a driver over the synthetic bus</a>).</li>
-<li><strong>Device kinds</strong>: keyboard, pointer, network interface, block device and display. The kernel managers (<code>KeyboardManager</code>, <code>MouseManager</code>, <code>NetworkManager</code>, <code>StorageManager</code>, <code>DisplayManager</code>) pick up whatever a driver publishes.</li>
-<li><strong>Shipped drivers</strong>: every kernel gets the drivers below through <code>Cosmos.Kernel.Drivers</code>. They use the same public API as your drivers, so they are the best examples to read. <a href="#excluding-and-opting-in">Excluding and opting in</a> shows how to drop one.</li>
-</ul>
+<hr>
+<h2 id="what-the-kit-supports">What the kit supports</h2>
+<p>The kit supports five buses on real hardware, platform, PCI, virtio, USB and PS/2, plus a synthetic bus for tests (<a href="#testing-a-driver-over-the-synthetic-bus">Testing a driver over the synthetic bus</a>). A driver hands the kernel one of six kinds of device: a keyboard, a pointer, a network interface, a block device, a display or an audio output. The kernel manager for that kind (<code>KeyboardManager</code>, <code>MouseManager</code>, <code>NetworkManager</code>, <code>StorageManager</code>, <code>DisplayManager</code> or <code>AudioManager</code>) picks up whatever a driver publishes. Every kernel also gets the drivers below through <code>Cosmos.Kernel.Drivers</code>. They use the same public API as your drivers, which makes their <a href="https://github.com/CosmosOS/Cosmos/tree/gen3/src/Cosmos.Kernel.Drivers">sources</a> the best examples to read, and <a href="#excluding-and-opting-in">Excluding and opting in</a> shows how to drop one:</p>
 <table>
 <thead>
 <tr>
@@ -116,7 +115,7 @@
 </tr>
 <tr>
 <td>PCI</td>
-<td><code>PcieRootPortDriver</code>, <code>VirtioPciTransportDriver</code>, <code>XhciDriver</code>, <code>E1000EDriver</code>, <code>AhciDriver</code>, <code>NvmeDriver</code>, <code>VmwareSvgaDriver</code>, <code>AmdDcnDriver</code>, <code>IntelGraphicsDriver</code></td>
+<td><code>PcieRootPortDriver</code>, <code>VirtioPciTransportDriver</code>, <code>XhciDriver</code>, <code>E1000EDriver</code>, <code>AhciDriver</code>, <code>NvmeDriver</code>, <code>VmwareSvgaDriver</code>, <code>AmdDcnDriver</code>, <code>IntelGraphicsDriver</code>, <code>HdAudioDriver</code></td>
 </tr>
 <tr>
 <td>Virtio</td>
@@ -132,7 +131,8 @@
 </tr>
 </tbody>
 </table>
-<p>Their sources are filed as <code>&lt;bus&gt;/&lt;category&gt;/&lt;driver&gt;/</code> (for example <code>Pci/Network/E1000E/</code>), and the namespace follows the folder.</p>
+<p>In the source tree, each driver is filed as <code>&lt;bus&gt;/&lt;category&gt;/&lt;driver&gt;/</code> (for example <code>Pci/Network/E1000E/</code>), and its namespace follows the folder, as in <code>Cosmos.Kernel.Drivers.Pci.Network.E1000E</code>; that full type name is what <a href="#excluding-and-opting-in">Excluding and opting in</a> needs.</p>
+<hr>
 <h2 id="what-a-driver-is">What a driver is</h2>
 <p>The kit is built on five concepts:</p>
 <table>
@@ -144,28 +144,28 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>Node</strong> (<code>DeviceNode</code>)</td>
+<td>Node (<code>DeviceNode</code>)</td>
 <td>A piece of hardware the kernel can see: its identity on a bus, its resources and its interrupts. Buses and bus drivers publish nodes.</td>
 </tr>
 <tr>
-<td><strong>Bus kind</strong></td>
+<td>Bus kind</td>
 <td>What a node looks like on a given bus (platform, PCI, virtio, USB, PS/2, synthetic) and how a driver matches it.</td>
 </tr>
 <tr>
-<td><strong>Driver</strong> (<code>Driver</code>)</td>
+<td>Driver (<code>Driver</code>)</td>
 <td>Your class: it says which nodes it wants, and takes or declines each one it is offered.</td>
 </tr>
 <tr>
-<td><strong>Binding</strong> (<code>DeviceBinding</code>)</td>
+<td>Binding (<code>DeviceBinding</code>)</td>
 <td>The link between one driver and one node. The driver reaches the hardware and the kernel only through it, and it remembers everything the driver acquired.</td>
 </tr>
 <tr>
-<td><strong>Device</strong></td>
-<td>What the driver hands the kernel: an <code>IKeyboard</code>, <code>IPointer</code>, <code>INetworkInterface</code>, <code>IBlockDevice</code> or <code>IDisplay</code>.</td>
+<td>Published device</td>
+<td>What the driver hands the kernel: an <code>IKeyboard</code>, <code>IPointer</code>, <code>INetworkInterface</code>, <code>IBlockDevice</code>, <code>IDisplay</code> or <code>IAudioOutput</code>.</td>
 </tr>
 </tbody>
 </table>
-<p>When a node appears, the kit offers it to each matching driver in turn until one returns <code>ProbeResult.Bound</code>; whatever a declining driver acquired is released. When the node goes away, the kit tears the binding down for you: devices are withdrawn first, memory is freed last.</p>
+<p>When a node appears, the kit offers it to each matching driver in turn until one returns <code>ProbeResult.Bound</code>; whatever a declining driver acquired is released. When the node goes away, the kit tears the binding down for you: child nodes and published devices go first, memory last. The diagram follows one node from publication to teardown:</p>
 <pre><code class="lang-mermaid">flowchart TD
     Bus[&quot;Bus or bus driver&quot;] --&gt;|&quot;publishes&quot;| Node[&quot;Node (DeviceNode)&lt;br/&gt;identity, resources, interrupts&quot;]
     Node --&gt;|&quot;matched against every driver's Matches&quot;| Candidates[&quot;Candidate drivers&lt;br/&gt;ordered by Priority, then specificity&quot;]
@@ -174,13 +174,13 @@
     Release --&gt;|&quot;next candidate&quot;| Probe
     Release --&gt;|&quot;no candidate left&quot;| Unbound[&quot;Node stays unbound&quot;]
     Probe --&gt;|&quot;Bound&quot;| Binding[&quot;Binding (DeviceBinding)&lt;br/&gt;registers, DMA, interrupts, work items, threads&quot;]
-    Binding --&gt;|&quot;PublishKeyboard, PublishNetwork, ...&quot;| Device[&quot;Device&lt;br/&gt;IKeyboard, INetworkInterface, ...&quot;]
+    Binding --&gt;|&quot;PublishKeyboard, PublishNetwork, ...&quot;| Device[&quot;Published device&lt;br/&gt;IKeyboard, INetworkInterface, ...&quot;]
     Device --&gt;|&quot;consumed by&quot;| Manager[&quot;Kernel manager&lt;br/&gt;KeyboardManager, NetworkManager, ...&quot;]
     Binding --&gt;|&quot;PublishChild (bus drivers)&quot;| Node
-    Binding -.-&gt;|&quot;node removed&quot;| Teardown[&quot;Teardown: withdraw devices, disconnect interrupts,&lt;br/&gt;OnDetach, free memory&quot;]
+    Binding -.-&gt;|&quot;node removed&quot;| Teardown[&quot;Teardown: remove children, withdraw devices,&lt;br/&gt;disconnect interrupts, OnDetach, free memory&quot;]
 </code></pre>
 <p>The driver, the binding and the node tree are in <code>Cosmos.Kernel.HAL.DriverKit</code>. What a binding hands out sits one namespace down, by concern: <code>Cosmos.Kernel.HAL.DriverKit.Resources</code> (register windows, mapped regions, DMA buffers), <code>.Interrupts</code> (interrupt handles, the handler contract) and <code>.Threading</code> (locks, events, threads, work items). Each bus kind has its own namespace under <code>.Buses</code>, and each device kind its category's under <code>Cosmos.Kernel.HAL.Devices</code>.</p>
-<p>The smallest driver that compiles and binds:</p>
+<p>This is the smallest driver that compiles and binds:</p>
 <pre><code class="lang-csharp">using Cosmos.Kernel.HAL.DriverKit;
 using Cosmos.Kernel.HAL.DriverKit.Buses.Synthetic;
 
@@ -202,11 +202,12 @@ public sealed class SampleDriver : Driver
     }
 }
 </code></pre>
-<p><code>Name</code> is shown in the log, <code>Matches</code> lists the nodes the driver wants, and <code>Priority</code> (<code>0</code> by default) decides which matching driver is offered a node first. <code>Probe</code> is required; <code>OnDetach</code> is optional.</p>
+<p><code>Name</code> is shown in the log, <code>Matches</code> lists the nodes the driver wants, and <code>Priority</code> (<code>0</code> by default) decides which matching driver is offered a node first. <code>Probe</code>, the driver's chance to look at the hardware and decide whether it is one it serves, is required; <code>OnDetach</code> is optional.</p>
 <p>Each driver class is instantiated once and offered every node it matches, so its fields are shared across devices. Keep per-device state in an object created in <code>Probe</code> and stored in <code>binding.DriverState</code>.</p>
-<h2 id="where-a-driver-runs">Where a driver runs</h2>
+<hr>
+<h2 id="when-drivers-are-bound">When drivers are bound</h2>
 <p>The driver stage runs from <code>Kernel.Start</code>, once the heap, the interrupt controller and the scheduler are up and interrupts are enabled. The kit offers every node published so far, including the children a bus driver publishes from its probe, and returns when all of them have been offered. <code>OnBoot</code> and <code>BeforeRun</code> run after it, so every bound device is usable there.</p>
-<p>The serial log shows each node, its candidate drivers and the result of the offer. An excerpt from an x64 kernel launched with <code>cosmos run --nic virtio-net-pci</code>:</p>
+<p>The serial log shows each node, its candidate drivers and the result of the offer. This excerpt comes from an x64 kernel launched with <code>cosmos run --nic virtio-net-pci</code>:</p>
 <pre><code>[Kernel] Starting drivers...
 [Drivers] manifest: PcieRootPortDriver(prio 0) VirtioPciTransportDriver(prio 0) ... VirtioBlkDriver(prio 0)
 [Drivers] engine started, worker thread
@@ -224,11 +225,12 @@ public sealed class SampleDriver : Driver
 [Drivers] virtio:pci:0000:00:02.0 offer VirtioNetDriver -&gt; bound
 [Kernel] Calling OnBoot()...
 </code></pre>
-<p>A node published after boot, such as a USB device plugged in, takes the same path. See <a href="startup.html">Kernel Startup</a> for the rest of the boot sequence.</p>
-<p>Probes, teardowns and work items run one at a time on the kit's worker thread, so a driver never sees two of them overlap. Only driver threads run concurrently.</p>
-<p>A kernel built with <code>CosmosEnableScheduler</code> off has no worker thread: probing still works, but <code>WorkItem.Schedule</code>, <code>TrySchedulePeriodic</code> and <code>TryStartThread</code> return <code>false</code>. A driver that must work in such a kernel checks those results. The engine then runs inline: the thread that publishes or retracts a node drains the queue itself, and the log says <code>engine started, inline (no worker)</code>.</p>
+<p>Each <code>published</code> line ends with <code>(consumed)</code> when a kernel manager took the device, or <code>(no consumer)</code> when none did. A node published after boot, such as a USB device plugged in, takes the same path. See <a href="startup.html">Kernel Startup</a> for the rest of the boot sequence.</p>
+<hr>
 <h2 id="the-two-execution-contexts-and-the-guard">The two execution contexts and the guard</h2>
-<p>Driver code runs in one of two contexts: thread or interrupt.</p>
+<p>Probes, teardowns and work items run one at a time on the kit's worker thread, so a driver never sees two of them overlap. Only driver threads run concurrently with them.</p>
+<p>A kernel built with <code>CosmosEnableScheduler</code> off has no worker thread: probing still works, but <code>WorkItem.Schedule</code>, <code>TrySchedulePeriodic</code> and <code>TryStartThread</code> return <code>false</code>. A driver that must work in such a kernel checks those results. The engine then runs inline: the thread that publishes or retracts a node drains the queue itself, and the log says <code>engine started, inline (no worker)</code>.</p>
+<p>Wherever it runs, driver code is in one of two <a href="driver-concepts/interrupt-context.html">contexts</a>: thread or interrupt.</p>
 <table>
 <thead>
 <tr>
@@ -254,44 +256,48 @@ public sealed class SampleDriver : Driver
 <tr>
 <td>Device methods the kernel calls (<code>Transmit</code>, <code>Flush</code>, ...)</td>
 <td>thread (the caller's)</td>
-<td>briefly</td>
+<td>yes, for the I/O they perform</td>
 <td>yes</td>
 </tr>
 <tr>
 <td>Interrupt handlers</td>
 <td>interrupt</td>
-<td><strong>no</strong></td>
-<td><strong>no</strong></td>
+<td>no</td>
+<td>no</td>
 </tr>
 </tbody>
 </table>
-<p>An interrupt handler should acknowledge the device and hand the rest to a work item. Its <code>InterruptContext</code> offers three calls: <code>Mask()</code> its own source, <code>Signal(DeviceEvent)</code> a waiting thread, and <code>Schedule(WorkItem)</code> work that needs thread context. It may also read and write its registers and DMA buffers and report through a sink, but it must not allocate (no <code>new</code> of a reference type, no string building, no capturing lambda) and must not block.</p>
-<p>Calling a <code>DeviceBinding</code> method from a handler stops the kernel with a panic naming the member. Over the synthetic bus it throws instead: the kit records the fault on the node and masks the source, so a test can assert it.</p>
+<p><code>Transmit</code> and <code>IAudioOutput.Write</code> are the exceptions among device methods: they never wait for room, and report a full queue instead (<code>false</code>, or a short write).</p>
+<p><strong>An interrupt handler runs in interrupt context.</strong> It runs on the stack of the thread it interrupted, with interrupts masked, so neither a thread nor the timer can run on that CPU until it returns, and a handler that waits for either waits forever. That is why its <code>InterruptContext</code> offers only three calls, <code>Mask()</code> its own source, <code>Signal(DeviceEvent)</code> a waiting thread, and <code>Schedule(WorkItem)</code> work that needs thread context, and why a handler should acknowledge the device and hand the rest to a work item. It may also read and write its registers and DMA buffers, and report through a sink (the object the kit hands back when a driver publishes a device, see <a href="#publishing-a-device">Publishing a device</a>). It must not block, and it must not allocate (no <code>new</code> of a reference type, no string building, no capturing lambda). The kernel's own handlers do allocate, and the garbage collector tolerates it; for driver handlers the kit forbids it as a safety rule, because an allocation can pull in runtime machinery that misbehaves in interrupt context, notably interface dispatch resolution and exception throwing.</p>
+<p>Calling a thread-context member of the kit from a handler (a <code>DeviceBinding</code> method, or an access-object member such as a <code>UsbAccess</code> transfer or <code>Ps2Access.TryCommand</code>) stops the kernel with a panic naming the member. Over the synthetic bus it throws instead: the kit records the fault on the node and masks the source, so a test can assert it. Nothing detects an allocation: the guard runs only inside those kit members, never in the driver's own code.</p>
+<hr>
 <h2 id="the-attribute-and-the-manifest">The attribute and the manifest</h2>
-<p>The build registers every class marked <code>[Driver]</code>: a source generator writes <code>DriverManifest.g.cs</code> into the kernel project, which constructs each driver once at boot (<a href="../dev/build/driver-manifest.html">Driver Manifest</a> describes the generator). A driver class must derive from <code>Driver</code>, be concrete and non-generic, and have a parameterless constructor. It may be <code>internal</code> in the kernel project, but must be <code>public</code> in a driver library (<a href="#a-driver-library">A driver library</a>).</p>
+<p>The build registers every class marked <code>[Driver]</code>: a <a href="driver-concepts/source-generators.html">source generator</a> writes <code>DriverManifest.g.cs</code> into the kernel project, which constructs each driver once at boot (<a href="../dev/build/driver-manifest.html">Driver manifest</a> describes the generator). A driver class must derive from <code>Driver</code>, be concrete and non-generic, and have a parameterless constructor. It may be <code>internal</code> in the kernel project, but must be <code>public</code> in a driver library (<a href="#a-driver-library">A driver library</a>). A class that breaks one of these rules is left out of the manifest with warning <code>COSMOSGEN001</code>, and so does not appear in the boot log's <code>manifest:</code> line.</p>
 <p>The attribute takes two options:</p>
 <ul>
-<li><code>[Driver(Feature = DriverFeature.Keyboard)]</code> registers the driver only when the matching feature switch (<code>CosmosEnableKeyboard</code>) is on; otherwise it is trimmed from the kernel.</li>
+<li><code>[Driver(Feature = DriverFeature.Keyboard)]</code> registers the driver only when the matching <a href="driver-concepts/trimming.html">feature switch</a> (<code>CosmosEnableKeyboard</code>) is on; otherwise it is trimmed, left out of the compiled kernel.</li>
 <li><code>[Driver(Default = false)]</code> registers the driver only when the kernel opts into it by name (<a href="#excluding-and-opting-in">Excluding and opting in</a>).</li>
 </ul>
 <p>The manifest order is deterministic (the kernel's own drivers first, then those of referenced libraries) and is printed at boot.</p>
+<hr>
 <h2 id="identity-and-matches">Identity and matches</h2>
 <p>Every node has a <code>DeviceIdentity</code>, set by its bus: <code>BusName</code>, <code>Address</code>, and <code>Describe()</code> for the log. The node's <code>Path</code> joins the first two (<code>pci:0000:00:03.0</code>) and is how the log names the node.</p>
-<p>A driver's <code>Matches</code> is a list of <code>DeviceMatch</code>. Each one tests an identity and has a <code>Specificity</code>: the number of fields it checks. Every bus kind has its own pair of types (<code>PciIdentity</code> and <code>PciMatch</code>, <code>UsbIdentity</code> and <code>UsbMatch</code>, ...), described with their buses below. On the synthetic bus:</p>
+<p>A driver's <code>Matches</code> is a list of <code>DeviceMatch</code>. Each one tests an identity and has a <code>Specificity</code>: the number of fields it checks. Every bus kind has its own pair of types (<code>PciIdentity</code> and <code>PciMatch</code>, <code>UsbIdentity</code> and <code>UsbMatch</code>, ...), described with their buses below. On the synthetic bus, a match names one device or all of them:</p>
 <pre><code class="lang-csharp">// This device and no other: specificity 1.
 private readonly DeviceMatch[] _matches = [SyntheticMatch.Key(&quot;kbd&quot;)];
 
 // Every synthetic device: specificity 0.
 private readonly DeviceMatch[] _matches = [SyntheticMatch.Any()];
 </code></pre>
-<p>When a node appears, the kit orders the matching drivers by <code>Priority</code>, then by specificity (highest first), then by manifest order, and offers the node to each until one returns <code>Bound</code>:</p>
+<p>When a node appears, the kit <a href="driver-concepts/driver-matching.html">orders the matching drivers</a> by <code>Priority</code>, then by specificity (highest first), then by manifest order, and offers the node to each until one returns <code>Bound</code>:</p>
 <pre><code>[Drivers] synthetic:prio candidates: HighPriorityDriver(prio 10, spec 1) LowPriorityDriver(prio 0, spec 1)
 [Drivers] synthetic:prio offer HighPriorityDriver -&gt; bound
 </code></pre>
-<p>To replace a shipped driver for the same hardware, give yours a <code>Priority</code> above <code>0</code>. A node no driver takes is logged <code>no driver</code> and stays <code>Unbound</code>.</p>
+<p>To replace a shipped driver for the same hardware, give yours a <code>Priority</code> above <code>0</code>: every shipped driver leaves it at <code>0</code>, the default. A node no driver takes is logged <code>no driver</code> and stays <code>Unbound</code>.</p>
+<hr>
 <h2 id="probe-and-the-binding">Probe and the binding</h2>
 <p><code>Probe</code> is the only required entry point, and <code>DeviceBinding</code> is the driver's only way to reach the hardware and the kernel. Everything the driver acquires through it (register windows, DMA memory, interrupts, events, work items, threads, published devices, child nodes) is recorded on the binding and released by the kit, so a driver never writes cleanup code.</p>
-<p>A probe reads the node (<code>binding.Node.Resources</code>, <code>binding.Node.Interrupts</code>, <code>binding.Node.Access&lt;T&gt;()</code>), acquires what it needs, creates its per-device state, publishes the device and returns. A full driver, modelled on the keyboard driver of the Drivers suite:</p>
+<p>A probe reads the node (<code>binding.Node.Resources</code>, <code>binding.Node.Interrupts</code>, and <code>binding.Node.Access&lt;T&gt;()</code>, the access object, which the bus provides for talking to the device and which is described with each bus below), acquires what it needs, creates its per-device state, publishes the device and returns. Here is a full driver, for a keyboard on the synthetic bus:</p>
 <pre><code class="lang-csharp">using Cosmos.Kernel.HAL.DriverKit;
 using Cosmos.Kernel.HAL.DriverKit.Buses.Synthetic;
 using Cosmos.Kernel.HAL.DriverKit.Interrupts;
@@ -411,9 +417,9 @@ public sealed class KeyboardState : IKeyboard
 </code></pre>
 <p>Neither class allocates pages, programs an interrupt controller, registers the keyboard with a manager or frees anything: the binding does all of it. The sections below cover its members; their samples are pieces of a driver's <code>Probe</code> or of its state object.</p>
 <h3 id="register-windows">Register windows</h3>
-<p><code>binding.MapRegisters(resourceIndex)</code> maps one of <code>Node.Resources</code> and returns a <code>RegisterWindow</code>, with <code>Read8</code> to <code>Read64</code> and <code>Write8</code> to <code>Write64</code> at a byte offset. Every access is bounds-checked and carries the barriers it needs, so a doorbell write always lands after the DMA stores before it. The same code works over a memory window, a synthetic node's RAM window and an x64 port range. The accessors are safe from an interrupt handler, and throw once the binding is torn down.</p>
+<p>A device's <a href="driver-concepts/registers.html">registers</a> are reached through a register window: <code>binding.MapRegisters(resourceIndex)</code> maps one of <code>Node.Resources</code> and returns a <code>RegisterWindow</code>, with <code>Read8</code> to <code>Read64</code> and <code>Write8</code> to <code>Write64</code> at a byte offset. Every access is bounds-checked, and over a memory window it must also be aligned to its width. Every access carries the <a href="driver-concepts/barriers.html">barriers</a> it needs, so a doorbell write always lands after the DMA stores before it. The same code works over a memory window, a synthetic node's RAM window and an x64 port range, except that a port range has no 64-bit access: <code>Read64</code> and <code>Write64</code> throw <code>NotSupportedException</code> there. The accessors are safe from an interrupt handler, and throw once the binding is torn down.</p>
 <h3 id="bulk-regions">Bulk regions</h3>
-<p><code>binding.MapRegion(resourceIndex, RegionCaching)</code> maps a resource as plain memory, for a framebuffer or a command queue, and returns a <code>DeviceRegion</code>. Unlike a register window, its accesses are neither checked nor ordered:</p>
+<p><code>binding.MapRegion(resourceIndex, RegionCaching)</code> maps a resource as plain memory, for a framebuffer or a command queue, and returns a <code>DeviceRegion</code>. Unlike a register window, its accesses are neither checked nor ordered; a probe maps a framebuffer and draws into it through a span:</p>
 <pre><code class="lang-csharp">// In Probe:
 DeviceRegion framebuffer = binding.MapRegion(1, RegionCaching.WriteCombining);
 framebuffer.Span.Fill(0);
@@ -426,18 +432,18 @@ pixels[0] = 0x00FF0000;
 <li><code>RegionCaching.WriteCombining</code> for a framebuffer: writes are grouped into bursts, which is much faster for drawing pixels.</li>
 <li><code>RegionCaching.Normal</code> for ordinary RAM shared with the device.</li>
 </ul>
-<p>On x64, <code>WriteCombining</code> is applied to every 2 MiB block the region covers whole; a block it shares with something else stays <code>Device</code>. Every other choice, and every choice on ARM64, is mapped as <code>Device</code> today. Pick the right value anyway: the kit records it and will apply it once the platform supports it.</p>
+<p>On x64, <code>WriteCombining</code> is applied to every 2 MiB block the region covers whole; a block it shares with something else stays <code>Device</code>. Every other choice, and every choice on ARM64, is mapped as <code>Device</code> today; a synthetic node's RAM window keeps the kernel's normal mapping whatever the choice. Pick the right value anyway: the kit records it in <code>DeviceRegion.Caching</code> and will apply it once the platform supports it.</p>
 <h3 id="dma-memory">DMA memory</h3>
-<p><code>binding.AllocateDma(length, alignment)</code> returns a <code>DmaBuffer</code>: zeroed, physically contiguous memory, with <code>PhysicalAddress</code> for the device and <code>Span</code> for the CPU.</p>
-<p>DMA memory usually holds a <strong>ring</strong>: a fixed array of descriptors that the driver and the device use as a circular queue. Each descriptor points at a data buffer and says who owns it. The driver fills descriptors, hands them to the device and writes a register (the doorbell) to say new ones are ready; the device processes them in order, marks each one done, and wraps back to the first after the last. A network card, for example, has a receive ring the device fills with incoming frames and a transmit ring the driver fills with outgoing ones.</p>
-<p>For a device that only addresses 32 bits, <code>TryAllocateDma</code> takes a constraint and returns <code>false</code> instead of throwing:</p>
+<p><code>binding.AllocateDma(length, alignment)</code> returns a <code>DmaBuffer</code>: zeroed, <a href="driver-concepts/physical-addresses.html">physically contiguous</a> memory, with <code>PhysicalAddress</code> for the device and <code>Span</code> for the CPU.</p>
+<p><a href="driver-concepts/dma.html">DMA</a> memory usually holds a <a href="driver-concepts/descriptor-rings.html">descriptor ring</a>: a fixed array of descriptors, each pointing at a data buffer, that the driver and the device pass back and forth as a circular queue. The driver writes a register (the doorbell) when it hands new descriptors over, and the device marks each one done. A network card, for example, has a receive ring the device fills with incoming frames and a transmit ring the driver fills with outgoing ones.</p>
+<p>For a device that only addresses 32 bits, <code>TryAllocateDma</code> takes a constraint and returns <code>false</code> instead of throwing when the buffer does not meet it. The kit has no pool of low memory yet: it allocates as usual and gives the buffer back when it ends above 4 GiB:</p>
 <pre><code class="lang-csharp">// In Probe:
 if (!binding.TryAllocateDma(RingBytes, 4096, DmaConstraints.Addressable32Bit, out DmaBuffer? ring))
 {
     return ProbeResult.Declined(&quot;no DMA memory below 4 GiB&quot;);
 }
 </code></pre>
-<p>DMA is coherent, so only ordering matters. Call <code>DmaBuffer.WriteBarrier()</code> between filling a descriptor and handing it to the device, and <code>DmaBuffer.ReadBarrier()</code> between reading a flag the device wrote and reading the data it guards. Register writes carry their own barrier:</p>
+<p>DMA is coherent, so only ordering matters. Call <code>DmaBuffer.WriteBarrier()</code> between filling a descriptor and handing it to the device, and <code>DmaBuffer.ReadBarrier()</code> between reading a flag the device wrote and reading the data it guards. Handing one descriptor to the device reads as follows; the doorbell write after it needs no barrier, because register writes carry their own:</p>
 <pre><code class="lang-csharp">// When sending, for example in Transmit:
 Span&lt;byte&gt; descriptors = ring.Span;
 descriptors[8] = 0x01;                   // fill the descriptor
@@ -448,7 +454,7 @@ window.Write32(DoorbellOffset, 1);       // no barrier needed
 </code></pre>
 <p>Never hand a device a managed array: the garbage collector does not know the device holds it.</p>
 <h3 id="interrupts">Interrupts</h3>
-<p><code>binding.TryRequestInterrupt(source, handler, out handle)</code> connects a handler to one of <code>Node.Interrupts</code>. It returns <code>false</code> when the platform cannot deliver that interrupt, so the driver can decline or poll instead. The handler is live as soon as the call returns <code>true</code>, which lets a probe send a command and wait for the interrupt; arm the device last if it must not interrupt earlier.</p>
+<p><code>binding.TryRequestInterrupt(source, handler, out handle)</code> connects a handler to one of <code>Node.Interrupts</code>. It returns <code>false</code> when the platform cannot deliver that interrupt, so the driver can decline or poll instead, reading the device's state on a timer rather than waiting for an interrupt. The handler is live as soon as the call returns <code>true</code>, which lets a probe send a command and wait for the interrupt; arm the device last, with the register write that lets it start raising interrupts, if it must not interrupt earlier. The probe connects its handler and keeps the handle:</p>
 <pre><code class="lang-csharp">// In Probe:
 if (!binding.TryRequestInterrupt(binding.Node.Interrupts[0], state.OnInterrupt, out InterruptHandle? handle))
 {
@@ -457,7 +463,7 @@ if (!binding.TryRequestInterrupt(binding.Node.Interrupts[0], state.OnInterrupt, 
 
 state.Handle = handle;
 </code></pre>
-<p>The handler runs in interrupt context: it acknowledges the device and leaves the real work to a work item. With an <code>OnInterrupt</code> method on the state object:</p>
+<p>The handler runs in interrupt context: it <a href="driver-concepts/interrupt-delivery.html">acknowledges the device</a> and leaves the real work to a work item. Here it is an <code>OnInterrupt</code> method on the state object:</p>
 <pre><code class="lang-csharp">// In the state object, in interrupt context:
 public void OnInterrupt(InterruptContext context)
 {
@@ -480,13 +486,13 @@ if (!binding.Wait(state.CommandDone, 100))
     return ProbeResult.Failed(&quot;the device did not answer the reset&quot;);
 }
 </code></pre>
-<p>For short waits in thread context, <code>binding.Delay(microseconds)</code> busy-waits and <code>binding.Sleep(milliseconds)</code> gives up the CPU:</p>
+<p>For short waits in thread context, <code>binding.Delay(microseconds)</code> busy-waits, spinning on the CPU, which suits a register that needs a few microseconds after a write, and <code>binding.Sleep(milliseconds)</code> gives up the CPU so that other threads run meanwhile:</p>
 <pre><code class="lang-csharp">// In Probe or a work item:
 window.Write32(ControlOffset, ResetBit);
 binding.Delay(10);   // the device needs 10 µs before the next access
 </code></pre>
 <h3 id="work-items">Work items</h3>
-<p><code>binding.CreateWorkItem(callback)</code> returns a <code>WorkItem</code> whose callback runs on the kit worker when scheduled. <code>context.Schedule(item)</code> from a handler, or <code>item.Schedule()</code> from anywhere, queues it without allocating; it returns <code>false</code> when the item is already queued, cancelled by teardown, or the kernel has no worker. Create work items in <code>Probe</code> and schedule them later:</p>
+<p>A handler hands its real work to a work item: <code>binding.CreateWorkItem(callback)</code> returns a <code>WorkItem</code> whose callback runs on the kit worker when scheduled. <code>context.Schedule(item)</code> from a handler, or <code>item.Schedule()</code> from anywhere, queues it without allocating; it returns <code>false</code> when the item is already queued, cancelled by teardown, or the kernel has no worker. Create work items in <code>Probe</code> and schedule them later:</p>
 <pre><code class="lang-csharp">// In Probe: create the work item once.
 state.ReceiveWork = binding.CreateWorkItem(state.DrainReceiveRing);
 
@@ -500,7 +506,7 @@ public void DrainReceiveRing()
 }
 </code></pre>
 <h3 id="periodic-work">Periodic work</h3>
-<p><code>binding.TrySchedulePeriodic(intervalMilliseconds, item)</code> runs a work item at an interval until teardown, rounded to the timer's tick. It returns <code>false</code> when the kernel has no timer or no scheduler. The kit never polls on a driver's behalf. With an <code>OnPoll</code> method on the state object:</p>
+<p><code>binding.TrySchedulePeriodic(intervalMilliseconds, item)</code> runs a work item at an interval until teardown, rounded to the timer's tick. It returns <code>false</code> when the kernel has no timer or no scheduler. The kit never polls on a driver's behalf, so a driver that must poll schedules its own work item, here an <code>OnPoll</code> method on the state object:</p>
 <pre><code class="lang-csharp">// In Probe:
 WorkItem poll = binding.CreateWorkItem(state.OnPoll);
 if (!binding.TrySchedulePeriodic(20, poll))
@@ -509,7 +515,7 @@ if (!binding.TrySchedulePeriodic(20, poll))
 }
 </code></pre>
 <h3 id="driver-threads">Driver threads</h3>
-<p><code>binding.TryStartThread(name, entry, out thread)</code> starts a thread for work that has to wait, and returns <code>false</code> when the scheduler is not running. The thread loops on the binding's events and returns once <code>IsDetaching</code> is true; teardown wakes every waiter, then joins the thread:</p>
+<p>Work that has to wait in a loop gets a thread of its own: <code>binding.TryStartThread(name, entry, out thread)</code> starts one, and returns <code>false</code> when the scheduler is not running. The thread loops on the binding's events and returns once <code>IsDetaching</code> is true; teardown wakes every waiter, then joins the thread:</p>
 <pre><code class="lang-csharp">// In the state object, on the driver thread:
 public void ThreadMain()
 {
@@ -522,6 +528,7 @@ public void ThreadMain()
     }
 }
 </code></pre>
+<p>Teardown waits half a second for each thread. A thread still running after that keeps the binding's memory from being freed, because it may still touch it: the kit leaks that memory on purpose and logs <code>thread &quot;name&quot; did not stop in 500 ms; n resources leaked</code>. The probe starts the thread once its state is in place:</p>
 <pre><code class="lang-csharp">// In Probe:
 DrainState state = new(binding);
 binding.DriverState = state;
@@ -532,7 +539,7 @@ if (!binding.TryStartThread(&quot;drain&quot;, state.ThreadMain, out DriverThrea
 }
 </code></pre>
 <h3 id="device-locks">Device locks</h3>
-<p><code>binding.CreateLock()</code> returns a <code>DeviceLock</code>, for a device entered from several contexts at once, such as a <code>Transmit</code> the network stack calls while the driver's work item drains the receive ring. <code>Acquire()</code> disables interrupts until the scope is disposed. The lock is not reentrant, and must never be held across <code>Sleep</code>, <code>Wait</code>, <code>Delay</code>, a sink call or a publish:</p>
+<p><code>binding.CreateLock()</code> returns a <code>DeviceLock</code>, for a device entered from several contexts at once, such as a <code>Transmit</code> the network stack calls while the driver's work item drains the receive ring. <code>Acquire()</code> disables interrupts until the scope is disposed, so a handler can never interrupt a thread that holds the lock and then spin on it, and a handler may take the lock too. The holder must not wait with interrupts off, so the lock is never held across <code>Sleep</code>, <code>Wait</code> or <code>Delay</code>, nor across a sink call or a publish, which can come straight back into the driver: the network stack may answer a received frame by calling <code>Transmit</code> before <code>Receive</code> returns. The lock is not reentrant, so a holder that acquires it again spins forever. In the state object, <code>Transmit</code> takes it around its ring work:</p>
 <pre><code class="lang-csharp">// In the state object, called by the network stack:
 public bool Transmit(ReadOnlySpan&lt;byte&gt; frame)
 {
@@ -546,7 +553,7 @@ public bool Transmit(ReadOnlySpan&lt;byte&gt; frame)
 }
 </code></pre>
 <h3 id="publishing-a-device">Publishing a device</h3>
-<p>A device kind is a small interface the driver implements, plus a <strong>sink</strong> the kit hands back for the driver to report events through:</p>
+<p>A device kind is a small interface the driver implements, plus a sink the kit hands back for the driver to report events through:</p>
 <table>
 <thead>
 <tr>
@@ -589,7 +596,7 @@ public bool Transmit(ReadOnlySpan&lt;byte&gt; frame)
 </tr>
 <tr>
 <td>Audio</td>
-<td><code>IAudioOutput</code> (<code>Name</code>, <code>Format</code>, <code>SampleRate</code>, <code>TrySetFormat</code>, <code>Start</code>, <code>Stop</code>, <code>Write</code>)</td>
+<td><code>IAudioOutput</code> (<code>Name</code>, <code>Format</code>, <code>SampleRate</code>, <code>SupportedFormats</code>, <code>IsRunning</code>, <code>WritableBytes</code>, <code>TrySetFormat</code>, <code>Start</code>, <code>Stop</code>, <code>Write</code>)</td>
 <td><code>PublishAudio</code></td>
 <td><code>AudioSink.BufferCompleted()</code>, <code>FormatChanged()</code></td>
 </tr>
@@ -610,17 +617,13 @@ Sink?.Receive(frame);
 <pre><code>[Drivers] synthetic:kbd synthetic-keyboard published keyboard &quot;synthetic-kbd&quot; (consumed)
 [Drivers] synthetic:kbd synthetic-keyboard withdrew keyboard &quot;synthetic-kbd&quot;
 </code></pre>
-<p>A few rules per kind:</p>
-<ul>
-<li><strong>Network</strong>: call <code>NetworkSink.Receive</code> from thread context, never from the handler; hand received frames to a work item.</li>
-<li><strong>Block</strong>: <code>PublishBlockDevice</code> registers the disk with <code>StorageManager</code> and scans its partitions before returning, so the device must be ready. If the manager refuses it, the probe fails.</li>
-<li><strong>Display</strong>: publish the display as you found it; <code>Mode</code> is empty until something sets one, and <code>Framebuffer</code> is <code>null</code> when the CPU cannot draw into it. The same object may also implement <code>IDisplayModes</code> to switch modes and <code>IHardwareCursor</code> for a hardware cursor. The bootloader's framebuffer is published as the firmware display at boot, and withdrawn when a driver binds the PCI function it lives in.</li>
-<li><strong>Audio</strong>: <code>Write</code> copies whole frames into the device's buffer, as many as fit, and never blocks; a short write is how the device says it is full. <code>BufferCompleted</code> may be called from the interrupt handler.</li>
-</ul>
+<p>Each kind also carries a rule of its own. A keyboard driver reports raw scan codes, the set 1 code for a key going down or up, which <code>KeyboardManager</code> turns into keys. A network driver calls <code>NetworkSink.Receive</code> from thread context, never from its handler, and hands received frames to a work item: the sink itself does not allocate, but the network stack behind it copies the frame, which needs thread context. An audio driver is the opposite case, since <code>AudioSink.BufferCompleted</code> may be called straight from the interrupt handler. Its <code>Write</code> copies whole audio frames (one sample for every channel) into the device's buffer, as many as fit, and never blocks; a short write is how the device says it is full.</p>
+<p><code>PublishBlockDevice</code> registers the disk with <code>StorageManager</code> and scans its partitions before it returns, so the device must be ready to read when the driver publishes it. If the manager refuses the disk (its table is full, or the disk is already registered), <code>PublishBlockDevice</code> throws <code>InvalidOperationException</code> and the probe fails.</p>
+<p>A display driver publishes the display as it found it: <code>Mode</code> is empty until something sets one, and <code>Framebuffer</code> is <code>null</code> when the CPU cannot draw into it. The same object may also implement <code>IDisplayModes</code> to switch modes and <code>IHardwareCursor</code> for a hardware cursor. The bootloader's framebuffer is published as the firmware display at boot, and withdrawn when a driver binds the PCI function whose memory window holds it.</p>
 <p>See <a href="graphics.html">Graphics</a>, <a href="audio.html">Audio</a> and <a href="filesystem.html">File System</a> for the consuming side.</p>
 <h3 id="publishing-child-nodes">Publishing child nodes</h3>
 <p>A bus driver publishes the devices it finds as child nodes: <code>binding.PublishChild(identity, resources, interrupts, access)</code> adds one beneath its node, to be offered to drivers like any other, and <code>binding.RetractChild(child, hardwarePresent)</code> removes it. Children go away with their parent, and their drivers see <code>DetachCause.ParentRetracted</code>.</p>
-<p>A bus driver either uses a bus kind the kit defines (the virtio transports publish <code>VirtioIdentity</code> nodes) or brings its own identity and match pair:</p>
+<p>A bus driver either publishes a bus kind the kit already defines, or brings its own identity and match pair. The shipped virtio transport drivers do the first: they publish their device with the kit's <code>VirtioIdentity</code>, no resources, the nine interrupt sources of a <code>VirtioAccess</code>, and that access as the access object (<a href="#virtio-devices">Virtio devices</a>). The kit's USB enumeration core does the same beneath the xHCI or hub driver's node, with a <code>UsbIdentity</code>, no resources, no interrupt sources and a <code>UsbAccess</code> (<a href="#usb-devices">USB devices</a>). A bus of your own needs an identity and a match:</p>
 <pre><code class="lang-csharp">using Cosmos.Kernel.HAL.DriverKit;
 
 namespace MyOS.Drivers;
@@ -661,6 +664,7 @@ public sealed class ChildMatch : DeviceMatch
     }
 }
 </code></pre>
+<p>The bus driver's probe then publishes a child with that identity, its registers as resource 0:</p>
 <pre><code class="lang-csharp">// In the bus driver:
 public override ProbeResult Probe(DeviceBinding binding)
 {
@@ -674,10 +678,10 @@ public override ProbeResult Probe(DeviceBinding binding)
     return ProbeResult.Bound;
 }
 </code></pre>
-<p>A bus driver may also publish a child of a bus kind the kit already defines: the shipped virtio transport drivers publish their device with the kit's <code>VirtioIdentity</code>, no resources, the nine interrupt sources of a <code>VirtioAccess</code> and that access as the access object (<a href="#virtio-devices">Virtio devices</a>), and the kit's USB enumeration core publishes a device's interfaces beneath the xHCI or hub driver's node with a <code>UsbIdentity</code>, no resources, no interrupt sources and a <code>UsbAccess</code> (<a href="#usb-devices">USB devices</a>).</p>
 <p>Resources are built with <code>DeviceResource.MemoryWindow</code>, <code>PortRange</code>, <code>RamWindow</code> or <code>None</code> (an unassigned slot that keeps the indices after it). Interrupts are <code>InterruptSource</code> subclasses the bus provides.</p>
 <h3 id="logging">Logging</h3>
 <p><code>binding.Log(message)</code> writes one line to the serial log from thread context: <code>[Drivers] synthetic:kbd synthetic-keyboard: message</code>.</p>
+<hr>
 <h2 id="declining-and-failing">Declining and failing</h2>
 <p><code>Probe</code> returns one of three results:</p>
 <table>
@@ -707,6 +711,7 @@ public override ProbeResult Probe(DeviceBinding binding)
 [Drivers] synthetic:decline offer AnyKeyDriver -&gt; bound
 [Drivers] synthetic:throw offer ThrowingDriver -&gt; failed: probe threw on purpose
 </code></pre>
+<hr>
 <h2 id="teardown-and-ondetach">Teardown and OnDetach</h2>
 <p>When a node goes away (the device is unplugged, its parent is removed, or a test retracts it), the kit tears its binding down in a fixed order:</p>
 <ol>
@@ -717,7 +722,7 @@ public override ProbeResult Probe(DeviceBinding binding)
 <li><code>OnDetach</code> runs.</li>
 <li>Memory is freed: DMA buffers, register windows and regions.</li>
 </ol>
-<p><code>OnDetach</code> is optional. It is the place to stop the hardware, because interrupts and threads are already stopped and the registers are still mapped. Check <code>reason.HardwarePresent</code> first: it is <code>false</code> when the device was unplugged, and the registers must not be touched then.</p>
+<p><code>OnDetach</code> is optional. It is the place to stop the hardware, because interrupts and threads are already stopped and the registers are still mapped. Check <code>reason.HardwarePresent</code> first: it is <code>false</code> when the device was <a href="driver-concepts/hot-plug.html">unplugged</a>, and the registers must not be touched then, because a write to a window whose device is gone can fault or reach another device. The keyboard sample's <code>OnDetach</code> disables the device only when it is still there:</p>
 <pre><code class="lang-csharp">// In the driver:
 public override void OnDetach(DeviceBinding binding, DetachReason reason)
 {
@@ -727,12 +732,13 @@ public override void OnDetach(DeviceBinding binding, DetachReason reason)
     }
 }
 </code></pre>
-<p><code>reason.Cause</code> says why: <code>DetachCause.Retracted</code> when the node itself was removed, <code>DetachCause.ParentRetracted</code> when its parent was.</p>
+<p><code>reason.Cause</code> says why: <code>DetachCause.Retracted</code> when the node itself was removed, <code>DetachCause.ParentRetracted</code> when its parent was. The log shows the withdrawal, then the node leaving the tree:</p>
 <pre><code>[Drivers] synthetic:kbd synthetic-keyboard withdrew keyboard &quot;synthetic-kbd&quot;
 [Drivers] synthetic:kbd retracted
 </code></pre>
+<hr>
 <h2 id="buses">Buses</h2>
-<p>Buses nest. The machine description publishes the root nodes, and bus drivers publish the devices they find beneath them. On an x64 machine, for example:</p>
+<p><a href="driver-concepts/buses.html">Buses</a> nest. The machine description, the platform code that describes the machine's fixed devices at boot, publishes the root nodes, and bus drivers publish the devices they find beneath them. On an x64 machine, for example, the tree looks like this:</p>
 <pre><code>platform:i8042@60                    I8042Driver
 ├── ps2:kbd                          Ps2KeyboardDriver
 └── ps2:aux                          Ps2MouseDriver
@@ -743,7 +749,8 @@ platform:pci@cf8                     PciHostDriver
     └── usb:1-1:0                    UsbKeyboardDriver
 </code></pre>
 <p>A driver only sees its own node: a virtio driver never learns which transport carries its device, and a USB driver never sees the controller or the hubs above it.</p>
-<p>Each bus kind has its own namespace, <code>Cosmos.Kernel.HAL.DriverKit.Buses.&lt;Bus&gt;</code> (<code>Platform</code>, <code>Pci</code>, <code>Virtio</code>, <code>Usb</code>, <code>Ps2</code>, and <code>Synthetic</code> for tests), and names its types the same way: <code>&lt;Bus&gt;Identity</code> for what a node is, <code>&lt;Bus&gt;Match</code> for what a driver binds, and <code>&lt;Bus&gt;Access</code> for how the driver reaches the device, on every bus but the platform one, whose drivers map the node's resources (the PCI host node alone carries an access object, <code>PciHostAccess</code>).</p>
+<p>Each bus kind has its own namespace, <code>Cosmos.Kernel.HAL.DriverKit.Buses.&lt;Bus&gt;</code> (<code>Platform</code>, <code>Pci</code>, <code>Virtio</code>, <code>Usb</code>, <code>Ps2</code>, and <code>Synthetic</code> for tests), and names its types the same way: <code>&lt;Bus&gt;Identity</code> for what a node is, <code>&lt;Bus&gt;Match</code> for what a driver binds, and <code>&lt;Bus&gt;Access</code> for how the driver reaches the device. The platform bus is the exception: its drivers map the node's resources instead, and only the PCI host node carries an access object, <code>PciHostAccess</code>.</p>
+<p>Platform nodes and the PCI host driver come first, below; the four sections after them take the buses a driver binds in turn: PCI, virtio, USB and PS/2.</p>
 <h3 id="platform-nodes">Platform nodes</h3>
 <p>Platform nodes are the roots: devices nothing can enumerate, which the machine description publishes at boot. A kernel cannot publish its own.</p>
 <table>
@@ -777,16 +784,17 @@ platform:pci@cf8                     PciHostDriver
 </tr>
 </tbody>
 </table>
-<p>On ARM64 they come from ACPI, the device tree, or the virt machine's fixed layout. A driver matches a platform node by one of its compatible strings:</p>
+<p>On ARM64 they come from ACPI, the device tree, or the virt machine's fixed layout. The two PCI hosts differ in how they reach configuration space: <code>pci-host-legacy</code> through ports <code>0xCF8</code> and <code>0xCFC</code>, <code>pci-host-ecam-generic</code> through a memory window. A driver matches a platform node by one of its compatible strings:</p>
 <pre><code class="lang-csharp">// In the driver:
 private readonly DeviceMatch[] _matches = [PlatformMatch.Compatible(&quot;virtio,mmio&quot;)];
 </code></pre>
 <p><code>PlatformMatch.Any()</code> matches every platform node.</p>
 <h3 id="the-pci-host-driver">The PCI host driver</h3>
-<p><code>PciHostDriver</code> binds the PCI host node, scans every bus behind it, following bridges, and publishes one <code>pci:</code> node per function it finds. The functions behind a PCI Express hot-plug slot are published by <code>PcieRootPortDriver</code> instead, when a device is plugged in. A function no driver matches is left as the firmware set it up.</p>
+<p><code>PciHostDriver</code> binds the PCI host node, scans every bus behind it, following bridges, and publishes one <code>pci:</code> node per function it finds. The functions behind a PCI Express hot-plug slot are published by <code>PcieRootPortDriver</code> instead, at boot for a device already in a powered slot and later when one is plugged in. A function no driver matches is left as the <a href="driver-concepts/firmware-handoff.html">firmware</a> set it up.</p>
+<hr>
 <h2 id="pci-devices">PCI devices</h2>
-<p>A PCI node is one function: its identity read from the configuration header, six resources (its base address registers), its interrupt sources (the legacy line, then its MSI-X messages) and a <code>PciAccess</code> for its configuration space. The shipped <code>E1000EDriver</code> is a good model, and the samples below are its steps.</p>
-<h3 id="identity-and-match">Identity and match</h3>
+<p>A PCI node is one <a href="driver-concepts/pci.html">function</a>: its identity read from the configuration header, six resources (its base address registers), its interrupt sources (the legacy line, then its MSI-X messages) and a <code>PciAccess</code> for its configuration space. The shipped <code>E1000EDriver</code> is a good model, and the samples below are its steps.</p>
+<h3 id="pci-identity-and-match">PCI identity and match</h3>
 <p><code>PciIdentity</code> holds the header fields a driver matches on: <code>VendorId</code>, <code>DeviceId</code>, <code>SubsystemVendorId</code>, <code>SubsystemId</code>, <code>ClassCode</code>, <code>Subclass</code>, <code>ProgIf</code> and <code>Revision</code>, plus the function's address. The node path is <code>pci:&lt;segment&gt;:&lt;bus&gt;:&lt;device&gt;.&lt;function&gt;</code>, for example <code>pci:0000:00:03.0</code>.</p>
 <p><code>PciMatch</code> takes any of those fields; every field given must be equal, and the specificity is the number of fields given:</p>
 <pre><code class="lang-csharp">// In the driver:
@@ -798,16 +806,16 @@ private readonly DeviceMatch[] _matches =
     new PciMatch(classCode: 0x02),                      // every network controller: specificity 1
 ];
 </code></pre>
-<p>A match must set at least one field. Prefer the device ids you tested over a class match: the shipped E1000E matches eight Intel device ids and nothing else.</p>
-<h3 id="the-access-object">The access object</h3>
+<p>A match must set at least one field. Prefer the device ids you tested over a class match: a class match binds every function of that class, including chips whose registers differ from the one you tested. A class match is right only where a specification fixes the register layout, as the HD Audio specification does for <code>HdAudioDriver</code>; the shipped E1000E matches eight Intel device ids and nothing else.</p>
+<h3 id="the-pci-access-object">The PCI access object</h3>
 <p><code>binding.Node.Access&lt;PciAccess&gt;()</code> reaches the function's configuration space:</p>
 <ul>
-<li><code>ReadConfig8/16/32</code> and <code>WriteConfig8/16/32</code> read and write a register at an offset.</li>
+<li><code>ReadConfig8/16/32</code> and <code>WriteConfig8/16/32</code> read and write a register at an offset aligned to its width. An offset past the configuration space the host reaches throws <code>ArgumentOutOfRangeException</code>: that space is 256 bytes on x64, whose host uses the legacy ports, and 4 KiB over ECAM.</li>
 <li><code>FindCapability(id)</code> returns the offset of a capability, or 0.</li>
-<li><code>EnableMemorySpace</code>, <code>EnableIoSpace</code> and <code>EnableBusMastering</code> turn on what the driver uses: decoding makes the registers answer, bus mastering lets the device reach DMA memory.</li>
+<li><code>EnableMemorySpace</code>, <code>EnableIoSpace</code> and <code>EnableBusMastering</code> turn on what the driver uses: decoding makes the registers answer, <a href="driver-concepts/dma.html">bus mastering</a> lets the device reach DMA memory.</li>
 <li><code>Bars</code> describes the six base address registers (next section).</li>
 </ul>
-<p>Before the first probe, the kit turns bus mastering and interrupts off on the function, so a probe turns on what it needs itself. If every driver declines, the kit restores what the firmware had set.</p>
+<p>Before the first probe, the kit turns bus mastering and interrupts off on the function, so a probe turns on what it needs itself. It does so again after each probe that did not bind, before that probe's memory is freed, so the device stops writing into it, and once more after a binding is torn down while the device is still present. If every driver declines, the kit restores what the firmware had set.</p>
 <h3 id="bar-resources">BAR resources</h3>
 <p><code>Node.Resources</code> of a PCI node always has six entries, one per base address register: a <code>MemoryWindow</code>, a <code>PortRange</code>, or <code>None</code> for a register that is not assigned (or is the upper half of a 64-bit one). Mapping a <code>None</code> entry throws, so check <code>pci.Bars[i]</code> first:</p>
 <pre><code class="lang-csharp">// In Probe:
@@ -823,7 +831,7 @@ pci.EnableMemorySpace(true);
 pci.EnableBusMastering(true);
 </code></pre>
 <h3 id="the-legacy-line">The legacy line</h3>
-<p><code>Node.Interrupts[0]</code> is the function's legacy interrupt line. It is only routed on x64, and never shared with another device, so <code>TryRequestInterrupt</code> often returns <code>false</code>. Even when it connects, the routing has only been validated on QEMU, so pair it with a periodic drain that keeps the device working if the line never fires:</p>
+<p><code>Node.Interrupts[0]</code> is the function's <a href="driver-concepts/interrupt-delivery.html">legacy interrupt line</a>. The kit routes it on x64 only, for lines 3 to 15, and gives each line to one function rather than share it, so <code>TryRequestInterrupt</code> returns <code>false</code> on ARM64, for any other line, and for a line another driver holds. Even when it connects, the kit programs the line edge-triggered, which QEMU delivers but a real chipset, whose PCI lines are level-triggered and shared, may not. Pair it with a periodic drain that keeps the device working if the line never fires:</p>
 <pre><code class="lang-csharp">// In Probe:
 WorkItem drain = binding.CreateWorkItem(state.Drain);
 state.DrainWork = drain;
@@ -837,7 +845,7 @@ if (!hasLine &amp;&amp; !polling)
 </code></pre>
 <p>The handler acknowledges the device and schedules the same drain, which must therefore be safe to run at any time.</p>
 <h3 id="message-interrupts">Message interrupts</h3>
-<p>When the function supports MSI-X, <code>Node.Interrupts[1]</code> onwards are its messages, up to 32. They need memory decoding on, because the MSI-X table lives in a BAR, and they return <code>false</code> where the platform cannot route messages (ARM64 without a GICv3 ITS). Connecting a message turns the legacy line off, so the two are never live together:</p>
+<p>When the function supports MSI-X, <code>Node.Interrupts[1]</code> onwards are its messages, up to 32. They need memory decoding on, because the MSI-X table lives in a BAR, and they return <code>false</code> where the platform cannot route messages (ARM64 without a GICv3 ITS, the ARM interrupt controller's translation service for message interrupts; QEMU's virt machine defaults to GICv2, which has none). Connecting a message turns the legacy line off, so the two are never live together:</p>
 <pre><code class="lang-csharp">// In Probe:
 pci.EnableMemorySpace(true);   // before requesting a message
 
@@ -845,9 +853,10 @@ bool hasMessage = binding.Node.Interrupts.Count &gt; 1
     &amp;&amp; binding.TryRequestInterrupt(binding.Node.Interrupts[1], state.OnInterrupt, out _);
 </code></pre>
 <h3 id="hot-plug-slots">Hot-plug slots</h3>
-<p>A function behind a PCI Express hot-plug slot is published when a device is plugged in, and retracted when it is removed; <code>PcieRootPortDriver</code> handles the slot. If the firmware left the function's registers unassigned, the kit places them before the function is offered, so a driver needs nothing special: it checks <code>Bars</code> as usual, and leaves the registers alone in <code>OnDetach</code> when <code>reason.HardwarePresent</code> is <code>false</code>.</p>
+<p>A function behind a PCI Express <a href="driver-concepts/hot-plug.html">hot-plug</a> slot is published when its device is plugged in (or at boot, when the slot already holds a powered device), and retracted when it is removed; <code>PcieRootPortDriver</code> handles the slot. If the firmware left the function's registers unassigned, the kit places them before the function is offered, and a register that does not fit the slot's address windows stays unassigned. A driver therefore needs nothing special: it checks <code>Bars</code> as usual, and leaves the registers alone in <code>OnDetach</code> when <code>reason.HardwarePresent</code> is <code>false</code>.</p>
+<hr>
 <h2 id="virtio-devices">Virtio devices</h2>
-<p>A virtio node is one virtio device, published by a transport driver over PCI or MMIO. It has no resources, nine interrupt sources and a <code>VirtioAccess</code> that speaks the virtio protocol, so a driver works the same over both transports. The shipped <code>VirtioNetDriver</code> is a good model, and the samples below are its steps.</p>
+<p>A virtio node is one <a href="driver-concepts/virtio.html">virtio</a> device, published by a transport driver over PCI or MMIO. It has no resources, nine interrupt sources and a <code>VirtioAccess</code> that speaks the virtio protocol, so a driver works the same over both transports. The shipped <code>VirtioNetDriver</code> is a good model, and the samples below are its steps.</p>
 <h3 id="virtio-identity-and-match">Virtio identity and match</h3>
 <p><code>VirtioIdentity</code> carries the <code>DeviceType</code> (<code>VirtioDeviceType.Network</code>, <code>Block</code>, <code>Gpu</code>, <code>Input</code>, ...) and the transport, which shows in the node path (<code>virtio:pci:0000:00:02.0</code>, <code>virtio:mmio:a003e00</code>) but never matters to the driver. A driver matches on the device type:</p>
 <pre><code class="lang-csharp">// In the driver:
@@ -858,7 +867,7 @@ private readonly DeviceMatch[] _matches = [VirtioMatch.DeviceType(VirtioDeviceTy
 <h3 id="the-virtio-access-object">The virtio access object</h3>
 <p><code>binding.Node.Access&lt;VirtioAccess&gt;()</code> is the device. A probe uses it in this order:</p>
 <ol>
-<li><code>NegotiateFeatures(requested, out negotiated)</code> with the feature bits the driver understands. It returns <code>false</code> when the device rejects them.</li>
+<li><code>NegotiateFeatures(requestedLow, out negotiatedLow)</code> with the feature bits the driver understands, among the low 32; the kit adds <code>VIRTIO_F_VERSION_1</code> itself when the device offers it. It returns <code>false</code> when the device rejects them.</li>
 <li><code>TryCreateQueue</code> for each queue (<a href="#queues">Queues</a>).</li>
 <li><code>ReadConfig8/16/32</code> and <code>WriteConfig8</code> for the device's own configuration, such as a network card's MAC address.</li>
 <li><code>TryRequestInterrupt</code> on the queue and configuration sources (<a href="#virtio-interrupt-sources">Virtio interrupt sources</a>).</li>
@@ -877,7 +886,7 @@ if (!dev.NegotiateFeatures(FeatureMac | FeatureStatus, out uint features))
 <p>A virtqueue is a ring (<a href="#dma-memory">DMA memory</a>) the driver and the device share. <code>dev.TryCreateQueue(binding, index, preferredSize, out Virtqueue? queue)</code> allocates one and activates it on the device. A <code>Virtqueue</code> offers:</p>
 <ul>
 <li><code>TryAllocateDescriptor(out index)</code> and <code>FreeDescriptor(index)</code>.</li>
-<li><code>SetDescriptor(index, physicalAddress, length, flags)</code>: <code>VirtqueueDescriptorFlags.Write</code> for a buffer the device fills, <code>Next</code> to chain descriptors.</li>
+<li><code>SetDescriptor(index, physicalAddress, length, flags, next)</code>: <code>VirtqueueDescriptorFlags.Write</code> for a buffer the device fills, <code>Next</code> with the index of the following descriptor in <code>next</code> to chain them (<code>next</code> defaults to 0).</li>
 <li><code>Submit(head)</code> hands a descriptor chain to the device, and <code>Notify()</code> rings the doorbell.</li>
 <li><code>TryTakeUsed(out id, out length)</code> takes back what the device finished.</li>
 </ul>
@@ -959,71 +968,12 @@ public override void OnDetach(DeviceBinding binding, DetachReason reason)
 </tr>
 </tbody>
 </table>
-<h3 id="the-display-drivers">The display drivers</h3>
-<table>
-<thead>
-<tr>
-<th>Driver</th>
-<th>Hardware</th>
-<th>Notes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>VirtioGpuDriver</code></td>
-<td>virtio-gpu, over PCI or MMIO</td>
-<td>2D: the guest draws, the host composites</td>
-</tr>
-<tr>
-<td><code>VmwareSvgaDriver</code></td>
-<td>VMware SVGA II, PCI, x64 only</td>
-<td>Switches modes and draws a hardware cursor; replaces the firmware framebuffer, which lives in its VRAM</td>
-</tr>
-<tr>
-<td><code>AmdDcnDriver</code></td>
-<td>AMD DCN 3.1.5, the integrated Radeon graphics of Ryzen 7000 (Raphael, Dragon Range) and Ryzen 9000 (Granite Ridge) processors, PCI</td>
-<td>Keeps the mode the UEFI firmware set (no mode switching); flips between three frames in VRAM at the vertical update, so nothing tears, and draws a hardware cursor; replaces the firmware framebuffer, which lives in its VRAM. A legacy (CSM) boot, a laptop in discrete-GPU-only mode, or a surface it cannot draw into makes it decline, with the reason recorded on the offer, where <code>DriverDiagnostics</code> reports it</td>
-</tr>
-<tr>
-<td><code>IntelGraphicsDriver</code></td>
-<td>The integrated graphics of Intel Core processors from the 2nd generation (Sandy Bridge, HD Graphics 2000 and 3000) to the 14th (Raptor Lake, UHD and Iris Xe Graphics), PCI</td>
-<td>Keeps the mode the UEFI firmware set (no mode switching); flips between three frames in stolen memory at the vertical blank, so nothing tears, and draws a hardware cursor; replaces the firmware framebuffer, which it reaches through the GPU's aperture. A legacy (CSM) boot, a surface it cannot draw into, or a device id outside the table it shares with Linux's i915 makes it decline; too little stolen memory after the firmware's surface leaves it drawing without flipping or without a cursor, which the bind log says</td>
-</tr>
-</tbody>
-</table>
-<h3 id="the-storage-drivers">The storage drivers</h3>
-<table>
-<thead>
-<tr>
-<th>Driver</th>
-<th>Hardware</th>
-<th>Disk names</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>AhciDriver</code></td>
-<td>SATA controllers in AHCI mode (disks only, no CD-ROM)</td>
-<td><code>sata&lt;n&gt;</code></td>
-</tr>
-<tr>
-<td><code>NvmeDriver</code></td>
-<td>NVMe controllers</td>
-<td><code>nvme&lt;controller&gt;n&lt;namespace&gt;</code></td>
-</tr>
-<tr>
-<td><code>VirtioBlkDriver</code></td>
-<td>virtio-blk, over PCI or MMIO</td>
-<td><code>vblk&lt;n&gt;</code></td>
-</tr>
-</tbody>
-</table>
-<p>A USB stick is handled by <code>UsbMassStorageDriver</code> (<a href="#the-usb-class-drivers">The USB class drivers</a>). Every disk is registered with <code>StorageManager</code> when it is published.</p>
+<hr>
 <h2 id="usb-devices">USB devices</h2>
-<p>A USB node is one interface of a USB device, published by the host controller driver for a device on a root port, or by the hub driver for a device behind a hub. It has no resources, no interrupt sources and a <code>UsbAccess</code> for everything a class driver does. A device with several interfaces gives several nodes. A class driver never sees the controller or the hubs above it; the shipped <code>UsbKeyboardDriver</code>, <code>UsbMouseDriver</code> and <code>UsbMassStorageDriver</code> are good models.</p>
+<p>A USB node is one <a href="driver-concepts/usb.html">interface</a> of a USB device, published by the host controller driver for a device on a root port, or by the hub driver for a device behind a hub. It has no resources, no interrupt sources and a <code>UsbAccess</code> for everything a class driver does. A device with several interfaces gives several nodes. A class driver never sees the controller or the hubs above it; the shipped <code>UsbKeyboardDriver</code>, <code>UsbMouseDriver</code> and <code>UsbMassStorageDriver</code> are good models.</p>
 <h3 id="usb-identity-and-match">USB identity and match</h3>
 <p><code>UsbIdentity</code> holds the device's <code>VendorId</code>, <code>ProductId</code> and class, and the interface's class, subclass and protocol. The node path is the port chain and the interface number: <code>usb:1-1:0</code> is interface 0 of the device on root port 1 of the first controller, and <code>usb:1-2.1:0</code> a device on port 1 of a hub plugged into root port 2.</p>
-<p><code>UsbMatch</code> works like <code>PciMatch</code>: every field given must be equal, and the specificity is the number of fields given. A class driver usually matches the interface class, subclass and protocol:</p>
+<p><code>UsbMatch</code> works like <code>PciMatch</code>: every field given must be equal, and the specificity is the number of fields given. A class driver usually matches the interface class, subclass and protocol. The shipped keyboard and mouse drivers match the HID boot interface, which every PC keyboard and mouse declares so that firmware can use it:</p>
 <pre><code class="lang-csharp">// In the driver:
 using Cosmos.Kernel.HAL.DriverKit.Buses.Usb;
 
@@ -1037,7 +987,7 @@ private readonly DeviceMatch[] _matches =
 <ul>
 <li><code>Endpoints</code> lists the interface's endpoints, and <code>FindEndpoint(type, isIn)</code> finds one.</li>
 <li><code>ControlIn</code>, <code>ControlOut</code> and <code>GetDescriptor</code> send control requests to the device. Each returns a <code>UsbTransferStatus</code>: <code>Success</code>, <code>Stall</code>, <code>Timeout</code>, <code>Error</code> or <code>Disconnected</code>.</li>
-<li><code>OpenInterruptPipe(binding, endpoint, handler, out pipe)</code> opens an interrupt IN endpoint and calls the handler with every report the device sends.</li>
+<li><code>OpenInterruptPipe(binding, endpoint, handler, out pipe)</code> opens an <a href="driver-concepts/usb.html">interrupt IN endpoint</a> and calls the handler with every report the device sends.</li>
 <li><code>OpenBulkPipe(binding, endpoint, out pipe)</code> opens a bulk endpoint, and <code>BulkIn</code> and <code>BulkOut</code> move data through it and wait for the transfer.</li>
 <li><code>IsDisconnected</code> turns true once the device is unplugged; every transfer then returns <code>Disconnected</code>, so check it rather than retrying.</li>
 </ul>
@@ -1114,7 +1064,7 @@ public void OnReport(ReadOnlySpan&lt;byte&gt; report)
 </tr>
 </tbody>
 </table>
-<p>A USB stick present at boot, for example:</p>
+<p>A unit is one logical disk behind a mass storage device, such as one slot of a card reader. A USB stick present at boot shows in the log like this:</p>
 <pre><code>[Drivers] pci:0000:00:03.0 XhciDriver: usb 1-1: 46f4:0001 SuperSpeed, 1 interface(s)
 [Drivers] pci:0000:00:03.0 offer XhciDriver -&gt; bound
 [Drivers] usb:1-1:0 candidates: UsbMassStorageDriver(prio 0, spec 3)
@@ -1122,8 +1072,9 @@ public void OnReport(ReadOnlySpan&lt;byte&gt; report)
 [Drivers] usb:1-1:0 UsbMassStorageDriver published block &quot;usb0&quot; (consumed)
 [Drivers] usb:1-1:0 offer UsbMassStorageDriver -&gt; bound
 </code></pre>
+<hr>
 <h2 id="ps2-devices">PS/2 devices</h2>
-<p>A PS/2 node is one port of the 8042 controller, published by <code>I8042Driver</code>: <code>ps2:kbd</code> for the keyboard port and <code>ps2:aux</code> for the mouse port. It has no resources, one interrupt source and a <code>Ps2Access</code> to talk to the device. The class driver finds out what is plugged in. PS/2 exists on x64 only.</p>
+<p>A PS/2 node is one port of the <a href="driver-concepts/ps2.html">8042 controller</a>, published by <code>I8042Driver</code>: <code>ps2:kbd</code> for the keyboard port and <code>ps2:aux</code> for the mouse port. It has no resources, one interrupt source and a <code>Ps2Access</code> to talk to the device. The class driver finds out what is plugged in. PS/2 exists on x64 only.</p>
 <h3 id="ps2-identity-and-match">PS/2 identity and match</h3>
 <p>A driver matches one port, never both, since a keyboard and a mouse speak different protocols:</p>
 <pre><code class="lang-csharp">// In the driver:
@@ -1138,7 +1089,7 @@ private readonly DeviceMatch[] _matches = [Ps2Match.Port(Ps2Port.Keyboard)];
 <li><code>TryReceive(out value)</code> takes the next byte the device sent on its own, such as a scan code. Any context, so the handler uses it.</li>
 <li><code>DeliversUnattended</code> is <code>false</code> when the controller can neither interrupt nor be polled; decline the port then.</li>
 </ul>
-<p>Bytes that answer a command go to <code>TryCommand</code>, never to <code>TryReceive</code>. A keyboard probe resets the device, publishes the keyboard, connects the port's interrupt, then starts scanning:</p>
+<p>Bytes that answer a command go to <code>TryCommand</code>, never to <code>TryReceive</code>. A mouse probe publishes its pointer before it enables data reporting, and a keyboard probe resets the device, publishes the keyboard, connects the port's interrupt, then starts scanning:</p>
 <pre><code class="lang-csharp">// In Probe:
 Ps2Access ps2 = binding.Node.Access&lt;Ps2Access&gt;();
 if (!ps2.DeliversUnattended)
@@ -1173,9 +1124,9 @@ public void OnInterrupt(InterruptContext context)
 }
 </code></pre>
 <h3 id="the-controller-contract">The controller contract</h3>
-<p><code>Ps2Controller</code> is what a controller driver implements to send bytes to a port and hand back the bytes it reads. <code>I8042State</code> is the only implementation, and a class driver never uses it.</p>
+<p><code>Ps2Controller</code> is what a controller driver implements to send bytes to a port and hand back the bytes it reads. <code>I8042Driver</code> holds the only implementation, and a class driver never uses it.</p>
 <h3 id="the-8042-driver">The 8042 driver</h3>
-<p><code>I8042Driver</code> binds <code>platform:i8042@60</code>. It tests the controller and its two ports, connects IRQ 1 and IRQ 12 (or polls every 20 ms when it cannot), and publishes one node per working port. It is the only code that touches ports <code>0x60</code> and <code>0x64</code>.</p>
+<p><code>I8042Driver</code> binds <code>platform:i8042@60</code>. It tests the controller and its two ports, connects IRQ 1 and IRQ 12 (or polls every 20 ms when it cannot), and publishes one node per working port. It is the only driver that touches ports <code>0x60</code> and <code>0x64</code>; the kernel's x64 reboot also writes <code>0xFE</code> to <code>0x64</code>.</p>
 <h3 id="the-ps2-class-drivers">The PS/2 class drivers</h3>
 <table>
 <thead>
@@ -1198,7 +1149,7 @@ public void OnInterrupt(InterruptContext context)
 </tr>
 </tbody>
 </table>
-<p>Both are published during the driver stage, so a kernel finds them in <code>OnBoot</code>. PS/2 has no hot-plug.</p>
+<p>Both are published during the driver stage, so a kernel finds them in <code>OnBoot</code>. PS/2 has no hot-plug. The boot log shows both ports bound:</p>
 <pre><code>[Drivers] ps2:kbd Ps2KeyboardDriver published keyboard &quot;ps2-keyboard&quot; (consumed)
 [Drivers] ps2:kbd Ps2KeyboardDriver: MF2 keyboard (id ab 41), scanning
 [Drivers] ps2:kbd offer Ps2KeyboardDriver -&gt; bound
@@ -1206,6 +1157,73 @@ public void OnInterrupt(InterruptContext context)
 [Drivers] ps2:aux Ps2MouseDriver: wheel mouse (id 03), 4-byte packets, reporting
 [Drivers] ps2:aux offer Ps2MouseDriver -&gt; bound
 </code></pre>
+<hr>
+<h2 id="shipped-device-drivers">Shipped device drivers</h2>
+<p>The buses above also carry the shipped drivers for displays, disks and sound. They publish through the same calls as yours, and are listed here by the kind of device they publish.</p>
+<h3 id="the-display-drivers">The display drivers</h3>
+<table>
+<thead>
+<tr>
+<th>Driver</th>
+<th>Hardware</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VirtioGpuDriver</code></td>
+<td>virtio-gpu, over PCI or MMIO</td>
+<td>2D: the guest draws, the host composites</td>
+</tr>
+<tr>
+<td><code>VmwareSvgaDriver</code></td>
+<td>VMware SVGA II, PCI, x64 only</td>
+<td>Switches modes and draws a hardware cursor; replaces the firmware framebuffer, which lives in its VRAM</td>
+</tr>
+<tr>
+<td><code>AmdDcnDriver</code></td>
+<td>AMD DCN 3.1.5, the integrated Radeon graphics of Ryzen 7000 (Raphael, Dragon Range) and Ryzen 9000 (Granite Ridge) processors, PCI</td>
+<td>Keeps the UEFI mode; tear-free flipping; hardware cursor; replaces the firmware framebuffer, which lives in its VRAM</td>
+</tr>
+<tr>
+<td><code>IntelGraphicsDriver</code></td>
+<td>The integrated graphics of Intel Core processors from the 2nd generation (Sandy Bridge, HD Graphics 2000 and 3000) to the 14th (Raptor Lake, UHD and Iris Xe Graphics), PCI</td>
+<td>Keeps the UEFI mode; tear-free flipping; hardware cursor; replaces the firmware framebuffer, which it reaches through the GPU's aperture</td>
+</tr>
+</tbody>
+</table>
+<p><code>AmdDcnDriver</code> and <code>IntelGraphicsDriver</code> keep the mode the UEFI firmware set rather than switching modes. They flip between three frames, in VRAM at the vertical update for AMD and in stolen memory at the vertical blank for Intel, so nothing tears, and both draw a hardware cursor. Both decline after a legacy (CSM) boot, CSM being the firmware's BIOS compatibility mode, or on a surface they cannot draw into. <code>AmdDcnDriver</code> also declines on a laptop in discrete-GPU-only mode, and <code>IntelGraphicsDriver</code> on a device id outside the table it shares with Linux's i915. A decline records its reason on the offer, where <code>DriverDiagnostics</code> reports it. With too little stolen memory left after the firmware's surface, <code>IntelGraphicsDriver</code> draws without flipping or without a cursor, and the bind log says which.</p>
+<h3 id="the-storage-drivers">The storage drivers</h3>
+<table>
+<thead>
+<tr>
+<th>Driver</th>
+<th>Hardware</th>
+<th>Disk names</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AhciDriver</code></td>
+<td>SATA controllers in AHCI mode (disks only, no CD-ROM)</td>
+<td><code>sata&lt;n&gt;</code></td>
+</tr>
+<tr>
+<td><code>NvmeDriver</code></td>
+<td>NVMe controllers</td>
+<td><code>nvme&lt;controller&gt;n&lt;namespace&gt;</code></td>
+</tr>
+<tr>
+<td><code>VirtioBlkDriver</code></td>
+<td>virtio-blk, over PCI or MMIO</td>
+<td><code>vblk&lt;n&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>An NVMe namespace is one of the disks a controller exposes, hence the second number in an NVMe disk's name. A USB stick is handled by <code>UsbMassStorageDriver</code> (<a href="#the-usb-class-drivers">The USB class drivers</a>). Every disk is registered with <code>StorageManager</code> when it is published.</p>
+<h3 id="the-audio-driver">The audio driver</h3>
+<p><code>HdAudioDriver</code> binds any PCI controller that reports the HD Audio programming interface, matching by class rather than by device id because the specification fixes the register layout, and publishes one audio output to <code>AudioManager</code> (<a href="audio.html">Audio</a>). It is registered only when <code>CosmosEnableAudio</code> is on.</p>
+<hr>
 <h2 id="observing-drivers">Observing drivers</h2>
 <p>The kit reports what it does in two places. The serial log has one line per event, prefixed <code>[Drivers]</code>, so you can follow a boot. The <code>DriverDiagnostics</code> class in <code>Cosmos.Kernel.System.Diagnostics</code> gives code the same facts, for a test or a shell command.</p>
 <p>The lines you will see most, in the order a device's life produces them:</p>
@@ -1288,6 +1306,7 @@ for (int i = 0; i &lt; DriverDiagnostics.NodeCount; i++)
 }
 </code></pre>
 <p>The snapshots are taken without locking, so a node that is being offered or torn down at that moment may read one step behind.</p>
+<hr>
 <h2 id="testing-a-driver-over-the-synthetic-bus">Testing a driver over the synthetic bus</h2>
 <p>The synthetic bus lets you test a driver with no hardware. A test kernel publishes a fake node, the kit offers it to your driver as it would a real device, and the test plays the hardware's side. It behaves the same on x64 and ARM64.</p>
 <p><code>SyntheticBus</code> has four members:</p>
@@ -1318,40 +1337,46 @@ for (int i = 0; i &lt; DriverDiagnostics.NodeCount; i++)
 </tbody>
 </table>
 <p>The test sees the device through the node's <code>SyntheticAccess</code>: <code>Window</code> is the register window's memory, so the test writes what the driver will read and reads what the driver wrote.</p>
-<p>A test of the keyboard driver above:</p>
+<p>A test of the keyboard driver above publishes its node, plays a key press and unplugs it, and writes a <code>FAIL:</code> line to the serial log for every check that does not hold:</p>
 <pre><code class="lang-csharp">// In the test kernel:
 using Cosmos.Kernel.HAL.DriverKit;
 using Cosmos.Kernel.HAL.DriverKit.Buses.Synthetic;
 using Cosmos.Kernel.System.Diagnostics;
-using Cosmos.TestRunner.Framework;
 using MyOS.Drivers;
 
 // In BeforeRun:
 DeviceNode node = SyntheticBus.Publish(SyntheticKeyboardDriver.Key, [], interruptCount: 1, windowBytes: 64);
 SyntheticAccess access = node.Access&lt;SyntheticAccess&gt;();
-Assert.Equal(KeyboardState.EnableBit, access.Window[KeyboardState.ControlOffset], &quot;the probe should arm the device&quot;);
+if (access.Window[KeyboardState.ControlOffset] != KeyboardState.EnableBit)
+{
+    Log.WriteString(&quot;FAIL: the probe should arm the device\n&quot;);
+}
 
 // Play a key press: fill the registers, then raise the interrupt.
 access.Window[KeyboardState.ScanCodeOffset] = 0x1E;
 access.Window[KeyboardState.FlagsOffset] = 0;
-Assert.True(SyntheticBus.RaiseInterrupt(node, 0), &quot;the handler should run&quot;);
+if (!SyntheticBus.RaiseInterrupt(node, 0))
+{
+    Log.WriteString(&quot;FAIL: the handler should run\n&quot;);
+}
 SyntheticBus.WaitForQueuedJobs();   // the work item the handler scheduled has run too
 
 // Unplug: the kit releases everything the probe acquired.
 int heldBefore = DriverDiagnostics.GetTotalHeldResourceCount();
 SyntheticBus.Retract(node);
-Assert.True(DriverDiagnostics.GetTotalHeldResourceCount() &lt; heldBefore, &quot;teardown should release the binding&quot;);
-Assert.False(SyntheticBus.RaiseInterrupt(node, 0), &quot;nothing is connected any more&quot;);
+if (DriverDiagnostics.GetTotalHeldResourceCount() &gt;= heldBefore)
+{
+    Log.WriteString(&quot;FAIL: teardown should release the binding\n&quot;);
+}
+if (SyntheticBus.RaiseInterrupt(node, 0))
+{
+    Log.WriteString(&quot;FAIL: nothing is connected any more\n&quot;);
+}
 </code></pre>
-<p>Reach the driver's own state through <code>node.Binding.DriverState</code> to check what the handler did, and use <code>DriverDiagnostics</code> (see <a href="#observing-drivers">Observing drivers</a>) to check the node's state and offers. A node published in the kernel's constructor, before the driver stage, tests the boot path; one published in <code>BeforeRun</code> tests hot-plug. See <a href="../dev/testing.html">Testing</a> for how to build and run a test kernel.</p>
+<p>Reach the driver's own state through <code>node.Binding.DriverState</code> to check what the handler did, and use <code>DriverDiagnostics</code> (see <a href="#observing-drivers">Observing drivers</a>) to check the node's state and offers. A node published in the kernel's constructor, before the driver stage, tests the boot path; one published in <code>BeforeRun</code> tests hot-plug. <code>cosmos run</code> connects the serial port to your terminal, so the <code>FAIL:</code> lines appear there next to the kit's own <code>[Drivers]</code> lines (<a href="debugging.html#writing-to-the-serial-log">Writing to the serial log</a>).</p>
+<hr>
 <h2 id="project-settings">Project settings</h2>
-<h3 id="a-driver-inside-the-kernel-project">A driver inside the kernel project</h3>
-<p>A kernel project built with <code>Cosmos.Sdk</code> only needs to acknowledge the experimental kit. The driver class may be <code>internal</code>:</p>
-<pre><code class="lang-xml">&lt;!-- In the kernel's .csproj: --&gt;
-&lt;PropertyGroup&gt;
-  &lt;NoWarn&gt;$(NoWarn);COSMOS0003&lt;/NoWarn&gt;
-&lt;/PropertyGroup&gt;
-</code></pre>
+<p>A driver inside a kernel project built with <code>Cosmos.Sdk</code> needs nothing beyond the <code>NoWarn</code> line from <a href="#experimental-status">Experimental status</a> in the kernel's <code>.csproj</code>, and its class may be <code>internal</code>.</p>
 <h3 id="a-driver-library">A driver library</h3>
 <p>To ship drivers on their own, put them in a class library. It references <code>Cosmos.Kernel.HAL</code> for the kit and <code>Cosmos.Kernel.System</code> for the kernel API. Its <code>[Driver]</code> classes must be <code>public</code>, so the kernel's manifest generator can see them:</p>
 <pre><code class="lang-xml">&lt;!-- The library's .csproj: --&gt;
@@ -1390,29 +1415,79 @@ Assert.False(SyntheticBus.RaiseInterrupt(node, 0), &quot;nothing is connected an
   &lt;CosmosDriverInclude Include=&quot;Acme.Drivers.ExperimentalGpu&quot; /&gt;
 &lt;/ItemGroup&gt;
 </code></pre>
-<ul>
-<li>Excluding a bus driver also leaves the devices behind it unbound: without <code>PciHostDriver</code>, no PCI node is published, so no PCI driver binds.</li>
-<li>To drop a whole kind of device, turn its feature switch off instead: <code>CosmosEnableNetwork</code> set to <code>false</code> keeps every network driver out.</li>
-<li>A name that matches no driver is reported as <code>COSMOSGEN002</code>.</li>
-<li>The generated <code>DriverManifest.g.cs</code> under <code>obj/</code> shows what the kernel carries.</li>
-</ul>
-<h2 id="checklist">Checklist</h2>
-<ol>
-<li>Derive from <code>Driver</code>, mark the class <code>[Driver]</code>, and give it <code>Name</code>, <code>Matches</code> and, when it must win a device from another driver, <code>Priority</code>.</li>
-<li>Keep the driver class stateless across devices: create a state object in <code>Probe</code> and hang it off <code>binding.DriverState</code>.</li>
-<li>In <code>Probe</code>, decline early on what the node is not (<code>ProbeResult.Declined</code>), acquire everything through the binding, publish the device, connect the interrupt, and arm the device last; fail on bring-up (<code>ProbeResult.Failed</code>) and let the kit unwind.</li>
-<li>Keep the handler to registers, DMA memory, sinks and the three <code>InterruptContext</code> members; hand everything else to a work item. Never allocate or block there: the guard stops the call and masks the source.</li>
-<li>Order DMA with <code>DmaBuffer.WriteBarrier()</code> before handing a descriptor over and <code>DmaBuffer.ReadBarrier()</code> after reading a device-written flag; register accesses carry their own.</li>
-<li>Check the <code>Try</code> results: <code>TryRequestInterrupt</code>, <code>TryAllocateDma</code>, <code>TrySchedulePeriodic</code>, <code>TryStartThread</code> all say <code>false</code> when the platform or the kernel's switches cannot provide it.</li>
-<li>For a PCI function, decline on <code>PciAccess.Bars</code> before mapping (a function that arrived behind a hot-plug slot has had its registers placed by the kit, so the same check holds), turn on decoding and bus mastering through <code>PciAccess</code> yourself, request its message sources only after decoding is on, and pair the legacy line with a periodic drain, since neither the line nor the messages are routable everywhere.</li>
-<li>For a virtio device, negotiate, create the queues, submit the buffers and connect the queue sources first, then <code>SetDriverOk</code> and only then <code>Notify</code>; reset the device in <code>OnDetach</code>.</li>
-<li>For a USB interface, find the endpoints through <code>UsbAccess</code>, open pipes on your own binding and let the kit close them, check <code>IsDisconnected</code> and the <code>Disconnected</code> status rather than retrying, and keep a report handler to a sink, <code>Interlocked</code> and <code>DeviceEvent.Signal</code>.</li>
-<li>For a PS/2 port, talk to the device through <code>Ps2Access</code> only: <code>TryCommand</code> for every command with its acknowledgement, <code>TryReceive</code> from the handler for the stream, and publish before you enable scanning or reporting.</li>
-<li>Write driver threads as a loop on <code>IsDetaching</code> around <code>binding.Wait</code>, and return promptly once it turns true.</li>
-<li>Put hardware quiescing in <code>OnDetach</code>, and only when <code>reason.HardwarePresent</code> is true.</li>
-<li>Write a test kernel over the synthetic bus: publish, raise, <code>WaitForQueuedJobs</code>, retract, and assert through <code>DriverDiagnostics</code> and the driver's own state.</li>
-<li>Add <code>&lt;NoWarn&gt;$(NoWarn);COSMOS0003&lt;/NoWarn&gt;</code> to the project, and <code>&lt;CosmosDriverAssembly&gt;true&lt;/CosmosDriverAssembly&gt;</code> to a library, with its drivers <code>public</code>.</li>
-</ol>
+<p>Excluding a bus driver also leaves the devices behind it unbound: without <code>PciHostDriver</code>, no PCI node is published, so no PCI driver binds. To drop a whole kind of device, turn its feature switch off instead; <code>CosmosEnableNetwork</code> set to <code>false</code> keeps every network driver out. A name that matches no driver is reported as warning <code>COSMOSGEN002</code>, and the generated <code>DriverManifest.g.cs</code> under <code>obj/</code> shows what the kernel carries.</p>
+<hr>
+<h2 id="summary">Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Call</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Declare a driver</td>
+<td><code>[Driver]</code> on a class deriving from <code>Driver</code>, with <code>Name</code>, <code>Matches</code> and <code>Probe</code></td>
+</tr>
+<tr>
+<td>Map registers</td>
+<td><code>binding.MapRegisters(index)</code></td>
+</tr>
+<tr>
+<td>Map a framebuffer or a queue</td>
+<td><code>binding.MapRegion(index, caching)</code></td>
+</tr>
+<tr>
+<td>Allocate DMA memory</td>
+<td><code>binding.AllocateDma(length, alignment)</code>, <code>binding.TryAllocateDma(length, alignment, constraints, out buffer)</code></td>
+</tr>
+<tr>
+<td>Connect an interrupt</td>
+<td><code>binding.TryRequestInterrupt(source, handler, out handle)</code></td>
+</tr>
+<tr>
+<td>Defer work to a thread</td>
+<td><code>binding.CreateWorkItem(callback)</code>, then <code>context.Schedule(item)</code></td>
+</tr>
+<tr>
+<td>Poll on a timer</td>
+<td><code>binding.TrySchedulePeriodic(ms, item)</code></td>
+</tr>
+<tr>
+<td>Run a thread</td>
+<td><code>binding.TryStartThread(name, entry, out thread)</code></td>
+</tr>
+<tr>
+<td>Wait for the device</td>
+<td><code>binding.CreateEvent()</code>, <code>context.Signal(evt)</code>, <code>binding.Wait(evt, ms)</code></td>
+</tr>
+<tr>
+<td>Share a device between contexts</td>
+<td><code>binding.CreateLock()</code>, <code>using (lock.Acquire())</code></td>
+</tr>
+<tr>
+<td>Hand the kernel a device</td>
+<td><code>PublishKeyboard</code>, <code>PublishPointer</code>, <code>PublishNetwork</code>, <code>PublishBlockDevice</code>, <code>PublishDisplay</code>, <code>PublishAudio</code></td>
+</tr>
+<tr>
+<td>Publish a child node</td>
+<td><code>binding.PublishChild(identity, resources, interrupts, access)</code></td>
+</tr>
+<tr>
+<td>Stop the hardware on the way out</td>
+<td><code>OnDetach</code>, after checking <code>reason.HardwarePresent</code></td>
+</tr>
+<tr>
+<td>Test without hardware</td>
+<td><code>SyntheticBus.Publish</code>, <code>RaiseInterrupt</code>, <code>WaitForQueuedJobs</code>, <code>Retract</code></td>
+</tr>
+<tr>
+<td>Inspect drivers at run time</td>
+<td><code>DriverDiagnostics</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 

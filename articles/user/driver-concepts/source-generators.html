@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Preemption | Cosmos Gen 3 </title>
+      <title>Source generators | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Preemption | Cosmos Gen 3 ">
+      <meta name="title" content="Source generators | Cosmos Gen 3 ">
       
       
       <link rel="icon" href="../../../images/favicon.ico">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-concepts/source-generators.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -85,16 +85,18 @@
         </div>
 
         <article data-uid="">
-<h1 id="preemption">Preemption</h1>
+<h1 id="source-generators">Source generators</h1>
 
-<p>A preemptive scheduler can take the CPU away from a running thread without its cooperation. A hardware interrupt, usually a timer tick, transfers control to the kernel no matter what the thread was doing, and the kernel is then free to resume a different thread instead. The alternative is cooperative scheduling, where a switch only happens when the running thread volunteers by yielding or blocking; there, a single thread that never yields owns the CPU forever, and one buggy loop freezes the system.</p>
-<p>Preemption turns CPU time into a resource the kernel allocates rather than one threads take. The tick period bounds how long any thread can monopolize a core (its <a href="scheduler-tick.html">quantum</a>), so an infinite loop degrades into wasted share instead of a hang. The price is paid by every thread: since the tick lands at an arbitrary <a href="instruction-boundary.html">instruction boundary</a>, code can lose the CPU between any two instructions and must protect its critical sections accordingly, with masked interrupts or atomic instructions.</p>
-<p>In the Cosmos kernel every context switch is preemptive today: the switch happens on an interrupt exit (the 10 ms tick, a device interrupt whose handler woke another thread, or the interrupt a blocking thread raises on its own CPU), and a thread otherwise runs until it parks on a blocking primitive or exits; there is no working voluntary switch. See <a href="../scheduler.html#preemption">Preemption</a> and <a href="../scheduler.html#what-there-is-not-a-voluntary-switch">What there is not: a voluntary switch</a>.</p>
+<p>A source generator is a plug-in that runs inside the C# compiler. While a project compiles, the compiler gives the generator a read-only model of the program: the syntax of every source file, and the symbols of every type, including those of referenced assemblies. The generator can add C# files to the compilation and report diagnostics, but it cannot change or remove code that is already there. What it adds is compiled with the rest of the project, as if the project's author had written it.</p>
+<p>A generator suits work that is mechanical but has to follow the program, such as listing every class marked with an attribute. Doing that at run time is reflection: the program searches its own metadata while it runs. Doing it at build time produces ordinary code that names each class directly, which costs nothing at startup and works where reflection is not available. Generators are incremental: the compiler caches the output of each step and reruns a step only when its input changed, so a generator that depends only on a build property is not rerun when a source file is edited.</p>
+<p>Build settings do not reach a generator on their own. A project lists each MSBuild property a generator may read as a <code>CompilerVisibleProperty</code>, and the build writes those properties into an editorconfig file that it hands to the compiler, where the generator reads them as <code>build_property.&lt;Name&gt;</code>.</p>
+<p>The trap is code nobody can see. Generated files are not in the project folder, so a reader can look for a class that the compiler sees but the file list does not show, and a mistake in a generator surfaces as a compile error in a file nobody wrote. A generator also sees only what the compilation sees: a class the project cannot access, such as a private nested class or an internal class of another assembly, is out of reach of the code it generates.</p>
+<p>In Cosmos, a kernel is compiled ahead of time and kernel code does not use reflection, so the kernel cannot search its assemblies for drivers when it boots. <code>DriverManifestGenerator</code>, in <code>Cosmos.Kernel.SourceGenerators</code>, does that search at build time: it finds every <code>[Driver]</code> class in the kernel project and in the referenced assemblies that reference <code>Cosmos.Kernel.HAL</code>, and writes <code>DriverManifest.g.cs</code>, which constructs each one. <code>CosmosEntryPointGenerator</code> writes the entry point that calls the manifest. <code>Cosmos.Sdk</code> turns <code>EmitCompilerGeneratedFiles</code> on, so both files are also written under <code>obj/</code> for reading, and a marked class the generator cannot construct is reported with warning <code>COSMOSGEN001</code> rather than dropped in silence. See <a href="../drivers.html#the-attribute-and-the-manifest">The attribute and the manifest</a> and the <a href="../../dev/build/driver-manifest.html">Driver manifest</a>.</p>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-concepts/source-generators.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

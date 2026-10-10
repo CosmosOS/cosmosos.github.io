@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Preemption | Cosmos Gen 3 </title>
+      <title>Priority inversion and inheritance | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Preemption | Cosmos Gen 3 ">
+      <meta name="title" content="Priority inversion and inheritance | Cosmos Gen 3 ">
       
       
       <link rel="icon" href="../../../images/favicon.ico">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/priority-inversion.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -85,16 +85,17 @@
         </div>
 
         <article data-uid="">
-<h1 id="preemption">Preemption</h1>
+<h1 id="priority-inversion-and-inheritance">Priority inversion and inheritance</h1>
 
-<p>A preemptive scheduler can take the CPU away from a running thread without its cooperation. A hardware interrupt, usually a timer tick, transfers control to the kernel no matter what the thread was doing, and the kernel is then free to resume a different thread instead. The alternative is cooperative scheduling, where a switch only happens when the running thread volunteers by yielding or blocking; there, a single thread that never yields owns the CPU forever, and one buggy loop freezes the system.</p>
-<p>Preemption turns CPU time into a resource the kernel allocates rather than one threads take. The tick period bounds how long any thread can monopolize a core (its <a href="scheduler-tick.html">quantum</a>), so an infinite loop degrades into wasted share instead of a hang. The price is paid by every thread: since the tick lands at an arbitrary <a href="instruction-boundary.html">instruction boundary</a>, code can lose the CPU between any two instructions and must protect its critical sections accordingly, with masked interrupts or atomic instructions.</p>
-<p>In the Cosmos kernel every context switch is preemptive today: the switch happens on an interrupt exit (the 10 ms tick, a device interrupt whose handler woke another thread, or the interrupt a blocking thread raises on its own CPU), and a thread otherwise runs until it parks on a blocking primitive or exits; there is no working voluntary switch. See <a href="../scheduler.html#preemption">Preemption</a> and <a href="../scheduler.html#what-there-is-not-a-voluntary-switch">What there is not: a voluntary switch</a>.</p>
+<p>Priority inversion happens when a high-priority thread waits for a lock that a low-priority one holds. The wait itself is expected, since the holder only has to finish its critical section. The inversion comes from a third thread, of medium priority, that needs no lock at all: it preempts the holder, the holder cannot release the lock while it is off the CPU, and so the high-priority thread waits for the medium one, for as long as that one runs. The best-known case is the Mars Pathfinder lander in 1997, which kept resetting because a high-priority task waited on a lock held by a low-priority task that medium-priority tasks kept off the CPU.</p>
+<p>Priority inheritance bounds the wait. While a thread holds a lock a higher-priority thread waits for, it runs at the waiter's priority, so no medium thread can preempt it, and it drops back to its own priority when it releases the lock. The priority ceiling protocol is the static alternative: each lock carries the priority of its highest-priority user, and any thread that takes the lock runs at that priority while it holds it.</p>
+<p>The trap is undoing the boost correctly. Inheritance is transitive, since the holder may itself wait on a lock held by a third thread, which then has to inherit too, and a thread holding several locks has to fall back to the highest priority still owed to it, not to its base, when it releases one of them. The order in which a lock hands itself over matters as well: a lock that serves its waiters first come, first served can pass to a low-priority waiter while a high-priority one is queued behind it.</p>
+<p>In Cosmos the kernel <code>Mutex</code> keeps its waiters in a FIFO and, on release, hands ownership directly to the head waiter, without boosting the holder while others wait: fair, but open to inversion under a fixed-priority policy. Under the default Stride policy priority is a share, so a holder keeps receiving its share and a high-priority waiter's wait stays bounded, only longer. The hook an inheritance protocol would use is <code>SetPriority</code>, reached through <code>SchedulerManager.SetPriority</code>; nothing in the kernel calls it, and no policy implements inheritance. See <a href="../scheduler.html#mutex">Mutex</a> and <a href="../../user/scheduler-plugging.html#real-time-notes">Real-time notes</a>.</p>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/priority-inversion.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

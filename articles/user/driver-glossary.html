@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Scheduler glossary | Cosmos Gen 3 </title>
+      <title>Driver glossary | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Scheduler glossary | Cosmos Gen 3 ">
+      <meta name="title" content="Driver glossary | Cosmos Gen 3 ">
       
       
       <link rel="icon" href="../../images/favicon.ico">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/scheduler-glossary.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-glossary.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -85,9 +85,9 @@
         </div>
 
         <article data-uid="">
-<h1 id="scheduler-glossary">Scheduler glossary</h1>
+<h1 id="driver-glossary">Driver glossary</h1>
 
-<p>These notes give the background on the scheduling concepts that the contributor article on the <a href="scheduler.html">Scheduler</a> and the guide to <a href="../user/scheduler-plugging.html">Writing a scheduler</a> build on, for a reader who has not written a scheduler before. Each page explains the concept on its own, then closes with how Cosmos applies it. The table groups them in three parts: how a thread gets the CPU and loses it, what code that runs against the tick has to respect, then the properties a policy is judged by. The rules for hook code also build on a note from the driver glossary, <a href="../user/driver-concepts/interrupt-context.html">interrupt context</a>.</p>
+<p>These notes give the background on the hardware, operating system and build concepts that <a href="drivers.html">Writing a driver</a> and the contributor page on the <a href="../dev/build/driver-manifest.html">Driver manifest</a> build on, for a reader who has not written a driver before. Each page explains the concept on its own, then closes with how Cosmos applies it. The table groups them in four parts: how a driver reaches a device, how the device and the driver signal each other, the buses, then how a kernel comes to carry a driver and picks one for each device. Interrupt context also builds on two scheduling notes from the contributor documentation, <a href="../dev/sched-concepts/preemption.html">preemption</a> and the <a href="../dev/sched-concepts/instruction-boundary.html">instruction boundary</a>.</p>
 <table>
 <thead>
 <tr>
@@ -97,52 +97,72 @@
 </thead>
 <tbody>
 <tr>
-<td><a href="sched-concepts/policy-and-mechanism.html">Policy and mechanism</a></td>
-<td>Deciding which thread runs, kept apart from the code that switches threads</td>
+<td><a href="driver-concepts/registers.html">MMIO and port I/O</a></td>
+<td>Reaching device registers through memory or ports, and how mappings cache them</td>
 </tr>
 <tr>
-<td><a href="sched-concepts/run-queue.html">Thread states and the run queue</a></td>
-<td>Running, ready and blocked threads, the structure ready threads wait in, and the idle thread</td>
+<td><a href="driver-concepts/physical-addresses.html">Physical addresses</a></td>
+<td>Virtual against physical addresses, physical contiguity, and the alignment devices require</td>
 </tr>
 <tr>
-<td><a href="sched-concepts/preemption.html">Preemption</a></td>
-<td>The kernel takes the CPU away on an interrupt; threads never have to volunteer</td>
+<td><a href="driver-concepts/dma.html">DMA</a></td>
+<td>Devices reading and writing memory themselves: bus mastering, coherence, 32-bit limits</td>
 </tr>
 <tr>
-<td><a href="sched-concepts/scheduler-tick.html">The tick and the quantum</a></td>
-<td>The timer interrupt that gives the scheduler control, the time slice, and accounting by sample</td>
+<td><a href="driver-concepts/barriers.html">Memory barriers</a></td>
+<td>Ordering CPU loads and stores so a device sees them in order</td>
 </tr>
 <tr>
-<td><a href="sched-concepts/context-switch.html">Context switch</a></td>
-<td>Saving one thread's registers and restoring another's, and when the switch actually happens</td>
+<td><a href="driver-concepts/descriptor-rings.html">Descriptor rings</a></td>
+<td>Circular descriptor arrays shared with a device: ownership, head and tail, doorbells</td>
 </tr>
 <tr>
-<td><a href="sched-concepts/instruction-boundary.html">Interrupts at instruction boundaries</a></td>
-<td>An interrupt lands after one instruction and before the next; nothing longer is atomic against it</td>
+<td><a href="driver-concepts/interrupt-delivery.html">Interrupt delivery</a></td>
+<td>IRQs, acknowledging the device, edge and level triggering, INTx against MSI-X</td>
 </tr>
 <tr>
-<td><a href="sched-concepts/spinlocks-and-masking.html">Spinlocks and interrupt masking</a></td>
-<td>Why a lock does not keep out an interrupt handler on the same CPU, and what does</td>
+<td><a href="driver-concepts/interrupt-context.html">Interrupt context</a></td>
+<td>Why a handler cannot wait, why a driver's handler must not allocate, and how its work is split</td>
 </tr>
 <tr>
-<td><a href="sched-concepts/virtual-time-fair-share.html">Virtual-time fair-share</a></td>
-<td>Weighted CPU shares, enforced by always running the thread whose virtual clock is furthest behind</td>
+<td><a href="driver-concepts/buses.html">Buses and enumeration</a></td>
+<td>Enumerable buses, platform devices described by firmware, and the node tree</td>
 </tr>
 <tr>
-<td><a href="sched-concepts/starvation.html">Starvation and aging</a></td>
-<td>Ready threads that never run, and the guards against it</td>
+<td><a href="driver-concepts/firmware-handoff.html">Firmware handoff</a></td>
+<td>What UEFI configures before the kernel runs, and what Cosmos keeps</td>
 </tr>
 <tr>
-<td><a href="sched-concepts/priority-inversion.html">Priority inversion and inheritance</a></td>
-<td>A high-priority thread stuck behind a lock holder that a medium-priority thread preempts</td>
+<td><a href="driver-concepts/pci.html">PCI</a></td>
+<td>The PCI function, its configuration space, class codes, capabilities and BARs</td>
 </tr>
 <tr>
-<td><a href="sched-concepts/real-time-scheduling.html">Real-time scheduling</a></td>
-<td>Deadlines, Rate Monotonic and EDF, utilization bounds and admission control</td>
+<td><a href="driver-concepts/hot-plug.html">Hot-plug</a></td>
+<td>Devices arriving and leaving at run time, and surprise removal</td>
 </tr>
 <tr>
-<td><a href="sched-concepts/cpu-affinity.html">CPU affinity and load balancing</a></td>
-<td>Per-CPU run queues, placement, migration and pinned threads</td>
+<td><a href="driver-concepts/virtio.html">Virtio</a></td>
+<td>Paravirtual devices: transports, the status handshake, feature negotiation and virtqueues</td>
+</tr>
+<tr>
+<td><a href="driver-concepts/usb.html">USB</a></td>
+<td>Interfaces, endpoints, transfer types, polled interrupt endpoints, enumeration, the HID boot protocol</td>
+</tr>
+<tr>
+<td><a href="driver-concepts/ps2.html">PS/2 and the 8042 controller</a></td>
+<td>The 8042 controller, its two ports, commands, acknowledgements and scanning</td>
+</tr>
+<tr>
+<td><a href="driver-concepts/source-generators.html">Source generators</a></td>
+<td>Compiler plug-ins that add code at build time, in place of reflection, and how build properties reach them</td>
+</tr>
+<tr>
+<td><a href="driver-concepts/trimming.html">Trimming and feature switches</a></td>
+<td>Leaving unreachable code out of the image, and build-time switches that make a branch unreachable</td>
+</tr>
+<tr>
+<td><a href="driver-concepts/driver-matching.html">Driver matching</a></td>
+<td>Match tables, specificity and rank, and a deterministic last key when several drivers fit one device</td>
 </tr>
 </tbody>
 </table>
@@ -150,7 +170,7 @@
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/scheduler-glossary.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-glossary.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

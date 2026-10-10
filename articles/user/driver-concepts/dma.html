@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Preemption | Cosmos Gen 3 </title>
+      <title>DMA (direct memory access) | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Preemption | Cosmos Gen 3 ">
+      <meta name="title" content="DMA (direct memory access) | Cosmos Gen 3 ">
       
       
       <link rel="icon" href="../../../images/favicon.ico">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-concepts/dma.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -85,16 +85,18 @@
         </div>
 
         <article data-uid="">
-<h1 id="preemption">Preemption</h1>
+<h1 id="dma-direct-memory-access">DMA (direct memory access)</h1>
 
-<p>A preemptive scheduler can take the CPU away from a running thread without its cooperation. A hardware interrupt, usually a timer tick, transfers control to the kernel no matter what the thread was doing, and the kernel is then free to resume a different thread instead. The alternative is cooperative scheduling, where a switch only happens when the running thread volunteers by yielding or blocking; there, a single thread that never yields owns the CPU forever, and one buggy loop freezes the system.</p>
-<p>Preemption turns CPU time into a resource the kernel allocates rather than one threads take. The tick period bounds how long any thread can monopolize a core (its <a href="scheduler-tick.html">quantum</a>), so an infinite loop degrades into wasted share instead of a hang. The price is paid by every thread: since the tick lands at an arbitrary <a href="instruction-boundary.html">instruction boundary</a>, code can lose the CPU between any two instructions and must protect its critical sections accordingly, with masked interrupts or atomic instructions.</p>
-<p>In the Cosmos kernel every context switch is preemptive today: the switch happens on an interrupt exit (the 10 ms tick, a device interrupt whose handler woke another thread, or the interrupt a blocking thread raises on its own CPU), and a thread otherwise runs until it parks on a blocking primitive or exits; there is no working voluntary switch. See <a href="../scheduler.html#preemption">Preemption</a> and <a href="../scheduler.html#what-there-is-not-a-voluntary-switch">What there is not: a voluntary switch</a>.</p>
+<p>With programmed I/O the CPU copies every word through a device register itself, which would keep a core busy for a fast network card or disk. With direct memory access the device reads and writes main memory on its own: the driver gives it the <a href="physical-addresses.html">physical address</a> and length of a buffer, usually through a <a href="descriptor-rings.html">descriptor ring</a>, the device moves the data while the CPU does other work, and it reports completion, often with an interrupt.</p>
+<p>A device that starts memory transactions on its own is a bus master. On <a href="pci.html">PCI</a> a function may do so only while the Bus Master Enable bit of its Command register is set, which lets the operating system stop it. Some devices drive only 32 address bits and reach only the first 4 GiB of physical memory.</p>
+<p>The CPU caches memory, and a device working behind the caches could read stale data or leave stale lines. On a coherent platform, which x64 PCs are, the hardware keeps device accesses consistent with the caches; on a non-coherent one the driver cleans or invalidates cache lines around every transfer. Coherence orders nothing, though, so a driver still needs <a href="barriers.html">barriers</a> between writing data and telling the device it is there.</p>
+<p>The trap is that DMA bypasses everything the kernel uses to protect memory. A device keeps writing to the address it was given until it is stopped, so a buffer freed while a transfer is in flight is overwritten inside whatever reuses it. A garbage collector adds a way to free one by surprise: it reclaims an object once no reference remains, and an address in a descriptor is not a reference it can see.</p>
+<p>In the driver kit, a <code>DmaBuffer</code> from <code>binding.AllocateDma</code> lives until teardown frees it after <code>OnDetach</code>, so a driver hands a device only such buffers, never a managed array. <code>TryAllocateDma</code> with <code>DmaConstraints.Addressable32Bit</code> returns <code>false</code> for a buffer that would end above 4 GiB: the kit has no pool of low memory, so it allocates as usual and gives such a buffer back. The kit treats DMA as coherent on x64 and ARM64. It turns bus mastering off on a PCI function before the first probe, and again after each probe that does not bind, before that probe's buffers are freed, so every probe starts from a function that cannot write to memory and a declined probe's device stops before its buffers go back; a driver turns it back on with <code>PciAccess.EnableBusMastering(true)</code>. See <a href="../drivers.html#dma-memory">DMA memory</a> and <a href="../drivers.html#the-pci-access-object">The PCI access object</a>.</p>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-concepts/dma.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

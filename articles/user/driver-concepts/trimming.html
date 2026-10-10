@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Preemption | Cosmos Gen 3 </title>
+      <title>Trimming and feature switches | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Preemption | Cosmos Gen 3 ">
+      <meta name="title" content="Trimming and feature switches | Cosmos Gen 3 ">
       
       
       <link rel="icon" href="../../../images/favicon.ico">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-concepts/trimming.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -85,16 +85,17 @@
         </div>
 
         <article data-uid="">
-<h1 id="preemption">Preemption</h1>
+<h1 id="trimming-and-feature-switches">Trimming and feature switches</h1>
 
-<p>A preemptive scheduler can take the CPU away from a running thread without its cooperation. A hardware interrupt, usually a timer tick, transfers control to the kernel no matter what the thread was doing, and the kernel is then free to resume a different thread instead. The alternative is cooperative scheduling, where a switch only happens when the running thread volunteers by yielding or blocking; there, a single thread that never yields owns the CPU forever, and one buggy loop freezes the system.</p>
-<p>Preemption turns CPU time into a resource the kernel allocates rather than one threads take. The tick period bounds how long any thread can monopolize a core (its <a href="scheduler-tick.html">quantum</a>), so an infinite loop degrades into wasted share instead of a hang. The price is paid by every thread: since the tick lands at an arbitrary <a href="instruction-boundary.html">instruction boundary</a>, code can lose the CPU between any two instructions and must protect its critical sections accordingly, with masked interrupts or atomic instructions.</p>
-<p>In the Cosmos kernel every context switch is preemptive today: the switch happens on an interrupt exit (the 10 ms tick, a device interrupt whose handler woke another thread, or the interrupt a blocking thread raises on its own CPU), and a thread otherwise runs until it parks on a blocking primitive or exits; there is no working voluntary switch. See <a href="../scheduler.html#preemption">Preemption</a> and <a href="../scheduler.html#what-there-is-not-a-voluntary-switch">What there is not: a voluntary switch</a>.</p>
+<p>An ahead-of-time compiler sees the whole program before it runs. Starting from the entry point, it follows every call, every type constructed and every virtual method that might be reached, compiles what it reaches, and leaves everything else out of the image. This is trimming. It keeps a kernel built from large libraries small, and it also means that code has to be reachable to exist: a class that nothing references is not in the image, whatever assembly it came from.</p>
+<p>A feature switch decides reachability at build time. It is a named setting fixed when the program is compiled and read through a property the compiler knows about. The compiler replaces each read of that property with the switch's value, so a branch guarded by a switch that is off tests a constant <code>false</code>, can never run, and is removed, along with everything that only that branch reached. Turning a subsystem off this way removes its code from the image instead of skipping it at run time.</p>
+<p>The trap is a reference outside the guard. Trimming removes what is unreachable, not what is guarded: if any code that stays in the image references a type, the type stays too, even with its switch off. A switch is also a build setting, so a kernel compiled with a feature off cannot turn it on at run time; the code is not there.</p>
+<p>In Cosmos, each <code>CosmosEnable*</code> property in a kernel's <code>.csproj</code> becomes a <code>RuntimeHostConfigurationOption</code> marked <code>Trim=&quot;true&quot;</code>, which reaches ILC, the NativeAOT compiler (<a href="../../dev/build/ilc-build.html">Cosmos.Build.Ilc</a>), as a <code>--feature:</code> argument. The properties ILC replaces are in Core's <code>CosmosFeatures</code>, marked <code>[FeatureSwitchDefinition]</code>, and <code>KernelFeatures</code> in <code>Cosmos.Kernel.System</code> is the public view a kernel reads. Some switches turn others off: with <code>CosmosEnableInterrupts</code> off, <code>Sdk.targets</code> also turns off the timer, keyboard, mouse, network, storage, scheduler and PCI switches. The driver manifest uses the switches as guards: a driver declared <code>[Driver(Feature = DriverFeature.Network)]</code> is registered inside <code>if (KernelFeatures.Network)</code>, and since nothing else constructs a shipped driver, a kernel built with <code>CosmosEnableNetwork</code> off carries no network driver at all. See <a href="../drivers.html#the-attribute-and-the-manifest">The attribute and the manifest</a> and <a href="../../dev/build/driver-manifest.html#feature-guards">Feature guards</a>.</p>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-concepts/trimming.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Preemption | Cosmos Gen 3 </title>
+      <title>Starvation and aging | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Preemption | Cosmos Gen 3 ">
+      <meta name="title" content="Starvation and aging | Cosmos Gen 3 ">
       
       
       <link rel="icon" href="../../../images/favicon.ico">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/starvation.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -85,16 +85,16 @@
         </div>
 
         <article data-uid="">
-<h1 id="preemption">Preemption</h1>
+<h1 id="starvation-and-aging">Starvation and aging</h1>
 
-<p>A preemptive scheduler can take the CPU away from a running thread without its cooperation. A hardware interrupt, usually a timer tick, transfers control to the kernel no matter what the thread was doing, and the kernel is then free to resume a different thread instead. The alternative is cooperative scheduling, where a switch only happens when the running thread volunteers by yielding or blocking; there, a single thread that never yields owns the CPU forever, and one buggy loop freezes the system.</p>
-<p>Preemption turns CPU time into a resource the kernel allocates rather than one threads take. The tick period bounds how long any thread can monopolize a core (its <a href="scheduler-tick.html">quantum</a>), so an infinite loop degrades into wasted share instead of a hang. The price is paid by every thread: since the tick lands at an arbitrary <a href="instruction-boundary.html">instruction boundary</a>, code can lose the CPU between any two instructions and must protect its critical sections accordingly, with masked interrupts or atomic instructions.</p>
-<p>In the Cosmos kernel every context switch is preemptive today: the switch happens on an interrupt exit (the 10 ms tick, a device interrupt whose handler woke another thread, or the interrupt a blocking thread raises on its own CPU), and a thread otherwise runs until it parks on a blocking primitive or exits; there is no working voluntary switch. See <a href="../scheduler.html#preemption">Preemption</a> and <a href="../scheduler.html#what-there-is-not-a-voluntary-switch">What there is not: a voluntary switch</a>.</p>
+<p>A thread starves when it is ready to run and the scheduler never picks it. Strict priority invites this: while any higher-priority thread is ready, a lower one does not run, and a busy high level can keep it off the CPU indefinitely. A scheduler that ranks threads protects the low ranks with aging, which raises a thread's priority the longer it waits, or with a periodic boost, which lifts every thread back to the top level now and then. A <a href="virtual-time-fair-share.html">fair-share</a> scheduler avoids starvation by construction, since every thread with a positive weight receives its share, but the placement of a woken thread can bring it back: a thread placed far behind the others in virtual time runs first until it catches up, and holds the CPU from all of them meanwhile.</p>
+<p>The trap is that starvation is usually a bookkeeping bug rather than a property of the policy. A thread that left the run queue and was never put back, a queue that holds a thread twice, and a sorted queue whose order broke all look the same from outside: some thread stops running, and no rule of the policy says it should. When a thread starves under a policy that should not starve anyone, the first thing to check is whether each ready thread is queued exactly once.</p>
+<p>In Cosmos, the Stride policy's <code>OnThreadYield</code> raises a thread's <code>Pass</code> to the CPU's <code>GlobalPass</code> when it has fallen behind, so a thread that started early, such as the idle thread, cannot keep ranking ahead of threads created later. Stride also carries a cap on wakeup placement for the same purpose, which does not run today (<a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/445">#445</a>): every woken thread rejoins at <code>GlobalPass</code>, which neither starves it nor lets it run ahead. The manager keeps the queue-once rule on its side. A wake for a thread already <code>Ready</code> or <code>Running</code> does nothing, and a switch puts the outgoing thread back only if it was still <code>Running</code>, because a second entry in Stride's sorted queue would keep its place while the thread's <code>Pass</code> rises, and <code>PickNext</code>, which only takes the head, would then never reach the threads behind it. A policy that ranks threads brings its own guard: the MLFQ sketch resets every thread to the top level every few ticks. See <a href="../scheduler.html#the-stride-policy">The Stride policy</a> and <a href="../../user/scheduler-plugging.html#worked-sketches">Worked sketches</a>.</p>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/starvation.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

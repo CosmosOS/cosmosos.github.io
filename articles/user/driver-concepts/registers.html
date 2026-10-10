@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Preemption | Cosmos Gen 3 </title>
+      <title>MMIO (memory-mapped I/O) and port I/O | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Preemption | Cosmos Gen 3 ">
+      <meta name="title" content="MMIO (memory-mapped I/O) and port I/O | Cosmos Gen 3 ">
       
       
       <link rel="icon" href="../../../images/favicon.ico">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-concepts/registers.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -85,16 +85,17 @@
         </div>
 
         <article data-uid="">
-<h1 id="preemption">Preemption</h1>
+<h1 id="mmio-memory-mapped-io-and-port-io">MMIO (memory-mapped I/O) and port I/O</h1>
 
-<p>A preemptive scheduler can take the CPU away from a running thread without its cooperation. A hardware interrupt, usually a timer tick, transfers control to the kernel no matter what the thread was doing, and the kernel is then free to resume a different thread instead. The alternative is cooperative scheduling, where a switch only happens when the running thread volunteers by yielding or blocking; there, a single thread that never yields owns the CPU forever, and one buggy loop freezes the system.</p>
-<p>Preemption turns CPU time into a resource the kernel allocates rather than one threads take. The tick period bounds how long any thread can monopolize a core (its <a href="scheduler-tick.html">quantum</a>), so an infinite loop degrades into wasted share instead of a hang. The price is paid by every thread: since the tick lands at an arbitrary <a href="instruction-boundary.html">instruction boundary</a>, code can lose the CPU between any two instructions and must protect its critical sections accordingly, with masked interrupts or atomic instructions.</p>
-<p>In the Cosmos kernel every context switch is preemptive today: the switch happens on an interrupt exit (the 10 ms tick, a device interrupt whose handler woke another thread, or the interrupt a blocking thread raises on its own CPU), and a thread otherwise runs until it parks on a blocking primitive or exits; there is no working voluntary switch. See <a href="../scheduler.html#preemption">Preemption</a> and <a href="../scheduler.html#what-there-is-not-a-voluntary-switch">What there is not: a voluntary switch</a>.</p>
+<p>A device exposes its controls as registers, small locations the driver reads for the device's state and writes to give it orders. With memory-mapped I/O (MMIO) the device answers a range of <a href="physical-addresses.html">physical addresses</a>, and ordinary loads and stores reach it once the range is mapped. x86 also has a separate port space of 65,536 addresses, reached only by the <code>in</code> and <code>out</code> instructions, at most 32 bits at a time; older devices such as the <a href="ps2.html">PS/2 controller</a> still live there. ARM64 has no port space.</p>
+<p>Registers are not memory. A read can have a side effect, such as clearing an interrupt cause or taking a byte off a FIFO, and a write can start a command, so writing a value twice can run it twice. Each access must happen exactly once, in program order, at the width the device documents: a 32-bit register read as four bytes is four different accesses, and many devices misbehave on a wrong width or an access not aligned to its width.</p>
+<p>The mapping decides how the CPU caches the addresses, a page at a time. Registers need uncached device memory, where every access reaches the device in order and nothing is read speculatively. A framebuffer is plain memory on the device, slow to draw into uncached, so it is mapped write-combining: stores are gathered into bursts and give up their ordering. Normal cacheable memory suits RAM a coherent device shares with the CPU. A cached register fails quietly, returning stale values and holding writes in the cache.</p>
+<p>In the driver kit, <code>binding.MapRegisters</code> returns a <code>RegisterWindow</code>, whose <code>Read8</code> to <code>Read64</code> and <code>Write8</code> to <code>Write64</code> each make one access of that width, checked against the bounds and, over a memory window, the alignment; over an x64 port range they use <code>in</code> and <code>out</code>, accept any offset, and the 64-bit ones throw. <code>binding.MapRegion</code> takes a <code>RegionCaching</code> of <code>Device</code>, <code>WriteCombining</code> or <code>Normal</code>, though today only x64 applies <code>WriteCombining</code>, in the 2 MiB blocks a region covers whole, and every other memory window is mapped as <code>Device</code>. See <a href="../drivers.html#register-windows">Register windows</a> and <a href="../drivers.html#bulk-regions">Bulk regions</a>.</p>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-concepts/registers.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

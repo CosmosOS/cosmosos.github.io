@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Preemption | Cosmos Gen 3 </title>
+      <title>USB (Universal Serial Bus) | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Preemption | Cosmos Gen 3 ">
+      <meta name="title" content="USB (Universal Serial Bus) | Cosmos Gen 3 ">
       
       
       <link rel="icon" href="../../../images/favicon.ico">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-concepts/usb.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -85,16 +85,18 @@
         </div>
 
         <article data-uid="">
-<h1 id="preemption">Preemption</h1>
+<h1 id="usb-universal-serial-bus">USB (Universal Serial Bus)</h1>
 
-<p>A preemptive scheduler can take the CPU away from a running thread without its cooperation. A hardware interrupt, usually a timer tick, transfers control to the kernel no matter what the thread was doing, and the kernel is then free to resume a different thread instead. The alternative is cooperative scheduling, where a switch only happens when the running thread volunteers by yielding or blocking; there, a single thread that never yields owns the CPU forever, and one buggy loop freezes the system.</p>
-<p>Preemption turns CPU time into a resource the kernel allocates rather than one threads take. The tick period bounds how long any thread can monopolize a core (its <a href="scheduler-tick.html">quantum</a>), so an infinite loop degrades into wasted share instead of a hang. The price is paid by every thread: since the tick lands at an arbitrary <a href="instruction-boundary.html">instruction boundary</a>, code can lose the CPU between any two instructions and must protect its critical sections accordingly, with masked interrupts or atomic instructions.</p>
-<p>In the Cosmos kernel every context switch is preemptive today: the switch happens on an interrupt exit (the 10 ms tick, a device interrupt whose handler woke another thread, or the interrupt a blocking thread raises on its own CPU), and a thread otherwise runs until it parks on a blocking primitive or exits; there is no working voluntary switch. See <a href="../scheduler.html#preemption">Preemption</a> and <a href="../scheduler.html#what-there-is-not-a-voluntary-switch">What there is not: a voluntary switch</a>.</p>
+<p>USB connects devices in a tree whose root is a host controller. A device describes itself through descriptors: vendor and product ids, then a configuration of one or more interfaces. An interface is one function of the device, with a class, subclass and protocol that say what it is. It talks through endpoints, one-way channels IN to the host or OUT from it, beside the control endpoint 0 every device has. Each endpoint has a transfer type: control for requests, bulk for large data without timing guarantees, interrupt for small reports with bounded latency, isochronous for streams such as audio.</p>
+<p>The name of the interrupt type misleads. A USB device has no interrupt line to the CPU and never starts a transfer: the host controller schedules every one. An interrupt IN endpoint is one the controller polls at the interval its descriptor asks for, and a device with nothing new answers that it has no data, all without the CPU. What reaches the CPU is the controller's own interrupt when a transfer completes, so the code that receives a report can run inside that handler, in <a href="interrupt-context.html">interrupt context</a>.</p>
+<p>Hubs and enumeration are the host's side of the bus. A hub is a device with downstream ports, and the controller's root ports act as one. When a device is plugged in, the host resets its port, assigns it an address, reads its descriptors and selects a configuration, and only then offers its interfaces to class drivers.</p>
+<p>Keyboards and mice belong to the HID (human interface device) class, whose devices normally describe their report layout in a report descriptor that the host must parse, more than a PC's firmware is expected to do. The boot protocol is the fixed alternative: an interface with subclass 1 and protocol 1 (keyboard) or 2 (mouse), once a SET_PROTOCOL request selects it, sends an 8-byte keyboard report (modifiers, a reserved byte, up to six keys held) or a mouse report of buttons, then X and Y movement.</p>
+<p>In the driver kit, a USB node is one interface, reached through <code>UsbAccess</code>, whose <code>OpenInterruptPipe</code> hands each report to a <code>UsbReportHandler</code>. The handler runs in interrupt context when the controller signals completions with a message interrupt, and in thread context when it is polled, so it follows the interrupt handler rules either way; <code>XhciDriver</code> and <code>UsbHubDriver</code> hand each new device to the kit's enumeration, which a class driver never sees. See <a href="../drivers.html#the-usb-access-object">The USB access object</a> and <a href="../drivers.html#the-usb-class-drivers">The USB class drivers</a>.</p>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-concepts/usb.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

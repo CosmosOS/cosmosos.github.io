@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Preemption | Cosmos Gen 3 </title>
+      <title>Interrupt context | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Preemption | Cosmos Gen 3 ">
+      <meta name="title" content="Interrupt context | Cosmos Gen 3 ">
       
       
       <link rel="icon" href="../../../images/favicon.ico">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-concepts/interrupt-context.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -85,16 +85,18 @@
         </div>
 
         <article data-uid="">
-<h1 id="preemption">Preemption</h1>
+<h1 id="interrupt-context">Interrupt context</h1>
 
-<p>A preemptive scheduler can take the CPU away from a running thread without its cooperation. A hardware interrupt, usually a timer tick, transfers control to the kernel no matter what the thread was doing, and the kernel is then free to resume a different thread instead. The alternative is cooperative scheduling, where a switch only happens when the running thread volunteers by yielding or blocking; there, a single thread that never yields owns the CPU forever, and one buggy loop freezes the system.</p>
-<p>Preemption turns CPU time into a resource the kernel allocates rather than one threads take. The tick period bounds how long any thread can monopolize a core (its <a href="scheduler-tick.html">quantum</a>), so an infinite loop degrades into wasted share instead of a hang. The price is paid by every thread: since the tick lands at an arbitrary <a href="instruction-boundary.html">instruction boundary</a>, code can lose the CPU between any two instructions and must protect its critical sections accordingly, with masked interrupts or atomic instructions.</p>
-<p>In the Cosmos kernel every context switch is preemptive today: the switch happens on an interrupt exit (the 10 ms tick, a device interrupt whose handler woke another thread, or the interrupt a blocking thread raises on its own CPU), and a thread otherwise runs until it parks on a blocking primitive or exits; there is no working voluntary switch. See <a href="../scheduler.html#preemption">Preemption</a> and <a href="../scheduler.html#what-there-is-not-a-voluntary-switch">What there is not: a voluntary switch</a>.</p>
+<p>When a device raises an interrupt, the CPU stops the running code at the next <a href="../../dev/sched-concepts/instruction-boundary.html">instruction boundary</a> and jumps to a handler. The handler is not a thread: it borrows the stack of whatever it interrupted and runs with interrupts masked, so nothing else runs on that CPU until it returns, not even the timer tick that drives <a href="../../dev/sched-concepts/preemption.html">preemption</a>. A handler runs in interrupt context, and everything else in thread context.</p>
+<p>A handler therefore cannot wait. Waiting means giving the CPU to another thread, and a handler has no thread to park: one that sleeps, waits for an event or spins on a lock the interrupted code holds waits forever. Kernels split interrupt work in two. The top half, in the handler, acknowledges the device and wakes whoever waits. The bottom half runs later in thread context, where it may block and take ordinary locks.</p>
+<p>Data a handler shares with a thread needs a spin lock that disables interrupts while held, or the handler can fire on the holder's CPU and spin forever on a thread that cannot run until the handler returns. Such a lock is held briefly, never across a wait.</p>
+<p>In the driver kit, a handler acknowledges through its register window and hands off through its <code>InterruptContext</code>: <code>Mask()</code> masks its source, <code>Signal(DeviceEvent)</code> wakes a waiting thread, and <code>Schedule(WorkItem)</code> queues the bottom half on the kit worker, while <code>DeviceLock.Acquire()</code> is the spin lock that disables interrupts. The guard catches calls to <code>DeviceBinding</code> methods and to some access-object members, such as <code>UsbAccess</code> transfers and <code>Ps2Access.TryCommand</code>: it halts the kernel in a real interrupt, naming the member, and throws in a synthetic dispatch, where the kit records the fault and masks the source.</p>
+<p>The kit also adds a rule of its own: a driver's handler must not allocate. The kernel's own handlers do, and the garbage collector tolerates it; this is a safety rule, because an allocation can pull in runtime machinery that misbehaves in interrupt context, notably interface dispatch resolution and exception throwing. Nothing detects an allocation: the guard runs only inside those kit members, never in the driver's own code. See <a href="../drivers.html#the-two-execution-contexts-and-the-guard">The two execution contexts and the guard</a>, <a href="../drivers.html#work-items">Work items</a> and <a href="../drivers.html#device-locks">Device locks</a>.</p>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-concepts/interrupt-context.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

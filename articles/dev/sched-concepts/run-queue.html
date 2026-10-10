@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Preemption | Cosmos Gen 3 </title>
+      <title>Thread states and the run queue | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Preemption | Cosmos Gen 3 ">
+      <meta name="title" content="Thread states and the run queue | Cosmos Gen 3 ">
       
       
       <link rel="icon" href="../../../images/favicon.ico">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/run-queue.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -85,16 +85,17 @@
         </div>
 
         <article data-uid="">
-<h1 id="preemption">Preemption</h1>
+<h1 id="thread-states-and-the-run-queue">Thread states and the run queue</h1>
 
-<p>A preemptive scheduler can take the CPU away from a running thread without its cooperation. A hardware interrupt, usually a timer tick, transfers control to the kernel no matter what the thread was doing, and the kernel is then free to resume a different thread instead. The alternative is cooperative scheduling, where a switch only happens when the running thread volunteers by yielding or blocking; there, a single thread that never yields owns the CPU forever, and one buggy loop freezes the system.</p>
-<p>Preemption turns CPU time into a resource the kernel allocates rather than one threads take. The tick period bounds how long any thread can monopolize a core (its <a href="scheduler-tick.html">quantum</a>), so an infinite loop degrades into wasted share instead of a hang. The price is paid by every thread: since the tick lands at an arbitrary <a href="instruction-boundary.html">instruction boundary</a>, code can lose the CPU between any two instructions and must protect its critical sections accordingly, with masked interrupts or atomic instructions.</p>
-<p>In the Cosmos kernel every context switch is preemptive today: the switch happens on an interrupt exit (the 10 ms tick, a device interrupt whose handler woke another thread, or the interrupt a blocking thread raises on its own CPU), and a thread otherwise runs until it parks on a blocking primitive or exits; there is no working voluntary switch. See <a href="../scheduler.html#preemption">Preemption</a> and <a href="../scheduler.html#what-there-is-not-a-voluntary-switch">What there is not: a voluntary switch</a>.</p>
+<p>At any moment a thread is in one of a few states. It is running while a CPU executes it, ready when it could run but no CPU is free for it, and blocked while it waits for something: a lock, a device, a signal, or a moment in time, which some kernels track as a separate sleeping state. A new thread starts out created and becomes ready when it is started, and a finished one is dead until the kernel reclaims it. Only ready threads compete for the CPU, and the scheduler keeps them in its run queue. The name is traditional: the structure can be a FIFO, a list sorted by some key, a heap, or one queue per priority level, whatever makes choosing the next thread cheap for the policy.</p>
+<p>A CPU always has to run something, so when no thread is ready it runs an idle thread, which usually halts the core until the next interrupt. An idle thread should never block, because nothing stands behind it to fall back to.</p>
+<p>The trap is the running thread. Whether it stays in the run queue while it runs, or is taken out when picked and put back when it leaves the CPU, is a convention, and code that mixes the two conventions either queues a thread twice or loses it. A thread queued twice gets two turns, and in a sorted queue a stale entry that keeps its place breaks the order for every thread behind it. A thread lost from the queue stays ready without ever being picked, which from outside looks like a hang.</p>
+<p>In Cosmos the states are those of <code>SchedulerThreadState</code>: <code>Created</code>, <code>Ready</code>, <code>Running</code>, <code>Blocked</code>, <code>Sleeping</code> and <code>Dead</code>, and a policy never changes them. The running thread is normally not in the run structure: <code>PickNext</code> removes the thread it returns, and the thread leaving the CPU comes back through <code>OnThreadYield</code> after the pick, only if it was still <code>Running</code>. The exception is a thread that blocked and was woken before the switch took it off the CPU, which is <code>Ready</code> and queued while it still runs. A wake for a thread already <code>Ready</code> or <code>Running</code> does nothing, but a <code>Created</code> thread keeps that state until it first runs, so <code>OnThreadReady</code> can arrive twice for it and has to guard against a second insert. The idle thread is the boot thread itself, the one that goes on to call the kernel's <code>BeforeRun</code> and <code>Run</code>. <code>PickNext</code> returning <code>null</code> runs it, whatever state it is in. The kernel's mutex and interrupt event make it spin or poll instead of parking, but a wait through the kernel's condition variable, which CoreLib's own waits (<code>Thread.Sleep</code>, <code>Thread.Join</code>, a <code>WaitHandle</code>) reach through its low-level monitor, marks it <code>Blocked</code> or <code>Sleeping</code> and hands it to <code>OnThreadBlocked</code>, and it then halts instead of raising the reschedule interrupt. Otherwise it passes through the hooks like any other thread: it reaches <code>OnThreadCreate</code> already <code>Running</code> when a policy is installed, and comes back through <code>OnThreadYield</code> when it is switched out. See <a href="../scheduler.html#lifecycle">Lifecycle</a> and <a href="../../user/scheduler-plugging.html#the-interface">The interface</a>.</p>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/run-queue.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Preemption | Cosmos Gen 3 </title>
+      <title>Virtio | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Preemption | Cosmos Gen 3 ">
+      <meta name="title" content="Virtio | Cosmos Gen 3 ">
       
       
       <link rel="icon" href="../../../images/favicon.ico">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-concepts/virtio.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -85,16 +85,18 @@
         </div>
 
         <article data-uid="">
-<h1 id="preemption">Preemption</h1>
+<h1 id="virtio">Virtio</h1>
 
-<p>A preemptive scheduler can take the CPU away from a running thread without its cooperation. A hardware interrupt, usually a timer tick, transfers control to the kernel no matter what the thread was doing, and the kernel is then free to resume a different thread instead. The alternative is cooperative scheduling, where a switch only happens when the running thread volunteers by yielding or blocking; there, a single thread that never yields owns the CPU forever, and one buggy loop freezes the system.</p>
-<p>Preemption turns CPU time into a resource the kernel allocates rather than one threads take. The tick period bounds how long any thread can monopolize a core (its <a href="scheduler-tick.html">quantum</a>), so an infinite loop degrades into wasted share instead of a hang. The price is paid by every thread: since the tick lands at an arbitrary <a href="instruction-boundary.html">instruction boundary</a>, code can lose the CPU between any two instructions and must protect its critical sections accordingly, with masked interrupts or atomic instructions.</p>
-<p>In the Cosmos kernel every context switch is preemptive today: the switch happens on an interrupt exit (the 10 ms tick, a device interrupt whose handler woke another thread, or the interrupt a blocking thread raises on its own CPU), and a thread otherwise runs until it parks on a blocking primitive or exits; there is no working voluntary switch. See <a href="../scheduler.html#preemption">Preemption</a> and <a href="../scheduler.html#what-there-is-not-a-voluntary-switch">What there is not: a voluntary switch</a>.</p>
+<p>A hypervisor can emulate a real network card register by register, but each register access the guest makes is an expensive exit from the virtual machine into the hypervisor, and a real card's driver makes many per packet. Virtio is a family of paravirtual devices: devices designed for a hypervisor to implement, which keep register accesses to a minimum and do their work in shared memory. One specification defines network cards, block devices, GPUs, input devices and more, each with a device type number.</p>
+<p>The same device can reach the guest over different transports. Over <a href="pci.html">PCI</a> it is a function with vendor id 0x1AF4 whose capabilities locate its virtio registers; over MMIO it is a register block at a fixed address the platform describes. Above the transport the protocol is the same.</p>
+<p>Bringing a device up is a handshake through its status register. The driver resets the device by writing 0, sets ACKNOWLEDGE and DRIVER, then negotiates features: the device offers a bitmap of optional features, the driver writes back the subset it understands and sets FEATURES_OK, and a device that clears that bit again refuses the subset. Bit 32, VIRTIO_F_VERSION_1, marks a device that follows the 1.0 specification rather than the legacy interface. The driver then sets up its virtqueues and sets DRIVER_OK, and the device is live. A virtqueue is a <a href="descriptor-rings.html">descriptor ring</a> in three parts: a descriptor table, an available ring where the driver offers buffers, and a used ring where the device returns them. The driver writes a notify register when the available ring grows, and the device interrupts when the used ring does.</p>
+<p>The trap is acting on the requested features rather than the negotiated ones: a feature outside the negotiated set is off, and some features change the layout of the data the device exchanges.</p>
+<p>In the driver kit, <code>VirtioAccess</code> runs this handshake. The kit resets the device and sets ACKNOWLEDGE and DRIVER before every probe; <code>NegotiateFeatures</code> takes the low 32 bits a driver understands, adds VIRTIO_F_VERSION_1 when offered and returns <code>false</code> when FEATURES_OK does not stick; <code>TryCreateQueue</code> builds a <code>Virtqueue</code> in the binding's DMA memory; and <code>SetDriverOk</code> comes before the first <code>Notify</code>. A driver calls <code>Reset()</code> in <code>OnDetach</code> so the device stops writing into rings the kit is about to free; see <a href="../drivers.html#the-virtio-access-object">The virtio access object</a> and <a href="../drivers.html#queues">Queues</a>.</p>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-concepts/virtio.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

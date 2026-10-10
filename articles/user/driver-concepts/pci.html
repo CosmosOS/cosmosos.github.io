@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Preemption | Cosmos Gen 3 </title>
+      <title>PCI (Peripheral Component Interconnect) | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Preemption | Cosmos Gen 3 ">
+      <meta name="title" content="PCI (Peripheral Component Interconnect) | Cosmos Gen 3 ">
       
       
       <link rel="icon" href="../../../images/favicon.ico">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-concepts/pci.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -85,16 +85,19 @@
         </div>
 
         <article data-uid="">
-<h1 id="preemption">Preemption</h1>
+<h1 id="pci-peripheral-component-interconnect">PCI (Peripheral Component Interconnect)</h1>
 
-<p>A preemptive scheduler can take the CPU away from a running thread without its cooperation. A hardware interrupt, usually a timer tick, transfers control to the kernel no matter what the thread was doing, and the kernel is then free to resume a different thread instead. The alternative is cooperative scheduling, where a switch only happens when the running thread volunteers by yielding or blocking; there, a single thread that never yields owns the CPU forever, and one buggy loop freezes the system.</p>
-<p>Preemption turns CPU time into a resource the kernel allocates rather than one threads take. The tick period bounds how long any thread can monopolize a core (its <a href="scheduler-tick.html">quantum</a>), so an infinite loop degrades into wasted share instead of a hang. The price is paid by every thread: since the tick lands at an arbitrary <a href="instruction-boundary.html">instruction boundary</a>, code can lose the CPU between any two instructions and must protect its critical sections accordingly, with masked interrupts or atomic instructions.</p>
-<p>In the Cosmos kernel every context switch is preemptive today: the switch happens on an interrupt exit (the 10 ms tick, a device interrupt whose handler woke another thread, or the interrupt a blocking thread raises on its own CPU), and a thread otherwise runs until it parks on a blocking primitive or exits; there is no working voluntary switch. See <a href="../scheduler.html#preemption">Preemption</a> and <a href="../scheduler.html#what-there-is-not-a-voluntary-switch">What there is not: a voluntary switch</a>.</p>
+<p>PCI, and PCI Express after it with the same software model, connects most devices in a PC and in many ARM machines. Software addresses a device by where it sits: a segment (a group of buses), a bus number, a device number on that bus (0 to 31) and a function number (0 to 7). The function is the unit a driver binds, because one physical device can hold up to eight independent functions, such as a graphics card and its audio controller.</p>
+<p>Each function has a configuration space, 256 bytes in classic PCI and 4 KiB in PCI Express, which opens with a standard header. Its vendor id and device id name the exact chip, and three class bytes (class, subclass and programming interface) say what kind of device it is. Optional features such as MSI-X (<a href="interrupt-delivery.html">interrupt delivery</a>) are announced in a capability list, a chain of entries that each hold an id and the offset of the next. The header also holds the command register, whose bits decide whether the function answers memory accesses, answers I/O port accesses, and may start DMA on its own (<a href="dma.html">bus mastering</a>).</p>
+<p>A function's registers have no fixed address. Each of its six base address registers (BARs) asks for a memory window or an I/O port range of a fixed size, and a 64-bit memory BAR takes two of the six slots. Something must give every BAR an address, and the firmware does so during boot (<a href="firmware-handoff.html">firmware handoff</a>), which leaves a device plugged in later without one (<a href="hot-plug.html">hot-plug</a>).</p>
+<p>Configuration space is reached in one of two ways. The legacy x86 mechanism writes a function's address to port 0xCF8, moves the data through port 0xCFC, and reaches only the first 256 bytes. ECAM (enhanced configuration access mechanism) maps every function's full 4 KiB into a memory window, whose base ACPI or the device tree gives.</p>
+<p>The trap is a match on the class alone. A class says what a device does, not how it is programmed: every network controller is class 0x02, whoever made it, so a driver matching that class is offered chips whose registers it has never seen. The class bytes pin down a programming model only where a standard defines one, such as xHCI, AHCI, NVMe or HD Audio.</p>
+<p>In the driver kit, <code>PciMatch</code> tests the header fields of a <code>PciIdentity</code>, whose node path is <code>pci:&lt;segment&gt;:&lt;bus&gt;:&lt;device&gt;.&lt;function&gt;</code> (<a href="../drivers.html#pci-identity-and-match">PCI identity and match</a>), and <code>PciAccess</code> offers <code>FindCapability</code> and the command register bits as <code>EnableMemorySpace</code>, <code>EnableIoSpace</code> and <code>EnableBusMastering</code> (<a href="../drivers.html#the-pci-access-object">The PCI access object</a>). <code>Node.Resources</code> holds the BARs as the firmware assigned them, or as the kit placed them behind a hot-plug slot, <code>None</code> marking an unassigned slot or the upper half of a 64-bit BAR (<a href="../drivers.html#bar-resources">BAR resources</a>). The x64 host is <code>pci-host-legacy</code>, where a configuration access past offset 255 throws, and the ARM64 host is <code>pci-host-ecam-generic</code> (<a href="../drivers.html#platform-nodes">Platform nodes</a>).</p>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-concepts/pci.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

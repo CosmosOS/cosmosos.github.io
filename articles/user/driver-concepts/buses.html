@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Preemption | Cosmos Gen 3 </title>
+      <title>Buses and enumeration | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Preemption | Cosmos Gen 3 ">
+      <meta name="title" content="Buses and enumeration | Cosmos Gen 3 ">
       
       
       <link rel="icon" href="../../../images/favicon.ico">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-concepts/buses.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -85,16 +85,18 @@
         </div>
 
         <article data-uid="">
-<h1 id="preemption">Preemption</h1>
+<h1 id="buses-and-enumeration">Buses and enumeration</h1>
 
-<p>A preemptive scheduler can take the CPU away from a running thread without its cooperation. A hardware interrupt, usually a timer tick, transfers control to the kernel no matter what the thread was doing, and the kernel is then free to resume a different thread instead. The alternative is cooperative scheduling, where a switch only happens when the running thread volunteers by yielding or blocking; there, a single thread that never yields owns the CPU forever, and one buggy loop freezes the system.</p>
-<p>Preemption turns CPU time into a resource the kernel allocates rather than one threads take. The tick period bounds how long any thread can monopolize a core (its <a href="scheduler-tick.html">quantum</a>), so an infinite loop degrades into wasted share instead of a hang. The price is paid by every thread: since the tick lands at an arbitrary <a href="instruction-boundary.html">instruction boundary</a>, code can lose the CPU between any two instructions and must protect its critical sections accordingly, with masked interrupts or atomic instructions.</p>
-<p>In the Cosmos kernel every context switch is preemptive today: the switch happens on an interrupt exit (the 10 ms tick, a device interrupt whose handler woke another thread, or the interrupt a blocking thread raises on its own CPU), and a thread otherwise runs until it parks on a blocking primitive or exits; there is no working voluntary switch. See <a href="../scheduler.html#preemption">Preemption</a> and <a href="../scheduler.html#what-there-is-not-a-voluntary-switch">What there is not: a voluntary switch</a>.</p>
+<p>A bus connects devices to the processor, and enumeration is how software finds out what is on it. PCI and USB can be enumerated because every device answers at a predictable place with a standard description of itself: software reads the vendor id at each PCI address, where an empty slot reads as all ones (<a href="pci.html">PCI</a>), and asks each new <a href="usb.html">USB</a> device for its descriptors.</p>
+<p>Other devices offer no such place to ask. A PC's <a href="ps2.html">PS/2</a> controller sits at fixed I/O ports, an ARM machine's devices at fixed memory addresses, and the PCI host bridge that every PCI scan starts from is one of them. Reading an address where nothing answers can fault, and a device that answers has no standard way to say what it is, so these platform devices must be described to the kernel. On PCs and ARM servers the firmware's ACPI tables describe them. On many ARM boards a device tree does: a structure the bootloader hands over, whose nodes list each device's registers, interrupts and compatible strings, the names of the programming models it follows. A machine with a fixed layout, such as QEMU's virt machine, can also be described by a table in the kernel.</p>
+<p>The two kinds combine into a tree. The description yields the roots, and the driver of a root that is a bus controller enumerates its bus and publishes what it finds as children for other drivers to bind: a PCI host yields PCI functions, one of which may be a USB controller that yields USB devices.</p>
+<p>The trap is that nothing confirms a description. A device it leaves out is invisible, and one it lists that is absent leaves a driver probing empty addresses.</p>
+<p>In the driver kit, the platform nodes are published at boot by the machine description: on x64 a fixed PC layout of the 8042 controller (<code>pnp0303</code>) and the PCI host (<code>pci-host-legacy</code>), on ARM64 the PCI host from ACPI or the device tree and each occupied <code>virtio,mmio</code> slot from the device tree or the virt machine's fixed layout (<a href="../drivers.html#platform-nodes">Platform nodes</a>). Drivers match them with <code>PlatformMatch.Compatible</code>, and a bus driver adds children with <code>binding.PublishChild</code>, so each node's <code>Parent</code> and <code>Children</code> form the tree (<a href="../drivers.html#publishing-child-nodes">Publishing child nodes</a>, <a href="../drivers.html#buses">Buses</a>).</p>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-concepts/buses.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

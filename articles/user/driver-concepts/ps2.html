@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Preemption | Cosmos Gen 3 </title>
+      <title>PS/2 and the 8042 controller | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Preemption | Cosmos Gen 3 ">
+      <meta name="title" content="PS/2 and the 8042 controller | Cosmos Gen 3 ">
       
       
       <link rel="icon" href="../../../images/favicon.ico">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-concepts/ps2.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -85,16 +85,17 @@
         </div>
 
         <article data-uid="">
-<h1 id="preemption">Preemption</h1>
+<h1 id="ps2-and-the-8042-controller">PS/2 and the 8042 controller</h1>
 
-<p>A preemptive scheduler can take the CPU away from a running thread without its cooperation. A hardware interrupt, usually a timer tick, transfers control to the kernel no matter what the thread was doing, and the kernel is then free to resume a different thread instead. The alternative is cooperative scheduling, where a switch only happens when the running thread volunteers by yielding or blocking; there, a single thread that never yields owns the CPU forever, and one buggy loop freezes the system.</p>
-<p>Preemption turns CPU time into a resource the kernel allocates rather than one threads take. The tick period bounds how long any thread can monopolize a core (its <a href="scheduler-tick.html">quantum</a>), so an infinite loop degrades into wasted share instead of a hang. The price is paid by every thread: since the tick lands at an arbitrary <a href="instruction-boundary.html">instruction boundary</a>, code can lose the CPU between any two instructions and must protect its critical sections accordingly, with masked interrupts or atomic instructions.</p>
-<p>In the Cosmos kernel every context switch is preemptive today: the switch happens on an interrupt exit (the 10 ms tick, a device interrupt whose handler woke another thread, or the interrupt a blocking thread raises on its own CPU), and a thread otherwise runs until it parks on a blocking primitive or exits; there is no working voluntary switch. See <a href="../scheduler.html#preemption">Preemption</a> and <a href="../scheduler.html#what-there-is-not-a-voluntary-switch">What there is not: a voluntary switch</a>.</p>
+<p>PS/2 is the keyboard and mouse interface of IBM-compatible PCs. Each device talks over a serial line to a controller on the motherboard, the 8042, named after the Intel microcontroller of the PC/AT; many PCs still provide one, sometimes emulated by the firmware. Its first port serves the keyboard and its second, the auxiliary port, a mouse; the CPU reaches it through two <a href="registers.html">I/O ports</a>: <code>0x60</code> carries data bytes both ways, and <code>0x64</code> is the status register when read and takes controller commands when written. The keyboard port raises IRQ 1, the mouse port IRQ 12.</p>
+<p>Commands come at two levels. The controller's own, written to <code>0x64</code>, read and write its configuration byte, run its self test and test or enable each port. A device's commands are written as data to <code>0x60</code>, to the second port after a <code>0xD4</code> written to <code>0x64</code>: reset, identify, set the keyboard's lights, enable scanning. The device acknowledges each command byte with <code>0xFA</code>, or asks for it again with <code>0xFE</code>, then sends any reply; a reset is answered <code>0xAA</code> once the device passes its self test.</p>
+<p>Once scanning is enabled, the keyboard sends a code for each key press and another for each release, in one of three scan code sets, and the controller can translate set 2 into the older set 1. A mouse, once reporting, sends three-byte movement packets, four bytes for a wheel mouse. The trap is the shared data port: a command's acknowledgements and replies arrive untagged among the stream, so a driver that sends a command while the user types must sort the bytes it reads.</p>
+<p>In the driver kit, <code>I8042Driver</code> owns the controller: it tests it and both ports, turns translation on so the keyboard port delivers set 1 codes, connects IRQ 1 and IRQ 12 or polls instead, and publishes one node per working port. A class driver talks through <code>Ps2Access</code>, whose <code>TryCommand</code> waits for each <code>Acknowledge</code>, resends on <code>Resend</code> up to <code>MaxResends</code> times and collects the reply; every other byte joins the stream the handler drains with <code>TryReceive</code>. See <a href="../drivers.html#ps2-devices">PS/2 devices</a> and <a href="../drivers.html#the-ps2-access-object">The PS/2 access object</a>.</p>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-concepts/ps2.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

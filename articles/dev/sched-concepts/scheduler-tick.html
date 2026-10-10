@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Preemption | Cosmos Gen 3 </title>
+      <title>The tick and the quantum | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Preemption | Cosmos Gen 3 ">
+      <meta name="title" content="The tick and the quantum | Cosmos Gen 3 ">
       
       
       <link rel="icon" href="../../../images/favicon.ico">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/scheduler-tick.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -85,16 +85,17 @@
         </div>
 
         <article data-uid="">
-<h1 id="preemption">Preemption</h1>
+<h1 id="the-tick-and-the-quantum">The tick and the quantum</h1>
 
-<p>A preemptive scheduler can take the CPU away from a running thread without its cooperation. A hardware interrupt, usually a timer tick, transfers control to the kernel no matter what the thread was doing, and the kernel is then free to resume a different thread instead. The alternative is cooperative scheduling, where a switch only happens when the running thread volunteers by yielding or blocking; there, a single thread that never yields owns the CPU forever, and one buggy loop freezes the system.</p>
-<p>Preemption turns CPU time into a resource the kernel allocates rather than one threads take. The tick period bounds how long any thread can monopolize a core (its <a href="scheduler-tick.html">quantum</a>), so an infinite loop degrades into wasted share instead of a hang. The price is paid by every thread: since the tick lands at an arbitrary <a href="instruction-boundary.html">instruction boundary</a>, code can lose the CPU between any two instructions and must protect its critical sections accordingly, with masked interrupts or atomic instructions.</p>
-<p>In the Cosmos kernel every context switch is preemptive today: the switch happens on an interrupt exit (the 10 ms tick, a device interrupt whose handler woke another thread, or the interrupt a blocking thread raises on its own CPU), and a thread otherwise runs until it parks on a blocking primitive or exits; there is no working voluntary switch. See <a href="../scheduler.html#preemption">Preemption</a> and <a href="../scheduler.html#what-there-is-not-a-voluntary-switch">What there is not: a voluntary switch</a>.</p>
+<p>A <a href="preemption.html">preemptive</a> scheduler needs a way to take control back from a thread that does not give it up, and the usual way is a periodic timer interrupt, the tick. A timer is programmed to interrupt every few milliseconds, and each interrupt enters the kernel, which charges the running thread for the time and decides whether it has run long enough. The quantum, or time slice, is how long a thread may run before the scheduler considers another one. It is counted in ticks, so it can be one tick or several but never less than one: the scheduler cannot preempt more finely than the timer interrupts.</p>
+<p>A timer can also be programmed one interrupt at a time. A one-shot timer is set for the moment the next decision is due, the end of the current slice or the nearest deadline, and the kernel programs it again from each interrupt. Kernels that work this way, often called tickless, avoid waking an idle CPU for nothing and can meet a deadline that does not fall on a tick, at the cost of reprogramming the timer for every decision.</p>
+<p>The trap is accounting by tick. Charging the running thread one period per interrupt is sampling, not measurement: a thread that runs between two ticks and blocks before the next is charged nothing, and the thread that happens to be running when the tick lands is charged for the whole period. Over many ticks the samples average out for threads that run long, but a thread that wakes, works briefly and sleeps again can stay almost free. A tick that arrives late is charged as if it were on time, too, unless the kernel reads a clock.</p>
+<p>In Cosmos the boot path arms the scheduler tick at <code>SchedulerManager.DefaultQuantumNs</code>, 10 ms. On x64 it comes from the local APIC timer running periodic; on ARM64 the Generic Timer is re-armed from each interrupt, a one-shot used as a periodic tick. Each tick first readies the sleepers whose deadline has passed, then calls the policy's <code>OnTick</code> with <code>elapsedNs</code>, the configured period rather than a measurement. Charging it to <code>SchedulerThread.TotalRuntime</code> is the policy's job, a quantum longer than one tick is a counter the policy decrements across ticks, and returning <code>true</code> reschedules before the interrupt returns. <code>SchedulerDiagnostics.TickPeriodNs</code> reports the period the timer last passed in, which follows a retune where <code>DefaultQuantumNs</code> does not, and nothing yet lets a policy program the next interrupt itself. See <a href="../scheduler.html#timer-sources">Timer sources</a>, <a href="../scheduler.html#the-tick">The tick</a> and <a href="../../user/scheduler-plugging.html#real-time-notes">Real-time notes</a>.</p>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/scheduler-tick.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

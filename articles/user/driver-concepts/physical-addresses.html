@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Preemption | Cosmos Gen 3 </title>
+      <title>Physical addresses | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Preemption | Cosmos Gen 3 ">
+      <meta name="title" content="Physical addresses | Cosmos Gen 3 ">
       
       
       <link rel="icon" href="../../../images/favicon.ico">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-concepts/physical-addresses.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -85,16 +85,18 @@
         </div>
 
         <article data-uid="">
-<h1 id="preemption">Preemption</h1>
+<h1 id="physical-addresses">Physical addresses</h1>
 
-<p>A preemptive scheduler can take the CPU away from a running thread without its cooperation. A hardware interrupt, usually a timer tick, transfers control to the kernel no matter what the thread was doing, and the kernel is then free to resume a different thread instead. The alternative is cooperative scheduling, where a switch only happens when the running thread volunteers by yielding or blocking; there, a single thread that never yields owns the CPU forever, and one buggy loop freezes the system.</p>
-<p>Preemption turns CPU time into a resource the kernel allocates rather than one threads take. The tick period bounds how long any thread can monopolize a core (its <a href="scheduler-tick.html">quantum</a>), so an infinite loop degrades into wasted share instead of a hang. The price is paid by every thread: since the tick lands at an arbitrary <a href="instruction-boundary.html">instruction boundary</a>, code can lose the CPU between any two instructions and must protect its critical sections accordingly, with masked interrupts or atomic instructions.</p>
-<p>In the Cosmos kernel every context switch is preemptive today: the switch happens on an interrupt exit (the 10 ms tick, a device interrupt whose handler woke another thread, or the interrupt a blocking thread raises on its own CPU), and a thread otherwise runs until it parks on a blocking primitive or exits; there is no working voluntary switch. See <a href="../scheduler.html#preemption">Preemption</a> and <a href="../scheduler.html#what-there-is-not-a-voluntary-switch">What there is not: a voluntary switch</a>.</p>
+<p>Code running on a CPU with paging never names memory directly. Every pointer it holds is a virtual address, which the memory management unit translates through page tables into a physical address, the location the memory bus actually carries, in RAM or in a device's register space. Translation works page by page, usually 4 KiB at a time, and neighboring virtual pages need not map to neighboring physical ones.</p>
+<p>A device sits outside that translation. When it reads or writes memory by <a href="dma.html">DMA</a>, it puts an address on the bus with no page table to consult, so a driver gives it the physical address of a buffer, never the pointer its own code uses. An IOMMU can give devices a translation of their own; without one, the device address is the physical address. The split also runs the other way: a device's <a href="registers.html">registers</a> sit at a physical address, which the kernel maps into the virtual address space before the CPU can reach them.</p>
+<p>Two constraints follow. A buffer contiguous in virtual memory may be scattered across physical pages, while a device told to transfer N bytes from an address reads N physically consecutive bytes, so a driver allocates physically contiguous memory or describes a scattered buffer as a list of fragments. Devices also impose alignment: a register that holds a base address often ignores its low bits, and some structures must not cross a page boundary.</p>
+<p>The trap is that both kinds of address are plain integers. Nothing stops a driver from handing a device a virtual address, and the device then reads or writes an unrelated physical location, with no fault to show where.</p>
+<p>In the driver kit, a <code>DmaBuffer</code> from <code>binding.AllocateDma(length, alignment)</code> hands out both views together: it is physically contiguous, starts at least on a 4 KiB boundary, and carries <code>Span</code> for the CPU and <code>PhysicalAddress</code> for the device. A node's memory windows (<code>DeviceResource.PhysicalBase</code>, and <code>PciBar.Base</code> for a memory BAR) are physical addresses that <code>MapRegisters</code> and <code>MapRegion</code> make reachable, and the kernel sets up no IOMMU, so a physical address is what a device uses. See <a href="../drivers.html#dma-memory">DMA memory</a> and <a href="../drivers.html#bar-resources">BAR resources</a>.</p>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-concepts/physical-addresses.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

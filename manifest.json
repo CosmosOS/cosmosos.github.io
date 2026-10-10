@@ -4546,6 +4546,26 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "articles/dev/sched-concepts/context-switch.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/dev/sched-concepts/context-switch.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/dev/sched-concepts/cpu-affinity.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/dev/sched-concepts/cpu-affinity.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "articles/dev/sched-concepts/instruction-boundary.md",
       "output": {
         ".html": {
@@ -4556,10 +4576,80 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "articles/dev/sched-concepts/policy-and-mechanism.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/dev/sched-concepts/policy-and-mechanism.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "articles/dev/sched-concepts/preemption.md",
       "output": {
         ".html": {
           "relative_path": "articles/dev/sched-concepts/preemption.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/dev/sched-concepts/priority-inversion.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/dev/sched-concepts/priority-inversion.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/dev/sched-concepts/real-time-scheduling.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/dev/sched-concepts/real-time-scheduling.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/dev/sched-concepts/run-queue.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/dev/sched-concepts/run-queue.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/dev/sched-concepts/scheduler-tick.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/dev/sched-concepts/scheduler-tick.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/dev/sched-concepts/spinlocks-and-masking.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/dev/sched-concepts/spinlocks-and-masking.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/dev/sched-concepts/starvation.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/dev/sched-concepts/starvation.html"
         }
       },
       "version": ""
@@ -4633,6 +4723,186 @@
       "output": {
         ".html": {
           "relative_path": "articles/user/debugging.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/user/driver-concepts/barriers.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/user/driver-concepts/barriers.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/user/driver-concepts/buses.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/user/driver-concepts/buses.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/user/driver-concepts/descriptor-rings.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/user/driver-concepts/descriptor-rings.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/user/driver-concepts/dma.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/user/driver-concepts/dma.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/user/driver-concepts/driver-matching.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/user/driver-concepts/driver-matching.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/user/driver-concepts/firmware-handoff.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/user/driver-concepts/firmware-handoff.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/user/driver-concepts/hot-plug.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/user/driver-concepts/hot-plug.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/user/driver-concepts/interrupt-context.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/user/driver-concepts/interrupt-context.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/user/driver-concepts/interrupt-delivery.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/user/driver-concepts/interrupt-delivery.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/user/driver-concepts/pci.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/user/driver-concepts/pci.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/user/driver-concepts/physical-addresses.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/user/driver-concepts/physical-addresses.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/user/driver-concepts/ps2.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/user/driver-concepts/ps2.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/user/driver-concepts/registers.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/user/driver-concepts/registers.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/user/driver-concepts/source-generators.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/user/driver-concepts/source-generators.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/user/driver-concepts/trimming.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/user/driver-concepts/trimming.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/user/driver-concepts/usb.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/user/driver-concepts/usb.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/user/driver-concepts/virtio.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/user/driver-concepts/virtio.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/user/driver-glossary.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/user/driver-glossary.html"
         }
       },
       "version": ""

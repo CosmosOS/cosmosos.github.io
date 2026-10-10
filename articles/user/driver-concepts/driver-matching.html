@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Preemption | Cosmos Gen 3 </title>
+      <title>Driver matching | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Preemption | Cosmos Gen 3 ">
+      <meta name="title" content="Driver matching | Cosmos Gen 3 ">
       
       
       <link rel="icon" href="../../../images/favicon.ico">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-concepts/driver-matching.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -85,16 +85,17 @@
         </div>
 
         <article data-uid="">
-<h1 id="preemption">Preemption</h1>
+<h1 id="driver-matching">Driver matching</h1>
 
-<p>A preemptive scheduler can take the CPU away from a running thread without its cooperation. A hardware interrupt, usually a timer tick, transfers control to the kernel no matter what the thread was doing, and the kernel is then free to resume a different thread instead. The alternative is cooperative scheduling, where a switch only happens when the running thread volunteers by yielding or blocking; there, a single thread that never yields owns the CPU forever, and one buggy loop freezes the system.</p>
-<p>Preemption turns CPU time into a resource the kernel allocates rather than one threads take. The tick period bounds how long any thread can monopolize a core (its <a href="scheduler-tick.html">quantum</a>), so an infinite loop degrades into wasted share instead of a hang. The price is paid by every thread: since the tick lands at an arbitrary <a href="instruction-boundary.html">instruction boundary</a>, code can lose the CPU between any two instructions and must protect its critical sections accordingly, with masked interrupts or atomic instructions.</p>
-<p>In the Cosmos kernel every context switch is preemptive today: the switch happens on an interrupt exit (the 10 ms tick, a device interrupt whose handler woke another thread, or the interrupt a blocking thread raises on its own CPU), and a thread otherwise runs until it parks on a blocking primitive or exits; there is no working voluntary switch. See <a href="../scheduler.html#preemption">Preemption</a> and <a href="../scheduler.html#what-there-is-not-a-voluntary-switch">What there is not: a voluntary switch</a>.</p>
+<p>A kernel carries many drivers and meets many devices, and something has to decide which driver serves which device. The kernel cannot let each driver poke at every device to see whether it recognizes it, because a register that one chip uses for its status may start a command on another. So each driver declares in advance what it serves, as a table of matches: each entry names identity fields that the bus reports for a device, such as a PCI vendor and device id or class bytes, a USB interface class, or a compatible string from the firmware's description (<a href="buses.html">buses</a>). When a device appears, the kernel compares its identity with every table, and only the drivers with a fitting entry are offered it, one at a time, in the probe: the driver's chance to look at the hardware and either take it or decline.</p>
+<p>Several drivers often fit the same device. A generic driver matches a whole class, such as every xHCI controller, while another matches the exact device id of a chip it knows better, and a driver a kernel author writes may match the same ids as one the kernel already ships. A kernel settles this with an order of preference. A more specific match comes before a more general one, because a driver that names the exact chip knows more about it than one that names its class. An explicit rank lets a driver step ahead of the others whatever its match, which is how a replacement wins over a shipped driver. A last key breaks the ties that remain. The first candidate whose probe accepts keeps the device, and a decline passes it to the next.</p>
+<p>The trap is a tie broken by accident. If the last key is load order, hash order, or the order in which files happened to be compiled, the driver that binds a device can change when an unrelated driver is added or a file is renamed, and two builds of the same sources can behave differently. The last key has to be deterministic, and visible to someone reading why a device went to the driver it did. A decline must also leave the device as the next candidate expects it, since a probe that turned something on before declining hands the next driver a device in a state it did not choose.</p>
+<p>In the driver kit, a driver's <code>Matches</code> is a list of <code>DeviceMatch</code>, each with a <code>Specificity</code>, the number of identity fields it checks. The candidates for a node are ordered by <code>Priority</code> (highest first), then by the specificity of their best match (highest first), then by manifest position (earliest first), and the first <code>ProbeResult.Bound</code> keeps the node. Every shipped driver leaves <code>Priority</code> at <code>0</code>, so a replacement only needs a higher one. The manifest position is fixed at build time: the kernel's own drivers come first, ordered by file path and then by position in the file, followed by those of referenced assemblies, ordered by assembly name and then by full type name. The boot log lists each node's candidates with their <code>prio</code> and <code>spec</code>, and the kit releases whatever a declining probe acquired before it offers the node to the next candidate. See <a href="../drivers.html#identity-and-matches">Identity and matches</a> and <a href="../../dev/build/driver-manifest.html#how-drivers-are-found">How drivers are found</a>.</p>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/user/driver-concepts/driver-matching.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

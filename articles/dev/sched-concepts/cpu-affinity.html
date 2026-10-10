@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Preemption | Cosmos Gen 3 </title>
+      <title>CPU affinity and load balancing | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Preemption | Cosmos Gen 3 ">
+      <meta name="title" content="CPU affinity and load balancing | Cosmos Gen 3 ">
       
       
       <link rel="icon" href="../../../images/favicon.ico">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/cpu-affinity.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -85,16 +85,17 @@
         </div>
 
         <article data-uid="">
-<h1 id="preemption">Preemption</h1>
+<h1 id="cpu-affinity-and-load-balancing">CPU affinity and load balancing</h1>
 
-<p>A preemptive scheduler can take the CPU away from a running thread without its cooperation. A hardware interrupt, usually a timer tick, transfers control to the kernel no matter what the thread was doing, and the kernel is then free to resume a different thread instead. The alternative is cooperative scheduling, where a switch only happens when the running thread volunteers by yielding or blocking; there, a single thread that never yields owns the CPU forever, and one buggy loop freezes the system.</p>
-<p>Preemption turns CPU time into a resource the kernel allocates rather than one threads take. The tick period bounds how long any thread can monopolize a core (its <a href="scheduler-tick.html">quantum</a>), so an infinite loop degrades into wasted share instead of a hang. The price is paid by every thread: since the tick lands at an arbitrary <a href="instruction-boundary.html">instruction boundary</a>, code can lose the CPU between any two instructions and must protect its critical sections accordingly, with masked interrupts or atomic instructions.</p>
-<p>In the Cosmos kernel every context switch is preemptive today: the switch happens on an interrupt exit (the 10 ms tick, a device interrupt whose handler woke another thread, or the interrupt a blocking thread raises on its own CPU), and a thread otherwise runs until it parks on a blocking primitive or exits; there is no working voluntary switch. See <a href="../scheduler.html#preemption">Preemption</a> and <a href="../scheduler.html#what-there-is-not-a-voluntary-switch">What there is not: a voluntary switch</a>.</p>
+<p>On a machine with several CPUs, a scheduler usually gives each CPU its own run queue. A single shared queue would need a lock that every CPU contends for on every switch, and a thread that keeps returning to the same CPU finds its data still in that CPU's caches. Per-CPU queues bring two decisions of their own. Placement picks a CPU for a thread when it is created or woken, typically the least loaded one. Load balancing moves threads afterwards, when one queue runs long while another CPU sits idle: the idle CPU pulls, or steals, a thread from a busy one, or a busy CPU pushes one away.</p>
+<p>Affinity limits where a thread may go. Hard affinity, or pinning, restricts a thread to one CPU or a set of them, for a per-CPU thread such as an idle thread or for code that touches per-CPU state. Soft affinity is only a preference, the cache warmth a scheduler weighs against the load.</p>
+<p>The trap is per-CPU state that travels with the thread. A policy that keeps a per-CPU clock, such as the virtual time of a <a href="virtual-time-fair-share.html">fair-share</a> scheduler, has to rebase a migrating thread on the destination's clock, or the thread arrives far ahead of or far behind every thread there. A migration also touches the queues of two CPUs at once, so it has to be safe against the ticks of both, and a balancer must never steal a pinned thread.</p>
+<p>In Cosmos the kernel runs on one CPU today. The hooks that place and balance threads, <code>SelectCpu</code> and <code>Balance</code>, have no caller, and <code>OnThreadMigrate</code> runs only when a policy's own <code>Balance</code> calls it. The shape is per-CPU all the same: every hook that touches a run structure receives the <code>PerCpuState</code> it operates on, a policy keeps its run structure in that state's <code>SchedulerData</code>, and <code>SchedulerThread.CpuId</code> names the CPU a thread is assigned to, so a policy written per CPU now carries over. <code>SchedulerThreadFlags.Pinned</code> marks a thread that must not migrate; only the idle threads carry it, since a kernel can read a thread's flags but not set them. Stride's <code>Balance</code> steals the tail of the longest queue when its own is empty and that queue holds more than one thread, unless the tail is pinned, and its <code>OnThreadMigrate</code> rebases the thread's <code>Pass</code> on the destination's <code>GlobalPass</code> plus the thread's saved <code>Remain</code>. See <a href="../scheduler.html#limitations-and-evolution">Limitations and evolution</a>.</p>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/cpu-affinity.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

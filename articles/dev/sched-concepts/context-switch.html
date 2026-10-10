@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Preemption | Cosmos Gen 3 </title>
+      <title>Context switch | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Preemption | Cosmos Gen 3 ">
+      <meta name="title" content="Context switch | Cosmos Gen 3 ">
       
       
       <link rel="icon" href="../../../images/favicon.ico">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/context-switch.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -85,16 +85,17 @@
         </div>
 
         <article data-uid="">
-<h1 id="preemption">Preemption</h1>
+<h1 id="context-switch">Context switch</h1>
 
-<p>A preemptive scheduler can take the CPU away from a running thread without its cooperation. A hardware interrupt, usually a timer tick, transfers control to the kernel no matter what the thread was doing, and the kernel is then free to resume a different thread instead. The alternative is cooperative scheduling, where a switch only happens when the running thread volunteers by yielding or blocking; there, a single thread that never yields owns the CPU forever, and one buggy loop freezes the system.</p>
-<p>Preemption turns CPU time into a resource the kernel allocates rather than one threads take. The tick period bounds how long any thread can monopolize a core (its <a href="scheduler-tick.html">quantum</a>), so an infinite loop degrades into wasted share instead of a hang. The price is paid by every thread: since the tick lands at an arbitrary <a href="instruction-boundary.html">instruction boundary</a>, code can lose the CPU between any two instructions and must protect its critical sections accordingly, with masked interrupts or atomic instructions.</p>
-<p>In the Cosmos kernel every context switch is preemptive today: the switch happens on an interrupt exit (the 10 ms tick, a device interrupt whose handler woke another thread, or the interrupt a blocking thread raises on its own CPU), and a thread otherwise runs until it parks on a blocking primitive or exits; there is no working voluntary switch. See <a href="../scheduler.html#preemption">Preemption</a> and <a href="../scheduler.html#what-there-is-not-a-voluntary-switch">What there is not: a voluntary switch</a>.</p>
+<p>A context switch moves a CPU from one thread to another. The registers of the thread leaving are saved where the kernel can find them again, usually on that thread's own stack or in its control block; the stack pointer is pointed at the arriving thread's saved state, and its registers are restored, so it carries on exactly where it stopped. Kernels reach a switch in two ways. An involuntary switch happens on an interrupt: the interrupt entry has already saved the interrupted thread's registers, so the kernel only has to return into a different saved state. A voluntary switch happens when a thread calls into the kernel to block or yield, through a routine that saves the registers itself.</p>
+<p>A switch costs more than the registers it copies. The arriving thread finds the caches and the address translation buffers filled with the other thread's data, and runs slower until it has warmed them again, which is why a scheduler does not switch more often than its policy needs.</p>
+<p>The trap is that deciding to switch and switching are separate steps. A scheduler can decide during a tick, or when a thread is woken, while the switch itself happens only when the kernel leaves the interrupt. Everything between the decision and the switch has to agree with it: the thread recorded as current, the thread put back in the queue and the stack the CPU will resume must all describe the same switch, or the CPU resumes a thread that the bookkeeping places somewhere else.</p>
+<p>In Cosmos every switch happens on an interrupt exit. The interrupt stub saves the thread's registers, the SIMD state included, on the thread's stack; the manager calls <code>PickNext</code>, records where the old thread's state lies in its <code>SchedulerThread.StackPointer</code> and stages the new one, and the stub restores from it on the way out. A thread's first run, which has no saved frame to return into, jumps to its entry point instead. Any interrupt's exit can carry a switch: the timer tick when <code>OnTick</code> returns <code>true</code>, and any hardware interrupt once a wake, a block, a <code>Thread.Yield</code> or a policy swap has asked for a reschedule, in which case <code>PickNext</code> runs whatever <code>OnTick</code> answered, or without <code>OnTick</code> at all when the interrupt is not the tick. There is no voluntary switch: a thread that blocks raises an interrupt on its own CPU to switch away (the idle thread halts instead), and <code>Thread.Yield</code> returns at once and leaves the switch to the next interrupt exit. The policy never touches a register. See <a href="../scheduler.html#the-tick">The tick</a> and <a href="../scheduler.html#what-there-is-not-a-voluntary-switch">What there is not: a voluntary switch</a>.</p>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/preemption.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/articles/dev/sched-concepts/context-switch.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>
