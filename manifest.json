@@ -849,7 +849,7 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice",
-      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.yml\" sourcestartlinenumber=\"1\">One USB function behind one port: the host created it when it addressed\nthe port (an xHCI slot) and derives from it to carry its per-device\nstate and the transfer primitives; the enumeration core fills the\nidentity it read from the descriptors. A host implements the protected\nmembers; the kit calls them through the internal ones, so a class driver\nholding a reference can reach none of them and goes through its\n<xref href=\"Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbAccess\" data-throw-if-not-resolved=\"false\"></xref> instead.</p>\n"
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.yml\" sourcestartlinenumber=\"1\">One USB function behind one port: the host created it when it addressed\nthe port (an xHCI slot, an EHCI queue head set or an OHCI endpoint\ndescriptor set) and derives from it to carry its per-device\nstate and the transfer primitives; the enumeration core fills the\nidentity it read from the descriptors. A host implements the protected\nmembers; the kit calls them through the internal ones, so a class driver\nholding a reference can reach none of them and goes through its\n<xref href=\"Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbAccess\" data-throw-if-not-resolved=\"false\"></xref> instead.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -891,7 +891,7 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbHostController",
-      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbHostController.yml\" sourcestartlinenumber=\"1\">The contract a USB host controller driver implements for the kit: how\na device on a port gets its address and how its state is freed again.\nThe host driver binds the controller's own node (a PCI function for\nxHCI), creates a <xref href=\"Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbBus\" data-throw-if-not-resolved=\"false\"></xref> over this object from its probe,\nand owns every register, ring, context and DMA page; the kit never\npublishes a node for the controller itself. A host implements the\nprotected members; the kit calls them through the internal ones, so a\nclass driver holding a reference can reach neither.</p>\n"
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbHostController.yml\" sourcestartlinenumber=\"1\">The contract a USB host controller driver implements for the kit: how\na device on a port gets its address and how its state is freed again.\nThe host driver binds the controller's own node (a PCI function for\nxHCI, EHCI and OHCI), creates a <xref href=\"Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbBus\" data-throw-if-not-resolved=\"false\"></xref> over this object\nfrom its probe, and owns every register, ring, descriptor list, context\nand DMA page; the kit never\npublishes a node for the controller itself. A host implements the\nprotected members; the kit calls them through the internal ones, so a\nclass driver holding a reference can reach neither.</p>\n"
     },
     {
       "type": "ManagedReference",

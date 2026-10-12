@@ -156,7 +156,7 @@ internal static class DriverManifest
 </table>
 <p>The kernel's own drivers come first, then the referenced ones. An assembly that does not reference <code>Cosmos.Kernel.HAL</code> is not searched, since it cannot carry the attribute.</p>
 <p>To be registered, a class must be concrete (not abstract, not static) and non-generic, derive from <code>Cosmos.Kernel.HAL.DriverKit.Driver</code>, and have a parameterless constructor the kernel assembly can call. A marked class that fails one of these is reported (<code>COSMOSGEN001</code>) and left out.</p>
-<p>The drivers Cosmos ships take the second path. They live in <code>Cosmos.Kernel.Drivers</code>, which the <code>Cosmos.Kernel</code> aggregator every kernel references carries, so all twenty-three are in every kernel's manifest after its own drivers without the kernel referencing the package itself. They are ordered by full type name, and a shipped driver's full name carries its bus kind, category and driver folder (<code>Cosmos.Kernel.Drivers.Pci.Storage.Nvme.NvmeDriver</code>), so that order groups them by bus kind (<code>Pci</code>, <code>Platform</code>, <code>Ps2</code>, <code>Usb</code>, <code>Virtio</code>) and, within one, by category. Twenty of them are registered under a feature guard, and three under none:</p>
+<p>The drivers Cosmos ships take the second path. They live in <code>Cosmos.Kernel.Drivers</code>, which the <code>Cosmos.Kernel</code> aggregator every kernel references carries, so all twenty-five are in every kernel's manifest after its own drivers without the kernel referencing the package itself. They are ordered by full type name, and a shipped driver's full name carries its bus kind, category and driver folder (<code>Cosmos.Kernel.Drivers.Pci.Storage.Nvme.NvmeDriver</code>), so that order groups them by bus kind (<code>Pci</code>, <code>Platform</code>, <code>Ps2</code>, <code>Usb</code>, <code>Virtio</code>) and, within one, by category. Twenty-two of them are registered under a feature guard, and three under none:</p>
 <table>
 <thead>
 <tr>
@@ -187,7 +187,7 @@ internal static class DriverManifest
 </tr>
 <tr>
 <td><code>Usb</code></td>
-<td><code>XhciDriver</code>, <code>UsbHubDriver</code>, <code>UsbKeyboardDriver</code>, <code>UsbMouseDriver</code>, <code>UsbMassStorageDriver</code></td>
+<td><code>XhciDriver</code>, <code>EhciDriver</code>, <code>OhciDriver</code>, <code>UsbHubDriver</code>, <code>UsbKeyboardDriver</code>, <code>UsbMouseDriver</code>, <code>UsbMassStorageDriver</code></td>
 </tr>
 <tr>
 <td><code>Keyboard</code></td>

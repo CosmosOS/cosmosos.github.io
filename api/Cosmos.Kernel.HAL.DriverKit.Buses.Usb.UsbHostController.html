@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class UsbHostController | Cosmos Gen 3 ">
       
-      <meta name="description" content="The contract a USB host controller driver implements for the kit: how a device on a port gets its address and how its state is freed again. The host driver binds the controller&#39;s own node (a PCI function for xHCI), creates a  over this object from its probe, and owns every register, ring, context and DMA page; the kit never publishes a node for the controller itself. A host implements the protected members; the kit calls them through the internal ones, so a class driver holding a reference can reach neither.">
+      <meta name="description" content="The contract a USB host controller driver implements for the kit: how a device on a port gets its address and how its state is freed again. The host driver binds the controller&#39;s own node (a PCI function for xHCI, EHCI and OHCI), creates a  over this object from its probe, and owns every register, ring, descriptor list, context and DMA page; the kit never publishes a node for the controller itself. A host implements the protected members; the kit calls them through the internal ones, so a class driver holding a reference can reach neither.">
       <link rel="icon" href="../images/favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -100,8 +100,9 @@ Class UsbHostController
   <div class="markdown summary"><p>The contract a USB host controller driver implements for the kit: how
 a device on a port gets its address and how its state is freed again.
 The host driver binds the controller's own node (a PCI function for
-xHCI), creates a <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbBus.html">UsbBus</a> over this object from its probe,
-and owns every register, ring, context and DMA page; the kit never
+xHCI, EHCI and OHCI), creates a <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbBus.html">UsbBus</a> over this object
+from its probe, and owns every register, ring, descriptor list, context
+and DMA page; the kit never
 publishes a node for the controller itself. A host implements the
 protected members; the kit calls them through the internal ones, so a
 class driver holding a reference can reach neither.</p>
@@ -199,7 +200,7 @@ public abstract class UsbHostController</code></pre>
   
   </h3>
 
-  <div class="markdown level1 summary"><p>A short name for logs, <code>&quot;xHCI&quot;</code>.</p>
+  <div class="markdown level1 summary"><p>A short name for logs, <code>&quot;xHCI&quot;</code>, <code>&quot;EHCI&quot;</code> or <code>&quot;OHCI&quot;</code>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 

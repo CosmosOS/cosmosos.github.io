@@ -115,7 +115,7 @@
 </tr>
 <tr>
 <td>PCI</td>
-<td><code>PcieRootPortDriver</code>, <code>VirtioPciTransportDriver</code>, <code>XhciDriver</code>, <code>E1000EDriver</code>, <code>AhciDriver</code>, <code>NvmeDriver</code>, <code>VmwareSvgaDriver</code>, <code>AmdDcnDriver</code>, <code>IntelGraphicsDriver</code>, <code>HdAudioDriver</code></td>
+<td><code>PcieRootPortDriver</code>, <code>VirtioPciTransportDriver</code>, <code>XhciDriver</code>, <code>EhciDriver</code>, <code>OhciDriver</code>, <code>E1000EDriver</code>, <code>AhciDriver</code>, <code>NvmeDriver</code>, <code>VmwareSvgaDriver</code>, <code>AmdDcnDriver</code>, <code>IntelGraphicsDriver</code>, <code>HdAudioDriver</code></td>
 </tr>
 <tr>
 <td>Virtio</td>
@@ -209,7 +209,7 @@ public sealed class SampleDriver : Driver
 <p>The driver stage runs from <code>Kernel.Start</code>, once the heap, the interrupt controller and the scheduler are up and interrupts are enabled. The kit offers every node published so far, including the children a bus driver publishes from its probe, and returns when all of them have been offered. <code>OnBoot</code> and <code>BeforeRun</code> run after it, so every bound device is usable there.</p>
 <p>The serial log shows each node, its candidate drivers and the result of the offer. This excerpt comes from an x64 kernel launched with <code>cosmos run --nic virtio-net-pci</code>:</p>
 <pre><code>[Kernel] Starting drivers...
-[Drivers] manifest: PcieRootPortDriver(prio 0) VirtioPciTransportDriver(prio 0) ... VirtioBlkDriver(prio 0)
+[Drivers] manifest: HdAudioDriver(prio 0) EhciDriver(prio 0) OhciDriver(prio 0) PcieRootPortDriver(prio 0) ... VirtioBlkDriver(prio 0)
 [Drivers] engine started, worker thread
 ...
 [Drivers] platform:pci@cf8 candidates: PciHostDriver(prio 0, spec 1)
@@ -623,7 +623,7 @@ Sink?.Receive(frame);
 <p>See <a href="graphics.html">Graphics</a>, <a href="audio.html">Audio</a> and <a href="filesystem.html">File System</a> for the consuming side.</p>
 <h3 id="publishing-child-nodes">Publishing child nodes</h3>
 <p>A bus driver publishes the devices it finds as child nodes: <code>binding.PublishChild(identity, resources, interrupts, access)</code> adds one beneath its node, to be offered to drivers like any other, and <code>binding.RetractChild(child, hardwarePresent)</code> removes it. Children go away with their parent, and their drivers see <code>DetachCause.ParentRetracted</code>.</p>
-<p>A bus driver either publishes a bus kind the kit already defines, or brings its own identity and match pair. The shipped virtio transport drivers do the first: they publish their device with the kit's <code>VirtioIdentity</code>, no resources, the nine interrupt sources of a <code>VirtioAccess</code>, and that access as the access object (<a href="#virtio-devices">Virtio devices</a>). The kit's USB enumeration core does the same beneath the xHCI or hub driver's node, with a <code>UsbIdentity</code>, no resources, no interrupt sources and a <code>UsbAccess</code> (<a href="#usb-devices">USB devices</a>). A bus of your own needs an identity and a match:</p>
+<p>A bus driver either publishes a bus kind the kit already defines, or brings its own identity and match pair. The shipped virtio transport drivers do the first: they publish their device with the kit's <code>VirtioIdentity</code>, no resources, the nine interrupt sources of a <code>VirtioAccess</code>, and that access as the access object (<a href="#virtio-devices">Virtio devices</a>). The kit's USB enumeration core does the same beneath a host controller driver's node (xHCI, EHCI or OHCI) or the hub driver's, with a <code>UsbIdentity</code>, no resources, no interrupt sources and a <code>UsbAccess</code> (<a href="#usb-devices">USB devices</a>). A bus of your own needs an identity and a match:</p>
 <pre><code class="lang-csharp">using Cosmos.Kernel.HAL.DriverKit;
 
 namespace MyOS.Drivers;
@@ -1027,11 +1027,15 @@ public void OnReport(ReadOnlySpan&lt;byte&gt; report)
 }
 </code></pre>
 <h3 id="the-host-controller-contract">The host controller contract</h3>
-<p>A host controller driver binds the controller's own node and implements <code>UsbHostController</code> and <code>UsbDevice</code>, with its pipes derived from <code>UsbPipe</code>. It creates a <code>UsbBus</code>, whose <code>Attach(port, speed)</code> and <code>Detach(port)</code> enumerate a device and publish or retract its interface nodes. <code>XhciDriver</code> is the reference implementation; a class driver never deals with any of this.</p>
+<p>A host controller driver binds the controller's own node and implements <code>UsbHostController</code> and <code>UsbDevice</code>, with its pipes derived from <code>UsbPipe</code>. It creates a <code>UsbBus</code>, whose <code>Attach(port, speed)</code> and <code>Detach(port)</code> enumerate a device and publish or retract its interface nodes. <code>XhciDriver</code>, <code>EhciDriver</code> and <code>OhciDriver</code> implement it, with <code>XhciDriver</code> as the reference implementation; a class driver never deals with any of this.</p>
 <h3 id="hubs">Hubs</h3>
 <p><code>UsbHubDriver</code> binds every hub interface. It hands the devices on the hub's ports to the same enumeration through <code>ConfigureAsHub</code>, <code>AttachChild</code> and <code>DetachChild</code>, and watches the ports from a thread, so a device behind a hub is offered like any other, as <code>usb:1-2.1:0</code>.</p>
 <h3 id="the-xhci-driver">The xHCI driver</h3>
 <p><code>XhciDriver</code> binds every xHCI controller. It enumerates the devices already plugged in during its probe, so a USB stick is ready before <code>OnBoot</code>, and handles hot-plug from a thread. It uses an MSI-X message where the platform routes one and polls every 20 ms otherwise. Isochronous endpoints, interrupt OUT endpoints and streams are not supported.</p>
+<h3 id="the-ehci-driver">The EHCI driver</h3>
+<p><code>EhciDriver</code> binds every EHCI controller, the USB 2.0 host that preceded xHCI on PCs and that many embedded boards still carry. Its root ports take high-speed devices only, so the driver hands a full- or low-speed device plugged into one to the companion controller that shares the port, which enumerates it on a bus of its own (<a href="#the-ohci-driver">The OHCI driver</a>); on a port without a companion the device is logged and left. On the boards that put a high-speed hub in front of the ports instead, as Intel chipsets do, such a device arrives behind that hub, where <code>UsbHubDriver</code> enumerates it and the controller reaches it through the hub's transaction translator, so it is offered like any other (<a href="#hubs">Hubs</a>). It enumerates the devices already plugged in during its probe, so a USB stick is ready before <code>OnBoot</code>, and handles hot-plug from a thread. It uses the function's legacy line where the platform routes one, which the kit does on x64 only, and polls every 20 ms otherwise. Isochronous endpoints, interrupt OUT endpoints, data structures above 4 GiB, suspend and the recovery of a controller that halted on a host system error are not supported, and a hub is driven through one transaction translator.</p>
+<h3 id="the-ohci-driver">The OHCI driver</h3>
+<p><code>OhciDriver</code> binds every OHCI controller, the USB 1.1 host interface of many chipsets, AMD's and NVIDIA's among them (UHCI, the USB 1.1 host of Intel and VIA chipsets, has no driver), on its own or as the companion of an EHCI, in which case it serves the full- and low-speed devices the EHCI driver hands over. Nothing coordinates the two drivers: the hand-off is a bit in the EHCI's port register, which the OHCI sees as a plain connect on its own root port, from its probe when it binds after the EHCI and from its hot-plug thread when it bound first, so a hand-off in that order needs the scheduler. It enumerates the devices already plugged in during its probe, so a USB stick is ready before <code>OnBoot</code>, and handles hot-plug from a thread, like <code>XhciDriver</code>. It uses the function's legacy line where the platform routes one, which the kit does on x64 only, and polls every 20 ms otherwise. Isochronous endpoints, interrupt OUT endpoints, suspend and the recovery of a controller that stopped on an unrecoverable error are not supported.</p>
 <h3 id="the-usb-class-drivers">The USB class drivers</h3>
 <table>
 <thead>
@@ -1277,7 +1281,7 @@ public void OnInterrupt(InterruptContext context)
 </tr>
 </tbody>
 </table>
-<p>Bus drivers add their own lines through <code>binding.Log</code>: the xHCI driver logs each USB device it finds, the root port driver each hot-plug event. The storage manager adds <code>[StorageManager]</code> lines when it registers or drops a disk.</p>
+<p>Bus drivers add their own lines through <code>binding.Log</code>: the USB host controller drivers log each USB device they find, the root port driver each hot-plug event. The storage manager adds <code>[StorageManager]</code> lines when it registers or drops a disk.</p>
 <p><code>DriverDiagnostics</code> only reads, so it never changes the kit and never throws:</p>
 <ul>
 <li><code>DriverCount</code>, <code>NodeCount</code> and <code>DeviceCount</code>, with <code>TryGetDriver</code>, <code>TryGetNode</code> and <code>TryGetDevice</code> to read one entry by index.</li>
