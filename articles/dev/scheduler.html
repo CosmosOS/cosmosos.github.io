@@ -143,6 +143,10 @@
 <td>The backing store for <code>[ThreadStatic]</code> fields, handed to CoreLib by ref</td>
 </tr>
 <tr>
+<td><code>_exceptionDispatchState</code></td>
+<td>The exception dispatcher's state for the thread, which throws, unwinds and catches on its own stack: the head of its ExInfo chain, its guard against a throw from inside a dispatch, and the funclets running on it. <code>ExceptionHelper.State</code> reads it by ref, and the boot code uses the dispatcher's own before it is a scheduler thread (valentinbreiz/nativeaot-patcher#440)</td>
+</tr>
+<tr>
 <td><code>SchedulerData</code></td>
 <td>A single <code>object?</code> slot the active scheduler attaches its bookkeeping to (inherited from <code>SchedulerExtensible</code>)</td>
 </tr>
@@ -632,9 +636,10 @@
 </ul>
 <hr>
 <h2 id="tests">Tests</h2>
-<p>Two kernel test suites cover this article. <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/tests/Kernels/Cosmos.Kernel.Tests.Threading/Kernel.cs"><code>Cosmos.Kernel.Tests.Threading</code></a> runs 58 tests (<code>make test KERNEL=Threading</code>):</p>
+<p>Two kernel test suites cover this article. <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/tests/Kernels/Cosmos.Kernel.Tests.Threading/Kernel.cs"><code>Cosmos.Kernel.Tests.Threading</code></a> runs 80 tests (<code>make test KERNEL=Threading</code>):</p>
 <ul>
 <li>thread lifecycle and concurrency (<code>Thread_Start_ExecutesDelegate</code>, <code>Thread_Multiple_CanRunConcurrently</code>),</li>
+<li>exception dispatch on several threads at once (<code>Thread_Throw_TwoThreadsUnhandled_BothJoin</code>, <code>Thread_Throw_ConcurrentCatchRethrow_OwnExceptions</code>),</li>
 <li>stack sizing and the #433 floor (<code>Thread_MaxStackSize_IsHonored</code>, <code>Thread_MaxStackSize_TinyRequestIsFloored</code>, <code>Thread_EnsureSufficientExecutionStack_Passes</code>),</li>
 <li>thread statics (<code>Thread_ThreadStatics</code>),</li>
 <li>mutex contention, hand-off, and idle accounting (<code>Mutex_ThreeContenders_AllAcquire</code>, <code>Mutex_ReleaseHandsOffToParkedWaiter</code>, <code>Mutex_IdleThreadContention_KeepsTicketAccounting</code>),</li>
