@@ -1145,11 +1145,51 @@ if (map.ContainsKey(key))         // Bad: two lookups
 {
     device = map[key];
 }
+
+// Don't loop on a literal; the condition says what ends the loop
+while (true)                      // Bad: nothing in the header bounds it
+{
+    if (pos &gt;= end)
+    {
+        break;
+    }
+    pos += Step(pos);
+}
+
+while (pos &lt; end)                 // Good: the bound is the condition
+{
+    pos += Step(pos);
+}
 </code></pre>
 <blockquote>
 <p>Braces are enforced by <code>.editorconfig</code> (<code>csharp_prefer_braces = true:error</code>) and by CI (<code>dotnet format style --severity error</code>).</p>
 </blockquote>
 <p>Methods, constructors, operators and local functions take a block body, even for a single statement: a wrapped <code>=&gt;</code> hides where the body starts. A property, indexer or accessor uses <code>=&gt;</code> only when the whole member fits on one line, and a lambda keeps its <code>=&gt;</code>. The vendored trees under <code>ThirdParty/</code> follow this rule too, and each one's README lists the members it changed. <code>.editorconfig</code> records this in the <code>csharp_style_expression_bodied_*</code> options at <code>silent</code>, so CI does not enforce it.</p>
+<h3 id="bounded-loops">Bounded Loops</h3>
+<p><code>while (true)</code> is not written. A loop's header states what ends it: a count, a bound on an index, a deadline, a flag the body sets when it has found what it was looking for. With the bound in the header, a reader checks in one place that every path moves toward it; with <code>while (true)</code>, the exit is wherever a <code>break</code> or <code>return</code> happens to be, and the loop that lost its exit through an edit reads exactly like the one that never had one. The three kinds of loop that look unbounded each have a bound to state:</p>
+<table>
+<thead>
+<tr>
+<th>Loop</th>
+<th>Header</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A parse that walks a buffer</td>
+<td><code>while (pos &lt; end &amp;&amp; !closed)</code>, with the parse's end as the bound and a flag for the record that closes it</td>
+</tr>
+<tr>
+<td>A wait on hardware or on another thread</td>
+<td><code>while (!ready &amp;&amp; Stopwatch.GetTimestamp() &lt; deadline)</code> or <code>while (!ready &amp;&amp; attempts++ &lt; MaxAttempts)</code>; a poll with no budget is the hang <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/365">#365</a> tracks</td>
+</tr>
+<tr>
+<td>A kernel's main loop, or a halt that never returns</td>
+<td><code>while (!_stopped)</code> for the first; the second halts the CPU in its loop body, so its spin is the point and <code>while (true) { Halt(); }</code> stays</td>
+</tr>
+</tbody>
+</table>
+<p>The last row is the one exemption: a method that never returns and whose loop body halts the CPU, as <code>Power.Reboot</code> and <code>Power.Shutdown</code> fall back to when the platform cannot do either, and as <code>Kernel.Start</code> does after <code>AfterRun</code>. A loop with an empty body is not that exemption; it burns the CPU to go nowhere, and halts instead. Everything else states its bound. The existing <code>while (true)</code> loops in <code>src/</code> predate this rule and are converted as the code around them is touched, not in a sweep; no analyzer checks it.</p>
 <h3 id="feature-switches">Feature Switches</h3>
 <p>Use <code>[FeatureSwitchDefinition]</code> for compile-time feature toggling (trimmed by NativeAOT linker). All feature flags live in <code>Cosmos.Kernel.Core.CosmosFeatures</code>:</p>
 <pre><code class="lang-csharp">// In CosmosFeatures.cs: one property per feature
