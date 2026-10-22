@@ -325,6 +325,41 @@ InsufficientExecutionStackException on every call (#433).</p>
 
 
 
+  <a id="Cosmos_Kernel_Core_Scheduler_SchedulerThread_IsIdle_" data-uid="Cosmos.Kernel.Core.Scheduler.SchedulerThread.IsIdle*"></a>
+
+  <h3 id="Cosmos_Kernel_Core_Scheduler_SchedulerThread_IsIdle" data-uid="Cosmos.Kernel.Core.Scheduler.SchedulerThread.IsIdle">
+  IsIdle
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Whether this is a CPU's idle thread: the boot thread itself on the boot CPU, the
+scheduler's fallback when <a class="xref" href="Cosmos.Kernel.Core.Scheduler.IScheduler.html#Cosmos_Kernel_Core_Scheduler_IScheduler_PickNext_Cosmos_Kernel_Core_Scheduler_PerCpuState_">PickNext(PerCpuState)</a> returns null. The blocking
+primitives make it spin or poll instead of parking, since a parked idle thread comes
+back through that fallback as Running without the wake that returns its tickets.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsIdle { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Cosmos_Kernel_Core_Scheduler_SchedulerThread_StackBase_" data-uid="Cosmos.Kernel.Core.Scheduler.SchedulerThread.StackBase*"></a>
 
   <h3 id="Cosmos_Kernel_Core_Scheduler_SchedulerThread_StackBase" data-uid="Cosmos.Kernel.Core.Scheduler.SchedulerThread.StackBase">
