@@ -182,7 +182,7 @@ public class Kernel : Sys.Kernel
 <tr>
 <td><code>OnThreadReady(state, thread)</code></td>
 <td>a thread becomes runnable: its first start, a wake, an expired sleep, or the <code>Ready</code> state at the swap</td>
-<td>Place the thread and insert it into the run structure, once</td>
+<td>Place the thread and insert it into the run structure, once. The manager writes <code>Ready</code> after the hook returns, so <code>thread.State</code> still says which of the four it is: <code>Created</code>, <code>Blocked</code>, <code>Sleeping</code> or <code>Ready</code></td>
 </tr>
 <tr>
 <td><code>OnThreadBlocked(state, thread)</code></td>

@@ -242,7 +242,7 @@
 </tr>
 <tr>
 <td><code>ReadyThread</code></td>
-<td><code>Ready</code>, unless the thread is still <code>Created</code></td>
+<td><code>Ready</code>, unless the thread is still <code>Created</code>, after the hook</td>
 <td><code>OnThreadReady</code></td>
 <td>sets the per-CPU <code>_needReschedule</code> flag</td>
 </tr>
@@ -455,12 +455,11 @@
 </tr>
 </tbody>
 </table>
-<p>Wakeup placement is where fairness needs judgment. A woken thread cannot keep its old <code>Pass</code>: it fell far behind <code>GlobalPass</code> while parked, and running it until it caught up would starve everyone else. The code carries two placements for this:</p>
+<p>Wakeup placement is where fairness needs judgment. A woken thread cannot keep its old <code>Pass</code>: it fell far behind <code>GlobalPass</code> while parked, and running it until it caught up would starve everyone else. <code>ReadyThread</code> calls the hook before it marks the thread <code>Ready</code>, so the hook tells a wake (<code>Blocked</code> or <code>Sleeping</code>) from a first start (<code>Created</code>, placed at <code>GlobalPass</code>), and a wake takes one of two placements:</p>
 <ul>
 <li>a <strong>starvation cap</strong>, <code>Pass = max(GlobalPass + Remain, GlobalPass - 2 * Stride1)</code>: <code>Remain</code> restores the fraction of its quantum the thread had left when it blocked, and the cap bounds how far behind <code>GlobalPass</code> any waker can be placed;</li>
-<li>an <strong>interactive boost</strong>, <code>Pass = GlobalPass - Stride / 2</code>, half a quantum of head start for threads classified interactive (sleeps long relative to accumulated runtime), so input-driven threads preempt batch work promptly.</li>
+<li>an <strong>interactive boost</strong>, <code>Pass = GlobalPass - Stride / 2</code>, half a quantum of head start for threads classified interactive, so input-driven threads preempt batch work promptly. A thread is interactive when it stayed parked more than twice as long as it ran since its previous wake. <code>OnThreadBlocked</code> timestamps the park, <code>OnTick</code> adds the run time since the wake, both are compared in nanoseconds, and the classification is redone at every wake, so a thread that turns CPU-bound loses it. The run side is as coarse as <a href="sched-concepts/scheduler-tick.html">the tick</a>: a thread is charged a whole period when the tick lands on it and nothing when it parks before, so one wake can read interactive and the next not for the same behaviour; the average is right, the per-wake answer is not. A thread inherited parked at a policy swap has neither on record: its park is dated from the swap and its lifetime runtime stands in for the run, so that first wake can withhold a boost, never grant one the real measure would refuse.</li>
 </ul>
-<p>Neither runs today: the placement branch tests for <code>State == Blocked</code>, but the manager marks the thread <code>Ready</code> before calling the hook, so every wakeup takes the fallback path, <code>Pass = GlobalPass</code> (issue <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/445">#445</a>). That is still fair (a waker rejoins at the virtual present, with no catch-up advantage and no starvation), just blunter than designed.</p>
 <p>Two implementation notes carry over to anyone touching this code. Queue removal runs under <code>DisableInterruptsScope</code> and scans with <code>ReferenceEquals</code> instead of <code>List.Remove</code>, because <code>EqualityComparer&lt;T&gt;.Default</code> needs runtime helpers the kernel does not have. And <code>OnTick</code> tolerates a thread whose <code>SchedulerData</code> is already null (it exited mid-quantum) by rescheduling if anything else is queued.</p>
 <hr>
 <h2 id="synchronization-primitives">Synchronization primitives</h2>
@@ -632,7 +631,6 @@
 <li><strong>No stack protection.</strong> No guard page, and the saved context sits in the overflow path of the thread's own frames.</li>
 <li><strong>No priority inheritance.</strong> <code>Mutex</code> wakes FIFO and hands off directly, which is fair but <a href="sched-concepts/priority-inversion.html">inverts priorities</a>: a low-tickets holder is not boosted while a high-tickets thread waits. The <code>SetPriority</code> hook is the raw material for an inheritance protocol; no policy implements one.</li>
 <li><strong>Parked threads pin their referents.</strong> The conservative scan of parked stacks is the GC-side cost of preemption at arbitrary instructions; return-address hijacking (<a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/385">#385</a>) is the exit.</li>
-<li><strong>Stride's wakeup placement is inert.</strong> The starvation cap and the interactive boost are coded but unreachable (<a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/445">#445</a>): the state flip lands before the hook that tests it, so every wakeup rebases to <code>GlobalPass</code>. Reviving the branch also means fixing the heuristic's own quirks, catalogued in the issue.</li>
 <li><strong>The tick is nominal.</strong> <code>OnTimerInterrupt</code> receives the configured interval, not a measurement (<a href="sched-concepts/scheduler-tick.html">the tick and the quantum</a>), so time accounting drifts by whatever the hardware does between ticks.</li>
 </ul>
 <hr>
