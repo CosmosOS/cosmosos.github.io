@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Starvation and aging | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Starvation and aging | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.95/docs/articles/dev/sched-concepts/starvation.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="starvation-and-aging">Starvation and aging</h1>
+
+<p>A thread starves when it is ready to run and the scheduler never picks it. Strict priority invites this: while any higher-priority thread is ready, a lower one does not run, and a busy high level can keep it off the CPU indefinitely. A scheduler that ranks threads protects the low ranks with aging, which raises a thread's priority the longer it waits, or with a periodic boost, which lifts every thread back to the top level now and then. A <a href="virtual-time-fair-share.html">fair-share</a> scheduler avoids starvation by construction, since every thread with a positive weight receives its share, but the placement of a woken thread can bring it back: a thread placed far behind the others in virtual time runs first until it catches up, and holds the CPU from all of them meanwhile.</p>
+<p>The trap is that starvation is usually a bookkeeping bug rather than a property of the policy. A thread that left the run queue and was never put back, a queue that holds a thread twice, and a sorted queue whose order broke all look the same from outside: some thread stops running, and no rule of the policy says it should. When a thread starves under a policy that should not starve anyone, the first thing to check is whether each ready thread is queued exactly once.</p>
+<p>In Cosmos, the Stride policy's <code>OnThreadYield</code> raises a thread's <code>Pass</code> to the CPU's <code>GlobalPass</code> when it has fallen behind, so a thread that started early, such as the idle thread, cannot keep ranking ahead of threads created later. Wakeup placement guards the same way, in two steps. A woken thread rejoins at <code>GlobalPass</code> plus <code>Remain</code>, the offset it had when it parked, rather than at the <code>Pass</code> it left with: <code>Remain</code> is frozen at the park, so sleeping longer does not lower it, and a long sleep cannot buy a long run ahead of everyone else. The cap, never more than two <code>Stride1</code> behind <code>GlobalPass</code>, bounds a <code>Remain</code> that was already far negative when the thread parked, which the yield floor makes rare. The manager keeps the queue-once rule on its side. A wake for a thread already <code>Ready</code> or <code>Running</code> does nothing, and a switch puts the outgoing thread back only if it was still <code>Running</code>, because a second entry in Stride's sorted queue would keep its place while the thread's <code>Pass</code> rises, and <code>PickNext</code>, which only takes the head, would then never reach the threads behind it. A policy that ranks threads brings its own guard: the MLFQ sketch resets every thread to the top level every few ticks. See <a href="../scheduler.html#the-stride-policy">The Stride policy</a> and <a href="../../user/scheduler-plugging.html#worked-sketches">Worked sketches</a>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.95/docs/articles/dev/sched-concepts/starvation.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

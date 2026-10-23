@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class VirtioAccess | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class VirtioAccess | Cosmos Gen 3 ">
+      
+      <meta name="description" content="The access object of a virtio node, the one thing a leaf driver sees: the status handshake, the feature negotiation, the virtqueues and the device configuration space, run once here over whatever  the transport driver built. Behind it, for the kit only, the bus hooks: the device is reset and brought to DRIVER state before the first probe and again after a probe that did not bind, left reset when nobody binds, and reset after a binding is torn down. The node&#39;s interrupt sources are the access&#39;s own nine objects (the configuration change, then one per queue), multiplexed over the transport&#39;s entries by . Constructed by a transport driver in Cosmos.Kernel.Drivers, so the constructor is public. The execution context of each member is in its summary.">
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess">
+
+
+
+  <h1 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess" class="text-break">
+Class VirtioAccess  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><span class="xref">Cosmos</span>.<a class="xref" href="Cosmos.Kernel.html">Kernel</a>.<a class="xref" href="Cosmos.Kernel.HAL.html">HAL</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.html">DriverKit</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.html">Buses</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.html">Virtio</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Cosmos.Kernel.HAL.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>The access object of a virtio node, the one thing a leaf driver sees:
+the status handshake, the feature negotiation, the virtqueues and the
+device configuration space, run once here over whatever
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.html">VirtioTransport</a> the transport driver built. Behind it,
+for the kit only, the bus hooks: the device is reset and brought to
+DRIVER state before the first probe and again after a probe that did
+not bind, left reset when nobody binds, and reset after a binding is
+torn down. The node's interrupt sources are the access's own nine
+objects (the configuration change, then one per queue), multiplexed
+over the transport's entries by <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.html#Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_Dispatch_System_Int32_">Dispatch(int)</a>. Constructed by
+a transport driver in Cosmos.Kernel.Drivers, so the constructor is
+public. The execution context of each member is in its summary.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Experimental(&quot;COSMOS0003&quot;)]
+public sealed class VirtioAccess</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">VirtioAccess</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess__ctor_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.#ctor*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess__ctor_Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.#ctor(Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport)">
+  VirtioAccess(VirtioTransport)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Wraps a transport.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public VirtioAccess(VirtioTransport transport)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>transport</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.html">VirtioTransport</a></dt>
+    <dd><p>The transport driver's registers.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="fields">Fields
+</h2>
+
+
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_MaxQueues" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.MaxQueues">
+  MaxQueues
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>How many queues the kit describes per device; a queue index at or above it is refused.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int MaxQueues = 8</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_ResetPollMicroseconds" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.ResetPollMicroseconds">
+  ResetPollMicroseconds
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>How long the reset read-back loop waits between two status reads.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const uint ResetPollMicroseconds = 10</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_ResetTimeoutMilliseconds" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.ResetTimeoutMilliseconds">
+  ResetTimeoutMilliseconds
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The longest the kit waits for a device to acknowledge a reset before
+continuing: QEMU resets synchronously, a vhost or hardware backend
+may not, and virtio 1.1 sections 4.1.4.3.2 and 4.2.2.2 require the
+status read-back.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const uint ResetTimeoutMilliseconds = 100</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_ConfigInterrupt_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.ConfigInterrupt*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_ConfigInterrupt" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.ConfigInterrupt">
+  ConfigInterrupt
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The configuration change source, for a leaf to pass to
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.html#Cosmos_Kernel_HAL_DriverKit_DeviceBinding_TryRequestInterrupt_Cosmos_Kernel_HAL_DriverKit_Interrupts_InterruptSource_Cosmos_Kernel_HAL_DriverKit_Interrupts_InterruptHandler_Cosmos_Kernel_HAL_DriverKit_Interrupts_InterruptHandle__">TryRequestInterrupt(InterruptSource, InterruptHandler, out InterruptHandle?)</a>. Connected only
+once its entry is assigned, at the handshake start; otherwise the
+request returns false and the leaf polls. Any context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public InterruptSource ConfigInterrupt { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Interrupts.InterruptSource.html">InterruptSource</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_DeviceType_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.DeviceType*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_DeviceType" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.DeviceType">
+  DeviceType
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The device type the transport read. Any context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public VirtioDeviceType DeviceType { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioDeviceType.html">VirtioDeviceType</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_InterruptEntryCount_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.InterruptEntryCount*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_InterruptEntryCount" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.InterruptEntryCount">
+  InterruptEntryCount
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>How many interrupt entries the transport delivers, for the log: 0 when the leaf has to poll. Any context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int InterruptEntryCount { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_Version1Negotiated_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.Version1Negotiated*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_Version1Negotiated" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.Version1Negotiated">
+  Version1Negotiated
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>True once <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.html#Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_NegotiateFeatures_System_UInt32_System_UInt32__">NegotiateFeatures(uint, out uint)</a> took VIRTIO_F_VERSION_1 (bit 32), which the kit takes whenever the device offers it; false after a reset. Any context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Version1Negotiated { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_Dispatch_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.Dispatch*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_Dispatch_System_Int32_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.Dispatch(System.Int32)">
+  Dispatch(int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Delivers one interrupt of the transport's entry
+<code class="paramref">entry</code>: reads and acknowledges the status, raises
+the configuration source when the status has a configuration change
+and that source's entry is <code class="paramref">entry</code>, raises every
+queue source whose entry is <code class="paramref">entry</code> when the status
+has a queue update. A source with no entry is never raised. A raise
+runs the leaf's trampoline, nested inside the transport's own
+dispatch. Called by the transport driver's handler; interrupt
+context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Dispatch(int entry)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entry</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The transport entry that fired, from 0.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_InterruptsForPublish_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.InterruptsForPublish*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_InterruptsForPublish" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.InterruptsForPublish">
+  InterruptsForPublish()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The node's interrupt sources in the fixed order: index 0 the
+configuration change, index 1 + n queue n. A fresh array each call,
+for the transport driver to hand to
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.html#Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishChild_Cosmos_Kernel_HAL_DriverKit_DeviceIdentity_Cosmos_Kernel_HAL_DriverKit_Resources_DeviceResource___Cosmos_Kernel_HAL_DriverKit_Interrupts_InterruptSource___System_Object_">PublishChild(DeviceIdentity, DeviceResource[], InterruptSource[], object?)</a> exactly once: the elements
+are the access's own source objects, so the node owns exactly these,
+and the access never reads the array itself, so a leaf cannot
+corrupt what the kit's ownership check sees. Thread context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public InterruptSource[] InterruptsForPublish()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Interrupts.InterruptSource.html">InterruptSource</a>[]</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_NegotiateFeatures_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.NegotiateFeatures*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_NegotiateFeatures_System_UInt32_System_UInt32__" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.NegotiateFeatures(System.UInt32,System.UInt32@)">
+  NegotiateFeatures(uint, out uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Negotiates the features: the device's offer is masked with
+<code class="paramref">requestedLow</code>, the whole low word, reserved bits
+included (VIRTIO_F_ANY_LAYOUT, bit 27, is a leaf's request); the kit
+adds VIRTIO_F_VERSION_1 when offered and nothing else. On a
+transport with the FEATURES_OK step, sets it and reads it back.
+Thread context, after the hooks began the handshake.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool NegotiateFeatures(uint requestedLow, out uint negotiatedLow)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>requestedLow</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd><p>The low 32 feature bits the leaf understands.</p>
+</dd>
+    <dt><code>negotiatedLow</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd><p>The low 32 bits both sides accepted.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>False when the device did not accept the feature set (FEATURES_OK did not stick).</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_QueueInterrupt_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.QueueInterrupt*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_QueueInterrupt_System_UInt16_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.QueueInterrupt(System.UInt16)">
+  QueueInterrupt(ushort)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The source of queue <code class="paramref">index</code>, for a leaf to pass to
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.html#Cosmos_Kernel_HAL_DriverKit_DeviceBinding_TryRequestInterrupt_Cosmos_Kernel_HAL_DriverKit_Interrupts_InterruptSource_Cosmos_Kernel_HAL_DriverKit_Interrupts_InterruptHandler_Cosmos_Kernel_HAL_DriverKit_Interrupts_InterruptHandle__">TryRequestInterrupt(InterruptSource, InterruptHandler, out InterruptHandle?)</a>. Connected only once
+a successful <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.html#Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_TryCreateQueue_Cosmos_Kernel_HAL_DriverKit_DeviceBinding_System_UInt16_System_UInt16_Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue__">TryCreateQueue(DeviceBinding, ushort, ushort, out Virtqueue?)</a> assigned its entry;
+otherwise the request returns false and the leaf polls. Any context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public InterruptSource QueueInterrupt(ushort index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd><p>The queue index.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Interrupts.InterruptSource.html">InterruptSource</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p><code class="paramref">index</code> is at or above <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.html#Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_MaxQueues">MaxQueues</a>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_ReadConfig16_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.ReadConfig16*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_ReadConfig16_System_UInt32_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.ReadConfig16(System.UInt32)">
+  ReadConfig16(uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Reads one word of the device-specific configuration space. Any context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ushort ReadConfig16(uint offset)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>offset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd><p>The offset within the configuration space.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_ReadConfig32_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.ReadConfig32*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_ReadConfig32_System_UInt32_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.ReadConfig32(System.UInt32)">
+  ReadConfig32(uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Reads one dword of the device-specific configuration space. Any context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public uint ReadConfig32(uint offset)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>offset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd><p>The offset within the configuration space.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_ReadConfig8_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.ReadConfig8*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_ReadConfig8_System_UInt32_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.ReadConfig8(System.UInt32)">
+  ReadConfig8(uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Reads one byte of the device-specific configuration space. Any context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte ReadConfig8(uint offset)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>offset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd><p>The offset within the configuration space.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_Reset_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.Reset*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_Reset" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.Reset">
+  Reset()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Resets the device: writes status 0, waits up to
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.html#Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_ResetTimeoutMilliseconds">ResetTimeoutMilliseconds</a> for it to read back as 0 (a
+device that never answers is logged and treated as reset; the
+handshake that follows fails visibly), then lets the transport
+program what follows a reset, forgets the negotiated version and
+takes the entry away from every source (the reset put every vector
+register back to NO_VECTOR, so the kit's entries follow). Public so
+a leaf's OnDetach stops the device before the kit frees its rings:
+safe there because teardown disconnects the binding's handles
+before OnDetach, and safe before a decline because the bus hook and
+the unwind follow; a source the unwind disconnects afterwards stays
+disconnected. The kit's after-teardown hook resets again as a
+backstop. Thread context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Reset()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_SetDriverOk_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.SetDriverOk*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_SetDriverOk" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.SetDriverOk">
+  SetDriverOk()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sets DRIVER_OK: the driver is ready. A leaf calls
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.html#Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue_Notify">Notify()</a> on its queues only after this (virtio
+3.1.1: no available buffer notification before DRIVER_OK);
+submitting descriptors before it is fine. Thread context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetDriverOk()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_SetFailed_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.SetFailed*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_SetFailed" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.SetFailed">
+  SetFailed()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sets FAILED: the driver gave up on the device. Thread context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetFailed()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_TryCreateQueue_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.TryCreateQueue*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_TryCreateQueue_Cosmos_Kernel_HAL_DriverKit_DeviceBinding_System_UInt16_System_UInt16_Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_Virtqueue__" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.TryCreateQueue(Cosmos.Kernel.HAL.DriverKit.DeviceBinding,System.UInt16,System.UInt16,Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue@)">
+  TryCreateQueue(DeviceBinding, ushort, ushort, out Virtqueue?)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Creates queue <code class="paramref">index</code> in DMA memory on
+<code class="paramref">binding</code>'s ledger and activates it on the device.
+The size is the smaller of the device's maximum and
+<code class="paramref">preferredSize</code>; both are powers of two by the
+specification (QEMU offers 256 or 1024) and the kit does not round.
+The descriptor table is at the start of a page-aligned block, the
+available ring right after it, the used ring on the next page
+boundary. The queue gets an interrupt entry when the transport has
+one for it: entry index + 1 when the transport has that many,
+otherwise entry 0, shared. Thread context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryCreateQueue(DeviceBinding binding, ushort index, ushort preferredSize, out Virtqueue? queue)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>binding</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.html">DeviceBinding</a></dt>
+    <dd><p>The leaf's binding: the queue memory goes on its ledger and is freed with it.</p>
+</dd>
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd><p>The queue index.</p>
+</dd>
+    <dt><code>preferredSize</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd><p>The largest size the leaf wants.</p>
+</dd>
+    <dt><code>queue</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.Virtqueue.html">Virtqueue</a></dt>
+    <dd><p>The queue, when created.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>False when the index is at or above <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.html#Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_MaxQueues">MaxQueues</a>, the queue does not exist, is already ready, or the transport refused the layout; a refused layout leaves the memory on the ledger for the binding's unwind.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></dt>
+    <dd><p><code class="paramref">binding</code> is bound to a node whose access is not this one.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p><code class="paramref">preferredSize</code> is 0.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>No pages left, the binding is being torn down, or the caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_WriteConfig8_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.WriteConfig8*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_WriteConfig8_System_UInt32_System_Byte_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.WriteConfig8(System.UInt32,System.Byte)">
+  WriteConfig8(uint, byte)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Writes one byte of the device-specific configuration space. Any context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void WriteConfig8(uint offset, byte value)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>offset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd><p>The offset within the configuration space.</p>
+</dd>
+    <dt><code>value</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd><p>The value.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

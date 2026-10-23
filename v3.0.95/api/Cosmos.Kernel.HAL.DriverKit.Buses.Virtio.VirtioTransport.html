@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class VirtioTransport | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class VirtioTransport | Cosmos Gen 3 ">
+      
+      <meta name="description" content="What a transport driver implements over its registers so the kit&#39;s  can run the status handshake, the feature negotiation and the virtqueues once, for every transport. The kit calls these members; a leaf driver never sees the transport, only the access. A transport driver in Cosmos.Kernel.Drivers derives from this, so the constructor is protected and the members are public abstract. The execution context of each member is in its summary.">
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport">
+
+
+
+  <h1 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport" class="text-break">
+Class VirtioTransport  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><span class="xref">Cosmos</span>.<a class="xref" href="Cosmos.Kernel.html">Kernel</a>.<a class="xref" href="Cosmos.Kernel.HAL.html">HAL</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.html">DriverKit</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.html">Buses</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.html">Virtio</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Cosmos.Kernel.HAL.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>What a transport driver implements over its registers so the kit's
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.html">VirtioAccess</a> can run the status handshake, the feature
+negotiation and the virtqueues once, for every transport. The kit calls
+these members; a leaf driver never sees the transport, only the access.
+A transport driver in Cosmos.Kernel.Drivers derives from this, so the
+constructor is protected and the members are public abstract. The
+execution context of each member is in its summary.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Experimental(&quot;COSMOS0003&quot;)]
+public abstract class VirtioTransport</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">VirtioTransport</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport__ctor_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.#ctor*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport__ctor" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.#ctor">
+  VirtioTransport()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>For the derived transport.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected VirtioTransport()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_DeviceType_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.DeviceType*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_DeviceType" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.DeviceType">
+  DeviceType
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The device type the transport read from the function or the slot. Any context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract VirtioDeviceType DeviceType { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioDeviceType.html">VirtioDeviceType</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_InterruptEntryCount_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.InterruptEntryCount*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_InterruptEntryCount" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.InterruptEntryCount">
+  InterruptEntryCount
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>How many interrupt entries the transport delivers to
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioAccess.html#Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioAccess_Dispatch_System_Int32_">Dispatch(int)</a>: the MSI-X messages it connected
+over PCI, one for the MMIO line, 0 when the device has no interrupt
+path and the leaf polls. Read by the access at each handshake start
+and at each queue creation, so a transport sets it before publishing
+the node. Any context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract int InterruptEntryCount { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_SupportsFeaturesOk_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.SupportsFeaturesOk*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_SupportsFeaturesOk" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.SupportsFeaturesOk">
+  SupportsFeaturesOk
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>True for a virtio 1.x transport (PCI, MMIO version 2), where the
+FEATURES_OK step exists; false for legacy MMIO (version 1), where
+it does not. Any context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract bool SupportsFeaturesOk { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_ActivateQueue_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.ActivateQueue*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_ActivateQueue_System_UInt16_Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtqueueLayout__" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.ActivateQueue(System.UInt16,Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtqueueLayout@)">
+  ActivateQueue(ushort, in VirtqueueLayout)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Programs the ring addresses (or the PFN and the alignment on legacy
+MMIO) and enables the queue. Thread context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract bool ActivateQueue(ushort index, in VirtqueueLayout layout)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd><p>The queue index.</p>
+</dd>
+    <dt><code>layout</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtqueueLayout.html">VirtqueueLayout</a></dt>
+    <dd><p>Where the kit placed the rings.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>False when the transport refuses the index or the layout; the kit then frees the rings through the binding's unwind.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_AfterReset_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.AfterReset*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_AfterReset" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.AfterReset">
+  AfterReset()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>What the transport programs right after the status read back as 0: the guest page size on legacy MMIO, nothing elsewhere. Thread context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void AfterReset()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_AssignConfigInterrupt_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.AssignConfigInterrupt*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_AssignConfigInterrupt_System_Int32_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.AssignConfigInterrupt(System.Int32)">
+  AssignConfigInterrupt(int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Tells the device which interrupt entry signals a configuration
+change: PCI writes the MSI-X configuration vector and reads it back,
+MMIO does nothing and returns true. Thread context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract bool AssignConfigInterrupt(int entry)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entry</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The entry, from 0.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>False when the device refused the entry (PCI answers NO_VECTOR).</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_AssignQueueInterrupt_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.AssignQueueInterrupt*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_AssignQueueInterrupt_System_UInt16_System_Int32_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.AssignQueueInterrupt(System.UInt16,System.Int32)">
+  AssignQueueInterrupt(ushort, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Tells the device which interrupt entry signals a queue: PCI writes
+the queue's MSI-X vector and reads it back, MMIO does nothing and
+returns true. Thread context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract bool AssignQueueInterrupt(ushort index, int entry)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd><p>The queue index.</p>
+</dd>
+    <dt><code>entry</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The entry, from 0.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>False when the device refused the entry (PCI answers NO_VECTOR).</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_IsQueueReady_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.IsQueueReady*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_IsQueueReady_System_UInt16_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.IsQueueReady(System.UInt16)">
+  IsQueueReady(ushort)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>True when the queue is already enabled: a non-zero PFN on legacy MMIO, the ready or enable bit set on a modern transport. Thread context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract bool IsQueueReady(ushort index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd><p>The queue index.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_NotifyQueue_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.NotifyQueue*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_NotifyQueue_System_UInt16_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.NotifyQueue(System.UInt16)">
+  NotifyQueue(ushort)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The doorbell: tells the device the available ring of the queue has new buffers. Interrupt context allowed; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void NotifyQueue(ushort index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd><p>The queue index.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_ReadAndAcknowledgeInterrupt_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.ReadAndAcknowledgeInterrupt*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_ReadAndAcknowledgeInterrupt" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.ReadAndAcknowledgeInterrupt">
+  ReadAndAcknowledgeInterrupt()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Reads and, where the transport is level-signalled, acknowledges the
+interrupt status. A message-signalled transport that cannot read a
+per-delivery status returns <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioInterruptStatus.html#Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioInterruptStatus_Queue">Queue</a>
+and <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioInterruptStatus.html#Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioInterruptStatus_Config">Config</a> together. Interrupt
+context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract VirtioInterruptStatus ReadAndAcknowledgeInterrupt()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioInterruptStatus.html">VirtioInterruptStatus</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_ReadConfig16_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.ReadConfig16*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_ReadConfig16_System_UInt32_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.ReadConfig16(System.UInt32)">
+  ReadConfig16(uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Reads one word of the device-specific configuration space. Any context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract ushort ReadConfig16(uint offset)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>offset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd><p>The offset within the configuration space.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_ReadConfig32_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.ReadConfig32*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_ReadConfig32_System_UInt32_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.ReadConfig32(System.UInt32)">
+  ReadConfig32(uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Reads one dword of the device-specific configuration space. Any context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract uint ReadConfig32(uint offset)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>offset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd><p>The offset within the configuration space.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_ReadConfig8_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.ReadConfig8*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_ReadConfig8_System_UInt32_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.ReadConfig8(System.UInt32)">
+  ReadConfig8(uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Reads one byte of the device-specific configuration space. Any context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract byte ReadConfig8(uint offset)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>offset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd><p>The offset within the configuration space.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_ReadDeviceFeatures_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.ReadDeviceFeatures*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_ReadDeviceFeatures" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.ReadDeviceFeatures">
+  ReadDeviceFeatures()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Reads both 32-bit halves of the device features. Thread context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract ulong ReadDeviceFeatures()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_ReadQueueMaxSize_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.ReadQueueMaxSize*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_ReadQueueMaxSize_System_UInt16_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.ReadQueueMaxSize(System.UInt16)">
+  ReadQueueMaxSize(ushort)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Reads the largest size the device supports for a queue: 0 when the queue does not exist. Thread context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract ushort ReadQueueMaxSize(ushort index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd><p>The queue index.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_ReadStatus_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.ReadStatus*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_ReadStatus" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.ReadStatus">
+  ReadStatus()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Reads the device status register. Thread context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract byte ReadStatus()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_WriteConfig8_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.WriteConfig8*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_WriteConfig8_System_UInt32_System_Byte_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.WriteConfig8(System.UInt32,System.Byte)">
+  WriteConfig8(uint, byte)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Writes one byte of the device-specific configuration space. Any context; allocation-free.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void WriteConfig8(uint offset, byte value)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>offset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd><p>The offset within the configuration space.</p>
+</dd>
+    <dt><code>value</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd><p>The value.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_WriteDriverFeatures_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.WriteDriverFeatures*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_WriteDriverFeatures_System_UInt64_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.WriteDriverFeatures(System.UInt64)">
+  WriteDriverFeatures(ulong)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Writes both 32-bit halves of the driver features. Thread context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void WriteDriverFeatures(ulong features)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>features</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a></dt>
+    <dd><p>The features the driver accepts.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_WriteStatus_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.WriteStatus*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Virtio_VirtioTransport_WriteStatus_System_Byte_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Virtio.VirtioTransport.WriteStatus(System.Byte)">
+  WriteStatus(byte)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Writes the device status register. Thread context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void WriteStatus(byte status)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>status</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd><p>The whole register.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

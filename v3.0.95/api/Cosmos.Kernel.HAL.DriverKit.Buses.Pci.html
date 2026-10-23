@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Namespace Cosmos.Kernel.HAL.DriverKit.Buses.Pci | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Namespace Cosmos.Kernel.HAL.DriverKit.Buses.Pci | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci">
+
+  <h1 id="Cosmos_Kernel_HAL_DriverKit_Buses_Pci" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Pci" class="text-break">Namespace Cosmos.Kernel.HAL.DriverKit.Buses.Pci</h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="markdown level0 remarks"></div>
+
+    <h3 id="classes">
+Classes
+</h3>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.html">PciAccess</a></dt>
+      <dd><p>The access object of a PCI node: the function's configuration space,
+its sized base address registers, its capability list and the Command
+register bits a driver turns on. Behind it, for the kit only, the bus
+hooks: the function is quiesced before the first driver sees it (bus
+mastering off, legacy line disabled, a firmware-enabled MSI-X masked
+and disabled), quiesced again after each probe that did not bind, before
+the probe's memory is freed, restored as firmware left it when nobody
+binds, and quiesced once more after a binding is torn down. A bound
+driver owns the state from its probe on and enables what it needs. For
+a bridge it also carries the secondary and subordinate bus and, for a
+hot-plug slot, the describe of the functions behind it with the kit's
+one resource assignment. Any context and allocation-free except
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.html#Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_TryDescribeChild_System_Byte_System_Byte_System_Boolean_Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciFunctionDescription__">TryDescribeChild(byte, byte, bool, out PciFunctionDescription)</a>, which is thread context and allocates
+the description.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciHostAccess.html">PciHostAccess</a></dt>
+      <dd><p>The access object of a PCI host platform node: the configuration
+mechanism of one segment's buses (the x86 ports, or an ECAM window the
+machine description found in MCFG), raw configuration access over it,
+and <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciHostAccess.html#Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciHostAccess_TryDescribeFunction_System_Byte_System_Byte_System_Byte_Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciFunctionDescription__">TryDescribeFunction(byte, byte, byte, out PciFunctionDescription)</a>, which reads a function's header,
+sizes its base address registers and builds everything a host driver
+publishes for it. Created by the machine description through the
+internal factories; the host driver enumerates with it.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciIdentity.html">PciIdentity</a></dt>
+      <dd><p>The identity of a PCI function as its configuration header states it:
+where it is (segment, bus, device, function) and what it is (vendor,
+device, subsystem, class, revision, header layout). Read once by the
+host that described the function; never changes. Path is
+<code>pci:ssss:bb:dd.f</code>, all hexadecimal.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciMatch.html">PciMatch</a></dt>
+      <dd><p>A match over PCI identities: every field given must equal the
+function's, every field left null is not looked at, and the specificity
+is the number of fields given. A match that constrains nothing is
+refused: a catch-all driver would be offered every function on the
+bus, the ones other drivers want included.</p>
+</dd>
+    </dl>
+    <h3 id="structs">
+Structs
+</h3>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciBar.html">PciBar</a></dt>
+      <dd><p>One base address register of a PCI function as the host sized it at
+describe time: what the slot decodes, where, and how much. The six
+slots are always reported; the upper half of a 64-bit register and a
+slot with no register behind it are unassigned with length 0; an
+implemented register nobody has assigned yet is unassigned with the
+length its mask decoded, which is what the kit's placement for a
+function arriving behind a hot-plug slot uses. The resource at the same
+index on the node is the mappable form.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciFunctionDescription.html">PciFunctionDescription</a></dt>
+      <dd><p>Everything a PCI host or bridge driver publishes for one function, as
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciHostAccess.html#Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciHostAccess_TryDescribeFunction_System_Byte_System_Byte_System_Byte_Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciFunctionDescription__">TryDescribeFunction(byte, byte, byte, out PciFunctionDescription)</a> or
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Pci.PciAccess.html#Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciAccess_TryDescribeChild_System_Byte_System_Byte_System_Boolean_Cosmos_Kernel_HAL_DriverKit_Buses_Pci_PciFunctionDescription__">TryDescribeChild(byte, byte, bool, out PciFunctionDescription)</a> read it: the arguments of
+<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.html#Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishChild_Cosmos_Kernel_HAL_DriverKit_DeviceIdentity_Cosmos_Kernel_HAL_DriverKit_Resources_DeviceResource___Cosmos_Kernel_HAL_DriverKit_Interrupts_InterruptSource___System_Object_">PublishChild(DeviceIdentity, DeviceResource[], InterruptSource[], object?)</a>, in order, and whether the
+device has functions beyond 0. A default instance, which the describe
+returns with false, holds nothing.</p>
+</dd>
+    </dl>
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -611,7 +611,11 @@ structure. Called for a first start, for a wake, and for a sleep
 expiry, so it arrives both from thread context with interrupts masked
 and from interrupt context, either the timer tick waking a sleeper or
 a device ISR signalling a waiter. It is the hook most likely to fire
-twice for one thread, so guard against inserting it twice.</p>
+twice for one thread, so guard against inserting it twice. The manager
+calls it before it marks the thread Ready, so
+<a class="xref" href="Cosmos.Kernel.Core.Scheduler.SchedulerThread.html#Cosmos_Kernel_Core_Scheduler_SchedulerThread_State">State</a> still tells a wake (Blocked or
+Sleeping) from a first start (Created) and from the Ready threads a
+policy swap hands over.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 

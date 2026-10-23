@@ -226,9 +226,11 @@ public class DnsPacketAnswer : DnsPacket</code></pre>
 
   <div class="markdown level1 summary"><p>Parses a DNS response from a received frame. The buffer is aliased without copying. The whole
 message is parsed during construction: header counts, the question and answer sections, and
-compression pointers; malformed input throws (typically <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.indexoutofrangeexception">IndexOutOfRangeException</a>).
-When the reply code is not <a class="xref" href="Cosmos.Kernel.System.Network.Protocols.Dns.ReplyCode.html#Cosmos_Kernel_System_Network_Protocols_Dns_ReplyCode_OK">OK</a>, section parsing is skipped and
-<a class="xref" href="Cosmos.Kernel.System.Network.Protocols.Dns.DnsPacket.html#Cosmos_Kernel_System_Network_Protocols_Dns_DnsPacket_Queries">Queries</a> and <a class="xref" href="Cosmos.Kernel.System.Network.Protocols.Dns.DnsPacket.html#Cosmos_Kernel_System_Network_Protocols_Dns_DnsPacket_Answers">Answers</a> stay null.</p>
+the names, compressed or inline. The parse stops at the first malformed section, and
+<a class="xref" href="Cosmos.Kernel.System.Network.Protocols.Dns.DnsPacketAnswer.html#Cosmos_Kernel_System_Network_Protocols_Dns_DnsPacketAnswer_Truncated">Truncated</a> reports it: <a class="xref" href="Cosmos.Kernel.System.Network.Protocols.Dns.DnsPacket.html#Cosmos_Kernel_System_Network_Protocols_Dns_DnsPacket_Queries">Queries</a> then holds the
+questions read before it, and <a class="xref" href="Cosmos.Kernel.System.Network.Protocols.Dns.DnsPacket.html#Cosmos_Kernel_System_Network_Protocols_Dns_DnsPacket_Answers">Answers</a> the answers. Nothing is read
+past the UDP length, and nothing throws. When the reply code is not
+<a class="xref" href="Cosmos.Kernel.System.Network.Protocols.Dns.ReplyCode.html#Cosmos_Kernel_System_Network_Protocols_Dns_ReplyCode_OK">OK</a>, section parsing is skipped and both lists stay null.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -246,6 +248,44 @@ When the reply code is not <a class="xref" href="Cosmos.Kernel.System.Network.Pr
 
 
 
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Cosmos_Kernel_System_Network_Protocols_Dns_DnsPacketAnswer_Truncated_" data-uid="Cosmos.Kernel.System.Network.Protocols.Dns.DnsPacketAnswer.Truncated*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Network_Protocols_Dns_DnsPacketAnswer_Truncated" data-uid="Cosmos.Kernel.System.Network.Protocols.Dns.DnsPacketAnswer.Truncated">
+  Truncated
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Whether the parse stopped before the sections the header announced were complete: a
+message shorter than its UDP length, a name or a record running past the message's end,
+or a label with a reserved length. The sections read before the stop are kept.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Truncated { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
 
 
 

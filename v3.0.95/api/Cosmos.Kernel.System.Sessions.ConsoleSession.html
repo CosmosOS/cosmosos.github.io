@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class ConsoleSession | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class ConsoleSession | Cosmos Gen 3 ">
+      
+      <meta name="description" content="One console that  can be bound to: a screen, and the keys typed at it. The local virtual consoles and the connections of a remote terminal server, such as the Cosmos.Network.Telnet package&#39;s, are all sessions.  numbers them, shows one of them on the display, and binds every thread to one, so the same  calls read and write whichever session the calling thread belongs to.">
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession">
+
+
+
+  <h1 id="Cosmos_Kernel_System_Sessions_ConsoleSession" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession" class="text-break">
+Class ConsoleSession  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><span class="xref">Cosmos</span>.<a class="xref" href="Cosmos.Kernel.html">Kernel</a>.<a class="xref" href="Cosmos.Kernel.System.html">System</a>.<a class="xref" href="Cosmos.Kernel.System.Sessions.html">Sessions</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Cosmos.Kernel.System.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>One console that <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.console">Console</a> can be bound to: a screen, and the
+keys typed at it. The local virtual consoles and the connections of a
+remote terminal server, such as the Cosmos.Network.Telnet package's, are
+all sessions. <a class="xref" href="Cosmos.Kernel.System.Sessions.SessionManager.html">SessionManager</a> numbers them, shows one of
+them on the display, and binds every thread to one, so the same
+<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.console">Console</a> calls read and write whichever session the calling
+thread belongs to.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class ConsoleSession</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">ConsoleSession</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+  <h2 id="Cosmos_Kernel_System_Sessions_ConsoleSession_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>Every session keeps its screen as a <a class="xref" href="Cosmos.Kernel.System.Graphics.KernelConsole.html">KernelConsole</a>
+grid, on the display's canvas but hidden until the session is shown, so
+a session can be switched to at any time, a remote one included. Output
+runs with interrupts masked, so the screen and a remote terminal see one
+thread's changes in the order it made them.</p>
+<p>A library adds a remote session by deriving from this class: the
+<a class="xref" href="Cosmos.Kernel.System.Sessions.ConsoleSession.html#Cosmos_Kernel_System_Sessions_ConsoleSession__ctor_System_Int32_System_Int32_">ConsoleSession(int, int)</a> constructor gives it a screen,
+<a class="xref" href="Cosmos.Kernel.System.Sessions.ConsoleSession.html#Cosmos_Kernel_System_Sessions_ConsoleSession_EnqueueInput_Cosmos_Kernel_System_Input_KeyEvent_">EnqueueInput(KeyEvent)</a> takes the keys its terminal sends, and the
+<code>On</code> hooks tell it every change to send there. The hooks that report
+a change run inside it, with interrupts masked: they record what changed
+and return, without blocking, waiting or doing I/O. Only
+<a class="xref" href="Cosmos.Kernel.System.Sessions.ConsoleSession.html#Cosmos_Kernel_System_Sessions_ConsoleSession_OnFlush">OnFlush()</a> and <a class="xref" href="Cosmos.Kernel.System.Sessions.ConsoleSession.html#Cosmos_Kernel_System_Sessions_ConsoleSession_OnClosed">OnClosed()</a> run unmasked.</p>
+</div>
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="Cosmos_Kernel_System_Sessions_ConsoleSession__ctor_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.#ctor*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Sessions_ConsoleSession__ctor_System_Int32_System_Int32_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.#ctor(System.Int32,System.Int32)">
+  ConsoleSession(int, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Creates a session of a remote terminal: its screen is a grid of
+<code class="paramref">cols</code> by <code class="paramref">rows</code> characters in the
+kernel console's font, on the display's canvas but hidden until the
+session is shown. <a class="xref" href="Cosmos.Kernel.System.Sessions.SessionManager.html#Cosmos_Kernel_System_Sessions_SessionManager_TryRegister_Cosmos_Kernel_System_Sessions_ConsoleSession_">TryRegister(ConsoleSession)</a> lists the
+session, then <a class="xref" href="Cosmos.Kernel.System.Sessions.SessionManager.html#Cosmos_Kernel_System_Sessions_SessionManager_Start_Cosmos_Kernel_System_Sessions_ConsoleSession_System_Action_">Start(ConsoleSession, Action)</a> runs a thread on it.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected ConsoleSession(int cols, int rows)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>cols</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>Width of the screen, in characters.</p>
+</dd>
+    <dt><code>rows</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>Height of the screen, in characters.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p><code class="paramref">cols</code> or <code class="paramref">rows</code> is less than 1.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The kernel console is not initialized.</p>
+</dd>
+  </dl>
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Cosmos_Kernel_System_Sessions_ConsoleSession_Cols_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.Cols*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Sessions_ConsoleSession_Cols" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.Cols">
+  Cols
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Width of the session's screen, in characters.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Cols { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Sessions_ConsoleSession_CursorLeft_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.CursorLeft*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Sessions_ConsoleSession_CursorLeft" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.CursorLeft">
+  CursorLeft
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The cursor's column, from 0.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected int CursorLeft { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Sessions_ConsoleSession_CursorTop_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.CursorTop*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Sessions_ConsoleSession_CursorTop" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.CursorTop">
+  CursorTop
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The cursor's row, from 0.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected int CursorTop { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Sessions_ConsoleSession_ExplicitBackground_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.ExplicitBackground*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Sessions_ConsoleSession_ExplicitBackground" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.ExplicitBackground">
+  ExplicitBackground
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The background colour a program set, or null while the colours are the defaults.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected ConsoleColor? ExplicitBackground { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.consolecolor">ConsoleColor</a>?</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Sessions_ConsoleSession_ExplicitForeground_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.ExplicitForeground*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Sessions_ConsoleSession_ExplicitForeground" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.ExplicitForeground">
+  ExplicitForeground
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The text colour a program set, or null while the colours are the defaults.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected ConsoleColor? ExplicitForeground { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.consolecolor">ConsoleColor</a>?</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Sessions_ConsoleSession_Id_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.Id*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Sessions_ConsoleSession_Id" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.Id">
+  Id
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The session's number, from 1: its slot in the session table, and the
+function key that shows it with Alt. Zero until the session is
+registered.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Id { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Sessions_ConsoleSession_IsActive_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.IsActive*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Sessions_ConsoleSession_IsActive" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.IsActive">
+  IsActive
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Whether the session is the one on the display, the one the local keyboard types into.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsActive { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Sessions_ConsoleSession_IsClosed_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.IsClosed*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Sessions_ConsoleSession_IsClosed" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.IsClosed">
+  IsClosed
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Whether the session was closed. A closed session drops what is
+written to it, and its reads report the end of input.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsClosed { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Sessions_ConsoleSession_IsRemote_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.IsRemote*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Sessions_ConsoleSession_IsRemote" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.IsRemote">
+  IsRemote
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Whether the session's keys come from a remote terminal rather than the local keyboard.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract bool IsRemote { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Sessions_ConsoleSession_Name_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.Name*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Sessions_ConsoleSession_Name" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.Name">
+  Name
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The name the session is listed under: <code>tty</code> and the number for a
+virtual console, the peer's address for a remote session.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract string Name { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Sessions_ConsoleSession_Rows_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.Rows*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Sessions_ConsoleSession_Rows" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.Rows">
+  Rows
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Height of the session's screen, in characters.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Rows { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Cosmos_Kernel_System_Sessions_ConsoleSession_Close_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.Close*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Sessions_ConsoleSession_Close" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.Close">
+  Close()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Closes the session. A remote session hangs up, and a session on the
+display gives it back to the primary console. The primary console
+itself cannot be closed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Close()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The session is the primary console.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_System_Sessions_ConsoleSession_EnqueueInput_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.EnqueueInput*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Sessions_ConsoleSession_EnqueueInput_Cosmos_Kernel_System_Input_KeyEvent_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.EnqueueInput(Cosmos.Kernel.System.Input.KeyEvent)">
+  EnqueueInput(KeyEvent)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Queues a key for the session's reader and wakes it. Any context, the
+keyboard's interrupt handler included: the queue only grows, and so
+allocates, once <span class="xref">Cosmos.Kernel.System.Sessions.ConsoleSession.InputQueueCapacity</span> keys wait unread.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected void EnqueueInput(KeyEvent key)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>key</code> <a class="xref" href="Cosmos.Kernel.System.Input.KeyEvent.html">KeyEvent</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Sessions_ConsoleSession_OnCleared_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.OnCleared*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Sessions_ConsoleSession_OnCleared" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.OnCleared">
+  OnCleared()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The screen was cleared and the cursor homed. Runs with interrupts masked.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void OnCleared()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Sessions_ConsoleSession_OnClosed_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.OnClosed*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Sessions_ConsoleSession_OnClosed" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.OnClosed">
+  OnClosed()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The session was closed; releases what it holds. Runs once, unmasked, on the thread that closed it, which may be any.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void OnClosed()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Sessions_ConsoleSession_OnColorsChanged_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.OnColorsChanged*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Sessions_ConsoleSession_OnColorsChanged" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.OnColorsChanged">
+  OnColorsChanged()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The colours changed; <a class="xref" href="Cosmos.Kernel.System.Sessions.ConsoleSession.html#Cosmos_Kernel_System_Sessions_ConsoleSession_ExplicitForeground">ExplicitForeground</a> and <a class="xref" href="Cosmos.Kernel.System.Sessions.ConsoleSession.html#Cosmos_Kernel_System_Sessions_ConsoleSession_ExplicitBackground">ExplicitBackground</a> hold them. Runs with interrupts masked.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void OnColorsChanged()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Sessions_ConsoleSession_OnCursorMoved_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.OnCursorMoved*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Sessions_ConsoleSession_OnCursorMoved" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.OnCursorMoved">
+  OnCursorMoved()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The cursor was moved without writing, or the screen was resized. Runs with interrupts masked.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void OnCursorMoved()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Sessions_ConsoleSession_OnCursorVisibilityChanged_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.OnCursorVisibilityChanged*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Sessions_ConsoleSession_OnCursorVisibilityChanged_System_Boolean_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.OnCursorVisibilityChanged(System.Boolean)">
+  OnCursorVisibilityChanged(bool)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The cursor was shown or hidden. Runs with interrupts masked.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void OnCursorVisibilityChanged(bool visible)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>visible</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>Whether the cursor is now drawn.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Sessions_ConsoleSession_OnFlush_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.OnFlush*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Sessions_ConsoleSession_OnFlush" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.OnFlush">
+  OnFlush()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>A write finished and should be shown. Runs unmasked, on the writing thread.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void OnFlush()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Sessions_ConsoleSession_OnWritten_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.OnWritten*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Sessions_ConsoleSession_OnWritten_System_Char_System_Boolean_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.OnWritten(System.Char,System.Boolean)">
+  OnWritten(char, bool)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>A character went to the screen: a printable one, a line feed, a carriage return or a backspace. Runs with interrupts masked.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void OnWritten(char value, bool wrapped)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>value</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.char">char</a></dt>
+    <dd><p>The character.</p>
+</dd>
+    <dt><code>wrapped</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>Whether writing a printable character filled the line, so the cursor went on to the next one.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_Sessions_ConsoleSession_Resize_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.Resize*"></a>
+
+  <h3 id="Cosmos_Kernel_System_Sessions_ConsoleSession_Resize_System_Int32_System_Int32_" data-uid="Cosmos.Kernel.System.Sessions.ConsoleSession.Resize(System.Int32,System.Int32)">
+  Resize(int, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Resizes the screen, keeping the cells that fit: a remote session
+follows its terminal's window this way. When the screen loses rows the
+top ones go, so the cursor's line stays on screen, and
+<a class="xref" href="Cosmos.Kernel.System.Sessions.ConsoleSession.html#Cosmos_Kernel_System_Sessions_ConsoleSession_OnCursorMoved">OnCursorMoved()</a> reports where the cursor ended up. Any
+thread.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected void Resize(int cols, int rows)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>cols</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>New width, in characters.</p>
+</dd>
+    <dt><code>rows</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>New height, in characters.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p><code class="paramref">cols</code> or <code class="paramref">rows</code> is less than 1.</p>
+</dd>
+  </dl>
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

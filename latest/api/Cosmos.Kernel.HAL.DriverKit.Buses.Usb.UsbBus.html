@@ -168,9 +168,10 @@ public sealed class UsbBus</code></pre>
   </h3>
 
   <div class="markdown level1 summary"><p>Creates the bus of a host controller and takes the next ordinal: the
-first controller bound is 1, a second xHCI function 2; a controller
-unbound and rebound takes a new number. Thread context, the host
-driver's probe.</p>
+first controller bound is 1, a second controller function 2 whatever
+its interface (an EHCI beside an xHCI, or its OHCI companion); a
+controller unbound and rebound takes a new number. Thread context, the
+host driver's probe.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 

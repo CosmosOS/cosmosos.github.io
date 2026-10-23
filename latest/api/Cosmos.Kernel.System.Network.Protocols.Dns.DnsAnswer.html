@@ -292,8 +292,9 @@ this packet built rather than parsed: only the parse path fills it in.</p>
   
   </h3>
 
-  <div class="markdown level1 summary"><p>The raw 16-bit NAME field exactly as read from the record, usually a compression pointer
-(top two bits set) rather than a name.</p>
+  <div class="markdown level1 summary"><p>The first two bytes of the record's NAME field exactly as read: the compression pointer
+when the name is one (top two bits set), the first label's length and first character
+when the name is written inline.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -325,8 +326,8 @@ this packet built rather than parsed: only the parse path fills it in.</p>
   
   </h3>
 
-  <div class="markdown level1 summary"><p>The domain name obtained by following the compression pointer in <a class="xref" href="Cosmos.Kernel.System.Network.Protocols.Dns.DnsAnswer.html#Cosmos_Kernel_System_Network_Protocols_Dns_DnsAnswer_NameField">NameField</a>, or null
-when the NAME field is not a compression pointer (inline names are not resolved).</p>
+  <div class="markdown level1 summary"><p>The record's owner name, decompressed when <a class="xref" href="Cosmos.Kernel.System.Network.Protocols.Dns.DnsAnswer.html#Cosmos_Kernel_System_Network_Protocols_Dns_DnsAnswer_NameField">NameField</a> is a pointer and
+read label by label when it is written inline.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 

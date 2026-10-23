@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.94/docs/articles/user/keyboard.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.95/docs/articles/user/keyboard.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -121,7 +121,7 @@
 <tr>
 <td>Devices</td>
 <td>PS/2 keyboard</td>
-<td>PS/2 keyboard (x64), virtio-keyboard and USB keyboard, all over the driver kit (the 8042 on q35 and every PC; virtio over PCI on both architectures and MMIO on ARM64; USB on an xHCI controller on both)</td>
+<td>PS/2 keyboard (x64), virtio-keyboard and USB keyboard, all over the driver kit (the 8042 on q35 and every PC; virtio over PCI on both architectures and MMIO on ARM64; USB on an xHCI, EHCI or OHCI controller on both)</td>
 </tr>
 </tbody>
 </table>
@@ -140,7 +140,7 @@ using Cosmos.Kernel.System.Input;
 using Cosmos.Kernel.System.Input.Layouts;
 </code></pre>
 <p>There is nothing to initialize by hand: the PS/2 keyboard (x64), a virtio keyboard or a USB keyboard is bound by the driver kit's <code>Ps2KeyboardDriver</code>, <code>VirtioInputDriver</code> or <code>UsbKeyboardDriver</code> during the driver stage and published to the manager's consumer, which registers it (<a href="drivers.html#ps2-devices">PS/2 devices</a>, <a href="drivers.html#virtio-devices">Virtio devices</a>, <a href="drivers.html#usb-devices">USB devices</a>).</p>
-<p>USB keyboards also need the USB drivers, <code>CosmosEnableUsb</code>. You do not have to set it: left unset, it is on whenever <code>CosmosEnableKeyboard</code> is. Setting it to <code>false</code> keeps PS/2 and virtio keyboards and drops the USB ones with the xHCI driver.</p>
+<p>USB keyboards also need the USB drivers, <code>CosmosEnableUsb</code>. You do not have to set it: left unset, it is on whenever <code>CosmosEnableKeyboard</code> is. Setting it to <code>false</code> keeps PS/2 and virtio keyboards and drops the USB ones with the host controller drivers.</p>
 <h2 id="reading-a-line">Reading a line</h2>
 <p><code>Console.ReadLine()</code> works the way it does everywhere else in .NET, so most kernels never need anything more:</p>
 <pre><code class="lang-csharp">Console.WriteLine(&quot;What is your name?&quot;);
@@ -333,20 +333,20 @@ Keys.Add(new KeyMapping(0x10, 'q', 'Q', 'q', 'Q', 'q', 'Q', '@', Key.Q));
 <li>A PS/2 keyboard is published once, during the driver stage, when the keyboard driver bound the 8042 driver's keyboard port node and its reset was answered; a virtio keyboard present at boot once, when the stage offers its device. A USB keyboard is published when its node is bound and withdrawn when the node is retracted, and so is a virtio keyboard whose PCI function sits behind a PCI Express hot-plug slot, which the root port driver publishes and retracts, so those are the keyboards that can be plugged in and pulled out while the kernel runs; a modifier held on one pulled out stays down until pressed on another keyboard.</li>
 </ul>
 <h2 id="how-it-works">How it works</h2>
-<p>Every key press on the PS/2 keyboard raises IRQ 1 on x64; the 8042 driver's handler reads the byte from the controller's data port and hands it to the keyboard port's <code>Ps2Access</code>, whose source wakes the keyboard driver's handler: it folds the 0xE0 prefix and the release bit into set 1 scan codes (the right Alt as 0x60) and reports them through the keyboard sink to the manager's consumer. A virtio keyboard delivers an event record on its queue instead: the queue's interrupt (an MSI-X message over PCI, the slot's GIC line over MMIO) schedules the driver's drain on the driver kit's worker, or the drain runs every 20 ms when no interrupt could be routed, and the drain converts the Linux key code to the same set 1 scan code and reports it through the keyboard sink to the manager's consumer, which feeds <code>KeyboardManager</code> as the PS/2 keyboard's does. A USB keyboard's 8-byte boot reports arrive on its interrupt IN pipe, delivered by the xHCI driver's message interrupt or, when none could be routed, by its 20 ms polled drain of the event ring; <code>UsbKeyboardDriver</code>'s handler diffs each report against the previous one into the same set 1 scan codes and reports them through the same sink, and the lock keys light its indicators through <code>SetLeds</code>, one SET_REPORT control transfer on the kit worker. The lock keys light the PS/2 keyboard's indicators too, through <code>SetLeds</code> (0xED and the indicator byte) on the kit worker. The manager routes lock and modifier keys to the state properties and converts everything else through the active layout into a <code>KeyEvent</code>, queued in the key buffer. <code>ReadKey()</code> halts the CPU until an interrupt delivers the next event; <code>TryReadKey()</code> just dequeues. <code>Console.ReadLine</code> and <code>Console.ReadKey</code> are plugs on top of the same queue, so console input and raw key events never conflict.</p>
+<p>Every key press on the PS/2 keyboard raises IRQ 1 on x64; the 8042 driver's handler reads the byte from the controller's data port and hands it to the keyboard port's <code>Ps2Access</code>, whose source wakes the keyboard driver's handler: it folds the 0xE0 prefix and the release bit into set 1 scan codes (the right Alt as 0x60) and reports them through the keyboard sink to the manager's consumer. A virtio keyboard delivers an event record on its queue instead: the queue's interrupt (an MSI-X message over PCI, the slot's GIC line over MMIO) schedules the driver's drain on the driver kit's worker, or the drain runs every 20 ms when no interrupt could be routed, and the drain converts the Linux key code to the same set 1 scan code and reports it through the keyboard sink to the manager's consumer, which feeds <code>KeyboardManager</code> as the PS/2 keyboard's does. A USB keyboard's 8-byte boot reports arrive on its interrupt IN pipe, delivered by the host controller driver's interrupt (an MSI-X message on xHCI, the function's legacy line on EHCI and OHCI) or, when none could be routed, by its 20 ms poll; <code>UsbKeyboardDriver</code>'s handler diffs each report against the previous one into the same set 1 scan codes and reports them through the same sink, and the lock keys light its indicators through <code>SetLeds</code>, one SET_REPORT control transfer on the kit worker. The lock keys light the PS/2 keyboard's indicators too, through <code>SetLeds</code> (0xED and the indicator byte) on the kit worker. The manager routes lock and modifier keys to the state properties and converts everything else through the active layout into a <code>KeyEvent</code>, queued in the key buffer. <code>ReadKey()</code> halts the CPU until an interrupt delivers the next event; <code>TryReadKey()</code> just dequeues. <code>Console.ReadLine</code> and <code>Console.ReadKey</code> are plugs on top of the same queue, so console input and raw key events never conflict.</p>
 <pre><code>Console.ReadLine / Console.ReadKey        (plugs, Cosmos.Kernel.Plugs)
         │
 KeyboardManager ── KeyEvent queue ◀── active layout
         │                                    ▲
         │                              raw scan codes
         │                                    │
-PS/2 keyboard over the driver kit (the 8042, IRQ 1, x64)  /  virtio-keyboard over the driver kit (PCI, MMIO)  /  USB keyboard over the driver kit (xHCI)
+PS/2 keyboard over the driver kit (the 8042, IRQ 1, x64)  /  virtio-keyboard over the driver kit (PCI, MMIO)  /  USB keyboard over the driver kit (xHCI, EHCI, OHCI)
 </code></pre>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.94/docs/articles/user/keyboard.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.95/docs/articles/user/keyboard.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

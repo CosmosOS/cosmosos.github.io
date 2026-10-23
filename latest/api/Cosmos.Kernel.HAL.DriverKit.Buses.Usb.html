@@ -132,7 +132,8 @@ execution context of each member is in its summary.</p>
     <dl class="jumplist">
       <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbDevice.html">UsbDevice</a></dt>
       <dd><p>One USB function behind one port: the host created it when it addressed
-the port (an xHCI slot) and derives from it to carry its per-device
+the port (an xHCI slot, an EHCI queue head set or an OHCI endpoint
+descriptor set) and derives from it to carry its per-device
 state and the transfer primitives; the enumeration core fills the
 identity it read from the descriptors. A host implements the protected
 members; the kit calls them through the internal ones, so a class driver
@@ -151,8 +152,9 @@ enumeration core parsed it. Any context, immutable after parsing.</p>
       <dd><p>The contract a USB host controller driver implements for the kit: how
 a device on a port gets its address and how its state is freed again.
 The host driver binds the controller's own node (a PCI function for
-xHCI), creates a <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbBus.html">UsbBus</a> over this object from its probe,
-and owns every register, ring, context and DMA page; the kit never
+xHCI, EHCI and OHCI), creates a <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Usb.UsbBus.html">UsbBus</a> over this object
+from its probe, and owns every register, ring, descriptor list, context
+and DMA page; the kit never
 publishes a node for the controller itself. A host implements the
 protected members; the kit calls them through the internal ones, so a
 class driver holding a reference can reach neither.</p>

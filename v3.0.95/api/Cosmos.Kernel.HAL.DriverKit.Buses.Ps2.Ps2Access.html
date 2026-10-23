@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class Ps2Access | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class Ps2Access | Cosmos Gen 3 ">
+      
+      <meta name="description" content="The access object of a Ps2 node, one per port, constructed by the 8042 driver: the byte stream from the port (a receive ring the leaf drains from its handler with ), the command exchange (: the command byte and its arguments each acknowledged by 0xFA, resent on 0xFE, then the reply bytes) and the port&#39;s interrupt source, which the access raises for every stream byte. The controller driver hands every byte the status register attributed to the port to , which either completes the step of the exchange in flight or appends the byte to the ring and raises the source. The kit holds the protocol and nothing of the hardware: the controller driver maps the ports and connects the lines. The execution context of each member is in its summary.">
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access">
+
+
+
+  <h1 id="Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access" class="text-break">
+Class Ps2Access  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><span class="xref">Cosmos</span>.<a class="xref" href="Cosmos.Kernel.html">Kernel</a>.<a class="xref" href="Cosmos.Kernel.HAL.html">HAL</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.html">DriverKit</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.html">Buses</a>.<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.html">Ps2</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Cosmos.Kernel.HAL.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>The access object of a Ps2 node, one per port, constructed by the 8042
+driver: the byte stream from the port (a receive ring the leaf drains
+from its handler with <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.html#Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_TryReceive_System_Byte__">TryReceive(out byte)</a>), the command exchange
+(<a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.html#Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_TryCommand_System_Byte_System_ReadOnlySpan_System_Byte__System_Span_System_Byte__System_Int32__System_UInt32_">TryCommand(byte, ReadOnlySpan&lt;byte&gt;, Span&lt;byte&gt;, out int, uint)</a>: the command byte and its arguments each
+acknowledged by 0xFA, resent on 0xFE, then the reply bytes) and the
+port's interrupt source, which the access raises for every stream byte.
+The controller driver hands every byte the status register attributed
+to the port to <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.html#Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_Deliver_System_Byte_">Deliver(byte)</a>, which either completes the step of
+the exchange in flight or appends the byte to the ring and raises the
+source. The kit holds the protocol and nothing of the hardware: the
+controller driver maps the ports and connects the lines. The execution
+context of each member is in its summary.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Experimental(&quot;COSMOS0003&quot;)]
+public sealed class Ps2Access</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">Ps2Access</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access__ctor_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.#ctor*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access__ctor_Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Port_Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Controller_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.#ctor(Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Port,Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Controller)">
+  Ps2Access(Ps2Port, Ps2Controller)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Creates the access of one port: the receive ring, the port's source
+and the exchange's event are allocated here. Thread context, the
+controller driver's probe.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Ps2Access(Ps2Port port, Ps2Controller controller)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>port</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Port.html">Ps2Port</a></dt>
+    <dd><p>The port.</p>
+</dd>
+    <dt><code>controller</code> <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Controller.html">Ps2Controller</a></dt>
+    <dd><p>The controller driver's contract half.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p><code class="paramref">controller</code> is null.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p><code class="paramref">port</code> is neither <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Port.html#Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Port_Keyboard">Keyboard</a> nor <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Port.html#Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Port_Auxiliary">Auxiliary</a>.</p>
+</dd>
+  </dl>
+
+
+
+  <h2 class="section" id="fields">Fields
+</h2>
+
+
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_Acknowledge" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.Acknowledge">
+  Acknowledge
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The device's answer to a command byte it accepted.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const byte Acknowledge = 250</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_MaxReplyBytes" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.MaxReplyBytes">
+  MaxReplyBytes
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The most reply bytes one exchange collects; a longer <code>reply</code> span is refused.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int MaxReplyBytes = 8</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_MaxResends" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.MaxResends">
+  MaxResends
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>How many times a byte the device answered 0xFE to is sent again before the exchange fails.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int MaxResends = 3</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_ReceiveRingBytes" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.ReceiveRingBytes">
+  ReceiveRingBytes
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Bytes the port's receive ring holds; a full ring drops its oldest byte and counts the overrun.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int ReceiveRingBytes = 16</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_ReplyGapMilliseconds" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.ReplyGapMilliseconds">
+  ReplyGapMilliseconds
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Once at least one reply byte arrived, the exchange ends when this long passes without another.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const uint ReplyGapMilliseconds = 20</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_Resend" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.Resend">
+  Resend
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The device's answer to a command byte it wants again.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const byte Resend = 254</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_DeliversUnattended_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.DeliversUnattended*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_DeliversUnattended" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.DeliversUnattended">
+  DeliversUnattended
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>True when bytes reach this access after the probe returns: the
+controller's lines are connected or its driver drains it
+periodically. A leaf declines a port that is neither
+(<code>no interrupt and no timer to poll with</code>). Any context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool DeliversUnattended { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_OverrunCount_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.OverrunCount*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_OverrunCount" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.OverrunCount">
+  OverrunCount
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>How many stream bytes a full ring dropped so far. Any context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int OverrunCount { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_Port_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.Port*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_Port" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.Port">
+  Port
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The port this access serves. Any context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Ps2Port Port { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Port.html">Ps2Port</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_Deliver_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.Deliver*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_Deliver_System_Byte_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.Deliver(System.Byte)">
+  Deliver(byte)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>A byte the status register attributed to this port. Any context (the
+controller driver's interrupt handler, its periodic drain, or a poll
+inside an exchange); allocation-free; under no kit lock, the access's
+own spin lock excepted. Completes the step of the exchange in flight
+(an acknowledgement, a resend request or a reply byte) and signals
+the exchange's waiter, or appends the byte to the receive ring and
+raises the port's source. A byte does one or the other, never both.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Deliver(byte value)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>value</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd><p>The byte.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_InterruptsForPublish_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.InterruptsForPublish*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_InterruptsForPublish" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.InterruptsForPublish">
+  InterruptsForPublish()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The node's one interrupt source, the port's, in a fresh array for
+the controller driver to hand to <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.DeviceBinding.html#Cosmos_Kernel_HAL_DriverKit_DeviceBinding_PublishChild_Cosmos_Kernel_HAL_DriverKit_DeviceIdentity_Cosmos_Kernel_HAL_DriverKit_Resources_DeviceResource___Cosmos_Kernel_HAL_DriverKit_Interrupts_InterruptSource___System_Object_">PublishChild(DeviceIdentity, DeviceResource[], InterruptSource[], object?)</a>
+exactly once: the element is the access's own source object, so the
+node owns exactly it, and the access never reads the array itself.
+Thread context.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public InterruptSource[] InterruptsForPublish()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Interrupts.InterruptSource.html">InterruptSource</a>[]</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_TryCommand_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.TryCommand*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_TryCommand_System_Byte_System_ReadOnlySpan_System_Byte__System_Span_System_Byte__System_Int32__System_UInt32_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.TryCommand(System.Byte,System.ReadOnlySpan{System.Byte},System.Span{System.Byte},System.Int32@,System.UInt32)">
+  TryCommand(byte, ReadOnlySpan&lt;byte&gt;, Span&lt;byte&gt;, out int, uint)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sends <code class="paramref">command</code> and then each of
+<code class="paramref">arguments</code> to the device, each acknowledged by 0xFA
+within the remaining time (0xFE makes the access send that byte
+again, up to <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.html#Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_MaxResends">MaxResends</a> times), then collects up to
+<code>reply.Length</code> reply bytes, ending at <code>reply.Length</code>, at
+the first gap of <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.html#Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_ReplyGapMilliseconds">ReplyGapMilliseconds</a> once one byte
+arrived, or at the deadline with what arrived (an AT keyboard answers
+Identify with nothing: <code class="paramref">replyLength</code> 0 and true).
+The access does not judge a reply: a Reset's failure code (0xFC or
+0xFD) comes back as <code>reply[0]</code> and the leaf reads it. Thread
+context: a probe, <code>OnDetach</code>, or the ring's indicator work item
+on the kit worker; never an interrupt handler. One exchange at a time
+per port, and the exchanges of the two ports are serialized by their
+callers, all on the worker.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryCommand(byte command, ReadOnlySpan&lt;byte&gt; arguments, Span&lt;byte&gt; reply, out int replyLength, uint timeoutMilliseconds)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>command</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd><p>The command byte.</p>
+</dd>
+    <dt><code>arguments</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.readonlyspan-1">ReadOnlySpan</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>&gt;</dt>
+    <dd><p>The bytes that follow it, each acknowledged in turn.</p>
+</dd>
+    <dt><code>reply</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.span-1">Span</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>&gt;</dt>
+    <dd><p>Where the reply bytes go; at most <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.html#Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_MaxReplyBytes">MaxReplyBytes</a> long.</p>
+</dd>
+    <dt><code>replyLength</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>How many reply bytes arrived; 0 when the exchange failed.</p>
+</dd>
+    <dt><code>timeoutMilliseconds</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd><p>The time the whole exchange may take, counted from the call.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>False when a byte is not acknowledged within <code class="paramref">timeoutMilliseconds</code>, when the resends ran out, when the controller could not accept a byte, or when another exchange is in flight on this port.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p><code class="paramref">reply</code> is longer than <a class="xref" href="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.html#Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_MaxReplyBytes">MaxReplyBytes</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>The caller is an interrupt handler.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_TryReceive_" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.TryReceive*"></a>
+
+  <h3 id="Cosmos_Kernel_HAL_DriverKit_Buses_Ps2_Ps2Access_TryReceive_System_Byte__" data-uid="Cosmos.Kernel.HAL.DriverKit.Buses.Ps2.Ps2Access.TryReceive(System.Byte@)">
+  TryReceive(out byte)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Takes the oldest byte off the receive ring. Allocation-free; any
+context, the leaf's interrupt handler in practice.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryReceive(out byte value)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>value</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></dt>
+    <dd><p>The byte, or 0 when the ring is empty.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>False when the ring is empty.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

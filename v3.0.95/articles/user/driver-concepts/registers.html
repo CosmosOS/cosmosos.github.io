@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>MMIO (memory-mapped I/O) and port I/O | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="MMIO (memory-mapped I/O) and port I/O | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.95/docs/articles/user/driver-concepts/registers.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="mmio-memory-mapped-io-and-port-io">MMIO (memory-mapped I/O) and port I/O</h1>
+
+<p>A device exposes its controls as registers, small locations the driver reads for the device's state and writes to give it orders. With memory-mapped I/O (MMIO) the device answers a range of <a href="physical-addresses.html">physical addresses</a>, and ordinary loads and stores reach it once the range is mapped. x86 also has a separate port space of 65,536 addresses, reached only by the <code>in</code> and <code>out</code> instructions, at most 32 bits at a time; older devices such as the <a href="ps2.html">PS/2 controller</a> still live there. ARM64 has no port space.</p>
+<p>Registers are not memory. A read can have a side effect, such as clearing an interrupt cause or taking a byte off a FIFO, and a write can start a command, so writing a value twice can run it twice. Each access must happen exactly once, in program order, at the width the device documents: a 32-bit register read as four bytes is four different accesses, and many devices misbehave on a wrong width or an access not aligned to its width.</p>
+<p>The mapping decides how the CPU caches the addresses, a page at a time. Registers need uncached device memory, where every access reaches the device in order and nothing is read speculatively. A framebuffer is plain memory on the device, slow to draw into uncached, so it is mapped write-combining: stores are gathered into bursts and give up their ordering. Normal cacheable memory suits RAM a coherent device shares with the CPU. A cached register fails quietly, returning stale values and holding writes in the cache.</p>
+<p>In the driver kit, <code>binding.MapRegisters</code> returns a <code>RegisterWindow</code>, whose <code>Read8</code> to <code>Read64</code> and <code>Write8</code> to <code>Write64</code> each make one access of that width, checked against the bounds and, over a memory window, the alignment; over an x64 port range they use <code>in</code> and <code>out</code>, accept any offset, and the 64-bit ones throw. <code>binding.MapRegion</code> takes a <code>RegionCaching</code> of <code>Device</code>, <code>WriteCombining</code> or <code>Normal</code>, though today only x64 applies <code>WriteCombining</code>, in the 2 MiB blocks a region covers whole, and every other memory window is mapped as <code>Device</code>. See <a href="../drivers.html#register-windows">Register windows</a> and <a href="../drivers.html#bulk-regions">Bulk regions</a>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.95/docs/articles/user/driver-concepts/registers.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
