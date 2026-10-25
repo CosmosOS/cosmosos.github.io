@@ -7578,6 +7578,12 @@ references:
   commentId: F:Cosmos.Kernel.HAL.DriverKit.DriverFeature.Fat
   fullName: Cosmos.Kernel.HAL.DriverKit.DriverFeature.Fat
   nameWithType: DriverFeature.Fat
+- uid: Cosmos.Kernel.HAL.DriverKit.DriverFeature.FinalizerThread
+  name: FinalizerThread
+  href: api/Cosmos.Kernel.HAL.DriverKit.DriverFeature.html#Cosmos_Kernel_HAL_DriverKit_DriverFeature_FinalizerThread
+  commentId: F:Cosmos.Kernel.HAL.DriverKit.DriverFeature.FinalizerThread
+  fullName: Cosmos.Kernel.HAL.DriverKit.DriverFeature.FinalizerThread
+  nameWithType: DriverFeature.FinalizerThread
 - uid: Cosmos.Kernel.HAL.DriverKit.DriverFeature.Graphics
   name: Graphics
   href: api/Cosmos.Kernel.HAL.DriverKit.DriverFeature.html#Cosmos_Kernel_HAL_DriverKit_DriverFeature_Graphics
@@ -17643,6 +17649,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.Kernel.System.KernelFeatures.Fat
   nameWithType: KernelFeatures.Fat
+- uid: Cosmos.Kernel.System.KernelFeatures.FinalizerThread
+  name: FinalizerThread
+  href: api/Cosmos.Kernel.System.KernelFeatures.html#Cosmos_Kernel_System_KernelFeatures_FinalizerThread
+  commentId: P:Cosmos.Kernel.System.KernelFeatures.FinalizerThread
+  fullName: Cosmos.Kernel.System.KernelFeatures.FinalizerThread
+  nameWithType: KernelFeatures.FinalizerThread
+- uid: Cosmos.Kernel.System.KernelFeatures.FinalizerThread*
+  name: FinalizerThread
+  href: api/Cosmos.Kernel.System.KernelFeatures.html#Cosmos_Kernel_System_KernelFeatures_FinalizerThread_
+  commentId: Overload:Cosmos.Kernel.System.KernelFeatures.FinalizerThread
+  isSpec: "True"
+  fullName: Cosmos.Kernel.System.KernelFeatures.FinalizerThread
+  nameWithType: KernelFeatures.FinalizerThread
 - uid: Cosmos.Kernel.System.KernelFeatures.Graphics
   name: Graphics
   href: api/Cosmos.Kernel.System.KernelFeatures.html#Cosmos_Kernel_System_KernelFeatures_Graphics

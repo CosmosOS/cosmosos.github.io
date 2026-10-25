@@ -178,6 +178,7 @@ public static class CosmosEntryPoint
 <p><code>Cosmos.Kernel.System.Kernel</code> is the abstract base class of every user kernel. Its <code>Start()</code> drives the whole lifecycle:</p>
 <ol>
 <li>Enables hardware interrupts (everything before this point ran with interrupts off).</li>
+<li>Starts the finalizer thread when <code>CosmosEnableFinalizerThread</code> is on, which it is by default whenever the scheduler is: from here on, finalizers run on a thread of their own rather than on the thread that collected or allocated (<a href="../dev/garbage-collector.html#finalization">Finalization</a>).</li>
 <li>Runs the driver stage: the kit logs its manifest, publishes the firmware framebuffer recorded in phase 3 as the firmware display (the display manager's primary until a display driver publishes one), and then the drivers listed in the kernel's manifest are offered every node the buses have published, the platform nodes seeded in phase 3 first (the 8042 driver publishes its two PS/2 port nodes from its probe, and the keyboard and mouse drivers bind them during the stage), then every PCI function the PCI host driver found and every one a root port driver found behind its hot-plug slot, then every virtio device a transport driver published beneath a function or a slot, and the step returns once each node, children included, has been offered; the AHCI, NVMe, virtio-blk and USB mass storage drivers publish the disks they find here (the host controller drivers enumerate their root ports inside their probes, so a stick present at boot is published during the stage too), and the storage manager registers and scans each one inside the publish, so <code>StorageManager.Partitions</code> is filled by the time the step returns. Each USB host controller driver's hot-plug thread, started inside its probe, follows the devices plugged in or pulled out from then on; it needs the scheduler. The root port driver's slot thread does the same for a device plugged into or pulled out of a PCI Express hot-plug slot, placing the registers of one that arrives; it needs the scheduler too.</li>
 <li>Calls <code>OnBoot()</code>, whose default implementation initializes the graphical <code>KernelConsole</code> on whatever display is primary by then, which is what makes <code>Console.WriteLine</code> work.</li>
 <li>Turns off the early-boot text renderer: up to here, the boot log you see on screen is the serial log mirrored by a minimal framebuffer writer; from now on the screen belongs to <code>Console</code> and the <a href="graphics.html">Canvas</a>.</li>
@@ -187,7 +188,7 @@ public static class CosmosEntryPoint
 <li>Halts the CPU. There is no operating system to return to: a kernel never exits.</li>
 </ol>
 <h2 id="stopping-the-machine">Stopping the machine</h2>
-<p>Step 8 above is where a kernel ends up on its own. <code>Power</code> is how you get there deliberately, and the three members differ in how far they go:</p>
+<p>Step 9 above is where a kernel ends up on its own. <code>Power</code> is how you get there deliberately, and the three members differ in how far they go:</p>
 <pre><code class="lang-csharp">using Cosmos.Kernel.System;
 
 Power.Halt();      // park this CPU until an interrupt wakes it
