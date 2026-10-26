@@ -217,7 +217,14 @@ if (second.IsValid
     Console.WriteLine(&quot;Configured the second adapter&quot;);
 }
 </code></pre>
-<p>DHCP needs no handle: <code>SendDiscoverPacket</code> runs the exchange on every registered device.</p>
+<p>DHCP configures one adapter at a time. <code>new DhcpClient()</code> runs the exchange on the primary adapter and <code>new DhcpClient(adapter)</code> on the one the handle names; the other adapters keep their configuration either way. <code>SendReleasePacket()</code> gives that adapter's address back to the server and leaves it unconfigured:</p>
+<pre><code class="lang-csharp">NetworkAdapter second = NetworkManager.GetAdapter(1);
+
+if (second.IsValid &amp;&amp; new DhcpClient(second).SendDiscoverPacket() != -1)
+{
+    Console.WriteLine(&quot;Second adapter: &quot; + second.IPConfig?.Address.ToString());
+}
+</code></pre>
 <h3 id="read-the-configuration-back">Read the configuration back</h3>
 <p>Each adapter carries the configuration in force on it, or <code>null</code> while it is unconfigured:</p>
 <pre><code class="lang-csharp">Console.WriteLine(NetworkManager.Primary.IPConfig?.Address.ToString());

@@ -3145,7 +3145,7 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "Cosmos.Kernel.System.Network.DhcpClient",
-      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.System.Network.DhcpClient.yml\" sourcestartlinenumber=\"1\">Used to manage the DHCP connection to a server.</p>\n"
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.System.Network.DhcpClient.yml\" sourcestartlinenumber=\"1\">Obtains an IPv4 configuration for one network adapter from a DHCP server:\nthe primary adapter by default, or the one handed to the constructor. The\nexchange leaves through that adapter alone and only that adapter's\nconfiguration is touched; every other adapter keeps its own.</p>\n"
     },
     {
       "type": "ManagedReference",

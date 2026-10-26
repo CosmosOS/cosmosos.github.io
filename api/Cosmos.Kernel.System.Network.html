@@ -118,7 +118,10 @@ Classes
     </dl>
     <dl class="jumplist">
       <dt><a class="xref" href="Cosmos.Kernel.System.Network.DhcpClient.html">DhcpClient</a></dt>
-      <dd><p>Used to manage the DHCP connection to a server.</p>
+      <dd><p>Obtains an IPv4 configuration for one network adapter from a DHCP server:
+the primary adapter by default, or the one handed to the constructor. The
+exchange leaves through that adapter alone and only that adapter's
+configuration is touched; every other adapter keeps its own.</p>
 </dd>
     </dl>
     <dl class="jumplist">
