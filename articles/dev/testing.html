@@ -181,8 +181,8 @@ dotnet test tests/Cosmos.Kernel.Tests.System      # the kernel library tests
 </tr>
 <tr>
 <td><strong>Memory</strong></td>
-<td>85</td>
-<td>Boxing/unboxing, memory allocation, collections, memory copy, GC</td>
+<td>74</td>
+<td>Boxing/unboxing, struct equality, memory allocation, collections, memory copy, address translation</td>
 </tr>
 <tr>
 <td><strong>Drivers</strong></td>
@@ -233,6 +233,10 @@ dotnet test tests/Cosmos.Kernel.Tests.System      # the kernel library tests
 <li><code>Boxing_Char</code>, <code>Boxing_Int32</code>, <code>Boxing_Byte</code>, <code>Boxing_Long</code></li>
 <li><code>Boxing_Nullable</code>, <code>Boxing_Interface</code>, <code>Boxing_CustomStruct</code></li>
 <li><code>Boxing_ArrayCopy</code>, <code>Boxing_Enum</code>, <code>Boxing_ValueTuple</code>, <code>Boxing_NullInterface</code></li>
+</ul>
+<p><strong>Struct equality (3 tests):</strong> the inherited <code>ValueType.Equals</code>/<code>GetHashCode</code> and <code>EqualityComparer&lt;T&gt;.Default</code> on a struct compared byte by byte, on a <code>record struct</code> with a reference field (its own generated <code>Equals</code>), and on a plain struct with a reference field, which CoreLib compares field by field through the ILC-injected <code>__GetFieldHelper</code> and <code>RhBoxAny</code></p>
+<ul>
+<li><code>StructEquals_BitwiseFields</code>, <code>StructEquals_RecordStructReferenceField</code>, <code>StructEquals_ReferenceField</code></li>
 </ul>
 <p><strong>Memory Allocation (8 tests):</strong></p>
 <ul>
