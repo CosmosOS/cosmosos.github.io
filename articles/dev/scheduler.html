@@ -635,10 +635,11 @@
 </ul>
 <hr>
 <h2 id="tests">Tests</h2>
-<p>Two kernel test suites cover this article. <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/tests/Kernels/Cosmos.Kernel.Tests.Threading/Kernel.cs"><code>Cosmos.Kernel.Tests.Threading</code></a> runs 80 tests (<code>make test KERNEL=Threading</code>):</p>
+<p>Two kernel test suites cover this article. <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/tests/Kernels/Cosmos.Kernel.Tests.Threading/Kernel.cs"><code>Cosmos.Kernel.Tests.Threading</code></a> runs 89 tests (<code>make test KERNEL=Threading</code>):</p>
 <ul>
-<li>thread lifecycle and concurrency (<code>Thread_Start_ExecutesDelegate</code>, <code>Thread_Multiple_CanRunConcurrently</code>),</li>
+<li>thread lifecycle and concurrency (<code>Thread_Start_ExecutesDelegate</code>, <code>Thread_Multiple_CanRunConcurrently</code>), and thread ids handed out from two creating threads at once (<code>Thread_Ids_UniqueAcrossConcurrentStarts</code>),</li>
 <li>exception dispatch on several threads at once (<code>Thread_Throw_TwoThreadsUnhandled_BothJoin</code>, <code>Thread_Throw_ConcurrentCatchRethrow_OwnExceptions</code>),</li>
+<li>the reference form of <code>Interlocked.CompareExchange</code> (the runtime's <code>RhpCheckedLockCmpXchg</code>, assembly since it has to be atomic against a tick) raced from two threads (<code>Interlocked_ReferenceExchange_TwoThreads</code>),</li>
 <li>stack sizing and the #433 floor (<code>Thread_MaxStackSize_IsHonored</code>, <code>Thread_MaxStackSize_TinyRequestIsFloored</code>, <code>Thread_EnsureSufficientExecutionStack_Passes</code>),</li>
 <li>thread statics (<code>Thread_ThreadStatics</code>),</li>
 <li>mutex contention, hand-off, and idle accounting (<code>Mutex_ThreeContenders_AllAcquire</code>, <code>Mutex_ReleaseHandsOffToParkedWaiter</code>, <code>Mutex_IdleThreadContention_KeepsTicketAccounting</code>),</li>
