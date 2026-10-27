@@ -628,7 +628,7 @@ ALL TESTS PASSED
 <p><code>tests/Cosmos.TestRunner.Engine/Protocol/UartMessageParser.cs</code> reads the raw UART log captured by QEMU (<code>uart-output.log</code>), scans byte-by-byte for the magic signature, validates the command byte and length, then dispatches to the appropriate parse helper.</p>
 <p>Corruption detection: the <code>TestSuiteEnd</code> payload is validated by checking <code>total == passed + failed</code>. If this invariant does not hold (e.g. due to a timer-interrupt interleave corrupting UART bytes), the end message is ignored and results fall back to the individually tracked counters.</p>
 <h3 id="host-requests">Host Requests</h3>
-<p>A test calls <code>TR.RequestHost(request)</code> when it needs the machine changed under it, and the engine carries the request out through QEMU's QMP monitor as soon as the frame shows up on the UART:</p>
+<p>A test calls <code>TR.RequestHost(request)</code> when it needs the machine changed under it, or the host to act, and the engine carries the request out as soon as the frame shows up on the UART, through QEMU's QMP monitor for the machine requests and through its own TCP test server for <code>tcp-connect</code>:</p>
 <table>
 <thead>
 <tr>
@@ -672,6 +672,10 @@ ALL TESTS PASSED
 <tr>
 <td><code>mouse-button &lt;left or middle or right&gt; &lt;down or up&gt;</code></td>
 <td>Presses or releases a pointer button</td>
+</tr>
+<tr>
+<td><code>tcp-connect</code></td>
+<td>Connects the engine's TCP test server to the kernel's TCP server on port 5558 and runs the <code>TEST_FROM_HOST</code> echo exchange; the Network suite's <code>TCP_ServerAccept</code> sends it right after <code>listener.Start()</code>, so the SYN leaves while the listener is up (port 5558 is a <code>hostfwd</code>, which slirp accepts on the host side at once and delivers to the guest on its own retransmit schedule, 6 then 12 s apart: a connect made on a clock missed a listener that came up late, #3361)</td>
 </tr>
 </tbody>
 </table>
