@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>内核编译步骤 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="内核编译步骤 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/dev/build/kernel-compilation-steps.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="kernel-compilation-steps"></a></p>
+<h1 id="内核编译步骤">内核编译步骤</h1>
+<p>本文档概述完整的构建流水线：它借助 .NET NativeAOT 编译、自定义的 IL 修补和原生代码生成，把 C# 内核代码转换为可启动的 ISO 镜像。</p>
+<p><a id="compilation-flow-chart"></a></p>
+<h2 id="编译流程图">编译流程图</h2>
+<pre><code class="lang-mermaid">flowchart TD
+    CS[C# Source Code] --&gt; ROSLYN[Roslyn Compiler]
+    PLUGS[Plug Definitions] --&gt; ANALYZER[Cosmos.Build.Analyzer.Patcher]
+    ANALYZER -.-&gt; |Validates| ROSLYN
+    ROSLYN --&gt; IL[IL Assembly]
+
+    subgraph &quot;Cosmos.Build.Patcher&quot;
+        PATCHER[IL Patcher]
+        PATCHER --&gt; |cosmos.patcher| PATCHED[Patched Assemblies]
+        PATCHED --&gt; COSMOS_REF[&quot;$(IntermediateOutputPath)/cosmos/ref/&quot;]
+        PATCHED --&gt; COSMOS_ROOT[&quot;$(IntermediateOutputPath)/cosmos/&quot;]
+    end
+    IL --&gt; PATCHER
+    PLUGS --&gt; PATCHER
+
+    subgraph &quot;Cosmos.Build.Ilc&quot;
+        ILC[NativeAOT Compiler]
+        ILC --&gt; |ilc| NATIVE[&quot;Native Object (.o)&quot;]
+        NATIVE --&gt; COSMOS_NATIVE[&quot;$(IntermediateOutputPath)/cosmos/native/&quot;]
+    end
+    COSMOS_REF --&gt; ILC
+    COSMOS_ROOT --&gt; ILC
+
+    subgraph &quot;Cosmos.Build.Asm&quot;
+        ASM_BUILD[Clang Integrated Assembler]
+        ASM_BUILD --&gt; |clang --target=...-elf -c| ASM_OBJ[&quot;Assembly Objects (.obj)&quot;]
+        ASM_OBJ --&gt; COSMOS_ASM[&quot;$(IntermediateOutputPath)/cosmos/asm/&quot;]
+    end
+    ASM_SRC[&quot;Assembly Files (.s)&quot;] --&gt; ASM_BUILD
+
+    subgraph &quot;Cosmos.Build.CC&quot;
+        CC_BUILD[Clang Compiler]
+        CC_BUILD --&gt; |&quot;clang --target=...&quot;| C_OBJ[&quot;C Objects (.obj)&quot;]
+        C_OBJ --&gt; COSMOS_COBJ[&quot;$(IntermediateOutputPath)/cosmos/cobj/&quot;]
+    end
+    C_SRC[&quot;C Source Files (.c)&quot;] --&gt; CC_BUILD
+
+    subgraph &quot;Cosmos.Build.Common&quot;
+        LINK[Link Target]
+        LINK --&gt; |ld.lld| ELF[&quot;ELF Binary ($(OutputPath)/$(AssemblyName).elf)&quot;]
+        ELF --&gt; FINAL_ISO[BuildISO Target]
+        FINAL_ISO  --&gt; |xorriso + Limine| ISO_OUT[&quot;$(OutputPath)/cosmos/$(AssemblyName).iso&quot;]
+        ISO_OUT --&gt; |PublishISO| PUBLISH[&quot;$(PublishDir)/$(AssemblyName).iso&quot;]
+    end
+    
+    COSMOS_NATIVE --&gt; LINK
+    COSMOS_ASM --&gt; LINK
+    COSMOS_COBJ --&gt; LINK
+    LINKER_SCRIPT[&quot;linker.ld&quot;] --&gt; LINK
+    LIMINE_CONF[&quot;limine.conf&quot;] --&gt; FINAL_ISO
+
+    style CS fill:#e1f5e1
+    style ASM_SRC fill:#e1f5e1
+    style C_SRC fill:#e1f5e1
+    style PLUGS fill:#e1f5e1
+    style LINKER_SCRIPT fill:#e1f5e1
+    style LIMINE_CONF fill:#e1f5e1
+    
+    style PUBLISH fill:#ffe1e1
+</code></pre>
+<p><a id="prerequisites"></a></p>
+<h2 id="前提条件">前提条件</h2>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>用途</th>
+<th>版本要求</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>.NET SDK</strong></td>
+<td>核心编译</td>
+<td>10.0+</td>
+</tr>
+<tr>
+<td><strong>Clang</strong></td>
+<td>C 与汇编代码的编译（通过 --target 支持 x64/ARM64）</td>
+<td>LLVM 工具链</td>
+</tr>
+<tr>
+<td><strong>ld.lld</strong></td>
+<td>ELF 链接</td>
+<td>LLVM 工具链</td>
+</tr>
+<tr>
+<td><strong>xorriso</strong></td>
+<td>创建 ISO</td>
+<td>最新版本</td>
+</tr>
+</tbody>
+</table>
+<p><a id="key-components"></a></p>
+<h2 id="关键组件">关键组件</h2>
+<ul>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Sdk"><code>Cosmos.Sdk</code></a>：MSBuild SDK 编排</li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Patcher"><code>Cosmos.Build.Patcher</code></a>：IL 修补基础设施</li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Ilc"><code>Cosmos.Build.Ilc</code></a>：NativeAOT 集成</li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Asm"><code>Cosmos.Build.Asm</code></a>：汇编代码编译</li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.CC"><code>Cosmos.Build.CC</code></a>：C 代码编译（Clang）</li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Common"><code>Cosmos.Build.Common</code></a>：链接与 ISO 创建</li>
+</ul>
+<p><a id="example-project"></a></p>
+<h2 id="示例项目">示例项目</h2>
+<p>参考实现：<code>examples/DevKernel/DevKernel.csproj</code></p>
+<p><a id="output-summary"></a></p>
+<h2 id="输出汇总">输出汇总</h2>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>输出路径</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>修补</td>
+<td><code>$(IntermediateOutputPath)/cosmos/</code></td>
+<td>修补后的主程序集</td>
+</tr>
+<tr>
+<td>修补</td>
+<td><code>$(IntermediateOutputPath)/cosmos/ref/</code></td>
+<td>引用程序集</td>
+</tr>
+<tr>
+<td>NativeAOT</td>
+<td><code>$(IntermediateOutputPath)/cosmos/native/</code></td>
+<td>原生目标文件（.o）</td>
+</tr>
+<tr>
+<td>汇编</td>
+<td><code>$(IntermediateOutputPath)/cosmos/asm/</code></td>
+<td>Clang 汇编器生成的目标文件（.obj）</td>
+</tr>
+<tr>
+<td>C 代码</td>
+<td><code>$(IntermediateOutputPath)/cosmos/cobj/</code></td>
+<td>Clang 目标文件（.o/.obj）</td>
+</tr>
+<tr>
+<td>链接</td>
+<td><code>$(OutputPath)/$(AssemblyName).elf</code></td>
+<td>链接后的 ELF 内核</td>
+</tr>
+<tr>
+<td>ISO</td>
+<td><code>$(OutputPath)/cosmos/$(AssemblyName).iso</code></td>
+<td>可启动的 ISO 镜像</td>
+</tr>
+<tr>
+<td>发布</td>
+<td><code>$(PublishDir)/$(AssemblyName).iso</code></td>
+<td>已发布的 ISO</td>
+</tr>
+</tbody>
+</table>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/dev/build/kernel-compilation-steps.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

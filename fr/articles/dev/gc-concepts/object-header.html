@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>En-t&#234;te d&#39;objet du runtime | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="En-t&#234;te d&#39;objet du runtime | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/dev/gc-concepts/object-header.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="runtime-object-header"></a></p>
+<h1 id="en-tête-dobjet-du-runtime">En-tête d'objet du runtime</h1>
+<p>En .NET, chaque objet porte un mot d'en-tête juste avant la référence d'objet, à un décalage négatif, en plus du pointeur <code>MethodTable</code> au décalage 0. Le runtime y range des informations de gestion qui n'ont pas de champ propre : le code de hachage d'identité mis en cache (ce que <code>GetHashCode</code> renvoie pour un objet ordinaire) et le verrou léger que <code>Monitor.Enter</code> (l'instruction <code>lock</code>) prend sur un objet sans contention.</p>
+<p>Le ramasse-miettes ne lit jamais le code de hachage ni le verrou, mais il doit laisser de la place pour ce mot : le runtime écrit à <code>objRef - 4</code>, il faut donc des octets accessibles en écriture avant chaque objet, y compris le tout premier objet d'un segment et tout objet qui suit directement un espace libre recyclé. CoreLib réserve les trois bits de poids fort du mot au ramasse-miettes, et ses boucles de compare-exchange les laissent tels quels ; OrionGC en utilise un, le bit 30 (le <code>BIT_SBLK_FINALIZER_RUN</code> de .NET), comme indicateur que positionne <code>GC.SuppressFinalize</code>, voir <a href="../garbage-collector.html#finalization">Finalisation</a>.</p>
+<p>Dans OrionGC, c'est pourquoi chaque segment réserve 8 octets avant son premier objet, et pourquoi chaque bloc libre garde ses 8 derniers octets hors de l'allocation. Cet en-tête est distinct de la <a href="../garbage-collector.html#object-header">disposition GCObject</a>, qui commence à la référence d'objet elle-même. Voir <a href="../garbage-collector.html#segments">Segments</a> et <a href="../garbage-collector.html#free-lists">Listes de blocs libres</a>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/dev/gc-concepts/object-header.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

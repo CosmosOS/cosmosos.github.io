@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>源代码生成器 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="源代码生成器 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/user/driver-concepts/source-generators.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="source-generators"></a></p>
+<h1 id="源代码生成器">源代码生成器</h1>
+<p>源代码生成器是在 C# 编译器内部运行的插件。项目编译时，编译器会向生成器提供一个只读的程序模型：每个源文件的语法，以及每个类型的符号，包括被引用程序集中的类型。生成器可以向编译添加 C# 文件并报告诊断信息，但不能修改或删除已有的代码。它添加的内容与项目的其余部分一起编译，就像是项目作者亲手写的一样。</p>
+<p>生成器适合那些机械但又必须跟随程序的工作，例如列出所有标记了某个特性的类。在运行时做这件事就是反射（reflection）：程序在运行过程中搜索自己的元数据。在构建时做这件事则会生成直接点名每个类的普通代码，它在启动时没有任何开销，并且在无法使用反射的地方也能工作。生成器是增量式的：编译器会缓存每个步骤的输出，只在某个步骤的输入发生变化时才重新运行它，因此只依赖某个构建属性的生成器在编辑源文件时不会重新运行。</p>
+<p>构建设置不会自动传到生成器。项目把生成器可以读取的每个 MSBuild 属性列为 <code>CompilerVisibleProperty</code>，构建会把这些属性写入一个交给编译器的 editorconfig 文件，生成器再从中以 <code>build_property.&lt;Name&gt;</code> 的形式读取它们。</p>
+<p>陷阱在于没人看得到的代码。生成的文件不在项目文件夹中，所以读者可能会去找一个编译器能看到、文件列表里却没有的类，而生成器中的错误会表现为一个没人写过的文件里的编译错误。生成器也只能看到编译所能看到的东西：项目无法访问的类，例如私有嵌套类或另一个程序集中的 internal 类，是它生成的代码无法触及的。</p>
+<p>在 Cosmos 中，内核是预先编译的，内核代码不使用反射，因此内核启动时无法在自己的程序集中搜索驱动程序。<code>Cosmos.Kernel.SourceGenerators</code> 中的 <code>DriverManifestGenerator</code> 在构建时完成这项搜索：它在内核项目以及引用了 <code>Cosmos.Kernel.HAL</code> 的被引用程序集中找出每个 <code>[Driver]</code> 类，并写出 <code>DriverManifest.g.cs</code>，由该文件构造其中的每一个类。<code>CosmosEntryPointGenerator</code> 写出调用该清单的入口点。<code>Cosmos.Sdk</code> 开启了 <code>EmitCompilerGeneratedFiles</code>，因此这两个文件也会写到 <code>obj/</code> 下以便阅读；生成器无法构造的已标记类会以警告 <code>COSMOSGEN001</code> 报告出来，而不是被悄无声息地丢弃。参见<a href="../drivers.html#the-attribute-and-the-manifest">特性与清单</a>和<a href="../../dev/build/driver-manifest.html">驱动程序清单</a>。</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/user/driver-concepts/source-generators.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

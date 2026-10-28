@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>访问内部成员 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="访问内部成员 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/dev/accessing-internals.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="accessing-internals"></a></p>
+<h1 id="访问内部成员">访问内部成员</h1>
+<p><a href="public-api.html">公共 API 跟踪</a>中所描述的受支持 API 面之外的一切，在设计上都是 <code>internal</code> 的：可见性不是扩展机制，扩展点（seam）才是。当没有任何扩展点能满足某个需求时，<code>[UnsafeAccessor]</code> 和 <code>[UnsafeAccessorType]</code> 可以直接访问内部状态，而无需 <code>InternalsVisibleTo</code> 授权。这个应急手段是有意提供的，也是有意不受支持的：内部成员在任何版本中都可能不经通知就发生变化，使用它们的代码预计会失效。</p>
+<hr>
+<p><a id="the-mechanism"></a></p>
+<h2 id="机制">机制</h2>
+<p><code>[UnsafeAccessor]</code>（<code>System.Runtime.CompilerServices</code>）声明一个 <code>extern</code> 方法，由运行时将其绑定到一个原本无法访问的成员；<code>[UnsafeAccessorType]</code> 把这一机制扩展到本身就无法访问的类型，这些类型通过程序集限定名来指定。两者都由 ILC 静态解析，因此是 AOT 安全的，这一点与反射不同，而内核无法使用反射。</p>
+<p>访问内部类型的内部静态成员：</p>
+<pre><code class="lang-csharp">using System.Runtime.CompilerServices;
+
+internal static class CoreAccessors
+{
+    // Binds to Cosmos.Kernel.Core.Memory.Heap.Heap.Collect(). The first
+    // parameter carries the target type by name and is passed as null for
+    // static members.
+    [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = &quot;Collect&quot;)]
+    internal static extern int HeapCollect(
+        [UnsafeAccessorType(&quot;Cosmos.Kernel.Core.Memory.Heap.Heap, Cosmos.Kernel.Core&quot;)] object? heap);
+}
+
+int freed = CoreAccessors.HeapCollect(null);
+</code></pre>
+<p>访问可访问类型的私有实例字段：</p>
+<pre><code class="lang-csharp">[UnsafeAccessor(UnsafeAccessorKind.Field, Name = &quot;_name&quot;)]
+private static extern ref string GetName(Partition partition);
+</code></pre>
+<p><code>UnsafeAccessorKind</code> 涵盖方法、静态方法、构造函数和字段；属性访问器则作为名为 <code>get_X</code>/<code>set_X</code> 的方法来指定。</p>
+<hr>
+<p><a id="limits"></a></p>
+<h2 id="限制">限制</h2>
+<ul>
+<li><strong>按引用返回不可访问类型会抛出异常。</strong> 访问器不能以 <code>ref</code> 方式返回一个自身类型对声明程序集不可访问的字段；运行时按规范会拒绝这种做法。这就是 <code>Thread.CreateThread</code> 没有用 plug 替换的原因：上游的方法体会读取私有的 <code>StartHelper</code>，而它的类型无法按引用返回，因此扩展点改为位于它的下层（参见 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Bridge/Interop/libSystemNative.cs">libSystemNative.cs</a> 中的 <code>SystemNative_CreateThread</code>）。</li>
+<li><strong>解析失败会在调用点暴露出来</strong>，而不是表现为编译错误：目标成员一旦被重命名或删除，访问器就会变成一个抛出异常的桩代码。</li>
+<li><strong>签名必须完全匹配</strong>，包括少数带有自定义修饰符的成员上的那些修饰符。</li>
+</ul>
+<hr>
+<p><a id="when-to-use-it"></a></p>
+<h2 id="何时使用">何时使用</h2>
+<p>按优先顺序：</p>
+<ol>
+<li>受支持的 API 面（<code>Cosmos.Kernel.System</code> 加上各个契约接口）。如果其中缺少内核确实需要的东西，请提交 issue：扩展受支持层才是预期的解决方式。</li>
+<li>在存在 <code>[Experimental]</code> 扩展点的地方使用它（调度器扩展点，见<a href="../user/scheduler-plugging.html">编写调度器</a>；驱动工具包，见<a href="../user/drivers.html">编写驱动程序</a>）。</li>
+<li>当目标是替换行为而不是访问状态时，使用 <a href="plugs.html">plug</a>。</li>
+<li><code>[UnsafeAccessor]</code>/<code>[UnsafeAccessorType]</code>，并接受任何版本都可能使其失效。</li>
+</ol>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/dev/accessing-internals.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

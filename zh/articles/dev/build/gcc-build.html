@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title> | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content=" | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/dev/build/gcc-build.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><code>Cosmos.Build.GCC</code> 将 C 源文件编译为目标文件，这些目标文件随后与 NativeAOT 的输出链接在一起。</p>
+<hr>
+<p><a id="flow-chart"></a></p>
+<h2 id="流程图">流程图</h2>
+<pre><code class="lang-mermaid">flowchart TD
+    A[GetGCC] --&gt; B[FindCSourceFilesForGCC]
+    B --&gt; C[BuildGCC]
+    C --&gt; D[.o/.obj files under cosmos/cobj]
+</code></pre>
+<hr>
+<p><a id="parameters"></a></p>
+<h2 id="参数">参数</h2>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GCCPath</code></td>
+<td><code>gcc</code> 可执行文件的完整路径或名称。由 <code>GetGCC</code> 按操作系统设置，可在你的项目中覆盖。</td>
+<td>Unix：<code>gcc</code>；Windows：<code>x86_64-elf-gcc</code></td>
+</tr>
+<tr>
+<td><code>GCCProject</code></td>
+<td>一个或多个要在其中查找 <code>*.c</code> 文件的目录（不递归）。支持用架构子文件夹覆盖。</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>GCCOutputPath</code></td>
+<td>存放编译后目标文件的目录。</td>
+<td><code>$(IntermediateOutputPath)/cosmos/cobj/</code></td>
+</tr>
+<tr>
+<td><code>GCCCompilerFlags</code></td>
+<td>传递给 GCC 的额外编译器标志。</td>
+<td><code>-O2 -fno-stack-protector -nostdinc -fno-builtin</code>，外加架构相关标志</td>
+</tr>
+</tbody>
+</table>
+<p>注：</p>
+<ul>
+<li>设置了 <code>RuntimeIdentifier</code>（例如 <code>linux-x64</code>）时，如果存在架构子文件夹（例如 <code>&lt;dir&gt;/x64/</code>），<code>FindCSourceFilesForGCC</code> 会优先使用它。</li>
+<li>在 Windows 上，默认工具是交叉编译器（<code>x86_64-elf-gcc</code>）；在 Unix 上则是 <code>gcc</code>。你可以覆盖 <code>GCCPath</code>。</li>
+</ul>
+<hr>
+<p><a id="tasks"></a></p>
+<h2 id="任务">任务</h2>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>说明</th>
+<th>依赖于</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GetGCC</code></td>
+<td>按操作系统解析 <code>GCCPath</code>（Unix：<code>gcc</code>，Windows：<code>x86_64-elf-gcc</code>）。</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>FindCSourceFilesForGCC</code></td>
+<td>清理 <code>@(GCCProject)</code> 的输入并应用架构覆盖。</td>
+<td><code>Build</code></td>
+</tr>
+<tr>
+<td><code>BuildGCC</code></td>
+<td>调用 <code>GCCBuildTask</code>，编译每个 <code>@(GCCProject)</code> 目录中的每个 <code>*.c</code> 文件。</td>
+<td><code>FindCSourceFilesForGCC; GetGCC</code></td>
+</tr>
+<tr>
+<td><code>CleanGCC</code></td>
+<td>删除 <code>$(IntermediateOutputPath)/cosmos/cobj/</code>。</td>
+<td><code>Clean</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a id="detailed-workflow"></a></p>
+<h2 id="详细工作流程">详细工作流程</h2>
+<ol>
+<li><code>GetGCC</code> 根据宿主操作系统设置 <code>GCCPath</code>。如有需要，你可以在项目文件中覆盖 <code>GCCPath</code>。</li>
+<li><code>FindCSourceFilesForGCC</code>：
+<ul>
+<li>从 <code>@(GCCProject)</code> 中移除所有不存在的路径（并发出警告）。</li>
+<li>如果设置了 <code>RuntimeIdentifier</code>，并且存在匹配的架构子文件夹（例如 <code>x64</code>），就用该子文件夹替换原文件夹。</li>
+<li>记录最终的 C 项目目录列表。</li>
+</ul>
+</li>
+<li><code>BuildGCC</code>：
+<ul>
+<li>确保 <code>GCCOutputPath</code>（<code>$(IntermediateOutputPath)/cosmos/cobj/</code>）存在，并清理过时的目标文件。</li>
+<li>对每个 <code>@(GCCProject)</code> 目录调用 <code>GCCBuildTask</code>，由它编译该目录中的每个 <code>*.c</code> 文件（不递归）。</li>
+<li>每个文件单独编译为一个名为 <code>&lt;name&gt;-&lt;sha1&gt;.(obj|o)</code> 的目标文件，其中哈希由文件内容计算得出；扩展名在 Windows 上为 <code>.obj</code>，在其他系统上为 <code>.o</code>。</li>
+</ul>
+</li>
+<li><code>CleanGCC</code> 在 <code>Clean</code> 期间删除 <code>cosmos/cobj</code> 目录。</li>
+</ol>
+<hr>
+<p><a id="outputs"></a></p>
+<h2 id="输出">输出</h2>
+<ul>
+<li>位于 <code>$(IntermediateOutputPath)/cosmos/cobj/</code> 中的目标文件，命名为 <code>&lt;sourceName&gt;-&lt;sha1&gt;.(obj|o)</code>。</li>
+</ul>
+<hr>
+<p><a id="related-components"></a></p>
+<h2 id="相关组件">相关组件</h2>
+<ul>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.CC"><code>Cosmos.Build.GCC</code></a></li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/dev/build/gcc-build.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

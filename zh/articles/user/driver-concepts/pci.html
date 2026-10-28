@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>PCI（外设部件互连） | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="PCI（外设部件互连） | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/user/driver-concepts/pci.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="pci-peripheral-component-interconnect"></a></p>
+<h1 id="pci外设部件互连">PCI（外设部件互连）</h1>
+<p>PCI，以及沿用同一软件模型的后继者 PCI Express，连接着 PC 和许多 ARM 机器中的大多数设备。软件按设备所在的位置来寻址它：一个段（一组总线）、一个总线号、该总线上的设备号（0 到 31）和一个功能号（0 到 7）。功能是驱动程序绑定的单位，因为一个物理设备最多可以包含八个相互独立的功能，例如一块显卡和它的音频控制器。</p>
+<p>每个功能都有一个配置空间（传统 PCI 中为 256 字节，PCI Express 中为 4 KiB），以一个标准头开始。头中的厂商 ID 和设备 ID 指明具体是哪一款芯片，三个类别字节（类别、子类别和编程接口）则说明它是哪一类设备。MSI-X（<a href="interrupt-delivery.html">中断投递</a>）等可选特性在能力列表中声明，能力列表是一条由若干条目组成的链，每个条目包含一个 ID 和下一个条目的偏移量。头中还有命令寄存器，它的各个位决定该功能是否响应内存访问、是否响应 I/O 端口访问，以及是否可以自行发起 DMA（<a href="dma.html">总线主控</a>）。</p>
+<p>功能的寄存器没有固定地址。它的六个基址寄存器（BAR）各自请求一个固定大小的内存窗口或 I/O 端口范围，一个 64 位内存 BAR 会占用六个槽位中的两个。必须由某个环节为每个 BAR 分配地址，固件在启动期间完成这件事（<a href="firmware-handoff.html">固件交接</a>），因此之后才插入的设备就没有地址（<a href="hot-plug.html">热插拔</a>）。</p>
+<p>访问配置空间有两种方式。x86 的传统机制把功能的地址写入端口 0xCF8，通过端口 0xCFC 传送数据，并且只能访问前 256 字节。ECAM（增强型配置访问机制）把每个功能完整的 4 KiB 映射到一个内存窗口中，窗口的基址由 ACPI 或设备树给出。</p>
+<p>陷阱在于只按类别匹配。类别说明设备做什么，而不说明它如何编程：所有网络控制器的类别都是 0x02，不论由谁制造，因此按这个类别匹配的驱动程序会收到一些芯片，而它从未见过这些芯片的寄存器。只有在某个标准定义了编程模型的地方，类别字节才能确定编程模型，例如 xHCI、EHCI、OHCI、AHCI、NVMe 或 HD Audio。</p>
+<p>在驱动工具包中，<code>PciMatch</code> 检查一个 <code>PciIdentity</code> 中的头字段，该标识的节点路径为 <code>pci:&lt;segment&gt;:&lt;bus&gt;:&lt;device&gt;.&lt;function&gt;</code>（<a href="../drivers.html#pci-identity-and-match">PCI 标识与匹配</a>）；<code>PciAccess</code> 提供 <code>FindCapability</code>，并以 <code>EnableMemorySpace</code>、<code>EnableIoSpace</code> 和 <code>EnableBusMastering</code> 的形式提供命令寄存器的各个位（<a href="../drivers.html#the-pci-access-object">PCI 访问对象</a>）。<code>Node.Resources</code> 保存各个 BAR，其地址由固件分配，或者在热插拔插槽后面由工具包放置；<code>None</code> 表示未分配的槽位或 64 位 BAR 的高半部分（<a href="../drivers.html#bar-resources">BAR 资源</a>）。x64 上的主机是 <code>pci-host-legacy</code>，在它上面访问偏移量 255 之后的配置空间会抛出异常；ARM64 上的主机是 <code>pci-host-ecam-generic</code>（<a href="../drivers.html#platform-nodes">平台节点</a>）。</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/user/driver-concepts/pci.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

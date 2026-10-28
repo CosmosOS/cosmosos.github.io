@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>精确扫描与保守扫描 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="精确扫描与保守扫描 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/dev/gc-concepts/conservative-vs-precise.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="precise-vs-conservative-scanning"></a></p>
+<h1 id="精确扫描与保守扫描">精确扫描与保守扫描</h1>
+<p>栈扫描必须判断线程栈上的哪些字是对象引用。有两种做法。</p>
+<p>精确扫描确知答案。编译器生成一些表（在 NativeAOT 中为 GCInfo），为每个方法中的每个<a href="safepoint.html">安全点（safepoint）</a>精确描述哪些栈槽和寄存器持有存活引用。回收器报告这些槽，此外什么也不报告。精确扫描从不会把整数误认为指针，移动式回收器也正是因它才成为可能，但它只在这些表所描述的代码位置上有效。</p>
+<p>保守扫描靠猜测。栈上每个指针大小的字都被视为潜在的引用，任何恰好指向堆内的值都会让其目标保持存活。这种方式在任何指令处都有效，无需编译器支持，但有两个代价：一个看起来像堆地址的整数会留住垃圾对象（虚假根），而且任何被保守引用的对象都永远不能移动，因为那个字无法被安全地改写。</p>
+<p>具体来说，以每次 8 字节的步长遍历一个线程的栈：</p>
+<table>
+<thead>
+<tr>
+<th>栈字</th>
+<th>实际内容</th>
+<th>保守判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0x0000000000000007</code></td>
+<td>值为 7 的 int</td>
+<td>不在堆范围内，忽略</td>
+</tr>
+<tr>
+<td><code>0xFFFF8001A2B3C4D0</code></td>
+<td>存活的 <code>List&lt;int&gt;</code> 引用</td>
+<td>在堆范围内，被标记 ✅ 正确</td>
+</tr>
+<tr>
+<td><code>0xFFFF8001DEADBEEF</code></td>
+<td>已失效的溢出槽</td>
+<td>仍在范围内，被标记 ❌ 虚假根</td>
+</tr>
+<tr>
+<td><code>0xFFFFFFFF80123400</code></td>
+<td>指向内核代码的返回地址</td>
+<td>内核地址，但在堆段之外，忽略</td>
+</tr>
+<tr>
+<td><code>0xFFFF8001CAFE0000</code></td>
+<td>过时的被调用者指针</td>
+<td>仍在范围内，被标记 ❌ 虚假根</td>
+</tr>
+</tbody>
+</table>
+<p>OrionGC 两者都用。触发回收的线程停在一条托管调用点链上，那里的 GCInfo 是有效的，因此它被精确扫描；其他每个线程都是在任意指令处被抢占的，因此以保守方式扫描。参见<a href="../garbage-collector-gcinfo.html">精确栈扫描（GCInfo）</a>。</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/dev/gc-concepts/conservative-vs-precise.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

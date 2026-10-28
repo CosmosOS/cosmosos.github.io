@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>G&#233;n&#233;rateurs de source | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="G&#233;n&#233;rateurs de source | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/user/driver-concepts/source-generators.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="source-generators"></a></p>
+<h1 id="générateurs-de-source">Générateurs de source</h1>
+<p>Un générateur de source est une extension qui s'exécute dans le compilateur C#. Pendant la compilation d'un projet, le compilateur fournit au générateur un modèle du programme en lecture seule : la syntaxe de chaque fichier source et les symboles de chaque type, y compris ceux des assemblies référencés. Le générateur peut ajouter des fichiers C# à la compilation et signaler des diagnostics, mais il ne peut ni modifier ni supprimer le code déjà présent. Ce qu'il ajoute est compilé avec le reste du projet, comme si l'auteur du projet l'avait écrit.</p>
+<p>Un générateur convient à un travail mécanique qui doit pourtant suivre le programme, comme lister chaque classe marquée d'un attribut. Le faire à l'exécution, c'est de la réflexion : le programme parcourt ses propres métadonnées pendant qu'il s'exécute. Le faire au moment du build produit du code ordinaire qui nomme chaque classe directement, ce qui ne coûte rien au démarrage et fonctionne là où la réflexion n'est pas disponible. Les générateurs sont incrémentaux : le compilateur met en cache la sortie de chaque étape et ne réexécute une étape que si son entrée a changé, de sorte qu'un générateur qui ne dépend que d'une propriété de build n'est pas réexécuté lorsqu'un fichier source est modifié.</p>
+<p>Les paramètres de build n'atteignent pas un générateur d'eux-mêmes. Un projet déclare chaque propriété MSBuild qu'un générateur peut lire comme <code>CompilerVisibleProperty</code>, et le build écrit ces propriétés dans un fichier editorconfig qu'il transmet au compilateur, où le générateur les lit sous la forme <code>build_property.&lt;Name&gt;</code>.</p>
+<p>Le piège, c'est le code que personne ne voit. Les fichiers générés ne sont pas dans le dossier du projet : un lecteur peut donc chercher une classe que le compilateur voit mais que la liste des fichiers ne montre pas, et une erreur dans un générateur se manifeste par une erreur de compilation dans un fichier que personne n'a écrit. Un générateur ne voit par ailleurs que ce que voit la compilation : une classe à laquelle le projet ne peut pas accéder, comme une classe imbriquée privée ou une classe à visibilité internal d'un autre assembly, est hors de portée du code qu'il génère.</p>
+<p>Dans Cosmos, un noyau est compilé à l'avance et le code du noyau n'utilise pas la réflexion : le noyau ne peut donc pas chercher les pilotes dans ses assemblies au démarrage. <code>DriverManifestGenerator</code>, dans <code>Cosmos.Kernel.SourceGenerators</code>, fait cette recherche au moment du build : il trouve chaque classe <code>[Driver]</code> du projet du noyau et des assemblies référencés qui référencent <code>Cosmos.Kernel.HAL</code>, et écrit <code>DriverManifest.g.cs</code>, qui construit chacune d'elles. <code>CosmosEntryPointGenerator</code> écrit le point d'entrée qui appelle le manifeste. <code>Cosmos.Sdk</code> active <code>EmitCompilerGeneratedFiles</code> : les deux fichiers sont donc aussi écrits sous <code>obj/</code> pour qu'on puisse les lire, et une classe marquée que le générateur ne peut pas construire est signalée par l'avertissement <code>COSMOSGEN001</code> au lieu d'être écartée en silence. Voir <a href="../drivers.html#the-attribute-and-the-manifest">L'attribut et le manifeste</a> et le <a href="../../dev/build/driver-manifest.html">Manifeste des pilotes</a>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/user/driver-concepts/source-generators.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

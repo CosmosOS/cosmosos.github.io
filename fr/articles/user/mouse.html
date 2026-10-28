@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>Souris | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Souris | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/user/mouse.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="mouse"></a></p>
+<h1 id="souris">Souris</h1>
+<p>Dans cet article, nous verrons les entrées souris sur Cosmos Gen3 : comment suivre la position du pointeur, réagir aux appuis sur les boutons et à la molette, et dessiner un curseur avec l'API graphique.</p>
+<p>Les principales différences si vous venez de Gen2 :</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Gen2</th>
+<th>Gen3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API du gestionnaire</td>
+<td><code>Cosmos.System.MouseManager</code></td>
+<td>Le même modèle, dans <code>Cosmos.Kernel.System.Input</code></td>
+</tr>
+<tr>
+<td>État des boutons</td>
+<td>Énumération de flags <code>MouseState</code></td>
+<td>Booléens <code>LeftButton</code>, <code>RightButton</code>, <code>MiddleButton</code></td>
+</tr>
+<tr>
+<td>Position</td>
+<td><code>X</code>, <code>Y</code> limités à la taille de l'écran</td>
+<td>Identique</td>
+</tr>
+<tr>
+<td>Molette</td>
+<td><code>ScrollDelta</code> + <code>ResetScrollDelta()</code></td>
+<td>Identique</td>
+</tr>
+<tr>
+<td>Curseur</td>
+<td>Dessiné par votre code</td>
+<td>Dessiné par votre code</td>
+</tr>
+<tr>
+<td>Périphériques</td>
+<td>Souris PS/2</td>
+<td>Souris PS/2 avec molette (x64), virtio-mouse et souris USB, toutes sur le kit de pilotes (le 8042 sur q35 et sur tout PC ; virtio sur PCI sur les deux architectures, MMIO sur ARM64 ; USB sur un contrôleur xHCI, EHCI ou OHCI sur les deux)</td>
+</tr>
+</tbody>
+</table>
+<p>Si vous trouvez des bugs ou quelque chose d'anormal, merci de <a href="https://github.com/CosmosOS/Cosmos/issues/new/choose">soumettre une issue</a> sur notre dépôt.</p>
+<p><a id="enable-the-mouse-in-your-kernel"></a></p>
+<h2 id="activer-la-souris-dans-votre-noyau">Activer la souris dans votre noyau</h2>
+<p>La prise en charge de la souris dépend d'un commutateur de fonctionnalité. Vérifiez que le <code>.csproj</code> de votre noyau ne le désactive pas (sa valeur par défaut est <code>true</code>) :</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;CosmosEnableMouse&gt;true&lt;/CosmosEnableMouse&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p>Voici les directives <code>using</code> dont dépendent les extraits ci-dessous ; les types de dessin viennent de l'article <a href="graphics.html">Graphismes</a> :</p>
+<pre><code class="lang-csharp">using System.Drawing;
+using Cosmos.Kernel.System.Graphics;
+using Cosmos.Kernel.System.Graphics.Fonts;
+using Cosmos.Kernel.System.Input;
+</code></pre>
+<p>Comme pour le clavier, pendant l'étape des pilotes, la souris PS/2 (x64) est liée par le <code>Ps2MouseDriver</code> du kit de pilotes, une souris virtio par <code>VirtioInputDriver</code> et une souris USB par <code>UsbMouseDriver</code>, et chacune est publiée auprès du consommateur du gestionnaire, qui l'enregistre (<a href="drivers.html#ps2-devices">Périphériques PS/2</a>, <a href="drivers.html#virtio-devices">Périphériques virtio</a>, <a href="drivers.html#usb-devices">Périphériques USB</a>) ; <code>MouseManager</code> est prêt dès que votre noyau s'exécute.</p>
+<p>Les souris USB ont aussi besoin des pilotes USB, <code>CosmosEnableUsb</code>. Vous n'avez pas à le définir : laissé non défini, il est activé dès que <code>CosmosEnableMouse</code> l'est. Le mettre à <code>false</code> conserve les souris PS/2 et virtio et retire les souris USB en même temps que les pilotes de contrôleur hôte.</p>
+<p>Pour essayer une souris USB dans QEMU, passez <code>--mouse usb-mouse</code> à <code>cosmos run</code> : le lanceur ajoute un contrôleur <code>qemu-xhci</code> (ou réutilise celui qu'ont déjà amené des disques USB ou un clavier <code>usb-kbd</code>) et y branche la souris, sur l'une ou l'autre architecture. <code>--usb-controller ehci</code>, <code>ohci</code> ou <code>ehci-ohci</code> met à sa place un EHCI, un OHCI ou un EHCI accompagné d'un OHCI compagnon, chaque périphérique USB étant rattaché à l'un de ses ports racines.</p>
+<p><a id="position-and-buttons"></a></p>
+<h2 id="position-et-boutons">Position et boutons</h2>
+<p><code>MouseManager</code> est un ensemble de propriétés statiques que le gestionnaire d'interruption tient à jour : <code>X</code> et <code>Y</code> pour la position du pointeur, <code>LeftButton</code>, <code>RightButton</code> et <code>MiddleButton</code> pour les boutons. Aucun curseur n'apparaît à l'écran tant que vous n'en dessinez pas un, si bien que le code de souris est une boucle de rendu qui lit ces propriétés à chaque image :</p>
+<pre><code class="lang-csharp">Canvas canvas = Canvas.GetFullScreen();
+Font font = PCScreenFont.DefaultFont;
+
+/* Clamp the pointer to the actual screen */
+MouseManager.SetScreenSize(canvas.Width, canvas.Height);
+
+while (true)
+{
+    canvas.Clear(Color.MidnightBlue);
+
+    canvas.DrawString(&quot;X: &quot; + MouseManager.X + &quot;   Y: &quot; + MouseManager.Y,
+        font, Color.White, 40, 40);
+    canvas.DrawString(&quot;Buttons: &quot;
+        + (MouseManager.LeftButton ? &quot;L&quot; : &quot;-&quot;)
+        + (MouseManager.MiddleButton ? &quot;M&quot; : &quot;-&quot;)
+        + (MouseManager.RightButton ? &quot;R&quot; : &quot;-&quot;),
+        font, Color.White, 40, 100);
+
+    /* A minimal cursor: a white dot with a black outline */
+    canvas.DrawFilledCircle(Color.White, MouseManager.X, MouseManager.Y, 6);
+    canvas.DrawCircle(Color.Black, MouseManager.X, MouseManager.Y, 6);
+
+    canvas.Display();
+    Thread.Sleep(15);
+}
+</code></pre>
+<!-- video: le point du curseur suit la souris pendant que l'affichage de la position se met à jour et que les indicateurs L, M et R s'allument à chaque appui sur un bouton -->
+<p><video src="images/mouse-cursor.mp4" controls autoplay muted loop playsinline style="max-width:100%"></video></p>
+<p>Appelez <code>SetScreenSize</code> une fois au démarrage : le gestionnaire limite <code>X</code> et <code>Y</code> à ces bornes (la valeur par défaut est 1024x768, ce qui correspond rarement au framebuffer). Pour un vrai curseur en flèche, copiez un petit bitmap à l'écran à la place du cercle.</p>
+<p><a id="painting-with-the-mouse"></a></p>
+<h2 id="peindre-avec-la-souris">Peindre avec la souris</h2>
+<p>Les boutons sont de simples booléens, un programme de dessin se résume donc à quelques <code>if</code>. Les traits s'accumulent sur un canvas hors écran (voir <a href="graphics.html#off-screen-canvases">Canvas hors écran</a>), de sorte que le curseur peut être dessiné par-dessus sans les effacer :</p>
+<pre><code class="lang-csharp">Canvas screen = Canvas.GetFullScreen();
+MouseManager.SetScreenSize(screen.Width, screen.Height);
+
+Canvas paint = new Canvas(screen.Width, screen.Height);
+paint.Clear(Color.MidnightBlue);
+
+while (true)
+{
+    if (MouseManager.LeftButton)
+    {
+        paint.DrawFilledCircle(Color.Gold, MouseManager.X, MouseManager.Y, 6);
+    }
+
+    if (MouseManager.RightButton)
+    {
+        paint.Clear(Color.MidnightBlue);
+    }
+
+    screen.DrawCanvas(paint, 0, 0);
+    screen.DrawFilledCircle(Color.White, MouseManager.X, MouseManager.Y, 6);
+    screen.DrawCircle(Color.Black, MouseManager.X, MouseManager.Y, 6);
+    screen.Display();
+
+    Thread.Sleep(15);
+}
+</code></pre>
+<!-- video: des traits dorés peints en maintenant le bouton gauche, le canvas effacé d'un clic droit, puis de nouveaux traits peints -->
+<p><video src="images/mouse-paint.mp4" controls autoplay muted loop playsinline style="max-width:100%"></video></p>
+<p><a id="the-scroll-wheel"></a></p>
+<h2 id="la-molette">La molette</h2>
+<p>Le mouvement de la molette s'accumule dans <code>MouseManager.ScrollDelta</code>, à raison d'une unité par cran. Le pilote ne le remet jamais à zéro : lisez-le, appliquez-le, puis appelez <code>ResetScrollDelta()</code> pour que le même mouvement ne soit pas appliqué deux fois.</p>
+<pre><code class="lang-csharp">Canvas canvas = Canvas.GetFullScreen();
+Font font = PCScreenFont.DefaultFont;
+
+int radius = 60;
+
+while (true)
+{
+    int delta = MouseManager.ScrollDelta;
+    if (delta != 0)
+    {
+        radius = Math.Clamp(radius + delta * 10, 12, 320);
+        MouseManager.ResetScrollDelta();
+    }
+
+    canvas.Clear(Color.MidnightBlue);
+    canvas.DrawString(&quot;Scroll to resize the circle. Radius: &quot; + radius,
+        font, Color.White, 40, 40);
+    canvas.DrawFilledCircle(Color.DeepSkyBlue,
+        canvas.Width / 2, canvas.Height / 2, radius);
+    canvas.Display();
+
+    Thread.Sleep(15);
+}
+</code></pre>
+<!-- video: le cercle grandit et rétrécit à mesure que la molette tourne dans un sens puis dans l'autre -->
+<p><video src="images/mouse-scroll.mp4" controls autoplay muted loop playsinline style="max-width:100%"></video></p>
+<p><a id="sensitivity-and-pointer-control"></a></p>
+<h2 id="sensibilité-et-contrôle-du-pointeur">Sensibilité et contrôle du pointeur</h2>
+<p>Deux autres réglages sur <code>MouseManager</code> :</p>
+<ul>
+<li><code>Sensitivity</code> multiplie chaque delta de mouvement (<code>1.0f</code> par défaut) ; les valeurs inférieures à 1 ralentissent le pointeur, les valeurs supérieures l'accélèrent.</li>
+<li><code>SetPosition(x, y)</code> déplace le pointeur par programme, en le limitant aux bornes de l'écran, par exemple pour le centrer à l'ouverture d'une scène.</li>
+</ul>
+<p><a id="current-limitations"></a></p>
+<h2 id="limitations-actuelles">Limitations actuelles</h2>
+<ul>
+<li>Seuls les périphériques de pointage relatifs sont pris en charge. Il n'y a pas d'entrée absolue (tablette), si bien que dans la fenêtre d'une VM, le pointeur de l'invité ne suit pas le curseur de l'hôte point pour point.</li>
+<li>L'inclinaison horizontale de la molette est ignorée ; seule la molette verticale atteint <code>ScrollDelta</code>.</li>
+<li>Une souris PS/2 est publiée une seule fois, pendant l'étape des pilotes, lorsque le pilote de souris s'est lié au nœud du port auxiliaire du pilote 8042 et que sa réinitialisation a obtenu une réponse ; une souris virtio présente au démarrage l'est une seule fois, lorsque l'étape propose son périphérique. Une souris USB est publiée quand son nœud est lié et retirée quand le nœud est retiré, de même qu'une souris virtio dont la fonction PCI, que le pilote de port racine publie et retire, se trouve derrière un emplacement PCI Express à branchement à chaud : ce sont donc ces souris-là qui peuvent être branchées et débranchées pendant que le noyau s'exécute.</li>
+<li>Une souris USB est pilotée dans le protocole de démarrage HID, que toute souris de PC prend en charge : trois boutons, des deltas X et Y sur 8 bits et, sur une souris à molette, la molette dans l'octet qui les suit. Les boutons supplémentaires, l'inclinaison horizontale et la résolution plus fine que certaines souris rapportent dans leur propre protocole de rapport ne sont pas lus.</li>
+</ul>
+<p><a id="how-it-works"></a></p>
+<h2 id="fonctionnement">Fonctionnement</h2>
+<p>Sur x64, la souris PS/2 lève l'IRQ 12 pour chaque octet d'un paquet de mouvement, que le pilote 8042 lit et transmet au <code>Ps2Access</code> du port auxiliaire ; le gestionnaire d'interruption du pilote de souris assemble les 3 octets de boutons et de deltas X/Y, portés à 4 par l'octet de la molette une fois que son sondage a activé le protocole IntelliMouse (la séquence de fréquences d'échantillonnage 200, 100, 80), écarte un octet qui ne peut pas commencer un paquet, et transmet un rapport par paquet, à travers le récepteur de pointeur, au consommateur du gestionnaire. Une souris virtio fournit les mêmes informations sous forme d'enregistrements d'événements dans sa file, sur PCI ou MMIO : le <code>VirtioInputDriver</code> du kit de pilotes les retire de la file sur le thread de travail du kit (réveillé par l'interruption de la file, ou toutes les 20 ms quand aucune n'a pu être routée), regroupe les événements d'axe et de bouton en un rapport par événement de synchronisation, et le transmet, à travers le récepteur de pointeur, au consommateur du gestionnaire. Les rapports de démarrage d'une souris USB arrivent sur son pipe IN d'interruption, livrés par l'interruption du pilote de contrôleur hôte (un message MSI-X sur xHCI, la ligne d'interruption classique de la fonction sur EHCI et OHCI) ou, quand aucune n'a pu être routée, par sa scrutation toutes les 20 ms ; la routine de <code>UsbMouseDriver</code> qui les traite transforme chaque rapport en un mouvement relatif (HID oriente Y vers le bas, comme le gestionnaire, et sa molette est inversée pour qu'une valeur positive fasse défiler vers le bas, comme sur PS/2) et le transmet à travers le même récepteur. Dans tous les cas, les deltas parviennent à <code>MouseManager</code>, qui applique <code>Sensitivity</code>, les ajoute à <code>X</code> et <code>Y</code>, les limite à la taille de l'écran et met à jour les booléens des boutons ; les deltas de la molette s'accumulent dans <code>ScrollDelta</code> jusqu'à ce que le code qui les scrute les consomme. Votre boucle de rendu ne fait jamais que lire l'état, c'est pourquoi aucun verrouillage n'est nécessaire.</p>
+<pre><code>Render loop (reads X/Y, buttons, ScrollDelta)
+        │
+MouseManager ── Sensitivity, screen clamping, ScrollDelta accumulation
+        │
+PS/2 mouse over the driver kit (the 8042, IRQ 12, x64)  /  virtio-mouse over the driver kit (PCI, MMIO)  /  USB mouse over the driver kit (xHCI, EHCI, OHCI)
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/user/mouse.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

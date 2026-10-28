@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>Branchement &#224; chaud | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Branchement &#224; chaud | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/user/driver-concepts/hot-plug.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="hot-plug"></a></p>
+<h1 id="branchement-à-chaud">Branchement à chaud</h1>
+<p>Le branchement à chaud signifie qu'un périphérique peut arriver ou partir pendant que la machine fonctionne. L'arrivée est la moitié la plus simple : le pilote de bus remarque le nouveau périphérique, le décrit comme il le ferait au démarrage, et le noyau le propose aux pilotes. Le retrait est plus difficile, car le pilote lié au périphérique peut être en train de s'en servir. Un retrait ordonné demande d'abord l'autorisation : sur un emplacement PCI Express, l'utilisateur appuie sur le bouton d'attention de l'emplacement, le système d'exploitation arrête le périphérique et coupe l'alimentation de l'emplacement, et ce n'est qu'ensuite que la carte est retirée. Un retrait inopiné ne demande rien, et la carte ou le câble a disparu avant que le moindre logiciel n'en soit averti.</p>
+<p>Après un retrait inopiné, le piège est de toucher au périphérique. Une lecture sur un périphérique PCI qui n'est plus là renvoie tous les bits à un, valeur qu'un pilote peut prendre pour un registre d'état dont chaque bit est positionné, ou sur laquelle il peut attendre indéfiniment qu'un bit repasse à zéro. Une écriture peut provoquer une faute, ou atteindre le périphérique, quel qu'il soit, auquel la plage d'adresses est attribuée ensuite. Le démontage d'un pilote doit donc savoir si le matériel est toujours là avant de l'arrêter.</p>
+<p>PCI Express ajoute un second problème. Le firmware n'a donné d'adresses qu'aux périphériques présents au démarrage, si bien qu'une fonction qui arrive plus tard a des BAR non attribués, qu'il faut placer dans les fenêtres d'adresses que relaie le port situé au-dessus de l'emplacement (<a href="pci.html">PCI</a>).</p>
+<p><a href="usb.html">USB</a> et <a href="ps2.html">PS/2</a> se situent aux deux extrêmes. USB a été conçu pour le branchement à chaud : les hubs signalent chaque branchement et chaque débranchement, et l'hôte énumère chaque nouveau périphérique. PS/2 ne l'a pas été, et son clavier et sa souris ne sont détectés qu'une fois, au démarrage.</p>
+<p>Dans le kit de pilotes, <code>OnDetach</code> reçoit une <code>DetachReason</code> dont <code>HardwarePresent</code> vaut <code>false</code> une fois le périphérique parti, et le pilote ne doit alors pas toucher à ses registres (<a href="../drivers.html#teardown-and-ondetach">Démontage et OnDetach</a>). <code>PcieRootPortDriver</code> publie une fonction qui arrive dans un emplacement de branchement à chaud en plaçant ses BAR non attribués dans les fenêtres du port, et la retire quand elle est enlevée (<a href="../drivers.html#hot-plug-slots">Emplacements de branchement à chaud</a>). Le <code>UsbAccess.IsDisconnected</code> d'une interface USB passe à vrai une fois son périphérique débranché (<a href="../drivers.html#the-usb-access-object">L'objet d'accès USB</a>), tandis que les ports PS/2 ne sont publiés qu'au démarrage (<a href="../drivers.html#the-ps2-class-drivers">Les pilotes de classe PS/2</a>).</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/user/driver-concepts/hot-plug.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

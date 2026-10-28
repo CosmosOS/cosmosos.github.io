@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>优先级反转与优先级继承 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="优先级反转与优先级继承 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/dev/sched-concepts/priority-inversion.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="priority-inversion-and-inheritance"></a></p>
+<h1 id="优先级反转与优先级继承">优先级反转与优先级继承</h1>
+<p>当一个高优先级线程等待一个由低优先级线程持有的锁时，就会发生优先级反转（priority inversion）。等待本身是预料之中的，因为持有者只需完成它的临界区。反转来自第三个线程：它的优先级居中，根本不需要任何锁，却抢占了持有者；持有者不在 CPU 上时无法释放锁，于是高优先级线程实际上是在等待这个中优先级线程，它运行多久，高优先级线程就要等多久。最著名的例子是 1997 年的火星探路者（Mars Pathfinder）着陆器，它不断重启，原因是一个高优先级任务在等待一个由低优先级任务持有的锁，而中优先级任务一直把这个低优先级任务挡在 CPU 之外。</p>
+<p>优先级继承（priority inheritance）让等待变得有界。当一个线程持有某个更高优先级线程正在等待的锁时，它以该等待者的优先级运行，因此任何中优先级线程都无法抢占它；释放锁时，它再降回自己的优先级。优先级天花板协议（priority ceiling protocol）是静态的替代方案：每个锁带有其最高优先级使用者的优先级，任何获取该锁的线程在持有期间都以这个优先级运行。</p>
+<p>陷阱在于正确地撤销优先级提升。继承是可传递的，因为持有者自己可能也在等待第三个线程持有的锁，这个线程随后也必须继承优先级；而一个持有多个锁的线程在释放其中一个时，必须回落到它仍应得到的最高优先级，而不是回落到它的基础优先级。锁移交自身的顺序同样重要：一个按先到先服务的顺序服务等待者的锁，可能会交给一个低优先级的等待者，而一个高优先级的等待者还排在它后面。</p>
+<p>在 Cosmos 中，内核的 <code>Mutex</code> 把它的等待者保存在一个 FIFO 队列中，释放时直接把所有权移交给队首的等待者，而在其他线程等待期间不会提升持有者的优先级：这很公平，但在固定优先级策略下容易出现反转。在默认的 Stride 策略下，优先级是一种份额，因此持有者会持续获得它的份额，高优先级等待者的等待仍然有界，只是更长。继承协议会用到的钩子是 <code>SetPriority</code>，可通过 <code>SchedulerManager.SetPriority</code> 调用到它；内核中没有任何地方调用它，也没有任何策略实现了继承。参见 <a href="../scheduler.html#mutex">Mutex</a> 和<a href="../../user/scheduler-plugging.html#real-time-notes">实时说明</a>。</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/dev/sched-concepts/priority-inversion.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

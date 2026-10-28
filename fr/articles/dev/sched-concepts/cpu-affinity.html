@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>Affinit&#233; CPU et r&#233;partition de charge | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Affinit&#233; CPU et r&#233;partition de charge | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/dev/sched-concepts/cpu-affinity.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="cpu-affinity-and-load-balancing"></a></p>
+<h1 id="affinité-cpu-et-répartition-de-charge">Affinité CPU et répartition de charge</h1>
+<p>Sur une machine à plusieurs CPU, un ordonnanceur donne en général à chaque CPU sa propre file d'exécution. Une file unique partagée exigerait un verrou que tous les CPU se disputeraient à chaque changement, et un thread qui revient sans cesse sur le même CPU y retrouve ses données encore présentes dans les caches de ce CPU. Les files par CPU entraînent deux décisions qui leur sont propres. Le placement choisit un CPU pour un thread lorsqu'il est créé ou réveillé, généralement le moins chargé. La répartition de charge déplace ensuite les threads, quand une file s'allonge alors qu'un autre CPU reste inactif : le CPU inactif tire, ou vole, un thread à un CPU occupé, ou bien un CPU occupé en pousse un ailleurs.</p>
+<p>L'affinité limite les endroits où un thread peut aller. L'affinité stricte, ou épinglage, restreint un thread à un CPU ou à un ensemble de CPU, pour un thread par CPU comme un thread inactif, ou pour du code qui touche à un état par CPU. L'affinité souple n'est qu'une préférence : un cache encore chaud, qu'un ordonnanceur met en balance avec la charge.</p>
+<p>Le piège, c'est l'état par CPU qui voyage avec le thread. Une politique qui tient une horloge par CPU, comme le temps virtuel d'un ordonnanceur <a href="virtual-time-fair-share.html">à partage équitable</a>, doit recaler un thread qui migre sur l'horloge de la destination, faute de quoi le thread arrive très en avance ou très en retard sur tous les threads qui s'y trouvent. Une migration touche aussi les files de deux CPU à la fois : elle doit donc être sûre vis-à-vis des ticks des deux, et un répartiteur de charge ne doit jamais voler un thread épinglé.</p>
+<p>Dans Cosmos, le noyau s'exécute aujourd'hui sur un seul CPU. Les hooks qui placent et répartissent les threads, <code>SelectCpu</code> et <code>Balance</code>, n'ont aucun appelant, et <code>OnThreadMigrate</code> ne s'exécute que lorsque le <code>Balance</code> propre à une politique l'appelle. La conception est malgré tout par CPU : chaque hook qui touche à une structure d'exécution reçoit le <code>PerCpuState</code> sur lequel il opère, une politique garde sa structure d'exécution dans le <code>SchedulerData</code> de cet état, et <code>SchedulerThread.CpuId</code> désigne le CPU auquel un thread est attribué, si bien qu'une politique écrite par CPU dès maintenant restera valable telle quelle. <code>SchedulerThreadFlags.Pinned</code> marque un thread qui ne doit pas migrer ; seuls les threads inactifs le portent, puisqu'un noyau peut lire les indicateurs d'un thread mais pas les modifier. Le <code>Balance</code> de Stride vole le thread de queue de la file la plus longue quand sa propre file est vide et que cette file contient plus d'un thread, sauf si ce thread de queue est épinglé, et son <code>OnThreadMigrate</code> recale le <code>Pass</code> du thread sur le <code>GlobalPass</code> de la destination augmenté du <code>Remain</code> sauvegardé du thread. Voir <a href="../scheduler.html#limitations-and-evolution">Limites et évolution</a>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/dev/sched-concepts/cpu-affinity.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

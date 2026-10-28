@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title> | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content=" | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/dev/build/patcher-build.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="overview"></a></p>
+<h2 id="vue-densemble">Vue d'ensemble</h2>
+<p><code>Cosmos.Patcher.Build</code> intègre l'outil <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher"><code>Cosmos.Patcher</code></a> au pipeline MSBuild. <code>Cosmos.Patcher</code> réécrit l'IL des assemblies candidats en y appliquant des plugs à la manière de CosmosOS, afin que le framework .NET Core puisse s'exécuter sur des cibles NativeAOT. L'analyse statique est assurée par <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Analyzer.Patcher"><code>Cosmos.Patcher.Analyzer</code></a>, qui signale les erreurs de plug pendant la compilation C#, avant que le moindre IL ne soit réécrit.</p>
+<hr>
+<p><a id="net-assembly-structure"></a></p>
+<h2 id="structure-dun-assembly-net">Structure d'un assembly .NET</h2>
+<p>Un assembly .NET (<code>.dll</code> ou <code>.exe</code>) est un exécutable portable qui contient des métadonnées et du code IL. Le patcher manipule ces structures à l'aide de Mono.Cecil.</p>
+<pre><code>┌─────────────────────────────────────────────────────────────────────┐
+│                        AssemblyDefinition                           │
+│  ┌───────────────────────────────────────────────────────────────┐  │
+│  │ Name: &quot;MyAssembly&quot;                                            │  │
+│  │ Version: 1.0.0.0                                              │  │
+│  │ CustomAttributes: [AssemblyInfo, ...]                         │  │
+│  └───────────────────────────────────────────────────────────────┘  │
+│                              │                                      │
+│                              ▼                                      │
+│  ┌───────────────────────────────────────────────────────────────┐  │
+│  │                   ModuleDefinition[0]                         │  │
+│  │  ┌─────────────────────────────────────────────────────────┐  │  │
+│  │  │ Name: &quot;MyAssembly.dll&quot;                                  │  │  │
+│  │  │ AssemblyReferences: [mscorlib, System.Runtime, ...]     │  │  │
+│  │  │ TypeReferences: [external type tokens]                  │  │  │
+│  │  └─────────────────────────────────────────────────────────┘  │  │
+│  │                           │                                   │  │
+│  │                           ▼                                   │  │
+│  │  ┌─────────────────────────────────────────────────────────┐  │  │
+│  │  │                  TypeDefinition[0]                      │  │  │
+│  │  │  ┌───────────────────────────────────────────────────┐  │  │  │
+│  │  │  │ FullName: &quot;MyNamespace.MyClass&quot;                   │  │  │  │
+│  │  │  │ BaseType: System.Object                           │  │  │  │
+│  │  │  │ Interfaces: [IDisposable, ...]                    │  │  │  │
+│  │  │  │ CustomAttributes: [Plug, Serializable, ...]       │  │  │  │
+│  │  │  │                                                   │  │  │  │
+│  │  │  │  ┌─────────────────────────────────────────────┐  │  │  │  │
+│  │  │  │  │            FieldDefinition[0]               │  │  │  │  │
+│  │  │  │  │  Name, FieldType, Attributes, Constant      │  │  │  │  │
+│  │  │  │  ├─────────────────────────────────────────────┤  │  │  │  │
+│  │  │  │  │            FieldDefinition[n]               │  │  │  │  │
+│  │  │  │  └─────────────────────────────────────────────┘  │  │  │  │
+│  │  │  │                                                   │  │  │  │
+│  │  │  │  ┌─────────────────────────────────────────────┐  │  │  │  │
+│  │  │  │  │          PropertyDefinition[0]              │  │  │  │  │
+│  │  │  │  │  Name, PropertyType, GetMethod, SetMethod   │  │  │  │  │
+│  │  │  │  ├─────────────────────────────────────────────┤  │  │  │  │
+│  │  │  │  │          PropertyDefinition[n]              │  │  │  │  │
+│  │  │  │  └─────────────────────────────────────────────┘  │  │  │  │
+│  │  │  │                                                   │  │  │  │
+│  │  │  │  ┌─────────────────────────────────────────────┐  │  │  │  │
+│  │  │  │  │           MethodDefinition[0]               │  │  │  │  │
+│  │  │  │  │  Name, ReturnType, Parameters, Attributes   │  │  │  │  │
+│  │  │  │  │                                             │  │  │  │  │
+│  │  │  │  │  ┌───────────────────────────────────────┐  │  │  │  │  │
+│  │  │  │  │  │           MethodBody                  │  │  │  │  │  │
+│  │  │  │  │  │  Variables: [local0, local1, ...]     │  │  │  │  │  │
+│  │  │  │  │  │  MaxStackSize: 8                      │  │  │  │  │  │
+│  │  │  │  │  │  InitLocals: true                     │  │  │  │  │  │
+│  │  │  │  │  │                                       │  │  │  │  │  │
+│  │  │  │  │  │  Instructions:                        │  │  │  │  │  │
+│  │  │  │  │  │   IL_0000: ldarg.0                    │  │  │  │  │  │
+│  │  │  │  │  │   IL_0001: call .ctor                 │  │  │  │  │  │
+│  │  │  │  │  │   IL_0006: ldstr &quot;Hello&quot;              │  │  │  │  │  │
+│  │  │  │  │  │   IL_000B: call Console.WriteLine     │  │  │  │  │  │
+│  │  │  │  │  │   IL_0010: ret                        │  │  │  │  │  │
+│  │  │  │  │  │                                       │  │  │  │  │  │
+│  │  │  │  │  │  ExceptionHandlers:                   │  │  │  │  │  │
+│  │  │  │  │  │   [try/catch/finally blocks]          │  │  │  │  │  │
+│  │  │  │  │  └───────────────────────────────────────┘  │  │  │  │  │
+│  │  │  │  ├─────────────────────────────────────────────┤  │  │  │  │
+│  │  │  │  │           MethodDefinition[n]               │  │  │  │  │
+│  │  │  │  └─────────────────────────────────────────────┘  │  │  │  │
+│  │  │  └───────────────────────────────────────────────────┘  │  │  │
+│  │  ├─────────────────────────────────────────────────────────┤  │  │
+│  │  │                  TypeDefinition[n]                      │  │  │
+│  │  └─────────────────────────────────────────────────────────┘  │  │
+│  └───────────────────────────────────────────────────────────────┘  │
+│  ┌───────────────────────────────────────────────────────────────┐  │
+│  │                   ModuleDefinition[n]                         │  │
+│  └───────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<p><a id="flow-chart"></a></p>
+<h2 id="diagramme-de-flux">Diagramme de flux</h2>
+<pre><code class="lang-mermaid">flowchart TD
+    A[SetupPatcher] --&gt; B[FindPluggedAssembliesTask]
+    B --&gt; C{AssembliesToPatch}
+    C --&gt;|for each| D[PatcherTask]
+    D --&gt; E[Program patch]
+    E --&gt; F[PatchCommand.Execute]
+    F --&gt; G[PlugScanner.LoadPlugs]
+    G --&gt; H[PlugPatcher.PatchAssembly]
+    H --&gt; I[ProcessPlugMembers]
+    I --&gt; J[MethodResolver.ResolveMethod]
+    J --&gt; K[MethodPatcher.PatchMethod]
+    K --&gt; L[ILCloner.CloneInstructions]
+    L --&gt; M[TypeImporter.SafeImport*]
+    I --&gt; N[PropertyPatcher.PatchProperty]
+    I --&gt; O[FieldPatcher.PatchField]
+    K --&gt; P[Patched assemblies]
+    N --&gt; P
+    O --&gt; P
+    A --&gt; X[CleanPatcher]
+</code></pre>
+<hr>
+<p><a id="parameters"></a></p>
+<h2 id="paramètres">Paramètres</h2>
+<table>
+<thead>
+<tr>
+<th>Nom</th>
+<th>Description</th>
+<th>Valeur par défaut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EnablePatching</code></td>
+<td>Active ou désactive le patching.</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>CosmosPatcherExe</code></td>
+<td>Chemin de l'exécutable <code>Cosmos.Patcher</code>.</td>
+<td><code>%USERPROFILE%\.dotnet\tools\cosmos.patcher.exe</code> sous Windows, <code>cosmos.patcher</code> sous Unix</td>
+</tr>
+<tr>
+<td><code>PatcherOutputPath</code></td>
+<td>Répertoire dans lequel les assemblies patchés sont écrits.</td>
+<td><code>$(IntermediateOutputPath)/cosmos/ref/</code></td>
+</tr>
+<tr>
+<td><code>PlugReference</code></td>
+<td>Noms des assemblies de plugs à inclure.</td>
+<td>aucun</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a id="tasks"></a></p>
+<h2 id="tâches">Tâches</h2>
+<table>
+<thead>
+<tr>
+<th>Tâche</th>
+<th>Description</th>
+<th>Dépend de</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SetupPatcher</code></td>
+<td>Rassemble les assemblies candidats, résout les références de plugs et prépare les répertoires de sortie.</td>
+<td><code>Build</code>, <code>ResolveIlcPath</code></td>
+</tr>
+<tr>
+<td><code>RunPatcher</code></td>
+<td>Exécute <code>Cosmos.Patcher</code> pour chaque entrée de <code>AssembliesToPatch</code>.</td>
+<td><code>SetupPatcher</code></td>
+</tr>
+<tr>
+<td><code>CleanPatcher</code></td>
+<td>Supprime les fichiers générés par le patcher.</td>
+<td><code>Clean</code></td>
+</tr>
+<tr>
+<td><code>FindPluggedAssembliesTask</code></td>
+<td>Filtre les assemblies candidats pour ne garder que ceux qui contiennent des types cibles.</td>
+<td><code>SetupPatcher</code></td>
+</tr>
+<tr>
+<td><code>PatcherTask</code></td>
+<td>Enveloppe MSBuild autour de <code>Cosmos.Patcher</code> pour les scénarios personnalisés.</td>
+<td>aucune</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a id="detailed-workflow"></a></p>
+<h2 id="déroulement-détaillé">Déroulement détaillé</h2>
+<ol>
+<li><p><strong>SetupPatcher</strong> rassemble les assemblies de sortie et de référence, résout les références de plugs et les stocke dans <code>$(IntermediateOutputPath)/cosmos</code>.</p>
+</li>
+<li><p><strong>FindPluggedAssembliesTask</strong> utilise <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/PlugScanner.cs"><code>PlugScanner.FindPluggedAssemblies</code></a> pour croiser les cibles des plugs avec les assemblies candidats, et produit <code>AssembliesToPatch</code>.</p>
+</li>
+<li><p><strong>RunPatcher</strong> parcourt <code>AssembliesToPatch</code> et, pour chaque assembly, la <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Patcher/Tasks/PatcherTask.cs"><code>PatcherTask</code></a> lance la CLI <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher"><code>Cosmos.Patcher</code></a> (<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/Program.cs"><code>Program</code></a> → <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/PatchCommand.cs"><code>PatchCommand.Execute</code></a>). Dans <code>Execute</code> :</p>
+<ul>
+<li>L'assembly cible et les assemblies de plugs sont lus par <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/Resolution/PatcherAssemblyLoader.cs"><code>PatcherAssemblyLoader</code></a> avec un <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/Resolution/PatcherAssemblyResolver.cs"><code>PatcherAssemblyResolver</code></a> qui cherche dans les répertoires de la cible, des plugs et de la sortie, ainsi que dans ceux que <code>RunPatcher</code> transmet avec <code>--search</code> (<code>cosmos/ref</code> et le répertoire de chaque assembly candidat). L'écriture d'un assembly patché résout les types de ses constantes : un champ <code>const</code> ou un paramètre par défaut dont le type est une énumération d'un autre assembly Cosmos exige que cet assembly soit trouvé, et le résolveur par défaut de Mono.Cecil ne cherche que dans le répertoire courant et dans le runtime hôte.</li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/PlugScanner.cs"><code>PlugScanner.LoadPlugs</code></a> découvre les types de plugs dans ces assemblies.</li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/Patching/PlugPatcher.cs"><code>PlugPatcher.PatchAssembly</code></a> regroupe les plugs par cible <code>[Plug]</code> et patche chaque type cible à l'aide de :
+<ul>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/Resolution/MethodResolver.cs"><code>MethodResolver</code></a>, qui fait correspondre les signatures des plugs (constructeurs et paramètres <code>aThis</code> compris) par nom et par types de paramètres.</li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/Patching/PlugPatcher.Method.cs"><code>PlugPatcher.Method</code></a>, qui échange ou clone l'IL et supprime les métadonnées P/Invoke.</li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/IL/ILCloner.cs"><code>ILCloner</code></a>, qui clone les instructions, remappe les paramètres et corrige les cibles de branchement.</li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/IL/TypeImporter.cs"><code>TypeImporter</code></a>, qui importe de façon sûre les références de types, de méthodes et de champs, en corrigeant les autoréférences qui produiraient des métadonnées IL invalides.</li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/Patching/PlugPatcher.Property.cs"><code>PlugPatcher.Property</code></a>, qui relie les getters et les setters aux implémentations des plugs.</li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/Patching/PlugPatcher.Field.cs"><code>PlugPatcher.Field</code></a>, qui copie les valeurs constantes et redirige les accès aux champs.</li>
+</ul>
+</li>
+<li>L'assembly patché est écrit dans <code>PatcherOutputPath</code>.</li>
+</ul>
+</li>
+<li><p><strong>CleanPatcher</strong> supprime la sortie patchée lorsque le projet est nettoyé.</p>
+</li>
+<li><p><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Analyzer.Patcher"><code>Cosmos.Patcher.Analyzer</code></a> valide les règles des plugs pendant la compilation, afin de détecter les erreurs avant le patching.</p>
+</li>
+</ol>
+<hr>
+<p><a id="outputs"></a></p>
+<h2 id="sorties">Sorties</h2>
+<ul>
+<li>Assembly applicatif patché : <code>$(IntermediateOutputPath)/cosmos/$(AssemblyName)_patched.dll</code>, la sortie principale du projet après application des plugs.</li>
+<li>Assemblies de référence pour ILC : <code>$(IntermediateOutputPath)/cosmos/ref/*.dll</code>, patchés là où des plugs s'appliquent ; sinon copiés sans modification pour la résolution.</li>
+<li>Les répertoires intermédiaires sont créés à la demande sous <code>$(IntermediateOutputPath)/cosmos/</code>.</li>
+</ul>
+<p>Remarques :</p>
+<ul>
+<li><code>RunPatcher</code> ne s'exécute que lorsque <code>EnablePatching</code> vaut <code>true</code>, et après que <code>SetupPatcher</code> a calculé <code>@(AssembliesToPatch)</code> et les destinations.</li>
+</ul>
+<hr>
+<p><a id="related-components"></a></p>
+<h2 id="composants-associés">Composants associés</h2>
+<ul>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher"><code>Cosmos.Patcher</code></a></li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Analyzer.Patcher"><code>Cosmos.Patcher.Analyzer</code></a></li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/dev/build/patcher-build.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

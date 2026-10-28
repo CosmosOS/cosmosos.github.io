@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>中断投递 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="中断投递 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/user/driver-concepts/interrupt-delivery.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="interrupt-delivery"></a></p>
+<h1 id="中断投递">中断投递</h1>
+<p>设备通过发出中断请求（IRQ）来请求 CPU 的关注，该请求经由中断控制器传递：在 x64 上是 I/O APIC 和本地 APIC，在 ARM64 上是 GIC。控制器为各个中断源编号，可以单独屏蔽每一个中断源，并把一个请求转换成内核据以分派的编号。中断处理程序运行完毕后，内核发出中断结束（end of interrupt）信号，以便控制器投递下一个中断。</p>
+<p>中断结束通知的是控制器，而不是设备。设备把待处理的中断原因保存在一个状态寄存器中，只有它的驱动程序知道如何清除。电平触发的中断线在有待处理原因期间一直保持有效，因此一个没有清除该原因的处理程序会立即再次运行，无休无止。在边沿触发的中断线上，控制器只能看到电平跳变，因此一个未被清除的待处理原因可能再也不会产生新的边沿，设备就此沉默。无论哪种情况，处理程序都要先确认设备的中断。屏蔽中断源是另一种手段，用于只有线程才能清除的中断原因。</p>
+<p>经典的 PCI 功能通过传统引脚（INTx）发出中断信号，这是一根电平触发的连线，其路由因主板而异，并且可能被多个设备共享，因此挂在它上面的每个处理程序都要检查中断是不是自己的设备发出的。MSI 和 MSI-X 用一次内存写入取代了这根连线：设备把一个值写入一个地址，两者都由内核选定，控制器再把这次写入转换成中断。消息从不共享，不需要主板路由，而且一个设备可以为每个队列各配一个消息。MSI-X 把它的消息表（每个表项带一个屏蔽位）放在设备的某个 <a href="pci.html">BAR</a> 中。</p>
+<p>在驱动工具包中，PCI 节点的传统中断线只在 x64 上路由，仅限第 3 到第 15 号中断线，从不共享，并被编程为边沿触发，QEMU 能够投递这种中断，但真实芯片组未必能；它的消息只支持 MSI-X，最多 32 个，在 ARM64 上需要 GICv3 中断转换服务（ITS），并且连接其中一个消息就会关闭该中断线。<code>InterruptHandle.Mask()</code> 和 <code>Unmask()</code> 停止和恢复单个中断源：对中断线是在控制器上操作，对消息则是在表中操作。参见<a href="../drivers.html#interrupts">中断</a>、<a href="../drivers.html#the-legacy-line">传统中断线</a>和<a href="../drivers.html#message-interrupts">消息中断</a>。</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/user/driver-concepts/interrupt-delivery.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

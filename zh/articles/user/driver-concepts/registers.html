@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>MMIO（内存映射 I/O）与端口 I/O | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="MMIO（内存映射 I/O）与端口 I/O | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/user/driver-concepts/registers.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="mmio-memory-mapped-io-and-port-io"></a></p>
+<h1 id="mmio内存映射-io与端口-io">MMIO（内存映射 I/O）与端口 I/O</h1>
+<p>设备以寄存器的形式暴露它的控制接口：寄存器是一些很小的位置，驱动程序读取它们来获知设备的状态，写入它们来向设备下达命令。使用内存映射 I/O（MMIO）时，设备响应一段<a href="physical-addresses.html">物理地址</a>，这段地址映射之后，普通的加载和存储指令就能访问到它。x86 还有一个独立的端口空间，共 65536 个地址，只能通过 <code>in</code> 和 <code>out</code> 指令访问，每次最多 32 位；<a href="ps2.html">PS/2 控制器</a>等较老的设备至今仍位于其中。ARM64 没有端口空间。</p>
+<p>寄存器不是内存。读取可能带有副作用，例如清除某个中断原因，或者从 FIFO 中取走一个字节；写入则可能启动一条命令，因此把一个值写两次，就可能把命令执行两次。每次访问都必须恰好发生一次，按程序顺序进行，并使用设备文档规定的宽度：把一个 32 位寄存器按四个字节读取，就是四次不同的访问；而且许多设备在宽度错误或访问未按其宽度对齐时会出现异常行为。</p>
+<p>映射决定了 CPU 如何缓存这些地址，以页为单位。寄存器需要不可缓存的设备内存，在这种内存上，每次访问都按顺序到达设备，也不会有任何推测性读取。帧缓冲区是位于设备上的普通内存，在不可缓存的映射下绘制会很慢，因此它被映射为写合并（write-combining）：存储操作被合并成突发传输，并放弃彼此之间的顺序。普通的可缓存内存适用于一致性设备与 CPU 共享的 RAM。被缓存的寄存器会悄无声息地出错：返回过时的值，并把写入滞留在缓存中。</p>
+<p>在驱动工具包中，<code>binding.MapRegisters</code> 返回一个 <code>RegisterWindow</code>，它的 <code>Read8</code> 到 <code>Read64</code> 以及 <code>Write8</code> 到 <code>Write64</code> 每次调用都执行一次相应宽度的访问，并检查边界，在内存窗口上还检查对齐；在 x64 端口范围上，它们使用 <code>in</code> 和 <code>out</code>，接受任意偏移量，而 64 位的方法会抛出异常。<code>binding.MapRegion</code> 接受一个 <code>RegionCaching</code>，取值为 <code>Device</code>、<code>WriteCombining</code> 或 <code>Normal</code>，不过目前只有 x64 会应用 <code>WriteCombining</code>，而且只应用于区域完整覆盖的 2 MiB 块，其他所有内存窗口都按 <code>Device</code> 映射。参见<a href="../drivers.html#register-windows">寄存器窗口</a>和<a href="../drivers.html#bulk-regions">大块内存区域</a>。</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/user/driver-concepts/registers.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

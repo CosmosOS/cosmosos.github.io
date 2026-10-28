@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title> | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content=" | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="images/favicon.ico">
+      <link rel="stylesheet" href="public/docfx.min.css">
+      <link rel="stylesheet" href="public/main.css">
+      <meta name="docfx:navrel" content="toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/index.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="landing" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="index.html">
+            <img id="logo" class="svg" src="images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>欢迎来到 Cosmos gen3 wiki！</p>
+<p>查看<a href="roadmap.html">路线图</a>，了解我们迈向首个版本的进展 🚀。</p>
+<p>文档按你想用 gen3 做什么分为两部分：</p>
+<ul>
+<li><strong><a href="articles/user/install.html">用户指南</a></strong>：你想用 Cosmos <strong>构建自己的操作系统</strong>，包括安装工具链、使用文件系统、调试你的内核。</li>
+<li><strong><a href="articles/dev/install-dev.html">贡献者文档</a></strong>：你想<strong>为 Cosmos 本身做贡献</strong>，或了解它的内部实现，包括架构、构建流水线和运行时子系统。</li>
+</ul>
+<p><a id="user-guide"></a></p>
+<h2 id="用户指南">用户指南</h2>
+<p>创建、构建和运行你自己的 Cosmos 内核所需的一切：</p>
+<ul>
+<li><a href="articles/user/install.html">安装指南</a>：配置工具链，并在 VS Code 中创建你的第一个内核。</li>
+<li><a href="articles/user/startup.html">内核启动</a>：启动链以及 <code>BeforeRun</code>/<code>Run</code>/<code>AfterRun</code> 生命周期。</li>
+<li><a href="articles/user/filesystem.html">文件系统</a>：挂载磁盘，并使用标准 .NET <code>System.IO</code> API（<code>File</code>、<code>Directory</code>、流）。</li>
+<li><a href="articles/user/network.html">网络</a>：通过标准 .NET <code>System.Net.Sockets</code> API 使用 DHCP、UDP 和 TCP，以及 DNS。</li>
+<li><a href="articles/user/timers.html">定时器与闹钟</a>：阻塞一段时间，或稍后从定时器中断（<code>TimerManager</code>）或内核线程（<code>AlarmManager</code>）中运行回调。</li>
+<li><a href="articles/user/graphics.html">图形</a>：使用 Canvas API 在屏幕上绘制形状、文本和图像。</li>
+<li><a href="articles/user/audio.html">音频</a>：借助 <code>AudioManager</code> 和 <code>Console.Beep</code>，通过 HD Audio 输出播放音调、WAV 文件以及你自己生成的声音。</li>
+<li><a href="articles/user/keyboard.html">键盘</a>：通过 <code>Console</code> 和 <code>KeyboardManager</code> 读取整行输入、按键事件和键盘布局。</li>
+<li><a href="articles/user/sessions.html">控制台会话与 Telnet</a>：在虚拟控制台上并排运行多个 shell，并通过 Telnet 将它们提供给远程终端。</li>
+<li><a href="articles/user/mouse.html">鼠标</a>：通过 <code>MouseManager</code> 获取指针位置、按键和滚轮。</li>
+<li><a href="articles/user/drivers.html">编写驱动程序</a>：将驱动程序与设备匹配，访问硬件，把设备交给内核，并在没有硬件的情况下进行测试。</li>
+<li><a href="articles/user/scheduler-plugging.html">编写调度器</a>：如何实现并安装调度策略。</li>
+<li><a href="articles/user/debugging.html">使用 VSCode 和 QEMU 调试</a>：通过远程 GDB 在你的内核中设置断点。</li>
+</ul>
+<p><a id="contributor-docs"></a></p>
+<h2 id="贡献者文档">贡献者文档</h2>
+<p>架构与内部实现，面向贡献者和好奇的读者：</p>
+<ul>
+<li><a href="articles/dev/install-dev.html">开发容器配置</a>：从源代码构建框架。</li>
+<li><a href="articles/dev/kernel-project-layout.html">内核项目结构</a>：分层的项目依赖图。</li>
+<li><a href="articles/dev/coding-guidelines.html">编码规范</a>：代码风格与架构模式。</li>
+<li><a href="articles/dev/plugs.html">Plug</a>：IL 层面的方法替换系统。</li>
+<li><a href="articles/dev/testing.html">测试</a>：单元测试与 QEMU 内核测试套件。</li>
+<li><a href="articles/dev/public-api.html">公共 API 跟踪</a>：声明的 API 面文件、包验证、带版本的文档。</li>
+<li><a href="articles/dev/garbage-collector.html">垃圾回收器</a>：标记-清除式 GC。</li>
+<li><a href="articles/dev/garbage-collector-gcinfo.html">垃圾回收器 - 精确栈扫描</a>：GCInfo 如何让触发回收的线程的栈扫描做到精确。</li>
+<li><a href="articles/dev/garbage-collector-glossary.html">垃圾回收器 - 术语表</a>：各篇文章所依赖的 GC 概念的背景说明。</li>
+<li><a href="articles/dev/scheduler.html">调度器</a>：抢占式、可插拔的调度器。</li>
+<li><a href="articles/dev/scheduler-glossary.html">调度器 - 术语表</a>：该文章所依赖的调度概念的背景说明。</li>
+<li><a href="articles/dev/build/kernel-compilation-steps.html">内核编译步骤</a>：从 C# 到可启动 ISO 的完整流程。</li>
+<li><a href="articles/dev/build/asm-build.html">Cosmos.Build.Asm</a>、<a href="articles/dev/build/gcc-build.html">Cosmos.Build.GCC</a>、<a href="articles/dev/build/patcher-build.html">Cosmos.Build.Patcher</a>、<a href="articles/dev/build/ilc-build.html">Cosmos.Build.Ilc</a>：构建流水线的各个组件。</li>
+<li><a href="articles/dev/build/driver-manifest.html">驱动程序清单</a>：构建会注册哪些 <code>[Driver]</code> 类、按什么顺序注册，以及内核如何排除或显式启用某个驱动程序。</li>
+</ul>
+<p><a id="cross-referencing"></a></p>
+<h2 id="交叉引用">交叉引用</h2>
+<p>API 参考文档在 <a href="https://cosmosos.github.io/xrefmap.yml"><code>/xrefmap.yml</code></a> 发布了一份 DocFX 交叉引用映射，涵盖每个已文档化的命名空间、类型和成员。其他 DocFX 站点只需将该 URL 添加到自身 <code>docfx.json</code> 的 <code>xref</code> 列表中，即可使用它：</p>
+<pre><code class="lang-json">{
+  &quot;build&quot;: {
+    &quot;xref&quot;: [ &quot;https://cosmosos.github.io/xrefmap.yml&quot; ]
+  }
+}
+</code></pre>
+<p>这样，Cosmos 类型就通过 UID 而不是 URL 进行链接，写作 <code>&lt;xref:Cosmos.Kernel.System.Graphics.Canvas&gt;</code> 或其简写 <code>@Cosmos.Kernel.System.Graphics.Canvas</code>。每个冻结的发布副本都在旁边附带自己的映射，位于 <code>/vX.Y.Z/xrefmap.yml</code> 和 <code>/latest/xrefmap.yml</code>。</p>
+<p><a id="resources"></a></p>
+<h2 id="资源">资源</h2>
+<ul>
+<li><a href="https://valentin.bzh/posts/3">Cosmos Gen3：NativeAOT 时代与 IL2CPU 的终结？</a></li>
+<li><a href="https://github.com/dotnet/runtime/blob/main/docs/workflow/building/coreclr/nativeaot.md">NativeAOT 开发者工作流程</a></li>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/#limitations-of-native-aot-deployment">Native AOT 的限制</a></li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/index.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

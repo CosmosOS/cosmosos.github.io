@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>&#201;crire un pilote | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="&#201;crire un pilote | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/user/drivers.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="writing-a-driver"></a></p>
+<h1 id="écrire-un-pilote">Écrire un pilote</h1>
+<p>Dans cet article, nous verrons comment écrire un pilote de périphérique pour Cosmos Gen3 : comment un pilote est mis en correspondance avec un périphérique, comment il accède au matériel, comment il remet un périphérique au noyau et comment on le teste sans matériel.</p>
+<p>Chaque noyau embarque déjà les pilotes fournis listés dans <a href="#what-the-kit-supports">Ce que le kit prend en charge</a> : vous écrivez donc un pilote quand votre matériel n'en fait pas partie. Une règle façonne tout le kit : un pilote n'accède au matériel et au noyau qu'à travers sa liaison, et la liaison enregistre tout ce que le pilote acquiert, afin que ce soit le kit, et non le pilote, qui le libère. La première moitié de cette page suit un pilote de la correspondance jusqu'au démontage ; la seconde passe chaque bus en revue, puis les pilotes de périphériques fournis ; les dernières sections montrent comment observer les pilotes à l'exécution, en tester un sans matériel et en distribuer un sous forme de bibliothèque. Chaque terme lié dispose d'une courte note de contexte dans le <a href="driver-glossary.html">glossaire des pilotes</a>.</p>
+<p>Si vous trouvez des bugs ou quelque chose d'anormal, merci de <a href="https://github.com/CosmosOS/Cosmos/issues/new/choose">soumettre une issue</a> sur notre dépôt.</p>
+<hr>
+<p><a id="experimental-status"></a></p>
+<h2 id="statut-expérimental">Statut expérimental</h2>
+<p>Le kit de pilotes est expérimental : chaque type public sous <code>Cosmos.Kernel.HAL.DriverKit</code> et <code>Cosmos.Kernel.HAL.Devices</code>, à l'exception des types stables <code>IBlockDevice</code> et <code>MacAddress</code>, porte <code>[Experimental(&quot;COSMOS0003&quot;)]</code>. Vous pouvez les utiliser dès aujourd'hui, mais ils peuvent changer jusqu'à leur promotion dans l'API stable. Y faire référence provoque une erreur de build tant que votre projet ne l'a pas explicitement accepté :</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;NoWarn&gt;$(NoWarn);COSMOS0003&lt;/NoWarn&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p>Consultez <a href="../dev/public-api.html">Suivi de l'API publique</a> pour savoir comment les API expérimentales sont promues.</p>
+<hr>
+<p><a id="what-the-kit-supports"></a></p>
+<h2 id="ce-que-le-kit-prend-en-charge">Ce que le kit prend en charge</h2>
+<p>Le kit prend en charge cinq bus sur du matériel réel (plateforme, PCI, virtio, USB et PS/2), plus un bus synthétique pour les tests (<a href="#testing-a-driver-over-the-synthetic-bus">Tester un pilote sur le bus synthétique</a>). Un pilote remet au noyau l'un des six types de périphériques suivants : un clavier, un pointeur, une interface réseau, un périphérique bloc, un écran ou une sortie audio. Le gestionnaire du noyau pour ce type (<code>KeyboardManager</code>, <code>MouseManager</code>, <code>NetworkManager</code>, <code>StorageManager</code>, <code>DisplayManager</code> ou <code>AudioManager</code>) récupère tout ce qu'un pilote publie. Chaque noyau reçoit aussi les pilotes ci-dessous via <code>Cosmos.Kernel.Drivers</code>. Ils utilisent la même API publique que vos pilotes, ce qui fait de leurs <a href="https://github.com/CosmosOS/Cosmos/tree/gen3/src/Cosmos.Kernel.Drivers">sources</a> les meilleurs exemples à lire, et <a href="#excluding-and-opting-in">Exclure et inclure explicitement</a> montre comment en retirer un :</p>
+<table>
+<thead>
+<tr>
+<th>Bus</th>
+<th>Pilotes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Plateforme</td>
+<td><code>PciHostDriver</code>, <code>I8042Driver</code>, <code>VirtioMmioTransportDriver</code></td>
+</tr>
+<tr>
+<td>PCI</td>
+<td><code>PcieRootPortDriver</code>, <code>VirtioPciTransportDriver</code>, <code>XhciDriver</code>, <code>EhciDriver</code>, <code>OhciDriver</code>, <code>E1000EDriver</code>, <code>AhciDriver</code>, <code>NvmeDriver</code>, <code>VmwareSvgaDriver</code>, <code>AmdDcnDriver</code>, <code>IntelGraphicsDriver</code>, <code>HdAudioDriver</code></td>
+</tr>
+<tr>
+<td>Virtio</td>
+<td><code>VirtioNetDriver</code>, <code>VirtioBlkDriver</code>, <code>VirtioGpuDriver</code>, <code>VirtioInputDriver</code></td>
+</tr>
+<tr>
+<td>USB</td>
+<td><code>UsbHubDriver</code>, <code>UsbKeyboardDriver</code>, <code>UsbMouseDriver</code>, <code>UsbMassStorageDriver</code></td>
+</tr>
+<tr>
+<td>PS/2</td>
+<td><code>Ps2KeyboardDriver</code>, <code>Ps2MouseDriver</code></td>
+</tr>
+</tbody>
+</table>
+<p>Dans l'arborescence des sources, chaque pilote est rangé sous <code>&lt;bus&gt;/&lt;category&gt;/&lt;driver&gt;/</code> (par exemple <code>Pci/Network/E1000E/</code>), et son espace de noms suit le dossier, comme dans <code>Cosmos.Kernel.Drivers.Pci.Network.E1000E</code> ; c'est ce nom de type complet qu'attend <a href="#excluding-and-opting-in">Exclure et inclure explicitement</a>.</p>
+<hr>
+<p><a id="what-a-driver-is"></a></p>
+<h2 id="ce-quest-un-pilote">Ce qu'est un pilote</h2>
+<p>Le kit repose sur cinq concepts :</p>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Ce que c'est</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nœud (<code>DeviceNode</code>)</td>
+<td>Un élément matériel que le noyau peut voir : son identité sur un bus, ses ressources et ses interruptions. Les bus et les pilotes de bus publient des nœuds.</td>
+</tr>
+<tr>
+<td>Type de bus</td>
+<td>L'apparence d'un nœud sur un bus donné (plateforme, PCI, virtio, USB, PS/2, synthétique) et la façon dont un pilote le met en correspondance.</td>
+</tr>
+<tr>
+<td>Pilote (<code>Driver</code>)</td>
+<td>Votre classe : elle indique quels nœuds elle veut, et prend ou décline chacun de ceux qui lui sont proposés.</td>
+</tr>
+<tr>
+<td>Liaison (<code>DeviceBinding</code>)</td>
+<td>Le lien entre un pilote et un nœud. Le pilote n'accède au matériel et au noyau qu'à travers elle, et elle se souvient de tout ce que le pilote a acquis.</td>
+</tr>
+<tr>
+<td>Périphérique publié</td>
+<td>Ce que le pilote remet au noyau : un <code>IKeyboard</code>, <code>IPointer</code>, <code>INetworkInterface</code>, <code>IBlockDevice</code>, <code>IDisplay</code> ou <code>IAudioOutput</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Quand un nœud apparaît, le kit le propose tour à tour à chaque pilote correspondant jusqu'à ce que l'un d'eux renvoie <code>ProbeResult.Bound</code> ; tout ce qu'a acquis un pilote qui décline est libéré. Quand le nœud disparaît, le kit démonte la liaison à votre place : les nœuds enfants et les périphériques publiés partent en premier, la mémoire en dernier. Le diagramme suit un nœud de sa publication à son démontage :</p>
+<pre><code class="lang-mermaid">flowchart TD
+    Bus[&quot;Bus or bus driver&quot;] --&gt;|&quot;publishes&quot;| Node[&quot;Node (DeviceNode)&lt;br/&gt;identity, resources, interrupts&quot;]
+    Node --&gt;|&quot;matched against every driver's Matches&quot;| Candidates[&quot;Candidate drivers&lt;br/&gt;ordered by Priority, then specificity&quot;]
+    Candidates --&gt;|&quot;offers the node with a new binding&quot;| Probe[&quot;Driver.Probe(binding)&quot;]
+    Probe --&gt;|&quot;Declined or Failed&quot;| Release[&quot;The kit releases what the probe acquired&quot;]
+    Release --&gt;|&quot;next candidate&quot;| Probe
+    Release --&gt;|&quot;no candidate left&quot;| Unbound[&quot;Node stays unbound&quot;]
+    Probe --&gt;|&quot;Bound&quot;| Binding[&quot;Binding (DeviceBinding)&lt;br/&gt;registers, DMA, interrupts, work items, threads&quot;]
+    Binding --&gt;|&quot;PublishKeyboard, PublishNetwork, ...&quot;| Device[&quot;Published device&lt;br/&gt;IKeyboard, INetworkInterface, ...&quot;]
+    Device --&gt;|&quot;consumed by&quot;| Manager[&quot;Kernel manager&lt;br/&gt;KeyboardManager, NetworkManager, ...&quot;]
+    Binding --&gt;|&quot;PublishChild (bus drivers)&quot;| Node
+    Binding -.-&gt;|&quot;node removed&quot;| Teardown[&quot;Teardown: remove children, withdraw devices,&lt;br/&gt;disconnect interrupts, OnDetach, free memory&quot;]
+</code></pre>
+<p>Le pilote, la liaison et l'arbre des nœuds se trouvent dans <code>Cosmos.Kernel.HAL.DriverKit</code>. Ce que distribue une liaison se trouve un espace de noms plus bas, rangé par domaine : <code>Cosmos.Kernel.HAL.DriverKit.Resources</code> (fenêtres de registres, régions mappées, tampons DMA), <code>.Interrupts</code> (handles d'interruption, contrat du gestionnaire d'interruption) et <code>.Threading</code> (verrous, événements, threads, éléments de travail). Chaque type de bus a son propre espace de noms sous <code>.Buses</code>, et chaque type de périphérique celui de sa catégorie sous <code>Cosmos.Kernel.HAL.Devices</code>.</p>
+<p>Voici le plus petit pilote qui compile et se lie :</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.HAL.DriverKit;
+using Cosmos.Kernel.HAL.DriverKit.Buses.Synthetic;
+
+namespace MyOS.Drivers;
+
+[Driver]
+public sealed class SampleDriver : Driver
+{
+    private readonly DeviceMatch[] _matches = [SyntheticMatch.Key(&quot;sample&quot;)];
+
+    public override string Name =&gt; &quot;sample&quot;;
+
+    public override ReadOnlySpan&lt;DeviceMatch&gt; Matches =&gt; _matches;
+
+    public override ProbeResult Probe(DeviceBinding binding)
+    {
+        binding.Log(&quot;bound&quot;);
+        return ProbeResult.Bound;
+    }
+}
+</code></pre>
+<p><code>Name</code> s'affiche dans le journal, <code>Matches</code> liste les nœuds que veut le pilote, et <code>Priority</code> (<code>0</code> par défaut) décide quel pilote correspondant se voit proposer un nœud en premier. <code>Probe</code>, l'occasion pour le pilote d'examiner le matériel et de décider s'il fait partie de ceux qu'il sert, est obligatoire ; <code>OnDetach</code> est facultatif.</p>
+<p>Chaque classe de pilote est instanciée une seule fois et se voit proposer chaque nœud auquel elle correspond : ses champs sont donc partagés entre les périphériques. Gardez l'état propre à chaque périphérique dans un objet créé dans <code>Probe</code> et stocké dans <code>binding.DriverState</code>.</p>
+<hr>
+<p><a id="when-drivers-are-bound"></a></p>
+<h2 id="quand-les-pilotes-sont-liés">Quand les pilotes sont liés</h2>
+<p>L'étape des pilotes s'exécute depuis <code>Kernel.Start</code>, une fois que le tas, le contrôleur d'interruptions et l'ordonnanceur sont en place et que les interruptions sont activées. Le kit propose chaque nœud publié jusque-là, y compris les enfants qu'un pilote de bus publie depuis son sondage, et rend la main quand tous ont été proposés. <code>OnBoot</code> et <code>BeforeRun</code> s'exécutent après elle, si bien que chaque périphérique lié y est utilisable.</p>
+<p>Le journal série montre chaque nœud, ses pilotes candidats et le résultat de la proposition. Cet extrait provient d'un noyau x64 lancé avec <code>cosmos run --nic virtio-net-pci</code> :</p>
+<pre><code>[Kernel] Starting drivers...
+[Drivers] manifest: HdAudioDriver(prio 0) EhciDriver(prio 0) OhciDriver(prio 0) PcieRootPortDriver(prio 0) ... VirtioBlkDriver(prio 0)
+[Drivers] engine started, worker thread
+...
+[Drivers] platform:pci@cf8 candidates: PciHostDriver(prio 0, spec 1)
+[Drivers] platform:pci@cf8 PciHostDriver: 6 functions on 1 buses
+[Drivers] platform:pci@cf8 offer PciHostDriver -&gt; bound
+...
+[Drivers] pci:0000:00:01.0 no driver
+[Drivers] pci:0000:00:02.0 candidates: VirtioPciTransportDriver(prio 0, spec 1)
+[Drivers] pci:0000:00:02.0 offer VirtioPciTransportDriver -&gt; bound
+...
+[Drivers] virtio:pci:0000:00:02.0 candidates: VirtioNetDriver(prio 0, spec 1)
+[Drivers] virtio:pci:0000:00:02.0 VirtioNetDriver published network &quot;virtio-net&quot; (consumed)
+[Drivers] virtio:pci:0000:00:02.0 offer VirtioNetDriver -&gt; bound
+[Kernel] Calling OnBoot()...
+</code></pre>
+<p>Chaque ligne <code>published</code> se termine par <code>(consumed)</code> quand un gestionnaire du noyau a pris le périphérique, ou par <code>(no consumer)</code> quand aucun ne l'a fait. Un nœud publié après le démarrage, comme un périphérique USB que l'on branche, suit le même chemin. Consultez <a href="startup.html">Démarrage du noyau</a> pour le reste de la séquence de démarrage.</p>
+<hr>
+<p><a id="the-two-execution-contexts-and-the-guard"></a></p>
+<h2 id="les-deux-contextes-dexécution-et-le-garde-fou">Les deux contextes d'exécution et le garde-fou</h2>
+<p>Les sondages, les démontages et les éléments de travail s'exécutent un par un sur le thread de travail du kit, si bien qu'un pilote n'en voit jamais deux se chevaucher. Seuls les threads de pilote s'exécutent en même temps qu'eux.</p>
+<p>Un noyau compilé avec <code>CosmosEnableScheduler</code> désactivé n'a pas de thread de travail : le sondage fonctionne toujours, mais <code>WorkItem.Schedule</code>, <code>TrySchedulePeriodic</code> et <code>TryStartThread</code> renvoient <code>false</code>. Un pilote qui doit fonctionner dans un tel noyau vérifie ces résultats. Le moteur s'exécute alors de façon synchrone : le thread qui publie ou retire un nœud vide lui-même la file, et le journal indique <code>engine started, inline (no worker)</code>.</p>
+<p>Où qu'il s'exécute, le code d'un pilote se trouve dans l'un des deux <a href="driver-concepts/interrupt-context.html">contextes</a> : thread ou interruption.</p>
+<table>
+<thead>
+<tr>
+<th>Point d'entrée</th>
+<th>Contexte</th>
+<th>Peut bloquer</th>
+<th>Peut allouer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Probe</code>, <code>OnDetach</code>, éléments de travail</td>
+<td>thread (le thread de travail du kit)</td>
+<td>oui</td>
+<td>oui</td>
+</tr>
+<tr>
+<td>Threads de pilote</td>
+<td>thread (le leur)</td>
+<td>oui</td>
+<td>oui</td>
+</tr>
+<tr>
+<td>Méthodes de périphérique appelées par le noyau (<code>Transmit</code>, <code>Flush</code>, ...)</td>
+<td>thread (celui de l'appelant)</td>
+<td>oui, pour les E/S qu'elles effectuent</td>
+<td>oui</td>
+</tr>
+<tr>
+<td>Gestionnaires d'interruption</td>
+<td>interruption</td>
+<td>non</td>
+<td>non</td>
+</tr>
+</tbody>
+</table>
+<p><code>Transmit</code> et <code>IAudioOutput.Write</code> sont les exceptions parmi les méthodes de périphérique : elles n'attendent jamais qu'il y ait de la place, et signalent plutôt une file pleine (<code>false</code>, ou une écriture partielle).</p>
+<p><strong>Un gestionnaire d'interruption s'exécute en contexte d'interruption.</strong> Il s'exécute sur la pile du thread qu'il a interrompu, interruptions masquées, si bien que ni un thread ni le minuteur ne peuvent s'exécuter sur ce CPU avant qu'il ne rende la main, et que s'il attend l'un ou l'autre, il attend indéfiniment. C'est pourquoi son <code>InterruptContext</code> ne propose que trois appels (<code>Mask()</code> pour masquer sa propre source, <code>Signal(DeviceEvent)</code> pour signaler un thread en attente et <code>Schedule(WorkItem)</code> pour planifier un travail qui a besoin du contexte de thread), et pourquoi il doit acquitter le périphérique et confier le reste à un élément de travail. Il peut aussi lire et écrire ses registres et ses tampons DMA, et remonter ses événements via un récepteur (l'objet que le kit renvoie quand un pilote publie un périphérique, voir <a href="#publishing-a-device">Publier un périphérique</a>). Il ne doit pas bloquer, et il ne doit pas allouer (pas de <code>new</code> d'un type référence, pas de construction de chaîne, pas de lambda qui capture). Les gestionnaires d'interruption propres au noyau allouent bel et bien, et le ramasse-miettes le tolère ; pour les gestionnaires d'interruption des pilotes, le kit l'interdit par règle de sécurité, car une allocation peut entraîner des mécanismes du runtime qui se comportent mal en contexte d'interruption, notamment la résolution du dispatch d'interface et la levée d'exceptions.</p>
+<p>Appeler depuis un gestionnaire d'interruption un membre du kit réservé au contexte de thread (une méthode de <code>DeviceBinding</code>, ou un membre d'objet d'accès comme un transfert <code>UsbAccess</code> ou <code>Ps2Access.TryCommand</code>) arrête le noyau par une panique qui nomme ce membre. Sur le bus synthétique, l'appel lève plutôt une exception : le kit enregistre l'erreur sur le nœud et masque la source, afin qu'un test puisse le vérifier. Rien ne détecte une allocation : le garde-fou ne s'exécute qu'à l'intérieur de ces membres du kit, jamais dans le code du pilote lui-même.</p>
+<hr>
+<p><a id="the-attribute-and-the-manifest"></a></p>
+<h2 id="lattribut-et-le-manifeste">L'attribut et le manifeste</h2>
+<p>Le build enregistre chaque classe marquée <code>[Driver]</code> : un <a href="driver-concepts/source-generators.html">générateur de source</a> écrit dans le projet du noyau <code>DriverManifest.g.cs</code>, un fichier qui construit chaque pilote une fois au démarrage (<a href="../dev/build/driver-manifest.html">Manifeste des pilotes</a> décrit le générateur). Une classe de pilote doit dériver de <code>Driver</code>, être concrète et non générique, et avoir un constructeur sans paramètre. Elle peut être <code>internal</code> dans le projet du noyau, mais doit être <code>public</code> dans une bibliothèque de pilotes (<a href="#a-driver-library">Une bibliothèque de pilotes</a>). Une classe qui enfreint l'une de ces règles est laissée hors du manifeste avec l'avertissement <code>COSMOSGEN001</code>, et n'apparaît donc pas sur la ligne <code>manifest:</code> du journal de démarrage.</p>
+<p>L'attribut accepte deux options :</p>
+<ul>
+<li><code>[Driver(Feature = DriverFeature.Keyboard)]</code> n'enregistre le pilote que si le <a href="driver-concepts/trimming.html">commutateur de fonctionnalité</a> correspondant (<code>CosmosEnableKeyboard</code>) est activé ; sinon il est éliminé par le trimming, laissé hors du noyau compilé.</li>
+<li><code>[Driver(Default = false)]</code> n'enregistre le pilote que si le noyau l'inclut explicitement par son nom (<a href="#excluding-and-opting-in">Exclure et inclure explicitement</a>).</li>
+</ul>
+<p>L'ordre du manifeste est déterministe (les pilotes propres au noyau d'abord, puis ceux des bibliothèques référencées) et il est affiché au démarrage.</p>
+<hr>
+<p><a id="identity-and-matches"></a></p>
+<h2 id="identité-et-correspondances">Identité et correspondances</h2>
+<p>Chaque nœud a une <code>DeviceIdentity</code>, définie par son bus : <code>BusName</code>, <code>Address</code>, et <code>Describe()</code> pour le journal. Le <code>Path</code> du nœud réunit les deux premiers (<code>pci:0000:00:03.0</code>) et c'est sous ce nom que le journal désigne le nœud.</p>
+<p>Le <code>Matches</code> d'un pilote est une liste de <code>DeviceMatch</code>. Chacun teste une identité et a une <code>Specificity</code> : le nombre de champs qu'il vérifie. Chaque type de bus a sa propre paire de types (<code>PciIdentity</code> et <code>PciMatch</code>, <code>UsbIdentity</code> et <code>UsbMatch</code>, ...), décrits avec leurs bus plus bas. Sur le bus synthétique, une correspondance désigne un seul périphérique ou tous :</p>
+<pre><code class="lang-csharp">// This device and no other: specificity 1.
+private readonly DeviceMatch[] _matches = [SyntheticMatch.Key(&quot;kbd&quot;)];
+
+// Every synthetic device: specificity 0.
+private readonly DeviceMatch[] _matches = [SyntheticMatch.Any()];
+</code></pre>
+<p>Quand un nœud apparaît, le kit <a href="driver-concepts/driver-matching.html">ordonne les pilotes correspondants</a> par <code>Priority</code>, puis par spécificité (la plus élevée d'abord), puis par ordre du manifeste, et propose le nœud à chacun jusqu'à ce que l'un d'eux renvoie <code>Bound</code> :</p>
+<pre><code>[Drivers] synthetic:prio candidates: HighPriorityDriver(prio 10, spec 1) LowPriorityDriver(prio 0, spec 1)
+[Drivers] synthetic:prio offer HighPriorityDriver -&gt; bound
+</code></pre>
+<p>Pour remplacer un pilote fourni pour le même matériel, donnez au vôtre une <code>Priority</code> supérieure à <code>0</code> : chaque pilote fourni la laisse à <code>0</code>, la valeur par défaut. Un nœud qu'aucun pilote ne prend est journalisé <code>no driver</code> et reste <code>Unbound</code>.</p>
+<hr>
+<p><a id="probe-and-the-binding"></a></p>
+<h2 id="probe-et-la-liaison">Probe et la liaison</h2>
+<p><code>Probe</code> est le seul point d'entrée obligatoire, et <code>DeviceBinding</code> est le seul moyen pour le pilote d'accéder au matériel et au noyau. Tout ce que le pilote acquiert à travers elle (fenêtres de registres, mémoire DMA, interruptions, événements, éléments de travail, threads, périphériques publiés, nœuds enfants) est enregistré sur la liaison et libéré par le kit, si bien qu'un pilote n'écrit jamais de code de nettoyage.</p>
+<p>Un sondage lit le nœud (<code>binding.Node.Resources</code>, <code>binding.Node.Interrupts</code>, et <code>binding.Node.Access&lt;T&gt;()</code>, l'objet d'accès, que le bus fournit pour dialoguer avec le périphérique et qui est décrit avec chaque bus plus bas), acquiert ce dont il a besoin, crée son état propre au périphérique, publie le périphérique et rend la main. Voici un pilote complet, pour un clavier sur le bus synthétique :</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.HAL.DriverKit;
+using Cosmos.Kernel.HAL.DriverKit.Buses.Synthetic;
+using Cosmos.Kernel.HAL.DriverKit.Interrupts;
+using Cosmos.Kernel.HAL.DriverKit.Resources;
+using Cosmos.Kernel.HAL.DriverKit.Threading;
+
+namespace MyOS.Drivers;
+
+[Driver(Feature = DriverFeature.Keyboard)]
+public sealed class SyntheticKeyboardDriver : Driver
+{
+    public const string Key = &quot;kbd&quot;;
+
+    private readonly DeviceMatch[] _matches = [SyntheticMatch.Key(Key)];
+
+    public override string Name =&gt; &quot;synthetic-keyboard&quot;;
+
+    public override ReadOnlySpan&lt;DeviceMatch&gt; Matches =&gt; _matches;
+
+    public override ProbeResult Probe(DeviceBinding binding)
+    {
+        if (binding.Node.Resources.Count == 0 || binding.Node.Interrupts.Count == 0)
+        {
+            return ProbeResult.Declined(&quot;no register window or no interrupt source&quot;);
+        }
+
+        RegisterWindow window = binding.MapRegisters(0);
+        DeviceEvent keyEvent = binding.CreateEvent();
+        KeyboardState state = new(binding, window, keyEvent);
+        binding.DriverState = state;
+
+        state.Sink = binding.PublishKeyboard(state);
+
+        if (!binding.TryRequestInterrupt(binding.Node.Interrupts[0], state.OnInterrupt, out InterruptHandle? handle))
+        {
+            return ProbeResult.Failed(&quot;interrupt 0 could not be connected&quot;);
+        }
+
+        state.Handle = handle;
+
+        // The handler is live from here on, so the device is armed last.
+        window.Write8(KeyboardState.ControlOffset, KeyboardState.EnableBit);
+        return ProbeResult.Bound;
+    }
+
+    public override void OnDetach(DeviceBinding binding, DetachReason reason)
+    {
+        if (reason.HardwarePresent &amp;&amp; binding.DriverState is KeyboardState state)
+        {
+            state.Window.Write8(KeyboardState.ControlOffset, 0);
+        }
+    }
+}
+</code></pre>
+<p>L'objet d'état est une classe ordinaire, pas un <code>Driver</code> : il en existe un par périphérique, et il implémente le contrat du périphérique, possède le gestionnaire d'interruption et détient chaque objet du kit que le sondage a acquis :</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.HAL.Devices.Input;
+using Cosmos.Kernel.HAL.DriverKit;
+using Cosmos.Kernel.HAL.DriverKit.Interrupts;
+using Cosmos.Kernel.HAL.DriverKit.Resources;
+using Cosmos.Kernel.HAL.DriverKit.Threading;
+
+namespace MyOS.Drivers;
+
+public sealed class KeyboardState : IKeyboard
+{
+    public const int ControlOffset = 0x00;
+    public const int ScanCodeOffset = 0x10;
+    public const int FlagsOffset = 0x11;
+    public const byte EnableBit = 1;
+    public const byte ReleasedFlag = 1;
+
+    private readonly DeviceBinding _binding;
+    private KeyboardLeds _leds;
+
+    public KeyboardState(DeviceBinding binding, RegisterWindow window, DeviceEvent keyEvent)
+    {
+        _binding = binding;
+        Window = window;
+        KeyEvent = keyEvent;
+        KeyWork = binding.CreateWorkItem(OnKeyWork);
+    }
+
+    public string Name =&gt; &quot;synthetic-kbd&quot;;
+
+    public RegisterWindow Window { get; }
+
+    public DeviceEvent KeyEvent { get; }
+
+    public WorkItem KeyWork { get; }
+
+    public KeyboardSink? Sink { get; set; }
+
+    public InterruptHandle? Handle { get; set; }
+
+    public void SetLeds(KeyboardLeds leds)
+    {
+        _leds = leds;
+    }
+
+    // Interrupt context: reads two registers, reports the key, wakes the
+    // thread and hands the rest to the work item. Allocates nothing.
+    public void OnInterrupt(InterruptContext context)
+    {
+        byte scanCode = Window.Read8(ScanCodeOffset);
+        bool released = (Window.Read8(FlagsOffset) &amp; ReleasedFlag) != 0;
+        Sink?.Report(scanCode, released);
+        context.Signal(KeyEvent);
+        context.Schedule(KeyWork);
+    }
+
+    // Thread context, on the kit worker.
+    public void OnKeyWork()
+    {
+        _binding.Log(&quot;key work ran&quot;);
+    }
+}
+</code></pre>
+<p>Aucune des deux classes n'alloue de pages, ne programme de contrôleur d'interruptions, n'enregistre le clavier auprès d'un gestionnaire ni ne libère quoi que ce soit : la liaison fait tout cela. Les sections ci-dessous couvrent ses membres ; leurs exemples sont des extraits du <code>Probe</code> d'un pilote ou de son objet d'état.</p>
+<p><a id="register-windows"></a></p>
+<h3 id="fenêtres-de-registres">Fenêtres de registres</h3>
+<p>On accède aux <a href="driver-concepts/registers.html">registres</a> d'un périphérique à travers une fenêtre de registres : <code>binding.MapRegisters(resourceIndex)</code> mappe l'une des <code>Node.Resources</code> et renvoie une <code>RegisterWindow</code>, avec <code>Read8</code> à <code>Read64</code> et <code>Write8</code> à <code>Write64</code> à un décalage donné en octets. Chaque accès fait l'objet d'un contrôle de bornes et, sur une fenêtre mémoire, doit aussi être aligné sur sa largeur. Chaque accès porte les <a href="driver-concepts/barriers.html">barrières</a> dont il a besoin, si bien qu'une écriture dans le doorbell arrive toujours après les écritures en mémoire DMA qui la précèdent. Le même code fonctionne sur une fenêtre mémoire, sur la fenêtre RAM d'un nœud synthétique et sur une plage de ports x64, sauf qu'une plage de ports n'a pas d'accès 64 bits : <code>Read64</code> et <code>Write64</code> y lèvent <code>NotSupportedException</code>. Les accesseurs sont sûrs depuis un gestionnaire d'interruption, et lèvent une exception une fois la liaison démontée.</p>
+<p><a id="bulk-regions"></a></p>
+<h3 id="régions-en-bloc">Régions en bloc</h3>
+<p><code>binding.MapRegion(resourceIndex, RegionCaching)</code> mappe une ressource comme de la mémoire ordinaire, pour un framebuffer ou une file de commandes, et renvoie une <code>DeviceRegion</code>. Contrairement à ceux d'une fenêtre de registres, ses accès ne sont ni vérifiés ni ordonnés ; un sondage mappe un framebuffer et y dessine à travers un span :</p>
+<pre><code class="lang-csharp">// In Probe:
+DeviceRegion framebuffer = binding.MapRegion(1, RegionCaching.WriteCombining);
+framebuffer.Span.Fill(0);
+Span&lt;uint&gt; pixels = framebuffer.As&lt;uint&gt;();
+pixels[0] = 0x00FF0000;
+</code></pre>
+<p>Le second argument indique au CPU comment mettre la région en cache. Choisissez-le selon ce que contient la région :</p>
+<ul>
+<li><code>RegionCaching.Device</code> pour les commandes que lit le périphérique, comme une file de commandes : chaque lecture et chaque écriture va directement au périphérique, dans l'ordre.</li>
+<li><code>RegionCaching.WriteCombining</code> pour un framebuffer : les écritures sont regroupées en rafales, ce qui est bien plus rapide pour dessiner des pixels.</li>
+<li><code>RegionCaching.Normal</code> pour de la RAM ordinaire partagée avec le périphérique.</li>
+</ul>
+<p>Sur x64, <code>WriteCombining</code> est appliqué à chaque bloc de 2 Mio que la région couvre entièrement ; un bloc qu'elle partage avec autre chose reste en <code>Device</code>. Tout autre choix, et tout choix sur ARM64, est aujourd'hui mappé en <code>Device</code> ; la fenêtre RAM d'un nœud synthétique garde le mappage normal du noyau quel que soit le choix. Choisissez quand même la bonne valeur : le kit l'enregistre dans <code>DeviceRegion.Caching</code> et l'appliquera dès que la plateforme le prendra en charge.</p>
+<p><a id="dma-memory"></a></p>
+<h3 id="mémoire-dma">Mémoire DMA</h3>
+<p><code>binding.AllocateDma(length, alignment)</code> renvoie un <code>DmaBuffer</code> : une mémoire mise à zéro et <a href="driver-concepts/physical-addresses.html">physiquement contiguë</a>, avec <code>PhysicalAddress</code> pour le périphérique et <code>Span</code> pour le CPU.</p>
+<p>La mémoire <a href="driver-concepts/dma.html">DMA</a> contient généralement un <a href="driver-concepts/descriptor-rings.html">anneau de descripteurs</a> : un tableau fixe de descripteurs, chacun pointant vers un tampon de données, que le pilote et le périphérique se renvoient l'un à l'autre comme une file circulaire. Le pilote écrit dans un registre (le doorbell) quand il cède de nouveaux descripteurs, et le périphérique marque chacun comme terminé. Une carte réseau, par exemple, a un anneau de réception que le périphérique remplit de trames entrantes et un anneau d'émission que le pilote remplit de trames sortantes.</p>
+<p>Pour un périphérique qui n'adresse que 32 bits, <code>TryAllocateDma</code> prend une contrainte et renvoie <code>false</code> au lieu de lever une exception quand le tampon ne la respecte pas. Le kit n'a pas encore de réserve de mémoire basse : il alloue comme d'habitude et libère le tampon quand celui-ci se termine au-dessus de 4 Gio :</p>
+<pre><code class="lang-csharp">// In Probe:
+if (!binding.TryAllocateDma(RingBytes, 4096, DmaConstraints.Addressable32Bit, out DmaBuffer? ring))
+{
+    return ProbeResult.Declined(&quot;no DMA memory below 4 GiB&quot;);
+}
+</code></pre>
+<p>Le DMA est cohérent, seul l'ordre compte donc. Appelez <code>DmaBuffer.WriteBarrier()</code> entre le remplissage d'un descripteur et sa remise au périphérique, et <code>DmaBuffer.ReadBarrier()</code> entre la lecture d'un indicateur écrit par le périphérique et la lecture des données qu'il protège. Remettre un descripteur au périphérique s'écrit ainsi ; l'écriture dans le doorbell qui suit n'a besoin d'aucune barrière, car les écritures de registres portent la leur :</p>
+<pre><code class="lang-csharp">// When sending, for example in Transmit:
+Span&lt;byte&gt; descriptors = ring.Span;
+descriptors[8] = 0x01;                   // fill the descriptor
+DmaBuffer.WriteBarrier();
+descriptors[0] = OwnedByDevice;          // then hand it over
+
+window.Write32(DoorbellOffset, 1);       // no barrier needed
+</code></pre>
+<p>Ne remettez jamais un tableau managé à un périphérique : le ramasse-miettes ne sait pas que le périphérique le détient.</p>
+<p><a id="interrupts"></a></p>
+<h3 id="interruptions">Interruptions</h3>
+<p><code>binding.TryRequestInterrupt(source, handler, out handle)</code> connecte un gestionnaire d'interruption à l'une des <code>Node.Interrupts</code>. Elle renvoie <code>false</code> quand la plateforme ne peut pas acheminer cette interruption, afin que le pilote puisse décliner ou scruter à la place, c'est-à-dire lire l'état du périphérique à intervalles réguliers, au rythme d'un minuteur, plutôt qu'attendre une interruption. Le gestionnaire d'interruption est actif dès que l'appel renvoie <code>true</code>, ce qui permet à un sondage d'envoyer une commande et d'attendre l'interruption ; armez le périphérique en dernier, par l'écriture de registre qui lui permet de commencer à lever des interruptions, s'il ne doit pas interrompre plus tôt. Le sondage connecte son gestionnaire d'interruption et garde le handle :</p>
+<pre><code class="lang-csharp">// In Probe:
+if (!binding.TryRequestInterrupt(binding.Node.Interrupts[0], state.OnInterrupt, out InterruptHandle? handle))
+{
+    return ProbeResult.Declined(&quot;the interrupt cannot be delivered&quot;);
+}
+
+state.Handle = handle;
+</code></pre>
+<p>Le gestionnaire d'interruption s'exécute en contexte d'interruption : il <a href="driver-concepts/interrupt-delivery.html">acquitte le périphérique</a> et laisse le vrai travail à un élément de travail. Ici, c'est une méthode <code>OnInterrupt</code> de l'objet d'état :</p>
+<pre><code class="lang-csharp">// In the state object, in interrupt context:
+public void OnInterrupt(InterruptContext context)
+{
+    uint cause = Window.Read32(InterruptCauseOffset);
+    Window.Write32(InterruptCauseOffset, cause);   // acknowledge
+    context.Schedule(ReceiveWork);
+}
+</code></pre>
+<p>L'<code>InterruptHandle</code> masque et démasque la source (<code>Mask()</code>, <code>Unmask()</code>) depuis n'importe quel contexte. Un gestionnaire d'interruption qui lève une exception laisse sa source masquée.</p>
+<p><a id="events-and-waiting"></a></p>
+<h3 id="événements-et-attente">Événements et attente</h3>
+<p><code>binding.CreateEvent()</code> renvoie un <code>DeviceEvent</code>. Un gestionnaire d'interruption le signale avec <code>context.Signal(evt)</code> ; un thread l'attend avec <code>binding.Wait(evt, timeoutMilliseconds)</code>, qui renvoie <code>true</code> sur un signal, et <code>false</code> à l'expiration du délai ou une fois le démontage commencé.</p>
+<p>Un sondage peut envoyer une commande et attendre que le périphérique réponde. Le gestionnaire d'interruption appelle <code>context.Signal(CommandDone)</code>, et le sondage attend sur le même événement :</p>
+<pre><code class="lang-csharp">// In Probe:
+state.CommandDone = binding.CreateEvent();
+// ... connect the interrupt, then send the command
+window.Write32(CommandOffset, ResetCommand);
+
+if (!binding.Wait(state.CommandDone, 100))
+{
+    return ProbeResult.Failed(&quot;the device did not answer the reset&quot;);
+}
+</code></pre>
+<p>Pour de courtes attentes en contexte de thread, <code>binding.Delay(microseconds)</code> fait une attente active en tournant sur le CPU, ce qui convient à un registre qui a besoin de quelques microsecondes après une écriture, et <code>binding.Sleep(milliseconds)</code> cède le CPU pour que d'autres threads s'exécutent pendant ce temps :</p>
+<pre><code class="lang-csharp">// In Probe or a work item:
+window.Write32(ControlOffset, ResetBit);
+binding.Delay(10);   // the device needs 10 µs before the next access
+</code></pre>
+<p><a id="work-items"></a></p>
+<h3 id="éléments-de-travail">Éléments de travail</h3>
+<p>Un gestionnaire d'interruption confie son vrai travail à un élément de travail : <code>binding.CreateWorkItem(callback)</code> renvoie un <code>WorkItem</code> dont le callback s'exécute sur le thread de travail du kit une fois planifié. <code>context.Schedule(item)</code> depuis un gestionnaire d'interruption, ou <code>item.Schedule()</code> depuis n'importe où, le met en file sans allouer ; l'appel renvoie <code>false</code> quand l'élément est déjà en file, qu'il a été annulé par le démontage, ou que le noyau n'a pas de thread de travail. Créez les éléments de travail dans <code>Probe</code> et planifiez-les plus tard :</p>
+<pre><code class="lang-csharp">// In Probe: create the work item once.
+state.ReceiveWork = binding.CreateWorkItem(state.DrainReceiveRing);
+
+// In the handler: queue it.
+context.Schedule(ReceiveWork);
+
+// On the kit worker, in thread context: may allocate, wait and report.
+public void DrainReceiveRing()
+{
+    // walk the receive ring and hand each frame to Sink.Receive
+}
+</code></pre>
+<p><a id="periodic-work"></a></p>
+<h3 id="travail-périodique">Travail périodique</h3>
+<p><code>binding.TrySchedulePeriodic(intervalMilliseconds, item)</code> exécute un élément de travail à intervalle régulier jusqu'au démontage, l'intervalle étant arrondi au tick du minuteur. Elle renvoie <code>false</code> quand le noyau n'a pas de minuteur ou pas d'ordonnanceur. Le kit ne scrute jamais à la place d'un pilote : un pilote qui doit scruter planifie donc son propre élément de travail, ici une méthode <code>OnPoll</code> de l'objet d'état :</p>
+<pre><code class="lang-csharp">// In Probe:
+WorkItem poll = binding.CreateWorkItem(state.OnPoll);
+if (!binding.TrySchedulePeriodic(20, poll))
+{
+    return ProbeResult.Failed(&quot;no timer to poll with&quot;);
+}
+</code></pre>
+<p><a id="driver-threads"></a></p>
+<h3 id="threads-de-pilote">Threads de pilote</h3>
+<p>Un travail qui doit attendre dans une boucle obtient son propre thread : <code>binding.TryStartThread(name, entry, out thread)</code> en démarre un, et renvoie <code>false</code> quand l'ordonnanceur ne tourne pas. Le thread boucle sur les événements de la liaison et se termine dès que <code>IsDetaching</code> est vrai ; le démontage réveille chaque thread en attente, puis attend la fin du thread :</p>
+<pre><code class="lang-csharp">// In the state object, on the driver thread:
+public void ThreadMain()
+{
+    while (!_binding.IsDetaching)
+    {
+        if (_binding.Wait(KeyEvent, 50))
+        {
+            // a key arrived; drain the device in thread context
+        }
+    }
+}
+</code></pre>
+<p>Le démontage attend une demi-seconde pour chaque thread. Un thread qui tourne encore au-delà empêche la libération de la mémoire de la liaison, car il peut encore y accéder : le kit laisse fuir cette mémoire volontairement et journalise <code>thread &quot;name&quot; did not stop in 500 ms; n resources leaked</code>. Le sondage démarre le thread une fois son état en place :</p>
+<pre><code class="lang-csharp">// In Probe:
+DrainState state = new(binding);
+binding.DriverState = state;
+
+if (!binding.TryStartThread(&quot;drain&quot;, state.ThreadMain, out DriverThread? thread))
+{
+    return ProbeResult.Failed(&quot;no scheduler to run the drain thread on&quot;);
+}
+</code></pre>
+<p><a id="device-locks"></a></p>
+<h3 id="verrous-de-périphérique">Verrous de périphérique</h3>
+<p><code>binding.CreateLock()</code> renvoie un <code>DeviceLock</code>, pour un périphérique sollicité depuis plusieurs contextes à la fois, comme un <code>Transmit</code> qu'appelle la pile réseau pendant que l'élément de travail du pilote vide l'anneau de réception. <code>Acquire()</code> désactive les interruptions jusqu'à la libération de la portée, si bien qu'un gestionnaire d'interruption ne peut jamais interrompre un thread qui détient le verrou pour ensuite tourner dessus, et qu'un gestionnaire d'interruption peut lui aussi prendre le verrou. Le détenteur ne doit pas attendre avec les interruptions désactivées, si bien que le verrou n'est jamais conservé pendant <code>Sleep</code>, <code>Wait</code> ou <code>Delay</code>, ni pendant un appel de récepteur ou une publication, qui peuvent revenir directement dans le pilote : la pile réseau peut répondre à une trame reçue en appelant <code>Transmit</code> avant que <code>Receive</code> ne rende la main. Le verrou n'est pas réentrant : un détenteur qui l'acquiert de nouveau tourne donc indéfiniment. Dans l'objet d'état, <code>Transmit</code> le prend autour de son travail sur l'anneau :</p>
+<pre><code class="lang-csharp">// In the state object, called by the network stack:
+public bool Transmit(ReadOnlySpan&lt;byte&gt; frame)
+{
+    using (_lock.Acquire())
+    {
+        // check the ring, copy the frame, write the descriptor,
+        // DmaBuffer.WriteBarrier(), then advance the tail register
+    }
+
+    return true;
+}
+</code></pre>
+<p><a id="publishing-a-device"></a></p>
+<h3 id="publier-un-périphérique">Publier un périphérique</h3>
+<p>Un type de périphérique se compose d'une petite interface que le pilote implémente et d'un récepteur que le kit lui renvoie et à travers lequel le pilote signale les événements :</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Le pilote implémente</th>
+<th>Appel de publication</th>
+<th>Le pilote signale via</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Clavier</td>
+<td><code>IKeyboard</code> (<code>Name</code>, <code>SetLeds</code>)</td>
+<td><code>PublishKeyboard</code></td>
+<td><code>KeyboardSink.Report(scanCode, released)</code></td>
+</tr>
+<tr>
+<td>Pointeur</td>
+<td><code>IPointer</code> (<code>Name</code>)</td>
+<td><code>PublishPointer</code></td>
+<td><code>PointerSink.ReportRelative(...)</code>, <code>ReportAbsolute(...)</code></td>
+</tr>
+<tr>
+<td>Réseau</td>
+<td><code>INetworkInterface</code> (<code>Name</code>, <code>MacAddress</code>, <code>LinkUp</code>, <code>Transmit</code>)</td>
+<td><code>PublishNetwork</code></td>
+<td><code>NetworkSink.Receive(frame)</code>, <code>LinkChanged(up)</code></td>
+</tr>
+<tr>
+<td>Bloc</td>
+<td><code>IBlockDevice</code></td>
+<td><code>PublishBlockDevice</code></td>
+<td>rien</td>
+</tr>
+<tr>
+<td>Écran</td>
+<td><code>IDisplay</code> (<code>Name</code>, <code>Mode</code>, <code>Framebuffer</code>, <code>Flush</code>)</td>
+<td><code>PublishDisplay</code></td>
+<td><code>DisplaySink.ModeChanged()</code></td>
+</tr>
+<tr>
+<td>Audio</td>
+<td><code>IAudioOutput</code> (<code>Name</code>, <code>Format</code>, <code>SampleRate</code>, <code>SupportedFormats</code>, <code>IsRunning</code>, <code>WritableBytes</code>, <code>TrySetFormat</code>, <code>Start</code>, <code>Stop</code>, <code>Write</code>)</td>
+<td><code>PublishAudio</code></td>
+<td><code>AudioSink.BufferCompleted()</code>, <code>FormatChanged()</code></td>
+</tr>
+</tbody>
+</table>
+<p>Pour chaque type de périphérique, les types correspondants se trouvent dans l'espace de noms de sa catégorie sous <code>Cosmos.Kernel.HAL.Devices</code>, les mêmes catégories que celles des dossiers des pilotes : les types clavier et pointeur dans <code>Cosmos.Kernel.HAL.Devices.Input</code> ; les types réseau dans <code>Cosmos.Kernel.HAL.Devices.Network</code>, à côté de <code>MacAddress</code>, le type que renvoie <code>INetworkInterface.MacAddress</code> ; les types écran dans <code>Cosmos.Kernel.HAL.Devices.Display</code> ; les types audio dans <code>Cosmos.Kernel.HAL.Devices.Audio</code>, à côté de <code>AudioFormat</code> ; et <code>IBlockDevice</code> dans <code>Cosmos.Kernel.HAL.Devices.Storage</code>.</p>
+<p>Le gestionnaire du noyau pour ce type récupère le périphérique dès qu'il est publié, et le démontage le retire avant de libérer quoi que ce soit d'autre. Les récepteurs n'allouent jamais, et ignorent les rapports une fois le périphérique retiré.</p>
+<p>Avec un objet d'état <code>NicState</code> qui implémente <code>INetworkInterface</code>, le sondage le publie et garde le récepteur qu'il reçoit en retour :</p>
+<pre><code class="lang-csharp">// In Probe:
+NicState state = new(binding);
+binding.DriverState = state;
+state.Sink = binding.PublishNetwork(state);
+
+// In the receive work item, for each frame the device received:
+Sink?.Receive(frame);
+</code></pre>
+<p>Le journal enregistre le début et la fin, ici pour l'exemple de clavier ci-dessus :</p>
+<pre><code>[Drivers] synthetic:kbd synthetic-keyboard published keyboard &quot;synthetic-kbd&quot; (consumed)
+[Drivers] synthetic:kbd synthetic-keyboard withdrew keyboard &quot;synthetic-kbd&quot;
+</code></pre>
+<p>Chaque type a aussi sa propre règle. Un pilote de clavier signale des scancodes bruts, le code du jeu 1 pour une touche qui s'enfonce ou se relâche, que <code>KeyboardManager</code> transforme en touches. Un pilote réseau appelle <code>NetworkSink.Receive</code> depuis le contexte de thread, jamais depuis son gestionnaire d'interruption, et confie les trames reçues à un élément de travail : le récepteur lui-même n'alloue pas, mais la pile réseau derrière lui copie la trame, ce qui demande le contexte de thread. Un pilote audio est le cas inverse, puisque <code>AudioSink.BufferCompleted</code> peut être appelé directement depuis le gestionnaire d'interruption. Son <code>Write</code> copie des trames audio entières (un échantillon par canal) dans le tampon du périphérique, autant que le tampon peut en contenir, et ne bloque jamais ; c'est par une écriture partielle que le périphérique indique qu'il est plein.</p>
+<p><code>PublishBlockDevice</code> enregistre le disque auprès de <code>StorageManager</code> et parcourt ses partitions avant de rendre la main : le périphérique doit donc être prêt à être lu quand le pilote le publie. Si le gestionnaire refuse le disque (sa table est pleine, ou le disque est déjà enregistré), <code>PublishBlockDevice</code> lève <code>InvalidOperationException</code> et le sondage échoue.</p>
+<p>Un pilote d'écran publie l'écran tel qu'il l'a trouvé : <code>Mode</code> est vide tant que rien n'en définit un, et <code>Framebuffer</code> vaut <code>null</code> quand le CPU ne peut pas y dessiner. Le même objet peut aussi implémenter <code>IDisplayModes</code> pour changer de mode et <code>IHardwareCursor</code> pour un curseur matériel. Le framebuffer du chargeur d'amorçage est publié comme écran du firmware au démarrage, et retiré quand un pilote se lie à la fonction PCI dont la fenêtre mémoire le contient.</p>
+<p>Consultez <a href="graphics.html">Graphismes</a>, <a href="audio.html">Audio</a> et <a href="filesystem.html">Système de fichiers</a> pour le côté consommateur.</p>
+<p><a id="publishing-child-nodes"></a></p>
+<h3 id="publier-des-nœuds-enfants">Publier des nœuds enfants</h3>
+<p>Un pilote de bus publie les périphériques qu'il trouve sous forme de nœuds enfants : <code>binding.PublishChild(identity, resources, interrupts, access)</code> en ajoute un sous son nœud, qui sera proposé aux pilotes comme n'importe quel autre, et <code>binding.RetractChild(child, hardwarePresent)</code> le retire. Les enfants disparaissent avec leur parent, et leurs pilotes voient <code>DetachCause.ParentRetracted</code>.</p>
+<p>Un pilote de bus publie soit un type de bus que le kit définit déjà, soit sa propre paire d'identité et de correspondance. Les pilotes de transport virtio fournis font le premier choix : ils publient leur périphérique avec la <code>VirtioIdentity</code> du kit, aucune ressource, les neuf sources d'interruption d'un <code>VirtioAccess</code>, et cet accès comme objet d'accès (<a href="#virtio-devices">Périphériques virtio</a>). Le cœur d'énumération USB du kit fait de même sous le nœud d'un pilote de contrôleur hôte (xHCI, EHCI ou OHCI) ou sous celui du pilote de hub, avec une <code>UsbIdentity</code>, aucune ressource, aucune source d'interruption et un <code>UsbAccess</code> (<a href="#usb-devices">Périphériques USB</a>). Un bus qui vous est propre a besoin d'une identité et d'une correspondance :</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.HAL.DriverKit;
+
+namespace MyOS.Drivers;
+
+public sealed class ChildIdentity : DeviceIdentity
+{
+    public ChildIdentity(string name)
+    {
+        Name = name;
+    }
+
+    public string Name { get; }
+
+    public override string BusName =&gt; &quot;mybus&quot;;
+
+    public override string Address =&gt; Name;
+
+    public override string Describe()
+    {
+        return string.Concat(&quot;child &quot;, Name);
+    }
+}
+
+public sealed class ChildMatch : DeviceMatch
+{
+    private readonly string _name;
+
+    public ChildMatch(string name)
+    {
+        _name = name;
+    }
+
+    public override int Specificity =&gt; 1;
+
+    public override bool Matches(DeviceIdentity identity)
+    {
+        return identity is ChildIdentity child &amp;&amp; string.Equals(_name, child.Name);
+    }
+}
+</code></pre>
+<p>Le sondage du pilote de bus publie alors un enfant avec cette identité, ses registres en ressource 0 :</p>
+<pre><code class="lang-csharp">// In the bus driver:
+public override ProbeResult Probe(DeviceBinding binding)
+{
+    DeviceResource[] resources =
+    [
+        DeviceResource.MemoryWindow(0xFEB00000, 0x1000),   // the child's registers, index 0
+    ];
+
+    DeviceNode child = binding.PublishChild(new ChildIdentity(&quot;port0&quot;), resources, [], null);
+    binding.DriverState = child;
+    return ProbeResult.Bound;
+}
+</code></pre>
+<p>Les ressources se construisent avec <code>DeviceResource.MemoryWindow</code>, <code>PortRange</code>, <code>RamWindow</code> ou <code>None</code> (un emplacement non attribué qui préserve les indices qui le suivent). Les interruptions sont des sous-classes d'<code>InterruptSource</code> fournies par le bus.</p>
+<p><a id="logging"></a></p>
+<h3 id="journalisation">Journalisation</h3>
+<p><code>binding.Log(message)</code> écrit une ligne dans le journal série depuis le contexte de thread : <code>[Drivers] synthetic:kbd synthetic-keyboard: message</code>.</p>
+<hr>
+<p><a id="declining-and-failing"></a></p>
+<h2 id="décliner-et-échouer">Décliner et échouer</h2>
+<p><code>Probe</code> renvoie l'un des trois résultats suivants :</p>
+<table>
+<thead>
+<tr>
+<th>Résultat</th>
+<th>Quand le renvoyer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ProbeResult.Bound</code></td>
+<td>Le pilote a pris le périphérique.</td>
+</tr>
+<tr>
+<td><code>ProbeResult.Declined(reason)</code></td>
+<td>Le périphérique ne fait finalement pas partie de ceux que sert le pilote (une révision inconnue, une fonctionnalité manquante).</td>
+</tr>
+<tr>
+<td><code>ProbeResult.Failed(reason)</code></td>
+<td>Le périphérique fait partie de ceux que sert le pilote, mais sa mise en route n'a pas fonctionné. Une exception qui s'échappe de <code>Probe</code> compte comme un échec.</td>
+</tr>
+</tbody>
+</table>
+<p>Pour tout résultat autre que <code>Bound</code>, le kit libère tout ce que le sondage a acquis, puis propose le nœud au candidat suivant. La raison est affichée dans le journal :</p>
+<pre><code>[Drivers] synthetic:decline offer DecliningDriver -&gt; declined: declined on purpose
+[Drivers] synthetic:decline offer AnyKeyDriver -&gt; bound
+[Drivers] synthetic:throw offer ThrowingDriver -&gt; failed: probe threw on purpose
+</code></pre>
+<hr>
+<p><a id="teardown-and-ondetach"></a></p>
+<h2 id="démontage-et-ondetach">Démontage et OnDetach</h2>
+<p>Quand un nœud disparaît (le périphérique est débranché, son parent est retiré, ou un test le retire), le kit démonte sa liaison dans un ordre fixe :</p>
+<ol>
+<li><code>IsDetaching</code> passe à vrai, et la liaison refuse toute nouvelle acquisition.</li>
+<li>Les nœuds enfants sont retirés.</li>
+<li>Les périphériques publiés sont retirés, si bien que le noyau cesse de les utiliser.</li>
+<li>Les interruptions sont déconnectées, et les éléments de travail, le travail périodique et les threads de pilote sont arrêtés.</li>
+<li><code>OnDetach</code> s'exécute.</li>
+<li>La mémoire est libérée : tampons DMA, fenêtres de registres et régions.</li>
+</ol>
+<p><code>OnDetach</code> est facultatif. C'est l'endroit où arrêter le matériel, car les interruptions et les threads sont déjà arrêtés et les registres sont encore mappés. Vérifiez d'abord <code>reason.HardwarePresent</code> : il vaut <code>false</code> quand le périphérique a été <a href="driver-concepts/hot-plug.html">débranché</a>, et il ne faut alors pas toucher aux registres, car une écriture dans une fenêtre dont le périphérique a disparu peut déclencher une exception matérielle ou atteindre un autre périphérique. Le <code>OnDetach</code> de l'exemple de clavier ne désactive le périphérique que s'il est encore là :</p>
+<pre><code class="lang-csharp">// In the driver:
+public override void OnDetach(DeviceBinding binding, DetachReason reason)
+{
+    if (reason.HardwarePresent &amp;&amp; binding.DriverState is KeyboardState state)
+    {
+        state.Window.Write8(KeyboardState.ControlOffset, 0);   // disable the device
+    }
+}
+</code></pre>
+<p><code>reason.Cause</code> en donne la raison : <code>DetachCause.Retracted</code> quand le nœud lui-même a été retiré, <code>DetachCause.ParentRetracted</code> quand c'est son parent qui l'a été. Le journal montre le retrait du périphérique, puis le nœud qui quitte l'arbre :</p>
+<pre><code>[Drivers] synthetic:kbd synthetic-keyboard withdrew keyboard &quot;synthetic-kbd&quot;
+[Drivers] synthetic:kbd retracted
+</code></pre>
+<hr>
+<p><a id="buses"></a></p>
+<h2 id="bus">Bus</h2>
+<p>Les <a href="driver-concepts/buses.html">bus</a> s'imbriquent. La description de la machine, c'est-à-dire le code de plateforme qui décrit les périphériques fixes de la machine au démarrage, publie les nœuds racines, et les pilotes de bus publient les périphériques qu'ils trouvent en dessous. Sur une machine x64, par exemple, l'arbre ressemble à ceci :</p>
+<pre><code>platform:i8042@60                    I8042Driver
+├── ps2:kbd                          Ps2KeyboardDriver
+└── ps2:aux                          Ps2MouseDriver
+platform:pci@cf8                     PciHostDriver
+├── pci:0000:00:02.0                 VirtioPciTransportDriver
+│   └── virtio:pci:0000:00:02.0      VirtioNetDriver
+└── pci:0000:00:04.0                 XhciDriver
+    └── usb:1-1:0                    UsbKeyboardDriver
+</code></pre>
+<p>Un pilote ne voit que son propre nœud : un pilote virtio ne sait jamais quel transport porte son périphérique, et un pilote USB ne voit jamais le contrôleur ni les hubs au-dessus de lui.</p>
+<p>Chaque type de bus a son propre espace de noms, <code>Cosmos.Kernel.HAL.DriverKit.Buses.&lt;Bus&gt;</code> (<code>Platform</code>, <code>Pci</code>, <code>Virtio</code>, <code>Usb</code>, <code>Ps2</code>, et <code>Synthetic</code> pour les tests), et nomme ses types de la même façon : <code>&lt;Bus&gt;Identity</code> pour ce qu'est un nœud, <code>&lt;Bus&gt;Match</code> pour ce à quoi un pilote se lie, et <code>&lt;Bus&gt;Access</code> pour la façon dont le pilote accède au périphérique. Le bus de plateforme fait exception : ses pilotes mappent plutôt les ressources du nœud, et seul le nœud de l'hôte PCI porte un objet d'accès, <code>PciHostAccess</code>.</p>
+<p>Les nœuds de plateforme et le pilote de l'hôte PCI viennent d'abord, ci-dessous ; les quatre sections suivantes passent tour à tour en revue les bus auxquels un pilote se lie : PCI, virtio, USB et PS/2.</p>
+<p><a id="platform-nodes"></a></p>
+<h3 id="nœuds-de-plateforme">Nœuds de plateforme</h3>
+<p>Les nœuds de plateforme sont les racines : des périphériques que rien ne peut énumérer, et que la description de la machine publie au démarrage. Un noyau ne peut pas publier les siens.</p>
+<table>
+<thead>
+<tr>
+<th>Machine</th>
+<th>Nœud</th>
+<th>Compatible</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x64</td>
+<td><code>platform:i8042@60</code>, le contrôleur PS/2</td>
+<td><code>pnp0303</code></td>
+</tr>
+<tr>
+<td>x64</td>
+<td><code>platform:pci@cf8</code>, l'hôte PCI</td>
+<td><code>pci-host-legacy</code></td>
+</tr>
+<tr>
+<td>ARM64</td>
+<td><code>platform:pci@&lt;base&gt;</code>, l'hôte PCI</td>
+<td><code>pci-host-ecam-generic</code></td>
+</tr>
+<tr>
+<td>ARM64</td>
+<td><code>platform:virtio_mmio@&lt;base&gt;</code>, un par emplacement occupé</td>
+<td><code>virtio,mmio</code></td>
+</tr>
+</tbody>
+</table>
+<p>Sur ARM64, ils proviennent d'ACPI, du device tree ou de la disposition fixe de la machine virt. Les deux hôtes PCI diffèrent par la façon dont ils accèdent à l'espace de configuration : <code>pci-host-legacy</code> par les ports <code>0xCF8</code> et <code>0xCFC</code>, <code>pci-host-ecam-generic</code> par une fenêtre mémoire. Un pilote met en correspondance un nœud de plateforme par l'une de ses chaînes compatibles :</p>
+<pre><code class="lang-csharp">// In the driver:
+private readonly DeviceMatch[] _matches = [PlatformMatch.Compatible(&quot;virtio,mmio&quot;)];
+</code></pre>
+<p><code>PlatformMatch.Any()</code> correspond à chaque nœud de plateforme.</p>
+<p><a id="the-pci-host-driver"></a></p>
+<h3 id="le-pilote-de-lhôte-pci">Le pilote de l'hôte PCI</h3>
+<p><code>PciHostDriver</code> se lie au nœud de l'hôte PCI, parcourt chaque bus derrière lui en suivant les ponts, et publie un nœud <code>pci:</code> par fonction trouvée. Les fonctions situées derrière un emplacement PCI Express à branchement à chaud sont publiées par <code>PcieRootPortDriver</code> à la place, au démarrage pour un périphérique déjà présent dans un emplacement alimenté, et plus tard quand un périphérique y est branché. Une fonction à laquelle aucun pilote ne correspond est laissée telle que le <a href="driver-concepts/firmware-handoff.html">firmware</a> l'a configurée.</p>
+<hr>
+<p><a id="pci-devices"></a></p>
+<h2 id="périphériques-pci">Périphériques PCI</h2>
+<p>Un nœud PCI est une <a href="driver-concepts/pci.html">fonction</a> : son identité lue dans l'en-tête de configuration, six ressources (ses registres d'adresse de base), ses sources d'interruption (la ligne héritée, puis ses messages MSI-X) et un <code>PciAccess</code> pour son espace de configuration. Le pilote fourni <code>E1000EDriver</code> est un bon modèle, et les exemples ci-dessous en reprennent les étapes.</p>
+<p><a id="pci-identity-and-match"></a></p>
+<h3 id="identité-et-correspondance-pci">Identité et correspondance PCI</h3>
+<p><code>PciIdentity</code> contient les champs d'en-tête sur lesquels un pilote établit la correspondance : <code>VendorId</code>, <code>DeviceId</code>, <code>SubsystemVendorId</code>, <code>SubsystemId</code>, <code>ClassCode</code>, <code>Subclass</code>, <code>ProgIf</code> et <code>Revision</code>, plus l'adresse de la fonction. Le chemin du nœud est <code>pci:&lt;segment&gt;:&lt;bus&gt;:&lt;device&gt;.&lt;function&gt;</code>, par exemple <code>pci:0000:00:03.0</code>.</p>
+<p><code>PciMatch</code> accepte n'importe lequel de ces champs ; chaque champ fourni doit correspondre exactement, et la spécificité est le nombre de champs fournis :</p>
+<pre><code class="lang-csharp">// In the driver:
+using Cosmos.Kernel.HAL.DriverKit.Buses.Pci;
+
+private readonly DeviceMatch[] _matches =
+[
+    new PciMatch(vendorId: 0x8086, deviceId: 0x10D3),   // one chip: specificity 2
+    new PciMatch(classCode: 0x02),                      // every network controller: specificity 1
+];
+</code></pre>
+<p>Une correspondance doit définir au moins un champ. Préférez les identifiants de périphérique que vous avez testés à une correspondance par classe : une correspondance par classe lie chaque fonction de cette classe, y compris des puces dont les registres diffèrent de celle que vous avez testée. Une correspondance par classe n'est justifiée que là où une spécification fixe la disposition des registres, comme la spécification HD Audio le fait pour <code>HdAudioDriver</code> ; le pilote E1000E fourni correspond à huit identifiants de périphérique Intel et à rien d'autre.</p>
+<p><a id="the-pci-access-object"></a></p>
+<h3 id="lobjet-daccès-pci">L'objet d'accès PCI</h3>
+<p><code>binding.Node.Access&lt;PciAccess&gt;()</code> donne accès à l'espace de configuration de la fonction :</p>
+<ul>
+<li><code>ReadConfig8/16/32</code> et <code>WriteConfig8/16/32</code> lisent et écrivent un registre à un décalage aligné sur sa largeur. Un décalage au-delà de l'espace de configuration auquel l'hôte accède lève <code>ArgumentOutOfRangeException</code> : cet espace fait 256 octets sur x64, dont l'hôte utilise les ports hérités, et 4 Kio avec ECAM.</li>
+<li><code>FindCapability(id)</code> renvoie le décalage d'une capacité, ou 0.</li>
+<li><code>EnableMemorySpace</code>, <code>EnableIoSpace</code> et <code>EnableBusMastering</code> activent ce que le pilote utilise : le décodage fait répondre les registres, le <a href="driver-concepts/dma.html">bus mastering</a> permet au périphérique d'atteindre la mémoire DMA.</li>
+<li><code>Bars</code> décrit les six registres d'adresse de base (section suivante).</li>
+</ul>
+<p>Avant le premier sondage, le kit désactive le bus mastering et les interruptions sur la fonction : un sondage active donc lui-même ce dont il a besoin. Le kit recommence après chaque sondage qui n'a pas abouti à une liaison, avant que la mémoire de ce sondage ne soit libérée, afin que le périphérique cesse d'y écrire, et encore une fois après le démontage d'une liaison alors que le périphérique est toujours présent. Si tous les pilotes déclinent, le kit restaure ce que le firmware avait configuré.</p>
+<p><a id="bar-resources"></a></p>
+<h3 id="ressources-bar">Ressources BAR</h3>
+<p>Les <code>Node.Resources</code> d'un nœud PCI comptent toujours six entrées, une par registre d'adresse de base : une <code>MemoryWindow</code>, une <code>PortRange</code>, ou <code>None</code> pour un registre qui n'est pas attribué (ou qui est la moitié haute d'un registre 64 bits). Mapper une entrée <code>None</code> lève une exception, vérifiez donc d'abord <code>pci.Bars[i]</code> :</p>
+<pre><code class="lang-csharp">// In Probe:
+PciAccess pci = binding.Node.Access&lt;PciAccess&gt;();
+PciBar bar0 = pci.Bars[0];
+if (!bar0.IsAssigned || bar0.IsIo || bar0.Length &lt; 0x20000)
+{
+    return ProbeResult.Declined(&quot;BAR0 is not a memory window of 128 KiB&quot;);
+}
+
+RegisterWindow registers = binding.MapRegisters(0);
+pci.EnableMemorySpace(true);
+pci.EnableBusMastering(true);
+</code></pre>
+<p><a id="the-legacy-line"></a></p>
+<h3 id="la-ligne-héritée">La ligne héritée</h3>
+<p><code>Node.Interrupts[0]</code> est la <a href="driver-concepts/interrupt-delivery.html">ligne d'interruption héritée</a> de la fonction. Le kit ne la route que sur x64, pour les lignes 3 à 15, et attribue chaque ligne à une seule fonction plutôt que de la partager : <code>TryRequestInterrupt</code> renvoie donc <code>false</code> sur ARM64, pour toute autre ligne, et pour une ligne que détient un autre pilote. Même quand la connexion réussit, le kit programme la ligne en déclenchement sur front, ce que QEMU délivre mais qu'un vrai chipset, dont les lignes PCI sont déclenchées sur niveau et partagées, peut ne pas délivrer. Associez-la à un vidage périodique qui maintient le périphérique en marche si la ligne ne se déclenche jamais :</p>
+<pre><code class="lang-csharp">// In Probe:
+WorkItem drain = binding.CreateWorkItem(state.Drain);
+state.DrainWork = drain;
+
+bool hasLine = binding.TryRequestInterrupt(binding.Node.Interrupts[0], state.OnInterrupt, out _);
+bool polling = binding.TrySchedulePeriodic(50, drain);
+if (!hasLine &amp;&amp; !polling)
+{
+    return ProbeResult.Declined(&quot;no interrupt and no timer to poll with&quot;);
+}
+</code></pre>
+<p>Le gestionnaire d'interruption acquitte le périphérique et planifie le même vidage, qui doit donc pouvoir s'exécuter sans risque à tout moment.</p>
+<p><a id="message-interrupts"></a></p>
+<h3 id="interruptions-par-message">Interruptions par message</h3>
+<p>Quand la fonction prend en charge MSI-X, <code>Node.Interrupts[1]</code> et les suivantes sont ses messages, jusqu'à 32. Ils nécessitent que le décodage mémoire soit activé, car la table MSI-X se trouve dans un BAR, et leur connexion renvoie <code>false</code> là où la plateforme ne peut pas router de messages (ARM64 sans ITS GICv3, le service de traduction du contrôleur d'interruptions ARM pour les interruptions par message ; la machine virt de QEMU utilise par défaut GICv2, qui n'en a pas). Connecter un message désactive la ligne héritée, si bien que les deux ne sont jamais actives en même temps :</p>
+<pre><code class="lang-csharp">// In Probe:
+pci.EnableMemorySpace(true);   // before requesting a message
+
+bool hasMessage = binding.Node.Interrupts.Count &gt; 1
+    &amp;&amp; binding.TryRequestInterrupt(binding.Node.Interrupts[1], state.OnInterrupt, out _);
+</code></pre>
+<p><a id="hot-plug-slots"></a></p>
+<h3 id="emplacements-de-branchement-à-chaud">Emplacements de branchement à chaud</h3>
+<p>Une fonction située derrière un emplacement PCI Express à <a href="driver-concepts/hot-plug.html">branchement à chaud</a> est publiée quand son périphérique est branché (ou au démarrage, quand l'emplacement contient déjà un périphérique alimenté), et retirée quand il est enlevé ; <code>PcieRootPortDriver</code> gère l'emplacement. Si le firmware a laissé les registres de la fonction non attribués, le kit les place avant que la fonction ne soit proposée, et un registre qui ne tient pas dans les fenêtres d'adresses de l'emplacement reste non attribué. Un pilote n'a donc besoin de rien de particulier : il vérifie <code>Bars</code> comme d'habitude, et ne touche pas aux registres dans <code>OnDetach</code> quand <code>reason.HardwarePresent</code> vaut <code>false</code>.</p>
+<hr>
+<p><a id="virtio-devices"></a></p>
+<h2 id="périphériques-virtio">Périphériques virtio</h2>
+<p>Un nœud virtio est un périphérique <a href="driver-concepts/virtio.html">virtio</a>, publié par un pilote de transport sur PCI ou MMIO. Il n'a pas de ressources, mais neuf sources d'interruption et un <code>VirtioAccess</code> qui parle le protocole virtio, si bien qu'un pilote fonctionne de la même façon sur les deux transports. Le pilote fourni <code>VirtioNetDriver</code> est un bon modèle, et les exemples ci-dessous en reprennent les étapes.</p>
+<p><a id="virtio-identity-and-match"></a></p>
+<h3 id="identité-et-correspondance-virtio">Identité et correspondance virtio</h3>
+<p><code>VirtioIdentity</code> porte le <code>DeviceType</code> (<code>VirtioDeviceType.Network</code>, <code>Block</code>, <code>Gpu</code>, <code>Input</code>, ...) et le transport, qui apparaît dans le chemin du nœud (<code>virtio:pci:0000:00:02.0</code>, <code>virtio:mmio:a003e00</code>) mais n'importe jamais au pilote. Un pilote établit la correspondance sur le type de périphérique :</p>
+<pre><code class="lang-csharp">// In the driver:
+using Cosmos.Kernel.HAL.DriverKit.Buses.Virtio;
+
+private readonly DeviceMatch[] _matches = [VirtioMatch.DeviceType(VirtioDeviceType.Network)];
+</code></pre>
+<p><a id="the-virtio-access-object"></a></p>
+<h3 id="lobjet-daccès-virtio">L'objet d'accès virtio</h3>
+<p><code>binding.Node.Access&lt;VirtioAccess&gt;()</code> est le périphérique. Un sondage l'utilise dans cet ordre :</p>
+<ol>
+<li><code>NegotiateFeatures(requestedLow, out negotiatedLow)</code> avec les bits de fonctionnalité que comprend le pilote, parmi les 32 bits de poids faible ; le kit ajoute lui-même <code>VIRTIO_F_VERSION_1</code> quand le périphérique le propose. Elle renvoie <code>false</code> quand le périphérique les rejette.</li>
+<li><code>TryCreateQueue</code> pour chaque file (<a href="#queues">Files</a>).</li>
+<li><code>ReadConfig8/16/32</code> et <code>WriteConfig8</code> pour la configuration propre au périphérique, comme l'adresse MAC d'une carte réseau.</li>
+<li><code>TryRequestInterrupt</code> sur les sources de file et de configuration (<a href="#virtio-interrupt-sources">Sources d'interruption virtio</a>).</li>
+<li><code>SetDriverOk()</code>, après quoi le périphérique est actif.</li>
+</ol>
+<p>Le kit réinitialise le périphérique avant chaque sondage, si bien qu'un sondage commence par la négociation :</p>
+<pre><code class="lang-csharp">// In Probe:
+VirtioAccess dev = binding.Node.Access&lt;VirtioAccess&gt;();
+if (!dev.NegotiateFeatures(FeatureMac | FeatureStatus, out uint features))
+{
+    return ProbeResult.Failed(&quot;the device rejected the feature set&quot;);
+}
+</code></pre>
+<p><code>Reset()</code> arrête le périphérique ; un pilote l'appelle dans <code>OnDetach</code>.</p>
+<p><a id="queues"></a></p>
+<h3 id="files">Files</h3>
+<p>Une virtqueue est un anneau (<a href="#dma-memory">Mémoire DMA</a>) que partagent le pilote et le périphérique. <code>dev.TryCreateQueue(binding, index, preferredSize, out Virtqueue? queue)</code> en alloue une et l'active sur le périphérique. Une <code>Virtqueue</code> propose :</p>
+<ul>
+<li><code>TryAllocateDescriptor(out index)</code> et <code>FreeDescriptor(index)</code>.</li>
+<li><code>SetDescriptor(index, physicalAddress, length, flags, next)</code> : <code>VirtqueueDescriptorFlags.Write</code> pour un tampon que remplit le périphérique, <code>Next</code> avec l'indice du descripteur suivant dans <code>next</code> pour les chaîner (<code>next</code> vaut 0 par défaut).</li>
+<li><code>Submit(head)</code> remet une chaîne de descripteurs au périphérique, et <code>Notify()</code> actionne le doorbell.</li>
+<li><code>TryTakeUsed(out id, out length)</code> reprend ce que le périphérique a terminé.</li>
+</ul>
+<p>Une file n'est pas thread-safe : protégez-la avec un <code>DeviceLock</code> quand <code>Transmit</code> et un élément de travail la partagent. Les tampons peuvent être soumis avant <code>SetDriverOk</code>, mais <code>Notify</code> seulement après :</p>
+<pre><code class="lang-csharp">// In Probe:
+if (!dev.TryCreateQueue(binding, ReceiveQueue, 128, out Virtqueue? receiveQueue))
+{
+    return ProbeResult.Failed(&quot;no receive queue&quot;);
+}
+
+// One buffer per descriptor, for the device to write received frames into.
+DmaBuffer receiveBuffers = binding.AllocateDma(receiveQueue.Size * BufferBytes, 4096);
+for (int i = 0; i &lt; receiveQueue.Size; i++)
+{
+    receiveQueue.TryAllocateDescriptor(out ushort slot);
+    ulong physical = receiveBuffers.PhysicalAddress + (ulong)(slot * BufferBytes);
+    receiveQueue.SetDescriptor(slot, physical, BufferBytes, VirtqueueDescriptorFlags.Write);
+    receiveQueue.Submit(slot);
+}
+
+// ... connect the interrupts ...
+
+dev.SetDriverOk();
+receiveQueue.Notify();
+state.Sink = binding.PublishNetwork(state);
+</code></pre>
+<p><a id="virtio-interrupt-sources"></a></p>
+<h3 id="sources-dinterruption-virtio">Sources d'interruption virtio</h3>
+<p><code>dev.QueueInterrupt(n)</code> est l'interruption de la file <code>n</code>, et <code>dev.ConfigInterrupt</code> se déclenche quand la configuration du périphérique change. Quand le transport n'a pas pu les router (ARM64 sans ITS GICv3, par exemple), <code>TryRequestInterrupt</code> renvoie <code>false</code> et le pilote scrute à la place :</p>
+<pre><code class="lang-csharp">// In Probe:
+WorkItem drain = binding.CreateWorkItem(state.Drain);
+bool hasInterrupt = binding.TryRequestInterrupt(dev.QueueInterrupt(ReceiveQueue), state.OnInterrupt, out _);
+if (!hasInterrupt &amp;&amp; !binding.TrySchedulePeriodic(50, drain))
+{
+    return ProbeResult.Declined(&quot;no interrupt and no timer to poll with&quot;);
+}
+</code></pre>
+<p>Dans <code>OnDetach</code>, réinitialisez le périphérique pour qu'il cesse d'écrire dans la mémoire que le kit s'apprête à libérer, puis laissez aux transferts DMA en cours un instant pour aboutir :</p>
+<pre><code class="lang-csharp">// In the driver:
+public override void OnDetach(DeviceBinding binding, DetachReason reason)
+{
+    if (reason.HardwarePresent)
+    {
+        binding.Node.Access&lt;VirtioAccess&gt;().Reset();
+        binding.Delay(100);
+    }
+}
+</code></pre>
+<p><a id="the-transport-drivers"></a></p>
+<h3 id="les-pilotes-de-transport">Les pilotes de transport</h3>
+<p><code>VirtioPciTransportDriver</code> se lie à chaque fonction PCI virtio (fabricant <code>0x1AF4</code>), en n'utilisant que l'interface moderne et les messages MSI-X. <code>VirtioMmioTransportDriver</code> se lie aux nœuds de plateforme <code>virtio,mmio</code> sur ARM64. Un pilote feuille n'a jamais affaire ni à l'un ni à l'autre.</p>
+<p><a id="the-shipped-leaf-drivers"></a></p>
+<h3 id="les-pilotes-feuilles-fournis">Les pilotes feuilles fournis</h3>
+<table>
+<thead>
+<tr>
+<th>Pilote</th>
+<th>Type de périphérique</th>
+<th>Publie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VirtioNetDriver</code></td>
+<td><code>Network</code></td>
+<td>une interface réseau, <code>virtio-net</code></td>
+</tr>
+<tr>
+<td><code>VirtioInputDriver</code></td>
+<td><code>Input</code></td>
+<td>un clavier, <code>virtio-keyboard</code>, ou un pointeur, <code>virtio-mouse</code></td>
+</tr>
+<tr>
+<td><code>VirtioBlkDriver</code></td>
+<td><code>Block</code></td>
+<td>un périphérique bloc, <code>vblk&lt;n&gt;</code></td>
+</tr>
+<tr>
+<td><code>VirtioGpuDriver</code></td>
+<td><code>Gpu</code></td>
+<td>un écran, <code>virtio-gpu</code> (2D uniquement)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a id="usb-devices"></a></p>
+<h2 id="périphériques-usb">Périphériques USB</h2>
+<p>Un nœud USB est une <a href="driver-concepts/usb.html">interface</a> d'un périphérique USB, publiée par le pilote du contrôleur hôte pour un périphérique sur un port racine, ou par le pilote de hub pour un périphérique derrière un hub. Il n'a ni ressources ni sources d'interruption, mais un <code>UsbAccess</code> pour tout ce que fait un pilote de classe. Un périphérique à plusieurs interfaces donne plusieurs nœuds. Un pilote de classe ne voit jamais le contrôleur ni les hubs au-dessus de lui ; les pilotes fournis <code>UsbKeyboardDriver</code>, <code>UsbMouseDriver</code> et <code>UsbMassStorageDriver</code> sont de bons modèles.</p>
+<p><a id="usb-identity-and-match"></a></p>
+<h3 id="identité-et-correspondance-usb">Identité et correspondance USB</h3>
+<p><code>UsbIdentity</code> contient le <code>VendorId</code>, le <code>ProductId</code> et la classe du périphérique, ainsi que la classe, la sous-classe et le protocole de l'interface. Le chemin du nœud est la chaîne des ports suivie du numéro d'interface : <code>usb:1-1:0</code> est l'interface 0 du périphérique sur le port racine 1 du premier contrôleur, et <code>usb:1-2.1:0</code> un périphérique sur le port 1 d'un hub branché sur le port racine 2.</p>
+<p><code>UsbMatch</code> fonctionne comme <code>PciMatch</code> : chaque champ fourni doit correspondre exactement, et la spécificité est le nombre de champs fournis. Un pilote de classe établit généralement la correspondance sur la classe, la sous-classe et le protocole de l'interface. Les pilotes de clavier et de souris fournis correspondent à l'interface HID boot, que chaque clavier et chaque souris de PC déclarent afin que le firmware puisse s'en servir :</p>
+<pre><code class="lang-csharp">// In the driver:
+using Cosmos.Kernel.HAL.DriverKit.Buses.Usb;
+
+private readonly DeviceMatch[] _matches =
+[
+    new UsbMatch(interfaceClass: UsbClassCode.Hid, interfaceSubclass: 0x01, interfaceProtocol: 0x01),   // a HID boot keyboard: specificity 3
+];
+</code></pre>
+<p><a id="the-usb-access-object"></a></p>
+<h3 id="lobjet-daccès-usb">L'objet d'accès USB</h3>
+<p><code>binding.Node.Access&lt;UsbAccess&gt;()</code> représente l'interface USB. Ses membres s'exécutent en contexte de thread :</p>
+<ul>
+<li><code>Endpoints</code> liste les endpoints de l'interface, et <code>FindEndpoint(type, isIn)</code> en trouve un.</li>
+<li><code>ControlIn</code>, <code>ControlOut</code> et <code>GetDescriptor</code> envoient des requêtes de contrôle au périphérique. Chacune renvoie un <code>UsbTransferStatus</code> : <code>Success</code>, <code>Stall</code>, <code>Timeout</code>, <code>Error</code> ou <code>Disconnected</code>.</li>
+<li><code>OpenInterruptPipe(binding, endpoint, handler, out pipe)</code> ouvre un <a href="driver-concepts/usb.html">endpoint interrupt IN</a> et appelle la routine de traitement pour chaque rapport qu'envoie le périphérique.</li>
+<li><code>OpenBulkPipe(binding, endpoint, out pipe)</code> ouvre un endpoint bulk, et <code>BulkIn</code> et <code>BulkOut</code> y font transiter des données en attendant la fin du transfert.</li>
+<li><code>IsDisconnected</code> passe à vrai une fois le périphérique débranché ; chaque transfert renvoie alors <code>Disconnected</code>, vérifiez-le donc plutôt que de réessayer.</li>
+</ul>
+<p>Les pipes sont enregistrés sur la liaison, si bien que le kit les ferme quand le sondage décline ou que le périphérique disparaît. Le pilote de stockage de masse ouvre deux pipes bulk ; si le second échoue, le kit ferme quand même le premier :</p>
+<pre><code class="lang-csharp">// In Probe:
+UsbAccess usb = binding.Node.Access&lt;UsbAccess&gt;();
+UsbEndpoint? bulkIn = usb.FindEndpoint(UsbEndpointType.Bulk, isIn: true);
+UsbEndpoint? bulkOut = usb.FindEndpoint(UsbEndpointType.Bulk, isIn: false);
+if (bulkIn is null || bulkOut is null)
+{
+    return ProbeResult.Declined(&quot;no bulk endpoints&quot;);
+}
+
+if (!usb.OpenBulkPipe(binding, bulkIn, out UsbPipe? inPipe) || !usb.OpenBulkPipe(binding, bulkOut, out UsbPipe? outPipe))
+{
+    return ProbeResult.Failed(&quot;could not open the bulk pipes&quot;);
+}
+</code></pre>
+<p>La routine qui traite les rapports peut s'exécuter en contexte d'interruption : elle suit donc les règles d'un gestionnaire d'interruption, c'est-à-dire pas de blocage, pas d'allocation, et pas d'appel à <code>UsbAccess</code> ni à <code>DeviceBinding</code>. Elle peut appeler un récepteur, <code>DeviceEvent.Signal</code> et <code>Interlocked</code>. Le pilote de clavier publie d'abord son clavier, afin que cette routine ait toujours un récepteur, puis ouvre le pipe de rapports :</p>
+<pre><code class="lang-csharp">// In Probe:
+UsbEndpoint? reports = usb.FindEndpoint(UsbEndpointType.Interrupt, isIn: true);
+if (reports is null)
+{
+    return ProbeResult.Declined(&quot;no interrupt IN endpoint&quot;);
+}
+
+state.Sink = binding.PublishKeyboard(state);
+if (!usb.OpenInterruptPipe(binding, reports, state.OnReport, out UsbPipe? pipe))
+{
+    return ProbeResult.Failed(&quot;could not open the report pipe&quot;);
+}
+
+// In the state object, for every report:
+public void OnReport(ReadOnlySpan&lt;byte&gt; report)
+{
+    // compare with the previous report and hand each key change to Sink.Report
+}
+</code></pre>
+<p><a id="the-host-controller-contract"></a></p>
+<h3 id="le-contrat-du-contrôleur-hôte">Le contrat du contrôleur hôte</h3>
+<p>Un pilote de contrôleur hôte se lie au nœud du contrôleur lui-même et implémente <code>UsbHostController</code> et <code>UsbDevice</code>, avec ses pipes dérivés de <code>UsbPipe</code>. Il crée un <code>UsbBus</code>, dont <code>Attach(port, speed)</code> et <code>Detach(port)</code> énumèrent un périphérique et publient ou retirent ses nœuds d'interface. <code>XhciDriver</code>, <code>EhciDriver</code> et <code>OhciDriver</code> implémentent ce contrat, <code>XhciDriver</code> servant d'implémentation de référence ; un pilote de classe n'a affaire à rien de tout cela.</p>
+<h3 id="hubs">Hubs</h3>
+<p><code>UsbHubDriver</code> se lie à chaque interface de hub. Il confie les périphériques présents sur les ports du hub à la même énumération par <code>ConfigureAsHub</code>, <code>AttachChild</code> et <code>DetachChild</code>, et surveille les ports depuis un thread, si bien qu'un périphérique derrière un hub est proposé comme n'importe quel autre, sous la forme <code>usb:1-2.1:0</code>.</p>
+<p><a id="the-xhci-driver"></a></p>
+<h3 id="le-pilote-xhci">Le pilote xHCI</h3>
+<p><code>XhciDriver</code> se lie à chaque contrôleur xHCI. Il énumère pendant son sondage les périphériques déjà branchés, si bien qu'une clé USB est prête avant <code>OnBoot</code>, et gère le branchement à chaud depuis un thread. Il utilise un message MSI-X là où la plateforme en achemine un, et scrute sinon le contrôleur toutes les 20 ms. Les endpoints isochrones, les endpoints interrupt OUT et les streams ne sont pas pris en charge.</p>
+<p><a id="the-ehci-driver"></a></p>
+<h3 id="le-pilote-ehci">Le pilote EHCI</h3>
+<p><code>EhciDriver</code> se lie à chaque contrôleur EHCI, l'hôte USB 2.0 qui a précédé xHCI sur les PC et que portent encore de nombreuses cartes embarquées. Ses ports racines n'acceptent que des périphériques high-speed : le pilote confie donc un périphérique full-speed ou low-speed branché sur l'un d'eux au contrôleur compagnon qui partage le port, lequel l'énumère sur un bus qui lui est propre (<a href="#the-ohci-driver">Le pilote OHCI</a>) ; sur un port sans compagnon, le périphérique est journalisé et laissé de côté. Sur les cartes qui placent plutôt un hub high-speed devant les ports, comme le font les chipsets Intel, un tel périphérique arrive derrière ce hub, où <code>UsbHubDriver</code> l'énumère et où le contrôleur l'atteint à travers le traducteur de transactions du hub, si bien qu'il est proposé comme n'importe quel autre (<a href="#hubs">Hubs</a>). Il énumère pendant son sondage les périphériques déjà branchés, si bien qu'une clé USB est prête avant <code>OnBoot</code>, et gère le branchement à chaud depuis un thread. Il utilise la ligne héritée de la fonction là où la plateforme en achemine une, ce que le kit ne fait que sur x64, et scrute sinon le contrôleur toutes les 20 ms. Les endpoints isochrones, les endpoints interrupt OUT, les structures de données au-delà de 4 Gio, la mise en veille, et la remise en service d'un contrôleur arrêté sur une erreur système de l'hôte ne sont pas pris en charge, et un hub est piloté à travers un seul traducteur de transactions.</p>
+<p><a id="the-ohci-driver"></a></p>
+<h3 id="le-pilote-ohci">Le pilote OHCI</h3>
+<p><code>OhciDriver</code> se lie à chaque contrôleur OHCI, l'interface d'hôte USB 1.1 de nombreux chipsets, dont ceux d'AMD et de NVIDIA (UHCI, l'hôte USB 1.1 des chipsets Intel et VIA, n'a pas de pilote), seul ou comme compagnon d'un EHCI, auquel cas il sert les périphériques full-speed et low-speed que lui confie le pilote EHCI. Rien ne coordonne les deux pilotes : le passage de relais est un bit du registre de port de l'EHCI, que l'OHCI voit comme une simple connexion sur son propre port racine, depuis son sondage quand il se lie après l'EHCI et depuis son thread de branchement à chaud quand il s'est lié en premier ; un passage de relais dans ce dernier ordre nécessite donc l'ordonnanceur. Il énumère pendant son sondage les périphériques déjà branchés, si bien qu'une clé USB est prête avant <code>OnBoot</code>, et gère le branchement à chaud depuis un thread, comme <code>XhciDriver</code>. Il utilise la ligne héritée de la fonction là où la plateforme en achemine une, ce que le kit ne fait que sur x64, et scrute sinon le contrôleur toutes les 20 ms. Les endpoints isochrones, les endpoints interrupt OUT, la mise en veille, et la remise en service d'un contrôleur arrêté sur une erreur irrécupérable ne sont pas pris en charge.</p>
+<p><a id="the-usb-class-drivers"></a></p>
+<h3 id="les-pilotes-de-classe-usb">Les pilotes de classe USB</h3>
+<table>
+<thead>
+<tr>
+<th>Pilote</th>
+<th>Correspond à</th>
+<th>Publie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>UsbKeyboardDriver</code></td>
+<td>Claviers HID boot</td>
+<td>un clavier, <code>usb-keyboard</code></td>
+</tr>
+<tr>
+<td><code>UsbMouseDriver</code></td>
+<td>Souris HID boot</td>
+<td>un pointeur, <code>usb-mouse</code></td>
+</tr>
+<tr>
+<td><code>UsbMassStorageDriver</code></td>
+<td>Stockage de masse en transport bulk-only (clés, lecteurs de cartes, disques USB)</td>
+<td>un périphérique bloc par unité, <code>usb&lt;n&gt;</code></td>
+</tr>
+<tr>
+<td><code>UsbHubDriver</code></td>
+<td>Hubs</td>
+<td>les périphériques derrière le hub, comme nœuds enfants</td>
+</tr>
+</tbody>
+</table>
+<p>Une unité est un disque logique derrière un périphérique de stockage de masse, comme un emplacement d'un lecteur de cartes. Une clé USB présente au démarrage apparaît ainsi dans le journal :</p>
+<pre><code>[Drivers] pci:0000:00:03.0 XhciDriver: usb 1-1: 46f4:0001 SuperSpeed, 1 interface(s)
+[Drivers] pci:0000:00:03.0 offer XhciDriver -&gt; bound
+[Drivers] usb:1-1:0 candidates: UsbMassStorageDriver(prio 0, spec 3)
+[StorageManager] usb0 registered by UsbMassStorageDriver (primary)
+[Drivers] usb:1-1:0 UsbMassStorageDriver published block &quot;usb0&quot; (consumed)
+[Drivers] usb:1-1:0 offer UsbMassStorageDriver -&gt; bound
+</code></pre>
+<hr>
+<p><a id="ps2-devices"></a></p>
+<h2 id="périphériques-ps2">Périphériques PS/2</h2>
+<p>Un nœud PS/2 est un port du <a href="driver-concepts/ps2.html">contrôleur 8042</a>, publié par <code>I8042Driver</code> : <code>ps2:kbd</code> pour le port clavier et <code>ps2:aux</code> pour le port souris. Il n'a pas de ressources, mais une source d'interruption et un <code>Ps2Access</code> pour dialoguer avec le périphérique. C'est le pilote de classe qui découvre ce qui est branché. PS/2 n'existe que sur x64.</p>
+<p><a id="ps2-identity-and-match"></a></p>
+<h3 id="identité-et-correspondance-ps2">Identité et correspondance PS/2</h3>
+<p>Un pilote correspond à un seul port, jamais aux deux, puisqu'un clavier et une souris parlent des protocoles différents :</p>
+<pre><code class="lang-csharp">// In the driver:
+using Cosmos.Kernel.HAL.DriverKit.Buses.Ps2;
+
+private readonly DeviceMatch[] _matches = [Ps2Match.Port(Ps2Port.Keyboard)];
+</code></pre>
+<p><a id="the-ps2-access-object"></a></p>
+<h3 id="lobjet-daccès-ps2">L'objet d'accès PS/2</h3>
+<p><code>binding.Node.Access&lt;Ps2Access&gt;()</code> est le port :</p>
+<ul>
+<li><code>TryCommand(command, arguments, reply, out replyLength, timeoutMilliseconds)</code> envoie une commande et ses arguments, attend que le périphérique acquitte chaque octet, et recueille la réponse. Contexte de thread.</li>
+<li><code>TryReceive(out value)</code> prend l'octet suivant que le périphérique a envoyé de lui-même, comme un scancode. N'importe quel contexte : c'est donc ce qu'utilise le gestionnaire d'interruption.</li>
+<li><code>DeliversUnattended</code> vaut <code>false</code> quand le contrôleur ne peut ni interrompre ni être scruté ; déclinez alors le port.</li>
+</ul>
+<p>Les octets qui répondent à une commande vont à <code>TryCommand</code>, jamais à <code>TryReceive</code>. Un sondage de souris publie son pointeur avant d'activer l'envoi des données, et un sondage de clavier réinitialise le périphérique, publie le clavier, connecte l'interruption du port, puis active le balayage des touches :</p>
+<pre><code class="lang-csharp">// In Probe:
+Ps2Access ps2 = binding.Node.Access&lt;Ps2Access&gt;();
+if (!ps2.DeliversUnattended)
+{
+    return ProbeResult.Declined(&quot;no interrupt and no timer to poll with&quot;);
+}
+
+Span&lt;byte&gt; reply = stackalloc byte[1];
+if (!ps2.TryCommand(Reset, [], reply, out int count, 1000) || count == 0 || reply[0] != SelfTestPassed)
+{
+    return ProbeResult.Declined(&quot;no keyboard on the port&quot;);
+}
+
+state.Sink = binding.PublishKeyboard(state);   // before scanning starts
+if (!binding.TryRequestInterrupt(binding.Node.Interrupts[0], state.OnInterrupt, out _))
+{
+    return ProbeResult.Failed(&quot;the port's interrupt could not be connected&quot;);
+}
+
+if (!ps2.TryCommand(EnableScanning, [], [], out _, 100))
+{
+    return ProbeResult.Failed(&quot;enable scanning was not acknowledged&quot;);
+}
+
+// In the state object, in interrupt context:
+public void OnInterrupt(InterruptContext context)
+{
+    while (_ps2.TryReceive(out byte value))
+    {
+        // decode the scan code and hand it to Sink.Report
+    }
+}
+</code></pre>
+<p><a id="the-controller-contract"></a></p>
+<h3 id="le-contrat-du-contrôleur">Le contrat du contrôleur</h3>
+<p><code>Ps2Controller</code> est ce qu'implémente un pilote de contrôleur pour envoyer des octets à un port et restituer les octets qu'il lit. <code>I8042Driver</code> en détient la seule implémentation, et un pilote de classe ne s'en sert jamais.</p>
+<p><a id="the-8042-driver"></a></p>
+<h3 id="le-pilote-8042">Le pilote 8042</h3>
+<p><code>I8042Driver</code> se lie à <code>platform:i8042@60</code>. Il teste le contrôleur et ses deux ports, connecte l'IRQ 1 et l'IRQ 12 (ou scrute toutes les 20 ms quand il ne le peut pas), et publie un nœud par port fonctionnel. C'est le seul pilote qui touche aux ports <code>0x60</code> et <code>0x64</code> ; le redémarrage x64 du noyau écrit aussi <code>0xFE</code> sur <code>0x64</code>.</p>
+<p><a id="the-ps2-class-drivers"></a></p>
+<h3 id="les-pilotes-de-classe-ps2">Les pilotes de classe PS/2</h3>
+<table>
+<thead>
+<tr>
+<th>Pilote</th>
+<th>Port</th>
+<th>Publie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Ps2KeyboardDriver</code></td>
+<td><code>ps2:kbd</code></td>
+<td>un clavier, <code>ps2-keyboard</code> (claviers AT et MF2, avec leurs voyants)</td>
+</tr>
+<tr>
+<td><code>Ps2MouseDriver</code></td>
+<td><code>ps2:aux</code></td>
+<td>un pointeur, <code>ps2-mouse</code> (souris standard et à molette)</td>
+</tr>
+</tbody>
+</table>
+<p>Les deux sont publiés pendant l'étape des pilotes, si bien qu'un noyau les trouve dans <code>OnBoot</code>. PS/2 n'a pas de branchement à chaud. Le journal de démarrage montre les deux ports liés :</p>
+<pre><code>[Drivers] ps2:kbd Ps2KeyboardDriver published keyboard &quot;ps2-keyboard&quot; (consumed)
+[Drivers] ps2:kbd Ps2KeyboardDriver: MF2 keyboard (id ab 41), scanning
+[Drivers] ps2:kbd offer Ps2KeyboardDriver -&gt; bound
+[Drivers] ps2:aux Ps2MouseDriver published pointer &quot;ps2-mouse&quot; (consumed)
+[Drivers] ps2:aux Ps2MouseDriver: wheel mouse (id 03), 4-byte packets, reporting
+[Drivers] ps2:aux offer Ps2MouseDriver -&gt; bound
+</code></pre>
+<hr>
+<p><a id="shipped-device-drivers"></a></p>
+<h2 id="pilotes-de-périphériques-fournis">Pilotes de périphériques fournis</h2>
+<p>Les bus ci-dessus portent aussi les pilotes fournis pour les écrans, les disques et le son. Ils publient par les mêmes appels que les vôtres, et sont listés ici selon le type de périphérique qu'ils publient.</p>
+<p><a id="the-display-drivers"></a></p>
+<h3 id="les-pilotes-décran">Les pilotes d'écran</h3>
+<table>
+<thead>
+<tr>
+<th>Pilote</th>
+<th>Matériel</th>
+<th>Remarques</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VirtioGpuDriver</code></td>
+<td>virtio-gpu, sur PCI ou MMIO</td>
+<td>2D : l'invité dessine, l'hôte compose l'image</td>
+</tr>
+<tr>
+<td><code>VmwareSvgaDriver</code></td>
+<td>VMware SVGA II, PCI, x64 uniquement</td>
+<td>Change de mode et dessine un curseur matériel ; remplace le framebuffer du firmware, qui se trouve dans sa VRAM</td>
+</tr>
+<tr>
+<td><code>AmdDcnDriver</code></td>
+<td>AMD DCN 3.1.5, la partie graphique Radeon intégrée des processeurs Ryzen 7000 (Raphael, Dragon Range) et Ryzen 9000 (Granite Ridge), PCI</td>
+<td>Conserve le mode UEFI ; basculement sans déchirure ; curseur matériel ; remplace le framebuffer du firmware, qui se trouve dans sa VRAM</td>
+</tr>
+<tr>
+<td><code>IntelGraphicsDriver</code></td>
+<td>La partie graphique intégrée des processeurs Intel Core de la 2e génération (Sandy Bridge, HD Graphics 2000 et 3000) à la 14e (Raptor Lake, UHD et Iris Xe Graphics), PCI</td>
+<td>Conserve le mode UEFI ; basculement sans déchirure ; curseur matériel ; remplace le framebuffer du firmware, auquel il accède à travers l'aperture du GPU</td>
+</tr>
+</tbody>
+</table>
+<p><code>AmdDcnDriver</code> et <code>IntelGraphicsDriver</code> conservent le mode que le firmware UEFI a défini plutôt que de changer de mode. Ils basculent entre trois images, en VRAM à la mise à jour verticale pour AMD et en mémoire volée (stolen memory) au retour vertical pour Intel, si bien que rien ne se déchire, et tous deux dessinent un curseur matériel. Tous deux déclinent après un démarrage hérité (CSM), CSM étant le mode de compatibilité BIOS du firmware, ou sur une surface dans laquelle ils ne peuvent pas dessiner. <code>AmdDcnDriver</code> décline aussi sur un portable en mode GPU discret seul, et <code>IntelGraphicsDriver</code> sur un identifiant de périphérique absent de la table qu'il partage avec le pilote i915 de Linux. Un refus enregistre sa raison sur la proposition, où <code>DriverDiagnostics</code> la signale. S'il reste trop peu de mémoire volée après la surface du firmware, <code>IntelGraphicsDriver</code> dessine sans basculement ou sans curseur, et le journal de liaison indique lequel des deux.</p>
+<p><a id="the-storage-drivers"></a></p>
+<h3 id="les-pilotes-de-stockage">Les pilotes de stockage</h3>
+<table>
+<thead>
+<tr>
+<th>Pilote</th>
+<th>Matériel</th>
+<th>Noms de disque</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AhciDriver</code></td>
+<td>Contrôleurs SATA en mode AHCI (disques uniquement, pas de CD-ROM)</td>
+<td><code>sata&lt;n&gt;</code></td>
+</tr>
+<tr>
+<td><code>NvmeDriver</code></td>
+<td>Contrôleurs NVMe</td>
+<td><code>nvme&lt;controller&gt;n&lt;namespace&gt;</code></td>
+</tr>
+<tr>
+<td><code>VirtioBlkDriver</code></td>
+<td>virtio-blk, sur PCI ou MMIO</td>
+<td><code>vblk&lt;n&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Un espace de noms NVMe est l'un des disques qu'expose un contrôleur, d'où le second nombre dans le nom d'un disque NVMe. Une clé USB est prise en charge par <code>UsbMassStorageDriver</code> (<a href="#the-usb-class-drivers">Les pilotes de classe USB</a>). Chaque disque est enregistré auprès de <code>StorageManager</code> quand il est publié.</p>
+<p><a id="the-audio-driver"></a></p>
+<h3 id="le-pilote-audio">Le pilote audio</h3>
+<p><code>HdAudioDriver</code> se lie à tout contrôleur PCI qui annonce l'interface de programmation HD Audio, en établissant la correspondance par classe plutôt que par identifiant de périphérique, car la spécification fixe la disposition des registres, et publie une sortie audio auprès d'<code>AudioManager</code> (<a href="audio.html">Audio</a>). Il n'est enregistré que si <code>CosmosEnableAudio</code> est activé.</p>
+<hr>
+<p><a id="observing-drivers"></a></p>
+<h2 id="observer-les-pilotes">Observer les pilotes</h2>
+<p>Le kit rend compte de ce qu'il fait à deux endroits. Le journal série contient une ligne par événement, préfixée par <code>[Drivers]</code>, ce qui vous permet de suivre un démarrage. La classe <code>DriverDiagnostics</code> de <code>Cosmos.Kernel.System.Diagnostics</code> fournit les mêmes informations au code, pour un test ou une commande de shell.</p>
+<p>Voici les lignes que vous verrez le plus souvent, dans l'ordre où la vie d'un périphérique les produit :</p>
+<table>
+<thead>
+<tr>
+<th>Ligne</th>
+<th>Signification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>manifest: A(prio 0) B(prio 10)</code></td>
+<td>Les pilotes enregistrés, une fois au début de l'étape des pilotes</td>
+</tr>
+<tr>
+<td><code>synthetic:k candidates: A(prio 10, spec 1) B(prio 0, spec 1)</code></td>
+<td>Un nœud est proposé à ces pilotes, dans cet ordre</td>
+</tr>
+<tr>
+<td><code>synthetic:k offer A -&gt; bound</code> / <code>-&gt; declined: reason</code> / <code>-&gt; failed: message</code></td>
+<td>Ce que chaque sondage a renvoyé</td>
+</tr>
+<tr>
+<td><code>synthetic:k no driver</code></td>
+<td>Aucun pilote ne correspond au nœud</td>
+</tr>
+<tr>
+<td><code>synthetic:k A published keyboard &quot;name&quot; (consumed)</code> / <code>(no consumer)</code></td>
+<td>Un périphérique a été publié, et un gestionnaire du noyau l'a pris ou non</td>
+</tr>
+<tr>
+<td><code>synthetic:k A: message</code></td>
+<td>Le pilote a appelé <code>binding.Log</code></td>
+</tr>
+<tr>
+<td><code>synthetic:k A interrupt handler threw: message</code></td>
+<td>Un gestionnaire d'interruption a levé une exception ; son interruption est masquée</td>
+</tr>
+<tr>
+<td><code>synthetic:k A work item threw: message</code></td>
+<td>Un élément de travail a levé une exception ; il est annulé</td>
+</tr>
+<tr>
+<td><code>synthetic:k A withdrew keyboard &quot;name&quot;</code></td>
+<td>Le démontage a retiré un périphérique</td>
+</tr>
+<tr>
+<td><code>synthetic:k retracted</code></td>
+<td>Le nœud a été retiré</td>
+</tr>
+</tbody>
+</table>
+<p>Les pilotes de bus ajoutent leurs propres lignes par <code>binding.Log</code> : les pilotes de contrôleur hôte USB journalisent chaque périphérique USB qu'ils trouvent, le pilote de port racine chaque événement de branchement à chaud. Le gestionnaire de stockage ajoute des lignes <code>[StorageManager]</code> quand il enregistre ou abandonne un disque.</p>
+<p><code>DriverDiagnostics</code> ne fait que lire, si bien qu'il ne modifie jamais le kit et ne lève jamais d'exception :</p>
+<ul>
+<li><code>DriverCount</code>, <code>NodeCount</code> et <code>DeviceCount</code>, avec <code>TryGetDriver</code>, <code>TryGetNode</code> et <code>TryGetDevice</code> pour lire une entrée par son indice.</li>
+<li><code>TryGetOffer(nodeIndex, offerIndex, out DeviceOfferInfo)</code> rejoue les propositions qu'a reçues un nœud : le pilote, sa priorité et sa spécificité, l'<code>Outcome</code> (<code>Bound</code>, <code>Declined</code>, <code>Failed</code>) et la <code>Reason</code>.</li>
+<li>Un nœud (<code>DeviceNodeInfo</code>) donne son <code>Path</code>, son <code>DriverName</code>, son <code>State</code> (<code>Pending</code>, <code>Bound</code>, <code>Unbound</code>, <code>Retracted</code>) et des compteurs tels que <code>HeldResourceCount</code>, <code>FaultCount</code> et <code>LastFault</code>.</li>
+</ul>
+<p>Ce code affiche chaque nœud avec le pilote qui l'a pris, et les propositions qui y ont mené :</p>
+<pre><code class="lang-csharp">// In the kernel:
+using Cosmos.Kernel.System.Diagnostics;
+
+for (int i = 0; i &lt; DriverDiagnostics.NodeCount; i++)
+{
+    if (!DriverDiagnostics.TryGetNode(i, out DeviceNodeInfo node))
+    {
+        continue;
+    }
+
+    Console.WriteLine($&quot;{node.Path}: {node.DriverName ?? &quot;no driver&quot;} ({node.State})&quot;);
+    for (int j = 0; j &lt; node.OfferCount; j++)
+    {
+        if (DriverDiagnostics.TryGetOffer(i, j, out DeviceOfferInfo offer))
+        {
+            Console.WriteLine($&quot;  {offer.DriverName} -&gt; {offer.Outcome} {offer.Reason}&quot;);
+        }
+    }
+}
+</code></pre>
+<p>Les instantanés sont pris sans verrouillage, si bien qu'un nœud en cours de proposition ou de démontage à ce moment-là peut apparaître avec une étape de retard.</p>
+<hr>
+<p><a id="testing-a-driver-over-the-synthetic-bus"></a></p>
+<h2 id="tester-un-pilote-sur-le-bus-synthétique">Tester un pilote sur le bus synthétique</h2>
+<p>Le bus synthétique vous permet de tester un pilote sans matériel. Un noyau de test publie un faux nœud, le kit le propose à votre pilote comme il le ferait d'un vrai périphérique, et le test joue le rôle du matériel. Il se comporte de la même façon sur x64 et sur ARM64.</p>
+<p><code>SyntheticBus</code> a quatre membres :</p>
+<table>
+<thead>
+<tr>
+<th>Membre</th>
+<th>Ce qu'il fait</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Publish(key, data, interruptCount, windowBytes)</code></td>
+<td>Publie un nœud sous <code>synthetic:key</code> avec <code>interruptCount</code> sources d'interruption et, quand <code>windowBytes</code> est défini, une fenêtre de registres adossée à la RAM, d'au plus une page, en ressource 0. Rend la main une fois le nœud proposé</td>
+</tr>
+<tr>
+<td><code>RaiseInterrupt(node, index)</code></td>
+<td>Exécute le gestionnaire d'interruption connecté à cette source, comme le ferait une vraie interruption. Renvoie <code>false</code> quand rien n'est connecté ou que la source est masquée</td>
+</tr>
+<tr>
+<td><code>WaitForQueuedJobs()</code></td>
+<td>Attend que chaque élément de travail mis en file jusque-là se soit exécuté, afin que le test puisse vérifier ce qu'il a fait</td>
+</tr>
+<tr>
+<td><code>Retract(node, hardwarePresent)</code></td>
+<td>Retire le nœud et rend la main une fois la liaison démontée. <code>hardwarePresent</code> est ce que voit <code>OnDetach</code> ; sa valeur par défaut est <code>false</code>, soit un débranchement à chaud</td>
+</tr>
+</tbody>
+</table>
+<p>Le test voit le périphérique à travers le <code>SyntheticAccess</code> du nœud : <code>Window</code> est la mémoire de la fenêtre de registres, si bien que le test écrit ce que le pilote lira et lit ce que le pilote a écrit.</p>
+<p>Un test du pilote de clavier ci-dessus publie son nœud, simule un appui sur une touche puis le débranche, et écrit une ligne <code>FAIL:</code> dans le journal série pour chaque vérification qui échoue :</p>
+<pre><code class="lang-csharp">// In the test kernel:
+using Cosmos.Kernel.HAL.DriverKit;
+using Cosmos.Kernel.HAL.DriverKit.Buses.Synthetic;
+using Cosmos.Kernel.System.Diagnostics;
+using MyOS.Drivers;
+
+// In BeforeRun:
+DeviceNode node = SyntheticBus.Publish(SyntheticKeyboardDriver.Key, [], interruptCount: 1, windowBytes: 64);
+SyntheticAccess access = node.Access&lt;SyntheticAccess&gt;();
+if (access.Window[KeyboardState.ControlOffset] != KeyboardState.EnableBit)
+{
+    Log.WriteString(&quot;FAIL: the probe should arm the device\n&quot;);
+}
+
+// Play a key press: fill the registers, then raise the interrupt.
+access.Window[KeyboardState.ScanCodeOffset] = 0x1E;
+access.Window[KeyboardState.FlagsOffset] = 0;
+if (!SyntheticBus.RaiseInterrupt(node, 0))
+{
+    Log.WriteString(&quot;FAIL: the handler should run\n&quot;);
+}
+SyntheticBus.WaitForQueuedJobs();   // the work item the handler scheduled has run too
+
+// Unplug: the kit releases everything the probe acquired.
+int heldBefore = DriverDiagnostics.GetTotalHeldResourceCount();
+SyntheticBus.Retract(node);
+if (DriverDiagnostics.GetTotalHeldResourceCount() &gt;= heldBefore)
+{
+    Log.WriteString(&quot;FAIL: teardown should release the binding\n&quot;);
+}
+if (SyntheticBus.RaiseInterrupt(node, 0))
+{
+    Log.WriteString(&quot;FAIL: nothing is connected any more\n&quot;);
+}
+</code></pre>
+<p>Accédez à l'état propre au pilote par <code>node.Binding.DriverState</code> pour vérifier ce qu'a fait le gestionnaire d'interruption, et utilisez <code>DriverDiagnostics</code> (voir <a href="#observing-drivers">Observer les pilotes</a>) pour vérifier l'état du nœud et ses propositions. Un nœud publié dans le constructeur du noyau, avant l'étape des pilotes, teste le chemin de démarrage ; un nœud publié dans <code>BeforeRun</code> teste le branchement à chaud. <code>cosmos run</code> connecte le port série à votre terminal, si bien que les lignes <code>FAIL:</code> y apparaissent à côté des lignes <code>[Drivers]</code> du kit (<a href="debugging.html#writing-to-the-serial-log">Écrire dans le journal série</a>).</p>
+<hr>
+<p><a id="project-settings"></a></p>
+<h2 id="paramètres-du-projet">Paramètres du projet</h2>
+<p>Un pilote situé dans un projet de noyau compilé avec <code>Cosmos.Sdk</code> n'a besoin de rien d'autre que la ligne <code>NoWarn</code> de <a href="#experimental-status">Statut expérimental</a> dans le <code>.csproj</code> du noyau, et sa classe peut être <code>internal</code>.</p>
+<p><a id="a-driver-library"></a></p>
+<h3 id="une-bibliothèque-de-pilotes">Une bibliothèque de pilotes</h3>
+<p>Pour distribuer des pilotes séparément, placez-les dans une bibliothèque de classes. Elle référence <code>Cosmos.Kernel.HAL</code> pour le kit et <code>Cosmos.Kernel.System</code> pour l'API du noyau. Ses classes <code>[Driver]</code> doivent être <code>public</code>, afin que le générateur de manifeste du noyau puisse les voir :</p>
+<pre><code class="lang-xml">&lt;!-- The library's .csproj: --&gt;
+&lt;Project Sdk=&quot;Microsoft.NET.Sdk&quot;&gt;
+
+  &lt;PropertyGroup&gt;
+    &lt;TargetFramework&gt;net10.0&lt;/TargetFramework&gt;
+    &lt;CosmosDriverAssembly&gt;true&lt;/CosmosDriverAssembly&gt;
+    &lt;NoWarn&gt;$(NoWarn);COSMOS0003&lt;/NoWarn&gt;
+  &lt;/PropertyGroup&gt;
+
+  &lt;ItemGroup&gt;
+    &lt;PackageReference Include=&quot;Cosmos.Kernel.HAL&quot; /&gt;
+    &lt;PackageReference Include=&quot;Cosmos.Kernel.System&quot; /&gt;
+    &lt;PackageReference Include=&quot;Cosmos.Build.Analyzer.Patcher&quot; /&gt;
+  &lt;/ItemGroup&gt;
+
+&lt;/Project&gt;
+</code></pre>
+<p>Les versions sont laissées à la gestion centralisée des packages. Sans <code>Directory.Packages.props</code>, donnez à chaque référence la version qu'utilise votre noyau.</p>
+<p><code>CosmosDriverAssembly</code>, avec le package d'analyseurs, vérifie au moment du build que la bibliothèque n'utilise que l'API publique :</p>
+<ul>
+<li><code>NAOT0007</code> : elle ne nomme rien de <code>Cosmos.Kernel.Core</code>, seulement ce qu'offrent <code>Cosmos.Kernel.HAL</code> et <code>Cosmos.Kernel.System</code>.</li>
+<li><code>NAOT0008</code> : elle n'utilise aucun <code>[UnsafeAccessor]</code> pour atteindre des éléments internes.</li>
+<li><code>NAOT0009</code> : aucun assembly Cosmos ne lui accorde <code>InternalsVisibleTo</code>.</li>
+</ul>
+<p>Les pilotes fournis dans <code>Cosmos.Kernel.Drivers</code> sont compilés de la même façon : ils n'utilisent donc rien que votre propre pilote ne puisse utiliser.</p>
+<p>Le noyau référence la bibliothèque par un <code>ProjectReference</code> ou un <code>PackageReference</code> et ajoute sa propre ligne <code>NoWarn</code>. Les pilotes de la bibliothèque rejoignent le manifeste après ceux du noyau.</p>
+<p><a id="excluding-and-opting-in"></a></p>
+<h3 id="exclure-et-inclure-explicitement">Exclure et inclure explicitement</h3>
+<p>Les pilotes qu'embarque un noyau se définissent dans son <code>.csproj</code>, par nom de type complet :</p>
+<pre><code class="lang-xml">&lt;!-- In the kernel's .csproj: --&gt;
+&lt;ItemGroup&gt;
+  &lt;!-- Drop a driver the build would otherwise register, here the shipped Intel network driver. --&gt;
+  &lt;CosmosDriverExclude Include=&quot;Cosmos.Kernel.Drivers.Pci.Network.E1000E.E1000EDriver&quot; /&gt;
+  &lt;!-- Register a driver declared [Driver(Default = false)]. --&gt;
+  &lt;CosmosDriverInclude Include=&quot;Acme.Drivers.ExperimentalGpu&quot; /&gt;
+&lt;/ItemGroup&gt;
+</code></pre>
+<p>Exclure un pilote de bus laisse aussi sans liaison les périphériques situés derrière lui : sans <code>PciHostDriver</code>, aucun nœud PCI n'est publié, donc aucun pilote PCI ne se lie. Pour retirer tout un type de périphérique, désactivez plutôt son commutateur de fonctionnalité ; <code>CosmosEnableNetwork</code> défini à <code>false</code> écarte tous les pilotes réseau. Un nom qui ne correspond à aucun pilote est signalé par l'avertissement <code>COSMOSGEN002</code>, et le fichier <code>DriverManifest.g.cs</code> généré sous <code>obj/</code> montre ce qu'embarque le noyau.</p>
+<hr>
+<p><a id="summary"></a></p>
+<h2 id="résumé">Résumé</h2>
+<table>
+<thead>
+<tr>
+<th>Tâche</th>
+<th>Appel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Déclarer un pilote</td>
+<td><code>[Driver]</code> sur une classe dérivée de <code>Driver</code>, avec <code>Name</code>, <code>Matches</code> et <code>Probe</code></td>
+</tr>
+<tr>
+<td>Mapper des registres</td>
+<td><code>binding.MapRegisters(index)</code></td>
+</tr>
+<tr>
+<td>Mapper un framebuffer ou une file</td>
+<td><code>binding.MapRegion(index, caching)</code></td>
+</tr>
+<tr>
+<td>Allouer de la mémoire DMA</td>
+<td><code>binding.AllocateDma(length, alignment)</code>, <code>binding.TryAllocateDma(length, alignment, constraints, out buffer)</code></td>
+</tr>
+<tr>
+<td>Connecter une interruption</td>
+<td><code>binding.TryRequestInterrupt(source, handler, out handle)</code></td>
+</tr>
+<tr>
+<td>Déléguer du travail à un thread</td>
+<td><code>binding.CreateWorkItem(callback)</code>, puis <code>context.Schedule(item)</code></td>
+</tr>
+<tr>
+<td>Scruter sur un minuteur</td>
+<td><code>binding.TrySchedulePeriodic(ms, item)</code></td>
+</tr>
+<tr>
+<td>Exécuter un thread</td>
+<td><code>binding.TryStartThread(name, entry, out thread)</code></td>
+</tr>
+<tr>
+<td>Attendre le périphérique</td>
+<td><code>binding.CreateEvent()</code>, <code>context.Signal(evt)</code>, <code>binding.Wait(evt, ms)</code></td>
+</tr>
+<tr>
+<td>Partager un périphérique entre contextes</td>
+<td><code>binding.CreateLock()</code>, <code>using (lock.Acquire())</code></td>
+</tr>
+<tr>
+<td>Remettre un périphérique au noyau</td>
+<td><code>PublishKeyboard</code>, <code>PublishPointer</code>, <code>PublishNetwork</code>, <code>PublishBlockDevice</code>, <code>PublishDisplay</code>, <code>PublishAudio</code></td>
+</tr>
+<tr>
+<td>Publier un nœud enfant</td>
+<td><code>binding.PublishChild(identity, resources, interrupts, access)</code></td>
+</tr>
+<tr>
+<td>Arrêter le matériel au départ</td>
+<td><code>OnDetach</code>, après avoir vérifié <code>reason.HardwarePresent</code></td>
+</tr>
+<tr>
+<td>Tester sans matériel</td>
+<td><code>SyntheticBus.Publish</code>, <code>RaiseInterrupt</code>, <code>WaitForQueuedJobs</code>, <code>Retract</code></td>
+</tr>
+<tr>
+<td>Inspecter les pilotes à l'exécution</td>
+<td><code>DriverDiagnostics</code></td>
+</tr>
+</tbody>
+</table>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/user/drivers.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

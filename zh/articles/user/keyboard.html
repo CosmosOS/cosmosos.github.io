@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>键盘 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="键盘 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/user/keyboard.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="keyboard"></a></p>
+<h1 id="键盘">键盘</h1>
+<p>本文将介绍 Cosmos Gen3 上的键盘输入：如何通过标准的 <code>Console</code> API 读取文本，如何响应单个按键，以及如何切换键盘布局。</p>
+<p>如果你从 Gen2 迁移过来，主要区别如下：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Gen2</th>
+<th>Gen3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>管理器 API</td>
+<td><code>Cosmos.System.KeyboardManager</code></td>
+<td>相同的 API，位于 <code>Cosmos.Kernel.System.Input</code>，其中 <code>SetKeyLayout</code>/<code>GetKeyLayout</code> 更名为 <code>SetLayout</code>/<code>GetLayout</code></td>
+</tr>
+<tr>
+<td><code>Console.ReadLine</code> / <code>Console.ReadKey</code></td>
+<td>通过 plug 实现，由管理器提供支持</td>
+<td>通过 plug 实现，由管理器提供支持</td>
+</tr>
+<tr>
+<td>按键事件</td>
+<td><code>KeyEvent</code>（<code>KeyChar</code>、<code>Key</code>、<code>Modifiers</code>），按键类型为 <code>ConsoleKeyEx</code></td>
+<td>相同，按键类型为 <code>Key</code>，成员也相同</td>
+</tr>
+<tr>
+<td>布局</td>
+<td>基于 <code>ScanMapBase</code> 的 US、FR、DE、ES、GB、TR、Dvorak 布局</td>
+<td>同一组布局，基于 <code>KeyboardLayout</code>，位于 <code>Cosmos.Kernel.System.Input.Layouts</code></td>
+</tr>
+<tr>
+<td>设备</td>
+<td>PS/2 键盘</td>
+<td>PS/2 键盘（x64）、virtio-keyboard 和 USB 键盘，全部基于驱动工具包（q35 和所有 PC 上的 8042；两种架构上均为 PCI 上的 virtio，ARM64 上还有 MMIO 上的 virtio；两种架构上均为 xHCI、EHCI 或 OHCI 控制器上的 USB）</td>
+</tr>
+</tbody>
+</table>
+<p>如果你发现 bug 或任何异常，请在我们的仓库中<a href="https://github.com/CosmosOS/Cosmos/issues/new/choose">提交 issue</a>。</p>
+<p><a id="enable-the-keyboard-in-your-kernel"></a></p>
+<h2 id="在内核中启用键盘">在内核中启用键盘</h2>
+<p>键盘支持由一个功能开关控制。请确保内核的 <code>.csproj</code> 没有关闭它（默认值为 <code>true</code>）：</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;CosmosEnableKeyboard&gt;true&lt;/CosmosEnableKeyboard&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p>下面的代码片段依赖以下 <code>using</code> 指令：</p>
+<pre><code class="lang-csharp">using System.Drawing;
+using Cosmos.Kernel.System.Graphics;
+using Cosmos.Kernel.System.Graphics.Fonts;
+using Cosmos.Kernel.System.Input;
+using Cosmos.Kernel.System.Input.Layouts;
+</code></pre>
+<p>无需手动初始化任何东西：PS/2 键盘（x64）、virtio 键盘或 USB 键盘会在驱动阶段由驱动工具包的 <code>Ps2KeyboardDriver</code>、<code>VirtioInputDriver</code> 或 <code>UsbKeyboardDriver</code> 绑定，并发布给管理器的消费者，由后者完成注册（<a href="drivers.html#ps2-devices">PS/2 设备</a>、<a href="drivers.html#virtio-devices">virtio 设备</a>、<a href="drivers.html#usb-devices">USB 设备</a>）。</p>
+<p>USB 键盘还需要 USB 驱动程序，即 <code>CosmosEnableUsb</code>。你不必设置它：不设置时，只要 <code>CosmosEnableKeyboard</code> 开启，它就会开启。把它设为 <code>false</code> 会保留 PS/2 和 virtio 键盘，并连同主机控制器驱动程序一起去掉 USB 键盘。</p>
+<p><a id="reading-a-line"></a></p>
+<h2 id="读取一行">读取一行</h2>
+<p><code>Console.ReadLine()</code> 的行为与在 .NET 中其他任何地方一样，因此大多数内核都不需要更多功能：</p>
+<pre><code class="lang-csharp">Console.WriteLine(&quot;What is your name?&quot;);
+Console.Write(&quot;&gt; &quot;);
+
+string? name = Console.ReadLine();
+Console.WriteLine(&quot;Hello, &quot; + name + &quot;!&quot;);
+</code></pre>
+<p>行编辑器支持的不只是输入：左右方向键在输入内容中移动光标，Home 和 End 跳到行首或行尾，Backspace 和 Delete 删除字符，在行中间输入会插入字符而不是覆盖。</p>
+<!-- video: 输入“Comsos Gen3”，然后用 Home、方向键和 Delete 修正拼写错误，再按下 Enter -->
+<p><video src="images/keyboard-readline.mp4" controls autoplay muted loop playsinline style="max-width:100%"></video></p>
+<p><a id="reading-single-keys"></a></p>
+<h2 id="读取单个按键">读取单个按键</h2>
+<p>对于比整行更底层的操作，<code>KeyboardManager.ReadKey()</code> 会一直阻塞到有键按下，并返回一个 <code>KeyEvent</code>：</p>
+<pre><code class="lang-csharp">Console.WriteLine(&quot;Press keys to inspect them (Escape to leave):&quot;);
+
+while (true)
+{
+    KeyEvent key = KeyboardManager.ReadKey();
+    if (key.Key == Key.Escape)
+    {
+        break;
+    }
+
+    Console.WriteLine(&quot;Key: &quot; + key.Key + &quot;   Char: '&quot; + key.KeyChar
+        + &quot;'   Modifiers: &quot; + key.Modifiers);
+}
+</code></pre>
+<p>一个 <code>KeyEvent</code> 包含三项内容：</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>类型</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Key</code></td>
+<td><code>Key</code></td>
+<td>物理按键，与布局和修饰键无关（<code>A</code>、<code>D5</code>、<code>F1</code>、<code>LeftArrow</code> 等）</td>
+</tr>
+<tr>
+<td><code>KeyChar</code></td>
+<td><code>char</code></td>
+<td>按键产生的文本字符；如果按键不产生字符（功能键、方向键、Ctrl 组合键），则为 <code>'\0'</code></td>
+</tr>
+<tr>
+<td><code>Modifiers</code></td>
+<td><code>ConsoleModifiers</code></td>
+<td>按下按键时处于激活状态的 Shift、Alt 和 Control 标志</td>
+</tr>
+</tbody>
+</table>
+<!-- video: 检查循环为字母、Shift+B、Shift+5、Ctrl+A、Alt+X、F1、F12、LeftArrow 和 Space 打印 Key/Char/Modifiers -->
+<p><video src="images/keyboard-readkey.mp4" controls autoplay muted loop playsinline style="max-width:100%"></video></p>
+<p>标准的 <code>Console.ReadKey()</code> 同样可用，并返回普通的 <code>ConsoleKeyInfo</code>；<code>ReadKey(true)</code> 重载会禁止回显。它只是 <code>KeyboardManager.ReadKey()</code> 的一层薄封装，因此哪个更适合你的代码就用哪个。</p>
+<p>一旦内核打开第二个控制台会话，键盘就会向显示设备上的会话输入，而 <code>Console</code> 和 <code>KeyboardManager</code> 都会读取调用线程所在会话的按键（<a href="sessions.html">控制台会话与 Telnet</a>）。</p>
+<p><a id="polling-without-blocking"></a></p>
+<h2 id="非阻塞轮询">非阻塞轮询</h2>
+<p>渲染循环不能阻塞在 <code>ReadKey()</code> 上。<code>KeyboardManager.TryReadKey()</code> 会从队列中取出一个待处理的按键，没有按键时返回 <code>false</code>，这样这一帧可以照常继续。下面用它在<a href="graphics.html">图形</a>一文的画布上移动一个方块：</p>
+<pre><code class="lang-csharp">Canvas canvas = Canvas.GetFullScreen();
+Font font = PCScreenFont.DefaultFont;
+
+int x = (canvas.Width - 60) / 2;
+int y = (canvas.Height - 60) / 2;
+const int Step = 20;
+
+bool running = true;
+while (running)
+{
+    /* Drain every key pressed since the last frame */
+    while (KeyboardManager.TryReadKey(out KeyEvent? key))
+    {
+        switch (key.Key)
+        {
+            case Key.UpArrow: y -= Step; break;
+            case Key.DownArrow: y += Step; break;
+            case Key.LeftArrow: x -= Step; break;
+            case Key.RightArrow: x += Step; break;
+            case Key.Escape: running = false; break;
+        }
+    }
+
+    canvas.Clear(Color.MidnightBlue);
+    canvas.DrawString(&quot;Move the square with the arrow keys&quot;, font, Color.White, 40, 40);
+    canvas.DrawFilledRectangle(Color.Gold, x, y, 60, 60);
+    canvas.Display();
+
+    Thread.Sleep(15);
+}
+</code></pre>
+<!-- video: 金色方块在方向键的控制下在画布上移动 -->
+<p><video src="images/keyboard-square.mp4" controls autoplay muted loop playsinline style="max-width:100%"></video></p>
+<p><code>KeyboardManager.KeyAvailable</code>（或通过 plug 实现的 <code>Console.KeyAvailable</code>）告诉你是否有按键在等待，但不会消费它；<code>KeyboardManager.Peek()</code> 返回下一个 <code>KeyEvent</code>，同时把它留在队列中。</p>
+<p><a id="modifiers-and-lock-keys"></a></p>
+<h2 id="修饰键与锁定键">修饰键与锁定键</h2>
+<p><code>KeyboardManager</code> 在全局范围内跟踪修饰键和锁定键的状态，独立于任何按键事件：</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ShiftPressed</code></td>
+<td>当前按住了一个 Shift 键</td>
+</tr>
+<tr>
+<td><code>ControlPressed</code></td>
+<td>当前按住了一个 Control 键</td>
+</tr>
+<tr>
+<td><code>AltPressed</code></td>
+<td>当前按住了一个 Alt 键</td>
+</tr>
+<tr>
+<td><code>CapsLock</code></td>
+<td>Caps Lock 已开启</td>
+</tr>
+<tr>
+<td><code>NumLock</code></td>
+<td>Num Lock 已开启</td>
+</tr>
+<tr>
+<td><code>ScrollLock</code></td>
+<td>Scroll Lock 已开启</td>
+</tr>
+</tbody>
+</table>
+<p>锁定键每按一次就切换一次状态，并更新键盘指示灯（virtio 键盘的指示灯保持不变：驱动程序不驱动设备的状态队列）。按住的修饰键也会通过每个 <code>KeyEvent</code> 的 <code>Modifiers</code> 标志传递，这通常是更方便的形式。</p>
+<p>AltGr 是右 Alt 键，用于那些为按键提供第三层字符的布局（德语、西班牙语、土耳其语）。按住它时，按键会通过布局的 Control+Alt 列进行转换，<code>KeyEvent</code> 的 <code>Modifiers</code> 中会同时带有 <code>Control</code> 和 <code>Alt</code>，这与 Windows 报告同一按键的方式一致。<code>ControlPressed</code> 和 <code>AltPressed</code> 仍然反映物理 Control 和 Alt 键的状态。在其他布局上，右 Alt 只是第二个 Alt 键。</p>
+<p><a id="keyboard-layouts"></a></p>
+<h2 id="键盘布局">键盘布局</h2>
+<p>按键以与布局无关的扫描码形式从硬件发出；布局把它们转换为字符。默认布局是 US QWERTY，<code>SetLayout</code> 可以随时切换布局：</p>
+<pre><code class="lang-csharp">KeyboardManager.SetLayout(new FRStandardLayout());
+</code></pre>
+<p><code>Cosmos.Kernel.System.Input.Layouts</code> 中提供了七种布局：</p>
+<table>
+<thead>
+<tr>
+<th>类</th>
+<th>布局</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>USStandardLayout</code></td>
+<td>美式 QWERTY（默认）</td>
+</tr>
+<tr>
+<td><code>FRStandardLayout</code></td>
+<td>法语 AZERTY</td>
+</tr>
+<tr>
+<td><code>DEStandardLayout</code></td>
+<td>德语 QWERTZ</td>
+</tr>
+<tr>
+<td><code>ESStandardLayout</code></td>
+<td>西班牙语 QWERTY</td>
+</tr>
+<tr>
+<td><code>GBStandardLayout</code></td>
+<td>英式 QWERTY</td>
+</tr>
+<tr>
+<td><code>TRStandardLayout</code></td>
+<td>土耳其语 Q</td>
+</tr>
+<tr>
+<td><code>USDvorakLayout</code></td>
+<td>美式 Dvorak</td>
+</tr>
+</tbody>
+</table>
+<p>切换会立即生效：下面把同样的六个物理按键输入两次，第一次使用美式布局，第二次使用法语布局。</p>
+<!-- video: 在美式布局下输入 Tab 右侧的六个键（“qwerty”），切换到 FRStandardLayout，再输入一次（“azerty”） -->
+<p><video src="images/keyboard-layouts.mp4" controls autoplay muted loop playsinline style="max-width:100%"></video></p>
+<p><code>KeyboardManager.GetLayout()</code> 返回当前布局；自定义布局是一个派生自 <code>KeyboardLayout</code> 的类，它重写 <code>InitializeKeys()</code>，用 <code>KeyMapping</code> 项填充 <code>Keys</code> 列表。该方法只运行一次，即在扫描码第一次到达该布局时。</p>
+<p>扫描码是第 1 套扫描码中的按下码（make code），并去掉了扩展键的 <code>E0</code> 前缀，内置布局正是这样列出 Windows 键和导航键区的。唯一的例外是右 Alt，它去掉前缀后的代码与左 Alt 相同：驱动程序把它报告为 <code>0x60</code>，这是第 1 套中未使用的代码。布局把这个代码映射到 <code>Key.AltGr</code>，可以让该键成为它的第三层修饰键；映射到 <code>Key.RAlt</code>，则让它保持为普通的 Alt。两者都不映射的布局会失去这个键。按键的第三层是 <code>KeyMapping</code> 的 <code>ctrlAlt</code> 参数，<code>ctrlAltShift</code> 则是第四层：</p>
+<pre><code class="lang-csharp">/* Right Alt selects the third level on this layout */
+Keys.Add(new KeyMapping(0x60, Key.AltGr));
+/* Q: q, Q, and @ under AltGr */
+Keys.Add(new KeyMapping(0x10, 'q', 'Q', 'q', 'Q', 'q', 'Q', '@', Key.Q));
+</code></pre>
+<p><a id="current-limitations"></a></p>
+<h2 id="当前限制">当前限制</h2>
+<ul>
+<li>按键释放不会进入队列：<code>KeyEvent.Type</code> 有一个 <code>Break</code> 值，但只有按下事件会到达缓冲区。Shift、Ctrl 和 Alt 的释放会更新修饰键状态，除此之外都会被丢弃。</li>
+<li>德语、西班牙语和土耳其语布局带有各自的 AltGr 字符；法语和英式布局还没有（AZERTY 上的 <code>@</code>、<code>#</code>、<code>{</code>），因此它们的右 Alt 仍是普通的 Alt。死键不会组合：土耳其语的 <code>¨</code>、<code>~</code>、<code>´</code> 和 <code>`</code> 会按原样输出。</li>
+<li>PS/2 键盘只在驱动阶段发布一次，条件是键盘驱动程序已绑定 8042 驱动程序的键盘端口节点，并且其复位得到了应答；启动时就存在的 virtio 键盘也只发布一次，即在驱动阶段提供其设备时。USB 键盘在其节点被绑定时发布，在节点被撤回时撤下；PCI 功能位于 PCI Express 热插拔插槽后面的 virtio 键盘也是如此，这类插槽由根端口驱动程序发布和撤回。因此，可以在内核运行时插入和拔出的正是这些键盘；在被拔出的键盘上按住的修饰键会一直保持按下状态，直到在另一块键盘上按下它。</li>
+</ul>
+<p><a id="how-it-works"></a></p>
+<h2 id="工作原理">工作原理</h2>
+<p>在 x64 上，PS/2 键盘的每次按键都会触发 IRQ 1；8042 驱动程序的中断处理程序从控制器的数据端口读取字节，并把它交给键盘端口的 <code>Ps2Access</code>，后者的中断源会唤醒键盘驱动程序的处理程序：该处理程序把 0xE0 前缀和释放位合并为第 1 套扫描码（右 Alt 为 0x60），并通过键盘接收器报告给管理器的消费者。virtio 键盘则是在其队列上投递一条事件记录：队列的中断（PCI 上为 MSI-X 消息，MMIO 上为插槽的 GIC 中断线）会在驱动工具包的工作线程上调度驱动程序的排空操作，如果无法路由任何中断，排空操作就每 20 ms 运行一次；排空操作把 Linux 键码转换为同样的第 1 套扫描码，并通过键盘接收器报告给管理器的消费者，后者像 PS/2 键盘的消费者一样为 <code>KeyboardManager</code> 提供输入。USB 键盘的 8 字节引导协议报告到达其中断 IN 管道，由主机控制器驱动程序的中断投递（xHCI 上为 MSI-X 消息，EHCI 和 OHCI 上为该功能的传统中断线），在无法路由任何中断时则由其 20 ms 轮询投递；<code>UsbKeyboardDriver</code> 的处理程序把每份报告与上一份进行比较，得出同样的第 1 套扫描码，并通过同一个接收器报告；锁定键则通过 <code>SetLeds</code> 点亮它的指示灯，即在工具包工作线程上执行一次 SET_REPORT 控制传输。锁定键同样会通过 <code>SetLeds</code>（0xED 加指示灯字节）在工具包工作线程上点亮 PS/2 键盘的指示灯。管理器把锁定键和修饰键交给状态属性，其余按键则通过当前布局转换为 <code>KeyEvent</code>，放入按键缓冲区。<code>ReadKey()</code> 会让 CPU 暂停（halt），直到中断投递下一个事件；<code>TryReadKey()</code> 只是从队列中取出。<code>Console.ReadLine</code> 和 <code>Console.ReadKey</code> 是建立在同一队列之上的 plug，因此控制台输入和原始按键事件永远不会冲突。</p>
+<pre><code>Console.ReadLine / Console.ReadKey        (plugs, Cosmos.Kernel.Plugs)
+        │
+KeyboardManager ── KeyEvent queue ◀── active layout
+        │                                    ▲
+        │                              raw scan codes
+        │                                    │
+PS/2 keyboard over the driver kit (the 8042, IRQ 1, x64)  /  virtio-keyboard over the driver kit (PCI, MMIO)  /  USB keyboard over the driver kit (xHCI, EHCI, OHCI)
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/user/keyboard.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

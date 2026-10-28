@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>线程状态与运行队列 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="线程状态与运行队列 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/dev/sched-concepts/run-queue.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="thread-states-and-the-run-queue"></a></p>
+<h1 id="线程状态与运行队列">线程状态与运行队列</h1>
+<p>在任一时刻，线程都处于少数几种状态之一。CPU 执行它时，它处于运行状态；它本可以运行但没有空闲的 CPU 可用时，处于就绪状态；它在等待某样东西时，处于阻塞状态：一把锁、一个设备、一个信号，或某个时间点，有些内核把最后这种情况作为单独的睡眠状态来跟踪。新线程最初处于已创建状态，被启动后变为就绪；已结束的线程处于死亡状态，直到内核将其回收。只有就绪线程会争夺 CPU，调度器把它们保存在自己的运行队列中。这个名字是沿袭下来的：这种结构可以是 FIFO、按某个键排序的列表、堆，或者每个优先级一个队列，只要能让该策略以低代价选出下一个线程即可。</p>
+<p>CPU 总得运行点什么，所以没有线程就绪时，它会运行一个空闲线程，空闲线程通常让核心停机，直到下一次中断。空闲线程绝不应阻塞，因为它身后再没有任何可以回退的对象。</p>
+<p>陷阱在于正在运行的线程。它在运行期间是留在运行队列中，还是在被选中时移出、离开 CPU 时再放回，这只是一种约定；混用这两种约定的代码要么把一个线程入队两次，要么把它弄丢。入队两次的线程会得到两次运行机会，而在有序队列中，一个保持原位的过期条目会打乱排在它后面的所有线程的顺序。从队列中丢失的线程一直处于就绪状态，却永远不会被选中，从外部看就像卡死了一样。</p>
+<p>在 Cosmos 中，这些状态就是 <code>SchedulerThreadState</code> 的状态：<code>Created</code>、<code>Ready</code>、<code>Running</code>、<code>Blocked</code>、<code>Sleeping</code> 和 <code>Dead</code>，策略从不修改它们。正在运行的线程通常不在运行队列结构中：<code>PickNext</code> 会移除它返回的线程，而离开 CPU 的线程只有在仍为 <code>Running</code> 时，才会在选择之后通过 <code>OnThreadYield</code> 回来。例外是一个已经阻塞、但在上下文切换把它从 CPU 上换下之前就被唤醒的线程：它在仍然运行时就已是 <code>Ready</code> 并已入队。对已经是 <code>Ready</code> 或 <code>Running</code> 的线程进行唤醒不起任何作用，但 <code>Created</code> 线程在首次运行之前一直保持该状态，因此 <code>OnThreadReady</code> 可能对它到达两次，必须防止第二次插入。空闲线程就是启动线程本身，即随后去调用内核的 <code>BeforeRun</code> 和 <code>Run</code> 的那个线程。<code>PickNext</code> 返回 <code>null</code> 时就运行它，无论它处于什么状态。内核的互斥锁、中断事件和条件变量（最后一个通过其底层管程支撑着 CoreLib 自身的等待：<code>Thread.Sleep</code>、<code>Thread.Join</code>、一个 <code>WaitHandle</code>）让它在两次检查之间自旋、轮询或停机，而不是挂起，因此它永远不会到达 <code>OnThreadBlocked</code>：一个被挂起的空闲线程会经由空闲后备以 <code>Running</code> 状态回来，却没有那次把票数还给它的唤醒。除此之外，它像其他任何线程一样经过各个钩子：安装了策略时，它到达 <code>OnThreadCreate</code> 时已经是 <code>Running</code>，被换出时则通过 <code>OnThreadYield</code> 回来。参见<a href="../scheduler.html#lifecycle">生命周期</a>和<a href="../../user/scheduler-plugging.html#the-interface">接口</a>。</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/dev/sched-concepts/run-queue.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

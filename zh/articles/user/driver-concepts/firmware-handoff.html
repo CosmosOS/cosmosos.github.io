@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>固件交接 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="固件交接 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/user/driver-concepts/firmware-handoff.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="firmware-handoff"></a></p>
+<h1 id="固件交接">固件交接</h1>
+<p>内核并不是机器上第一个运行的软件。UEFI 固件在引导加载程序之前运行，等到它交出控制权时，它已经为自身用途配置好了很大一部分硬件。它已经枚举了 PCI，为各个桥分配了总线号，为每个功能的 BAR 分配了地址（<a href="pci.html">PCI</a>），并启用了它从中启动的设备。它通过自己的 Graphics Output Protocol（图形输出协议）设置了显示模式，并在屏幕上留下一个线性帧缓冲区，引导加载程序会把这个帧缓冲区的地址、大小和像素布局传给内核。描述那些无法被发现的内容的表也以同样的方式到达内核：在 PC 和 ARM 服务器上是 ACPI，在许多 ARM 开发板上是设备树（<a href="buses.html">总线</a>）。</p>
+<p>内核可以重做这些工作，也可以在此基础上继续。沿用固件的成果可以省去工作，尤其是显示模式：设置模式意味着编程显示时序并建立与显示器之间的链路，而这些固件已经做过了。代价是内核会继承可能仍处于活动状态的设备：总线主控仍开启、DMA 仍在进行，或者固件仍在用某个 USB 控制器模拟 PS/2 键盘。</p>
+<p>陷阱在于传统启动。借助 CSM（兼容性支持模块），UEFI 固件会模拟老式 PC BIOS，显示停留在 VGA 模式，而不是线性帧缓冲区上，因此期望使用固件表面的驱动程序将找不到任何表面。</p>
+<p>在驱动工具包中，PCI 主机驱动程序沿用固件留下的配置：它保留固件分配的总线号和 BAR，而不是重新分配。工具包会在第一次探测之前关闭功能的总线主控和中断，这样任何驱动程序都不会看到固件留下仍在运行的设备；当没有驱动程序绑定该功能时，工具包会恢复固件的设置（<a href="../drivers.html#the-pci-access-object">PCI 访问对象</a>）。引导加载程序的帧缓冲区被发布为名为 <code>framebuffer</code> 的显示设备，当某个驱动程序绑定了其内存中包含该帧缓冲区的 PCI 功能时，它会被撤回（<a href="../drivers.html#publishing-a-device">发布设备</a>）。<code>AmdDcnDriver</code> 和 <code>IntelGraphicsDriver</code> 保留 UEFI 模式，在 CSM 启动之后拒绝绑定，并在 <code>OnDetach</code> 中把固件的表面重新显示到屏幕上（<a href="../drivers.html#the-display-drivers">显示设备驱动程序</a>）。</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/user/driver-concepts/firmware-handoff.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

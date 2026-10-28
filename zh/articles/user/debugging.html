@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>使用 VS Code 和 QEMU 调试 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="使用 VS Code 和 QEMU 调试 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/user/debugging.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="debugging-with-vs-code-and-qemu"></a></p>
+<h1 id="使用-vs-code-和-qemu-调试">使用 VS Code 和 QEMU 调试</h1>
+<p>内核调试采用远程 GDB：QEMU 在 <code>localhost:1234</code> 上提供 GDB 服务器，VS Code 通过 <code>cppdbg</code> 连接到它，断点直接在编辑器中设置。<code>cosmos new</code> 模板自带所需的 <code>.vscode/launch.json</code> 和 <code>.vscode/tasks.json</code>，并且已经预先配置好。</p>
+<hr>
+<p><a id="prerequisites"></a></p>
+<h2 id="前提条件">前提条件</h2>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>用途</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gdb</code></td>
+<td>x64 调试</td>
+<td>必须位于 <code>PATH</code> 中；启动配置以 <code>gdb</code> 这个名称调用它</td>
+</tr>
+<tr>
+<td><code>gdb-multiarch</code></td>
+<td>ARM64 调试</td>
+<td>必须位于 <code>PATH</code> 中；aarch64 目标需要它</td>
+</tr>
+<tr>
+<td>QEMU</td>
+<td>运行内核</td>
+<td>由 <code>cosmos install</code> 安装</td>
+</tr>
+<tr>
+<td>VS Code C/C++ 扩展</td>
+<td><code>cppdbg</code> 调试适配器</td>
+<td><code>ms-vscode.cpptools</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>cosmos check</code> 会检查工具链。在 Debian/Ubuntu 上，<code>apt install gdb gdb-multiarch</code> 即可安装这两个调试器。</p>
+<hr>
+<p><a id="debugging-a-kernel-created-with-cosmos-new"></a></p>
+<h2 id="调试用-cosmos-new-创建的内核">调试用 <code>cosmos new</code> 创建的内核</h2>
+<ol>
+<li>在 VS Code 中打开内核文件夹。</li>
+<li>在你的内核源代码中设置断点。</li>
+<li>打开<strong>运行和调试</strong>视图，选择 <strong>Debug x64 Kernel</strong>（或 <strong>Debug ARM64 Kernel</strong>）。</li>
+<li>按 F5。预启动任务会构建内核，以 <code>-s -S</code> 启动 QEMU（GDB 服务器，启动时冻结执行），然后调试器附加上去。执行会在你的断点处停下。</li>
+</ol>
+<hr>
+<p><a id="serial-log"></a></p>
+<h2 id="串口日志">串口日志</h2>
+<p>内核的每个启动阶段都会把日志写到串口（x64 上为 COM1，ARM64 上为 PL011），<code>cosmos run</code> 会把串口连接到你的终端。当内核无法启动，或者在调试器派上用场之前就崩溃时，首先应该阅读的就是串口日志；逐阶段的讲解以及如何将崩溃地址符号化，参见<a href="startup.html">内核启动</a>。</p>
+<hr>
+<p><a id="writing-to-the-serial-log"></a></p>
+<h2 id="写入串口日志">写入串口日志</h2>
+<p><code>Log</code> 把你自己的输出写到同一个流上。它是 <code>Console.WriteLine</code> 的对应物，而两者的区别恰恰在你需要日志的那些场合最为关键：<code>Console</code> 绘制在帧缓冲区画布上，因此需要图形系统已经就绪，每次写入都会重绘屏幕，而且会分配内存。<code>Log</code> 则同步地直接写入串口，对字符串和数字不做任何分配，并且从 <code>BeforeRun</code> 的第一行起就能工作，无论是在还没有控制台可供写入之前，还是在崩溃连带帧缓冲区一起失效之后。</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.System.Diagnostics;
+using Cosmos.Kernel.System.Storage;
+
+Log.WriteString(&quot;storage: &quot;);
+Log.WriteNumber(StorageManager.DeviceCount);
+Log.WriteString(&quot; device(s), &quot;);
+Log.WriteNumber(StorageManager.Partitions.Count);
+Log.WriteString(&quot; partition(s)\n&quot;);
+</code></pre>
+<p>没有 <code>WriteLine</code>：请自行追加 <code>&quot;\n&quot;</code>，内核中各处也都是这样做的。</p>
+<table>
+<thead>
+<tr>
+<th>调用</th>
+<th>写入内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Log.WriteString(text)</code></td>
+<td>一个字符串。参数不能为 null</td>
+</tr>
+<tr>
+<td><code>Log.Write(a, b, c)</code></td>
+<td>按顺序写入每个参数的 <code>ToString()</code>。接受 null，并为其写入 <code>null</code></td>
+</tr>
+<tr>
+<td><code>Log.WriteNumber(n)</code></td>
+<td>十进制数字。有 <code>int</code>、<code>uint</code>、<code>long</code> 和 <code>ulong</code> 的重载</td>
+</tr>
+<tr>
+<td><code>Log.WriteHex(n)</code></td>
+<td>十六进制数字</td>
+</tr>
+<tr>
+<td><code>Log.WriteHexWithPrefix(n)</code></td>
+<td>同上，但带有前导 <code>0x</code></td>
+</tr>
+<tr>
+<td><code>Log.WriteBytes(span)</code></td>
+<td>原始字节，不做格式化</td>
+</tr>
+</tbody>
+</table>
+<p>在任何频繁执行或较早执行的路径上，优先使用 <code>WriteString</code> 和 <code>WriteNumber</code>，而不是 <code>Write</code>。<code>Write</code> 的参数列表构建在栈上，没有任何开销，但传给它的数字或 <code>bool</code> 会先被装箱，而这个装箱对象就是一次堆分配，类型化的重载则不会产生这种分配。</p>
+<p>串口本身受 <code>CosmosEnableUART</code> 功能开关控制。关闭该开关后，这些调用仍会正常返回，但不会有任何内容到达串口输出流，因此关闭了该开关的内核不应依赖 <code>Log</code> 输出任何它需要回读的内容。</p>
+<hr>
+<p><a id="known-limitations"></a></p>
+<h2 id="已知限制">已知限制</h2>
+<ul>
+<li>VS Code 调试体验中存在源代码映射和变量查看方面的 bug（参见<a href="../../roadmap.html">路线图</a>）；单步执行和断点可以正常工作，但查看某些局部变量时可能显示错误的值或缺失值。</li>
+<li>调试以 QEMU 为前提。VMware、VirtualBox 和 Hyper-V 是未经测试的目标。</li>
+<li>在 TCG 模拟下进行 ARM64 调试速度较慢；在大型内核上执行单步操作时，可能会出现数秒的停顿。</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/user/debugging.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

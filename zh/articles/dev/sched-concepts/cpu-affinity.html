@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>CPU 亲和性与负载均衡 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="CPU 亲和性与负载均衡 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/dev/sched-concepts/cpu-affinity.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="cpu-affinity-and-load-balancing"></a></p>
+<h1 id="cpu-亲和性与负载均衡">CPU 亲和性与负载均衡</h1>
+<p>在有多个 CPU 的机器上，调度器通常为每个 CPU 配备各自的运行队列。单一的共享队列需要一把锁，每个 CPU 在每次切换时都要争夺它；而一个总是回到同一个 CPU 的线程，会发现自己的数据仍留在该 CPU 的缓存中。每 CPU 队列也带来了它们自己的两个决策。放置是指在线程被创建或唤醒时为它选择一个 CPU，通常是负载最轻的那个。负载均衡则是在之后移动线程：当一个队列排得很长、而另一个 CPU 却处于空闲时，空闲的 CPU 从繁忙的 CPU 拉取（或者说窃取）一个线程，或者由繁忙的 CPU 推走一个线程。</p>
+<p>亲和性限制了线程可以去往的位置。硬亲和性，也称固定（pinning），把线程限制在一个 CPU 或一组 CPU 上，用于每 CPU 线程（例如空闲线程），或用于访问每 CPU 状态的代码。软亲和性只是一种偏好，即调度器拿来与负载相权衡的缓存热度。</p>
+<p>陷阱在于随线程一起迁移的每 CPU 状态。维护每 CPU 时钟的策略，例如<a href="virtual-time-fair-share.html">公平份额</a>调度器的虚拟时间，必须以目标 CPU 的时钟为基准重新设定迁移中的线程，否则该线程到达后会远远领先或远远落后于那里的所有线程。迁移还会同时触及两个 CPU 的队列，因此它必须能安全应对两者的节拍；而且均衡器绝不能窃取被固定的线程。</p>
+<p>在 Cosmos 中，内核目前只在一个 CPU 上运行。负责放置和均衡线程的钩子 <code>SelectCpu</code> 和 <code>Balance</code> 没有调用者，<code>OnThreadMigrate</code> 只有在策略自己的 <code>Balance</code> 调用它时才会运行。尽管如此，整体结构仍是按每 CPU 设计的：每个触及运行结构的钩子都会收到它所操作的 <code>PerCpuState</code>，策略把自己的运行结构保存在该状态的 <code>SchedulerData</code> 中，<code>SchedulerThread.CpuId</code> 指明线程被分配到的 CPU，因此现在按每 CPU 编写的策略以后可以直接沿用。<code>SchedulerThreadFlags.Pinned</code> 标记不得迁移的线程；只有空闲线程带有该标志，因为内核可以读取线程的标志，却不能设置它们。Stride 的 <code>Balance</code> 在自己的队列为空、且最长的队列包含不止一个线程时，从该队列窃取队尾线程，除非队尾线程被固定；它的 <code>OnThreadMigrate</code> 以目标 CPU 的 <code>GlobalPass</code> 加上线程保存的 <code>Remain</code> 为基准，重新设定该线程的 <code>Pass</code>。参见<a href="../scheduler.html#limitations-and-evolution">局限与演进</a>。</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/dev/sched-concepts/cpu-affinity.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

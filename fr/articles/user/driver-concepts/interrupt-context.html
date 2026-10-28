@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>Contexte d&#39;interruption | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Contexte d&#39;interruption | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/user/driver-concepts/interrupt-context.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="interrupt-context"></a></p>
+<h1 id="contexte-dinterruption">Contexte d'interruption</h1>
+<p>Quand un périphérique lève une interruption, le CPU arrête le code en cours d'exécution à la prochaine <a href="../../dev/sched-concepts/instruction-boundary.html">frontière d'instruction</a> et saute vers un gestionnaire d'interruption. Celui-ci n'est pas un thread : il emprunte la pile de ce qu'il a interrompu et s'exécute interruptions masquées, si bien que rien d'autre ne s'exécute sur ce CPU avant qu'il ne rende la main, pas même le tick du minuteur qui pilote la <a href="../../dev/sched-concepts/preemption.html">préemption</a>. Un gestionnaire d'interruption s'exécute en contexte d'interruption, et tout le reste en contexte de thread.</p>
+<p>Un gestionnaire d'interruption ne peut donc pas attendre. Attendre, c'est céder le CPU à un autre thread, et un gestionnaire d'interruption n'a aucun thread à mettre en attente : s'il dort, attend un événement ou tourne en boucle sur un verrou que détient le code interrompu, il attend indéfiniment. Les noyaux coupent le traitement des interruptions en deux. La partie haute, dans le gestionnaire d'interruption, acquitte le périphérique et réveille ceux qui attendent. La partie basse s'exécute plus tard en contexte de thread, où elle peut bloquer et prendre des verrous ordinaires.</p>
+<p>Les données qu'un gestionnaire d'interruption partage avec un thread exigent un spinlock qui désactive les interruptions tant qu'il est détenu ; sans cela, le gestionnaire d'interruption peut se déclencher sur le CPU du détenteur et tourner en boucle indéfiniment en attendant un thread qui ne peut pas s'exécuter avant que le gestionnaire d'interruption ne rende la main. Un tel verrou n'est détenu que brièvement, jamais pendant une attente.</p>
+<p>Dans le kit de pilotes, un gestionnaire d'interruption acquitte le périphérique à travers sa fenêtre de registres et passe le relais à travers son <code>InterruptContext</code> : <code>Mask()</code> masque sa source, <code>Signal(DeviceEvent)</code> réveille un thread en attente et <code>Schedule(WorkItem)</code> place la partie basse dans la file du thread de travail du kit, tandis que <code>DeviceLock.Acquire()</code> est le spinlock qui désactive les interruptions. Le garde-fou intercepte les appels aux méthodes de <code>DeviceBinding</code> et à certains membres d'objets d'accès, comme les transferts <code>UsbAccess</code> et <code>Ps2Access.TryCommand</code> : lors d'une vraie interruption, il arrête le noyau en nommant le membre ; lors d'un dispatch synthétique, il lève une exception, et le kit enregistre alors l'erreur et masque la source.</p>
+<p>Le kit ajoute aussi une règle qui lui est propre : le gestionnaire d'interruption d'un pilote ne doit pas allouer. Les gestionnaires d'interruption du noyau lui-même allouent, et le ramasse-miettes le tolère ; il s'agit d'une règle de sécurité, car une allocation peut entraîner des mécanismes du runtime qui se comportent mal en contexte d'interruption, notamment la résolution du dispatch d'interface et la levée d'exceptions. Rien ne détecte une allocation : le garde-fou ne s'exécute qu'à l'intérieur de ces membres du kit, jamais dans le code du pilote lui-même. Voir <a href="../drivers.html#the-two-execution-contexts-and-the-guard">Les deux contextes d'exécution et le garde-fou</a>, <a href="../drivers.html#work-items">Éléments de travail</a> et <a href="../drivers.html#device-locks">Verrous de périphérique</a>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/user/driver-concepts/interrupt-context.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

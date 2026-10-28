@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>R&#233;seau | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="R&#233;seau | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/user/network.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="network"></a></p>
+<h1 id="réseau">Réseau</h1>
+<p>Dans cet article, nous verrons le réseau sur Cosmos Gen3 : comment mettre en route la pile réseau, puis envoyer et recevoir des paquets. Les protocoles disponibles sont <strong>ARP</strong>, <strong>IPv4</strong>, <strong>IPv6</strong>, <strong>UDP</strong>, <strong>TCP</strong>, <strong>DHCP</strong> et <strong>DNS</strong>.</p>
+<p>Les principales différences si vous venez de Gen2 :</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Gen2</th>
+<th>Gen3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TCP</td>
+<td><code>System.Net.Sockets</code> standard (via des plugs)</td>
+<td><code>System.Net.Sockets</code> standard (via des plugs)</td>
+</tr>
+<tr>
+<td>UDP</td>
+<td>Classe <code>UdpClient</code> propre à Cosmos</td>
+<td><code>System.Net.Sockets.UdpClient</code> standard (via des plugs)</td>
+</tr>
+<tr>
+<td>DHCP</td>
+<td>Classe cliente Cosmos</td>
+<td>Classe cliente Cosmos (<code>Cosmos.Kernel.System.Network</code>)</td>
+</tr>
+<tr>
+<td>DNS</td>
+<td>Classe cliente Cosmos</td>
+<td><code>System.Net.Dns</code> standard (via des plugs), ou le <code>DnsClient</code> de Cosmos</td>
+</tr>
+<tr>
+<td>Pilotes de carte réseau</td>
+<td>RTL8168, E1000, PCNET</td>
+<td>Intel E1000E via le kit de pilotes (toute machine dotée d'un nœud hôte PCI ; la carte réseau q35 par défaut de QEMU sur x64), qui lie aussi la carte e1000 8254x de QEMU et VirtualBox (82540EM) et de VMware (82545EM), virtio-net via le kit de pilotes (PCI sur les deux architectures, MMIO sur ARM64)</td>
+</tr>
+</tbody>
+</table>
+<p>Aucun de ces protocoles n'implémente toutes les fonctionnalités de sa RFC. Si vous trouvez des bugs ou quelque chose d'anormal, merci de <a href="https://github.com/CosmosOS/Cosmos/issues/new/choose">soumettre une issue</a> sur notre dépôt.</p>
+<p><a id="enable-networking-in-your-kernel"></a></p>
+<h2 id="activer-le-réseau-dans-votre-noyau">Activer le réseau dans votre noyau</h2>
+<p>La prise en charge du réseau dépend d'un commutateur de fonctionnalité. Assurez-vous que le <code>.csproj</code> de votre noyau ne la désactive pas (sa valeur par défaut est <code>true</code>) :</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;CosmosEnableNetwork&gt;true&lt;/CosmosEnableNetwork&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p>Au démarrage, une carte réseau parvient à <code>NetworkManager</code> par le kit de pilotes, quelle qu'elle soit ; les deux pilotes sont livrés dans <code>Cosmos.Kernel.Drivers</code>, que tout noyau embarque. Une <strong>Intel E1000E</strong> est liée par <code>E1000EDriver</code> : le pilote hôte PCI publie la fonction, le pilote l'initialise et publie une interface nommée <code>e1000e</code>, puis le consommateur du gestionnaire l'enregistre (<a href="drivers.html#pci-devices">Écrire un pilote</a>). Un périphérique <strong>virtio-net</strong> est lié par <code>VirtioNetDriver</code> sur l'un ou l'autre transport : le pilote de transport virtio PCI publie un nœud virtio sous la fonction, le pilote de transport virtio MMIO en publie un sous l'emplacement de la machine virt, et le même pilote feuille lie les deux et publie une interface nommée <code>virtio-net</code> (<a href="drivers.html#virtio-devices">Périphériques virtio</a>). La première interface publiée par un pilote du kit est l'interface principale, dans l'ordre où l'étape des pilotes les lie. Sur x64, <code>cosmos run</code> n'a besoin d'aucune option supplémentaire : la carte réseau q35 par défaut de QEMU est une e1000e. Sur ARM64, attachez explicitement une carte réseau virtio :</p>
+<pre><code class="lang-console">$ cosmos run                          # x64: default e1000e NIC, user-mode networking
+$ cosmos run --nic virtio-net-pci     # x64 or arm64: virtio NIC over PCI
+$ cosmos run --nic virtio-net-device  # arm64: virtio NIC over MMIO
+</code></pre>
+<p>Une fonction virtio PCI délivre ses interruptions sous forme de messages MSI-X, que l'ITS du GICv3 route sur ARM64 (<code>-M virt,gic-version=3</code>) ; <code>cosmos run</code> lance ARM64 avec le GICv2 par défaut de QEMU, qui n'a pas d'ITS : la carte réseau PCI y est donc publiée sans entrée d'interruption et <code>VirtioNetDriver</code> la fait fonctionner en scrutation, en vidant sa file de réception toutes les 50 ms. <code>--nic virtio-net-pci</code> fonctionne donc aussi avec le lancement ARM64 par défaut, tandis que la carte réseau MMIO fonctionne sur sa ligne GIC et constitue là le choix piloté par interruptions.</p>
+<p>Avec le <em>réseau en mode utilisateur</em> de QEMU (le mode par défaut), votre noyau vit dans un réseau privé <code>10.0.2.0/24</code> : l'hôte est joignable à l'adresse <strong>10.0.2.2</strong>, le serveur DHCP intégré de QEMU attribue les adresses, et le trafic UDP/TCP sortant est traduit par NAT vers le réseau réel.</p>
+<p>Voici les directives <code>using</code> sur lesquelles s'appuient les extraits ci-dessous :</p>
+<pre><code class="lang-csharp">using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using Cosmos.Kernel.System.Network;
+using Cosmos.Kernel.System.Timers;
+</code></pre>
+<p><a id="the-network-device"></a></p>
+<h2 id="le-périphérique-réseau">Le périphérique réseau</h2>
+<p><code>NetworkManager</code> possède les cartes réseau détectées. Vérifiez qu'un périphérique est présent et prêt avant de configurer quoi que ce soit :</p>
+<pre><code class="lang-csharp">if (NetworkManager.DeviceCount &gt; 0)
+{
+    Console.WriteLine(&quot;Device:  &quot; + NetworkManager.Name);
+    Console.WriteLine(&quot;MAC:     &quot; + NetworkManager.MacAddress?.ToString());
+    Console.WriteLine(&quot;Link up: &quot; + NetworkManager.LinkUp);
+    Console.WriteLine(&quot;Ready:   &quot; + NetworkManager.Ready);
+}
+</code></pre>
+<p>Ces propriétés décrivent l'adaptateur principal, celui qu'utilise l'anneau supporté quand aucun autre n'est désigné. Avec plusieurs cartes réseau, énumérez-les et choisissez-en une autre comme principale :</p>
+<pre><code class="lang-csharp">for (int i = 0; i &lt; NetworkManager.DeviceCount; i++)
+{
+    NetworkAdapter adapter = NetworkManager.GetAdapter(i);
+    Console.WriteLine($&quot;[{i}] {adapter.Name}  {adapter.MacAddress}  link={adapter.LinkUp}&quot;);
+}
+
+NetworkAdapter second = NetworkManager.GetAdapter(1);
+if (second.IsValid)
+{
+    NetworkManager.Primary = second;
+}
+</code></pre>
+<p>Un <code>NetworkAdapter</code> est un handle, pas le périphérique : il porte l'index d'enregistrement, si bien qu'un handle construit par défaut ne désigne rien et que <code>IsValid</code> vaut false. <code>GetAdapter</code> renvoie un tel handle pour un index qu'aucun périphérique n'occupe, c'est pourquoi l'affectation ci-dessus est protégée : le setter de <code>Primary</code> lève <code>ArgumentException</code> sur un handle qui ne désigne rien, et QEMU ne donne par défaut qu'une seule carte réseau au noyau, si bien que <code>GetAdapter(1)</code> n'y désigne rien.</p>
+<!-- screenshot: la console affiche "Device: e1000e", l'adresse MAC, "Link up: True", "Ready: True" -->
+<p><img src="images/network-device.png" alt="Périphérique réseau"></p>
+<p><a id="configure-ipv4"></a></p>
+<h2 id="configurer-ipv4">Configurer IPv4</h2>
+<p>Comme sur tout système d'exploitation, le noyau a besoin d'une configuration IPv4 (adresse, masque de sous-réseau, passerelle) avant de pouvoir communiquer avec le réseau. Elle peut être obtenue dynamiquement par DHCP ou définie manuellement.</p>
+<p>Il n'y a pas d'étape distincte d'initialisation de la pile. C'est la configuration d'une adresse qui met la pile en route : elle associe l'adresse et l'adresse MAC au périphérique. <code>NetworkStack.RemoveAllConfigIP()</code> l'annule.</p>
+<p><a id="dynamically-through-dhcp"></a></p>
+<h3 id="dynamiquement-par-dhcp">Dynamiquement par DHCP</h3>
+<p><code>DhcpClient.SendDiscoverPacket()</code> effectue tout l'échange DISCOVER → OFFER → REQUEST → ACK et applique la configuration obtenue. Elle renvoie le nombre de millisecondes écoulées, ou <code>-1</code> si le délai expire :</p>
+<pre><code class="lang-csharp">DhcpClient dhcpClient = new();
+
+if (dhcpClient.SendDiscoverPacket() != -1)
+{
+    IPConfig? config = NetworkManager.Primary.IPConfig;
+    if (config is not null)
+    {
+        Console.WriteLine(&quot;IP address: &quot; + config.Address.ToString());
+        Console.WriteLine(&quot;Subnet:     &quot; + config.SubnetMask.ToString());
+        Console.WriteLine(&quot;Gateway:    &quot; + config.DefaultGateway.ToString());
+    }
+}
+else
+{
+    Console.WriteLine(&quot;DHCP timed out&quot;);
+}
+</code></pre>
+<!-- screenshot: la console affiche l'adresse 10.0.2.15 attribuée par DHCP, le masque de sous-réseau et la passerelle 10.0.2.2 -->
+<p><img src="images/network-dhcp.png" alt="DHCP"></p>
+<p><a id="manually"></a></p>
+<h3 id="manuellement">Manuellement</h3>
+<pre><code class="lang-csharp">if (!IPConfig.Enable(
+        new Address4(192, 168, 1, 69),     // local address
+        new Address4(255, 255, 255, 0),    // subnet mask
+        new Address4(192, 168, 1, 254)))   // gateway
+{
+    Console.WriteLine(&quot;No adapter to configure&quot;);
+}
+</code></pre>
+<p>Cela configure l'adaptateur principal. Pour en configurer un en particulier, passez son handle. <code>Enable</code> renvoie <code>false</code> quand le handle ne désigne aucun périphérique, ce que vous obtenez avec un index situé au-delà du dernier adaptateur :</p>
+<pre><code class="lang-csharp">NetworkAdapter second = NetworkManager.GetAdapter(1);
+
+if (second.IsValid
+    &amp;&amp; IPConfig.Enable(second,
+        new Address4(192, 168, 2, 69),
+        new Address4(255, 255, 255, 0),
+        new Address4(192, 168, 2, 254)))
+{
+    Console.WriteLine(&quot;Configured the second adapter&quot;);
+}
+</code></pre>
+<p>DHCP configure un adaptateur à la fois. <code>new DhcpClient()</code> effectue l'échange sur l'adaptateur principal et <code>new DhcpClient(adapter)</code> sur celui que désigne le handle ; dans les deux cas, les autres adaptateurs conservent leur configuration. <code>SendReleasePacket()</code> rend l'adresse de cet adaptateur au serveur et le laisse non configuré :</p>
+<pre><code class="lang-csharp">NetworkAdapter second = NetworkManager.GetAdapter(1);
+
+if (second.IsValid &amp;&amp; new DhcpClient(second).SendDiscoverPacket() != -1)
+{
+    Console.WriteLine(&quot;Second adapter: &quot; + second.IPConfig?.Address.ToString());
+}
+</code></pre>
+<p><a id="read-the-configuration-back"></a></p>
+<h3 id="relire-la-configuration">Relire la configuration</h3>
+<p>Chaque adaptateur porte la configuration qui y est en vigueur, ou <code>null</code> tant qu'il n'est pas configuré :</p>
+<pre><code class="lang-csharp">Console.WriteLine(NetworkManager.Primary.IPConfig?.Address.ToString());
+Console.WriteLine(NetworkManager.GetAdapter(1).IPConfig?.SubnetMask.ToString());
+</code></pre>
+<h2 id="ipv6">IPv6</h2>
+<p>La configuration IPv4 active aussi une adresse IPv6 lien-local sur le périphérique : <code>fe80::/64</code> avec l'identifiant d'interface dérivé de son adresse MAC (RFC 4291, annexe A). Sur la carte réseau par défaut de QEMU, c'est <code>fe80::5054:ff:fe12:3456</code>. Neighbor Discovery résout les adresses du lien comme ARP le fait pour IPv4, et l'écho ICMPv6 fonctionne dans les deux sens.</p>
+<pre><code class="lang-csharp">Address6? linkLocal = NetworkManager.Primary.LinkLocalAddress;   // null until the device is configured
+
+Icmpv6Client ping = new();
+ping.Connect(new Address6(0xFEC0_0000, 0, 0, 2));               // QEMU user networking answers on fec0::2
+ping.SendEcho();
+
+Cosmos.Kernel.System.Network.EndPoint from = new(Address6.Zero, 0);
+int elapsedMs = ping.Receive(ref from, 5000);                  // -1 on timeout
+ping.Close();
+</code></pre>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>IPv4</th>
+<th>IPv6</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Adresse</td>
+<td><code>IPConfig.Enable</code> ou DHCP</td>
+<td>Lien-local, dérivée de l'adresse MAC</td>
+</tr>
+<tr>
+<td>Résolution</td>
+<td>ARP</td>
+<td>Neighbor Discovery (sollicitation et annonce)</td>
+</tr>
+<tr>
+<td>Ping</td>
+<td><code>IcmpClient</code></td>
+<td><code>Icmpv6Client</code></td>
+</tr>
+<tr>
+<td>UDP et TCP</td>
+<td><code>UdpPacket</code>, <code>TcpPacket</code></td>
+<td>Les deux mêmes classes, avec une somme de contrôle calculée sur le pseudo-en-tête IPv6</td>
+</tr>
+<tr>
+<td>DNS</td>
+<td><code>DnsClient</code>, enregistrements A</td>
+<td>Le même client, enregistrements AAAA</td>
+</tr>
+</tbody>
+</table>
+<p>Ce qu'IPv6 ne couvre pas encore : les adresses au-delà du lien-local (les Router Advertisements sont ignorés, il n'y a ni SLAAC ni DHCPv6, si bien que seules les destinations du lien sont joignables), et <code>AddressFamily.InterNetworkV6</code> sur les classes de socket .NET.</p>
+<h2 id="udp">UDP</h2>
+<p>UDP passe par la classe .NET standard <code>System.Net.Sockets.UdpClient</code> ; aucune classe propre à Cosmos n'est nécessaire. <code>Cosmos.Kernel.System.Network</code> a son propre <code>UdpClient</code> (le client au niveau des paquets), donc lorsque les deux espaces de noms sont importés, comme plus haut, nommez celui de .NET en entier. Les envois partent immédiatement ; pour les réceptions, scrutez <code>Available</code> (une réception sans rien en attente bloquerait) :</p>
+<pre><code class="lang-csharp">var udpClient = new System.Net.Sockets.UdpClient(4242);
+
+/* Send data: 10.0.2.2 is the host under QEMU user networking */
+byte[] message = Encoding.ASCII.GetBytes(&quot;Hello from CosmosOS!&quot;);
+udpClient.Send(message, message.Length, new IPEndPoint(IPAddress.Parse(&quot;10.0.2.2&quot;), 4242));
+
+/* Receive data */
+IPEndPoint remote = new(IPAddress.Any, 0);
+while (udpClient.Available == 0)
+{
+    TimerManager.Wait(100);
+}
+
+byte[] data = udpClient.Receive(ref remote);
+Console.WriteLine(&quot;Received '&quot; + Encoding.ASCII.GetString(data) + &quot;' from &quot; + remote.Address);
+
+udpClient.Close();
+</code></pre>
+<!-- screenshot: la console affiche l'écho UDP renvoyé par l'hôte -->
+<p><img src="images/network-udp.png" alt="UDP"></p>
+<p><a id="tcp-client"></a></p>
+<h2 id="client-tcp">Client TCP</h2>
+<p>TCP passe lui aussi par les classes .NET standard : <code>TcpClient</code>, <code>TcpListener</code> et <code>NetworkStream</code>.</p>
+<pre><code class="lang-csharp">var tcpClient = new TcpClient();
+tcpClient.Connect(IPAddress.Parse(&quot;10.0.2.2&quot;), 4343);
+
+NetworkStream stream = tcpClient.GetStream();
+
+/* Send data */
+byte[] message = Encoding.ASCII.GetBytes(&quot;Hello from CosmosOS!&quot;);
+stream.Write(message, 0, message.Length);
+
+/* Receive data */
+while (!stream.DataAvailable)
+{
+    TimerManager.Wait(100);
+}
+
+byte[] buffer = new byte[tcpClient.ReceiveBufferSize];
+int bytesRead = stream.Read(buffer, 0, buffer.Length);
+Console.WriteLine(&quot;Received '&quot; + Encoding.ASCII.GetString(buffer, 0, bytesRead) + &quot;'&quot;);
+
+tcpClient.Close();
+</code></pre>
+<p><code>Read</code> attend les données comme dans .NET : il rend la main dès que des octets sont arrivés, et ne renvoie 0 qu'une fois que le pair a fermé la connexion, si bien que la boucle sur <code>DataAvailable</code> est facultative. Définissez <code>ReadTimeout</code> (le <code>ReceiveTimeout</code> du socket) pour borner l'attente, au-delà de laquelle <code>Read</code> lève une <code>IOException</code>.</p>
+<!-- screenshot: la console affiche l'écho TCP renvoyé par l'hôte -->
+<p><img src="images/network-tcp-client.png" alt="Client TCP"></p>
+<p><a id="tcp-server"></a></p>
+<h2 id="serveur-tcp">Serveur TCP</h2>
+<p><code>TcpListener</code> accepte les connexions entrantes. Scrutez <code>Pending()</code> pour éviter de bloquer dans <code>AcceptTcpClient()</code> :</p>
+<pre><code class="lang-csharp">var listener = new TcpListener(IPAddress.Any, 4444);
+listener.Start();
+Console.WriteLine(&quot;Listening on port 4444...&quot;);
+
+while (!listener.Pending())
+{
+    TimerManager.Wait(100);
+}
+
+TcpClient client = listener.AcceptTcpClient();
+Console.WriteLine(&quot;Client connected!&quot;);
+
+NetworkStream stream = client.GetStream();
+while (!stream.DataAvailable)
+{
+    TimerManager.Wait(100);
+}
+
+byte[] buffer = new byte[client.ReceiveBufferSize];
+int bytesRead = stream.Read(buffer, 0, buffer.Length);
+Console.WriteLine(&quot;Received '&quot; + Encoding.ASCII.GetString(buffer, 0, bytesRead) + &quot;'&quot;);
+
+/* Echo it back */
+stream.Write(buffer, 0, bytesRead);
+
+client.Close();
+listener.Stop();
+</code></pre>
+<p>Pour atteindre depuis votre hôte un listener situé dans le réseau en mode utilisateur de QEMU, redirigez un port de l'hôte vers l'invité avec <code>cosmos run --hostfwd tcp::4444-:4444</code> (option répétable ; QEMU seul l'écrit <code>-nic user,model=e1000e,hostfwd=tcp::4444-:4444</code>), puis connectez-vous à <code>localhost:4444</code> sur l'hôte.</p>
+<p>Pour un shell interactif sur le réseau, le <code>TelnetServer</code> du paquet <a href="https://github.com/CosmosOS/Cosmos.Network.Telnet">Cosmos.Network.Telnet</a> donne à chaque client sa propre session de console (<a href="sessions.html">Sessions de console et Telnet</a>).</p>
+<!-- screenshot: la console affiche "Listening on port 4444...", "Client connected!" et le message reçu -->
+<p><img src="images/network-tcp-server.png" alt="Serveur TCP"></p>
+<p><a id="ftp-server"></a></p>
+<h2 id="serveur-ftp">Serveur FTP</h2>
+<p>Le paquet <a href="https://github.com/CosmosOS/Cosmos.Network.Ftp">Cosmos.Network.Ftp</a> sert un répertoire du VFS par FTP. La version 2 est celle de Gen3 ; la 1.x est destinée à Gen2. Ajoutez <code>&lt;PackageReference Include=&quot;Cosmos.Network.Ftp&quot; Version=&quot;2.0.0&quot; /&gt;</code> à votre noyau et démarrez le serveur une fois le réseau configuré et un système de fichiers monté :</p>
+<pre><code class="lang-csharp">using System.Threading;
+using Cosmos.Network.Ftp;
+
+FtpServer server = new(&quot;/mnt&quot;);
+new Thread(server.Listen).Start(); // Listen() serves every client until server.Close()
+</code></pre>
+<p>Les clients voient <code>/mnt</code> comme <code>/</code> et ne peuvent pas en sortir. Laisser <code>Authenticate</code> non défini admet n'importe quel nom d'utilisateur avec n'importe quel mot de passe ; définissez-le pour vérifier les identifiants. Les transferts sont passifs, sur les ports 50000 à 50009 par défaut (<code>PassivePortMin</code> et <code>PassivePortMax</code>) ; avec le réseau en mode utilisateur de QEMU, redirigez donc ces ports en plus du port de contrôle : <code>cosmos run --hostfwd tcp::2121-:21 --hostfwd tcp::50000-:50000 ...</code>, puis <code>curl ftp://localhost:2121/</code>. Une réponse <code>PASV</code> désigne l'adresse propre de l'invité, 10.0.2.15, que l'hôte ne peut pas joindre : curl l'ignore, mais FileZilla s'y connecte, alors définissez <code>PassiveAddress = IPAddress.Loopback</code> pour que <code>PASV</code> désigne 127.0.0.1 à la place.</p>
+<h2 id="dns">DNS</h2>
+<p>Deux API résolvent un nom : la classe standard <code>System.Net.Dns</code>, et le <code>DnsClient</code> de Cosmos. Enregistrez un serveur de noms avec l'une ou l'autre, car il n'existe pas de <code>resolv.conf</code> où en lire un, et c'est normalement DHCP qui le fournit :</p>
+<pre><code class="lang-csharp">DnsConfig.Add(new Address4(1, 1, 1, 1));   // Cloudflare public DNS
+
+IPAddress[] addresses = Dns.GetHostAddresses(&quot;github.com&quot;);
+Console.WriteLine(&quot;github.com resolved to &quot; + addresses[0].ToString());
+</code></pre>
+<p><code>System.Net.Dns</code> atteint le résolveur de Cosmos par un plug sur la couche de plateforme, vers laquelle convergent tous ses points d'entrée, si bien que toutes les surcharges bloquantes fonctionnent grâce à ce seul plug. Deux détails diffèrent d'un runtime de bureau : une recherche qui échoue lève <code>SocketException</code> là où le client Cosmos renvoie null, et <code>Dns.GetHostName()</code> renvoie <code>DnsConfig.HostName</code>, que rien ne définit à votre place.</p>
+<p>Le <code>DnsClient</code> de Cosmos est l'autre voie d'accès, et celle à utiliser quand vous voulez le paquet de réponse ou la liste complète des réponses :</p>
+<pre><code class="lang-csharp">DnsConfig.Add(new Address4(1, 1, 1, 1));   // Cloudflare public DNS
+
+var dnsClient = new DnsClient();
+dnsClient.Connect(new Address4(1, 1, 1, 1));
+
+/* Query a single domain name */
+dnsClient.SendQuery(&quot;github.com&quot;);
+
+/* Receive the answer (5 s timeout) */
+Address? address = dnsClient.Receive(5000);
+if (address != null)
+{
+    Console.WriteLine(&quot;github.com resolved to &quot; + address.ToString());
+}
+
+dnsClient.Close();
+</code></pre>
+<p>DNS est un seul et même protocole pour les deux versions d'IP, <code>DnsClient</code> sert donc les deux. Deux choses varient indépendamment : l'adresse du serveur passée à <code>Connect</code> décide de la version qui transporte la requête, et le type d'enregistrement passé à <code>SendQuery</code> décide de la famille d'adresses que contient la réponse. Une requête IPv4 peut demander une adresse IPv6, et inversement :</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.System.Network.Protocols.Dns;   // DnsRecordType, part of the packet seam (COSMOS0002)
+
+/* Ask for the IPv6 address, over whichever version reaches the server */
+dnsClient.SendQuery(&quot;github.com&quot;, DnsRecordType.AAAA);
+
+/* Every address record for the name, after any CNAME chain */
+List&lt;Address&gt;? all = dnsClient.ReceiveAll(5000);
+</code></pre>
+<p>DHCP est le cas inverse et reste limité à IPv4 : DHCPv6 est un protocole différent, et non celui-ci transporté sur IPv6 ; il n'en partage ni les ports, ni les types de messages, ni les codes d'option.</p>
+<!-- screenshot: la console affiche github.com résolu en une adresse IP -->
+<p><img src="images/network-dns.png" alt="DNS"></p>
+<p><a id="crafting-packets"></a></p>
+<h2 id="fabriquer-des-paquets">Fabriquer des paquets</h2>
+<p>Les types de paquets qui se trouvent derrière les clients sont publics en tant que point d'extension expérimental : un noyau peut construire lui-même des paquets de protocole, les transmettre par la pile, et recevoir les objets paquets analysés au lieu des octets de charge utile. Le point d'extension porte le diagnostic <code>COSMOS0002</code> (<a href="../dev/public-api.html">Suivi de l'API publique</a>) ; y faire référence est une erreur de build tant que le projet du noyau n'a pas pris acte de l'absence de promesse de compatibilité :</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;NoWarn&gt;$(NoWarn);COSMOS0002&lt;/NoWarn&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p>Le point d'extension comporte trois parties :</p>
+<table>
+<thead>
+<tr>
+<th>Partie</th>
+<th>Membres</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Types de paquets</td>
+<td><code>EthernetPacket</code>, <code>ArpRequestEthernet</code>/<code>ArpReplyEthernet</code>, <code>InternetPacket</code>, <code>IPPacket</code>, <code>IcmpEchoRequest</code>/<code>IcmpEchoReply</code>, <code>UdpPacket</code>, <code>DhcpDiscover</code>/<code>DhcpRequest</code>/<code>DhcpRelease</code>, <code>DnsPacketQuery</code>/<code>DnsPacketAnswer</code>, <code>TcpPacket</code></td>
+</tr>
+<tr>
+<td>Transmission et injection</td>
+<td><code>NetworkStack.Send(InternetPacket)</code> met en file un paquet construit et résout l'adresse de son voisin ; <code>NetworkStack.HandlePacket</code> injecte une trame brute dans le chemin de réception</td>
+</tr>
+<tr>
+<td>E/S client au niveau des paquets</td>
+<td><code>UdpClient.Send(UdpPacket)</code> / <code>UdpClient.ReceivePacket(timeout)</code>, <code>IcmpClient.Send(IcmpPacket)</code> / <code>IcmpClient.ReceivePacket(timeout)</code></td>
+</tr>
+</tbody>
+</table>
+<p>Les types de paquets forment la sous-arborescence <code>Cosmos.Kernel.System.Network.Protocols</code> : <code>EthernetPacket</code> et <code>InternetPacket</code> à sa racine, puis un espace de noms par protocole (<code>Arp</code>, <code>Dns</code>, <code>IPv4</code> avec <code>IPv4.Dhcp</code> en dessous, <code>Tcp</code>, <code>Udp</code>). Les membres de transmission, d'injection et des clients restent sur leurs types stables dans <code>Cosmos.Kernel.System.Network</code>.</p>
+<p>Le point d'extension sert à construire et à lire les types de paquets que la pile parle déjà, pas à en ajouter de nouveaux : leurs champs de trame, leurs fonctions d'aide pour la somme de contrôle de l'en-tête et le hook d'analyse <code>InitializeFields</code> sont internes à la pile, si bien qu'un noyau construit un paquet et lit ses propriétés plutôt que d'en dériver son propre type.</p>
+<p><code>UdpPacket</code> et <code>TcpPacket</code> servent les deux versions d'IP avec une seule classe. Ils ne dérivent pas de <code>IPPacket</code> ; ils conservent le paquet qui les transporte dans une propriété <code>Network</code>, typée comme le <code>InternetPacket</code> indépendant de la version. Construisez-en un en passant deux adresses de la même version, et remettez <code>packet.Network</code> à <code>NetworkStack.Send</code> :</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.System.Network.Protocols.Udp;
+
+UdpPacket datagram = new UdpPacket(localIp, remoteIp, 5000, 4242, payload);
+NetworkStack.Send(datagram.Network);
+</code></pre>
+<p>Une paire d'adresses de versions différentes lève <code>ArgumentException</code> plutôt que de tronquer l'une d'elles.</p>
+<p>Une requête d'écho fabriquée à la main, mise en correspondance avec sa réponse par l'identifiant et le numéro de séquence choisis par l'appelant :</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.System.Network;
+using Cosmos.Kernel.System.Network.Protocols.IPv4;
+
+IPConfig? config = NetworkManager.Primary.IPConfig;
+if (config is null)
+{
+    Console.WriteLine(&quot;The primary adapter has no IPv4 configuration.&quot;);
+    return;
+}
+
+Address localIp = config.Address;
+Address gateway = config.DefaultGateway;
+
+IcmpClient icmp = new IcmpClient();
+icmp.Connect(gateway);
+
+IcmpEchoRequest request = new IcmpEchoRequest(localIp, gateway, id: 0x1234, sequence: 7);
+
+if (!NetworkStack.Send(request))
+{
+    Console.WriteLine(&quot;No interface carries &quot; + localIp.ToString());
+    return;
+}
+
+if (icmp.ReceivePacket(5000) is IcmpEchoReply reply
+    &amp;&amp; reply.IcmpId == 0x1234 &amp;&amp; reply.IcmpSequence == 7)
+{
+    Console.WriteLine(&quot;reply from &quot; + reply.SourceIP.ToString());
+}
+
+icmp.Close();
+</code></pre>
+<p>Le contrat que les types de paquets implémentent réellement :</p>
+<ul>
+<li>Un constructeur de fabrication écrit la trame complète, longueurs et sommes de contrôle comprises, au moment de la construction ; rien n'est recalculé ensuite, les octets d'en-tête ne doivent donc pas être modifiés après la construction.</li>
+<li>Les propriétés d'en-tête sont des instantanés analysés à partir de <code>RawData</code> lors de la construction ; écrire dans <code>RawData</code> ne les met pas à jour.</li>
+<li>Un constructeur d'analyse (<code>new XxxPacket(byte[])</code>) référence le tableau de l'appelant sans le copier.</li>
+<li><code>NetworkStack.Send</code> détermine le périphérique émetteur à partir de l'IP source du paquet et renvoie <code>false</code> quand aucune interface configurée ne lui correspond ; l'adresse MAC de destination est résolue par ARP sur IPv4 et par Neighbor Discovery sur IPv6, sauf si la destination est une diffusion ou un groupe multicast.</li>
+<li>La somme de contrôle UDP diffère selon la version, et c'est le seul champ dans ce cas. Un constructeur de fabrication qui reçoit la charge utile écrit la somme de contrôle ; un constructeur qui ne prend qu'une longueur laisse le champ à zéro, ce qui signifie « non calculée » sur IPv4 et est interdit sur IPv6, appelez donc <code>WriteChecksum()</code> une fois la charge utile en place.</li>
+<li>Un protocole que seul IPv4 transporte est une sous-classe de <code>IPPacket</code> : passez le numéro de protocole et la longueur de la charge utile à un constructeur de fabrication et écrivez la charge utile à <code>DataOffset</code>. Un protocole que les deux versions transportent compose plutôt un <code>InternetPacket</code>, comme le font <code>UdpPacket</code> et <code>TcpPacket</code>.</li>
+</ul>
+<p><a id="current-limitations"></a></p>
+<h2 id="limitations-actuelles">Limitations actuelles</h2>
+<ul>
+<li><code>System.Net.Dns</code> ne résout que les enregistrements A. Dans les plugs, <code>IPAddress</code> contient quatre octets, il n'y a donc rien dans quoi une réponse AAAA pourrait être renvoyée, et <code>AddressFamily.InterNetworkV6</code> est refusé d'emblée. Le <code>DnsClient</code> de Cosmos n'a pas cette limite et renvoie une <code>Address6</code> pour un enregistrement AAAA.</li>
+<li>Les recherches inverses ne sont pas prises en charge. <code>Dns.GetHostEntry(IPAddress)</code> nécessite une requête PTR sur <code>in-addr.arpa</code>, que le résolveur n'envoie pas, si bien qu'elle lève une exception plutôt que de renvoyer un nom.</li>
+<li>Les surcharges asynchrones de <code>Dns</code> ne sont pas vérifiées. <code>GetHostAddressesAsync</code> et les paires <code>Begin</code>/<code>End</code> atteignent le même plug, mais elles y parviennent en mettant l'appel bloquant en file dans le pool de threads, avec lequel ce noyau n'a pas été éprouvé. Les surcharges bloquantes constituent le chemin testé.</li>
+<li>IPv6 s'arrête au lien. Il y a une adresse lien-local, Neighbor Discovery, l'écho ICMPv6, et UDP et TCP circulent désormais sur IPv6 par les mêmes classes de paquets qu'IPv4, mais il n'y a pas de table de routage, si bien que toute destination doit se trouver sur le lien. Pas de SLAAC ni de DHCPv6, pas de configuration d'adresse au-delà de l'adresse lien-local, et <code>IPAddress</code> reste limitée à IPv4 dans les plugs de socket, si bien que les classes de socket .NET standard n'atteignent qu'IPv4.</li>
+<li>Pas de TLS, donc pas de <code>HttpClient</code>/HTTPS : TCP brut uniquement.</li>
+<li>Plusieurs cartes réseau sont enregistrées et configurées, et les paquets sortants sont routés en comparant l'adresse source à la configuration de chaque interface, si bien que <code>NetworkManager.Primary</code> ne décide que de la destination des fonctions d'aide non routées (<code>NetworkManager.Send</code>, le <code>IPConfig.Enable</code> sans handle).</li>
+<li>Une interface que le kit de pilotes retire quitte la table du gestionnaire, mais sa configuration IP n'est pas supprimée et les handles <code>NetworkAdapter</code> restent positionnels, si bien qu'un handle obtenu avant le retrait peut désigner le périphérique qui a pris sa place.</li>
+<li>La semi-fermeture n'est pas prise en charge : <code>Close()</code> sur une connexion TCP établie attend que le pair réponde à l'échange FIN dans les 5 secondes et lève une exception s'il garde la connexion ouverte.</li>
+<li>Sur les <code>UdpClient</code> et <code>IcmpClient</code> de Cosmos, <code>Close()</code> et <code>Dispose()</code> ne sont pas la même porte. <code>Close()</code> arrête la remise au client, et un <code>IcmpClient</code> se rouvre avec un nouveau <code>Connect()</code> ; <code>Dispose()</code> (y compris celui qu'exécute un bloc <code>using</code>) met le client hors service définitivement, et tous les autres membres lèvent ensuite <code>ObjectDisposedException</code>.</li>
+</ul>
+<p><a id="how-it-works"></a></p>
+<h2 id="fonctionnement">Fonctionnement</h2>
+<p>Votre code appelle les classes de socket .NET standard, dont la PAL aboutit à des <a href="../dev/plugs.html">plugs</a> au niveau de <code>Socket</code> dans <code>Cosmos.Kernel.Plugs</code> (<code>SocketPlug</code>, <code>TcpClientPlug</code>, <code>TcpListenerPlug</code>, <code>UdpClientPlug</code>, <code>NetworkStreamPlug</code>, et <code>NameResolutionPalPlug</code> pour <code>Dns</code>). Ceux-ci délèguent à la pile réseau de Cosmos (la machine à états TCP et la couche UDP sur les deux versions d'IP, avec ARP et Ethernet sous IPv4, et ICMPv6 et Neighbor Discovery sous IPv6), qui envoie et reçoit les trames par le périphérique réseau enregistré auprès de <code>NetworkManager</code> : une interface publiée par un pilote du kit de pilotes, celle de l'E1000E ou celle du virtio-net. Une trame que reçoit le pilote du kit est remise à la pile sur le thread de travail du kit, avec les interruptions désactivées pendant tout le traitement de la trame. Les <code>DhcpClient</code> et <code>DnsClient</code> de Cosmos reposent directement sur la couche UDP de Cosmos, <code>DhcpClient</code> sur IPv4 uniquement.</p>
+<pre><code>TcpClient / TcpListener / UdpClient / NetworkStream     (stock BCL)
+        │
+Socket plugs                                            (Cosmos.Kernel.Plugs)
+        │
+Cosmos TCP state machine / UDP                          (Cosmos.Kernel.System.Network)
+        │                                    DhcpClient / DnsClient ride UDP directly
+IPv4 / ARP and IPv6 / Neighbor Discovery / Ethernet
+        │
+Network device                                          (e1000e or virtio-net, over the driver kit)
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/user/network.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

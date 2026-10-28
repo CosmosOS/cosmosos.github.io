@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>音频 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="音频 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/user/audio.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="audio"></a></p>
+<h1 id="音频">音频</h1>
+<p>本文将介绍 Cosmos Gen3 上的音频：如何找到声卡、播放音调、播放 WAV 文件以及生成你自己的声音。声音通过 <strong>Intel High Definition Audio</strong> 控制器输出，它是自 2004 年以来 PC 芯片组的音频标准，也是 QEMU 以 <code>intel-hda</code> 之名模拟的声卡。</p>
+<p>如果你来自 Gen2，主要区别如下：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Gen2</th>
+<th>Gen3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>音频 API</td>
+<td><code>Cosmos.System.Audio</code></td>
+<td><code>Cosmos.Kernel.System.Audio</code></td>
+</tr>
+<tr>
+<td>声卡驱动程序</td>
+<td>AC97</td>
+<td>基于驱动工具包的 Intel HD Audio（x64 和 ARM64）</td>
+</tr>
+<tr>
+<td>初始化设置</td>
+<td>一个带有 <code>Stream</code> 和 <code>Output</code> 的 <code>AudioManager</code>，然后调用 <code>Enable()</code></td>
+<td>无需设置：驱动工具包在启动时发布输出，<code>AudioManager.Play(stream)</code> 通过它播放</td>
+</tr>
+<tr>
+<td>混音</td>
+<td>基于多个流的 <code>AudioMixer</code></td>
+<td>每个输出同一时间只播放一个流</td>
+</tr>
+<tr>
+<td><code>Console.Beep</code></td>
+<td>PC 扬声器</td>
+<td>通过声卡播放的方波</td>
+</tr>
+<tr>
+<td>WAV 文件</td>
+<td><code>MemoryAudioStream.FromWave</code></td>
+<td><code>MemoryAudioStream.FromWave</code>，以及从卷中流式读取文件的 <code>WaveAudioStream</code></td>
+</tr>
+<tr>
+<td>播放</td>
+<td><code>Enable()</code> 运行后在后台播放</td>
+<td>使用 <code>AudioManager.Play</code> 在调用线程上播放，或使用 <code>AudioManager.TryStartPlayback</code> 在独立线程上播放</td>
+</tr>
+</tbody>
+</table>
+<p>如果你发现 bug 或任何异常，请在我们的仓库中<a href="https://github.com/CosmosOS/Cosmos/issues/new/choose">提交 issue</a>。</p>
+<p><a id="enable-audio-in-your-kernel"></a></p>
+<h2 id="在内核中启用音频">在内核中启用音频</h2>
+<p>音频支持由一个功能开关控制。请确保内核的 <code>.csproj</code> 没有将其关闭（默认值为 <code>true</code>）：</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;CosmosEnableAudio&gt;true&lt;/CosmosEnableAudio&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p>声卡是一个 PCI 功能，因此关闭 <code>CosmosEnablePCI</code>，或关闭会连带关闭 PCI 的 <code>CosmosEnableInterrupts</code>，同样会关闭音频。</p>
+<p>启动时，声卡通过<a href="drivers.html">驱动工具包</a>到达 <code>AudioManager</code>，就像网卡到达 <code>NetworkManager</code> 一样。<code>Cosmos.Kernel.Drivers</code> 中提供的 <code>HdAudioDriver</code> 会绑定所有类别为 <code>04.03.00</code>（即 HD Audio 控制器类别）的 PCI 功能，因此这一个驱动程序就能覆盖所有遵循该规范的控制器，而不是依赖一份设备 ID 列表。它在控制器后面的编解码器（codec）上找到一个转换器和一个输出引脚，然后发布一个名为 <code>hda</code> 的输出，管理器将其列为主输出。QEMU 默认不挂接任何声卡，因此需要让 <code>cosmos run</code> 添加一块，两种架构均可：</p>
+<pre><code class="lang-console">$ cosmos run --audio intel-hda        # the ICH6 HD Audio controller, the one the test suite runs on
+$ cosmos run --audio ich9-intel-hda   # the ICH9 one
+</code></pre>
+<p>HD Audio 控制器本身是一条总线，而不是一块完整的声卡：把样本转换为声音的编解码器位于它后面，因此 <code>cosmos run</code> 会在控制器旁边挂接 QEMU 的 <code>hda-duplex</code> 编解码器。声音通过 QEMU 的默认音频后端在你的主机上播放（PipeWire、PulseAudio、ALSA、CoreAudio 或 DirectSound，取决于主机）。</p>
+<p>串口日志会显示驱动程序绑定该控制器的过程：</p>
+<pre><code>[Audio] primary: HdAudioDriver &quot;hda&quot;
+[Drivers] pci:0000:00:02.0 HdAudioDriver published device &quot;hda&quot; (consumed)
+[Drivers] pci:0000:00:02.0 HdAudioDriver: version 1.0, codec 0 converter 2 pin 3, stream 4 (4 in, 4 out), 48 kHz stereo 16-bit, line 11
+</code></pre>
+<p>最后一个字段表示控制器的中断线是否到达了驱动程序。上面显示的是 <code>line 11</code>，对应一台没有网卡的 x64 机器。在 ARM64 上它显示 <code>no line</code>，因为驱动工具包不路由任何 PCI 传统中断线；在 x64 上与默认的 e1000e 网卡并存时也是如此，因为该网卡占用了它与控制器共享的中断线。无论哪种情况，输出的播放效果都一样：播放器跟踪流引擎的位置，而不是等待中断。</p>
+<p>下面的代码片段依赖以下 <code>using</code> 指令：</p>
+<pre><code class="lang-csharp">using System.IO;
+using Cosmos.Kernel.HAL.Devices.Audio;   // AudioFormat, for the sound you generate (COSMOS0003)
+using Cosmos.Kernel.System.Audio;
+using Cosmos.Kernel.System.FileSystem;
+using Cosmos.Kernel.System.Timers;
+</code></pre>
+<p><a id="the-audio-output"></a></p>
+<h2 id="音频输出">音频输出</h2>
+<p><code>AudioManager</code> 持有驱动工具包发布的输出。在播放任何内容之前，先检查是否存在输出：</p>
+<pre><code class="lang-csharp">if (!AudioManager.IsEnabled)
+{
+    Console.WriteLine(&quot;Audio is compiled out (CosmosEnableAudio=false)&quot;);
+    return;
+}
+
+AudioDevice? output = AudioManager.Primary;
+if (output is null)
+{
+    Console.WriteLine(&quot;No audio output: attach one with cosmos run --audio intel-hda&quot;);
+    return;
+}
+
+Console.WriteLine(&quot;Output:  &quot; + output.Name + &quot; (&quot; + output.DriverName + &quot;)&quot;);
+Console.WriteLine(&quot;Node:    &quot; + output.NodePath);
+Console.WriteLine(&quot;Format:  &quot; + output.SampleRate + &quot; Hz, &quot; + output.Format.Channels + &quot; ch, &quot;
+    + (output.Format.ChannelSize * 8) + &quot;-bit&quot;);
+</code></pre>
+<!-- screenshot: 控制台显示 "Output: hda (HdAudioDriver)"、pci 节点路径以及 "Format: 48000 Hz, 2 ch, 16-bit" -->
+<p><img src="images/audio-output.png" alt="音频输出"></p>
+<p><code>AudioDevice</code> 会报告它当前编程所用的格式（在有内容以其他采样率播放之前，为 48 kHz 有符号 16 位立体声）、其流引擎是否 <code>IsRunning</code>，以及当前为它提供数据的 <code>Player</code>，空闲时为 <code>null</code>。一旦驱动工具包撤回该输出，<code>IsWithdrawn</code> 就会变为 true，对它的所有调用都不再起作用。</p>
+<p>有多块声卡时，可以枚举它们。列表按节点路径排序，主输出排在最前，因此主输出不取决于哪个驱动程序最先完成探测：</p>
+<pre><code class="lang-csharp">for (int i = 0; i &lt; AudioManager.Count; i++)
+{
+    if (AudioManager.TryGet(i, out AudioDevice? device))
+    {
+        Console.WriteLine($&quot;[{i}] {device.Name}  {device.NodePath}&quot;);
+    }
+}
+</code></pre>
+<p><code>AudioManager.Play</code> 和 <code>AudioManager.TryStartPlayback</code> 始终使用主输出。要在其他输出上播放，请把该输出交给 <code>AudioPlayer</code> 或 <code>AudioPlayback.TryStart</code>（两者见下文）。</p>
+<p><a id="playing-a-tone"></a></p>
+<h2 id="播放音调">播放音调</h2>
+<p>发出声音最快的方式既不需要文件，也不需要任何设置：<code>Console.Beep</code>，内核通过 plug 将它接到主输出上。</p>
+<pre><code class="lang-csharp">/* The Windows default: 800 Hz for 200 ms */
+Console.Beep();
+
+/* A C major scale, a quarter of a second per note */
+int[] notes = { 262, 294, 330, 349, 392, 440, 494, 523 };
+foreach (int note in notes)
+{
+    Console.Beep(note, 250);
+}
+</code></pre>
+<p>音调是幅度为满量程四分之一的方波，调用在播放结束后才返回，与 Windows 上一致。它也会拒绝 Windows 所拒绝的参数：低于 37 Hz 或高于 32767 Hz 的音高，或小于等于零的时长，都会抛出 <code>ArgumentOutOfRangeException</code>。当没有可供播放的输出时（没有发布输出、音频被编译排除，或另一个播放正占用着输出），它会立即返回，不播放任何声音。</p>
+<p>.NET 将 <code>Console.Beep(int, int)</code> 标记为仅限 Windows，因此该调用会引发 <code>CA1416</code> 平台警告。内核仍然实现了它；你可以在调用处抑制该警告，或在整个项目中抑制：</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;NoWarn&gt;$(NoWarn);CA1416&lt;/NoWarn&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p><a id="playing-a-wav-file"></a></p>
+<h2 id="播放-wav-文件">播放 WAV 文件</h2>
+<p><code>MemoryAudioStream.FromWave</code> 读取已在内存中的 <code>.wav</code> 文件，<code>AudioManager.Play</code> 通过主输出播放它，并在最后一帧播放完毕后返回：</p>
+<pre><code class="lang-csharp">/* chime.wav is a 16-bit stereo PCM file on the FAT partition mounted at /mnt */
+MemoryAudioStream chime = MemoryAudioStream.FromWave(File.ReadAllBytes(&quot;/mnt/chime.wav&quot;));
+
+if (!AudioManager.Play(chime))
+{
+    Console.WriteLine(&quot;No output, or the output refused the file's format&quot;);
+}
+</code></pre>
+<p>对于不是未压缩 PCM RIFF/WAVE 的文件，<code>FromWave</code> 会抛出 <code>ArgumentException</code>。读取器会遍历文件的块（chunk）列表，因此在样本之前带有 <code>LIST</code> 或 <code>fact</code> 块的文件也能像其他文件一样读取。当没有发布输出，或输出拒绝流的格式时，<code>Play</code> 返回 <code>false</code>。</p>
+<p>最后一种情况很重要，因为读取器能理解的格式比声卡能播放的更多：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>WAV 读取器接受</th>
+<th>HD Audio 输出播放</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>编码</td>
+<td>PCM 和 <code>WAVE_FORMAT_EXTENSIBLE</code></td>
+<td>有符号 PCM</td>
+</tr>
+<tr>
+<td>每样本位数</td>
+<td>8、16、24、32</td>
+<td>16</td>
+</tr>
+<tr>
+<td>声道数</td>
+<td>1 到 255</td>
+<td>2</td>
+</tr>
+<tr>
+<td>采样率</td>
+<td>任意</td>
+<td>8、9.6、11.025、12、16、22.05、24、32、44.1、48、88.2、96、144、176.4 和 192 kHz</td>
+</tr>
+</tbody>
+</table>
+<p>途中不会进行任何转换或重采样：单声道、8 位或 24 位的文件会被拒绝，而不是以错误的速度或音高播放。请先在主机上完成转换再复制过去，例如使用 <a href="https://ffmpeg.org/">FFmpeg</a>，它还能解码 MP3、OGG 和 FLAC：</p>
+<pre><code class="lang-console">$ ffmpeg -i song.mp3 -ac 2 -ar 48000 -c:a pcm_s16le song.wav
+</code></pre>
+<p>声音只是一个文件，因此最简单的分发方式是把它放到<a href="filesystem.html">文件系统</a>一文中的 FAT 磁盘上，并使用 FAT 兼容的文件名。运行<a href="network.html#ftp-server">网络</a>一文中 FTP 服务器的内核，也可以在运行期间从主机接收声音文件：<code>curl -T song.wav ftp://localhost:2121/</code>。</p>
+<p><a id="playing-in-the-background"></a></p>
+<h2 id="后台播放">后台播放</h2>
+<p><code>FromWave</code> 把整个文件保存在内存中，<code>Play</code> 会在音频的整个时长内占住调用者，这适合短促的提示音。对于一首歌曲，请使用 <code>WaveAudioStream</code> 从卷中流式读取文件，每次读取一个块，占用固定大小的内存，并使用 <code>AudioManager.TryStartPlayback</code> 在独立线程上播放，这样内核在播放期间可以继续运行：</p>
+<pre><code class="lang-csharp">if (!VfsManager.TryOpenFile(&quot;/mnt/song.wav&quot;, out IVfsFileHandle? file))
+{
+    Console.WriteLine(&quot;File not found&quot;);
+    return;
+}
+
+if (!WaveAudioStream.TryOpen(file, out WaveAudioStream? song))
+{
+    Console.WriteLine(&quot;Not a PCM .wav file&quot;);
+    file.Dispose();
+    return;
+}
+
+uint seconds = song.Length / song.SampleRate;
+Console.WriteLine(&quot;Playing &quot; + seconds + &quot; s of audio&quot;);
+
+/* The playback thread reads the file as it plays, and disposes of it when it is done */
+if (!AudioManager.TryStartPlayback(song, file, out AudioPlayback? playback))
+{
+    Console.WriteLine(&quot;No output, the output is busy, or no scheduler to run the playback on&quot;);
+    file.Dispose();
+    return;
+}
+</code></pre>
+<p>第二个参数是流读取数据的来源：播放线程结束后，播放会将其释放，因此文件句柄随播放一起移交，调用者无需再管它。当 <code>TryStartPlayback</code> 返回 <code>false</code> 时，没有启动任何播放，句柄仍需由调用者关闭。对于不需要释放任何资源的流，传入 <code>null</code>。</p>
+<p><code>WaveAudioStream</code> 是一个 <code>SeekableAudioStream</code>，因此它以帧为单位报告其 <code>Length</code> 和 <code>Position</code>，调用 <code>Rewind()</code> 或设置新的 <code>Position</code> 可以移动它。<code>AudioPlayback</code> 报告播放进行到了哪里，<code>Stop()</code> 可以提前结束播放：</p>
+<pre><code class="lang-csharp">while (playback.IsPlaying)
+{
+    Console.WriteLine((song.Position / song.SampleRate) + &quot; s of &quot; + seconds + &quot; s&quot;);
+
+    if (Console.KeyAvailable &amp;&amp; Console.ReadKey(true).Key == ConsoleKey.Escape)
+    {
+        /* Returns at once; the state turns Stopped shortly after */
+        playback.Stop();
+    }
+
+    TimerManager.Wait(500);
+}
+
+if (playback.State == AudioPlaybackState.Completed)
+{
+    Console.WriteLine(&quot;Played to the end&quot;);
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th><code>State</code></th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Playing</code></td>
+<td>线程仍在向输出提供数据</td>
+</tr>
+<tr>
+<td><code>Completed</code></td>
+<td>流已播放到末尾</td>
+</tr>
+<tr>
+<td><code>Stopped</code></td>
+<td><code>Stop()</code> 提前结束了播放；输出中尚存的数据被丢弃</td>
+</tr>
+<tr>
+<td><code>Failed</code></td>
+<td>输出拒绝了流的格式、被撤回或不再接收帧，或者读取流时抛出了异常；抛出的异常会以 <code>[Audio] playback failed: ...</code> 的形式写入串口日志</td>
+</tr>
+</tbody>
+</table>
+<p>关于后台播放，需要了解三点：</p>
+<ul>
+<li><strong>它需要调度器。</strong> 没有 <code>CosmosEnableScheduler</code> 就没有第二个线程可用于播放，<code>TryStartPlayback</code> 会返回 <code>false</code>。此时可改用 <code>AudioManager.Play(stream)</code> 在调用线程上播放同一个流。</li>
+<li><strong>每个输出同时只有一个播放。</strong> 从 <code>TryStartPlayback</code> 返回 <code>true</code> 的那一刻起直到播放结束，该播放都占用着输出，因此在此期间第二个 <code>TryStartPlayback</code>、<code>Play</code> 或 <code>Console.Beep</code> 都会被拒绝。不持有 <code>AudioPlayback</code> 的代码可以通过 <code>AudioManager.Primary?.Player?.RequestStop()</code> 停止正在播放的内容。</li>
+<li><strong>播放期间不要动这个卷。</strong> 播放线程在内核其余部分运行的同时读取文件，而文件系统层自身没有任何锁。在 <code>IsPlaying</code> 变为 false 之前向同一个卷写入，就是自找麻烦。</li>
+</ul>
+<p><code>Position</code> 统计的是从流中读取的帧数，它比你实际听到的内容超前，超前的部分就是已在声卡缓冲区中排队的帧，在 48 kHz 下大约为十分之一秒。</p>
+<p><a id="generating-sound"></a></p>
+<h2 id="生成声音">生成声音</h2>
+<p>你自己计算的样本也以同样的方式播放。流的格式是一个 <code>AudioFormat</code>：每声道位数、每帧声道数以及样本是否有符号，其中 <code>AudioFormat.Stereo16</code> 是 HD Audio 输出所播放的格式。一帧按声道交错存放每个声道的一个样本，先左后右，每个样本是一个小端序的有符号 16 位值。</p>
+<p><code>AudioFormat</code> 和 <code>AudioBitDepth</code> 属于驱动工具包的实验性扩展点，因此在内核项目确认接受缺少兼容性承诺这一点之前，引用它们会产生带有 <code>COSMOS0003</code> 诊断的构建错误（<a href="../dev/public-api.html">公共 API 跟踪</a>）。像上面 <code>output.Format.Channels</code> 那样读取格式则无需任何操作：</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;NoWarn&gt;$(NoWarn);COSMOS0003&lt;/NoWarn&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p>对于短促的声音，填充一个缓冲区并将其包装进 <code>MemoryAudioStream</code>：</p>
+<pre><code class="lang-csharp">const uint SampleRate = 48000;
+AudioFormat format = AudioFormat.Stereo16;
+
+/* One second of a 440 Hz sine wave, at a quarter of full scale */
+int frames = (int)SampleRate;
+byte[] data = new byte[frames * format.FrameSize];
+
+for (int i = 0; i &lt; frames; i++)
+{
+    short sample = (short)(Math.Sin(2 * Math.PI * 440 * i / SampleRate) * 8192);
+
+    Span&lt;byte&gt; frame = data.AsSpan(i * format.FrameSize, format.FrameSize);
+    BitConverter.TryWriteBytes(frame, sample);       // left
+    BitConverter.TryWriteBytes(frame[2..], sample);  // right
+}
+
+AudioManager.Play(new MemoryAudioStream(format, SampleRate, data));
+</code></pre>
+<p>较长或无限持续的声音最好在读取时即时计算，这样不占用内存：从 <code>AudioStream</code> 派生，并填充播放器传给 <code>Read</code> 的缓冲区。基类有意不带长度，这样流就可以一直播放下去，就像合成器、你自己写的混音器或游戏配乐那样：</p>
+<pre><code class="lang-csharp">/* A sine wave worked out as it is read: it costs no memory and never runs out */
+internal sealed class SineStream : AudioStream
+{
+    private const uint Rate = 48000;
+
+    private readonly double _step;
+    private double _phase;
+
+    public SineStream(double frequency)
+    {
+        _step = 2 * Math.PI * frequency / Rate;
+    }
+
+    public override AudioFormat Format =&gt; AudioFormat.Stereo16;
+
+    public override uint SampleRate =&gt; Rate;
+
+    public override bool Depleted =&gt; false;
+
+    public override int Read(Span&lt;byte&gt; destination)
+    {
+        int frameSize = Format.FrameSize;
+        int frames = destination.Length / frameSize;
+
+        for (int i = 0; i &lt; frames; i++)
+        {
+            short sample = (short)(Math.Sin(_phase) * 8192);
+
+            Span&lt;byte&gt; frame = destination.Slice(i * frameSize, frameSize);
+            BitConverter.TryWriteBytes(frame, sample);
+            BitConverter.TryWriteBytes(frame[2..], sample);
+
+            _phase += _step;
+            if (_phase &gt;= 2 * Math.PI)
+            {
+                _phase -= 2 * Math.PI;
+            }
+        }
+
+        return frames * frameSize;
+    }
+}
+</code></pre>
+<p><code>Read</code> 返回它写入的字节数，始终是整数个帧；一旦 <code>Depleted</code> 变为 <code>true</code> 或 <code>Read</code> 返回 <code>0</code>，播放器就停止读取。永不耗尽的流必须被主动停止，因此请在后台播放它：</p>
+<pre><code class="lang-csharp">if (AudioManager.TryStartPlayback(new SineStream(440), null, out AudioPlayback? playback))
+{
+    TimerManager.Wait(2000);
+    playback.Stop();
+}
+</code></pre>
+<p><a id="writing-frames-yourself"></a></p>
+<h2 id="自己写入帧">自己写入帧</h2>
+<p>播放器只是 <code>AudioDevice</code> 之上的便利封装，内核也可以直接驱动 <code>AudioDevice</code>，例如在一个自行混合音效的游戏循环中。设备把帧接收到一个环形缓冲区中，由其流引擎按编解码器的时钟消耗：<code>Write</code> 复制能放下的部分并返回接收的字节数，缓冲区已满时返回 <code>0</code>，并且从不阻塞。</p>
+<pre><code class="lang-csharp">AudioDevice? output = AudioManager.Primary;
+if (output is null || output.Player is not null || !output.TrySetFormat(AudioFormat.Stereo16, 48000))
+{
+    return;
+}
+
+SineStream source = new(440);
+byte[] chunk = new byte[4096];
+output.Start();
+
+/* 500 chunks of 1024 frames: about ten seconds */
+for (int pass = 0; pass &lt; 500; pass++)
+{
+    int length = source.Read(chunk);
+    int written = 0;
+    while (written &lt; length)
+    {
+        int took = output.Write(chunk.AsSpan(written, length - written));
+        if (took == 0)
+        {
+            /* The buffer is full: the codec is playing what it has */
+            TimerManager.Wait(5);
+            continue;
+        }
+
+        written += took;
+    }
+}
+
+output.Stop();
+</code></pre>
+<p>设备要求你遵守以下规则：</p>
+<ul>
+<li><code>TrySetFormat</code> 只在设备停止时有效；正在运行的设备会保留现有格式并返回 <code>false</code>。</li>
+<li>持续提供数据。<code>Start()</code> 之后缓冲区为空时会播放静音，但缓冲区是环形的，因此长时间落后的写入方会听到旧的帧再次循环播放。</li>
+<li><code>Stop()</code> 会丢弃缓冲区中尚存的数据。要听到声音的尾音，请先在其后写入一个缓冲区大小的静音（在 <code>TrySetFormat</code> 之后立即读取 <code>WritableBytes</code> 即可得知其大小），播放器正是这样做的。</li>
+<li>直接写入不会占用输出。开始之前请检查 <code>Player</code> 是否为 <code>null</code>；在你写入期间到来的 <code>Play</code> 或 <code>Console.Beep</code> 会被拒绝，因为正在运行的设备会拒绝它们发起的格式更改。</li>
+</ul>
+<p><a id="current-limitations"></a></p>
+<h2 id="当前限制">当前限制</h2>
+<ul>
+<li>Intel HD Audio 是唯一的声卡驱动程序：没有 AC97、Sound Blaster、virtio-sound 或 USB 音频，也没有 PC 扬声器。没有 HD Audio 控制器时，<code>Console.Beep</code> 会立即返回，不播放任何声音。</li>
+<li>仅支持播放。不支持录音：编解码器的输入，包括 QEMU <code>hda-duplex</code> 的线路输入，均未使用。</li>
+<li>只有一种格式：有符号 16 位立体声，采样率为上表所列。其他布局或其他采样率的流会被拒绝，而不是被转换或重采样。</li>
+<li>没有混音器：一个输出同一时间只播放一个流，在其结束之前，第二个播放、<code>Play</code> 或 <code>Console.Beep</code> 都会被拒绝。</li>
+<li>没有音量控制。驱动程序将编解码器的放大器打开到最大增益；要降低音量，请缩放你的样本。</li>
+<li>驱动程序在第一个同时具备两者的编解码器上，通过第一个转换器和第一个能够输出的引脚播放。在有多个插孔的机器上，这可能不是你正在收听的那个；而计算机的 HDMI 或 DisplayPort 音频如果是一个独立的 HD Audio 控制器，会作为单独的输出发布，并且可能排在前面。</li>
+<li>WAV 是内核唯一能读取的文件格式；没有 MP3、OGG 或 FLAC 解码器。</li>
+</ul>
+<p><a id="how-it-works"></a></p>
+<h2 id="工作原理">工作原理</h2>
+<p>启动时，库初始化器会在驱动程序阶段运行之前安装音频管理器的<a href="drivers.html">驱动工具包</a>消费者，因此管理器能看到驱动程序发布的每一个输出。<code>HdAudioDriver</code> 绑定控制器的 PCI 功能，将其复位，建立用于与编解码器通信的命令环和响应环，并遍历每个编解码器的部件（widget），寻找一个输出转换器和一个能够驱动输出的引脚。它将引脚连接到转换器，打开两者的放大器，开启许多笔记本电脑的扬声器所需的外部放大器，在一个划分为四个 4 KiB 周期的 16 KiB 环形 DMA 缓冲区上对第一个输出流编程，并以 <code>hda</code> 之名发布该输出（任何驱动程序都可以发布输出：<a href="drivers.html#publishing-a-device">发布设备</a>）。</p>
+<p><code>AudioPlayer</code> 负责播放，无论启动播放的是 <code>AudioManager.Play</code>、后台的 <code>AudioPlayback</code>，还是 <code>Console.Beep</code> 的 plug（它播放一段生成的方波）。它占用输出，按流的格式和采样率对其编程，启动流引擎，并每次读取 1024 帧到暂存缓冲区，在有空间腾出时将每一批写入设备的缓冲区。设备根据流引擎自身的位置计算可用空间，这正是播放器不需要中断的原因；设备还让写入方前方紧邻的那个周期保持静音，因此写入方短暂落后而发生欠载（underrun）时，播放的是静音。完成中断（在中断线已连接的情况下）只是通知管理器有空间腾出。缓冲区已满时，播放器等待 5 ms：在调度器管理的线程上通过调度器休眠，否则通过定时器等待；如果整整一秒内设备都没有接收任何数据，它就放弃。在流的末尾，它会写入一个缓冲区的静音，使最后的帧在引擎停止之前到达编解码器。</p>
+<pre><code>Console.Beep / AudioManager.Play / AudioManager.TryStartPlayback
+        │
+AudioStream ── WaveAudioStream (a volume), MemoryAudioStream, your own   (Cosmos.Kernel.System.Audio)
+        │  read 1024 frames at a time
+AudioPlayer ── claims the output, writes what fits, waits 5 ms when full
+        │
+AudioManager ── AudioDevice (primary first)
+        │
+driver kit: IAudioOutput &quot;hda&quot;                                           (HdAudioDriver, Cosmos.Kernel.Drivers)
+        │  16 KiB cyclic DMA buffer, drained on the codec's clock
+HD Audio controller → codec converter → pin → speakers (or QEMU's audio backend)
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/user/audio.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

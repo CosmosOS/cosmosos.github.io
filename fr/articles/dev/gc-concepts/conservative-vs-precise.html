@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>Parcours pr&#233;cis et parcours conservateur | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Parcours pr&#233;cis et parcours conservateur | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/dev/gc-concepts/conservative-vs-precise.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="precise-vs-conservative-scanning"></a></p>
+<h1 id="parcours-précis-et-parcours-conservateur">Parcours précis et parcours conservateur</h1>
+<p>Un parcours de pile doit décider quels mots de la pile d'un thread sont des références d'objet. Il y a deux façons de le faire.</p>
+<p>Un parcours précis sait. Le compilateur émet des tables (GCInfo, dans NativeAOT) qui décrivent, pour chaque <a href="safepoint.html">point sûr</a> de chaque méthode, exactement quels emplacements de pile et quels registres contiennent des références vivantes. Le ramasse-miettes signale ces emplacements et rien d'autre. Un parcours précis ne prend jamais un entier pour un pointeur, et c'est lui qui rend possibles les ramasse-miettes déplaçants, mais il ne fonctionne qu'aux emplacements du code que décrivent les tables.</p>
+<p>Un parcours conservateur devine. Chaque mot de la pile de la taille d'un pointeur est traité comme une référence potentielle, et tout ce qui pointe par hasard dans le tas maintient sa cible en vie. Cela fonctionne sur n'importe quelle instruction, sans aucune aide du compilateur, mais avec deux coûts : un entier qui ressemble à une adresse du tas retient des objets morts (une fausse racine), et aucun objet référencé de façon conservatrice ne peut jamais être déplacé, puisque le mot ne peut pas être réécrit sans danger.</p>
+<p>Concrètement, voici la pile d'un thread parcourue 8 octets à la fois :</p>
+<table>
+<thead>
+<tr>
+<th>Mot de pile</th>
+<th>Ce qu'il est réellement</th>
+<th>Verdict conservateur</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0x0000000000000007</code></td>
+<td>un int de valeur 7</td>
+<td>Hors de la plage du tas, ignoré</td>
+</tr>
+<tr>
+<td><code>0xFFFF8001A2B3C4D0</code></td>
+<td>une référence vivante vers une <code>List&lt;int&gt;</code></td>
+<td>Dans la plage du tas, marqué ✅ correct</td>
+</tr>
+<tr>
+<td><code>0xFFFF8001DEADBEEF</code></td>
+<td>un emplacement de débordement mort</td>
+<td>Toujours dans la plage, marqué ❌ fausse racine</td>
+</tr>
+<tr>
+<td><code>0xFFFFFFFF80123400</code></td>
+<td>une adresse de retour dans le code du noyau</td>
+<td>Adresse du noyau, mais hors des segments du tas, ignorée</td>
+</tr>
+<tr>
+<td><code>0xFFFF8001CAFE0000</code></td>
+<td>un pointeur d'appelé périmé</td>
+<td>Toujours dans la plage, marqué ❌ fausse racine</td>
+</tr>
+</tbody>
+</table>
+<p>OrionGC utilise les deux. Le thread qui a déclenché la collecte se trouve sur une chaîne de sites d'appel managés où le GCInfo est valide, il est donc parcouru précisément ; tous les autres threads ont été préemptés sur une instruction arbitraire et sont parcourus de façon conservatrice. Voir <a href="../garbage-collector-gcinfo.html">Parcours précis de la pile (GCInfo)</a>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/dev/gc-concepts/conservative-vs-precise.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>控制台会话与 Telnet | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="控制台会话与 Telnet | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/user/sessions.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="console-sessions-and-telnet"></a></p>
+<h1 id="控制台会话与-telnet">控制台会话与 Telnet</h1>
+<p>本文将介绍 Cosmos Gen3 上的控制台会话：在本地显示设备上并排运行多个 shell，像 Linux 切换 tty 那样在它们之间切换，以及通过 Telnet 向远程终端提供 shell。</p>
+<p>控制台会话是 <code>System.Console</code> 可以绑定的一个控制台：一块屏幕，以及在它上面敲下的按键。<code>Console</code> 跟随调用线程。在某个会话上启动的线程读取该会话的按键并写入它的屏幕，因此同样的 <code>Console.ReadLine()</code> 和 <code>Console.WriteLine()</code> 代码无需修改就能在每个会话上运行，无论是本地会话还是远程会话。</p>
+<table>
+<thead>
+<tr>
+<th>种类</th>
+<th>按键来源</th>
+<th>屏幕显示于</th>
+<th>创建者</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>主控制台，<code>tty1</code></td>
+<td>本地键盘</td>
+<td>显示设备</td>
+<td>内核，基于 <code>KernelConsole.Default</code></td>
+</tr>
+<tr>
+<td>虚拟控制台，<code>tty2</code> 及之后</td>
+<td>本地键盘</td>
+<td>显示设备，当它是活动会话时</td>
+<td><code>SessionManager.CreateVirtualConsole()</code></td>
+</tr>
+<tr>
+<td>Telnet 会话</td>
+<td>Telnet 客户端</td>
+<td>客户端的终端；当它是活动会话时也显示在显示设备上</td>
+<td><a href="https://github.com/CosmosOS/Cosmos.Network.Telnet">Cosmos.Network.Telnet</a> 包中的 <code>TelnetServer</code>，每个连接一个</td>
+</tr>
+</tbody>
+</table>
+<p>下面的代码片段依赖 <code>using Cosmos.Kernel.System.Sessions;</code>。</p>
+<p>会话需要调度器（<code>CosmosEnableScheduler</code>），因为除主控制台之外的每个会话都运行在自己的线程上。它们还需要内核控制台，因为每块屏幕都是显示设备画布上的一个网格。Telnet 服务器还需要网络（<code>CosmosEnableNetwork</code>）。</p>
+<p><a id="the-primary-console"></a></p>
+<h2 id="主控制台">主控制台</h2>
+<p><code>tty1</code> 是每个内核本来就有的控制台。内核的主循环（<code>Run()</code>）运行在它上面，所有没有在其他会话上启动的线程也是如此，而且它不能被关闭。从不打开会话的内核，行为与以前完全相同：<code>Console</code> 和 <code>KeyboardManager</code> 直接读取键盘。</p>
+<p><a id="virtual-consoles"></a></p>
+<h2 id="虚拟控制台">虚拟控制台</h2>
+<p><code>SessionManager.CreateVirtualConsole()</code> 打开一个与主控制台大小相同的本地控制台。它创建时处于隐藏状态，<code>SessionManager.Start</code> 会在它上面启动一个线程：</p>
+<pre><code class="lang-csharp">ConsoleSession session = SessionManager.CreateVirtualConsole();
+
+SessionManager.Start(session, () =&gt;
+{
+    Console.WriteLine(&quot;Hello from &quot; + session.Name);
+
+    while (Console.ReadLine() is { } line)
+    {
+        Console.WriteLine(&quot;You typed: &quot; + line);
+    }
+});
+</code></pre>
+<p>该线程的 <code>Console</code> 就是这个会话。函数体返回时，会话随之关闭：虚拟控制台消失，远程会话挂断。从函数体中逃逸的异常会被记录到串口，并以同样的方式结束会话。</p>
+<p>函数体启动的线程不会绑定到该会话：它们的 <code>Console</code> 是主控制台。如果它们需要写入该会话，请用 <code>SessionManager.Start</code> 绑定它们。</p>
+<p><a id="switching-sessions"></a></p>
+<h2 id="切换会话">切换会话</h2>
+<p>会话编号为 1 到 12（<code>SessionManager.MaxSessions</code>），编号同时也对应显示该会话的功能键：</p>
+<table>
+<thead>
+<tr>
+<th>按键</th>
+<th>显示</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Alt+F1 … Alt+F12</td>
+<td>会话 1 … 12</td>
+</tr>
+<tr>
+<td>Alt+左方向键、Alt+右方向键</td>
+<td>上一个或下一个已打开的会话</td>
+</tr>
+</tbody>
+</table>
+<p>显示设备上的会话是 <code>SessionManager.Active</code>。本地键盘的输入会进入这个会话，无论它是本地会话还是远程会话，因此你可以在机器本身上接管一个 Telnet 会话。在代码中：</p>
+<pre><code class="lang-csharp">foreach (ConsoleSession session in SessionManager.GetSessions())
+{
+    Console.WriteLine(session.Id + &quot;  &quot; + session.Name + (session.IsActive ? &quot;  (on the display)&quot; : &quot;&quot;));
+}
+
+SessionManager.Switch(2);   // show tty2
+</code></pre>
+<p>一旦存在第二个会话，键盘输入就会被路由：每个按键直接送往显示设备上的会话。从此以后，<code>KeyboardManager</code> 的读取成员（<code>KeyAvailable</code>、<code>TryReadKey</code>、<code>ReadKey</code>、<code>Peek</code>）也会像 <code>Console</code> 一样读取调用线程所在的会话。</p>
+<p>QEMU 在窗口中运行时，宿主机桌面可能会在客户机收到之前截获 Alt 加功能键的组合；尤其是 Alt+F4 可能会关闭窗口。使用 Alt 加方向键，或在 shell 命令中调用 <code>SessionManager.Switch</code>，可以避免这个问题。</p>
+<p><a id="serving-a-shell-over-telnet"></a></p>
+<h2 id="通过-telnet-提供-shell">通过 Telnet 提供 shell</h2>
+<p>Telnet 服务器是一个独立的包：<a href="https://github.com/CosmosOS/Cosmos.Network.Telnet">Cosmos.Network.Telnet</a>。将它添加到你的内核中：</p>
+<pre><code class="lang-xml">&lt;ItemGroup&gt;
+    &lt;PackageReference Include=&quot;Cosmos.Network.Telnet&quot; Version=&quot;1.0.0&quot; /&gt;
+&lt;/ItemGroup&gt;
+</code></pre>
+<p><code>TelnetServer</code> 监听一个 TCP 端口，为每个客户端提供一个独立的会话，以及一个运行你传入的 shell 的线程：</p>
+<pre><code class="lang-csharp">using Cosmos.Network.Telnet;
+
+TelnetServer server = new(session =&gt;
+{
+    Console.WriteLine(&quot;Welcome, &quot; + session.Name);
+
+    while (Console.ReadLine() is { } line &amp;&amp; line != &quot;exit&quot;)
+    {
+        Console.WriteLine(&quot;You typed: &quot; + line);
+    }
+});
+
+server.Start();   // port 23 by default: new TelnetServer(shell, 2323) picks another
+</code></pre>
+<p><code>Start()</code> 会立即返回；服务器在自己的线程上接受连接，直到 <code>Stop()</code> 为止，而停止时已经打开的会话会保持连接。设置 <code>Log</code> 即可在每次连接、断开和失败时收到一行消息，例如 <code>Log = message =&gt; Cosmos.Kernel.System.Diagnostics.Log.WriteString(message + &quot;\n&quot;)</code>。网络必须已经配置好（通过 DHCP 或手动配置，见<a href="network.html#configure-ipv4">网络</a>），客户端才能访问服务器。</p>
+<p>服务器按照终端所期望的方式进行协商：</p>
+<ul>
+<li>它回显输入的内容并抑制 go-ahead，从而让客户端进入逐字符模式，因此行编辑器在远程也能正常工作：方向键、Home 和 End、Backspace 和 Delete。</li>
+<li>它请求窗口大小（NAWS），因此会话的 <code>Console.WindowWidth</code> 和 <code>WindowHeight</code> 就是客户端的窗口大小，并会在窗口调整大小时随之变化。</li>
+<li>输出以 VT100 序列发送：颜色、光标移动和 <code>Console.Clear()</code> 在客户端上的显示效果与在显示设备上一致。</li>
+</ul>
+<p>在 QEMU 用户模式网络下，将宿主机的一个端口转发到客户机的 23 端口，然后从宿主机连接：</p>
+<pre><code>$ cosmos run --nic e1000e --hostfwd tcp::2323-:23
+$ telnet localhost 2323
+</code></pre>
+<p>直接使用 QEMU 时，端口转发是用户模式网卡的一个选项：<code>-nic user,model=e1000e,hostfwd=tcp::2323-:23</code>。</p>
+<div class="WARNING">
+<h5>警告</h5>
+<p>Telnet 以明文发送所有内容，而且服务器不要求密码：任何能访问该端口的人都能获得一个 shell。请只在你信任的网络上提供该服务，例如 QEMU 的私有用户模式网络。</p>
+</div>
+<p><a id="current-limitations"></a></p>
+<h2 id="当前限制">当前限制</h2>
+<ul>
+<li>没有登录机制：Telnet 客户端一连接就能获得 shell。</li>
+<li>目前还没有 SSH。Telnet 是基于同一套会话的第一种传输方式；SSH 需要密钥交换、加密算法和随机源，而内核目前还没有这些。</li>
+<li>TCP 协议栈不会重传。在 QEMU 用户模式网络上不会丢包，但在真实网络上，丢失一个报文段就会让会话停滞。</li>
+<li>会话的屏幕位于显示设备的画布上，因此没有显示设备的内核就没有会话，远程会话也不例外。</li>
+<li>Ctrl+C 只是作为一个按键送达会话；没有任何机制能中断正在运行的命令。</li>
+</ul>
+<p><a id="remote-sessions-in-a-library"></a></p>
+<h2 id="在库中实现远程会话">在库中实现远程会话</h2>
+<p>用于另一种远程终端的服务器，是一个派生自 <code>ConsoleSession</code> 的类，Telnet 服务器的会话类就是这样实现的：</p>
+<ul>
+<li>构造函数 <code>ConsoleSession(int cols, int rows)</code> 为会话提供屏幕，在被显示之前处于隐藏状态。重写 <code>Name</code>（会话在列表中显示的名称）和 <code>IsRemote</code>（返回 true）。</li>
+<li><code>EnqueueInput(KeyEvent)</code> 将终端发送的按键加入队列，并唤醒会话的读取者；可以从任何线程调用它。<code>Resize(cols, rows)</code> 跟随终端窗口的大小变化。</li>
+<li><code>On</code> 钩子报告每一个需要发送给终端的变化：<code>OnWritten</code> 对应每个字符，还有 <code>OnCleared</code>、<code>OnCursorMoved</code>、<code>OnCursorVisibilityChanged</code>、<code>OnColorsChanged</code>，可通过 <code>CursorLeft</code>、<code>CursorTop</code>、<code>ExplicitForeground</code> 和 <code>ExplicitBackground</code> 读取状态。它们在变化过程中运行，此时中断被屏蔽：记录发生了什么变化后立即返回，不要阻塞，也不要进行 I/O。<code>OnFlush</code> 和 <code>OnClosed</code> 在中断未屏蔽的情况下运行。</li>
+<li><code>SessionManager.TryRegister(session)</code> 将会话加入列表，然后 <code>SessionManager.Start(session, body)</code> 在它上面运行一个线程。</li>
+</ul>
+<p>内核的套接字不能安全地被两个线程同时使用，因此 Telnet 服务器在自己独有的一个线程上读写所有连接：它的钩子把数据追加到一个缓冲区，由该线程负责发送。</p>
+<p><a id="how-it-works"></a></p>
+<h2 id="工作原理">工作原理</h2>
+<p>每个会话都把自己的屏幕保存为显示设备画布上的一个 <code>KernelConsole</code> 网格。只有活动会话的网格会绘制到画布上；其他会话保持各自单元格的最新状态，并在被显示时重绘整个显示设备。Telnet 会话还会在每次变化发生时就把它发送给客户端：每个字符，以及每次光标移动和颜色变化对应的转义序列，这些都取自网格。因此两者对每一行在何处换行的判断是一致的：网格在一行写满时立即换行，而会话会在客户端上显式结束该行。</p>
+<p>会话的读取者阻塞在一个 <code>InterruptEvent</code> 上，当有按键为该会话入队时，这个事件就会被触发。按键要么来自键盘解码器（它把按键加入活动会话的队列，可能是在中断上下文中），要么来自远程会话的服务器：Telnet 服务器的线程在连接空闲时每 10 ms 检查一次这些连接，并把客户端发送的按键加入队列。切换键会唤醒一个原本处于阻塞状态的线程。主控制台的读取者运行在调度器的空闲线程上，因此它等待下一次中断而不是阻塞，键盘一直以来都是这样做的。</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/user/sessions.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

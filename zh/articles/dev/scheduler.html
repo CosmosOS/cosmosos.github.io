@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title> | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content=" | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/dev/scheduler.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="overview"></a></p>
+<h2 id="概述">概述</h2>
+<p>调度器有三个特点：<a href="sched-concepts/preemption.html"><strong>抢占式</strong></a>、<a href="../user/scheduler-plugging.html"><strong>可插拔</strong></a>，并且默认采用<a href="sched-concepts/virtual-time-fair-share.html"><strong>基于虚拟时间的公平份额</strong></a>调度。每次上下文切换都发生在中断上下文中：硬件节拍到来时，中断桩代码已经把当前线程的寄存器保存到它的栈上，调度器决定中断返回到哪一个已保存的栈。没有专门的调度器线程，目前也没有可用的主动切换：线程会一直运行，直到某次中断退出把它切换走（节拍，或者某个设备中断的处理程序唤醒了另一个线程），直到它在某个阻塞原语上挂起（park），或者直到它退出。每个带链接的术语在<a href="scheduler-glossary.html">术语表</a>中都有一段简短的背景说明；“可插拔”则链接到操作指南。</p>
+<p>该设计将<a href="sched-concepts/policy-and-mechanism.html">策略与机制</a>分离。机制是固定且共享的：线程登记表、生命周期转换、定时器节拍入口、保存和恢复寄存器的汇编代码，以及 GC 用来扫描线程的桥接层。策略，即决定<em>哪个</em>线程在<em>何时</em>运行的一切，是一个单独的接口 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/IScheduler.cs"><code>IScheduler</code></a>，任何算法都可以实现它。默认实现是 <a href="#the-stride-policy">Stride</a>，一种基于虚拟时间的公平份额调度器；<a href="../user/scheduler-plugging.html">编写调度器</a>介绍了如何替换它。</p>
+<img src="images/diagrams/sched-mechanism-policy.svg" alt="策略与机制的分离。上方方框为机制，固定不变：SchedulerManager 负责生命周期分派、线程登记表和节拍入口；Thread 和 PerCpuState 作为可扩展的 TCB 和每 CPU 状态；用汇编编写的 IRQ 桩代码负责保存和恢复寄存器；Mutex、ConditionVariable、Monitor 和 InterruptEvent 通过 SchedulerManager 挂起和唤醒线程；GC 栈扫描桥接层在回收期间遍历线程登记表。一个标注为 IScheduler 接口的箭头指向下方方框，即策略，可插拔：StrideScheduler（默认的基于虚拟时间的公平份额策略），以及在编写调度器中简要介绍的 RoundRobin、MLFQ、EDF 或 FIFO 等替代方案。" style="width:100%;min-width:620px;max-width:760px">
+<p>启动时，只要功能开关处于打开状态，<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel/Internal/Runtime/CompilerHelpers/LibraryInitializer.cs"><code>LibraryInitializer</code></a> 就会把整个调度器装配起来：它以 CPU 数量调用 <code>SchedulerManager.Initialize</code>，为每个 CPU 创建一个空闲线程并将其设为该 CPU 的当前线程（空闲线程就是正在启动的内核本身，因此它没有单独的栈），在这些线程之上安装一个 <code>StrideScheduler</code>，翻转 <code>SchedulerManager.IsRunning</code>，最后以 10 ms 的时间片启动调度器定时器。之所以先创建空闲线程，是因为线程静态变量存放在当前线程上，而策略钩子可能会运行类构造函数，类构造函数的运行器会获取一个以线程静态变量为键的锁。从第一个节拍开始，内核的主流程就只是空闲线程，像其他线程一样被抢占。</p>
+<p>调度器所做的一切都受到两个从外部观察其状态的使用者的约束：定时器中断和垃圾回收器。中断可以在任意<a href="sched-concepts/instruction-boundary.html">指令边界</a>触发：在一条机器指令之后、下一条之前，指令流中的任何位置，把任何长于一条指令的代码序列拆开。因此，每次状态转换都在中断禁用的情况下进行，阻塞原语遵循严格的<a href="#the-park-protocol">挂起协议</a>，使得在转换过程中到达的唤醒永远不会丢失。此外，<a href="garbage-collector.html">垃圾回收器</a>在回收期间遍历<a href="#thread-registry">线程登记表</a>，因此每个存活线程都必须登记在册，并且其保存的状态必须恰好位于登记表所指示的位置。</p>
+<p>代码位于 <code>src/Cosmos.Kernel.Core/Scheduler/</code>。<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/SchedulerManager.cs"><code>SchedulerManager</code></a> 是机制；<code>Stride/</code> 存放默认策略；同步原语和闹钟服务各自位于旁边的独立文件中。与架构相关的寄存器保存和恢复代码位于原生项目中。完整的文件清单见本文末尾的<a href="#source-files">源文件</a>。</p>
+<hr>
+<p><a id="thread-model"></a></p>
+<h2 id="线程模型">线程模型</h2>
+<p>本节说明线程在物理上是什么：控制块、线程运行所用的栈、在抢占前后保存线程状态的寄存器快照，以及让调度器和 GC 能够看到线程的登记表。</p>
+<p><a id="the-thread-control-block"></a></p>
+<h3 id="线程控制块">线程控制块</h3>
+<p><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/SchedulerThread.cs"><code>SchedulerThread</code></a> 是 GC 堆上的一个托管类：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Id</code>, <code>CpuId</code></td>
+<td>全局唯一的 id（一个简单的递增计数器）和分配到的 CPU</td>
+</tr>
+<tr>
+<td><code>State</code></td>
+<td><code>Created</code>、<code>Ready</code>、<code>Running</code>、<code>Blocked</code>、<code>Sleeping</code>、<code>Dead</code> 之一</td>
+</tr>
+<tr>
+<td><code>Flags</code></td>
+<td><code>IdleThread</code>、<code>Pinned</code>、<code>Managed</code>；第 8 到 15 位保留给调度器使用。<code>IsIdle</code> 读取第一个标志：阻塞原语会让这样的线程自旋或轮询，而不是将其挂起</td>
+</tr>
+<tr>
+<td><code>StackBase</code>, <code>StackSize</code>, <code>StackPointer</code></td>
+<td>栈分配和已保存的栈指针（见下文）</td>
+</tr>
+<tr>
+<td><code>InstructionPointer</code></td>
+<td>入口点，预置到初始上下文中。属于管理器的簿记信息，不在扩展点上</td>
+</tr>
+<tr>
+<td><code>LastScheduledAt</code>, <code>WakeupTime</code></td>
+<td>由管理器维护的记账信息，不在扩展点上；<code>WakeupTime</code> 是以 <code>Stopwatch</code> 刻度表示的睡眠截止时间</td>
+</tr>
+<tr>
+<td><code>TotalRuntime</code></td>
+<td>累计 CPU 时间，由当前生效的策略记到当前线程上</td>
+</tr>
+<tr>
+<td><code>AllocContext</code></td>
+<td>线程的 <a href="gc-concepts/tlab.html">TLAB</a>（见 <a href="garbage-collector.html#alloccontext-tlab">GC 文章</a>）</td>
+</tr>
+<tr>
+<td><code>_threadStaticStorage</code></td>
+<td><code>[ThreadStatic]</code> 字段的后备存储，以引用方式交给 CoreLib</td>
+</tr>
+<tr>
+<td><code>_exceptionDispatchState</code></td>
+<td>该线程的异常分派器状态，线程在自己的栈上抛出、展开和捕获异常：其 ExInfo 链的头部、防止在分派过程中再次抛出的保护，以及在其上运行的 funclet。<code>ExceptionHelper.State</code> 以引用方式读取它，启动代码在成为调度器线程之前使用分派器自身的状态（valentinbreiz/nativeaot-patcher#440）</td>
+</tr>
+<tr>
+<td><code>SchedulerData</code></td>
+<td>一个 <code>object?</code> 槽，当前生效的调度器把自己的簿记信息挂在上面（继承自 <code>SchedulerExtensible</code>）</td>
+</tr>
+</tbody>
+</table>
+<p>有两个标志会改变其他地方的行为：</p>
+<ul>
+<li><code>Pinned</code>：线程不能在 CPU 之间迁移。Stride 的 <code>SelectCpu</code> 和 <code>Balance</code> 会遵守这一点。</li>
+<li><code>Managed</code>：入口参数是一个 <code>System.Threading.Thread</code> 的 <code>GCHandle</code>，入口跳板调用 CoreLib 的 <code>Thread.StartThread</code>，而不是把参数解码为一个独立的 <code>Action</code>。</li>
+</ul>
+<p><a id="per-thread-stack"></a></p>
+<h3 id="每线程栈">每线程栈</h3>
+<p><code>SchedulerThread.InitializeStack</code> 分配一个连续的内存块，创建者未指定大小时为 <code>DefaultStackSize</code> = 256 KiB（显式请求的大小会被采纳，下限为 64 KiB；见<a href="#creation-and-first-run">创建与首次运行</a>）。尚未运行过的线程的寄存器上下文被伪造在底部（最低地址处，向上取整到 16 字节），可用的调用栈从顶部向下朝它增长：</p>
+<div style="overflow-x:auto">
+<img src="images/diagrams/sched-thread-stack.svg" alt="线程栈在创建时的布局。伪造的 ThreadContext 位于栈底，即向上取整到 16 字节的 StackBase 处，初始 StackPointer 指向它。可用栈占据其余部分，活动帧位于顶部并向下增长。StackBase + StackSize 标记栈顶。没有保护页。首次运行之后，每次抢占都会改为在被中断的栈位置保存一个新的上下文。" style="width:100%;min-width:620px;max-width:760px">
+</div>
+<p><code>StackPointer</code> 始终指向当前保存的上下文，因此 IRQ 桩代码知道从哪里恢复，GC 也知道挂起线程保存的状态从哪里开始。对于 <code>Created</code> 线程，这就是上图所示位于栈底的伪造上下文，由首次运行消费；此后，每次抢占都会在中断发生时所处的栈位置保存一个新的上下文，<code>StackPointer</code> 随之更新。有两个大小下限很重要（issue <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/433">#433</a>）：</p>
+<ul>
+<li><code>DefaultStackSize</code> 必须保持在 128 KiB 以上，即 CoreLib 的 <code>MinExecutionStackSize</code>：<code>RuntimeHelpers.EnsureSufficientExecutionStack</code> 会把当前栈指针与运行时报告的边界进行比较，栈更小会使它在每次调用时都抛出异常。</li>
+<li>启动栈是独立的：内核向 Limine 请求 1 MiB，<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Runtime/BootStack.cs"><code>BootStack</code></a> 在任何托管代码运行之前记录其栈顶。在调度器启动之前运行的代码（以及空闲线程，它自己没有任何分配）报告的是这一组边界。</li>
+</ul>
+<p>没有保护页：一个递归超过 <code>StackBase</code> 的线程会直接闯入分配器放在它下方的任何东西，而且没有任何机制能检测到这种溢出。</p>
+<p><a id="the-saved-context"></a></p>
+<h3 id="保存的上下文">保存的上下文</h3>
+<p><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/ThreadContext.X64.cs"><code>ThreadContext</code></a> 逐字段地对应中断触发时 IRQ 桩代码压入的帧。这种等价正是核心技巧：抢占线程和创建线程产生的是同一种结构，因此恢复两者走的是同一条代码路径。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>x64（448 字节）</th>
+<th>ARM64（816 字节）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SIMD 区</td>
+<td><code>Xmm[256]</code>（XMM0 到 XMM15）</td>
+<td><code>Neon[512]</code>（Q0 到 Q31）</td>
+</tr>
+<tr>
+<td>通用寄存器</td>
+<td>R15 到 RAX（按内存顺序共 15 个槽；桩代码最先压入 RAX）</td>
+<td>X0 到 X30</td>
+</tr>
+<tr>
+<td>故障信息</td>
+<td><code>Interrupt</code>、<code>CpuFlags</code>、<code>Cr2</code>，外加一个 <code>TempRcx</code> 中转槽</td>
+<td><code>Interrupt</code>、<code>CpuFlags</code>（ESR_EL1）、<code>Far</code>（FAR_EL1）</td>
+</tr>
+<tr>
+<td>返回帧</td>
+<td><code>Rip</code>、<code>Cs</code>、<code>Rflags</code>、<code>Rsp</code>、<code>Ss</code>（<code>iretq</code> 帧）</td>
+<td><code>Sp</code>、<code>Elr</code>、<code>Spsr</code></td>
+</tr>
+</tbody>
+</table>
+<p>（各行按 x64 的内存顺序排列；在 ARM64 上，返回帧位于故障信息之前。）</p>
+<p>对于新线程，<code>ThreadContext.Initialize</code> 伪造出一个被抢占线程应有的快照：除入口参数（x64 上为 RDI，ARM64 上为 X0）外所有寄存器清零，帧指针为零以便栈遍历能够终止，入口点放在恢复槽中（<code>Rip</code> / <code>Elr</code>），以及一个对齐的初始栈指针（在 x64 上，栈顶对齐到 16 再减 8，即 ABI 所期望的执行 <code>call</code> 之后的状态；在 ARM64 上只需对齐，因为 AArch64 始终保持 SP 16 字节对齐）。</p>
+<p><a id="thread-registry"></a></p>
+<h3 id="线程登记表">线程登记表</h3>
+<p><code>SchedulerManager</code> 拥有一个扁平的、固定大小的 <code>SchedulerThread?[256]</code> 数组（<code>SchedulerThread.MaxThreadCount</code>），在 <code>Initialize</code> 时一次性分配，并以 <code>SchedulerManager.Threads</code> 的形式公开。每个存活线程从 <code>CreateThread</code> 起占据一个槽，直到 <code>ExitThread</code> 将其清除；阻塞和睡眠的线程即使不在任何运行队列中，也仍然登记在册。</p>
+<div style="overflow-x:auto">
+<img src="images/diagrams/sched-thread-registry.svg" alt="线程登记表：SchedulerManager.s_allThreads，一个在 Initialize 时一次性分配的 256 槽扁平数组。槽 0 到 3 向下指向线程方框：Thr 0（空闲，Running）、Thr 1（Ready）、Thr 2（Blocked）、Thr 3（Sleeping）。槽 4 为 null，空闲可用。省略的中间部分通向槽 255。GC 的标记阶段直接遍历这个数组。" style="width:100%;min-width:620px;max-width:760px">
+</div>
+<p>登记表是为 GC 而存在的。回收期间，标记阶段直接遍历该数组，不经过接口分派（接口分派可能会分配内存，而回收过程中不允许任何分配），并扫描每个已登记线程的栈；一个不在登记表中的线程会继续运行，而 GC 会释放它的栈所指向的对象。这也是固定容量的危险之处：登记表满时，<code>RegisterThread</code> 记录一条警告并放弃这次登记，但该线程仍然会被加入队列并照常运行，只是不会被扫描（issue <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/444">#444</a>）。</p>
+<hr>
+<p><a id="lifecycle"></a></p>
+<h2 id="生命周期">生命周期</h2>
+<p>每次转换都在中断被屏蔽的情况下进行：下面这些 <code>SchedulerManager</code> 入口点会获取 <code>InternalCpu.DisableInterruptsScope()</code>，而切换本身（<code>ScheduleFromInterrupt</code>）依赖于它已经运行在中断上下文中这一事实。每个入口点都会通过对应的 <code>IScheduler</code> 钩子通知当前生效的策略；下表列出了它们还会做的其他事情：</p>
+<pre><code class="lang-mermaid">stateDiagram-v2
+    [*] --&gt; Created: InitializeStack
+    Created --&gt; Running: first pick (new-thread tail)
+    Running --&gt; Ready: preempted (OnTick says reschedule)
+    Ready --&gt; Running: ScheduleFromInterrupt picks it
+    Running --&gt; Blocked: BlockThread (Mutex, CV.Wait, InterruptEvent)
+    Running --&gt; Sleeping: MarkSleeping (Sleep, CV.WaitTimeout)
+    Blocked --&gt; Ready: ReadyThread (Release / Signal)
+    Sleeping --&gt; Ready: CheckSleepingThreads (deadline) or ReadyThread
+    Running --&gt; Dead: ExitThread
+    Dead --&gt; [*]: registry slot cleared
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>入口点</th>
+<th>状态变化</th>
+<th>策略钩子</th>
+<th>其他操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CreateThread</code></td>
+<td>无（<code>InitializeStack</code> 已经设置了 <code>Created</code>）</td>
+<td><code>OnThreadCreate</code></td>
+<td>把线程登记到登记表中</td>
+</tr>
+<tr>
+<td><code>ReadyThread</code></td>
+<td>在钩子之后设为 <code>Ready</code>，除非线程仍处于 <code>Created</code></td>
+<td><code>OnThreadReady</code></td>
+<td>设置每 CPU 的 <code>_needReschedule</code> 标志</td>
+</tr>
+<tr>
+<td><code>BlockThread</code></td>
+<td><code>Blocked</code></td>
+<td><code>OnThreadBlocked</code></td>
+<td>设置 <code>_needReschedule</code></td>
+</tr>
+<tr>
+<td><code>MarkSleeping</code></td>
+<td>计算出 <code>WakeupTime</code> 之后设为 <code>Sleeping</code></td>
+<td><code>OnThreadBlocked</code></td>
+<td>不停机；由调用者自己挂起（见<a href="#the-park-protocol">挂起协议</a>）</td>
+</tr>
+<tr>
+<td><code>Sleep</code></td>
+<td>通过 <code>MarkSleeping</code></td>
+<td></td>
+<td>然后调用 <code>Park</code></td>
+</tr>
+<tr>
+<td><code>Park</code></td>
+<td>无</td>
+<td>无</td>
+<td>设置 <code>_needReschedule</code> 并触发控制器的重新调度中断；线程再次运行后返回（见<a href="#parking">挂起</a>）</td>
+</tr>
+<tr>
+<td><code>YieldThread</code></td>
+<td>无</td>
+<td>无；它请求的切换会调用 <code>OnThreadYield</code></td>
+<td>设置 <code>_needReschedule</code>，并在切换之前返回</td>
+</tr>
+<tr>
+<td><code>ExitThread</code></td>
+<td><code>Dead</code></td>
+<td><code>OnThreadExit</code></td>
+<td>运行退出回调，把 TLAB 交还给 GC，清除登记表槽</td>
+</tr>
+</tbody>
+</table>
+<p>有三个细节是有意为之的：</p>
+<ul>
+<li><code>Created</code> 线程即使在 <code>ReadyThread</code> 将其加入队列之后也保持该状态。<code>ScheduleFromInterrupt</code> 通过 <code>State == Created</code> 检测首次运行，首次运行需要下文所述的特殊退出路径。</li>
+<li><code>ReadyThread</code>、<code>BlockThread</code> 和 <code>YieldThread</code> 会设置 <code>_needReschedule</code>，使下一次中断退出立即重新调度。如果没有它，被设备中断唤醒的线程最多要在运行队列中等待一个完整的时间片，刚刚阻塞的线程会在停机循环中空转掉剩余的时间片，而主动让出的线程会一直占用 CPU，直到时间片耗尽。</li>
+<li><code>WakeupTime</code> 以 <code>Stopwatch</code> 刻度存储，而不是纳秒。节拍检查会与 <code>Stopwatch.GetTimestamp()</code> 进行比较，而经由纳秒换算曾使 ARM64 上 62.5 MHz 定时器的超时时间失真 16 倍。</li>
+</ul>
+<p><a id="creation-and-first-run"></a></p>
+<h3 id="创建与首次运行">创建与首次运行</h3>
+<p>内核代码通过唯一的一个入口创建线程：<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Bridge/Interop/libSystemNative.cs"><code>libSystemNative.cs</code></a> 中的 <code>SystemNative_CreateThread</code> 导出函数，它是 CoreLib 中 <code>Interop.Sys.CreateThread</code> P/Invoke 的底层实现。因此，内核代码中的 <code>new System.Threading.Thread(...).Start()</code> 会经过 CoreLib 流入这个导出函数，它把请求的栈大小向上取整到页的整数倍（下限 64 KiB），构建一个带 <code>Managed</code> 标志的 <code>SchedulerThread</code>，让其上下文指向 <code>ThreadNative.EntryPointStub</code> 跳板，然后调用 <code>CreateThread</code> 和 <code>ReadyThread</code>。（<code>System.Threading.Thread</code> 没有任何 plug：<code>Thread.CreateThread</code> 运行 CoreLib 未经修改的方法体，<code>Thread.Yield</code> 则到达运行时的 <code>RhYield</code>。）</p>
+<p>驱动工具包的线程（它的工作线程，以及驱动程序的 <code>TryStartThread</code> 线程，例如 USB 主机控制器驱动程序的热插拔线程，或 PCI Express 根端口驱动程序的插槽线程），以及 <code>GarbageCollector.ThreadedFinalizer</code> 打开时回收器的终结器线程，都不经过 CoreLib：<code>Thread.Start</code> 要等到新线程运行之后才返回，因此在一台永远不会切换到新线程的机器上（定时器从不产生节拍，或者启动 CPU 的 APIC ID 不为 0，其节拍从不进行调度），它会永远自旋。<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/KernelThread.cs"><code>KernelThread.TryStart</code></a> 自己构建 <code>SchedulerThread</code>，不带 <code>Managed</code> 标志，并以一个 <code>GCHandle&lt;Action&gt;</code> 作为参数，然后等待线程把一个握手字从“待处理”翻转为“已启动”。只要调度器在工作，它就一直等待，只会因为它所针对的两种故障而结束：在 <code>Stopwatch</code> 时间上持续 <code>KernelThread.NoTickTimeoutMs</code>（1 s）没有节拍，即定时器停止了；或者 <code>SchedulerManager.TickCount</code> 前进了 <code>KernelThread.NoSwitchTicks</code>（10）个节拍而 <code>SchedulerManager.SwitchCount</code> 没有变化，即节拍没有切换任何线程。只要节拍还在切换线程，无论策略排在新线程前面的线程要占用多少个时间片，策略都会让新线程轮到运行：一个被唤醒的 Stride 线程可能落后全局行程值两个时间片，因此新线程运行之前可能会经过好几个节拍。这两个界限都不是从新线程自己的启动时刻开始计算的，也都不单纯是时间：在模拟环境下，TSC 或 Generic Timer 的计数器按宿主机时间运行，因此一个被宿主机取消调度的虚拟 CPU 会看到几毫秒过去了，却没有收到任何节拍。等待结束时，它会改为把握手字翻转为“已放弃”；两次比较交换决定了这场竞争的胜负，输掉竞争的线程会直接返回，而不运行其入口。从未运行过的线程还会立即通过 <code>ExitThread</code> 从运行队列中移除：如果留在队列中，下一次设备中断仍会切换到它，而它的退出会让 CPU 一直挂起，直到等来一个这种机器永远不会送达的定时器节拍。</p>
+<p><code>Created</code> 线程的首次运行不能以 <code>iretq</code> 结束，因为没有可供返回的被中断帧。取而代之的是，IRQ 退出路径会（通过一个从 C# 预置的标志）被告知走新线程尾路径：它从上下文中加载入口点和伪造的初始栈指针，途中重新启用中断，然后跳转。落点始终是 <code>EntryPointStub</code>，它转发给 <code>SchedulerManager.InvokeCurrentThreadStart</code>：后者解码参数（对 <code>Managed</code> 线程是 CoreLib 的 <code>Thread.StartThread</code>，否则是一个 <code>GCHandle&lt;Action&gt;</code>），在一个兜底的 catch 中运行它，使抛出异常的线程以退出码 1 结束，而不是拖垮内核，最后以 <code>ExitThread</code> 和一个停机循环收尾。首次进入之后，该线程与任何被抢占的线程已无从区分。</p>
+<hr>
+<p><a id="preemption"></a></p>
+<h2 id="抢占">抢占</h2>
+<p>本节说明节拍如何变成一次上下文切换：哪个硬件触发它，中断路径保存什么，策略的决定如何被暂存，以及退出路径如何消费它。</p>
+<p><a id="timer-sources"></a></p>
+<h3 id="定时器源">定时器源</h3>
+<p>调度器并不拥有定时器；它公开 <code>OnTimerInterrupt</code>，由平台来调用。各架构的连接方式不同：</p>
+<table>
+<thead>
+<tr>
+<th>架构</th>
+<th>调度器节拍</th>
+<th>软件定时器（<a href="#timers-and-alarms">定时器与闹钟</a>）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x64</td>
+<td>LAPIC 定时器，向量 239，周期性，10 ms</td>
+<td>IRQ 0 上的 PIT，一次性，每次中断后重新设置</td>
+</tr>
+<tr>
+<td>ARM64</td>
+<td>Generic Timer，INTID 30，每次中断后重新设置，10 ms</td>
+<td>同一个中断，在调度器节拍之前分派</td>
+</tr>
+</tbody>
+</table>
+<p>两种情况下，处理程序都把<em>配置的</em>间隔作为 <code>elapsedNs</code> 传入，而不是实际测得的经过时间，并且自己计算保存的上下文的地址：托管 IRQ 入口收到一个指向通用寄存器块的指针，处理程序减去 SIMD 保存区（x64 上 256 字节，ARM64 上 512 字节）以得到 <code>ThreadContext</code> 的基址。被抢占线程的 <code>StackPointer</code> 中保存的就是这个地址。</p>
+<p><a id="the-tick"></a></p>
+<h3 id="节拍">节拍</h3>
+<pre><code class="lang-mermaid">sequenceDiagram
+    participant ASM as IRQ stub (asm)
+    participant TH as Timer handler (LocalApic / GenericTimer)
+    participant SM as SchedulerManager
+    participant SC as IScheduler (policy)
+
+    Note over ASM: Timer IRQ, interrupts disabled
+    ASM-&gt;&gt;ASM: push GPRs, fault info, SIMD registers (a ThreadContext at RSP)
+    ASM-&gt;&gt;TH: __managed__irq(GPR block pointer)
+    TH-&gt;&gt;SM: OnTimerInterrupt(cpuId, contextBase, intervalNs)
+    SM-&gt;&gt;SM: CheckSleepingThreads (ReadyThread every expired sleeper)
+    SM-&gt;&gt;SC: OnTick(state, current, elapsedNs)
+    SC--&gt;&gt;SM: needsReschedule
+    alt needsReschedule
+        SM-&gt;&gt;SM: ScheduleFromInterrupt
+        SM-&gt;&gt;SC: PickNext(state)
+        SC--&gt;&gt;SM: next (null means idle thread)
+        alt next is not prev
+            SM-&gt;&gt;SM: prev.StackPointer = contextBase, demote Running to Ready
+            SM-&gt;&gt;SC: OnThreadYield(state, prev) if prev stayed Ready
+            SM-&gt;&gt;ASM: stage new-thread flag, then target stack pointer
+        end
+    end
+    SM--&gt;&gt;TH: return
+    TH--&gt;&gt;ASM: return
+    alt a switch is staged
+        ASM-&gt;&gt;ASM: switch RSP to the target context, restore registers
+        alt new thread
+            ASM-&gt;&gt;ASM: load entry RIP and initial RSP, jump (no iretq)
+        else
+            ASM-&gt;&gt;ASM: iretq into the resumed thread
+        end
+    else
+        ASM-&gt;&gt;ASM: restore registers, iretq into the same thread
+    end
+</code></pre>
+<p>策略从不接触寄存器。桩代码保存与恢复之间的一切，都是操作 <code>SchedulerThread</code> 和 <code>PerCpuState</code> 的普通托管 C# 代码；每个方向的交接都只是一个指针。运行队列中永远不会出现同一个线程两次，<code>Ready</code> 就意味着已在队列中。换出时的簿记只在 <code>prev</code> 处于 <code>Running</code> 时，才通过 <code>OnThreadYield</code>（策略的重新入队钩子）把它重新入队，并将其降为 <code>Ready</code>。在节拍之前刚刚阻塞或进入睡眠的线程保持其挂起状态，不会被重新入队；而已经是 <code>Ready</code> 的线程本来就在队列中：它把自己挂起之后，在切换把它从 CPU 上移走之前，就被一次唤醒设为了就绪（节拍的睡眠线程检查会在本将把某个睡眠线程换出的那个节拍上唤醒它）。当策略交回的正是当前线程自己的条目时，该线程继续留在 CPU 上并回到 <code>Running</code>。<code>ReadyThread</code> 对已经是 <code>Ready</code> 或 <code>Running</code> 的线程不做任何事，<code>YieldThread</code> 自己也不让任何线程入队：它请求的切换会像对待任何其他处于 <code>Running</code> 的 <code>prev</code> 一样，把该线程重新入队。第二个条目并非无害：线程的行程值不断上升，而过时的条目保持原位，于是队列不再有序，而只取队首的 <code>PickNext</code> 永远到达不了排在该条目后面的线程。</p>
+<p>暂存本身是对原生全局变量的两次写入：先写新线程标志，再写目标栈指针（<code>_context_switch_target_rsp</code>；非零表示要切换）。全部 256 个中断向量在退出时都会检查这个全局变量，因此任何中断都可以执行已暂存的切换，而不只是定时器中断。暂存变量是单一的全局变量，这是目前把内核限制在单个 CPU 上的又一个原因。</p>
+<p><a id="waking-from-an-interrupt-handler"></a></p>
+<h3 id="从中断处理程序中唤醒">从中断处理程序中唤醒</h3>
+<p>设备中断处理程序也会唤醒线程：NVMe 驱动程序的消息中断处理程序会向驱动工具包的一个 <code>DeviceEvent</code>（其底层是一个 <a href="#interruptevent"><code>InterruptEvent</code></a>）发出信号，它的等待者必须得到运行。仅靠节拍路径，会让那个线程在队列中最多等待一个完整的时间片，所以唤醒走了一条捷径。<code>ReadyThread</code>（以及 <code>BlockThread</code> 和 <code>YieldThread</code>）会设置每 CPU 的 <code>_needReschedule</code> 标志，中断分派器在一个已处理的硬件中断退出时调用 <code>ReschedulePendingFromIrq</code>：如果该标志已设置，且本次中断还没有暂存切换，它就在设备中断自己的退出路径上当场运行 <code>ScheduleFromInterrupt</code>。“是否已暂存”的检查很重要：定时器处理程序可能已在同一次中断中暂存了一次切换，而第二次 <code>ScheduleFromInterrupt</code> 会把这个帧的栈指针保存到一个真实上下文位于别处的线程中。</p>
+<p><a id="parking"></a></p>
+<h3 id="挂起">挂起</h3>
+<p>阻塞或睡眠的线程通过 <code>SchedulerManager.Park</code> 让出 CPU，它在状态翻转之后、关闭 IRQ 的作用域释放之后被调用。<code>Park</code> 设置 <code>_needReschedule</code>，并在当前 CPU 上触发控制器的重新调度中断（<code>IInterruptController.TryRaiseReschedule</code>）。该中断的处理程序什么也不做：这个中断只是为了它的退出而存在，退出时会运行 <code>ReschedulePendingFromIrq</code> 并切换到下一个线程。</p>
+<table>
+<thead>
+<tr>
+<th>架构</th>
+<th>重新调度中断</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x64</td>
+<td>Local APIC 自 IPI，向量 <code>0xF0</code></td>
+</tr>
+<tr>
+<td>ARM64</td>
+<td>SGI 8，在 GICv3 上通过 <code>ICC_SGI1R_EL1</code>，在 GICv2 上通过 <code>GICD_SGIR</code></td>
+</tr>
+</tbody>
+</table>
+<p>随后 <code>Park</code> 等待状态离开 <code>Blocked</code> 或 <code>Sleeping</code>：当一次唤醒使线程就绪、且调度器再次运行了它时就会如此；如果唤醒在切换之前就已到达，则会立即如此。以前改用停机的做法，每当有线程阻塞，都会让 CPU 在该节拍剩余的时间里空闲。在控制器能够触发该中断之前就挂起的线程仍然会停机；空闲线程则从不挂起（见下文的原语），而是在检查条件变量的间隙停机。</p>
+<p><a id="what-there-is-not-a-voluntary-switch"></a></p>
+<h3 id="不存在的东西主动切换">不存在的东西：主动切换</h3>
+<p><code>SchedulerManager.Schedule</code> 和 <code>ContextSwitch.Switch</code> 存在于代码树中，但没有任何调用者，而且两者都无法完成同步切换：它们只是<em>暂存</em>一个目标栈指针，暂存的切换在中断退出时才被消费，而主动调用者并没有由中断保存的寄存器帧可供该退出路径恢复（<code>Schedule</code> 的辅助函数甚至不保存换出线程的栈指针）。唯一可用的主动让出入口，即 <code>Thread.Yield</code> 背后运行时的 <code>RhYield</code>，借用的是中断路径：<code>YieldThread</code> 设置 <code>_needReschedule</code>，使下一次硬件中断退出时即使时间片尚未用完也进行切换，然后立即返回。该切换先选出替代线程，之后再通过 <code>OnThreadYield</code> 把让出的线程重新入队，与抢占的做法完全相同，因此线程在仍在运行时永远不会位于队列中。调用者不等待切换，<code>Thread.Yield</code> 总是报告没有其他线程运行过：等待会让每次调用付出最多一个节拍的代价，而 CoreLib 在其“先自旋后阻塞”循环的每一轮都会调用一次 <code>Thread.Yield</code>（在单个 CPU 上，一个空闲的线程池工作线程在挂起前会自旋 70 次，<code>Thread.Start</code> 则会一直自旋，直到新线程报告已启动）。停机直到切换发生，会使这些循环持续 70 个节拍。真正的同步切换需要自己的保存路径（相当于 IRQ 桩代码的保存路径，但通过调用而非中断进入），而这条路径目前还不存在。</p>
+<hr>
+<p><a id="the-stride-policy"></a></p>
+<h2 id="stride-策略">Stride 策略</h2>
+<p><a href="https://web.eecs.umich.edu/%7Emosharaf/Readings/Stride.pdf">Stride 调度</a>是一种比例份额调度，采用确定性的、基于虚拟时间的记账方式。每个线程持有票数 <code>Tickets</code>（默认 100），即它的份额权重。由票数可以得出步长 <code>Stride</code>，即常量 <code>Stride1</code>（2^20）除以票数，以及行程值 <code>Pass</code>，即线程的虚拟时间。运行队列始终按 <code>Pass</code> 排序，<code>PickNext</code> 总是弹出最小的一个：在自己的份额中消耗得最少的线程下一个运行。线程运行时，它的 <code>Pass</code> 按运行时间成比例地增加（<code>Stride * elapsed / quantum</code>，因此每个完整的 10 ms 时间片恰好增加一个步长），票数越多，步长越小，<code>Pass</code> 上升得越慢，得到的 CPU 也越多。</p>
+<p>每个 CPU 都带有一个 <code>StrideCpuData</code>：运行队列（一个按 <code>Pass</code> 升序保持有序的 <code>List&lt;SchedulerThread&gt;</code>）、<code>TotalTickets</code>（总份额，同时用作负载指标），以及 <code>GlobalPass</code>，即该 CPU 自己的虚拟时钟，以总体速率（每个时间片 <code>Stride1 / TotalTickets</code>）前进。<code>GlobalPass</code> 是计算唤醒放置和优先级变化时所依据的参考点。</p>
+<div style="overflow-x:auto">
+<img src="images/diagrams/sched-run-queue.svg" alt="一个 Stride 运行队列：StrideCpuData.RunQueue，一个按 Pass 升序保持有序的线程 List。Pass 为 1042 的 Thr A 位于索引 0，即 PickNext 弹出的位置。随后是 Pass 为 1130 的 Thr B，接着是省略的中间部分，然后是位于队尾、Pass 为 1320 的 Thr T，即 Balance 窃取的位置。每个线程的 StrideThreadData 带有 Tickets、Stride 和 Pass。" style="width:100%;min-width:620px;max-width:760px">
+</div>
+<p>Stride 在每个钩子中的行为：</p>
+<table>
+<thead>
+<tr>
+<th>钩子</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>InitializeCpu</code> / <code>ShutdownCpu</code></td>
+<td>创建 / 丢弃每 CPU 的 <code>StrideCpuData</code></td>
+</tr>
+<tr>
+<td><code>OnThreadCreate</code></td>
+<td>附加 <code>StrideThreadData</code>（100 张票，<code>Pass = 0</code>）；线程尚未入队</td>
+</tr>
+<tr>
+<td><code>OnThreadReady</code></td>
+<td>放置线程（见下文的唤醒放置），按 <code>Pass</code> 有序插入，把它的票数加到 <code>TotalTickets</code></td>
+</tr>
+<tr>
+<td><code>OnThreadBlocked</code></td>
+<td>保存 <code>Remain = Pass - GlobalPass</code>，从队列中移除，减去票数</td>
+</tr>
+<tr>
+<td><code>OnThreadExit</code></td>
+<td>从队列中移除，减去票数，丢弃该线程的簿记信息</td>
+</tr>
+<tr>
+<td><code>OnTick</code></td>
+<td>推进当前线程的 <code>Pass</code> 和该 CPU 的 <code>GlobalPass</code>；如果队首的 <code>Pass</code> 严格更低，或者时间片已用完，则重新调度</td>
+</tr>
+<tr>
+<td><code>OnThreadYield</code></td>
+<td>如果 <code>Pass</code> 落后于 <code>GlobalPass</code>，就把它提升到 <code>GlobalPass</code>，然后重新插入</td>
+</tr>
+<tr>
+<td><code>PickNext</code></td>
+<td>弹出队首（最小的 <code>Pass</code>）；队列为空时返回 null，由管理器运行空闲线程</td>
+</tr>
+<tr>
+<td><code>OnPickFailed</code></td>
+<td>重新插入管理器未能切换过去的线程</td>
+</tr>
+<tr>
+<td><code>SelectCpu</code></td>
+<td>遵守 <code>Pinned</code>；否则接受负载（<code>TotalTickets</code>）低于目前所找到的最佳负载 80% 的 CPU</td>
+</tr>
+<tr>
+<td><code>Balance</code></td>
+<td>仅当本 CPU 的队列为空时：从队列最长的对等 CPU 窃取队尾线程（<code>Pass</code> 最大），前提是该队列至少有两个线程，且队尾线程不是 <code>Pinned</code></td>
+</tr>
+<tr>
+<td><code>OnThreadMigrate</code></td>
+<td>在 CPU 之间转移票数，并以目标 CPU 的 <code>GlobalPass + Remain</code> 为基准重新设定 <code>Pass</code></td>
+</tr>
+<tr>
+<td><code>SetPriority</code> / <code>GetPriority</code></td>
+<td>设置 / 读取票数；票数改变时，当前相对 <code>GlobalPass</code> 的偏移量按步长之比缩放，从而保持相对位置不变</td>
+</tr>
+</tbody>
+</table>
+<p>唤醒放置是公平性需要权衡的地方。被唤醒的线程不能保留它原来的 <code>Pass</code>：它在挂起期间已远远落后于 <code>GlobalPass</code>，让它一直运行到追上来，会使其他所有线程陷入饥饿。<code>ReadyThread</code> 在把线程标记为 <code>Ready</code> 之前调用钩子，因此钩子能够区分唤醒（<code>Blocked</code> 或 <code>Sleeping</code>）与首次启动（<code>Created</code>，放置在 <code>GlobalPass</code>），而唤醒会采用以下两种放置之一：</p>
+<ul>
+<li><strong>防饥饿上限</strong>，<code>Pass = max(GlobalPass + Remain, GlobalPass - 2 * Stride1)</code>：<code>Remain</code> 恢复线程阻塞时其时间片所剩的比例，上限则限制了任何被唤醒线程能被放置到落后 <code>GlobalPass</code> 多远的位置；</li>
+<li><strong>交互加成</strong>，<code>Pass = GlobalPass - Stride / 2</code>，为被归类为交互式的线程提供半个时间片的领先，使输入驱动的线程能够及时抢占批处理工作。如果一个线程自上次唤醒以来挂起的时长超过其运行时长的两倍，它就是交互式的。<code>OnThreadBlocked</code> 为挂起打上时间戳，<code>OnTick</code> 累加自唤醒以来的运行时间，两者都以纳秒比较，并且每次唤醒都会重新分类，因此一个变成 CPU 密集型的线程会失去这一资格。运行时间一侧的粒度与<a href="sched-concepts/scheduler-tick.html">节拍</a>一样粗：节拍落在某个线程上时，它会被记上整整一个周期，而如果它在节拍之前挂起，则什么也不记，因此对于相同的行为，这一次唤醒可能判定为交互式，下一次却不是；平均值是对的，每次唤醒的判定则不是。在策略替换时以挂起状态继承过来的线程两者都没有记录：它的挂起从替换时刻开始计时，其整个生命周期的运行时间被用来代替运行时长，因此这第一次唤醒可能扣下一次加成，但绝不会给出真实测量会拒绝的加成。</li>
+</ul>
+<p>有两条实现说明，任何修改这段代码的人都需要了解。从队列中移除在 <code>DisableInterruptsScope</code> 下进行，并用 <code>ReferenceEquals</code> 扫描，而不是使用 <code>List.Remove</code>，因为 <code>EqualityComparer&lt;T&gt;.Default</code> 需要内核所没有的运行时辅助函数。另外，<code>OnTick</code> 能够容忍 <code>SchedulerData</code> 已经为 null 的线程（它在时间片中途退出了）：只要队列中还有其他线程，就重新调度。</p>
+<hr>
+<p><a id="synchronization-primitives"></a></p>
+<h2 id="同步原语">同步原语</h2>
+<p>阻塞式同步建立在三个管理器调用之上：<code>BlockThread</code>、<code>ReadyThread</code> 和 <code>MarkSleeping</code>，因此它在任何策略下都能原样工作。这些原语是：<code>SpinLock</code>（非阻塞）、<code>Mutex</code>、<code>ConditionVariable</code>、<code>Monitor</code>（前两者的组合）以及 <code>InterruptEvent</code>（从中断到线程的完成通知）。它们都与调度器放在一起，因为它们的正确性依赖于调度器的内部细节，尤其是下文的挂起协议。</p>
+<p><a id="spinlock-and-the-irq-safe-scope"></a></p>
+<h3 id="spinlock-与-irq-安全作用域">SpinLock 与 IRQ 安全作用域</h3>
+<p><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/SpinLock.cs"><code>SpinLock</code></a> 是一个单字 CAS 锁，有两种获取形式，选择正确的那一种就是全部契约。普通的 <code>Acquire</code>/<code>Release</code> 只对从不在中断上下文中使用的锁是安全的：在单个 CPU 上，一个中断处理程序如果在自旋等待一个由它所中断的线程持有的锁，就会永远自旋下去。<code>AcquireIrqSafe</code> 返回一个作用域，它在获取锁之前禁用中断，在释放锁之后恢复中断，两端都按这个顺序，因此在本 CPU 上持有该锁期间，中断永远不会触发。<code>Mutex</code>、<code>ConditionVariable</code> 和 <code>InterruptEvent</code> 中的每一个锁都只通过 <code>AcquireIrqSafe</code> 获取：它们的等待一侧在中断被屏蔽的情况下持有锁，因此一个以普通方式获取锁的持有者如果在临界区中途被抢占，就会使其他所有自旋者陷入死锁，而 <code>InterruptEvent</code> 的信号一侧还确实会在中断处理程序中运行。</p>
+<p><a id="the-park-protocol"></a></p>
+<h3 id="挂起协议">挂起协议</h3>
+<p>阻塞原语必须把线程从运行状态转为挂起状态，而与此同时，唤醒可能在任何一条指令处到达，可能来自定时器路径，也可能来自设备中断。其失效模式是丢失唤醒：等待者在完成阻塞<em>之前</em>就被设为就绪，随后阻塞操作又覆盖在其上，线程便再也不会醒来（issue <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/357">#357</a>，正是 <code>ConditionVariable.Wait</code> 中的这种竞争）。内核中的每条阻塞路径都遵循同样的三条规则：</p>
+<pre><code class="lang-mermaid">flowchart TD
+    A[&quot;Take the primitive's lock with AcquireIrqSafe
+    (interrupts now masked)&quot;] --&gt; B[&quot;Insert self into the wait queue&quot;]
+    B --&gt; C[&quot;Release any covering lock (CV releases the mutex)&quot;]
+    C --&gt; D[&quot;BlockThread / MarkSleeping (state flips while IRQs are still masked)&quot;]
+    D --&gt; E[&quot;Dispose the scope (interrupts back on: a pending wake can land now)&quot;]
+    E --&gt; F{&quot;Still Blocked / Sleeping?&quot;}
+    F --&gt;|yes| G[&quot;Park: raise the reschedule interrupt, run the next thread&quot;]
+    F --&gt;|no| H[&quot;Already woken: continue&quot;]
+</code></pre>
+<ol>
+<li><strong>单一原子区段</strong>。入队、任何外层锁的释放以及状态翻转，都在同一个 <code>AcquireIrqSafe</code> 作用域内完成。唤醒无法穿插进来，因为信号一侧需要同一把锁，而且中断已被屏蔽。</li>
+<li><strong>由状态把关的挂起</strong>。作用域之后的 <code>Park</code> 只在线程仍处于挂起状态时才起作用。在作用域退出与切换之间的窗口内到达的唤醒会把状态翻转回 <code>Ready</code>，而这一检查能够看到它；无条件停机则会把这次唤醒睡过去。</li>
+<li><strong>基于成员关系的结果</strong>。对于带超时的等待，“我是收到了信号还是超时了”由是否仍在等待队列中来回答，而不是靠标志：信号会把线程从队列中移除，因此醒来后仍在队列中就意味着超时（线程还会移除自己的过时条目，使后续的信号不会浪费在它身上）。</li>
+</ol>
+<p><code>MarkSleeping</code> 之所以作为单独的入口存在，正是为了规则 1：<code>Sleep</code> 就是 <code>MarkSleeping</code> 加上 <code>Park</code>，但 <code>ConditionVariable.WaitTimeout</code> 需要在<em>它自己的</em>锁作用域内完成状态翻转，因此它在那里调用 <code>MarkSleeping</code>，之后再调用 <code>Park</code>。</p>
+<h3 id="mutex">Mutex</h3>
+<p><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/Mutex.cs"><code>Mutex</code></a> 是一个可重入的阻塞锁：一个所有者引用、一个递归深度和一个 FIFO 等待列表。发生争用的获取在第一次尝试失败时就按上述协议挂起；没有先自旋后挂起的阶段。在深度为零时释放会执行<strong>直接移交</strong>：仍在锁内时，它把队首的等待者出队，先让它成为所有者再将其设为就绪，因此正在运行的线程无法在等待者被唤醒的延迟期间插队，重新取得互斥锁。被唤醒的等待者能识别出这次移交（它拥有一个自己从未显式获取过的互斥锁），然后返回。</p>
+<p>两种特殊情况：空闲线程从不挂起（阻塞它只会让它作为空闲后备再次被选中），因此它以自旋方式获取，并在两次尝试之间启用中断。而在完全没有线程上下文时（调度器关闭或尚未就绪），<code>Acquire</code>/<code>Release</code> 不执行任何操作，<code>TryAcquire</code> 总是成功，因此早期启动代码可以经过受互斥锁保护的路径。</p>
+<p><a id="conditionvariable-and-monitor"></a></p>
+<h3 id="conditionvariable-与-monitor">ConditionVariable 与 Monitor</h3>
+<p><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/ConditionVariable.cs"><code>ConditionVariable</code></a> 提供与互斥锁集成的等待/信号机制。<code>Wait(mutex)</code> 把自己插入队列、释放互斥锁并阻塞，全部在一个作用域内完成（规则 1；在作用域之外释放互斥锁正是 #357 这个 bug），然后在醒来时重新获取互斥锁。<code>WaitTimeout</code> 带着截止时间通过 <code>MarkSleeping</code> 挂起，并根据成员关系报告是收到信号还是超时（规则 3）。<code>Signal</code> 使 FIFO 队首就绪；<code>SignalAll</code> 使所有等待者就绪。</p>
+<p>与 <code>Mutex</code> 相同的特殊情况：空闲线程在这里同样从不挂起。它在同一个作用域内插入自己并释放互斥锁，然后在两次停机之间检查等待者列表，直到某个 <code>Signal</code> 把它移除或截止时间已过。它停机而不是自旋，这与互斥锁（按契约其持有时间很短）和中断事件（其信号可能来自一个之后不再有中断的 ISR）不同：条件变量的信号来自某个线程，而线程只在中断退出时运行，因此停机最迟会在下一个节拍结束，一个用 <code>Thread.Sleep</code> 控制其 <code>Run</code> 节奏的内核也不会在整个睡眠期间空耗 CPU。过去让它挂起时，它的票数被从 Stride 总数中扣除，却没有那次把票数还回来的唤醒（空闲后备会把它重新设为 <code>Running</code>），于是总数发生回绕，<code>GlobalPass</code> 冻结，之后创建的线程让主线程一直得不到 CPU；CoreLib 的 <code>Thread.Sleep</code> 和 <code>Thread.Join</code> 通过底层管程到达这条路径，因此内核主线程会不断碰到它。</p>
+<p><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/Monitor.cs"><code>Monitor</code></a> 把一个 <code>Mutex</code> 和一个 <code>ConditionVariable</code> 组合成经典的管程形式；它的 <code>Signal</code>/<code>SignalAll</code> 还会释放互斥锁，因此发出信号即退出管程。</p>
+<h3 id="interruptevent">InterruptEvent</h3>
+<p><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/InterruptEvent.cs"><code>InterruptEvent</code></a> 是从中断到线程的完成原语：中断处理程序向它发出信号，线程在它上面等待。驱动工具包的 <code>DeviceEvent</code> 封装了一个：<code>Cosmos.Kernel.Drivers</code> 中的 NVMe 驱动程序通过其绑定为每个命令槽创建一个，并在该槽的完成到达时，从其消息中断处理程序中通过 <code>InterruptContext.Signal</code> 向它发出信号。</p>
+<p>信号是<strong>计数式</strong>的，而不是锁存式的：两个信号唤醒两个等待者，没有等待者时到达的信号会被累积起来，在之后的每次等待中各消耗一个（自动复位）。信号一侧在设计上就是中断安全的：它获取 IRQ 安全锁，增加计数，让一个等待者出队，然后调用 <code>ReadyThread</code>，整条路径上没有分配，也没有接口分派（等待者列表预先分配了四个位置，因此常见的等待也不会在中断处理程序所自旋等待的锁下分配内存）。这个 <code>ReadyThread</code> 会设置 <code>_needReschedule</code>，因此被唤醒的等待者就在同一次中断的退出路径上运行（见<a href="#waking-from-an-interrupt-handler">从中断处理程序中唤醒</a>）。</p>
+<p>等待一侧遵循挂起协议，但有两处变化。不具备挂起能力的调用者（空闲线程，或在调度器就绪之前运行的代码）会轮询信号计数，在两次检查之间启用中断，并且刻意从不停机：如果发出信号的中断恰好在停机之前触发，可能再也不会有中断到来结束这次停机。另外，<code>Wait(maxIterations)</code> 以循环次数限制等待，它是针对丢失的设备中断的防卡死措施，而不是一个时钟。</p>
+<hr>
+<p><a id="timers-and-alarms"></a></p>
+<h2 id="定时器与闹钟">定时器与闹钟</h2>
+<p>延迟工作分为两层，按执行上下文划分。两者的 API 文档中都写明了这条规则：中断上下文不得阻塞，线程上下文可以阻塞。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.System/Timers/TimerManager.cs"><code>TimerManager</code></a></th>
+<th><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.System/Timers/AlarmManager.cs"><code>AlarmManager</code></a></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>回调运行于</td>
+<td>中断上下文（定时器节拍）</td>
+<td>一个专用的内核线程</td>
+</tr>
+<tr>
+<td>可否阻塞、获取 Mutex</td>
+<td>否</td>
+<td>是</td>
+</tr>
+<tr>
+<td>精度</td>
+<td>节拍源的周期</td>
+<td>调度器节拍</td>
+</tr>
+<tr>
+<td>底层实现</td>
+<td>节拍源上的 <code>TimerEntry</code> 登记表</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/AlarmSystem.cs"><code>AlarmSystem</code></a>：一个按截止时间排序的列表、一个 <code>Mutex</code>、一个 <code>ConditionVariable</code></td>
+</tr>
+<tr>
+<td>调度方法</td>
+<td><code>Schedule(Action, TimeSpan)</code>、<code>ScheduleRecurring(Action, TimeSpan)</code></td>
+<td>相同的两个签名</td>
+</tr>
+<tr>
+<td>句柄</td>
+<td>一个 <code>SoftwareTimer</code>，未注册节拍源时为 null</td>
+<td>一个 <code>ulong</code> id，调度器未运行时为 0</td>
+</tr>
+<tr>
+<td>取消方法</td>
+<td><code>Cancel(SoftwareTimer?)</code></td>
+<td><code>Cancel(ulong)</code></td>
+</tr>
+<tr>
+<td>取消的返回值</td>
+<td>仅当定时器仍待处理时为 true</td>
+<td>仅当闹钟仍待处理时为 true</td>
+</tr>
+<tr>
+<td>可调用的上下文</td>
+<td>任何上下文，包括节拍路径：这些成员会屏蔽中断</td>
+<td>仅限线程上下文：每个成员都会获取闹钟列表的互斥锁，若该锁已被持有则挂起</td>
+</tr>
+<tr>
+<td>一次性 / 周期性</td>
+<td>两者皆可（周期必须为正）</td>
+<td>两者皆可（周期必须为正）</td>
+</tr>
+</tbody>
+</table>
+<p>两个管理器以相同的顺序接受相同的参数，并以相同的方式报告取消结果，因此调用点唯一需要选择的就是<em>回调</em>运行的上下文，而这正是管理器名称所表明的。不一致的是每个管理器可以<em>从</em>哪种上下文中被调用：调度或取消闹钟会在互斥锁上挂起，因此在 <code>TimerManager</code> 回调中这样做，会在定时器中断内部挂起，导致内核卡死。句柄类型也不同，因为闹钟归 <code>AlarmSystem</code> 所有，而 <code>AlarmSystem</code> 是 <code>Cosmos.Kernel.Core</code> 的内部类型；软件定时器则是受支持层包装在节拍源登记表条目之外的一个公共句柄。</p>
+<p>第一层贴近硬件：<code>TickSource</code> 维护一个 <code>TimerEntry</code> 倒计时登记表（每个 <code>SoftwareTimer</code> 句柄包装其中一个），并由其节拍中断（<code>HandleTick</code>）驱动它们，就在中断上下文中当场调用到期的回调。在 x64 上，这个节拍由 PIT 提供，独立于 LAPIC 的调度器节拍；在 ARM64 上，唯一的 Generic Timer 中断同时驱动两者，先处理软件定时器。</p>
+<p>第二层是一个完全构建在上述原语之上的服务，同时也是这些原语的参考用法。<code>AlarmSystem</code> 把闹钟保存在一个按截止时间排序、由 <code>Mutex</code> 保护的列表中；一个延迟启动的内核线程在一个 <code>ConditionVariable</code> 上等待，<code>WaitTimeout</code> 的超时被限制在下一个截止时间（空闲时则是 1 s 的心跳），它在锁外、在一个兜底的 catch 中触发到期的闹钟，并从<em>当前时刻</em>而不是名义到期时间开始重新设置周期性闹钟，因此一次迟到的唤醒不会引发补偿性的连续触发。<code>Add</code> 会向条件变量发出信号，使新的最近截止时间能够缩短正在进行的等待。由于插入和等待共用同一个互斥锁，在计算截止时间与挂起之间，不可能有闹钟悄无声息地插进来（这又是规则 1，只是高了一层）。</p>
+<hr>
+<p><a id="gc-integration"></a></p>
+<h2 id="gc-集成">GC 集成</h2>
+<p>调度器是 GC 获取栈根的权威来源；完整说明见 <a href="garbage-collector.html#mark-phase">GC 文章</a>。调度器一侧的契约分为三部分：</p>
+<ul>
+<li><strong>登记表就是根集合</strong>。标记阶段直接遍历 <code>SchedulerManager.Threads</code>，这是一次扁平数组遍历，没有接口分派，也没有分配。每个已登记且不是 <code>Dead</code> 的线程都会被扫描；登记表中没有的线程对 GC 来说并不存在。</li>
+<li><strong>挂起的线程根据其保存的状态被保守地扫描</strong>。对于每个当前未在运行的线程，GC 通过 <code>SchedulerThread.GetContext()</code> 读取保存的 <code>ThreadContext</code>，把保存的通用寄存器视为根候选（跳过 SIMD 区和标志），然后扫描从 <code>StackPointer</code> 到栈顶的每一个指针大小的字。对挂起线程进行精确扫描需要返回地址劫持，见 issue <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/385">#385</a>。</li>
+<li><strong>触发回收的线程被精确扫描</strong>。进入 <code>Collect</code> 的线程是通过一条托管调用链到达那里的，因此它的栈会根据 GCInfo 逐帧遍历（见<a href="garbage-collector-gcinfo.html">精确栈扫描</a>）；调度器提供栈的边界。</li>
+</ul>
+<p>保守扫描也是 <code>TryMarkRoot</code> 进行严格验证的原因：一个栈字只有在指向 GC 堆内部时才是候选，而且在解引用之前，在那里找到的 <code>MethodTable</code> 指针必须位于堆之外，并且高于 <code>AddressSpace.KernelSpaceStart</code>（内核高半区）。</p>
+<p>回收在触发线程上以中断禁用的方式运行，因此在扫描过程中，没有任何节拍、切换或中断处理程序能够改变线程状态。同样的规则也保护了另一个方向：由于 <code>AllocObject</code> 同样对中断是原子的，中断处理程序（节拍本身、输入驱动程序）可以分配内存。</p>
+<hr>
+<p><a id="runtime-bridge"></a></p>
+<h2 id="运行时桥接">运行时桥接</h2>
+<p>运行时和 CoreLib 通过 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Runtime/Thread.cs"><code>Runtime/Thread.cs</code></a> 中的导出函数看到调度器：</p>
+<table>
+<thead>
+<tr>
+<th>导出函数</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RhGetCurrentThreadStackBounds</code></td>
+<td>当前线程真实的 <code>[StackBase, StackBase + StackSize)</code>；在调度器运行之前、对于空闲线程以及开关关闭时，返回启动栈的边界（issue <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/433">#433</a>）</td>
+</tr>
+<tr>
+<td><code>RhGetThreadStaticStorage</code></td>
+<td>指向当前线程 <code>[ThreadStatic]</code> 后备存储的引用（开关关闭时为一个静态主干）</td>
+</tr>
+<tr>
+<td><code>RhGetDefaultStackSize</code></td>
+<td><code>SchedulerThread.DefaultStackSize</code>，256 KiB</td>
+</tr>
+<tr>
+<td><code>RhSetThreadExitCallback</code></td>
+<td>保存 <code>ExitThread</code> 调用的回调；CoreLib 用它来清理托管线程</td>
+</tr>
+<tr>
+<td><code>RhYield</code></td>
+<td>支撑 <code>Thread.Yield</code>：通过 <code>YieldThread</code> 请求在下一次中断退出时切换，并在切换之前返回 0；见<a href="#what-there-is-not-a-voluntary-switch">不存在的东西</a></td>
+</tr>
+<tr>
+<td><code>RhSpinWait</code></td>
+<td>一个计数的空循环</td>
+</tr>
+<tr>
+<td><code>RhGetThreadEntryPointAddress</code>, <code>RhSetCurrentThreadName</code></td>
+<td>桩实现：返回零，以及输出一条串口日志</td>
+</tr>
+</tbody>
+</table>
+<p>切换的原生一侧是 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Bridge/Import/ContextSwitchNative.cs"><code>ContextSwitchNative</code></a>：五个很小的 <code>[SuppressGCTransition]</code> 导入，在两种架构上完全相同。暂存函数对（<code>_native_set_context_switch_sp</code>、<code>_native_set_context_switch_new_thread</code>）和已暂存指针的读取函数（读到非零值时同时充当“切换已暂存”的检查）驱动退出路径；<code>_native_get_sp</code> 读取当前栈指针，供 GC 扫描正在运行的线程；<code>_native_capture_regdisplay</code> 则为 GC 的精确栈遍历提供起点。</p>
+<hr>
+<p><a id="feature-switch"></a></p>
+<h2 id="功能开关">功能开关</h2>
+<p>调度器由内核 <code>.csproj</code> 中的 <code>CosmosEnableScheduler</code> 控制，以 <code>CosmosFeatures.SchedulerEnabled</code> 的形式公开，并在三个层面上检查：</p>
+<ul>
+<li><code>SchedulerManager.IsEnabled</code>（内部）反映该开关。创建类入口点（<code>Initialize</code>、<code>CreateThread</code>、<code>ReadyThread</code>）在开关关闭时抛出异常；开关关闭时，其他任何东西都无法到达，因为根本不会有线程存在。在受支持层上，同一事实体现为 <code>KernelFeatures.Scheduler</code> 和 <code>SchedulerDiagnostics.IsSupported</code>。</li>
+<li><code>SchedulerManager.IsRunning</code>（内部）是运行时的启用开关，在受支持层上通过 <code>SchedulerDiagnostics.IsRunning</code> 读取。<code>LibraryInitializer</code> 只在管理器、策略和空闲线程全部装配完毕之后才翻转它，而中断一侧的入口（<code>OnTimerInterrupt</code>、<code>ReschedulePendingFromIrq</code>）在它被设置之前会提前返回，因此第一个节拍不可能与一个只搭建了一半的调度器发生竞争。</li>
+<li><code>SchedulerManager.IsReady</code>（<code>IsEnabled</code> 加上已初始化状态）是访问每 CPU 状态的守卫，也是三者中扩展点所公开的那一个。<code>Mutex</code> 和 <code>InterruptEvent</code> 直接检查它；<code>ConditionVariable</code> 和运行时导出函数则通过功能检查加上对 CPU 状态的 null 传播达到同样的效果。调度器未就绪时它们会降级：<code>Mutex</code> 变为空操作，<code>InterruptEvent</code> 改为轮询而不是挂起，栈边界退回到启动栈。</li>
+</ul>
+<hr>
+<p><a id="limitations-and-evolution"></a></p>
+<h2 id="局限与演进">局限与演进</h2>
+<ul>
+<li><strong>单 CPU</strong>（<a href="sched-concepts/cpu-affinity.html">CPU 亲和性与负载均衡</a>）。<code>GetCurrentCpuId()</code> 返回 0，切换暂存变量是单一的全局变量，而且从来没有任何代码调用 <code>SelectCpu</code> 或 <code>Balance</code>。这些结构是按每 CPU 设计的（<code>PerCpuState</code> 正是为此存在），但 SMP 需要每 CPU 的暂存、真正的 CPU id 来源，以及一个进行负载均衡的调用点。</li>
+<li><strong>没有主动切换</strong>。阻塞的线程会在自己的 CPU 上触发重新调度中断，并在该中断退出时切换，但 <code>Thread.Yield</code> 只设置 <code>_needReschedule</code> 并等待下一次中断，在空闲系统上最多要等一个时间片。解决办法是一条与 IRQ 桩代码对称的同步保存路径。</li>
+<li><strong>登记表上限为 256 个线程，并且以失败放行的方式失效</strong>。登记被丢弃，只留下一行日志，而线程仍在运行；此后 GC 永远不会扫描它的栈，这是释放后使用（use-after-free）问题的来源，而不是一种优雅的降级（issue <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/444">#444</a>）。</li>
+<li><strong>没有栈保护</strong>。没有保护页，而且保存的上下文就位于线程自身栈帧溢出时会覆盖到的路径上。</li>
+<li><strong>没有优先级继承</strong>。<code>Mutex</code> 按 FIFO 唤醒并直接移交，这很公平，却会<a href="sched-concepts/priority-inversion.html">反转优先级</a>：当一个高票数的线程在等待时，低票数的持有者不会得到提升。<code>SetPriority</code> 钩子是实现继承协议的原材料；目前没有任何策略实现它。</li>
+<li><strong>挂起的线程会钉住它们引用的对象</strong>。对挂起线程栈的保守扫描，是在任意指令处抢占在 GC 一侧付出的代价；返回地址劫持（<a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/385">#385</a>）是出路。</li>
+<li><strong>节拍是名义上的</strong>。<code>OnTimerInterrupt</code> 收到的是配置的间隔，而不是测量值（<a href="sched-concepts/scheduler-tick.html">节拍与时间片</a>），因此时间记账会随硬件在两次节拍之间的实际行为而漂移。</li>
+</ul>
+<hr>
+<p><a id="tests"></a></p>
+<h2 id="测试">测试</h2>
+<p>有两个内核测试套件覆盖本文内容。<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/tests/Kernels/Cosmos.Kernel.Tests.Threading/Kernel.cs"><code>Cosmos.Kernel.Tests.Threading</code></a> 运行 89 个测试（<code>make test KERNEL=Threading</code>）：</p>
+<ul>
+<li>线程生命周期与并发（<code>Thread_Start_ExecutesDelegate</code>、<code>Thread_Multiple_CanRunConcurrently</code>），以及由两个线程同时创建线程时分配出的线程 id（<code>Thread_Ids_UniqueAcrossConcurrentStarts</code>）；</li>
+<li>多个线程同时进行的异常分派（<code>Thread_Throw_TwoThreadsUnhandled_BothJoin</code>、<code>Thread_Throw_ConcurrentCatchRethrow_OwnExceptions</code>）；</li>
+<li>引用形式的 <code>Interlocked.CompareExchange</code>（运行时的 <code>RhpCheckedLockCmpXchg</code>，用汇编编写，因为它必须相对于节拍保持原子性）在两个线程之间的竞争（<code>Interlocked_ReferenceExchange_TwoThreads</code>）；</li>
+<li>栈大小设定与 #433 的下限（<code>Thread_MaxStackSize_IsHonored</code>、<code>Thread_MaxStackSize_TinyRequestIsFloored</code>、<code>Thread_EnsureSufficientExecutionStack_Passes</code>）；</li>
+<li>线程静态变量（<code>Thread_ThreadStatics</code>）；</li>
+<li>互斥锁争用、移交与空闲线程记账（<code>Mutex_ThreeContenders_AllAcquire</code>、<code>Mutex_ReleaseHandsOffToParkedWaiter</code>、<code>Mutex_IdleThreadContention_KeepsTicketAccounting</code>）；</li>
+<li>自旋锁、管程和 <code>lock</code> 语句（<code>SpinLock_*</code>、<code>Monitor_*</code>、<code>Lock_Statement_*</code>）；</li>
+<li>中断事件（<code>InterruptEvent_TwoWaiters_BothWake</code>）；</li>
+<li>在这一切之上的 BCL 接口：委托、<code>Task</code>、<code>async</code>/<code>await</code>、<code>ThreadPool</code>。</li>
+</ul>
+<p><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/tests/Kernels/Cosmos.Kernel.Tests.Timer/Kernel.cs"><code>Cosmos.Kernel.Tests.Timer</code></a> 在 x64 上运行 24 个测试，在 ARM64 上运行 18 个（<code>make test KERNEL=Timer</code>），覆盖两层延迟工作（<code>TimerManager_Schedule_*</code>、<code>AlarmSystem_*</code>）、构建在它们之上的 BCL <code>System.Threading.Timer</code>、<code>Stopwatch</code>、<code>DateTime</code>，以及各架构的定时器硬件（x64 上的 PIT 和 LAPIC）。</p>
+<hr>
+<p><a id="source-files"></a></p>
+<h2 id="源文件">源文件</h2>
+<table>
+<thead>
+<tr>
+<th>领域</th>
+<th>路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>策略接口</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/IScheduler.cs"><code>src/Cosmos.Kernel.Core/Scheduler/IScheduler.cs</code></a></td>
+</tr>
+<tr>
+<td>机制</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/SchedulerManager.cs"><code>SchedulerManager.cs</code></a>, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/SchedulerExtensible.cs"><code>SchedulerExtensible.cs</code></a>, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/PerCpuState.cs"><code>PerCpuState.cs</code></a></td>
+</tr>
+<tr>
+<td>线程控制块</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/SchedulerThread.cs"><code>SchedulerThread.cs</code></a>, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/SchedulerThreadState.cs"><code>SchedulerThreadState.cs</code></a></td>
+</tr>
+<tr>
+<td>保存的上下文</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/ThreadContext.X64.cs"><code>ThreadContext.X64.cs</code></a>, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/ThreadContext.ARM64.cs"><code>ThreadContext.ARM64.cs</code></a></td>
+</tr>
+<tr>
+<td>Stride 策略</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/Stride/StrideScheduler.cs"><code>Stride/StrideScheduler.cs</code></a>, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/Stride/StrideThreadData.cs"><code>Stride/StrideThreadData.cs</code></a>, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/Stride/StrideCpuData.cs"><code>Stride/StrideCpuData.cs</code></a></td>
+</tr>
+<tr>
+<td>同步</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/SpinLock.cs"><code>SpinLock.cs</code></a>, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/Mutex.cs"><code>Mutex.cs</code></a>, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/ConditionVariable.cs"><code>ConditionVariable.cs</code></a>, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/Monitor.cs"><code>Monitor.cs</code></a>, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/InterruptEvent.cs"><code>InterruptEvent.cs</code></a></td>
+</tr>
+<tr>
+<td>闹钟</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/AlarmSystem.cs"><code>AlarmSystem.cs</code></a></td>
+</tr>
+<tr>
+<td>软件定时器</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.System/Timers/SoftwareTimer.cs"><code>src/Cosmos.Kernel.System/Timers/SoftwareTimer.cs</code></a>, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.HAL/Timers/TimerEntry.cs"><code>src/Cosmos.Kernel.HAL/Timers/TimerEntry.cs</code></a>, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.HAL/Timers/TickSource.cs"><code>src/Cosmos.Kernel.HAL/Timers/TickSource.cs</code></a>, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.System/Timers/TimerManager.cs"><code>src/Cosmos.Kernel.System/Timers/TimerManager.cs</code></a></td>
+</tr>
+<tr>
+<td>启动装配</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel/Internal/Runtime/CompilerHelpers/LibraryInitializer.cs"><code>src/Cosmos.Kernel/Internal/Runtime/CompilerHelpers/LibraryInitializer.cs</code></a></td>
+</tr>
+<tr>
+<td>线程创建入口</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Bridge/Interop/libSystemNative.cs"><code>src/Cosmos.Kernel.Core/Bridge/Interop/libSystemNative.cs</code></a>, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Bridge/Export/ThreadNative.cs"><code>src/Cosmos.Kernel.Core/Bridge/Export/ThreadNative.cs</code></a></td>
+</tr>
+<tr>
+<td>运行时导出</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Runtime/Thread.cs"><code>src/Cosmos.Kernel.Core/Runtime/Thread.cs</code></a>, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Runtime/BootStack.cs"><code>src/Cosmos.Kernel.Core/Runtime/BootStack.cs</code></a></td>
+</tr>
+<tr>
+<td>原生暂存导入</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Bridge/Import/ContextSwitchNative.cs"><code>src/Cosmos.Kernel.Core/Bridge/Import/ContextSwitchNative.cs</code></a></td>
+</tr>
+<tr>
+<td>x64 IRQ 桩代码与退出路径</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Native.X64/CPU/Interrupts.s"><code>src/Cosmos.Kernel.Native.X64/CPU/Interrupts.s</code></a></td>
+</tr>
+<tr>
+<td>ARM64 IRQ 桩代码与退出路径</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Native.ARM64/CPU/Interrupts.s"><code>src/Cosmos.Kernel.Native.ARM64/CPU/Interrupts.s</code></a>, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Native.ARM64/CPU/ContextSwitch.s"><code>src/Cosmos.Kernel.Native.ARM64/CPU/ContextSwitch.s</code></a></td>
+</tr>
+<tr>
+<td>定时器硬件</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core.X64/Cpu/LocalApic.cs"><code>src/Cosmos.Kernel.Core.X64/Cpu/LocalApic.cs</code></a>, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.HAL.X64/PIT.cs"><code>src/Cosmos.Kernel.HAL.X64/PIT.cs</code></a>, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.HAL.ARM64/GenericTimer.cs"><code>src/Cosmos.Kernel.HAL.ARM64/GenericTimer.cs</code></a></td>
+</tr>
+<tr>
+<td>GC 标记集成</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.Mark.cs"><code>src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.Mark.cs</code></a></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a id="references"></a></p>
+<h2 id="参考资料">参考资料</h2>
+<p>调度器的设计借鉴了三个主要来源：</p>
+<ol>
+<li><em>Stride Scheduling: Deterministic Proportional-Share Resource Management</em>，Waldspurger 和 Weihl（MIT/LCS/TM-528）。<a href="https://web.eecs.umich.edu/%7Emosharaf/Readings/Stride.pdf">PDF</a>。<code>StrideScheduler</code> 中基于虚拟时间的公平份额算法（行程值、步长、票数、有序的运行队列）来自这篇论文。</li>
+<li><em>Ekiben: a pluggable scheduler API.</em> <a href="https://arxiv.org/pdf/2306.15076">arXiv:2306.15076</a>。<code>IScheduler</code> 的形态（生命周期钩子、<code>PickNext</code>、<code>OnTick</code>、每 CPU 状态槽、策略与机制的分离）仿照了 Ekiben 的 <code>EkibenScheduler</code> trait。<code>IScheduler.cs</code> 在代码中注明了这一点。</li>
+<li><em>Multithreading in .NET at the CLR Level: What Really Happens Under the Hood</em>。<a href="https://medium.com/codetodeploy/multithreading-in-net-at-the-clr-level-what-really-happens-under-the-hood-5699528b6e55">Medium 上的 codetodeploy</a>。关于 CLR 如何对线程建模的背景资料；在装配 <code>RhYield</code>、线程静态存储和托管线程创建入口时参考过。</li>
+</ol>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/dev/scheduler.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

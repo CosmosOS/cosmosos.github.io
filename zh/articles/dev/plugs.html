@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>Plug | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Plug | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/dev/plugs.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="plugs"></a></p>
+<h1 id="plug">Plug</h1>
+<p>Plug 在 IL 层面替换现有类型的成员：patcher（<code>cosmos-patcher</code>，基于 Mono.Cecil 构建）在 ILC 编译目标程序集之前重写该程序集，因此 BCL 和运行时代码无需修改源代码即可获得内核专用的实现。其机制、patcher 的流水线以及 plug 在构建中的运行位置由构建流水线文档介绍；本页介绍如何编写 plug。</p>
+<hr>
+<p><a id="attributes"></a></p>
+<h2 id="特性">特性</h2>
+<p>Gen3 实现了三个与 plug 相关的特性，全部定义在 <a href="https://github.com/CosmosOS/Cosmos/tree/gen3/src/Cosmos.Build.API/Attributes">Cosmos.Build.API</a> 中：</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>应用于</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[Plug]</code></td>
+<td>类</td>
+<td>将该类标记为某个目标类型的替换来源</td>
+</tr>
+<tr>
+<td><code>[PlugMember]</code></td>
+<td>方法、属性、字段</td>
+<td>替换目标类型中与之匹配的成员</td>
+</tr>
+<tr>
+<td><code>[PlatformSpecific]</code></td>
+<td>类或成员</td>
+<td>仅在针对所指定的架构打补丁时保留该元素</td>
+</tr>
+</tbody>
+</table>
+<p><a id="plug"></a></p>
+<h3 id="plug-1"><code>[Plug]</code></h3>
+<p>指定目标类型：当该类型可公开访问时，写成 <code>typeof(...)</code>；对于内部类型，则写成完全限定名字符串（<code>[Plug(&quot;Internal.Runtime.CompilerHelpers.StartupCodeHelpers&quot;)]</code>）。<code>IsOptional = true</code> 会在编译中不存在目标类型时静默跳过该 plug；非可选 plug 的 <code>TargetName</code> 拼写错误会导致构建失败。参见 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.API/Attributes/PlugAttribute.cs">PlugAttribute.cs</a>。</p>
+<h3 id="plugmember"><code>[PlugMember]</code></h3>
+<p>替换名称和签名都与 plug 成员相匹配的目标成员。字符串参数会覆盖按名称进行的匹配，构造函数和属性访问器就是这样指定的：<code>[PlugMember(&quot;.ctor&quot;)]</code>、<code>[PlugMember(&quot;get_Address&quot;)]</code>。签名必须与目标成员完全一致，只有实例成员多出一处，见下文；签名不匹配意味着 patcher 无法接入该成员。参见 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.API/Attributes/PlugMemberAttribute.cs">PlugMemberAttribute.cs</a>。</p>
+<h3 id="platformspecific"><code>[PlatformSpecific]</code></h3>
+<p>在打补丁时将 plug 类或成员限定于特定架构：<code>[PlatformSpecific(PlatformArchitecture.X64)]</code>。参见 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.API/Attributes/PlatformSpecificAttribute.cs">PlatformSpecificAttribute.cs</a>。</p>
+<hr>
+<p><a id="the-athis-convention"></a></p>
+<h2 id="athis-约定"><code>aThis</code> 约定</h2>
+<p>Plug 类是静态类，因此实例成员由一个静态方法替换，该方法的第一个参数是目标实例，按约定命名为 <code>aThis</code>。patcher 会把对 <code>this</code> 的引用重新指向这个参数：</p>
+<pre><code class="lang-csharp">using System.Net;
+using Cosmos.Build.API.Attributes;
+
+namespace Cosmos.Kernel.Plugs.System.Net;
+
+[Plug(typeof(IPEndPoint))]
+public static class IPEndPointPlug
+{
+    [PlugMember(&quot;.ctor&quot;)]
+    public static void Ctor(IPEndPoint aThis, IPAddress address, int port)
+    {
+        // runs in place of the target constructor
+    }
+
+    [PlugMember(&quot;get_Address&quot;)]
+    public static IPAddress? get_Address(IPEndPoint aThis)
+    {
+        // runs in place of the property getter
+        return null;
+    }
+
+    [PlugMember]
+    public static long Seek(IPEndPoint aThis, long offset)
+    {
+        // instance method: name and remaining signature match the target
+        return 0;
+    }
+
+    [PlugMember]
+    public static bool StaticMethod()
+    {
+        // static member: no aThis
+        return true;
+    }
+}
+</code></pre>
+<hr>
+<p><a id="accessing-private-and-internal-state"></a></p>
+<h2 id="访问私有和内部状态">访问私有和内部状态</h2>
+<p>Gen2 的 <code>[Expose]</code>（向目标类型注入新的私有成员）和 <code>[FieldAccess]</code>（将 plug 方法的参数绑定到目标的私有字段）在 gen3 patcher 中尚未实现；移植工作在 <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/458">#458</a> 中跟踪。在此之前，plug 有两种选择：</p>
+<ul>
+<li><strong>旁路存储。</strong> 把每个实例的状态保存在 plug 类自身中，以实例为键（<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Plugs/System/Net/IPEndPointPlug.cs">IPEndPointPlug.cs</a> 就是用字典这样做的）。这种做法完全取代目标的状态，而不是读取它，因此每个涉及该状态的成员都必须用 plug 替换。</li>
+<li><strong><code>[UnsafeAccessor]</code> / <code>[UnsafeAccessorType]</code>。</strong> 运行时的访问器机制可以直接访问私有和内部成员。它是<a href="public-api.html">公共 API 策略</a>中不受支持的应急手段；它能做什么、不能做什么，参见<a href="accessing-internals.html">访问内部成员</a>（特别是：它无法按引用返回一个类型本身不可访问的字段）。</li>
+</ul>
+<hr>
+<p><a id="pitfalls"></a></p>
+<h2 id="陷阱">陷阱</h2>
+<ul>
+<li><code>TargetName</code> 无法解析的 plug 会导致构建失败，除非设置了 <code>IsOptional</code>；可选 plug 若悄无声息地不再匹配，仍会照常编译，而目标则在未打补丁的状态下运行，因此凡是关乎正确性的内容，都应优先使用非可选 plug。</li>
+<li>如果 <code>[Plug]</code> 类的成员缺少 <code>[PlugMember]</code>，该类不会修补任何内容，也不会报错：类照常编译，目标在未打补丁的状态下运行。这已经造成过真实的静默失败（一个没有 plug 的 <code>NativeMemory</code> 不断递归，最终导致三重故障），所以请确认每个意在替换某些内容的成员上都带有该特性。</li>
+<li>签名不匹配（包括 <code>aThis</code> 参数缺失或类型错误）意味着该成员不会被接入。</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/dev/plugs.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

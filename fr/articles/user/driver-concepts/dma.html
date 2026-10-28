@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>DMA (acc&#232;s direct &#224; la m&#233;moire) | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="DMA (acc&#232;s direct &#224; la m&#233;moire) | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/user/driver-concepts/dma.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="dma-direct-memory-access"></a></p>
+<h1 id="dma-accès-direct-à-la-mémoire">DMA (accès direct à la mémoire)</h1>
+<p>Avec les E/S programmées, le CPU copie lui-même chaque mot à travers un registre du périphérique, ce qui accaparerait un cœur pour une carte réseau ou un disque rapide. Avec l'accès direct à la mémoire, le périphérique lit et écrit la mémoire principale de lui-même : le pilote lui donne l'<a href="physical-addresses.html">adresse physique</a> et la longueur d'un tampon, généralement par l'intermédiaire d'un <a href="descriptor-rings.html">anneau de descripteurs</a>, le périphérique déplace les données pendant que le CPU fait autre chose, puis il signale la fin du transfert, souvent par une interruption.</p>
+<p>Un périphérique qui lance de lui-même des transactions mémoire est un maître de bus. Sur <a href="pci.html">PCI</a>, une fonction ne peut le faire que tant que le bit Bus Master Enable de son registre de commande est positionné, ce qui permet au système d'exploitation de l'arrêter. Certains périphériques ne pilotent que 32 bits d'adresse et n'atteignent que les 4 premiers Gio de la mémoire physique.</p>
+<p>Le CPU met la mémoire en cache, et un périphérique qui travaille derrière les caches pourrait lire des données périmées ou laisser des lignes de cache périmées. Sur une plateforme cohérente, ce que sont les PC x64, le matériel maintient les accès des périphériques cohérents avec les caches ; sur une plateforme non cohérente, le pilote nettoie ou invalide les lignes de cache autour de chaque transfert. La cohérence n'impose pourtant aucun ordre, si bien qu'un pilote a toujours besoin de <a href="barriers.html">barrières</a> entre l'écriture des données et le moment où il indique au périphérique qu'elles sont là.</p>
+<p>Le piège est que le DMA contourne tout ce que le noyau utilise pour protéger la mémoire. Un périphérique continue d'écrire à l'adresse qu'on lui a donnée tant qu'on ne l'arrête pas, si bien qu'un tampon libéré alors qu'un transfert est en cours est écrasé à l'intérieur de ce qui le réutilise, quel qu'il soit. Un ramasse-miettes ajoute une façon d'en libérer un par surprise : il récupère un objet dès qu'il n'en reste plus aucune référence, et une adresse dans un descripteur n'est pas une référence qu'il peut voir.</p>
+<p>Dans le kit de pilotes, un <code>DmaBuffer</code> obtenu par <code>binding.AllocateDma</code> vit jusqu'à ce que le démontage le libère après <code>OnDetach</code> ; un pilote ne remet donc à un périphérique que de tels tampons, jamais un tableau managé. <code>TryAllocateDma</code> avec <code>DmaConstraints.Addressable32Bit</code> renvoie <code>false</code> pour un tampon qui se terminerait au-dessus de 4 Gio : le kit n'a pas de réserve de mémoire basse, il alloue donc comme d'habitude et rend un tel tampon. Le kit traite le DMA comme cohérent sur x64 et ARM64. Il désactive le bus mastering d'une fonction PCI avant le premier sondage, puis de nouveau après chaque sondage qui n'aboutit pas à une liaison, avant que les tampons de ce sondage soient libérés : ainsi, chaque sondage part d'une fonction qui ne peut pas écrire en mémoire, et le périphérique d'un sondage décliné s'arrête avant que ses tampons soient rendus ; un pilote le réactive avec <code>PciAccess.EnableBusMastering(true)</code>. Voir <a href="../drivers.html#dma-memory">Mémoire DMA</a> et <a href="../drivers.html#the-pci-access-object">L'objet d'accès PCI</a>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/user/driver-concepts/dma.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

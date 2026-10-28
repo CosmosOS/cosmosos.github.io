@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>Syst&#232;me de fichiers | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Syst&#232;me de fichiers | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/user/filesystem.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="file-system"></a></p>
+<h1 id="système-de-fichiers">Système de fichiers</h1>
+<p>Dans cet article, nous verrons comment utiliser le VFS (système de fichiers virtuel) de Cosmos Gen3.
+Contrairement à Gen2, où vous passiez par <code>CosmosVFS</code> et par un sous-ensemble de <code>System.IO</code> remplacé par des plugs, Gen3 vous donne l'<strong>API <code>System.IO</code> standard de .NET</strong> (<code>File</code>, <code>Directory</code>, <code>FileStream</code>, <code>StreamReader</code>/<code>StreamWriter</code>, <code>FileInfo</code>/<code>DirectoryInfo</code>), qui s'exécute sans modification au-dessus du VFS du noyau. Vous montez un système de fichiers sur un point de montage de style Unix et vous utilisez des chemins absolus ordinaires.</p>
+<p>Les principales différences si vous venez de Gen2 :</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Gen2</th>
+<th>Gen3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Chemins</td>
+<td>Lettres de lecteur DOS (<code>0:\file.txt</code>)</td>
+<td>Chemins Unix (<code>/mnt/file.txt</code>)</td>
+</tr>
+<tr>
+<td>Mise en place</td>
+<td><code>CosmosVFS</code> + <code>VFSManager.RegisterVFS</code></td>
+<td><code>VfsManager.RegisterFileSystem</code> + <code>VfsManager.TryMount</code></td>
+</tr>
+<tr>
+<td>Surface d'API</td>
+<td>Sous-ensemble de <code>System.IO</code> remplacé par des plugs</td>
+<td><code>System.IO</code> complet (flux, motifs d'énumération, <code>FileInfo</code>, …)</td>
+</tr>
+<tr>
+<td><code>File.Move</code></td>
+<td>Sans plug (copie + suppression)</td>
+<td>Fonctionne, y compris l'écrasement d'une destination existante</td>
+</tr>
+<tr>
+<td>Systèmes de fichiers</td>
+<td>FAT32 (FAT12/16 en partie)</td>
+<td>FAT12/16/32</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Attention</strong> : formatez <strong>toujours</strong> votre disque avec Cosmos, et <strong>uniquement</strong> avec Cosmos, si vous comptez l'utiliser avec Cosmos. Des outils comme Parted ou FDisk sont bien plus avancés et peuvent organiser le disque autrement que ce qu'attend Cosmos.</p>
+<p><strong>AVERTISSEMENT</strong> : n'essayez <strong>pas</strong> ceci sur du vrai matériel ! Cela peut causer des <strong>DOMMAGES IRRÉPARABLES</strong> à vos données. Utilisez une machine virtuelle (QEMU via <code>cosmos run</code>, VMware, VirtualBox, …).</p>
+<p><a id="enable-storage-in-your-kernel"></a></p>
+<h2 id="activer-le-stockage-dans-votre-noyau">Activer le stockage dans votre noyau</h2>
+<p>La prise en charge du stockage dépend d'un commutateur de fonctionnalité. Vérifiez que le <code>.csproj</code> de votre noyau ne la désactive pas (sa valeur par défaut est <code>true</code>) :</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;CosmosEnableStorage&gt;true&lt;/CosmosEnableStorage&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p>Au démarrage, le noyau initialise <code>StorageManager</code>, qui installe son consommateur des périphériques bloc du <a href="drivers.html">kit de pilotes</a>. Les pilotes AHCI, NVMe, virtio-blk et de stockage de masse USB du kit publient ensuite chaque disque SATA (<code>sata0</code>, <code>sata1</code>, ...), chaque namespace NVMe (<code>nvme0n1</code>, ...), chaque disque virtio-blk (<code>vblk0</code>, ...) et chaque clé USB (<code>usb0</code>, <code>usb1</code>, ...) qu'ils trouvent pendant l'étape des pilotes, et le gestionnaire enregistre chacun au moment où il est publié et analyse sa table de partitions MBR/GPT pour en remplir <code>StorageManager.Partitions</code> avant que la publication ne rende la main. Les clés USB nécessitent <code>CosmosEnableUsb</code>, activé par défaut dès que <code>CosmosEnableStorage</code> l'est ; le passer à <code>false</code> conserve les disques AHCI et NVMe et retire les disques USB en même temps que les pilotes de contrôleur hôte. Le gestionnaire tient ses tables dans un seul ordre, qui décide du périphérique principal : par chemin de nœud, <code>pci:</code> avant <code>usb:</code> avant <code>virtio:</code>, dans <code>Devices</code>, dans <code>Partitions</code> et pour <code>PrimaryDevice</code> ; un disque que le noyau a enregistré lui-même vient après tous les disques du kit ; puis l'ordre d'enregistrement. Ainsi, un disque interne sur un contrôleur PCI est le principal face à une clé USB présente au démarrage, quel que soit celui qui s'est enregistré en premier, et un disque du kit arrivé après une clé USB passe devant elle et renumérote <code>Partitions</code> : c'est pourquoi un montage par <code>Partition</code> (voir plus bas) est préférable à un montage par chaîne d'index.</p>
+<p>Les disques USB, ainsi que les disques virtio-blk derrière un emplacement PCI Express à branchement à chaud, peuvent aussi être branchés et retirés pendant que le noyau tourne. Un disque branché est publié par le kit, puis enregistré et analysé comme un disque trouvé au démarrage, sous le plus petit nom <code>usbN</code> ou <code>vblkN</code> libre. Un disque débranché est retiré : il quitte <code>StorageManager.Devices</code> et <code>StorageManager.Partitions</code>, les montages faits sur ses partitions avec la surcharge <code>Partition</code> de <code>TryMount</code> (voir plus bas) sont détachés, et les fichiers encore ouverts dessus échouent avec <code>IOException</code> (le pilote de stockage de masse USB lève <code>IOException(&quot;USB device detached&quot;)</code> et le pilote virtio-blk <code>IOException(&quot;virtio-blk device detached&quot;)</code>, de même que le pilote NVMe lève <code>IOException</code> pendant qu'il se détache) ; un disque dont le kit a libéré la mémoire du pilote échoue plutôt avec l'<code>InvalidOperationException</code> du kit, car l'anneau supporté n'enveloppe pas le périphérique du pilote. Un montage fait à partir d'une chaîne source ne désigne aucun disque : il reste donc en place, et ses E/S échouent de la même façon. Un montage détaché n'est pas vidé sur le disque, puisque le disque n'est plus là : appelez donc <code>VfsManager.TryUnmount</code> avant de retirer un disque. Les deux listes peuvent changer entre deux lectures pendant qu'un disque USB ou virtio-blk arrive ou s'en va, depuis le thread de travail du kit : lisez <code>Devices</code> ou <code>Partitions</code> une seule fois et indexez cette copie.</p>
+<p>Pour donner un disque à votre noyau dans QEMU, attachez une image avec <code>cosmos run</code> :</p>
+<pre><code class="lang-console">$ qemu-img create disk.img 64M
+$ cosmos run --disk disk.img            # attached as an AHCI disk (default)
+$ cosmos run --disk disk.img,nvme       # or as an NVMe namespace
+$ cosmos run --disk disk.img,usb        # or as a USB stick on an xHCI controller
+$ cosmos run --disk disk.img,virtio-blk # or as a virtio-blk-pci function
+$ cosmos run --disk disk.img,virtio-blk-mmio # or, on arm64, in the virt machine's virtio-mmio window
+</code></pre>
+<p><code>--disk</code> peut être répété si vous voulez plusieurs disques. Un disque <code>usb</code> donne aussi à la machine son contrôleur xHCI, <code>usbxhci0</code> ; <code>--usb-controller ehci</code> ou <code>ehci-ohci</code> y place plutôt un EHCI, <code>usbehci0</code>, et <code>ohci</code> un OHCI, <code>usbohci0</code>, chacun rattachant chaque périphérique USB à l'un de ses ports racines. Le contrôleur vous permet de brancher une autre clé et de la retirer pendant que le noyau tourne, depuis le moniteur QEMU (Ctrl+Alt+2 dans la fenêtre QEMU) :</p>
+<pre><code class="lang-console">(qemu) drive_add 0 if=none,id=stick,file=stick.img,format=raw
+(qemu) device_add usb-storage,drive=stick,id=stick,bus=usbxhci0.0
+(qemu) device_del stick
+</code></pre>
+<p><a id="register-a-filesystem-driver-and-mount-it"></a></p>
+<h2 id="enregistrer-un-pilote-de-système-de-fichiers-et-le-monter">Enregistrer un pilote de système de fichiers et le monter</h2>
+<p>Voici les <code>using</code> sur lesquels s'appuient les extraits ci-dessous :</p>
+<pre><code class="lang-csharp">using System.IO;
+using Cosmos.Kernel.HAL.Devices.Storage;
+using Cosmos.Kernel.System.FileSystem;
+using Cosmos.Kernel.System.FileSystem.Fat;
+using Cosmos.Kernel.System.Storage;
+</code></pre>
+<p><code>Cosmos.Kernel.System.FileSystem</code> contient tout le VFS dans un seul espace de noms : le gestionnaire et ce qu'il distribue (<code>VfsManager</code>, <code>VfsMount</code>, <code>IVfsNodeHandle</code>, <code>IVfsFileHandle</code> et <code>IVfsDirectoryHandle</code>), les contrats qu'implémente un pilote de système de fichiers (<code>IVfsFileSystemType</code>, <code>IVfsSuperblock</code>, <code>IVfsInode</code>, <code>IVfsOpenFile</code> et leurs interfaces d'opérations), ainsi que les types d'indicateurs, de modes et de métadonnées que nomme chaque appel de montage, de création et de stat (<code>MountFlags</code>, <code>VfsMode</code>, <code>VfsStat</code>, <code>VfsStatFs</code>, <code>SetAttrFlags</code>, <code>SeekWhence</code>, <code>VfsTimespec</code>). C'est pourquoi <code>MountFlags.None</code> apparaît dans le <code>BeforeRun()</code> d'un noyau sous le même <code>using</code> que <code>VfsManager</code>, et pourquoi l'<code>IVfsInode</code> que vous donne <code>IVfsNodeHandle.Inode</code> ne demande aucun autre <code>using</code>. Les pilotes de système de fichiers se trouvent un niveau plus bas, chacun dans son espace de noms : les types <code>FatFileSystemType</code> et <code>FatFormatOptions</code> du pilote FAT sont dans <code>Cosmos.Kernel.System.FileSystem.Fat</code>.</p>
+<p><code>Cosmos.Kernel.HAL.Devices.Storage</code> n'est nécessaire qu'à l'extrait du disque RAM plus bas, qui implémente <code>IBlockDevice</code>. Sans lui, monter une vraie partition demande les trois espaces de noms de <code>Cosmos.Kernel.System</code>.</p>
+<p>Commencez par enregistrer un pilote FAT sous le nom de votre choix, puis montez une partition sur un point de montage. Ajoutez ceci au <code>BeforeRun()</code> de votre noyau :</p>
+<pre><code class="lang-csharp">FatFileSystemType fat = new();
+
+if (!VfsManager.RegisterFileSystem(&quot;fat&quot;, fat))
+{
+    Console.WriteLine(&quot;The name \&quot;fat\&quot; is already registered.&quot;);
+    return;
+}
+
+if (StorageManager.Partitions.Count == 0)
+{
+    Console.WriteLine(&quot;No partitions found.&quot;);
+    return;
+}
+
+if (VfsManager.TryMount(&quot;fat&quot;, StorageManager.Partitions[0], MountFlags.None, &quot;/mnt&quot;, out VfsMount? mount))
+{
+    Console.WriteLine(&quot;Mounted &quot; + mount.Name + &quot; at &quot; + mount.MountPoint);
+}
+</code></pre>
+<p><code>Partitions</code> est vide avant l'analyse du stockage, quand aucun disque n'est attaché et quand le stockage est exclu de la compilation : ne l'indexez donc qu'après avoir vérifié <code>Count</code>. Chaque appel ci-dessus indique s'il a réussi : <code>RegisterFileSystem</code> refuse un nom déjà utilisé, et <code>TryMount</code> refuse une source que le pilote ne reconnaît pas.</p>
+<p><code>StorageManager.GetPartitions(device)</code> liste les partitions d'un seul disque, numérotées comme un utilisateur les numérote ; <code>StorageManager.Partitions</code> est la liste à plat de tous les disques.</p>
+<p>Il existe une seconde forme, <code>VfsManager.TryMount(&quot;fat&quot;, &quot;0&quot;, ...)</code>, où <code>source</code> est une chaîne propre au pilote. Tout pilote en accepte une, et le pilote FAT la lit comme un index dans <code>StorageManager.Partitions</code>. Préférez la surcharge <code>Partition</code> : créer ou supprimer une partition renumérote cette liste, si bien qu'un index conservé par-delà une nouvelle analyse peut finir par désigner une autre partition.</p>
+<!-- screenshot: console du noyau juste après le démarrage, avec la ligne "Mounted fat partition 0 at /mnt" -->
+<p><img src="images/filesystem-mount.png" alt="Montage"></p>
+<p>À partir de là, tout ce qui se trouve sous <code>/mnt</code> est servi par le pilote FAT, et tout le reste de cet article n'est que du <code>System.IO</code> ordinaire.</p>
+<p><strong>Remarque</strong> : <code>/</code> lui-même est une <em>racine virtuelle</em>. Elle existe toujours, même quand rien n'est monté, et l'énumérer liste les points de montage. Vous ne pouvez pas y créer de fichiers directement (<code>IOException</code>, système de fichiers en lecture seule) ; créez-les sous un point de montage comme <code>/mnt</code>.</p>
+<p><a id="alternative-a-ram-disk"></a></p>
+<h3 id="alternative--un-disque-ram">Alternative : un disque RAM</h3>
+<p>Pour des essais rapides, vous n'avez même pas besoin d'image disque. Un périphérique bloc n'est qu'un <code>IBlockDevice</code> (de <code>Cosmos.Kernel.HAL.Devices.Storage</code>), et un périphérique adossé à la RAM tient en quelques lignes ; c'est exactement ce qu'utilisent les suites de tests du noyau :</p>
+<pre><code class="lang-csharp">internal sealed class MemoryBlockDevice : IBlockDevice
+{
+    private readonly byte[] _storage;
+
+    public MemoryBlockDevice(string name, ulong blockSize, ulong blockCount)
+    {
+        Name = name;
+        BlockSize = blockSize;
+        BlockCount = blockCount;
+        _storage = new byte[blockSize * blockCount];
+    }
+
+    public string Name { get; }
+    public ulong BlockSize { get; }
+    public ulong BlockCount { get; }
+
+    public void ReadBlock(ulong blockNo, ulong blockCount, Span&lt;byte&gt; data)
+        =&gt; _storage.AsSpan((int)(blockNo * BlockSize), (int)(blockCount * BlockSize)).CopyTo(data);
+
+    public void WriteBlock(ulong blockNo, ulong blockCount, ReadOnlySpan&lt;byte&gt; data)
+        =&gt; data.Slice(0, (int)(blockCount * BlockSize)).CopyTo(_storage.AsSpan((int)(blockNo * BlockSize)));
+
+    public void Flush() { }
+}
+</code></pre>
+<p>Le pilote FAT accepte directement un périphérique injecté. Enregistrez-le comme d'habitude et laissez <code>source</code> vide : avec un périphérique déjà en main, le pilote n'a rien à chercher.</p>
+<pre><code class="lang-csharp">MemoryBlockDevice ramDisk = new(&quot;RAMDISK&quot;, 512, 65536);   // 32 MiB
+FatFileSystemType fat = new(ramDisk);
+
+if (!VfsManager.RegisterFileSystem(&quot;ramfat&quot;, fat)
+    || !VfsManager.TryFormat(&quot;ramfat&quot;, &quot;&quot;, new FatFormatOptions { Type = FatType.Fat16 })
+    || !VfsManager.TryMount(&quot;ramfat&quot;, &quot;&quot;, MountFlags.None, &quot;/mnt&quot;, out _))
+{
+    Console.WriteLine(&quot;RAM disk setup failed.&quot;);
+    return;
+}
+</code></pre>
+<p><a id="partition-a-disk"></a></p>
+<h2 id="partitionner-un-disque">Partitionner un disque</h2>
+<p>Formater demande une partition à formater. <code>StorageManager.Partitions</code> liste celles qui existent déjà sur les disques que le noyau a trouvés au démarrage ; quand il n'y en a aucune, ou que vous voulez une autre organisation, <code>Gpt</code>, <code>Mbr</code> et <code>PartitionManager</code> écrivent la table de partitions elle-même. Tous prennent un <code>IBlockDevice</code>, que vous fournit <code>StorageManager.PrimaryDevice</code>.</p>
+<p>Commencez par demander quel schéma de partitionnement le disque porte déjà :</p>
+<pre><code class="lang-csharp">IBlockDevice? disk = StorageManager.PrimaryDevice;
+if (disk is null)
+{
+    Console.WriteLine(&quot;No disk&quot;);
+    return;
+}
+
+if (Gpt.IsGpt(disk))
+{
+    Console.WriteLine(&quot;GPT, &quot; + Gpt.Parse(disk).Count + &quot; partition(s)&quot;);
+}
+else if (Mbr.IsMbr(disk))
+{
+    Console.WriteLine(&quot;MBR, &quot; + Mbr.Parse(disk).Count + &quot; partition(s)&quot;);
+}
+else
+{
+    Console.WriteLine(&quot;No partition table&quot;);
+}
+</code></pre>
+<p><code>Gpt.Create</code> et <code>Mbr.Create</code> écrivent une table vide de ce schéma, <strong>en détruisant tout ce qui s'y trouvait</strong>. <code>PartitionManager.Create</code> ajoute ensuite une partition, quel que soit le schéma que porte le disque, si bien que vous n'avez pas à distinguer les cas :</p>
+<pre><code class="lang-csharp">Gpt.Create(disk);
+
+/* 64 MiB at LBA 2048, on a 512-byte-sector disk. The MBR system id and the
+   GPT type GUID are both given; only the one matching the disk's scheme is
+   used. */
+if (!PartitionManager.Create(disk, startSector: 2048, sectorCount: 131072,
+                             mbrSystemId: 0x0C, gptType: Gpt.BasicDataPartitionType))
+{
+    Console.WriteLine(&quot;Create failed&quot;);
+    return;
+}
+
+StorageManager.RescanPartitions(disk);
+</code></pre>
+<p>C'est <code>RescanPartitions</code> qui fait apparaître la nouvelle partition dans <code>StorageManager.Partitions</code>. Tant que vous ne l'avez pas appelé, la liste décrit encore l'ancienne table.</p>
+<p>Les partitions existantes sont désignées par un <code>PartitionLocation</code>, c'est-à-dire le secteur de début et la longueur plutôt qu'un index, si bien qu'une partition ne change pas d'identité quand la table est renumérotée :</p>
+<pre><code class="lang-csharp">PartitionManager.PartitionLocation where = new(startSector: 2048, sectorCount: 131072);
+
+PartitionManager.Resize(disk, where, newSectorCount: 262144);
+PartitionManager.MoveWithData(disk, where, newStartSector: 4096);
+PartitionManager.Delete(disk, where);
+</code></pre>
+<p><code>MoveWithData</code> copie le contenu vers le nouvel emplacement avant de réécrire l'entrée ; <code>Resize</code> et <code>Delete</code> ne touchent qu'à la table, si bien que réduire une partition sous la taille de son système de fichiers fait perdre des données.</p>
+<p><strong>Tout index de partition est positionnel.</strong> En supprimer une renumérote les entrées qui la suivent, et <code>StorageManager.Partitions</code> est renumérotée avec elles : relisez donc la liste après chaque modification plutôt que de garder un index par-delà une modification.</p>
+<p>Les quatre emplacements primaires du MBR se prolongent par une chaîne de partitions logiques. <code>PartitionManager.TryCreateLogical</code> en ajoute une dans la partition étendue, et <code>Mbr.TryGetExtendedPartition</code> trouve celle-ci :</p>
+<pre><code class="lang-csharp">if (Mbr.TryGetExtendedPartition(disk, out ulong extendedStart, out ulong extendedCount)
+    &amp;&amp; PartitionManager.TryCreateLogical(disk, systemId: 0x0C, sectorCount: 65536, out ulong logicalStart))
+{
+    Console.WriteLine(&quot;logical partition at LBA &quot; + logicalStart);
+}
+</code></pre>
+<p><code>Gpt</code>, <code>Mbr</code> et <code>Ebr</code> forment la couche inférieure, un type par schéma, pour les cas où vous devez écrire des entrées que le gestionnaire n'expose pas.</p>
+<p><a id="format-a-disk"></a></p>
+<h2 id="formater-un-disque">Formater un disque</h2>
+<p>Pour formater (mkfs) une partition par le VFS, utilisez <code>VfsManager.TryFormat</code> avec le nom du pilote, la partition et le type d'options du pilote. Le formateur FAT choisit une géométrie raisonnable à partir des options que vous lui donnez :</p>
+<pre><code class="lang-csharp">FatFormatOptions options = new()
+{
+    Type = FatType.Fat32,
+    VolumeLabel = &quot;COSMOS     &quot;,
+};
+
+if (StorageManager.Partitions.Count == 0
+    || !VfsManager.TryFormat(&quot;fat&quot;, StorageManager.Partitions[0], options))
+{
+    Console.WriteLine(&quot;Format failed&quot;);
+}
+</code></pre>
+<p>Le formatage est refusé tant que la source est montée : démontez-la d'abord avec <code>VfsManager.TryUnmount(&quot;/mnt&quot;)</code>.</p>
+<p><a id="list-mounted-volumes"></a></p>
+<h2 id="lister-les-volumes-montés">Lister les volumes montés</h2>
+<p><code>VfsManager.Mounts</code> est la table des montages. Chaque entrée vous donne le nom du pilote, la source sous-jacente et le point de montage :</p>
+<pre><code class="lang-csharp">foreach (VfsMount m in VfsManager.Mounts)
+{
+    Console.WriteLine(m.MountPoint + &quot; -&gt; &quot; + m.Name + &quot; (source &quot; + m.Source + &quot;)&quot;);
+}
+</code></pre>
+<!-- screenshot: sortie console de la boucle sur la table des montages, par exemple "/mnt -> fat (source 0)" -->
+<p><img src="images/filesystem-mounts.png" alt="Montages"></p>
+<p><code>m.Partition</code> est la partition elle-même, pour les montages faits avec la surcharge <code>Partition</code>. Préférez-la à une reconversion de <code>m.Source</code> en index : elle continue de désigner la même plage sur le même disque après qu'une nouvelle analyse a renuméroté <code>StorageManager.Partitions</code>.</p>
+<p><a id="check-free-space"></a></p>
+<h2 id="vérifier-lespace-libre">Vérifier l'espace libre</h2>
+<p><code>VfsManager.TryStatFs</code> rapporte le décompte des blocs d'un montage. L'espace libre est le nombre de blocs disponibles multiplié par la taille de bloc :</p>
+<pre><code class="lang-csharp">if (VfsManager.TryStatFs(&quot;/mnt&quot;, out VfsStatFs stats))
+{
+    ulong freeBytes = stats.AvailableBlocks * stats.BlockSize;
+    ulong totalBytes = stats.Blocks * stats.BlockSize;
+    Console.WriteLine(freeBytes + &quot; of &quot; + totalBytes + &quot; bytes free&quot;);
+}
+</code></pre>
+<p><a id="get-a-list-of-files"></a></p>
+<h2 id="obtenir-une-liste-de-fichiers">Obtenir une liste de fichiers</h2>
+<p>Nous commençons par obtenir une liste de fichiers, avec :</p>
+<pre><code class="lang-csharp">string[] files = Directory.GetFiles(&quot;/mnt&quot;);
+
+foreach (string file in files)
+{
+    Console.WriteLine(file);
+}
+</code></pre>
+<p>Les motifs de recherche fonctionnent aussi ; c'est le moteur d'énumération standard de la BCL :</p>
+<pre><code class="lang-csharp">string[] logs = Directory.GetFiles(&quot;/mnt&quot;, &quot;*.txt&quot;);
+</code></pre>
+<!-- screenshot: console listant quelques fichiers sous /mnt -->
+<p><img src="images/filesystem-files-list.png" alt="Liste des fichiers"></p>
+<p><a id="get-a-directory-listing-files-and-other-directories"></a></p>
+<h2 id="obtenir-le-contenu-dun-répertoire-fichiers-et-autres-répertoires">Obtenir le contenu d'un répertoire (fichiers et autres répertoires)</h2>
+<pre><code class="lang-csharp">string[] files = Directory.GetFiles(&quot;/mnt&quot;);
+string[] directories = Directory.GetDirectories(&quot;/mnt&quot;);
+
+foreach (string file in files)
+{
+    Console.WriteLine(file);
+}
+foreach (string directory in directories)
+{
+    Console.WriteLine(directory);
+}
+</code></pre>
+<!-- screenshot: console listant les fichiers et les répertoires sous /mnt -->
+<p><img src="images/filesystem-directory-listing.png" alt="Contenu du répertoire"></p>
+<p><a id="read-all-the-files-in-a-directory"></a></p>
+<h2 id="lire-tous-les-fichiers-dun-répertoire">Lire tous les fichiers d'un répertoire</h2>
+<p>Nous obtenons la liste des fichiers et affichons le contenu de chacun. Comme dans Gen2, gardez le code de système de fichiers dans un <code>try</code>/<code>catch</code> : les exceptions sont celles de <code>System.IO</code> standard et elles peuvent être interceptées :</p>
+<pre><code class="lang-csharp">try
+{
+    foreach (string file in Directory.GetFiles(&quot;/mnt&quot;))
+    {
+        string content = File.ReadAllText(file);
+
+        Console.WriteLine(&quot;File name: &quot; + file);
+        Console.WriteLine(&quot;File size: &quot; + content.Length);
+        Console.WriteLine(&quot;Content: &quot; + content);
+    }
+}
+catch (Exception e)
+{
+    Console.WriteLine(e.ToString());
+}
+</code></pre>
+<!-- screenshot: console affichant le nom, la taille et le contenu d'un fichier -->
+<p><img src="images/filesystem-read-all-files.png" alt="Lire tous les fichiers"></p>
+<p><a id="create-a-new-file"></a></p>
+<h2 id="créer-un-nouveau-fichier">Créer un nouveau fichier</h2>
+<pre><code class="lang-csharp">try
+{
+    using FileStream stream = File.Create(&quot;/mnt/testing.txt&quot;);
+}
+catch (Exception e)
+{
+    Console.WriteLine(e.ToString());
+}
+</code></pre>
+<p><a id="create-a-new-directory"></a></p>
+<h2 id="créer-un-nouveau-répertoire">Créer un nouveau répertoire</h2>
+<p><code>Directory.CreateDirectory</code> crée toute la chaîne des parents manquants en un seul appel :</p>
+<pre><code class="lang-csharp">try
+{
+    Directory.CreateDirectory(&quot;/mnt/documents/reports&quot;);
+}
+catch (Exception e)
+{
+    Console.WriteLine(e.ToString());
+}
+</code></pre>
+<p><a id="write-to-a-file"></a></p>
+<h2 id="écrire-dans-un-fichier">Écrire dans un fichier</h2>
+<pre><code class="lang-csharp">try
+{
+    File.WriteAllText(&quot;/mnt/testing.txt&quot;, &quot;Learning how to use the Gen3 VFS!&quot;);
+}
+catch (Exception e)
+{
+    Console.WriteLine(e.ToString());
+}
+</code></pre>
+<p><code>File.AppendAllText</code>, <code>File.WriteAllBytes</code> et <code>File.WriteAllLines</code> fonctionnent de la même façon.</p>
+<p><a id="read-a-specific-file"></a></p>
+<h2 id="lire-un-fichier-précis">Lire un fichier précis</h2>
+<pre><code class="lang-csharp">try
+{
+    Console.WriteLine(File.ReadAllText(&quot;/mnt/testing.txt&quot;));
+}
+catch (Exception e)
+{
+    Console.WriteLine(e.ToString());
+}
+</code></pre>
+<!-- screenshot: console affichant le contenu du fichier écrit à l'étape précédente -->
+<p><img src="images/filesystem-read-specific-file.png" alt="Lire un fichier précis"></p>
+<p>Et pour des données binaires :</p>
+<pre><code class="lang-csharp">byte[] data = File.ReadAllBytes(&quot;/mnt/testing.txt&quot;);
+Console.WriteLine(&quot;Read &quot; + data.Length + &quot; bytes&quot;);
+</code></pre>
+<p><a id="copy-move-delete"></a></p>
+<h2 id="copier-déplacer-supprimer">Copier, déplacer, supprimer</h2>
+<p>Contrairement à Gen2, <code>File.Move</code> est entièrement pris en charge, sans contournement par copie puis suppression. Un déplacement vers une destination existante lève <code>IOException</code> à moins que vous ne passiez <code>overwrite: true</code> ; l'écrasement résiste aux plantages (la destination est conservée comme sauvegarde jusqu'à ce que le renommage aboutisse).</p>
+<pre><code class="lang-csharp">try
+{
+    File.Copy(&quot;/mnt/testing.txt&quot;, &quot;/mnt/copy.txt&quot;);
+    File.Move(&quot;/mnt/copy.txt&quot;, &quot;/mnt/renamed.txt&quot;);
+    File.Delete(&quot;/mnt/renamed.txt&quot;);
+
+    Directory.Delete(&quot;/mnt/documents&quot;, recursive: true);
+}
+catch (Exception e)
+{
+    Console.WriteLine(e.ToString());
+}
+</code></pre>
+<p>Supprimer un fichier encore ouvert n'échoue pas : la suppression passe <em>en attente</em> et l'entrée disparaît quand le dernier handle se ferme, ce qu'attend la sémantique <code>DeleteOnClose</code> de la BCL.</p>
+<p><a id="streams"></a></p>
+<h2 id="flux">Flux</h2>
+<p>Toute la pile des flux est disponible, y compris le positionnement, la troncature (<code>SetLength</code>) et les E/S texte avec tampon :</p>
+<pre><code class="lang-csharp">using (FileStream stream = new(&quot;/mnt/log.bin&quot;, FileMode.Create, FileAccess.ReadWrite))
+{
+    stream.Write(new byte[] { 1, 2, 3, 4 });
+    stream.Seek(0, SeekOrigin.Begin);
+    int first = stream.ReadByte();          // 1
+}
+
+using (StreamWriter writer = new(&quot;/mnt/notes.txt&quot;))
+{
+    writer.WriteLine(&quot;first line&quot;);
+    writer.WriteLine(&quot;second line&quot;);
+}
+
+using (StreamReader reader = new(&quot;/mnt/notes.txt&quot;))
+{
+    string? line;
+    while ((line = reader.ReadLine()) != null)
+    {
+        Console.WriteLine(line);
+    }
+}
+</code></pre>
+<!-- screenshot: console affichant les deux lignes relues par StreamReader -->
+<p><img src="images/filesystem-streams.png" alt="Flux"></p>
+<p><a id="current-directory-and-relative-paths"></a></p>
+<h2 id="répertoire-courant-et-chemins-relatifs">Répertoire courant et chemins relatifs</h2>
+<p>Le noyau tient un répertoire courant (qui commence à <code>/</code>), si bien que les chemins relatifs et <code>Path.GetFullPath</code> se comportent comme sur n'importe quel système Unix :</p>
+<pre><code class="lang-csharp">Directory.CreateDirectory(&quot;/mnt/work&quot;);
+Directory.SetCurrentDirectory(&quot;/mnt/work&quot;);
+
+File.WriteAllText(&quot;relative.txt&quot;, &quot;resolved against the CWD&quot;);
+Console.WriteLine(File.Exists(&quot;/mnt/work/relative.txt&quot;));      // True
+Console.WriteLine(Path.GetFullPath(&quot;sub/../file.txt&quot;));        // /mnt/work/file.txt
+
+Directory.SetCurrentDirectory(&quot;/&quot;);
+</code></pre>
+<p><a id="error-handling"></a></p>
+<h2 id="gestion-des-erreurs">Gestion des erreurs</h2>
+<p>Le contrat d'exceptions standard de <code>System.IO</code> s'applique, vous pouvez donc intercepter précisément :</p>
+<ul>
+<li>Ouvrir un fichier absent dont le parent existe → <code>FileNotFoundException</code></li>
+<li>Tout chemin sous un répertoire absent (ou sous un préfixe non monté) → <code>DirectoryNotFoundException</code></li>
+<li>Créer un fichier directement dans la racine virtuelle <code>/</code> → <code>IOException</code> (système de fichiers en lecture seule)</li>
+<li>Supprimer un répertoire non vide sans <code>recursive: true</code> → <code>IOException</code></li>
+<li><code>File.Copy</code>/<code>File.Move</code> vers un fichier existant sans écrasement → <code>IOException</code></li>
+</ul>
+<p>Quand <strong>rien du tout n'est monté</strong>, <code>System.IO</code> se dégrade quand même proprement : <code>Directory.Exists(&quot;/&quot;)</code> vaut <code>true</code>, énumérer <code>/</code> renvoie une liste vide, et tout accès à un autre chemin échoue avec l'une des exceptions ci-dessus, jamais par un plantage du noyau.</p>
+<p><a id="current-limitations"></a></p>
+<h2 id="limitations-actuelles">Limitations actuelles</h2>
+<ul>
+<li>Les liens symboliques et les liens physiques ne sont pas pris en charge (<code>ENOTSUP</code>/<code>EPERM</code> en interne ; la BCL remonte <code>IOException</code>).</li>
+<li>Les horodatages des fichiers ne sont pas encore persistés (<code>File.SetLastWriteTime</code> est accepté, mais l'horodatage FAT viendra plus tard).</li>
+<li><code>DriveInfo</code> n'est pas encore branché ; utilisez <code>VfsManager.TryStatFs</code> pour connaître l'espace libre.</li>
+<li>FAT est le seul pilote de système de fichiers que couvrent les suites du noyau ; un pilote ext2, <code>Ext2FileSystemType</code> dans <code>Cosmos.Kernel.System.FileSystem.Ext2</code>, est livré à côté et n'est testé que sur l'hôte. L'interface <code>IVfsFileSystemType</code> est ce qu'implémente un nouveau pilote.</li>
+</ul>
+<p><a id="how-it-works"></a></p>
+<h2 id="fonctionnement">Fonctionnement</h2>
+<p>Votre code appelle la BCL standard, qui aboutit au PAL Unix (les P/Invoke <code>Interop.Sys.*</code>). Ces quelque 45 points d'entrée sont <a href="../dev/plugs.html">remplacés par des plugs</a> dans <code>Cosmos.Kernel.Plugs</code> : une table de descripteurs de fichiers adapte le contrat du PAL (descripteurs de fichiers, flux de répertoires, errno du PAL) et délègue à <code>VfsManager</code>, qui gère la résolution des chemins, la table des montages, le répertoire courant et la sémantique des handles ouverts, et qui transmet l'appel au pilote de système de fichiers monté, lequel lit et écrit un <code>IBlockDevice</code> (un disque SATA, un namespace NVMe, un disque virtio-blk ou une unité de stockage de masse USB publiés par les <code>AhciDriver</code>, <code>NvmeDriver</code>, <code>VirtioBlkDriver</code> ou <code>UsbMassStorageDriver</code> du kit de pilotes, tous via <code>StorageManager</code> ; la RAM via <code>MemoryBlockDevice</code>).</p>
+<pre><code>File / Directory / FileStream          (stock BCL)
+        │
+Interop.Sys.* PAL calls                (stock BCL, plugged)
+        │
+FileDescriptorTable                    (Cosmos.Kernel.Plugs: fds, dir streams, errno)
+        │
+VfsManager                             (mounts, paths, CWD, open handles)
+        │
+IVfsFileSystemType / IVfsSuperblock    (FAT driver)
+        │
+IBlockDevice                           (the kit's AHCI, NVMe, virtio-blk and USB mass storage drivers, MemoryBlockDevice)
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/user/filesystem.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

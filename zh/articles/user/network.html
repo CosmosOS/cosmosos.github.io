@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>网络 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="网络 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/user/network.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="network"></a></p>
+<h1 id="网络">网络</h1>
+<p>本文将介绍 Cosmos Gen3 上的网络：如何启动网络协议栈，以及如何发送和接收数据包。可用的协议有 <strong>ARP</strong>、<strong>IPv4</strong>、<strong>IPv6</strong>、<strong>UDP</strong>、<strong>TCP</strong>、<strong>DHCP</strong> 和 <strong>DNS</strong>。</p>
+<p>如果你来自 Gen2，主要区别如下：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Gen2</th>
+<th>Gen3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TCP</td>
+<td>标准 <code>System.Net.Sockets</code>（通过 plug 实现）</td>
+<td>标准 <code>System.Net.Sockets</code>（通过 plug 实现）</td>
+</tr>
+<tr>
+<td>UDP</td>
+<td>Cosmos 专有的 <code>UdpClient</code> 类</td>
+<td>标准 <code>System.Net.Sockets.UdpClient</code>（通过 plug 实现）</td>
+</tr>
+<tr>
+<td>DHCP</td>
+<td>Cosmos 客户端类</td>
+<td>Cosmos 客户端类（<code>Cosmos.Kernel.System.Network</code>）</td>
+</tr>
+<tr>
+<td>DNS</td>
+<td>Cosmos 客户端类</td>
+<td>标准 <code>System.Net.Dns</code>（通过 plug 实现），或 Cosmos 的 <code>DnsClient</code></td>
+</tr>
+<tr>
+<td>网卡驱动程序</td>
+<td>RTL8168、E1000、PCNET</td>
+<td>基于驱动工具包的 Intel E1000E（任何带有 PCI 主机节点的机器；x64 上 QEMU 默认的 q35 网卡），它同样会绑定 QEMU 和 VirtualBox（82540EM）以及 VMware（82545EM）的 8254x e1000；基于驱动工具包的 virtio-net（两种架构上均支持 PCI，ARM64 上还支持 MMIO）</td>
+</tr>
+</tbody>
+</table>
+<p>这些协议都没有实现其 RFC 中的全部功能。如果你发现 bug 或任何异常，请在我们的仓库中<a href="https://github.com/CosmosOS/Cosmos/issues/new/choose">提交 issue</a>。</p>
+<p><a id="enable-networking-in-your-kernel"></a></p>
+<h2 id="在内核中启用网络">在内核中启用网络</h2>
+<p>网络支持由一个功能开关控制。请确保内核的 <code>.csproj</code> 没有将其关闭（默认值为 <code>true</code>）：</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;CosmosEnableNetwork&gt;true&lt;/CosmosEnableNetwork&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p>启动时，无论是哪种网卡，都会通过驱动工具包到达 <code>NetworkManager</code>；两个驱动程序都随 <code>Cosmos.Kernel.Drivers</code> 一起提供，而每个内核都包含它。<strong>Intel E1000E</strong> 由 <code>E1000EDriver</code> 绑定：PCI 主机驱动程序发布该功能（function），驱动程序将其初始化并发布一个名为 <code>e1000e</code> 的接口，再由管理器的消费者注册它（<a href="drivers.html#pci-devices">编写驱动程序</a>）。<strong>virtio-net</strong> 设备由 <code>VirtioNetDriver</code> 通过两种传输方式之一绑定：virtio PCI 传输驱动程序在该功能之下发布一个 virtio 节点，virtio MMIO 传输驱动程序在 virt 机器的插槽之下发布一个，同一个叶子驱动程序会绑定这两者，并发布一个名为 <code>virtio-net</code> 的接口（<a href="drivers.html#virtio-devices">Virtio 设备</a>）。工具包驱动程序发布的第一个接口就是主接口，顺序取决于驱动阶段绑定它们的顺序。在 x64 上，<code>cosmos run</code> 不需要额外的参数：QEMU 的 q35 默认网卡就是 e1000e。在 ARM64 上，需要显式挂接一块 virtio 网卡：</p>
+<pre><code class="lang-console">$ cosmos run                          # x64: default e1000e NIC, user-mode networking
+$ cosmos run --nic virtio-net-pci     # x64 or arm64: virtio NIC over PCI
+$ cosmos run --nic virtio-net-device  # arm64: virtio NIC over MMIO
+</code></pre>
+<p>virtio PCI 功能以 MSI-X 消息的形式发送中断，在 ARM64 上由 GICv3 的 ITS 进行路由（<code>-M virt,gic-version=3</code>）；<code>cosmos run</code> 启动 ARM64 时使用 QEMU 默认的 GICv2，它没有 ITS，因此在这种情况下 PCI 网卡发布时不带中断条目，<code>VirtioNetDriver</code> 以轮询方式驱动它，每 50 ms 清空一次接收队列。因此，<code>--nic virtio-net-pci</code> 在默认的 ARM64 启动方式下同样可用，而 MMIO 网卡则在自己的 GIC 中断线上运行，是那里的中断驱动之选。</p>
+<p>使用 QEMU 的<em>用户模式网络</em>（默认方式）时，你的内核处在一个私有的 <code>10.0.2.0/24</code> 网络中：主机可通过 <strong>10.0.2.2</strong> 访问，QEMU 内置的 DHCP 服务器负责分配地址，出站的 UDP/TCP 流量经 NAT 转换后发往真实网络。</p>
+<p>下面的代码片段依赖以下 <code>using</code> 指令：</p>
+<pre><code class="lang-csharp">using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using Cosmos.Kernel.System.Network;
+using Cosmos.Kernel.System.Timers;
+</code></pre>
+<p><a id="the-network-device"></a></p>
+<h2 id="网络设备">网络设备</h2>
+<p><code>NetworkManager</code> 管理检测到的网卡。在进行任何配置之前，先检查是否存在设备并且已就绪：</p>
+<pre><code class="lang-csharp">if (NetworkManager.DeviceCount &gt; 0)
+{
+    Console.WriteLine(&quot;Device:  &quot; + NetworkManager.Name);
+    Console.WriteLine(&quot;MAC:     &quot; + NetworkManager.MacAddress?.ToString());
+    Console.WriteLine(&quot;Link up: &quot; + NetworkManager.LinkUp);
+    Console.WriteLine(&quot;Ready:   &quot; + NetworkManager.Ready);
+}
+</code></pre>
+<p>这些属性反映的是主适配器，也就是在没有指定其他适配器时受支持层所使用的那一个。有多块网卡时，可以枚举它们并另选一块作为主适配器：</p>
+<pre><code class="lang-csharp">for (int i = 0; i &lt; NetworkManager.DeviceCount; i++)
+{
+    NetworkAdapter adapter = NetworkManager.GetAdapter(i);
+    Console.WriteLine($&quot;[{i}] {adapter.Name}  {adapter.MacAddress}  link={adapter.LinkUp}&quot;);
+}
+
+NetworkAdapter second = NetworkManager.GetAdapter(1);
+if (second.IsValid)
+{
+    NetworkManager.Primary = second;
+}
+</code></pre>
+<p><code>NetworkAdapter</code> 是一个句柄，而不是设备本身：它携带的是注册索引，因此默认构造的句柄不指向任何设备，其 <code>IsValid</code> 为 false。对于没有设备占用的索引，<code>GetAdapter</code> 返回的就是这样的句柄，这正是上面的赋值要加以保护的原因：<code>Primary</code> 的 setter 遇到不指向任何设备的句柄会抛出 <code>ArgumentException</code>，而 QEMU 默认只给内核一块网卡，所以在那里 <code>GetAdapter(1)</code> 不指向任何设备。</p>
+<!-- screenshot: 控制台显示 "Device: e1000e"、MAC 地址、"Link up: True"、"Ready: True" -->
+<p><img src="images/network-device.png" alt="网络设备"></p>
+<p><a id="configure-ipv4"></a></p>
+<h2 id="配置-ipv4">配置 IPv4</h2>
+<p>与任何操作系统一样，内核需要先有 IPv4 配置（地址、子网掩码、网关）才能与网络通信。该配置可以通过 DHCP 动态获取，也可以手动设置。</p>
+<p>协议栈没有单独的初始化步骤。配置地址这一操作本身就会启动协议栈：它将地址和 MAC 地址映射到设备上。<code>NetworkStack.RemoveAllConfigIP()</code> 可以撤销这一操作。</p>
+<p><a id="dynamically-through-dhcp"></a></p>
+<h3 id="通过-dhcp-动态配置">通过 DHCP 动态配置</h3>
+<p><code>DhcpClient.SendDiscoverPacket()</code> 会完成整个 DISCOVER → OFFER → REQUEST → ACK 交换过程，并应用得到的配置。它返回所用的毫秒数，超时则返回 <code>-1</code>：</p>
+<pre><code class="lang-csharp">DhcpClient dhcpClient = new();
+
+if (dhcpClient.SendDiscoverPacket() != -1)
+{
+    IPConfig? config = NetworkManager.Primary.IPConfig;
+    if (config is not null)
+    {
+        Console.WriteLine(&quot;IP address: &quot; + config.Address.ToString());
+        Console.WriteLine(&quot;Subnet:     &quot; + config.SubnetMask.ToString());
+        Console.WriteLine(&quot;Gateway:    &quot; + config.DefaultGateway.ToString());
+    }
+}
+else
+{
+    Console.WriteLine(&quot;DHCP timed out&quot;);
+}
+</code></pre>
+<!-- screenshot: 控制台显示 DHCP 分配的 10.0.2.15 地址、子网掩码和 10.0.2.2 网关 -->
+<p><img src="images/network-dhcp.png" alt="DHCP"></p>
+<p><a id="manually"></a></p>
+<h3 id="手动配置">手动配置</h3>
+<pre><code class="lang-csharp">if (!IPConfig.Enable(
+        new Address4(192, 168, 1, 69),     // local address
+        new Address4(255, 255, 255, 0),    // subnet mask
+        new Address4(192, 168, 1, 254)))   // gateway
+{
+    Console.WriteLine(&quot;No adapter to configure&quot;);
+}
+</code></pre>
+<p>这样配置的是主适配器。要配置某个特定的适配器，请传入它的句柄。当句柄不指向任何设备时，<code>Enable</code> 返回 <code>false</code>，超出最后一个适配器的索引得到的正是这种句柄：</p>
+<pre><code class="lang-csharp">NetworkAdapter second = NetworkManager.GetAdapter(1);
+
+if (second.IsValid
+    &amp;&amp; IPConfig.Enable(second,
+        new Address4(192, 168, 2, 69),
+        new Address4(255, 255, 255, 0),
+        new Address4(192, 168, 2, 254)))
+{
+    Console.WriteLine(&quot;Configured the second adapter&quot;);
+}
+</code></pre>
+<p>DHCP 一次只配置一个适配器。<code>new DhcpClient()</code> 在主适配器上进行交换，<code>new DhcpClient(adapter)</code> 则在句柄所指的适配器上进行；无论哪种方式，其他适配器都会保留各自的配置。<code>SendReleasePacket()</code> 将该适配器的地址交还给服务器，并使其处于未配置状态：</p>
+<pre><code class="lang-csharp">NetworkAdapter second = NetworkManager.GetAdapter(1);
+
+if (second.IsValid &amp;&amp; new DhcpClient(second).SendDiscoverPacket() != -1)
+{
+    Console.WriteLine(&quot;Second adapter: &quot; + second.IPConfig?.Address.ToString());
+}
+</code></pre>
+<p><a id="read-the-configuration-back"></a></p>
+<h3 id="读取配置">读取配置</h3>
+<p>每个适配器都带有当前在其上生效的配置，未配置时则为 <code>null</code>：</p>
+<pre><code class="lang-csharp">Console.WriteLine(NetworkManager.Primary.IPConfig?.Address.ToString());
+Console.WriteLine(NetworkManager.GetAdapter(1).IPConfig?.SubnetMask.ToString());
+</code></pre>
+<h2 id="ipv6">IPv6</h2>
+<p>IPv4 配置还会在设备上启用一个 IPv6 链路本地地址：<code>fe80::/64</code>，接口标识符由其 MAC 地址派生（RFC 4291 附录 A）。在 QEMU 的默认网卡上，该地址为 <code>fe80::5054:ff:fe12:3456</code>。邻居发现（Neighbor Discovery）解析链路上的地址，方式与 IPv4 下的 ARP 相同，ICMPv6 回显在两个方向上都能工作。</p>
+<pre><code class="lang-csharp">Address6? linkLocal = NetworkManager.Primary.LinkLocalAddress;   // null until the device is configured
+
+Icmpv6Client ping = new();
+ping.Connect(new Address6(0xFEC0_0000, 0, 0, 2));               // QEMU user networking answers on fec0::2
+ping.SendEcho();
+
+Cosmos.Kernel.System.Network.EndPoint from = new(Address6.Zero, 0);
+int elapsedMs = ping.Receive(ref from, 5000);                  // -1 on timeout
+ping.Close();
+</code></pre>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>IPv4</th>
+<th>IPv6</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>地址</td>
+<td><code>IPConfig.Enable</code> 或 DHCP</td>
+<td>链路本地地址，由 MAC 地址派生</td>
+</tr>
+<tr>
+<td>地址解析</td>
+<td>ARP</td>
+<td>邻居发现（请求与通告）</td>
+</tr>
+<tr>
+<td>Ping</td>
+<td><code>IcmpClient</code></td>
+<td><code>Icmpv6Client</code></td>
+</tr>
+<tr>
+<td>UDP 和 TCP</td>
+<td><code>UdpPacket</code>、<code>TcpPacket</code></td>
+<td>同样这两个类，校验和基于 IPv6 伪首部计算</td>
+</tr>
+<tr>
+<td>DNS</td>
+<td><code>DnsClient</code>，A 记录</td>
+<td>同一个客户端，AAAA 记录</td>
+</tr>
+</tbody>
+</table>
+<p>IPv6 目前尚未涵盖的内容：链路本地以外的地址（路由器通告会被忽略，没有 SLAAC 也没有 DHCPv6，因此只能访问链路上的目标），以及 .NET 套接字类上的 <code>AddressFamily.InterNetworkV6</code>。</p>
+<h2 id="udp">UDP</h2>
+<p>UDP 通过标准的 .NET <code>System.Net.Sockets.UdpClient</code> 实现，不需要任何 Cosmos 专有的类。<code>Cosmos.Kernel.System.Network</code> 有一个自己的 <code>UdpClient</code>（数据包级客户端），因此像上面那样同时导入两个命名空间时，请写出 .NET 那个类的完整名称。发送会立即发出；接收时则要轮询 <code>Available</code>（在没有待处理数据时接收会阻塞）：</p>
+<pre><code class="lang-csharp">var udpClient = new System.Net.Sockets.UdpClient(4242);
+
+/* Send data: 10.0.2.2 is the host under QEMU user networking */
+byte[] message = Encoding.ASCII.GetBytes(&quot;Hello from CosmosOS!&quot;);
+udpClient.Send(message, message.Length, new IPEndPoint(IPAddress.Parse(&quot;10.0.2.2&quot;), 4242));
+
+/* Receive data */
+IPEndPoint remote = new(IPAddress.Any, 0);
+while (udpClient.Available == 0)
+{
+    TimerManager.Wait(100);
+}
+
+byte[] data = udpClient.Receive(ref remote);
+Console.WriteLine(&quot;Received '&quot; + Encoding.ASCII.GetString(data) + &quot;' from &quot; + remote.Address);
+
+udpClient.Close();
+</code></pre>
+<!-- screenshot: 控制台显示从主机回传的 UDP 回显 -->
+<p><img src="images/network-udp.png" alt="UDP"></p>
+<p><a id="tcp-client"></a></p>
+<h2 id="tcp-客户端">TCP 客户端</h2>
+<p>TCP 同样通过标准的 .NET 类实现：<code>TcpClient</code>、<code>TcpListener</code> 和 <code>NetworkStream</code>。</p>
+<pre><code class="lang-csharp">var tcpClient = new TcpClient();
+tcpClient.Connect(IPAddress.Parse(&quot;10.0.2.2&quot;), 4343);
+
+NetworkStream stream = tcpClient.GetStream();
+
+/* Send data */
+byte[] message = Encoding.ASCII.GetBytes(&quot;Hello from CosmosOS!&quot;);
+stream.Write(message, 0, message.Length);
+
+/* Receive data */
+while (!stream.DataAvailable)
+{
+    TimerManager.Wait(100);
+}
+
+byte[] buffer = new byte[tcpClient.ReceiveBufferSize];
+int bytesRead = stream.Read(buffer, 0, buffer.Length);
+Console.WriteLine(&quot;Received '&quot; + Encoding.ASCII.GetString(buffer, 0, bytesRead) + &quot;'&quot;);
+
+tcpClient.Close();
+</code></pre>
+<p><code>Read</code> 与在 .NET 中一样会等待数据：字节一到达它就返回，只有在对端关闭连接后才返回 0，因此 <code>DataAvailable</code> 循环是可选的。设置 <code>ReadTimeout</code>（即套接字的 <code>ReceiveTimeout</code>）可以限定等待时间，超时后 <code>Read</code> 会抛出 <code>IOException</code>。</p>
+<!-- screenshot: 控制台显示从主机回传的 TCP 回显 -->
+<p><img src="images/network-tcp-client.png" alt="TCP 客户端"></p>
+<p><a id="tcp-server"></a></p>
+<h2 id="tcp-服务器">TCP 服务器</h2>
+<p><code>TcpListener</code> 接受传入的连接。轮询 <code>Pending()</code> 可以避免在 <code>AcceptTcpClient()</code> 中阻塞：</p>
+<pre><code class="lang-csharp">var listener = new TcpListener(IPAddress.Any, 4444);
+listener.Start();
+Console.WriteLine(&quot;Listening on port 4444...&quot;);
+
+while (!listener.Pending())
+{
+    TimerManager.Wait(100);
+}
+
+TcpClient client = listener.AcceptTcpClient();
+Console.WriteLine(&quot;Client connected!&quot;);
+
+NetworkStream stream = client.GetStream();
+while (!stream.DataAvailable)
+{
+    TimerManager.Wait(100);
+}
+
+byte[] buffer = new byte[client.ReceiveBufferSize];
+int bytesRead = stream.Read(buffer, 0, buffer.Length);
+Console.WriteLine(&quot;Received '&quot; + Encoding.ASCII.GetString(buffer, 0, bytesRead) + &quot;'&quot;);
+
+/* Echo it back */
+stream.Write(buffer, 0, bytesRead);
+
+client.Close();
+listener.Stop();
+</code></pre>
+<p>要从主机访问 QEMU 用户模式网络中的监听器，请用 <code>cosmos run --hostfwd tcp::4444-:4444</code> 将主机端口转发到客户机（可重复使用；直接使用 QEMU 时写作 <code>-nic user,model=e1000e,hostfwd=tcp::4444-:4444</code>），然后在主机上连接 <code>localhost:4444</code>。</p>
+<p>如果需要通过网络使用交互式 shell，<a href="https://github.com/CosmosOS/Cosmos.Network.Telnet">Cosmos.Network.Telnet</a> 包中的 <code>TelnetServer</code> 会为每个客户端提供一个独立的控制台会话（<a href="sessions.html">控制台会话与 Telnet</a>）。</p>
+<!-- screenshot: 控制台显示 "Listening on port 4444..."、"Client connected!" 和收到的消息 -->
+<p><img src="images/network-tcp-server.png" alt="TCP 服务器"></p>
+<p><a id="ftp-server"></a></p>
+<h2 id="ftp-服务器">FTP 服务器</h2>
+<p><a href="https://github.com/CosmosOS/Cosmos.Network.Ftp">Cosmos.Network.Ftp</a> 包通过 FTP 提供 VFS 中的一个目录。版本 2 是 Gen3 的版本；1.x 用于 Gen2。在内核中添加 <code>&lt;PackageReference Include=&quot;Cosmos.Network.Ftp&quot; Version=&quot;2.0.0&quot; /&gt;</code>，并在网络配置完成且文件系统挂载之后启动服务器：</p>
+<pre><code class="lang-csharp">using System.Threading;
+using Cosmos.Network.Ftp;
+
+FtpServer server = new(&quot;/mnt&quot;);
+new Thread(server.Listen).Start(); // Listen() serves every client until server.Close()
+</code></pre>
+<p>客户端会把 <code>/mnt</code> 视为 <code>/</code>，并且无法离开它。不设置 <code>Authenticate</code> 时，任何用户名配任何密码都能登录；设置它即可校验凭据。传输采用被动模式，默认使用 50000 到 50009 端口（<code>PassivePortMin</code> 和 <code>PassivePortMax</code>），因此在 QEMU 用户模式网络下，除了控制端口之外还要转发这些端口：<code>cosmos run --hostfwd tcp::2121-:21 --hostfwd tcp::50000-:50000 ...</code>，然后执行 <code>curl ftp://localhost:2121/</code>。<code>PASV</code> 应答中给出的是客户机自己的地址 10.0.2.15，主机无法访问该地址：curl 会忽略它，但 FileZilla 会连接它，因此请设置 <code>PassiveAddress = IPAddress.Loopback</code>，让 <code>PASV</code> 改为给出 127.0.0.1。</p>
+<h2 id="dns">DNS</h2>
+<p>有两个 API 可以解析名称：标准的 <code>System.Net.Dns</code>，以及 Cosmos 的 <code>DnsClient</code>。无论使用哪一个，都要注册一个域名服务器，因为没有可供读取的 <code>resolv.conf</code>，而域名服务器通常由 DHCP 提供：</p>
+<pre><code class="lang-csharp">DnsConfig.Add(new Address4(1, 1, 1, 1));   // Cloudflare public DNS
+
+IPAddress[] addresses = Dns.GetHostAddresses(&quot;github.com&quot;);
+Console.WriteLine(&quot;github.com resolved to &quot; + addresses[0].ToString());
+</code></pre>
+<p><code>System.Net.Dns</code> 通过平台层上的一个 plug 到达 Cosmos 的解析器，它的所有入口点最终都汇集到这个 plug，因此所有阻塞重载都靠这一个 plug 就能工作。与桌面运行时相比有两处细节不同：查找失败时会抛出 <code>SocketException</code>，而 Cosmos 客户端则返回 null；<code>Dns.GetHostName()</code> 返回的是 <code>DnsConfig.HostName</code>，而这个值不会有任何代码替你设置。</p>
+<p>Cosmos 的 <code>DnsClient</code> 是另一条途径，当你需要应答数据包或完整的应答列表时，就应该使用它：</p>
+<pre><code class="lang-csharp">DnsConfig.Add(new Address4(1, 1, 1, 1));   // Cloudflare public DNS
+
+var dnsClient = new DnsClient();
+dnsClient.Connect(new Address4(1, 1, 1, 1));
+
+/* Query a single domain name */
+dnsClient.SendQuery(&quot;github.com&quot;);
+
+/* Receive the answer (5 s timeout) */
+Address? address = dnsClient.Receive(5000);
+if (address != null)
+{
+    Console.WriteLine(&quot;github.com resolved to &quot; + address.ToString());
+}
+
+dnsClient.Close();
+</code></pre>
+<p>DNS 在两个 IP 版本上是同一个协议，因此 <code>DnsClient</code> 同时支持两者。有两件事相互独立地变化：传给 <code>Connect</code> 的服务器地址决定由哪个版本承载查询，传给 <code>SendQuery</code> 的记录类型决定应答中包含哪个地址族。IPv4 查询可以请求 IPv6 地址，反之亦然：</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.System.Network.Protocols.Dns;   // DnsRecordType, part of the packet seam (COSMOS0002)
+
+/* Ask for the IPv6 address, over whichever version reaches the server */
+dnsClient.SendQuery(&quot;github.com&quot;, DnsRecordType.AAAA);
+
+/* Every address record for the name, after any CNAME chain */
+List&lt;Address&gt;? all = dnsClient.ReceiveAll(5000);
+</code></pre>
+<p>DHCP 则是相反的情况，仍然只支持 IPv4：DHCPv6 是另一个协议，而不是在 IPv6 上运行的 DHCP，它与 DHCP 的端口、消息类型和选项代码都不相同。</p>
+<!-- screenshot: 控制台显示 github.com 被解析为一个 IP 地址 -->
+<p><img src="images/network-dns.png" alt="DNS"></p>
+<p><a id="crafting-packets"></a></p>
+<h2 id="构造数据包">构造数据包</h2>
+<p>客户端背后的数据包类型作为实验性扩展点公开：内核可以自己构建协议数据包，通过协议栈发送，并接收解析后的数据包对象而不是负载字节。该扩展点带有 <code>COSMOS0002</code> 诊断（<a href="../dev/public-api.html">公共 API 跟踪</a>）；在内核项目明确承认缺少兼容性承诺之前，引用它会导致构建错误：</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;NoWarn&gt;$(NoWarn);COSMOS0002&lt;/NoWarn&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p>该扩展点由三部分组成：</p>
+<table>
+<thead>
+<tr>
+<th>部分</th>
+<th>成员</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据包类型</td>
+<td><code>EthernetPacket</code>、<code>ArpRequestEthernet</code>/<code>ArpReplyEthernet</code>、<code>InternetPacket</code>、<code>IPPacket</code>、<code>IcmpEchoRequest</code>/<code>IcmpEchoReply</code>、<code>UdpPacket</code>、<code>DhcpDiscover</code>/<code>DhcpRequest</code>/<code>DhcpRelease</code>、<code>DnsPacketQuery</code>/<code>DnsPacketAnswer</code>、<code>TcpPacket</code></td>
+</tr>
+<tr>
+<td>发送与注入</td>
+<td><code>NetworkStack.Send(InternetPacket)</code> 将构建好的数据包加入队列并解析其邻居地址；<code>NetworkStack.HandlePacket</code> 将原始帧注入接收路径</td>
+</tr>
+<tr>
+<td>数据包级客户端 I/O</td>
+<td><code>UdpClient.Send(UdpPacket)</code> / <code>UdpClient.ReceivePacket(timeout)</code>、<code>IcmpClient.Send(IcmpPacket)</code> / <code>IcmpClient.ReceivePacket(timeout)</code></td>
+</tr>
+</tbody>
+</table>
+<p>数据包类型构成 <code>Cosmos.Kernel.System.Network.Protocols</code> 子树：<code>EthernetPacket</code> 和 <code>InternetPacket</code> 位于其根部，然后每个协议一个命名空间（<code>Arp</code>、<code>Dns</code>、<code>IPv4</code> 及其下的 <code>IPv4.Dhcp</code>、<code>Tcp</code>、<code>Udp</code>）。发送、注入和客户端成员仍保留在 <code>Cosmos.Kernel.System.Network</code> 中各自的稳定类型上。</p>
+<p>该扩展点用于构建和读取协议栈已经支持的数据包类型，而不是用于添加新类型：它们的线路格式字段、首部校验和辅助方法以及 <code>InitializeFields</code> 解析钩子都是协议栈内部的，因此内核只能构造数据包并读取其属性，而不能派生出自己的类型。</p>
+<p><code>UdpPacket</code> 和 <code>TcpPacket</code> 用同一个类支持两个 IP 版本。它们并不派生自 <code>IPPacket</code>；它们把承载自己的数据包保存在 <code>Network</code> 属性中，该属性的类型是与版本无关的 <code>InternetPacket</code>。构建时传入两个相同版本的地址，然后把 <code>packet.Network</code> 交给 <code>NetworkStack.Send</code>：</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.System.Network.Protocols.Udp;
+
+UdpPacket datagram = new UdpPacket(localIp, remoteIp, 5000, 4242, payload);
+NetworkStack.Send(datagram.Network);
+</code></pre>
+<p>如果两个地址的版本不一致，会抛出 <code>ArgumentException</code>，而不是截断其中一个。</p>
+<p>下面是一个手工构造的回显请求，通过调用者选择的标识符和序列号与其应答相对应：</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.System.Network;
+using Cosmos.Kernel.System.Network.Protocols.IPv4;
+
+IPConfig? config = NetworkManager.Primary.IPConfig;
+if (config is null)
+{
+    Console.WriteLine(&quot;The primary adapter has no IPv4 configuration.&quot;);
+    return;
+}
+
+Address localIp = config.Address;
+Address gateway = config.DefaultGateway;
+
+IcmpClient icmp = new IcmpClient();
+icmp.Connect(gateway);
+
+IcmpEchoRequest request = new IcmpEchoRequest(localIp, gateway, id: 0x1234, sequence: 7);
+
+if (!NetworkStack.Send(request))
+{
+    Console.WriteLine(&quot;No interface carries &quot; + localIp.ToString());
+    return;
+}
+
+if (icmp.ReceivePacket(5000) is IcmpEchoReply reply
+    &amp;&amp; reply.IcmpId == 0x1234 &amp;&amp; reply.IcmpSequence == 7)
+{
+    Console.WriteLine(&quot;reply from &quot; + reply.SourceIP.ToString());
+}
+
+icmp.Close();
+</code></pre>
+<p>数据包类型实际遵循的约定：</p>
+<ul>
+<li>构建型构造函数在构造时写入完整的帧，包括长度和校验和；之后不会重新计算任何内容，因此构造完成后不得修改首部字节。</li>
+<li>首部属性是构造时从 <code>RawData</code> 解析出的快照；写入 <code>RawData</code> 不会刷新它们。</li>
+<li>解析型构造函数（<code>new XxxPacket(byte[])</code>）直接引用调用者的数组，不进行复制。</li>
+<li><code>NetworkStack.Send</code> 根据数据包的源 IP 确定发送设备，没有已配置的接口与之匹配时返回 <code>false</code>；除非目标是广播或多播组，否则目标 MAC 地址在 IPv4 上通过 ARP 解析，在 IPv6 上通过邻居发现解析。</li>
+<li>UDP 校验和因版本而异，而且它是唯一因版本而异的字段。接收负载的构建型构造函数会写入校验和；只接收长度的构造函数则将该字段留为零，这在 IPv4 上表示“未计算”，在 IPv6 上则是非法的，因此负载就位后请调用 <code>WriteChecksum()</code>。</li>
+<li>只由 IPv4 承载的协议是 <code>IPPacket</code> 的子类：将协议号和负载长度传给构建型构造函数，并在 <code>DataOffset</code> 处写入负载。两个版本都承载的协议则改为组合一个 <code>InternetPacket</code>，就像 <code>UdpPacket</code> 和 <code>TcpPacket</code> 那样。</li>
+</ul>
+<p><a id="current-limitations"></a></p>
+<h2 id="当前限制">当前限制</h2>
+<ul>
+<li><code>System.Net.Dns</code> 只解析 A 记录。在 plug 中 <code>IPAddress</code> 只保存四个字节，因此 AAAA 应答无处可返回，<code>AddressFamily.InterNetworkV6</code> 会被直接拒绝。Cosmos 的 <code>DnsClient</code> 没有这一限制，对于 AAAA 记录会返回 <code>Address6</code>。</li>
+<li>不支持反向查找。<code>Dns.GetHostEntry(IPAddress)</code> 需要针对 <code>in-addr.arpa</code> 发出 PTR 查询，而解析器不会发送这种查询，因此它会抛出异常，而不是返回名称。</li>
+<li><code>Dns</code> 的异步重载未经验证。<code>GetHostAddressesAsync</code> 以及 <code>Begin</code>/<code>End</code> 方法对都会到达同一个 plug，但它们是通过把阻塞调用排入线程池来到达的，而这个内核尚未针对线程池进行过测试。阻塞重载才是经过测试的路径。</li>
+<li>IPv6 止步于链路。有链路本地地址、邻居发现、ICMPv6 回显，UDP 和 TCP 现在也通过与 IPv4 相同的数据包类在 IPv6 上传输，但没有路由表，因此每个目标都必须位于链路上。没有 SLAAC 或 DHCPv6，除链路本地地址外没有其他地址配置，而且在套接字 plug 中 <code>IPAddress</code> 仍然只支持 IPv4，因此标准的 .NET 套接字类只能访问 IPv4。</li>
+<li>没有 TLS，因此没有 <code>HttpClient</code>/HTTPS：只有原始 TCP。</li>
+<li>多块网卡都会被注册和配置，出站数据包通过将源地址与每个接口的配置进行匹配来路由，因此 <code>NetworkManager.Primary</code> 只决定不经路由的辅助方法（<code>NetworkManager.Send</code>、不带句柄的 <code>IPConfig.Enable</code>）的去向。</li>
+<li>驱动工具包撤回的接口会离开管理器的表，但其 IP 配置不会被移除，而且 <code>NetworkAdapter</code> 句柄仍按位置索引，因此在撤回之前获取的句柄可能指向后来移入该位置的设备。</li>
+<li>不支持半关闭：在已建立的 TCP 连接上调用 <code>Close()</code> 时，会期望对端在 5 秒内响应 FIN 握手，如果对端保持连接打开则会抛出异常。</li>
+<li>在 Cosmos 的 <code>UdpClient</code> 和 <code>IcmpClient</code> 上，<code>Close()</code> 和 <code>Dispose()</code> 不是同一回事。<code>Close()</code> 停止向客户端投递数据，<code>IcmpClient</code> 可以通过再次调用 <code>Connect()</code> 重新打开；<code>Dispose()</code>（包括 <code>using</code> 块执行的那一次）会永久停用该客户端，此后其他所有成员都会抛出 <code>ObjectDisposedException</code>。</li>
+</ul>
+<p><a id="how-it-works"></a></p>
+<h2 id="工作原理">工作原理</h2>
+<p>你的代码调用标准的 .NET 套接字类，其 PAL 最终落到 <code>Cosmos.Kernel.Plugs</code> 中 <code>Socket</code> 层级的 <a href="../dev/plugs.html">plug</a>（<code>SocketPlug</code>、<code>TcpClientPlug</code>、<code>TcpListenerPlug</code>、<code>UdpClientPlug</code>、<code>NetworkStreamPlug</code>，以及用于 <code>Dns</code> 的 <code>NameResolutionPalPlug</code>）。这些 plug 再委托给 Cosmos 网络协议栈（基于两个 IP 版本的 TCP 状态机和 UDP 层，IPv4 之下是 ARP 和以太网，IPv6 之下是 ICMPv6 和邻居发现），协议栈通过注册到 <code>NetworkManager</code> 的网络设备收发帧：即某个驱动工具包驱动程序发布的接口，E1000E 的或 virtio-net 的。工具包驱动程序收到的帧会在工具包的工作线程上交给协议栈，在处理程序执行期间中断处于禁用状态。Cosmos 的 <code>DhcpClient</code> 和 <code>DnsClient</code> 直接建立在 Cosmos 的 UDP 层之上，其中 <code>DhcpClient</code> 只支持 IPv4。</p>
+<pre><code>TcpClient / TcpListener / UdpClient / NetworkStream     (stock BCL)
+        │
+Socket plugs                                            (Cosmos.Kernel.Plugs)
+        │
+Cosmos TCP state machine / UDP                          (Cosmos.Kernel.System.Network)
+        │                                    DhcpClient / DnsClient ride UDP directly
+IPv4 / ARP and IPv6 / Neighbor Discovery / Ethernet
+        │
+Network device                                          (e1000e or virtio-net, over the driver kit)
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/user/network.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

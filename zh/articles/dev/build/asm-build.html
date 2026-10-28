@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title> | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content=" | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/dev/build/asm-build.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><code>Cosmos.Build.Asm</code> 将手写的汇编源文件编译为目标文件，这些目标文件随后会与 NativeAOT 的输出链接在一起。x64 和 ARM64 两种目标都使用 <strong>clang 集成汇编器</strong>处理 GAS 语法的 <code>.s</code> 文件。</p>
+<hr>
+<p><a id="flow-chart"></a></p>
+<h2 id="流程图">流程图</h2>
+<pre><code class="lang-mermaid">flowchart TD
+    A[GetAsmTool] --&gt; B[FindAsmSourceFiles]
+    B --&gt; C[BuildAsm]
+    C --&gt; D[.obj files under cosmos/asm]
+</code></pre>
+<hr>
+<p><a id="parameters"></a></p>
+<h2 id="参数">参数</h2>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AsmToolPath</code></td>
+<td><code>clang</code> 可执行文件的完整路径。未设置时由 <code>GetAsmTool</code> 自动检测。</td>
+<td>通过 <code>ResolveCosmosToolTask</code> 解析（系统 PATH + Cosmos 工具捆绑包）</td>
+</tr>
+<tr>
+<td><code>AsmSearchPath</code></td>
+<td>要扫描（非递归）<code>*.s</code> 文件的一个或多个目录。</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>AsmFiles</code></td>
+<td>要编译的 <code>*.s</code> 文件的显式列表（会添加到扫描结果中）。</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>AsmOutputPath</code></td>
+<td>存放编译后目标文件的目录。</td>
+<td><code>$(IntermediateOutputPath)/cosmos/asm/</code></td>
+</tr>
+</tbody>
+</table>
+<p>注：</p>
+<ul>
+<li>设置了 <code>RuntimeIdentifier</code>（例如 <code>linux-x64</code>）时，如果存在架构子文件夹（例如 <code>&lt;searchDir&gt;/x64/</code>），<code>FindAsmSourceFiles</code> 会优先使用它。</li>
+<li>目标三元组由 <code>AsmBuildTask</code> 根据 <code>TargetArchitecture</code> 选择：x64 为 <code>x86_64-elf</code>，ARM64 为 <code>aarch64-none-elf</code>。</li>
+</ul>
+<hr>
+<p><a id="tasks"></a></p>
+<h2 id="任务">任务</h2>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>说明</th>
+<th>依赖于</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GetAsmTool</code></td>
+<td>通过 <code>ResolveCosmosToolTask</code> 将 <code>AsmToolPath</code> 解析为 clang 二进制文件。</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>FindAsmSourceFiles</code></td>
+<td>清理输入，应用按架构的替换，并在 <code>AsmSearchPath</code> 下发现 <code>*.s</code> 文件。</td>
+<td><code>Build</code></td>
+</tr>
+<tr>
+<td><code>BuildAsm</code></td>
+<td>对每个文件以 <code>--target=&lt;triple&gt; -c</code> 调用 <code>AsmBuildTask</code>，输出写入 <code>AsmOutputPath</code>。</td>
+<td><code>FindAsmSourceFiles; GetAsmTool</code></td>
+</tr>
+<tr>
+<td><code>CleanAsm</code></td>
+<td>删除 <code>$(IntermediateOutputPath)/cosmos/asm/</code>。</td>
+<td><code>Clean</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a id="detailed-workflow"></a></p>
+<h2 id="详细工作流程">详细工作流程</h2>
+<ol>
+<li><code>GetAsmTool</code> 将 <code>AsmToolPath</code> 解析为一个 <code>clang</code> 二进制文件（显式指定 / 系统 / Cosmos 工具捆绑包）。</li>
+<li><code>FindAsmSourceFiles</code>：
+<ul>
+<li>从 <code>AsmSearchPath</code> 和 <code>AsmFiles</code> 中移除所有不存在的条目（并发出警告）。</li>
+<li>如果设置了 <code>RuntimeIdentifier</code>，则将包含匹配架构子文件夹的 <code>AsmSearchPath</code> 条目替换为该子文件夹（例如 <code>x64</code>）。</li>
+<li>构建非递归搜索模式 <code>%(AsmSearchPath.FullPath)/*.s</code>，并将结果添加到 <code>AsmFiles</code>（已去重）。</li>
+</ul>
+</li>
+<li><code>BuildAsm</code> 对每个文件调用 <code>AsmBuildTask</code>：
+<ul>
+<li>计算源文件的 SHA1，并将 <code>&lt;name&gt;-&lt;sha1&gt;.obj</code> 输出到 <code>AsmOutputPath</code>。</li>
+<li>执行 <code>clang --target=&lt;x86_64-elf|aarch64-none-elf&gt; -c -o &lt;output.obj&gt; &lt;input.s&gt;</code>。</li>
+</ul>
+</li>
+<li><code>CleanAsm</code> 在 <code>Clean</code> 期间删除 <code>cosmos/asm</code> 中间文件夹。</li>
+</ol>
+<hr>
+<p><a id="outputs"></a></p>
+<h2 id="输出">输出</h2>
+<ul>
+<li>位于 <code>$(IntermediateOutputPath)/cosmos/asm/</code> 中的目标文件，命名为 <code>&lt;sourceName&gt;-&lt;sha1&gt;.obj</code>，其中 <code>&lt;sha1&gt;</code> 是源文件内容的哈希。这保证了文件名具有确定性，并且在多次构建之间对缓存友好。</li>
+</ul>
+<hr>
+<p><a id="related-components"></a></p>
+<h2 id="相关组件">相关组件</h2>
+<ul>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Asm"><code>Cosmos.Build.Asm</code></a></li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/dev/build/asm-build.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

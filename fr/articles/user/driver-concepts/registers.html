@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>MMIO (E/S mapp&#233;es en m&#233;moire) et E/S de port | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="MMIO (E/S mapp&#233;es en m&#233;moire) et E/S de port | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/user/driver-concepts/registers.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="mmio-memory-mapped-io-and-port-io"></a></p>
+<h1 id="mmio-es-mappées-en-mémoire-et-es-de-port">MMIO (E/S mappées en mémoire) et E/S de port</h1>
+<p>Un périphérique expose son interface de contrôle sous forme de registres, de petits emplacements que le pilote lit pour connaître l'état du périphérique et dans lesquels il écrit pour lui donner des ordres. Avec les E/S mappées en mémoire (MMIO), le périphérique répond à une plage d'<a href="physical-addresses.html">adresses physiques</a>, et les lectures et écritures mémoire ordinaires l'atteignent une fois la plage mappée. Le x86 possède en outre un espace de ports distinct de 65 536 adresses, accessible uniquement par les instructions <code>in</code> et <code>out</code>, 32 bits au plus à la fois ; des périphériques plus anciens comme le <a href="ps2.html">contrôleur PS/2</a> s'y trouvent encore. ARM64 n'a pas d'espace de ports.</p>
+<p>Les registres ne sont pas de la mémoire. Une lecture peut avoir un effet de bord, comme effacer la cause d'une interruption ou retirer un octet d'une FIFO, et une écriture peut lancer une commande, si bien qu'écrire deux fois une valeur peut exécuter la commande deux fois. Chaque accès doit avoir lieu exactement une fois, dans l'ordre du programme, à la largeur que documente le périphérique : un registre de 32 bits lu comme quatre octets donne quatre accès différents, et beaucoup de périphériques se comportent mal face à une mauvaise largeur ou à un accès non aligné sur sa largeur.</p>
+<p>Le mappage décide de la façon dont le CPU met les adresses en cache, page par page. Les registres demandent de la mémoire de périphérique non mise en cache, où chaque accès atteint le périphérique dans l'ordre et où rien n'est lu de manière spéculative. Un framebuffer est de la mémoire ordinaire située sur le périphérique, dans laquelle dessiner sans cache est lent ; il est donc mappé en write-combining : les écritures sont regroupées en rafales et renoncent à leur ordre. La mémoire normale, mise en cache, convient à la RAM qu'un périphérique cohérent partage avec le CPU. Un registre mis en cache échoue silencieusement : il renvoie des valeurs périmées et retient les écritures dans le cache.</p>
+<p>Dans le kit de pilotes, <code>binding.MapRegisters</code> renvoie une <code>RegisterWindow</code>, dont les méthodes <code>Read8</code> à <code>Read64</code> et <code>Write8</code> à <code>Write64</code> font chacune un accès de cette largeur, vérifié contre les bornes et, sur une fenêtre mémoire, contre l'alignement ; sur une plage de ports x64, elles utilisent <code>in</code> et <code>out</code>, acceptent n'importe quel décalage, et celles de 64 bits lèvent une exception. <code>binding.MapRegion</code> prend un <code>RegionCaching</code> valant <code>Device</code>, <code>WriteCombining</code> ou <code>Normal</code>, mais aujourd'hui seul x64 applique <code>WriteCombining</code>, dans les blocs de 2 Mio qu'une région couvre entièrement, et toute autre fenêtre mémoire est mappée en <code>Device</code>. Voir <a href="../drivers.html#register-windows">Fenêtres de registres</a> et <a href="../drivers.html#bulk-regions">Régions en bloc</a>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/user/driver-concepts/registers.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

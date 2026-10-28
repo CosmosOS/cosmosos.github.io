@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>Cr&#233;dits | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Cr&#233;dits | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="images/favicon.ico">
+      <link rel="stylesheet" href="public/docfx.min.css">
+      <link rel="stylesheet" href="public/main.css">
+      <meta name="docfx:navrel" content="toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/credits.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="index.html">
+            <img id="logo" class="svg" src="images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="credits"></a></p>
+<h1 id="crédits">Crédits</h1>
+<p>Cosmos Gen3 repose sur les épaules d'autres projets open source. Cette page liste les composants tiers livrés avec Cosmos, avec leurs licences.</p>
+<p><a id="vendored-source-code"></a></p>
+<h2 id="code-source-intégré">Code source intégré</h2>
+<p>Code copié dans ce dépôt (les adaptations locales sont notées dans un <code>README.md</code> placé à côté des sources) :</p>
+<table>
+<thead>
+<tr>
+<th>Projet</th>
+<th>Licence</th>
+<th>Utilisé pour</th>
+<th>Emplacement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/EliotJones/BigGustave">BigGustave</a></td>
+<td>Unlicense</td>
+<td>Décodage PNG (<code>Cosmos.Kernel.System.Graphics.Png</code>)</td>
+<td><code>src/Cosmos.Kernel.System/ThirdParty/BigGustave/</code></td>
+</tr>
+<tr>
+<td><a href="https://github.com/icsharpcode/SharpZipLib">SharpZipLib</a></td>
+<td>MIT</td>
+<td>Décompression DEFLATE/zlib managée pour le décodeur PNG</td>
+<td><code>src/Cosmos.Kernel.System/ThirdParty/SharpZipLib/</code></td>
+</tr>
+<tr>
+<td><a href="https://github.com/Relfos/LunarFonts">LunarFonts</a></td>
+<td>MIT</td>
+<td>Chargement et rastérisation TrueType (<code>TrueTypeFont</code>)</td>
+<td><code>src/Cosmos.Kernel.System/ThirdParty/LunarFonts/</code></td>
+</tr>
+<tr>
+<td><a href="https://github.com/fcambus/spleen">Spleen</a></td>
+<td>BSD-2-Clause</td>
+<td>La police 16x32 par défaut de la console et du canvas</td>
+<td><code>src/Cosmos.Kernel.System/Graphics/Fonts/</code></td>
+</tr>
+<tr>
+<td><a href="https://github.com/Samma2009/Cosm3D">Cosm3D</a></td>
+<td>MIT</td>
+<td>La couche de commandes SVGA3D et le canvas du pilote d'écran VMware SVGA II (<code>Cosmos.Kernel.Drivers.Pci.Display.VmwareSvga.VmwareSvga3D</code>, <code>VmwareSvgaCanvas3D</code>)</td>
+<td><code>src/Cosmos.Kernel.Drivers/Pci/Display/VmwareSvga/</code> : <code>VmwareSvga3D.cs</code>, <code>VmwareSvgaCanvas3D.cs</code> ainsi que le vocabulaire de <code>Enums/</code> et <code>Structs/</code></td>
+</tr>
+</tbody>
+</table>
+<p>L'intégration PNG s'inspire de <a href="https://github.com/Szymekk44/CosmosPNG">CosmosPNG</a> (Unlicense), qui a le premier apporté BigGustave à Cosmos Gen2, et l'intégration TrueType s'inspire de <a href="https://github.com/GoldenretriverYT/CosmosTTF">CosmosTTF</a> (MIT), qui y a le premier apporté LunarFonts.</p>
+<p>L'intégration de VMware SVGA II provient d'un portage vers gen3 de <a href="https://github.com/Samma2009/Cosm3D">Cosm3D</a> (une implémentation de la <a href="https://sourceforge.net/projects/vmware-svga">spécification 3D SVGA II de VMware</a>), le portage reposant lui-même sur le pilote SVGA II de gen2 ; elle se trouve dans <code>Cosmos.Kernel.Drivers</code> sous la forme de <code>VmwareSvgaDriver</code>, au-dessus du kit de pilotes.</p>
+<p><a id="shipped-binaries-and-dependencies"></a></p>
+<h2 id="binaires-et-dépendances-livrés">Binaires et dépendances livrés</h2>
+<table>
+<thead>
+<tr>
+<th>Projet</th>
+<th>Licence</th>
+<th>Utilisé pour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/limine-bootloader/limine">Limine</a></td>
+<td>BSD-2-Clause</td>
+<td>Le chargeur d'amorçage inclus dans chaque ISO de noyau</td>
+</tr>
+<tr>
+<td><a href="https://github.com/dotnet/runtime">.NET Runtime</a></td>
+<td>MIT</td>
+<td>Les bibliothèques de classes de base et le compilateur NativeAOT (ILC) sur lesquels le noyau est construit</td>
+</tr>
+<tr>
+<td><a href="https://github.com/jbevain/cecil">Mono.Cecil</a></td>
+<td>MIT</td>
+<td>Lecture et réécriture de l'IL dans <code>cosmos-patcher</code></td>
+</tr>
+</tbody>
+</table>
+<p><a id="build-and-test-tools"></a></p>
+<h2 id="outils-de-build-et-de-test">Outils de build et de test</h2>
+<p>Non distribués avec Cosmos, mais nécessaires pour le compiler ou le tester : <a href="https://yasm.tortall.net/">YASM</a>, GNU binutils/GCC, <a href="https://www.gnu.org/software/xorriso/">xorriso</a> et <a href="https://www.qemu.org/">QEMU</a>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/credits.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

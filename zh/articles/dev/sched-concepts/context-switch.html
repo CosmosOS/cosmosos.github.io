@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>上下文切换 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="上下文切换 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/dev/sched-concepts/context-switch.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="context-switch"></a></p>
+<h1 id="上下文切换">上下文切换</h1>
+<p>上下文切换让一个 CPU 从一个线程转到另一个线程。换出线程的寄存器被保存在内核之后还能找到的地方，通常是该线程自己的栈上或它的控制块中；栈指针被指向换入线程已保存的状态，再恢复它的寄存器，于是它恰好从停下的地方继续执行。内核通过两种途径进入切换。被动切换发生在中断时：中断入口已经保存了被中断线程的寄存器，所以内核只需返回到另一个已保存的状态中。主动切换发生在线程调用内核以阻塞或让出时，经由一个自己保存寄存器的例程完成。</p>
+<p>一次切换的代价不止于它复制的那些寄存器。换入线程会发现缓存和地址转换缓冲区里装满了另一个线程的数据，在把它们重新预热之前都会运行得更慢，这就是调度器的切换频率不会超出其策略所需的原因。</p>
+<p>陷阱在于，决定切换与执行切换是两个独立的步骤。调度器可以在某个节拍中，或在某个线程被唤醒时作出决定，而切换本身只在内核离开中断时才发生。决定与切换之间的一切都必须与该决定保持一致：被记录为当前线程的线程、被放回队列的线程，以及 CPU 将要恢复的栈，必须全都描述同一次切换，否则 CPU 恢复运行的线程，在簿记中却位于别处。</p>
+<p>在 Cosmos 中，每次切换都发生在中断退出时。中断桩代码把线程的寄存器（包括 SIMD 状态）保存在该线程的栈上；管理器调用 <code>PickNext</code>，在旧线程的 <code>SchedulerThread.StackPointer</code> 中记录其状态所在的位置，并暂存新线程的状态，桩代码在退出途中据此恢复。线程的首次运行没有可供返回的已保存帧，因此改为跳转到它的入口点。任何中断的退出都可能带来一次切换：定时器节拍在 <code>OnTick</code> 返回 <code>true</code> 时如此；任何硬件中断，只要唤醒、阻塞、<code>Thread.Yield</code> 或策略替换已经请求了重新调度，也是如此，此时无论 <code>OnTick</code> 回答了什么，<code>PickNext</code> 都会运行，而当该中断不是节拍时，则根本不经过 <code>OnTick</code>。不存在主动切换：阻塞的线程在自己的 CPU 上触发一个中断来切换出去（空闲线程则改为停机），而 <code>Thread.Yield</code> 会立即返回，把切换留给下一次中断退出。策略从不接触寄存器。参见<a href="../scheduler.html#the-tick">节拍</a>和<a href="../scheduler.html#what-there-is-not-a-voluntary-switch">不存在的东西：主动切换</a>。</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/dev/sched-concepts/context-switch.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

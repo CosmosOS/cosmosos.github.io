@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>Organisation d&#39;un projet de noyau | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Organisation d&#39;un projet de noyau | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/dev/kernel-project-layout.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="kernel-project-layout"></a></p>
+<h1 id="organisation-dun-projet-de-noyau">Organisation d'un projet de noyau</h1>
+<p>Le noyau Cosmos est composé de projets organisés en couches afin d'imposer un graphe de dépendances propre. Les dépendances vont <strong>uniquement vers le bas</strong> : un projet ne doit jamais référencer un projet situé au-dessus de lui dans la hiérarchie.</p>
+<p><a id="dependency-graph"></a></p>
+<h2 id="graphe-des-dépendances">Graphe des dépendances</h2>
+<pre><code class="lang-mermaid">flowchart LR;
+	UsersKernel--&gt;Cosmos.Kernel.System;
+    Cosmos.Kernel.Drivers--&gt;Cosmos.Kernel.System;
+    Cosmos.Kernel.Drivers--&gt;Cosmos.Kernel.HAL;
+    Cosmos.Kernel.System--&gt;Cosmos.Kernel.HAL;
+	Cosmos.Kernel.Plugs--&gt;Cosmos.Kernel.System;
+    Cosmos.Kernel.Plugs--&gt;Cosmos.Kernel.HAL;
+    Cosmos.Kernel.Plugs--&gt;Cosmos.Kernel.Core;
+    Cosmos.Kernel.HAL.ARM64--&gt;Cosmos.Kernel.HAL;
+    Cosmos.Kernel.HAL.X64--&gt;Cosmos.Kernel.HAL;
+	Cosmos.Kernel.HAL.ARM64--&gt;Cosmos.Kernel.Core;
+	Cosmos.Kernel.HAL.X64--&gt;Cosmos.Kernel.Core;
+	Cosmos.Kernel.HAL--&gt;Cosmos.Kernel.Core;
+    Cosmos.Kernel.Core--&gt;Cosmos.Kernel.Native.X64;
+    Cosmos.Kernel.Core--&gt;Cosmos.Kernel.Native.ARM64;
+    Cosmos.Kernel.Core--&gt;Cosmos.Kernel.Native.MultiArch;
+</code></pre>
+<p><a id="project-descriptions"></a></p>
+<h2 id="description-des-projets">Description des projets</h2>
+<table>
+<thead>
+<tr>
+<th>Projet</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cosmos.Kernel.System</strong></td>
+<td>API de haut niveau du système d'exploitation : Console, FileSystem (le VFS avec les systèmes de fichiers FAT et ext2), Graphics (avec les types 3D à activer explicitement sous <code>Graphics.Rendering3D</code>), Input, Network (avec le point d'extension expérimental des paquets sous <code>Network.Protocols</code>), Timers. C'est la couche avec laquelle interagissent les noyaux utilisateurs.</td>
+</tr>
+<tr>
+<td><strong>Cosmos.Kernel.Drivers</strong></td>
+<td>Les vingt-cinq pilotes que Cosmos livre au-dessus du kit de pilotes : les pilotes de l'hôte PCI et du port racine PCI Express, le pilote Intel E1000E, les pilotes des transports virtio PCI et MMIO, les pilotes virtio-net et virtio-input, les quatre pilotes d'affichage, <code>VirtioGpuDriver</code>, <code>VmwareSvgaDriver</code> (avec sa couche de commandes SVGA3D et <code>Canvas3D</code>), <code>AmdDcnDriver</code> et <code>IntelGraphicsDriver</code>, les trois pilotes bloc, <code>AhciDriver</code>, <code>NvmeDriver</code> et le pilote feuille virtio <code>VirtioBlkDriver</code>, dont le gestionnaire de stockage consomme les disques, le pilote HD Audio, <code>HdAudioDriver</code>, les pilotes USB : <code>XhciDriver</code>, <code>EhciDriver</code> et <code>OhciDriver</code> avec les pilotes de classe du hub, du clavier HID en mode boot, de la souris HID en mode boot et du stockage de masse, et les pilotes PS/2 : <code>I8042Driver</code> avec <code>Ps2KeyboardDriver</code> et <code>Ps2MouseDriver</code>. Chaque pilote se trouve dans un dossier type de bus / catégorie / pilote, et son espace de noms suit le dossier (<a href="coding-guidelines.html#driver-folders">Dossiers des pilotes</a>) : <code>Pci/</code> (<code>Audio/HdAudio</code>, <code>Bus/Ehci</code>, <code>Bus/Ohci</code>, <code>Bus/PcieRootPort</code>, <code>Bus/VirtioPci</code>, <code>Bus/Xhci</code>, <code>Display/AmdDcn</code>, <code>Display/IntelGraphics</code>, <code>Display/VmwareSvga</code>, <code>Network/E1000E</code>, <code>Storage/Ahci</code>, <code>Storage/Nvme</code>), <code>Platform/Bus/</code> (<code>I8042</code>, <code>PciHost</code>, <code>VirtioMmio</code>), <code>Ps2/Input/</code> (<code>Ps2Keyboard</code>, <code>Ps2Mouse</code>), <code>Usb/</code> (<code>Bus/UsbHub</code>, <code>Input/UsbKeyboard</code>, <code>Input/UsbMouse</code>, <code>Storage/UsbMassStorage</code>) et <code>Virtio/</code> (<code>Display/VirtioGpu</code>, <code>Input/VirtioInput</code>, <code>Network/VirtioNet</code>, <code>Storage/VirtioBlk</code>), si bien que le pilote xHCI est <code>Cosmos.Kernel.Drivers.Pci.Bus.Xhci.XhciDriver</code>. C'est un assembly de pilotes de la couche User (<code>CosmosDriverAssembly</code>), que l'analyseur de couches restreint à ce qu'un auteur de noyau peut nommer, et auquel aucun projet n'accorde d'autorisation <code>InternalsVisibleTo</code> ; un seul package <code>lib/net10.0</code> sans RID, puisqu'il ne contient aucun code propre à une architecture. Il est référencé par Cosmos.Kernel, si bien que chaque noyau embarque ses pilotes dans le manifeste.</td>
+</tr>
+<tr>
+<td><strong>Cosmos.Kernel.HAL</strong></td>
+<td>Couche d'abstraction matérielle : la logique partagée, les contrats de plateforme, tous internes (<code>Boot/</code> : le contrat de démarrage <code>IPlatformInitializer</code> et l'enregistrement de la plateforme <code>PlatformHAL</code> ; <code>Timers/</code> : la base de la source de ticks avec ses entrées de minuteur (chaque handle <code>SoftwareTimer</code> de <strong>System</strong> en enveloppe une)), les catégories de périphériques (<code>Devices/</code> : <code>Display/</code> (avec les facettes d'écran), <code>Input/</code>, <code>Network/</code> et <code>Storage/</code>, chacune contenant le contrat et le vocabulaire du type de périphérique, le récepteur par lequel un pilote rend compte (le type bloc n'en a pas) et le consommateur interne de l'anneau supporté ; <code>IBlockDevice</code>, que les noyaux implémentent et pilotent directement, et <code>MacAddress</code> sont les types stables), le kit de pilotes (<code>DriverKit/</code>, avec le pilote et sa liaison à sa racine, ce qu'une liaison fournit sous <code>Resources/</code>, <code>Interrupts/</code> et <code>Threading/</code>, ses six types de bus sous <code>DriverKit/Buses/</code> (synthétique, plateforme, PCI, virtio, USB et PS/2, un dossier chacun), et son registre et son moteur internes sous <code>DriverKit/Engine/</code>). L'écran du firmware que le kit publie au-dessus du framebuffer de démarrage se trouve avec le type écran. Aucun code unsafe (<a href="coding-guidelines.html#unsafe-code">Code unsafe</a>). <a href="coding-guidelines.html#hal-folders">Dossiers de la HAL</a> donne les règles de ses dossiers.</td>
+</tr>
+<tr>
+<td><strong>Cosmos.Kernel.HAL.X64</strong></td>
+<td>Code de plateforme x86-64 : la description de la machine (les nœuds 8042 et hôte PCI), le routage des lignes de l'I/O APIC, le PIT et la RTC CMOS. Aucun pilote de périphérique.</td>
+</tr>
+<tr>
+<td><strong>Cosmos.Kernel.HAL.ARM64</strong></td>
+<td>Code de plateforme ARM64 : la description de la machine (l'hôte ECAM et les emplacements virtio-mmio, issus de la table MCFG d'ACPI, du device tree ou de la table de la machine virt), le routage des lignes du GIC, le minuteur générique et la RTC PL031. Aucun pilote de périphérique.</td>
+</tr>
+<tr>
+<td><strong>Cosmos.Kernel.Core</strong></td>
+<td>Runtime bas niveau : gestion de la mémoire, GC, ordonnanceur, E/S série, routine de traitement des paniques, le CSPRNG du noyau derrière <code>RandomNumberGenerator</code> (<a href="../user/random.html">Nombres aléatoires</a>), et ce que le chargeur d'amorçage et le firmware transmettent (<code>Firmware/</code> : le framebuffer de démarrage, l'analyseur de device tree que lit la description ARM64, l'heure de démarrage, le pont vers la table ACPI MCFG que le code de démarrage natif analyse, et l'horloge lue via les services runtime UEFI). C'est la couche du noyau qui contient le code unsafe : les couches supérieures atteignent la mémoire par ses points d'entrée fondés sur les adresses (<code>MemoryBlock</code> avec <code>PageAllocator.AllocBlock</code>, <code>AddressSpace.HhdmOffset</code>).</td>
+</tr>
+<tr>
+<td><strong>Cosmos.Kernel.Native.X64</strong></td>
+<td>Fichiers assembleur x86-64 (<code>.s</code>, syntaxe GAS) : stubs d'interruption, changement de contexte, SIMD.</td>
+</tr>
+<tr>
+<td><strong>Cosmos.Kernel.Native.ARM64</strong></td>
+<td>Fichiers assembleur ARM64 (<code>.s</code>, syntaxe GAS) : vecteurs d'exception, changement de contexte.</td>
+</tr>
+<tr>
+<td><strong>Cosmos.Kernel.Native.MultiArch</strong></td>
+<td>Code C natif multiplateforme (ACPI, stubs de la libc).</td>
+</tr>
+<tr>
+<td><strong>Cosmos.Kernel.Plugs</strong></td>
+<td>Remplacements de méthodes au niveau IL pour les types de la BCL (<code>Console</code>, <code>Thread</code>, <code>Environment</code>, etc.).</td>
+</tr>
+<tr>
+<td><strong>Cosmos.Kernel.Boot.Limine</strong></td>
+<td>Intégration du protocole du chargeur d'amorçage Limine.</td>
+</tr>
+<tr>
+<td><strong>Cosmos.Kernel</strong></td>
+<td>L'agrégateur que référence chaque noyau. Il intègre Boot.Limine, Core, Drivers, HAL, Plugs et System, livre les sources C d'amorçage <code>kmain</code>, et contient l'initialiseur de bibliothèque qui câble les gestionnaires d'exceptions du CPU et l'ordonnanceur. Aucun type public.</td>
+</tr>
+</tbody>
+</table>
+<p><a id="build-system-projects"></a></p>
+<h2 id="projets-du-système-de-build">Projets du système de build</h2>
+<table>
+<thead>
+<tr>
+<th>Projet</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cosmos.Build.Patcher</strong></td>
+<td>Patcher IL : applique les plugs et les correctifs au moment du build.</td>
+</tr>
+<tr>
+<td><strong>Cosmos.Build.Ilc</strong></td>
+<td>Intégration personnalisée d'ILC (compilateur IL) pour NativeAOT.</td>
+</tr>
+<tr>
+<td><strong>Cosmos.Build.Asm</strong></td>
+<td>Compilation de l'assembleur avec Clang (fichiers <code>.s</code> en syntaxe GAS pour x64 comme pour ARM64).</td>
+</tr>
+<tr>
+<td><strong>Cosmos.Build.CC</strong></td>
+<td>Compilation croisée avec Clang pour les cibles bare-metal x64 et ARM64.</td>
+</tr>
+<tr>
+<td><strong>Cosmos.Build.Common</strong></td>
+<td>Propriétés de build partagées, sélecteur d'architecture.</td>
+</tr>
+<tr>
+<td><strong>Cosmos.Build.API</strong></td>
+<td>Attributs de plug (<code>[Plug]</code>, <code>[PlugMember]</code>) et énumérations.</td>
+</tr>
+<tr>
+<td><strong>Cosmos.Build.Analyzer.Patcher</strong></td>
+<td>Analyseur Roslyn qui vérifie la correction des plugs.</td>
+</tr>
+</tbody>
+</table>
+<p><a id="rules"></a></p>
+<h2 id="règles">Règles</h2>
+<ul>
+<li>Ne référencez <strong>jamais</strong> vers le haut (Core ne doit référencer ni HAL ni System)</li>
+<li>Ne référencez <strong>jamais</strong> un projet HAL propre à une plateforme depuis Core</li>
+<li>Les préoccupations transversales (mémoire, ordonnanceur, série) vont dans <strong>Core</strong></li>
+<li>Le code unsafe va dans <strong>Core</strong> : HAL, HAL.X64, HAL.ARM64, System et Drivers se compilent avec <code>AllowUnsafeBlocks=false</code>, et ce dont ils ont besoin de la mémoire ou du firmware est un point d'entrée de Core</li>
+<li>Le code de plateforme (descriptions de machine, routage des lignes d'interruption, sources de ticks, horloges du firmware) va dans <strong>HAL.X64</strong> / <strong>HAL.ARM64</strong> ; les pilotes de périphériques vont dans <strong>Cosmos.Kernel.Drivers</strong>, au-dessus du kit</li>
+<li>Les API destinées aux utilisateurs vont dans <strong>System</strong></li>
+<li>Les contrats matériels que l'anneau supporté partage encore (<code>IBlockDevice</code>, <code>MacAddress</code>) sont définis dans <strong>HAL</strong>, hors du point d'extension expérimental du kit ; les autres types des catégories de périphériques, à côté d'eux sous <code>Devices/</code>, relèvent du point d'extension, et le périphérique réseau que pilote la pile est interne à <strong>System</strong></li>
+<li>Un pilote écrit au-dessus du kit de pilotes pour un périphérique qu'atteignent les bus du kit va dans <strong>Drivers</strong>, qui ne référence que System et HAL, et jamais les assemblies d'architecture</li>
+</ul>
+<p>Pour le style de code et les modèles d'implémentation, consultez les <a href="coding-guidelines.html">Règles de codage</a>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/dev/kernel-project-layout.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>D&#233;boguer avec VS Code et QEMU | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="D&#233;boguer avec VS Code et QEMU | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/user/debugging.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="debugging-with-vs-code-and-qemu"></a></p>
+<h1 id="déboguer-avec-vs-code-et-qemu">Déboguer avec VS Code et QEMU</h1>
+<p>Le débogage du noyau passe par GDB à distance : QEMU expose un serveur GDB sur <code>localhost:1234</code>, VS Code s'y connecte avec <code>cppdbg</code>, et les points d'arrêt se posent directement dans l'éditeur. Le modèle <code>cosmos new</code> fournit les fichiers <code>.vscode/launch.json</code> et <code>.vscode/tasks.json</code> nécessaires, déjà configurés.</p>
+<hr>
+<p><a id="prerequisites"></a></p>
+<h2 id="prérequis">Prérequis</h2>
+<table>
+<thead>
+<tr>
+<th>Outil</th>
+<th>Rôle</th>
+<th>Remarques</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gdb</code></td>
+<td>Débogage x64</td>
+<td>Doit être dans le <code>PATH</code> ; la configuration de lancement l'invoque sous le nom <code>gdb</code></td>
+</tr>
+<tr>
+<td><code>gdb-multiarch</code></td>
+<td>Débogage ARM64</td>
+<td>Doit être dans le <code>PATH</code> ; requis pour les cibles aarch64</td>
+</tr>
+<tr>
+<td>QEMU</td>
+<td>Exécute le noyau</td>
+<td>Installé par <code>cosmos install</code></td>
+</tr>
+<tr>
+<td>Extension C/C++ de VS Code</td>
+<td>Adaptateur de débogage <code>cppdbg</code></td>
+<td><code>ms-vscode.cpptools</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>cosmos check</code> vérifie la chaîne d'outils. Sous Debian/Ubuntu, <code>apt install gdb gdb-multiarch</code> installe les deux débogueurs.</p>
+<hr>
+<p><a id="debugging-a-kernel-created-with-cosmos-new"></a></p>
+<h2 id="déboguer-un-noyau-créé-avec-cosmos-new">Déboguer un noyau créé avec <code>cosmos new</code></h2>
+<ol>
+<li>Ouvrez le dossier du noyau dans VS Code.</li>
+<li>Placez des points d'arrêt dans le code source de votre noyau.</li>
+<li>Ouvrez la vue <strong>Exécuter et déboguer</strong> et sélectionnez <strong>Debug x64 Kernel</strong> (ou <strong>Debug ARM64 Kernel</strong>).</li>
+<li>Appuyez sur F5. La tâche préalable au lancement compile le noyau, démarre QEMU avec <code>-s -S</code> (serveur GDB, exécution figée au démarrage), puis le débogueur s'y attache. L'exécution s'arrête sur vos points d'arrêt.</li>
+</ol>
+<hr>
+<p><a id="serial-log"></a></p>
+<h2 id="journal-série">Journal série</h2>
+<p>Chaque phase de démarrage du noyau écrit dans le port série (COM1 sur x64, PL011 sur ARM64), que <code>cosmos run</code> relie à votre terminal. Quand un noyau ne démarre pas, ou plante avant que le débogueur ne soit utile, le journal série est la première chose à lire ; voir <a href="startup.html">Démarrage du noyau</a> pour un parcours phase par phase et pour savoir comment résoudre les adresses de plantage en symboles.</p>
+<hr>
+<p><a id="writing-to-the-serial-log"></a></p>
+<h2 id="écrire-dans-le-journal-série">Écrire dans le journal série</h2>
+<p><code>Log</code> place votre propre sortie sur ce même flux. C'est le pendant de <code>Console.WriteLine</code>, et la différence compte précisément dans les cas où vous avez besoin d'un journal : <code>Console</code> dessine sur le canvas du framebuffer, il lui faut donc des graphismes déjà initialisés, il redessine l'écran à chaque écriture et il alloue. <code>Log</code> écrit directement sur le port série, de manière synchrone, sans allocation pour les chaînes et les nombres, et fonctionne dès la première ligne de <code>BeforeRun</code>, avant qu'il n'existe une console où écrire comme après qu'un plantage a emporté le framebuffer avec lui.</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.System.Diagnostics;
+using Cosmos.Kernel.System.Storage;
+
+Log.WriteString(&quot;storage: &quot;);
+Log.WriteNumber(StorageManager.DeviceCount);
+Log.WriteString(&quot; device(s), &quot;);
+Log.WriteNumber(StorageManager.Partitions.Count);
+Log.WriteString(&quot; partition(s)\n&quot;);
+</code></pre>
+<p>Il n'y a pas de <code>WriteLine</code> : ajoutez <code>&quot;\n&quot;</code> vous-même, comme le fait le noyau partout.</p>
+<table>
+<thead>
+<tr>
+<th>Appel</th>
+<th>Écrit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Log.WriteString(text)</code></td>
+<td>Une chaîne. Prend un argument non null</td>
+</tr>
+<tr>
+<td><code>Log.Write(a, b, c)</code></td>
+<td>Le <code>ToString()</code> de chaque argument, dans l'ordre. Accepte null et écrit <code>null</code> à sa place</td>
+</tr>
+<tr>
+<td><code>Log.WriteNumber(n)</code></td>
+<td>Un nombre en décimal. Surcharges pour <code>int</code>, <code>uint</code>, <code>long</code> et <code>ulong</code></td>
+</tr>
+<tr>
+<td><code>Log.WriteHex(n)</code></td>
+<td>Un nombre en hexadécimal</td>
+</tr>
+<tr>
+<td><code>Log.WriteHexWithPrefix(n)</code></td>
+<td>La même chose, précédée de <code>0x</code></td>
+</tr>
+<tr>
+<td><code>Log.WriteBytes(span)</code></td>
+<td>Des octets bruts, sans mise en forme</td>
+</tr>
+</tbody>
+</table>
+<p>Préférez <code>WriteString</code> et <code>WriteNumber</code> à <code>Write</code> sur tout chemin qui s'exécute souvent ou tôt. La liste d'arguments de <code>Write</code> est construite sur la pile et ne coûte rien, mais un nombre ou un <code>bool</code> qui lui est passé subit d'abord un boxing, et cet objet boxé est une allocation sur le tas que les surcharges typées n'effectuent pas.</p>
+<p>Le port série lui-même dépend du commutateur de fonctionnalité <code>CosmosEnableUART</code>. Quand il est désactivé, les appels retournent toujours normalement, mais rien n'atteint le flux série : un noyau qui désactive ce commutateur ne doit donc pas compter sur <code>Log</code> pour quoi que ce soit qu'il a besoin de relire.</p>
+<hr>
+<p><a id="known-limitations"></a></p>
+<h2 id="limitations-connues">Limitations connues</h2>
+<ul>
+<li>L'expérience de débogage dans VS Code souffre de bugs de correspondance avec le code source et d'inspection des variables (voir la <a href="../../roadmap.html">feuille de route</a>) ; le pas à pas et les points d'arrêt fonctionnent, mais l'inspection de certaines variables locales peut afficher des valeurs fausses ou absentes.</li>
+<li>Le débogage suppose QEMU. VMware, VirtualBox et Hyper-V sont des cibles non testées.</li>
+<li>Le débogage ARM64 sous émulation TCG est lent : attendez-vous à des pauses de plusieurs secondes lors des opérations de pas à pas sur les gros noyaux.</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/user/debugging.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

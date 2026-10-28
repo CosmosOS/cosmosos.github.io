@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>Audio | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Audio | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/user/audio.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="audio">Audio</h1>
+
+<p>Dans cet article, nous verrons l'audio sur Cosmos Gen3 : comment trouver la carte son, jouer une tonalité, lire un fichier WAV et générer vos propres sons. Le son sort par un contrôleur <strong>Intel High Definition Audio</strong>, le standard audio des chipsets PC depuis 2004 et la carte son que QEMU émule sous le nom <code>intel-hda</code>.</p>
+<p>Les principales différences si vous venez de Gen2 :</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Gen2</th>
+<th>Gen3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API audio</td>
+<td><code>Cosmos.System.Audio</code></td>
+<td><code>Cosmos.Kernel.System.Audio</code></td>
+</tr>
+<tr>
+<td>Pilotes de carte son</td>
+<td>AC97</td>
+<td>Intel HD Audio via le kit de pilotes (x64 et ARM64)</td>
+</tr>
+<tr>
+<td>Configuration</td>
+<td>Un <code>AudioManager</code> avec un <code>Stream</code> et un <code>Output</code>, puis <code>Enable()</code></td>
+<td>Aucune : le kit de pilotes publie la sortie au démarrage, et <code>AudioManager.Play(stream)</code> joue à travers elle</td>
+</tr>
+<tr>
+<td>Mixage</td>
+<td><code>AudioMixer</code> sur plusieurs flux</td>
+<td>Un seul flux par sortie à la fois</td>
+</tr>
+<tr>
+<td><code>Console.Beep</code></td>
+<td>Haut-parleur PC</td>
+<td>Une onde carrée jouée par la carte son</td>
+</tr>
+<tr>
+<td>Fichiers WAV</td>
+<td><code>MemoryAudioStream.FromWave</code></td>
+<td><code>MemoryAudioStream.FromWave</code>, plus <code>WaveAudioStream</code>, qui lit un fichier en flux depuis un volume</td>
+</tr>
+<tr>
+<td>Lecture</td>
+<td>En arrière-plan une fois <code>Enable()</code> exécuté</td>
+<td>Sur le thread appelant avec <code>AudioManager.Play</code>, ou sur un thread dédié avec <code>AudioManager.TryStartPlayback</code></td>
+</tr>
+</tbody>
+</table>
+<p>Si vous trouvez des bugs ou quelque chose d'anormal, merci de <a href="https://github.com/CosmosOS/Cosmos/issues/new/choose">soumettre une issue</a> sur notre dépôt.</p>
+<p><a id="enable-audio-in-your-kernel"></a></p>
+<h2 id="activer-laudio-dans-votre-noyau">Activer l'audio dans votre noyau</h2>
+<p>La prise en charge de l'audio dépend d'un commutateur de fonctionnalité. Assurez-vous que le <code>.csproj</code> de votre noyau ne la désactive pas (sa valeur par défaut est <code>true</code>) :</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;CosmosEnableAudio&gt;true&lt;/CosmosEnableAudio&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p>La carte son est une fonction PCI : désactiver <code>CosmosEnablePCI</code>, ou <code>CosmosEnableInterrupts</code>, qui désactive PCI avec lui, désactive donc aussi l'audio.</p>
+<p>Au démarrage, une carte son parvient à <code>AudioManager</code> par le <a href="drivers.html">kit de pilotes</a>, comme une carte réseau parvient à <code>NetworkManager</code>. <code>HdAudioDriver</code>, fourni dans <code>Cosmos.Kernel.Drivers</code>, se lie à toute fonction PCI de classe <code>04.03.00</code>, la classe des contrôleurs HD Audio : ce seul pilote couvre ainsi tout contrôleur conforme à la spécification, plutôt qu'une liste d'identifiants de périphériques. Il trouve un convertisseur et une broche de sortie sur le codec situé derrière le contrôleur, puis publie une sortie nommée <code>hda</code>, que le gestionnaire désigne comme sa sortie principale. QEMU n'attache aucune carte son par défaut : demandez-en une à <code>cosmos run</code>, sur l'une ou l'autre architecture :</p>
+<pre><code class="lang-console">$ cosmos run --audio intel-hda        # the ICH6 HD Audio controller, the one the test suite runs on
+$ cosmos run --audio ich9-intel-hda   # the ICH9 one
+</code></pre>
+<p>Un contrôleur HD Audio est un bus plutôt qu'une carte son à lui seul : le codec qui transforme les échantillons en son se trouve derrière lui, c'est pourquoi <code>cosmos run</code> attache le codec <code>hda-duplex</code> de QEMU à côté du contrôleur. Le son est joué sur votre hôte par le backend audio par défaut de QEMU (PipeWire, PulseAudio, ALSA, CoreAudio ou DirectSound, selon l'hôte).</p>
+<p>Le journal série montre le pilote qui se lie au contrôleur :</p>
+<pre><code>[Audio] primary: HdAudioDriver &quot;hda&quot;
+[Drivers] pci:0000:00:02.0 HdAudioDriver published device &quot;hda&quot; (consumed)
+[Drivers] pci:0000:00:02.0 HdAudioDriver: version 1.0, codec 0 converter 2 pin 3, stream 4 (4 in, 4 out), 48 kHz stereo 16-bit, line 11
+</code></pre>
+<p>Le dernier champ indique si la ligne d'interruption du contrôleur est parvenue jusqu'au pilote. Il vaut <code>line 11</code> ci-dessus, sur une machine x64 sans carte réseau. Il vaut <code>no line</code> sur ARM64, où le kit ne route aucune ligne PCI legacy, et sur x64 à côté de la carte réseau e1000e par défaut, qui détient la ligne que le contrôleur partage avec elle. Dans les deux cas, la sortie joue de la même façon : le lecteur suit la position du moteur de flux plutôt que d'attendre l'interruption.</p>
+<p>Voici les directives <code>using</code> sur lesquelles s'appuient les extraits ci-dessous :</p>
+<pre><code class="lang-csharp">using System.IO;
+using Cosmos.Kernel.HAL.Devices.Audio;   // AudioFormat, for the sound you generate (COSMOS0003)
+using Cosmos.Kernel.System.Audio;
+using Cosmos.Kernel.System.FileSystem;
+using Cosmos.Kernel.System.Timers;
+</code></pre>
+<p><a id="the-audio-output"></a></p>
+<h2 id="la-sortie-audio">La sortie audio</h2>
+<p><code>AudioManager</code> détient les sorties publiées par le kit de pilotes. Vérifiez qu'il y en a une avant de jouer quoi que ce soit :</p>
+<pre><code class="lang-csharp">if (!AudioManager.IsEnabled)
+{
+    Console.WriteLine(&quot;Audio is compiled out (CosmosEnableAudio=false)&quot;);
+    return;
+}
+
+AudioDevice? output = AudioManager.Primary;
+if (output is null)
+{
+    Console.WriteLine(&quot;No audio output: attach one with cosmos run --audio intel-hda&quot;);
+    return;
+}
+
+Console.WriteLine(&quot;Output:  &quot; + output.Name + &quot; (&quot; + output.DriverName + &quot;)&quot;);
+Console.WriteLine(&quot;Node:    &quot; + output.NodePath);
+Console.WriteLine(&quot;Format:  &quot; + output.SampleRate + &quot; Hz, &quot; + output.Format.Channels + &quot; ch, &quot;
+    + (output.Format.ChannelSize * 8) + &quot;-bit&quot;);
+</code></pre>
+<!-- screenshot: console affichant "Output: hda (HdAudioDriver)", le chemin de nœud pci et "Format: 48000 Hz, 2 ch, 16-bit" -->
+<p><img src="images/audio-output.png" alt="La sortie audio"></p>
+<p>Un <code>AudioDevice</code> indique le format pour lequel il est programmé (48 kHz, 16 bits signés, stéréo, tant que rien n'est joué à une autre fréquence), si son moteur de flux est en marche (<code>IsRunning</code>), et le <code>Player</code> qui l'alimente en ce moment, <code>null</code> tant qu'il est inactif. Une fois que le kit retire la sortie, <code>IsWithdrawn</code> passe à true et tout appel sur elle reste sans effet.</p>
+<p>Avec plusieurs cartes son, énumérez-les. La liste est tenue dans l'ordre des chemins de nœud, la sortie principale en premier, de sorte que la sortie principale ne dépend pas du pilote qui a sondé le premier :</p>
+<pre><code class="lang-csharp">for (int i = 0; i &lt; AudioManager.Count; i++)
+{
+    if (AudioManager.TryGet(i, out AudioDevice? device))
+    {
+        Console.WriteLine($&quot;[{i}] {device.Name}  {device.NodePath}&quot;);
+    }
+}
+</code></pre>
+<p><code>AudioManager.Play</code> et <code>AudioManager.TryStartPlayback</code> utilisent toujours la sortie principale. Pour jouer sur une autre sortie, passez-la à un <code>AudioPlayer</code> ou à <code>AudioPlayback.TryStart</code> (tous deux présentés plus bas).</p>
+<p><a id="playing-a-tone"></a></p>
+<h2 id="jouer-une-tonalité">Jouer une tonalité</h2>
+<p>Le moyen le plus rapide de produire un son ne demande ni fichier ni configuration : <code>Console.Beep</code>, que le noyau redirige par un plug vers la sortie principale.</p>
+<pre><code class="lang-csharp">/* The Windows default: 800 Hz for 200 ms */
+Console.Beep();
+
+/* A C major scale, a quarter of a second per note */
+int[] notes = { 262, 294, 330, 349, 392, 440, 494, 523 };
+foreach (int note in notes)
+{
+    Console.Beep(note, 250);
+}
+</code></pre>
+<p>La tonalité est une onde carrée au quart de la pleine échelle, et l'appel rend la main une fois qu'elle a été jouée, comme sous Windows. Il refuse aussi les mêmes arguments que Windows : une fréquence inférieure à 37 Hz ou supérieure à 32767 Hz, ou une durée nulle ou négative, lève <code>ArgumentOutOfRangeException</code>. Quand il n'y a rien sur quoi jouer (aucune sortie publiée, audio exclu de la compilation, ou une autre lecture qui occupe la sortie), il rend la main immédiatement sans rien jouer.</p>
+<p>.NET marque <code>Console.Beep(int, int)</code> comme réservé à Windows, si bien que l'appel déclenche l'avertissement de plateforme <code>CA1416</code>. Le noyau l'implémente malgré tout ; supprimez l'avertissement autour de l'appel, ou pour tout le projet :</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;NoWarn&gt;$(NoWarn);CA1416&lt;/NoWarn&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p><a id="playing-a-wav-file"></a></p>
+<h2 id="lire-un-fichier-wav">Lire un fichier WAV</h2>
+<p><code>MemoryAudioStream.FromWave</code> lit un fichier <code>.wav</code> déjà en mémoire, et <code>AudioManager.Play</code> le joue sur la sortie principale, en rendant la main une fois la dernière trame jouée :</p>
+<pre><code class="lang-csharp">/* chime.wav is a 16-bit stereo PCM file on the FAT partition mounted at /mnt */
+MemoryAudioStream chime = MemoryAudioStream.FromWave(File.ReadAllBytes(&quot;/mnt/chime.wav&quot;));
+
+if (!AudioManager.Play(chime))
+{
+    Console.WriteLine(&quot;No output, or the output refused the file's format&quot;);
+}
+</code></pre>
+<p><code>FromWave</code> lève <code>ArgumentException</code> pour un fichier qui n'est pas un RIFF/WAVE PCM non compressé. L'analyseur parcourt la liste des chunks du fichier : un fichier qui porte des chunks <code>LIST</code> ou <code>fact</code> avant ses échantillons se lit donc comme n'importe quel autre. <code>Play</code> renvoie <code>false</code> quand aucune sortie n'est publiée ou quand la sortie refuse le format du flux.</p>
+<p>Ce dernier cas compte, car l'analyseur comprend plus de formats que la carte son n'en joue :</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>L'analyseur WAV accepte</th>
+<th>La sortie HD Audio joue</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Encodage</td>
+<td>PCM et <code>WAVE_FORMAT_EXTENSIBLE</code></td>
+<td>PCM signé</td>
+</tr>
+<tr>
+<td>Bits par échantillon</td>
+<td>8, 16, 24, 32</td>
+<td>16</td>
+</tr>
+<tr>
+<td>Canaux</td>
+<td>1 à 255</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Fréquence d'échantillonnage</td>
+<td>Toutes</td>
+<td>8 ; 9,6 ; 11,025 ; 12 ; 16 ; 22,05 ; 24 ; 32 ; 44,1 ; 48 ; 88,2 ; 96 ; 144 ; 176,4 et 192 kHz</td>
+</tr>
+</tbody>
+</table>
+<p>Rien n'est converti ni rééchantillonné en chemin : un fichier mono, 8 bits ou 24 bits est refusé plutôt que joué à la mauvaise vitesse ou à la mauvaise hauteur. Convertissez-le sur votre hôte avant de le copier, par exemple avec <a href="https://ffmpeg.org/">FFmpeg</a>, qui décode aussi le MP3, l'OGG et le FLAC :</p>
+<pre><code class="lang-console">$ ffmpeg -i song.mp3 -ac 2 -ar 48000 -c:a pcm_s16le song.wav
+</code></pre>
+<p>Un son n'est qu'un fichier : le plus simple pour en livrer un est de le placer sur le disque FAT de l'article <a href="filesystem.html">Système de fichiers</a>, sous un nom compatible avec FAT. Un noyau qui exécute le serveur FTP de l'article <a href="network.html#ftp-server">Réseau</a> peut aussi en recevoir un de l'hôte pendant qu'il tourne : <code>curl -T song.wav ftp://localhost:2121/</code>.</p>
+<p><a id="playing-in-the-background"></a></p>
+<h2 id="lire-en-arrière-plan">Lire en arrière-plan</h2>
+<p><code>FromWave</code> garde tout le fichier en mémoire et <code>Play</code> bloque l'appelant pendant toute la durée de l'audio, ce qui convient à un court carillon. Pour un morceau, lisez le fichier en flux depuis le volume avec <code>WaveAudioStream</code>, un bloc à la fois dans une quantité fixe de mémoire, et jouez-le sur un thread dédié avec <code>AudioManager.TryStartPlayback</code>, pour que le noyau continue de tourner pendant la lecture :</p>
+<pre><code class="lang-csharp">if (!VfsManager.TryOpenFile(&quot;/mnt/song.wav&quot;, out IVfsFileHandle? file))
+{
+    Console.WriteLine(&quot;File not found&quot;);
+    return;
+}
+
+if (!WaveAudioStream.TryOpen(file, out WaveAudioStream? song))
+{
+    Console.WriteLine(&quot;Not a PCM .wav file&quot;);
+    file.Dispose();
+    return;
+}
+
+uint seconds = song.Length / song.SampleRate;
+Console.WriteLine(&quot;Playing &quot; + seconds + &quot; s of audio&quot;);
+
+/* The playback thread reads the file as it plays, and disposes of it when it is done */
+if (!AudioManager.TryStartPlayback(song, file, out AudioPlayback? playback))
+{
+    Console.WriteLine(&quot;No output, the output is busy, or no scheduler to run the playback on&quot;);
+    file.Dispose();
+    return;
+}
+</code></pre>
+<p>Le second argument est la source dans laquelle le flux lit : la lecture la libère une fois son thread terminé, si bien que le handle de fichier part avec la lecture et que l'appelant n'a plus à s'en occuper. Quand <code>TryStartPlayback</code> renvoie <code>false</code>, rien n'a été démarré et c'est toujours à l'appelant de fermer le handle. Passez <code>null</code> pour un flux qui n'a rien à libérer.</p>
+<p><code>WaveAudioStream</code> est un <code>SeekableAudioStream</code> : il indique sa longueur (<code>Length</code>) et sa position (<code>Position</code>) en trames, et <code>Rewind()</code> ou une nouvelle valeur de <code>Position</code> le déplace. L'<code>AudioPlayback</code> indique où en est la lecture, et <code>Stop()</code> l'arrête avant la fin :</p>
+<pre><code class="lang-csharp">while (playback.IsPlaying)
+{
+    Console.WriteLine((song.Position / song.SampleRate) + &quot; s of &quot; + seconds + &quot; s&quot;);
+
+    if (Console.KeyAvailable &amp;&amp; Console.ReadKey(true).Key == ConsoleKey.Escape)
+    {
+        /* Returns at once; the state turns Stopped shortly after */
+        playback.Stop();
+    }
+
+    TimerManager.Wait(500);
+}
+
+if (playback.State == AudioPlaybackState.Completed)
+{
+    Console.WriteLine(&quot;Played to the end&quot;);
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th><code>State</code></th>
+<th>Signification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Playing</code></td>
+<td>Le thread alimente encore la sortie</td>
+</tr>
+<tr>
+<td><code>Completed</code></td>
+<td>Le flux a été joué jusqu'au bout</td>
+</tr>
+<tr>
+<td><code>Stopped</code></td>
+<td><code>Stop()</code> l'a arrêté avant la fin ; ce que la sortie contenait encore a été abandonné</td>
+</tr>
+<tr>
+<td><code>Failed</code></td>
+<td>La sortie a refusé le format du flux, a été retirée ou a cessé d'accepter des trames, ou la lecture du flux a levé une exception ; une exception levée est écrite dans le journal série sous la forme <code>[Audio] playback failed: ...</code></td>
+</tr>
+</tbody>
+</table>
+<p>Trois choses à savoir sur la lecture en arrière-plan :</p>
+<ul>
+<li><strong>Elle nécessite l'ordonnanceur.</strong> Sans <code>CosmosEnableScheduler</code>, il n'y a pas de second thread sur lequel jouer et <code>TryStartPlayback</code> renvoie <code>false</code>. <code>AudioManager.Play(stream)</code> joue alors le même flux sur le thread appelant.</li>
+<li><strong>Une lecture par sortie.</strong> Une lecture réserve la sortie à partir du moment où <code>TryStartPlayback</code> renvoie <code>true</code> et jusqu'à sa fin : un second <code>TryStartPlayback</code>, un <code>Play</code> ou un <code>Console.Beep</code> lancé entre-temps est donc refusé. Du code qui ne détient pas l'<code>AudioPlayback</code> arrête ce qui est en cours de lecture avec <code>AudioManager.Primary?.Player?.RequestStop()</code>.</li>
+<li><strong>Ne touchez pas au volume pendant la lecture.</strong> Le thread de lecture lit le fichier pendant que le reste du noyau tourne, et la couche système de fichiers n'a aucun verrouillage propre. Écrire sur le même volume tant que <code>IsPlaying</code> n'est pas repassé à false, c'est chercher les ennuis.</li>
+</ul>
+<p><code>Position</code> compte les trames lues dans le flux, qui ont de l'avance sur ce que vous entendez : l'avance correspond aux trames déjà en file dans le tampon de la carte son, soit environ un dixième de seconde à 48 kHz.</p>
+<p><a id="generating-sound"></a></p>
+<h2 id="générer-du-son">Générer du son</h2>
+<p>Les échantillons que vous calculez vous-même se jouent de la même façon. Le format d'un flux est un <code>AudioFormat</code> : bits par canal, canaux par trame et signe des échantillons, <code>AudioFormat.Stereo16</code> étant celui que joue la sortie HD Audio. Une trame entrelace un échantillon par canal, gauche puis droite, chaque échantillon étant une valeur signée de 16 bits en little-endian.</p>
+<p><code>AudioFormat</code> et <code>AudioBitDepth</code> appartiennent au point d'extension expérimental du kit de pilotes : les nommer provoque une erreur de build portant le diagnostic <code>COSMOS0003</code> (<a href="../dev/public-api.html">Suivi de l'API publique</a>) tant que le projet du noyau ne prend pas acte de l'absence de promesse de compatibilité. Lire un format, comme le fait <code>output.Format.Channels</code> plus haut, ne demande rien :</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;NoWarn&gt;$(NoWarn);COSMOS0003&lt;/NoWarn&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p>Pour un son court, remplissez un tampon et enveloppez-le dans un <code>MemoryAudioStream</code> :</p>
+<pre><code class="lang-csharp">const uint SampleRate = 48000;
+AudioFormat format = AudioFormat.Stereo16;
+
+/* One second of a 440 Hz sine wave, at a quarter of full scale */
+int frames = (int)SampleRate;
+byte[] data = new byte[frames * format.FrameSize];
+
+for (int i = 0; i &lt; frames; i++)
+{
+    short sample = (short)(Math.Sin(2 * Math.PI * 440 * i / SampleRate) * 8192);
+
+    Span&lt;byte&gt; frame = data.AsSpan(i * format.FrameSize, format.FrameSize);
+    BitConverter.TryWriteBytes(frame, sample);       // left
+    BitConverter.TryWriteBytes(frame[2..], sample);  // right
+}
+
+AudioManager.Play(new MemoryAudioStream(format, SampleRate, data));
+</code></pre>
+<p>Un son long ou sans fin gagne à être calculé au fur et à mesure de sa lecture, pour ne coûter aucune mémoire : dérivez de <code>AudioStream</code> et remplissez le tampon que le lecteur passe à <code>Read</code>. La classe de base ne porte volontairement aucune longueur, pour qu'un flux puisse jouer indéfiniment, comme le fait un synthétiseur, un mixeur de votre cru ou la bande-son d'un jeu :</p>
+<pre><code class="lang-csharp">/* A sine wave worked out as it is read: it costs no memory and never runs out */
+internal sealed class SineStream : AudioStream
+{
+    private const uint Rate = 48000;
+
+    private readonly double _step;
+    private double _phase;
+
+    public SineStream(double frequency)
+    {
+        _step = 2 * Math.PI * frequency / Rate;
+    }
+
+    public override AudioFormat Format =&gt; AudioFormat.Stereo16;
+
+    public override uint SampleRate =&gt; Rate;
+
+    public override bool Depleted =&gt; false;
+
+    public override int Read(Span&lt;byte&gt; destination)
+    {
+        int frameSize = Format.FrameSize;
+        int frames = destination.Length / frameSize;
+
+        for (int i = 0; i &lt; frames; i++)
+        {
+            short sample = (short)(Math.Sin(_phase) * 8192);
+
+            Span&lt;byte&gt; frame = destination.Slice(i * frameSize, frameSize);
+            BitConverter.TryWriteBytes(frame, sample);
+            BitConverter.TryWriteBytes(frame[2..], sample);
+
+            _phase += _step;
+            if (_phase &gt;= 2 * Math.PI)
+            {
+                _phase -= 2 * Math.PI;
+            }
+        }
+
+        return frames * frameSize;
+    }
+}
+</code></pre>
+<p><code>Read</code> renvoie le nombre d'octets écrits, toujours un nombre entier de trames, et le lecteur cesse de lire dès que <code>Depleted</code> passe à <code>true</code> ou que <code>Read</code> renvoie <code>0</code>. Un flux qui ne s'épuise jamais doit être arrêté, c'est pourquoi il faut le jouer en arrière-plan :</p>
+<pre><code class="lang-csharp">if (AudioManager.TryStartPlayback(new SineStream(440), null, out AudioPlayback? playback))
+{
+    TimerManager.Wait(2000);
+    playback.Stop();
+}
+</code></pre>
+<p><a id="writing-frames-yourself"></a></p>
+<h2 id="écrire-des-trames-vous-même">Écrire des trames vous-même</h2>
+<p>Le lecteur est une commodité au-dessus d'<code>AudioDevice</code>, qu'un noyau peut aussi piloter directement, par exemple depuis une boucle de jeu qui mixe ses propres effets sonores. Le périphérique reçoit les trames dans un tampon circulaire que son moteur de flux vide au rythme de l'horloge du codec : <code>Write</code> copie tout ce qui tient, renvoie le nombre d'octets pris, <code>0</code> quand le tampon est plein, et ne bloque jamais.</p>
+<pre><code class="lang-csharp">AudioDevice? output = AudioManager.Primary;
+if (output is null || output.Player is not null || !output.TrySetFormat(AudioFormat.Stereo16, 48000))
+{
+    return;
+}
+
+SineStream source = new(440);
+byte[] chunk = new byte[4096];
+output.Start();
+
+/* 500 chunks of 1024 frames: about ten seconds */
+for (int pass = 0; pass &lt; 500; pass++)
+{
+    int length = source.Read(chunk);
+    int written = 0;
+    while (written &lt; length)
+    {
+        int took = output.Write(chunk.AsSpan(written, length - written));
+        if (took == 0)
+        {
+            /* The buffer is full: the codec is playing what it has */
+            TimerManager.Wait(5);
+            continue;
+        }
+
+        written += took;
+    }
+}
+
+output.Stop();
+</code></pre>
+<p>Les règles que le périphérique vous impose :</p>
+<ul>
+<li><code>TrySetFormat</code> ne fonctionne que tant que le périphérique est arrêté ; un périphérique en marche garde son format et renvoie <code>false</code>.</li>
+<li>Alimentez-le sans interruption. Du silence est joué tant que le tampon est vide après <code>Start()</code>, mais le tampon est circulaire : si le code qui écrit prend longtemps du retard, on entend revenir d'anciennes trames.</li>
+<li><code>Stop()</code> abandonne ce que le tampon contient encore. Pour entendre la fin d'un son, écrivez d'abord à sa suite l'équivalent d'un tampon de silence (<code>WritableBytes</code> juste après <code>TrySetFormat</code> vous en donne la taille), comme le fait le lecteur.</li>
+<li>Écrire directement ne réserve rien. Vérifiez que <code>Player</code> vaut <code>null</code> avant de commencer ; un <code>Play</code> ou un <code>Console.Beep</code> qui arrive pendant que vous écrivez est refusé, car le périphérique en marche refuse son changement de format.</li>
+</ul>
+<p><a id="current-limitations"></a></p>
+<h2 id="limitations-actuelles">Limitations actuelles</h2>
+<ul>
+<li>Intel HD Audio est le seul pilote de carte son : pas d'AC97, de Sound Blaster, de virtio-sound ni d'audio USB, et pas de haut-parleur PC. Sans contrôleur HD Audio, <code>Console.Beep</code> rend la main immédiatement sans rien jouer.</li>
+<li>Lecture uniquement. Rien n'enregistre : les entrées du codec, y compris l'entrée ligne du <code>hda-duplex</code> de QEMU, restent inutilisées.</li>
+<li>Un seul format : stéréo 16 bits signé, aux fréquences du tableau ci-dessus. Les flux d'une autre disposition ou à une autre fréquence sont refusés plutôt que convertis ou rééchantillonnés.</li>
+<li>Pas de mixeur : une sortie joue un flux à la fois, et une seconde lecture, un <code>Play</code> ou un <code>Console.Beep</code> est refusé jusqu'à la fin de celle en cours.</li>
+<li>Pas de réglage du volume. Le pilote ouvre les amplificateurs du codec au gain maximal ; mettez vos échantillons à l'échelle pour jouer moins fort.</li>
+<li>Le pilote joue par le premier convertisseur et la première broche capable de sortir du son, sur le premier codec qui possède les deux. Sur une machine à plusieurs prises jack, ce n'est peut-être pas celle que vous écoutez, et l'audio HDMI ou DisplayPort d'un ordinateur, quand il passe par un contrôleur HD Audio distinct, est publié comme une sortie à part entière qui peut se retrouver en tête du tri.</li>
+<li>WAV est le seul format de fichier que lit le noyau ; il n'y a pas de décodeur MP3, OGG ou FLAC.</li>
+</ul>
+<p><a id="how-it-works"></a></p>
+<h2 id="fonctionnement">Fonctionnement</h2>
+<p>Au démarrage, l'initialiseur de la bibliothèque installe le consommateur du <a href="drivers.html">kit de pilotes</a> propre au gestionnaire audio avant l'exécution de l'étape des pilotes, si bien que le gestionnaire voit chaque sortie publiée par un pilote. <code>HdAudioDriver</code> se lie à la fonction PCI du contrôleur, la réinitialise, met en place les anneaux de commandes et de réponses par lesquels on communique avec les codecs, et parcourt les widgets de chaque codec à la recherche d'un convertisseur de sortie et d'une broche capable de piloter une sortie. Il relie la broche au convertisseur, ouvre leurs amplificateurs, allume l'amplificateur externe dont beaucoup de portables ont besoin pour leurs haut-parleurs, programme le premier flux de sortie sur un tampon DMA circulaire de 16 Kio découpé en quatre périodes de 4 Kio, et publie la sortie sous le nom <code>hda</code> (n'importe quel pilote peut en publier une : <a href="drivers.html#publishing-a-device">Publier un périphérique</a>).</p>
+<p>C'est <code>AudioPlayer</code> qui joue, que la lecture ait été lancée par <code>AudioManager.Play</code>, par un <code>AudioPlayback</code> en arrière-plan ou par le plug de <code>Console.Beep</code> (qui joue une onde carrée générée). Il réserve la sortie, la programme pour le format et la fréquence du flux, démarre le moteur de flux et lit le flux 1024 trames à la fois dans un tampon intermédiaire, en écrivant chaque lot dans le tampon du périphérique à mesure que de la place se libère. Le périphérique calcule la place libre à partir de la position du moteur lui-même, ce qui explique que le lecteur n'ait besoin d'aucune interruption, et maintient silencieuse la période située juste devant le code qui écrit : si ce code prend brièvement du retard, le manque de données (underrun) se traduit par du silence. L'interruption de complétion, là où la ligne est connectée, ne fait que signaler au gestionnaire que de la place s'est libérée. Quand le tampon est plein, le lecteur attend 5 ms, par une mise en sommeil de l'ordonnanceur sur un thread que l'ordonnanceur possède et par le minuteur sinon, et abandonne dès qu'une seconde entière s'écoule sans que le périphérique ne prenne rien. À la fin du flux, il écrit un tampon de silence, pour que les dernières trames atteignent le codec avant l'arrêt du moteur.</p>
+<pre><code>Console.Beep / AudioManager.Play / AudioManager.TryStartPlayback
+        │
+AudioStream ── WaveAudioStream (a volume), MemoryAudioStream, your own   (Cosmos.Kernel.System.Audio)
+        │  read 1024 frames at a time
+AudioPlayer ── claims the output, writes what fits, waits 5 ms when full
+        │
+AudioManager ── AudioDevice (primary first)
+        │
+driver kit: IAudioOutput &quot;hda&quot;                                           (HdAudioDriver, Cosmos.Kernel.Drivers)
+        │  16 KiB cyclic DMA buffer, drained on the codec's clock
+HD Audio controller → codec converter → pin → speakers (or QEMU's audio backend)
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/fr/articles/user/audio.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

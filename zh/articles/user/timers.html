@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>定时器与闹钟 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="定时器与闹钟 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/user/timers.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="timers-and-alarms"></a></p>
+<h1 id="定时器与闹钟">定时器与闹钟</h1>
+<p>本文将介绍 Cosmos Gen3 上的延迟工作与周期性工作：阻塞一段时间、稍后运行回调，以及如何在提供这一功能的两个管理器之间做出选择。</p>
+<p>首先要了解的就是这两个管理器。<code>TimerManager</code> 在定时器中断中运行回调；<code>AlarmManager</code> 在一个内核线程上运行回调。它们接受相同的参数，在调用处看起来几乎一模一样，而选错一个会让内核卡死。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>TimerManager</code></th>
+<th><code>AlarmManager</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>回调运行于</td>
+<td>中断上下文</td>
+<td>线程上下文</td>
+</tr>
+<tr>
+<td>回调可以阻塞、分配内存或获取锁</td>
+<td>否</td>
+<td>是</td>
+</tr>
+<tr>
+<td>可以从何处发起调度调用</td>
+<td>任何地方，包括中断处理程序</td>
+<td>仅限线程上下文</td>
+</tr>
+<tr>
+<td>需要调度器</td>
+<td>否</td>
+<td>是</td>
+</tr>
+<tr>
+<td>精度</td>
+<td>节拍源的周期</td>
+<td>调度器节拍</td>
+</tr>
+<tr>
+<td><code>Schedule</code> 的返回值</td>
+<td>一个 <code>SoftwareTimer</code> 句柄，或 null</td>
+<td>一个闹钟 ID，或 0</td>
+</tr>
+<tr>
+<td>功能开关</td>
+<td><code>CosmosEnableTimer</code></td>
+<td><code>CosmosEnableScheduler</code></td>
+</tr>
+</tbody>
+</table>
+<p>如果你发现 bug 或任何异常，请在我们的仓库中<a href="https://github.com/CosmosOS/Cosmos/issues/new/choose">提交 issue</a>。</p>
+<hr>
+<p><a id="enable-the-timer-in-your-kernel"></a></p>
+<h2 id="在内核中启用定时器">在内核中启用定时器</h2>
+<p>定时器支持由一个功能开关控制。请确保内核的 <code>.csproj</code> 没有将其关闭（默认值为 <code>true</code>）；如果需要闹钟，也请保持调度器开启：</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;CosmosEnableTimer&gt;true&lt;/CosmosEnableTimer&gt;
+  &lt;CosmosEnableScheduler&gt;true&lt;/CosmosEnableScheduler&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p>下面的代码片段依赖以下 <code>using</code> 指令：</p>
+<pre><code class="lang-csharp">using System;
+using Cosmos.Kernel.System.Diagnostics;
+using Cosmos.Kernel.System.Timers;
+</code></pre>
+<p>节拍源在启动时就会被发现并注册，因此内核一开始运行，<code>TimerManager</code> 就已就绪。<code>TimerManager.IsEnabled</code> 回答编译时的问题，<code>TimerManager.IsInitialized</code> 回答运行时的问题。</p>
+<hr>
+<p><a id="waiting"></a></p>
+<h2 id="等待">等待</h2>
+<p><code>TimerManager.Wait</code> 会让调用线程阻塞指定的毫秒数。它是本页最简单的功能，也是大多数内核最常用的功能，通常用来控制轮询循环的节奏：</p>
+<pre><code class="lang-csharp">for (int i = 0; i &lt; 10; i++)
+{
+    Console.WriteLine(&quot;tick &quot; + i);
+    TimerManager.Wait(500);
+}
+</code></pre>
+<p>当 <code>CosmosEnableTimer=false</code> 时，它会抛出指明该开关的 <code>InvalidOperationException</code>，而不是立即返回、让循环空转。</p>
+<hr>
+<p><a id="running-a-callback-later"></a></p>
+<h2 id="稍后运行回调">稍后运行回调</h2>
+<p><code>TimerManager.Schedule</code> 在一段延迟后运行一次回调，<code>ScheduleRecurring</code> 则每隔一个周期运行一次回调。两者都会返回一个 <code>SoftwareTimer</code> 句柄：</p>
+<pre><code class="lang-csharp">bool cursorVisible = false;
+
+/* Flipping a field is the shape an interrupt-context callback should have:
+   the render loop reads it and does the drawing. */
+SoftwareTimer? blink = TimerManager.ScheduleRecurring(
+    () =&gt; cursorVisible = !cursorVisible,
+    TimeSpan.FromMilliseconds(250));
+
+/* ... later ... */
+TimerManager.Cancel(blink);
+</code></pre>
+<p>句柄是只读的：调用方可以通过 <code>TimeoutNs</code>、<code>Recurring</code> 和 <code>IsActive</code> 查询一个尚未触发的定时器。把句柄交给 <code>Cancel</code> 即可停止该定时器。只有当定时器仍未触发时，<code>Cancel</code> 才返回 <code>true</code>，因此调用两次，或对已经触发过的一次性定时器调用，都不算错误。</p>
+<p><strong>回调运行在中断上下文中。</strong> 它不能阻塞，不能分配内存，也不能获取锁，因为被它中断的线程可能正持有某个锁。它也不能让异常逃逸：中断分发之上没有任何代码会捕获异常，内核会因此停机。</p>
+<p>当定时器被编译排除，或者没有注册任何节拍源时，<code>Schedule</code> 和 <code>ScheduleRecurring</code> 返回 <code>null</code>，这就是句柄可为空的原因。<code>Cancel</code> 接受 null 并返回 <code>false</code>。</p>
+<hr>
+<p><a id="running-a-callback-that-needs-to-do-real-work"></a></p>
+<h2 id="运行需要做实际工作的回调">运行需要做实际工作的回调</h2>
+<p>上一段所禁止的一切都应交给闹钟来做。<code>AlarmManager</code> 拥有自己的内核线程，并在该线程上运行回调，因此闹钟回调可以阻塞、分配内存、使用调度器原语并获取锁：</p>
+<pre><code class="lang-csharp">ulong id = AlarmManager.ScheduleRecurring(
+    () =&gt; Console.WriteLine(&quot;free pages: &quot; + MemoryDiagnostics.FreePages),
+    TimeSpan.FromSeconds(5));
+
+/* ... later ... */
+AlarmManager.Cancel(id);
+</code></pre>
+<p>它的形式有意与 <code>TimerManager</code> 保持一致，这样在两者之间切换只需改一个词。不同之处在于返回值：闹钟属于闹钟系统，而不属于某个节拍源的注册表，因此它由一个 <code>ulong</code> ID 标识。零表示闹钟没有被调度，这会在调度器未运行或周期不为正数时发生。</p>
+<p><strong>调度调用本身只能在线程上下文中进行。</strong> <code>AlarmManager</code> 的每个成员都会获取闹钟列表的互斥锁，如果该锁已被持有，就会休眠等待。在中断处理程序中调用其中任何一个成员，都会在处理程序内部休眠等待并卡死，而 <code>TimerManager</code> 的回调正是中断处理程序。<code>TimerManager</code> 的成员采用屏蔽中断而不是休眠等待的方式，因此没有这一限制；所以，需要做实际工作的定时器回调应当通知一个线程，而不是调度一个闹钟。</p>
+<p>周期性闹钟的周期从回调触发时重新开始计算，而不是从回调返回时开始，因此运行时间超过其周期的回调返回时，下一次触发已经到期。</p>
+<hr>
+<p><a id="changing-the-tick-rate"></a></p>
+<h2 id="更改节拍频率">更改节拍频率</h2>
+<p><code>TimerManager.Frequency</code> 以赫兹为单位读取和设置节拍源的频率。每个节拍源都是对一个固定计数器进行分频，因此各自只接受一个有限的范围：在 x64 PIT 上为 19 Hz 到 1193180 Hz，在 ARM64 通用定时器上为 1 Hz 到 <code>CNTFRQ_EL0</code>。超出范围的值会抛出 <code>ArgumentOutOfRangeException</code>，而不是被悄悄忽略：</p>
+<pre><code class="lang-csharp">Console.WriteLine(&quot;timer runs at &quot; + TimerManager.Frequency + &quot; Hz&quot;);
+TimerManager.Frequency = 1000;
+</code></pre>
+<p>提高频率会让已调度的回调触发得更接近其截止时间，同时也会让中断本身的开销更大。通常很少有理由修改它。</p>
+<hr>
+<p><a id="summary"></a></p>
+<h2 id="总结">总结</h2>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>阻塞一段时间</td>
+<td><code>TimerManager.Wait(ms)</code></td>
+</tr>
+<tr>
+<td>稍后运行一个小回调</td>
+<td><code>TimerManager.Schedule(callback, delay)</code></td>
+</tr>
+<tr>
+<td>重复运行一个小回调</td>
+<td><code>TimerManager.ScheduleRecurring(callback, period)</code></td>
+</tr>
+<tr>
+<td>停止定时器</td>
+<td><code>TimerManager.Cancel(timer)</code></td>
+</tr>
+<tr>
+<td>运行会阻塞或分配内存的回调</td>
+<td><code>AlarmManager.Schedule(callback, delay)</code></td>
+</tr>
+<tr>
+<td>重复运行此类回调</td>
+<td><code>AlarmManager.ScheduleRecurring(callback, period)</code></td>
+</tr>
+<tr>
+<td>停止闹钟</td>
+<td><code>AlarmManager.Cancel(id)</code></td>
+</tr>
+<tr>
+<td>读取或设置节拍频率</td>
+<td><code>TimerManager.Frequency</code></td>
+</tr>
+</tbody>
+</table>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/user/timers.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
