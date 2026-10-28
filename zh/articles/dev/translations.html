@@ -108,10 +108,11 @@
 <p><a id="the-source-hash"></a></p>
 <h2 id="源哈希">源哈希</h2>
 <p><code>stamp</code> 还会记录翻译所依据的英文页面。它把英文页面的 git blob 哈希作为 <code>source_hash</code> 写入翻译的前置元数据（front matter），对于翻译版的 <code>toc.yml</code>，则写在文件顶部的一行 <code># source_hash:</code> 注释中。英文页面的任何修改都会改变这个哈希，因此将它与当前英文页面比较，就能知道翻译是否仍与英文页面同步。</p>
+<p>仓库的 README 也有翻译，即与它放在一起的 <code>README_FR.md</code> 和 <code>README_CN.md</code>，每个 README 徽章下方的语言链接行都指向它们。README 的翻译逐段对应 <code>README.md</code>，但它的链接指向其自身语言的文档（<code>https://cosmosos.github.io/fr/...</code>），徽章标签也经过翻译，因此 <code>check</code> 不会把它的结构与 <code>README.md</code> 比较。<code>stamp README_FR.md</code> 会把 <code>README.md</code> 的哈希写入其第一行的 <code>&lt;!-- source_hash: ... --&gt;</code> 注释中，GitHub 不会显示这条注释；<code>check</code> 会报告缺失、未打标记或过时的 README 翻译。README 发生变化时，文档工作流也会运行，这样过时的 README 翻译就会出现在它的摘要中。</p>
 <p><a id="checking-the-translations"></a></p>
 <h2 id="检查翻译">检查翻译</h2>
 <p><code>python3 .github/scripts/docs-i18n.py check</code> 遍历每个英文页面，并针对每种语言报告以下几类翻译：缺失的、过时的（其 <code>source_hash</code> 与英文页面不再匹配）、孤立的（英文页面已不存在），以及结构与英文页面不再一致的，即标题、代码块、链接目标、行内代码、表格行或段落不同，有一行与六个词或更多词的英文行完全相同，使用了文档风格规范禁止的破折号，或者有 toc 条目指向该语言文件夹之外。它无法读取的文件，例如未以 UTF-8 保存的文件，会像其他发现一样被报告。</p>
-<p>文档工作流在构建完三个站点后运行它。每个有发现的页面都会成为工作流运行上的一条警告注释，完整列表则写入该运行的摘要，因为 GitHub 只显示一个步骤的前十条注释。这一步从不让构建失败，因为英文的修改不应等待能写法文和中文的人；过时的翻译会继续在其提示横幅下发布，直到有人更新它。在本地，<code>--strict</code> 让它以错误状态退出，<code>--lang fr</code> 将它限制在一种语言，而一组英文路径（相对于 <code>docs/</code>）则将它限制在这些页面。</p>
+<p>文档工作流在构建完三个站点后运行它。每个有发现的页面都会成为工作流运行上的一条警告注释，完整列表则写入该运行的摘要，因为 GitHub 只显示一个步骤的前十条注释。这一步从不让构建失败，因为英文的修改不应等待能写法文和中文的人；过时的翻译会继续在其提示横幅下发布，直到有人更新它。在本地，<code>--strict</code> 让它以错误状态退出，<code>--lang fr</code> 将它限制在一种语言，而一组英文路径（相对于 <code>docs/</code>，或者 <code>README.md</code>）则将它限制在这些页面。</p>
 <p><a id="when-you-change-an-english-page"></a></p>
 <h2 id="修改英文页面时">修改英文页面时</h2>
 <p>你不必在同一个拉取请求中更新翻译。如果可以，请修改两份翻译，使其内容与英文页面现在的内容一致，并保持标题与英文页面同步，然后为它们打上标记：</p>
@@ -129,9 +130,10 @@ python3 .github/scripts/docs-i18n.py check articles/user/timers.md
 <li>一个根 <code>toc.yml</code>，其 API 条目写作 <code>../api/</code>；</li>
 <li>一个包含主题字符串的 <code>templates/&lt;folder&gt;/token.json</code>；</li>
 <li>在 <code>main.js</code> 中，在 <code>languages</code> 列表里加入一个条目，添加提示横幅文本，并在 lunr 有该语言的词干提取器时把它加入 <code>lunrLanguages</code>；</li>
-<li>对于词与词之间不加空格的语言，需要一个按子串匹配的搜索 worker，例如 <code>templates/zh/public/search-worker.min.js</code>，并在 <code>docs-i18n.py</code> 中加入检查页面是否包含该文字的规则，就像中文的那条一样。</li>
+<li>对于词与词之间不加空格的语言，需要一个按子串匹配的搜索 worker，例如 <code>templates/zh/public/search-worker.min.js</code>，并在 <code>docs-i18n.py</code> 中加入检查页面是否包含该文字的规则，就像中文的那条一样；</li>
+<li>与 <code>README.md</code> 放在一起的一份 README 翻译，在 <code>docs-i18n.py</code> 的 <code>READMES</code> 中加入其文件名，并在每个 README 的语言行中加入指向它的链接。</li>
 </ul>
-<p><code>Makefile</code>、<code>build-docs.yml</code>、<code>release.yml</code> 和 <code>docs-i18n.py</code> 通过 <code>docs/&lt;folder&gt;/docfx.json</code> 找到各种语言，因此它们无需修改。</p>
+<p><code>Makefile</code>、<code>build-docs.yml</code> 和 <code>release.yml</code> 通过 <code>docs/&lt;folder&gt;/docfx.json</code> 找到各种语言，<code>docs-i18n.py</code> 对页面也是如此，因此它们无需其他修改。</p>
 <p><a id="terms"></a></p>
 <h2 id="术语">术语</h2>
 <p>翻译在所有页面中对同一概念使用同一个术语。下表列出了已确定的术语，使新的或更新后的翻译读起来与周围的页面一致。</p>
