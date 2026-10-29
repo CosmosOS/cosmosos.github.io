@@ -322,7 +322,7 @@
 <tr>
 <td>x64</td>
 <td>Minuteur LAPIC, vecteur 239, périodique, 10 ms</td>
-<td>PIT sur l'IRQ 0, ponctuel, réarmé à chaque interruption</td>
+<td>PIT sur l'IRQ 0, ponctuel, réarmé à chaque interruption, 10 ms</td>
 </tr>
 <tr>
 <td>ARM64</td>
@@ -672,7 +672,7 @@
 <li>les événements d'interruption (<code>InterruptEvent_TwoWaiters_BothWake</code>),</li>
 <li>la surface de la BCL au-dessus de tout cela : délégués, <code>Task</code>, <code>async</code>/<code>await</code>, <code>ThreadPool</code>.</li>
 </ul>
-<p><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/tests/Kernels/Cosmos.Kernel.Tests.Timer/Kernel.cs"><code>Cosmos.Kernel.Tests.Timer</code></a> exécute 24 tests sur x64 et 18 sur ARM64 (<code>make test KERNEL=Timer</code>), et couvre les deux niveaux de travail différé (<code>TimerManager_Schedule_*</code>, <code>AlarmSystem_*</code>), le <code>System.Threading.Timer</code> de la BCL bâti au-dessus, <code>Stopwatch</code>, <code>DateTime</code>, et le matériel de minuterie propre à chaque architecture (PIT et LAPIC sur x64).</p>
+<p><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/tests/Kernels/Cosmos.Kernel.Tests.Timer/Kernel.cs"><code>Cosmos.Kernel.Tests.Timer</code></a> exécute 27 tests sur x64 et 21 sur ARM64 (<code>make test KERNEL=Timer</code>), et couvre les deux niveaux de travail différé (<code>TimerManager_Schedule_*</code>, <code>AlarmSystem_*</code>), le <code>System.Threading.Timer</code> de la BCL bâti au-dessus, <code>Stopwatch</code>, <code>DateTime</code>, et le matériel de minuterie propre à chaque architecture (PIT et LAPIC sur x64).</p>
 <hr>
 <p><a id="source-files"></a></p>
 <h2 id="fichiers-source">Fichiers source</h2>

@@ -192,7 +192,7 @@ AlarmManager.Cancel(id);
 <p>A recurring alarm's period restarts when the callback fires, not when it returns, so a callback that runs longer than its period leaves the next firing already due.</p>
 <hr>
 <h2 id="changing-the-tick-rate">Changing the tick rate</h2>
-<p><code>TimerManager.Frequency</code> reads and writes the tick source's rate in hertz. Each tick source divides a fixed counter, so each accepts a bounded range: 19 Hz to 1193180 Hz on the x64 PIT, and 1 Hz up to <code>CNTFRQ_EL0</code> on the ARM64 generic timer. A value outside its range throws <code>ArgumentOutOfRangeException</code> rather than being quietly ignored:</p>
+<p><code>TimerManager.Frequency</code> reads and writes the tick source's rate in hertz. Both tick sources start at 100 Hz, a 10 ms tick, which is the resolution of <code>TimerManager.Wait</code> and of a scheduled callback. Each tick source divides a fixed counter, so each accepts a bounded range: 19 Hz to 1193180 Hz on the x64 PIT, and 1 Hz up to <code>CNTFRQ_EL0</code> on the ARM64 generic timer. A value outside its range throws <code>ArgumentOutOfRangeException</code> rather than being quietly ignored:</p>
 <pre><code class="lang-csharp">Console.WriteLine(&quot;timer runs at &quot; + TimerManager.Frequency + &quot; Hz&quot;);
 TimerManager.Frequency = 1000;
 </code></pre>

@@ -199,7 +199,7 @@ AlarmManager.Cancel(id);
 <hr>
 <p><a id="changing-the-tick-rate"></a></p>
 <h2 id="changer-la-fréquence-des-ticks">Changer la fréquence des ticks</h2>
-<p><code>TimerManager.Frequency</code> lit et écrit la fréquence de la source de ticks en hertz. Chaque source de ticks divise un compteur fixe, chacune accepte donc une plage bornée : de 19 Hz à 1193180 Hz sur le PIT x64, et de 1 Hz jusqu'à <code>CNTFRQ_EL0</code> sur le minuteur générique ARM64. Une valeur hors de cette plage lève <code>ArgumentOutOfRangeException</code> plutôt que d'être ignorée en silence :</p>
+<p><code>TimerManager.Frequency</code> lit et écrit la fréquence de la source de ticks en hertz. Les deux sources de ticks démarrent à 100 Hz, un tick de 10 ms, qui est la résolution de <code>TimerManager.Wait</code> et d'un rappel planifié. Chaque source de ticks divise un compteur fixe, chacune accepte donc une plage bornée : de 19 Hz à 1193180 Hz sur le PIT x64, et de 1 Hz jusqu'à <code>CNTFRQ_EL0</code> sur le minuteur générique ARM64. Une valeur hors de cette plage lève <code>ArgumentOutOfRangeException</code> plutôt que d'être ignorée en silence :</p>
 <pre><code class="lang-csharp">Console.WriteLine(&quot;timer runs at &quot; + TimerManager.Frequency + &quot; Hz&quot;);
 TimerManager.Frequency = 1000;
 </code></pre>

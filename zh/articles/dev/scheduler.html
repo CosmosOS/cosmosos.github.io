@@ -322,7 +322,7 @@
 <tr>
 <td>x64</td>
 <td>LAPIC 定时器，向量 239，周期性，10 ms</td>
-<td>IRQ 0 上的 PIT，一次性，每次中断后重新设置</td>
+<td>IRQ 0 上的 PIT，一次性，每次中断后重新设置，10 ms</td>
 </tr>
 <tr>
 <td>ARM64</td>
@@ -673,7 +673,7 @@
 <li>中断事件（<code>InterruptEvent_TwoWaiters_BothWake</code>）；</li>
 <li>在这一切之上的 BCL 接口：委托、<code>Task</code>、<code>async</code>/<code>await</code>、<code>ThreadPool</code>。</li>
 </ul>
-<p><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/tests/Kernels/Cosmos.Kernel.Tests.Timer/Kernel.cs"><code>Cosmos.Kernel.Tests.Timer</code></a> 在 x64 上运行 24 个测试，在 ARM64 上运行 18 个（<code>make test KERNEL=Timer</code>），覆盖两层延迟工作（<code>TimerManager_Schedule_*</code>、<code>AlarmSystem_*</code>）、构建在它们之上的 BCL <code>System.Threading.Timer</code>、<code>Stopwatch</code>、<code>DateTime</code>，以及各架构的定时器硬件（x64 上的 PIT 和 LAPIC）。</p>
+<p><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/tests/Kernels/Cosmos.Kernel.Tests.Timer/Kernel.cs"><code>Cosmos.Kernel.Tests.Timer</code></a> 在 x64 上运行 27 个测试，在 ARM64 上运行 21 个（<code>make test KERNEL=Timer</code>），覆盖两层延迟工作（<code>TimerManager_Schedule_*</code>、<code>AlarmSystem_*</code>）、构建在它们之上的 BCL <code>System.Threading.Timer</code>、<code>Stopwatch</code>、<code>DateTime</code>，以及各架构的定时器硬件（x64 上的 PIT 和 LAPIC）。</p>
 <hr>
 <p><a id="source-files"></a></p>
 <h2 id="源文件">源文件</h2>
