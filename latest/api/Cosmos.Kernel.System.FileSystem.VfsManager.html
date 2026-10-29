@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
       <title>Class VfsManager | Cosmos Gen 3 </title>
@@ -240,7 +240,8 @@ never changes; read the property again for a newer one.</p>
   </h3>
 
   <div class="markdown level1 summary"><p>Creates a directory at <code class="paramref">fullPath</code>; the parent
-directory must already exist on a mounted filesystem.</p>
+directory must already exist on a mounted filesystem that is not
+read-only.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -280,7 +281,8 @@ directory must already exist on a mounted filesystem.</p>
   </h3>
 
   <div class="markdown level1 summary"><p>Creates a regular file at <code class="paramref">fullPath</code>; the parent
-directory must already exist on a mounted filesystem.</p>
+directory must already exist on a mounted filesystem that is not
+read-only.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -695,7 +697,8 @@ operations, which is what a directory looks like from here.</p>
   
   </h3>
 
-  <div class="markdown level1 summary"><p>Removes the directory at <code class="paramref">fullPath</code> (driver enforces emptiness).</p>
+  <div class="markdown level1 summary"><p>Removes the directory at <code class="paramref">fullPath</code> (driver
+enforces emptiness). Refused on a read-only mount.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -760,9 +763,10 @@ open goes delete-pending instead of being dropped under its handles.</p>
     <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
     <dd><p><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> when either path is a mount point, the
 source does not exist, the destination is inside the source's own
-subtree, the two sit on different mounts, the two are of different
-kinds, the destination is a directory that is not empty, or the driver
-refuses the move. Renaming a path onto itself succeeds.</p>
+subtree, the two sit on different mounts, the mount is read-only, the
+two are of different kinds, the destination is a directory that is not
+empty, or the driver refuses the move. Renaming a path onto itself
+succeeds.</p>
 </dd>
   </dl>
 
@@ -873,7 +877,8 @@ tracks them. Multiply <a class="xref" href="Cosmos.Kernel.System.FileSystem.VfsS
   <div class="markdown level1 summary"><p>Removes the file at <code class="paramref">fullPath</code>. When open handles
 still reference the node the removal is deferred to the last close
 (delete-pending) instead — FAT-style drivers free the data clusters
-immediately on unlink, out from under any live handle.</p>
+immediately on unlink, out from under any live handle. Refused on a
+read-only mount.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 

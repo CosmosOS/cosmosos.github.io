@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
       <title>Class KernelFeatures | Cosmos Gen 3 </title>
@@ -203,6 +203,41 @@ Requires PCI.</p>
 
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public static bool Fat { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_KernelFeatures_FinalizerThread_" data-uid="Cosmos.Kernel.System.KernelFeatures.FinalizerThread*"></a>
+
+  <h3 id="Cosmos_Kernel_System_KernelFeatures_FinalizerThread" data-uid="Cosmos.Kernel.System.KernelFeatures.FinalizerThread">
+  FinalizerThread
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Whether the finalizers run on a thread of their own
+(<code>CosmosEnableFinalizerThread</code>), started by <code>Kernel.Start</code>
+once the driver stage is done. Requires Scheduler. Off, they run on
+the thread that collected or allocated.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool FinalizerThread { get; }</code></pre>
   </div>
 
 

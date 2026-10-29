@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>&#201;tats des threads et file d&#39;ex&#233;cution | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="&#201;tats des threads et file d&#39;ex&#233;cution | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/sched-concepts/run-queue.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="thread-states-and-the-run-queue"></a></p>
+<h1 id="états-des-threads-et-file-dexécution">États des threads et file d'exécution</h1>
+<p>À tout instant, un thread se trouve dans l'un de quelques états. Il est en cours d'exécution pendant qu'un CPU l'exécute, prêt quand il pourrait s'exécuter mais qu'aucun CPU n'est libre pour lui, et bloqué tant qu'il attend quelque chose : un verrou, un périphérique, un signal, ou un instant donné, que certains noyaux suivent comme un état d'endormissement distinct. Un nouveau thread commence à l'état créé et devient prêt quand il est démarré, et un thread terminé reste mort jusqu'à ce que le noyau le récupère. Seuls les threads prêts se disputent le CPU, et l'ordonnanceur les garde dans sa file d'exécution. Le nom est traditionnel : la structure peut être une FIFO, une liste triée selon une clé, un tas, ou une file par niveau de priorité, tout ce qui rend peu coûteux, pour la politique, le choix du thread suivant.</p>
+<p>Un CPU doit toujours exécuter quelque chose : quand aucun thread n'est prêt, il exécute donc un thread inactif, qui en général arrête le cœur jusqu'à la prochaine interruption. Un thread inactif ne doit jamais se bloquer, car il n'y a rien derrière lui sur quoi se replier.</p>
+<p>Le piège, c'est le thread en cours d'exécution. Qu'il reste dans la file d'exécution pendant qu'il s'exécute, ou qu'il en soit retiré quand il est choisi et remis quand il quitte le CPU, relève d'une convention, et un code qui mélange les deux conventions met un thread deux fois en file ou le perd. Un thread mis deux fois en file obtient deux tours, et dans une file triée, une entrée périmée qui garde sa place casse l'ordre pour tous les threads situés derrière elle. Un thread perdu par la file reste prêt sans jamais être choisi, ce qui, vu de l'extérieur, ressemble à un noyau figé.</p>
+<p>Dans Cosmos, les états sont ceux de <code>SchedulerThreadState</code> : <code>Created</code>, <code>Ready</code>, <code>Running</code>, <code>Blocked</code>, <code>Sleeping</code> et <code>Dead</code>, et une politique ne les modifie jamais. Le thread en cours d'exécution n'est normalement pas dans la structure de la file d'exécution : <code>PickNext</code> retire le thread qu'il renvoie, et le thread qui quitte le CPU revient par <code>OnThreadYield</code> après le choix, seulement s'il était encore <code>Running</code>. L'exception est un thread qui s'est bloqué et a été réveillé avant que le changement de contexte ne le retire du CPU : il est <code>Ready</code> et en file alors qu'il s'exécute encore. Un réveil pour un thread déjà <code>Ready</code> ou <code>Running</code> ne fait rien, mais un thread <code>Created</code> garde cet état jusqu'à sa première exécution, si bien que <code>OnThreadReady</code> peut arriver deux fois pour lui et doit se prémunir contre une seconde insertion. Le thread inactif est le thread de démarrage lui-même, celui qui appelle ensuite <code>BeforeRun</code> et <code>Run</code> du noyau. Quand <code>PickNext</code> renvoie <code>null</code>, c'est lui qui s'exécute, quel que soit son état. Le mutex du noyau, son événement d'interruption et sa variable de condition, cette dernière étant derrière les attentes propres de CoreLib (<code>Thread.Sleep</code>, <code>Thread.Join</code>, un <code>WaitHandle</code>) par son moniteur bas niveau, le font tourner en boucle, scruter ou arrêter le cœur entre deux vérifications au lieu de se mettre en attente, si bien qu'il n'atteint jamais <code>OnThreadBlocked</code> : un thread inactif mis en attente reviendrait par le repli à l'état <code>Running</code>, sans le réveil qui lui rend ses tickets. Pour le reste, il passe par les hooks comme n'importe quel autre thread : il atteint <code>OnThreadCreate</code> déjà <code>Running</code> quand une politique est installée, et revient par <code>OnThreadYield</code> quand il est retiré du CPU. Voir <a href="../scheduler.html#lifecycle">Cycle de vie</a> et <a href="../../user/scheduler-plugging.html#the-interface">L'interface</a>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/sched-concepts/run-queue.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title> | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content=" | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="images/favicon.ico">
+      <link rel="stylesheet" href="public/docfx.min.css">
+      <link rel="stylesheet" href="public/main.css">
+      <meta name="docfx:navrel" content="toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/roadmap.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="index.html">
+            <img id="logo" class="svg" src="images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="gen2gen3-feature-comparison"></a></p>
+<h2 id="comparaison-des-fonctionnalités-de-gen2-et-gen3">Comparaison des fonctionnalités de Gen2 et Gen3</h2>
+<table>
+<thead>
+<tr>
+<th>Fonctionnalité</th>
+<th>Gen2</th>
+<th>Gen3</th>
+<th>Remarques</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Accès bas niveau à l'assembleur</td>
+<td>✅</td>
+<td>✅</td>
+<td>Auparavant X#, désormais assembleur NASM x64 + GAS ARM64.</td>
+</tr>
+<tr>
+<td>ACPI</td>
+<td>✅</td>
+<td>✅</td>
+<td>LAI (Lightweight ACPI Implementation) via l'interopérabilité C.</td>
+</tr>
+<tr>
+<td>Gestion des interruptions</td>
+<td>✅</td>
+<td>✅</td>
+<td>x64 : APIC (local + I/O). ARM64 : GIC.</td>
+</tr>
+<tr>
+<td>Gestion de la mémoire</td>
+<td>✅</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td>Prise en charge des pilotes</td>
+<td>✅</td>
+<td>✅</td>
+<td>PCI et MMIO au-dessus du kit de pilotes ; le bus de plateforme peuplé à partir d'ACPI, du device tree (ARM64) ou de la table de la machine ; branchement à chaud PCI Express sur les ports racines</td>
+</tr>
+<tr>
+<td>Ramasse-miettes</td>
+<td>✅</td>
+<td>✅</td>
+<td>GC par marquage-balayage</td>
+</tr>
+<tr>
+<td>Système de fichiers</td>
+<td>✅</td>
+<td>✅</td>
+<td>FAT12/16/32 et ext2 sur un VFS de style Unix (montage, superblocs, inodes) avec formatage, ISO 9660 avec Rock Ridge en lecture seule ; partitionnement MBR/GPT/EBR. Exposé via <code>System.IO.File</code>/<code>FileStream</code>.</td>
+</tr>
+<tr>
+<td>Fonctionnalités de la bibliothèque de base .NET</td>
+<td>🟡</td>
+<td>🟡 Partiel</td>
+<td>Les types de base fonctionnent (String, Collections, List, Dictionary). Math, Console, DateTime, Random, BitOperations et <code>System.IO.File</code> sont couverts par des plugs.</td>
+</tr>
+<tr>
+<td>Système de plugs</td>
+<td>✅</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td>Framework de tests</td>
+<td>✅</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td>Débogueur</td>
+<td>✅</td>
+<td>🟡 Partiel</td>
+<td>Bugs de source link et des variables dans vscode</td>
+</tr>
+<tr>
+<td>Calcul mathématique accéléré par CPU/FPU</td>
+<td>✅</td>
+<td>✅</td>
+<td>x64 uniquement : FPU x87 (sin/cos/tan/exp/log/atan)</td>
+</tr>
+<tr>
+<td>Sous-système graphique Cosmos</td>
+<td>✅</td>
+<td>✅</td>
+<td>Le framebuffer du firmware via Limine, ainsi que les pilotes d'affichage virtio-gpu, VMware SVGA II, AMD DCN 3.1.5 et graphismes intégrés Intel au-dessus du kit de pilotes (SVGA3D sur celui de VMware).</td>
+</tr>
+<tr>
+<td>Interface réseau</td>
+<td>✅</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td>Minuteur / horloge</td>
+<td>✅</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td>Saisie au clavier</td>
+<td>✅</td>
+<td>✅</td>
+<td>Claviers PS/2 (x64), virtio et USB, tous sous forme de pilotes du kit de pilotes</td>
+</tr>
+<tr>
+<td>Saisie à la souris</td>
+<td>✅</td>
+<td>✅</td>
+<td>Souris PS/2 (x64), virtio et USB, toutes sous forme de pilotes du kit de pilotes</td>
+</tr>
+<tr>
+<td>Interface audio</td>
+<td>🟡</td>
+<td>✅</td>
+<td>Intel HD Audio : lecture WAV, flux générés et <code>Console.Beep</code>. Lecture uniquement, un flux par sortie.</td>
+</tr>
+</tbody>
+</table>
+<p><a id="additional-gen3-features"></a></p>
+<h2 id="fonctionnalités-supplémentaires-de-gen3">Fonctionnalités supplémentaires de Gen3</h2>
+<p>Au-delà de la parité avec Gen2, Gen3 apporte de nouvelles capacités :</p>
+<table>
+<thead>
+<tr>
+<th>Fonctionnalité</th>
+<th>État</th>
+<th>Remarques</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Runtime NativeAOT</strong></td>
+<td>🟡 Partiel</td>
+<td>Compilation NativeAOT complète avec le runtime, sans IL2CPU.</td>
+</tr>
+<tr>
+<td><strong>Prise en charge d'ARM64</strong></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Protocole de démarrage Limine</strong></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Threads et ordonnanceur</strong></td>
+<td>✅</td>
+<td>Ordonnanceur Stride fondé sur les priorités (x64 + ARM64). Mot-clé <code>lock</code> pris en charge.</td>
+</tr>
+<tr>
+<td><strong>Commutateurs de fonctionnalité</strong></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Extension Cosmos pour VS Code</strong></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Prise en charge USB</strong></td>
+<td>✅</td>
+<td>Contrôleurs hôtes xHCI, EHCI et OHCI avec hubs et branchement à chaud (x64 + ARM64) sous forme de pilotes du kit de pilotes, avec les pilotes de classe clavier HID boot, souris HID boot et stockage de masse (Bulk-Only Transport). Pas d'UHCI (le contrôleur compagnon USB 1.1 d'Intel, accessible par E/S de port).</td>
+</tr>
+</tbody>
+</table>
+<p><a id="future-releases"></a></p>
+<h2 id="versions-futures">Versions futures</h2>
+<p>Fonctionnalités prévues après la première version :</p>
+<table>
+<thead>
+<tr>
+<th>Fonctionnalité</th>
+<th>État</th>
+<th>Remarques</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SMP (multitraitement symétrique)</strong></td>
+<td>❌ Non commencé</td>
+<td>Démarrage des AP sur plusieurs cœurs, ordonnancement par CPU, équilibreur de charge.</td>
+</tr>
+<tr>
+<td><strong>HTTPS</strong></td>
+<td>❌ Non commencé</td>
+<td>Implémentation de TLS/SSL, gestion des certificats, sockets sécurisés.</td>
+</tr>
+<tr>
+<td><strong>GC générationnel</strong></td>
+<td>❌ Non commencé</td>
+<td>Remplacer l'actuel marquage-balayage par un collecteur générationnel (Gen0/Gen1/Gen2) pour de meilleures performances.</td>
+</tr>
+<tr>
+<td><strong>Exécution de code</strong></td>
+<td>❌ Non commencé</td>
+<td>VM WASM en espace utilisateur</td>
+</tr>
+<tr>
+<td><strong>Le GIC, l'ITS et les horloges à partir du device tree</strong></td>
+<td>❌ Non commencé</td>
+<td>Aujourd'hui, le contrôleur d'interruptions ARM64 provient d'ACPI ou des valeurs par défaut de virt, si bien qu'un démarrage avec acpi=off n'a pas de MSI ; le bus de plateforme lit déjà l'arbre. x64 n'en a jamais.</td>
+</tr>
+<tr>
+<td><strong>Branchement à chaud PCI au-delà des emplacements PCI Express natifs</strong></td>
+<td>❌ Non commencé</td>
+<td>Branchement à chaud ACPI (GPE), que QEMU utilise sur les ports racines de q35 sans l'option global ICH9-LPC et sur les ponts PCI conventionnels ; les ports aval des commutateurs font l'objet d'une correspondance mais ne sont pas testés.</td>
+</tr>
+</tbody>
+</table>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/roadmap.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

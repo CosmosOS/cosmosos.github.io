@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>Clavier | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Clavier | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/user/keyboard.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="keyboard"></a></p>
+<h1 id="clavier">Clavier</h1>
+<p>Dans cet article, nous verrons la saisie au clavier sur Cosmos Gen3 : comment lire du texte au moyen de l'API standard <code>Console</code>, comment réagir à chaque appui de touche, et comment changer de disposition de clavier.</p>
+<p>Les principales différences si vous venez de Gen2 :</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Gen2</th>
+<th>Gen3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API du gestionnaire</td>
+<td><code>Cosmos.System.KeyboardManager</code></td>
+<td>La même API, dans <code>Cosmos.Kernel.System.Input</code>, avec <code>SetKeyLayout</code>/<code>GetKeyLayout</code> renommées en <code>SetLayout</code>/<code>GetLayout</code></td>
+</tr>
+<tr>
+<td><code>Console.ReadLine</code> / <code>Console.ReadKey</code></td>
+<td>Remplacées par un plug, adossées au gestionnaire</td>
+<td>Remplacées par un plug, adossées au gestionnaire</td>
+</tr>
+<tr>
+<td>Événements de touche</td>
+<td><code>KeyEvent</code> (<code>KeyChar</code>, <code>Key</code>, <code>Modifiers</code>), touches représentées par <code>ConsoleKeyEx</code></td>
+<td>Identique, touches représentées par <code>Key</code> avec les mêmes membres</td>
+</tr>
+<tr>
+<td>Dispositions</td>
+<td>Dispositions US, FR, DE, ES, GB, TR et Dvorak bâties sur <code>ScanMapBase</code></td>
+<td>Le même ensemble bâti sur <code>KeyboardLayout</code>, dans <code>Cosmos.Kernel.System.Input.Layouts</code></td>
+</tr>
+<tr>
+<td>Périphériques</td>
+<td>Clavier PS/2</td>
+<td>Clavier PS/2 (x64), virtio-keyboard et clavier USB, tous sur le kit de pilotes (le 8042 sur q35 et sur tout PC ; virtio sur PCI sur les deux architectures et sur MMIO sur ARM64 ; USB sur un contrôleur xHCI, EHCI ou OHCI sur les deux)</td>
+</tr>
+</tbody>
+</table>
+<p>Si vous trouvez des bugs ou quelque chose d'anormal, merci de <a href="https://github.com/CosmosOS/Cosmos/issues/new/choose">soumettre une issue</a> sur notre dépôt.</p>
+<p><a id="enable-the-keyboard-in-your-kernel"></a></p>
+<h2 id="activer-le-clavier-dans-votre-noyau">Activer le clavier dans votre noyau</h2>
+<p>La prise en charge du clavier dépend d'un commutateur de fonctionnalité. Assurez-vous que le <code>.csproj</code> de votre noyau ne le désactive pas (il vaut <code>true</code> par défaut) :</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;CosmosEnableKeyboard&gt;true&lt;/CosmosEnableKeyboard&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p>Voici les directives <code>using</code> sur lesquelles reposent les extraits ci-dessous :</p>
+<pre><code class="lang-csharp">using System.Drawing;
+using Cosmos.Kernel.System.Graphics;
+using Cosmos.Kernel.System.Graphics.Fonts;
+using Cosmos.Kernel.System.Input;
+using Cosmos.Kernel.System.Input.Layouts;
+</code></pre>
+<p>Il n'y a rien à initialiser à la main : le clavier PS/2 (x64), un clavier virtio ou un clavier USB est lié par le <code>Ps2KeyboardDriver</code>, le <code>VirtioInputDriver</code> ou le <code>UsbKeyboardDriver</code> du kit de pilotes pendant l'étape des pilotes, puis publié auprès du consommateur du gestionnaire, qui l'enregistre (<a href="drivers.html#ps2-devices">Périphériques PS/2</a>, <a href="drivers.html#virtio-devices">Périphériques virtio</a>, <a href="drivers.html#usb-devices">Périphériques USB</a>).</p>
+<p>Les claviers USB ont aussi besoin des pilotes USB, <code>CosmosEnableUsb</code>. Vous n'avez pas à le définir : s'il est laissé non défini, il est activé dès que <code>CosmosEnableKeyboard</code> l'est. Le mettre à <code>false</code> conserve les claviers PS/2 et virtio et retire les claviers USB en même temps que les pilotes de contrôleur hôte.</p>
+<p><a id="reading-a-line"></a></p>
+<h2 id="lire-une-ligne">Lire une ligne</h2>
+<p><code>Console.ReadLine()</code> fonctionne comme partout ailleurs dans .NET, si bien que la plupart des noyaux n'ont jamais besoin de rien d'autre :</p>
+<pre><code class="lang-csharp">Console.WriteLine(&quot;What is your name?&quot;);
+Console.Write(&quot;&gt; &quot;);
+
+string? name = Console.ReadLine();
+Console.WriteLine(&quot;Hello, &quot; + name + &quot;!&quot;);
+</code></pre>
+<p>L'éditeur de ligne ne se limite pas à la saisie : les flèches gauche et droite déplacent le curseur dans la saisie, Début et Fin sautent à l'une ou l'autre extrémité, Retour arrière et Suppr effacent des caractères, et une saisie au milieu de la ligne insère au lieu de remplacer.</p>
+<!-- video: saisie de "Comsos Gen3", puis correction de la faute de frappe avec Début, les flèches et Suppr avant d'appuyer sur Entrée -->
+<p><video src="images/keyboard-readline.mp4" controls autoplay muted loop playsinline style="max-width:100%"></video></p>
+<p><a id="reading-single-keys"></a></p>
+<h2 id="lire-des-touches-une-à-une">Lire des touches une à une</h2>
+<p>Pour tout ce qui se situe sous le niveau de la ligne, <code>KeyboardManager.ReadKey()</code> bloque jusqu'à l'appui d'une touche et renvoie un <code>KeyEvent</code> :</p>
+<pre><code class="lang-csharp">Console.WriteLine(&quot;Press keys to inspect them (Escape to leave):&quot;);
+
+while (true)
+{
+    KeyEvent key = KeyboardManager.ReadKey();
+    if (key.Key == Key.Escape)
+    {
+        break;
+    }
+
+    Console.WriteLine(&quot;Key: &quot; + key.Key + &quot;   Char: '&quot; + key.KeyChar
+        + &quot;'   Modifiers: &quot; + key.Modifiers);
+}
+</code></pre>
+<p>Un <code>KeyEvent</code> porte trois informations :</p>
+<table>
+<thead>
+<tr>
+<th>Propriété</th>
+<th>Type</th>
+<th>Signification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Key</code></td>
+<td><code>Key</code></td>
+<td>La touche physique, indépendante de la disposition et des modificateurs (<code>A</code>, <code>D5</code>, <code>F1</code>, <code>LeftArrow</code>, ...)</td>
+</tr>
+<tr>
+<td><code>KeyChar</code></td>
+<td><code>char</code></td>
+<td>Le caractère de texte que produit la touche, <code>'\0'</code> si elle n'en produit aucun (touches de fonction, flèches, combinaisons avec Ctrl)</td>
+</tr>
+<tr>
+<td><code>Modifiers</code></td>
+<td><code>ConsoleModifiers</code></td>
+<td>Les indicateurs Shift, Alt et Control actifs au moment de l'appui</td>
+</tr>
+</tbody>
+</table>
+<!-- video: la boucle d'inspection affiche Key/Char/Modifiers pour des lettres, Shift+B, Shift+5, Ctrl+A, Alt+X, F1, F12, LeftArrow et Espace -->
+<p><video src="images/keyboard-readkey.mp4" controls autoplay muted loop playsinline style="max-width:100%"></video></p>
+<p>La méthode standard <code>Console.ReadKey()</code> fonctionne aussi et renvoie un <code>ConsoleKeyInfo</code> ordinaire ; la surcharge <code>ReadKey(true)</code> supprime l'écho. Ce n'est qu'une fine enveloppe autour de <code>KeyboardManager.ReadKey()</code> : utilisez celle qui convient le mieux à votre code.</p>
+<p>Dès qu'un noyau ouvre une deuxième session de console, le clavier saisit dans la session affichée à l'écran, et <code>Console</code> comme <code>KeyboardManager</code> lisent les touches de la session du thread appelant (<a href="sessions.html">Sessions de console et Telnet</a>).</p>
+<p><a id="polling-without-blocking"></a></p>
+<h2 id="scruter-sans-bloquer">Scruter sans bloquer</h2>
+<p>Une boucle de rendu ne peut pas se permettre de bloquer sur <code>ReadKey()</code>. <code>KeyboardManager.TryReadKey()</code> retire de la file un appui de touche en attente et renvoie <code>false</code> quand il n'y en a pas, si bien que l'image suit son cours. Ici, il déplace un carré sur un canvas tiré de l'article <a href="graphics.html">Graphismes</a> :</p>
+<pre><code class="lang-csharp">Canvas canvas = Canvas.GetFullScreen();
+Font font = PCScreenFont.DefaultFont;
+
+int x = (canvas.Width - 60) / 2;
+int y = (canvas.Height - 60) / 2;
+const int Step = 20;
+
+bool running = true;
+while (running)
+{
+    /* Drain every key pressed since the last frame */
+    while (KeyboardManager.TryReadKey(out KeyEvent? key))
+    {
+        switch (key.Key)
+        {
+            case Key.UpArrow: y -= Step; break;
+            case Key.DownArrow: y += Step; break;
+            case Key.LeftArrow: x -= Step; break;
+            case Key.RightArrow: x += Step; break;
+            case Key.Escape: running = false; break;
+        }
+    }
+
+    canvas.Clear(Color.MidnightBlue);
+    canvas.DrawString(&quot;Move the square with the arrow keys&quot;, font, Color.White, 40, 40);
+    canvas.DrawFilledRectangle(Color.Gold, x, y, 60, 60);
+    canvas.Display();
+
+    Thread.Sleep(15);
+}
+</code></pre>
+<!-- video: le carré doré se déplace sur le canvas sous l'action des flèches -->
+<p><video src="images/keyboard-square.mp4" controls autoplay muted loop playsinline style="max-width:100%"></video></p>
+<p><code>KeyboardManager.KeyAvailable</code> (ou <code>Console.KeyAvailable</code>, remplacé par un plug) vous indique si un appui de touche attend, sans le consommer, et <code>KeyboardManager.Peek()</code> renvoie le <code>KeyEvent</code> suivant tout en le laissant dans la file.</p>
+<p><a id="modifiers-and-lock-keys"></a></p>
+<h2 id="modificateurs-et-touches-de-verrouillage">Modificateurs et touches de verrouillage</h2>
+<p><code>KeyboardManager</code> suit l'état des modificateurs et des verrouillages de façon globale, en dehors de tout événement de touche :</p>
+<table>
+<thead>
+<tr>
+<th>Propriété</th>
+<th>Signification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ShiftPressed</code></td>
+<td>Une touche Maj est actuellement maintenue</td>
+</tr>
+<tr>
+<td><code>ControlPressed</code></td>
+<td>Une touche Ctrl est actuellement maintenue</td>
+</tr>
+<tr>
+<td><code>AltPressed</code></td>
+<td>Une touche Alt est actuellement maintenue</td>
+</tr>
+<tr>
+<td><code>CapsLock</code></td>
+<td>Verr. Maj est activé</td>
+</tr>
+<tr>
+<td><code>NumLock</code></td>
+<td>Verr. Num est activé</td>
+</tr>
+<tr>
+<td><code>ScrollLock</code></td>
+<td>Arrêt défil est activé</td>
+</tr>
+</tbody>
+</table>
+<p>Les touches de verrouillage basculent leur état à chaque appui et mettent à jour les voyants du clavier (ceux d'un clavier virtio restent tels quels : le pilote ne gère pas la file d'état du périphérique). Les modificateurs maintenus arrivent aussi dans chaque <code>KeyEvent</code> par ses indicateurs <code>Modifiers</code>, ce qui est en général la forme la plus pratique.</p>
+<p>AltGr est la touche Alt droite sur les dispositions qui donnent à leurs touches un troisième niveau (allemande, espagnole, turque). Tant qu'elle est maintenue, une touche est convertie par la colonne Control+Alt de la disposition, et le <code>KeyEvent</code> porte à la fois <code>Control</code> et <code>Alt</code> dans ses <code>Modifiers</code>, comme Windows signale cette même touche. <code>ControlPressed</code> et <code>AltPressed</code> restent l'état des touches Ctrl et Alt physiques. Sur les autres dispositions, la touche Alt droite est une seconde touche Alt.</p>
+<p><a id="keyboard-layouts"></a></p>
+<h2 id="dispositions-de-clavier">Dispositions de clavier</h2>
+<p>Les appuis de touche sortent du matériel sous forme de scancodes indépendants de la disposition ; une disposition les transforme en caractères. La disposition par défaut est US QWERTY, et <code>SetLayout</code> en change à tout moment :</p>
+<pre><code class="lang-csharp">KeyboardManager.SetLayout(new FRStandardLayout());
+</code></pre>
+<p>Sept dispositions sont fournies dans <code>Cosmos.Kernel.System.Input.Layouts</code> :</p>
+<table>
+<thead>
+<tr>
+<th>Classe</th>
+<th>Disposition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>USStandardLayout</code></td>
+<td>US QWERTY (par défaut)</td>
+</tr>
+<tr>
+<td><code>FRStandardLayout</code></td>
+<td>AZERTY français</td>
+</tr>
+<tr>
+<td><code>DEStandardLayout</code></td>
+<td>QWERTZ allemand</td>
+</tr>
+<tr>
+<td><code>ESStandardLayout</code></td>
+<td>QWERTY espagnol</td>
+</tr>
+<tr>
+<td><code>GBStandardLayout</code></td>
+<td>QWERTY britannique</td>
+</tr>
+<tr>
+<td><code>TRStandardLayout</code></td>
+<td>Q turc</td>
+</tr>
+<tr>
+<td><code>USDvorakLayout</code></td>
+<td>Dvorak US</td>
+</tr>
+</tbody>
+</table>
+<p>Le changement est visible immédiatement : ci-dessous, les six mêmes touches physiques sont tapées deux fois, d'abord avec la disposition US, puis avec la disposition française.</p>
+<!-- video: saisie des six touches à droite de Tab avec la disposition US ("qwerty"), passage à FRStandardLayout, nouvelle saisie des mêmes touches ("azerty") -->
+<p><video src="images/keyboard-layouts.mp4" controls autoplay muted loop playsinline style="max-width:100%"></video></p>
+<p><code>KeyboardManager.GetLayout()</code> renvoie la disposition active, et une disposition personnalisée est une classe dérivée de <code>KeyboardLayout</code> qui redéfinit <code>InitializeKeys()</code> pour remplir la liste <code>Keys</code> d'entrées <code>KeyMapping</code>. Cette méthode s'exécute une seule fois, la première fois qu'un scancode atteint la disposition.</p>
+<p>Les scancodes sont les codes d'enfoncement (make codes) du jeu 1, débarrassés du préfixe <code>E0</code> des touches étendues : c'est ainsi que les dispositions fournies listent les touches Windows et le bloc de navigation. La seule exception est la touche Alt droite, dont le code nu est celui de l'Alt gauche : les pilotes la signalent sous la forme <code>0x60</code>, un code que le jeu 1 laisse inutilisé. Une disposition associe ce code à <code>Key.AltGr</code> pour faire de la touche son modificateur de troisième niveau, et à <code>Key.RAlt</code> pour qu'elle reste un simple Alt. Une disposition qui ne l'associe à aucun des deux perd la touche. Le troisième niveau d'une touche est l'argument <code>ctrlAlt</code> de <code>KeyMapping</code>, et <code>ctrlAltShift</code> en est le quatrième :</p>
+<pre><code class="lang-csharp">/* Right Alt selects the third level on this layout */
+Keys.Add(new KeyMapping(0x60, Key.AltGr));
+/* Q: q, Q, and @ under AltGr */
+Keys.Add(new KeyMapping(0x10, 'q', 'Q', 'q', 'Q', 'q', 'Q', '@', Key.Q));
+</code></pre>
+<p><a id="current-limitations"></a></p>
+<h2 id="limitations-actuelles">Limitations actuelles</h2>
+<ul>
+<li>Les relâchements de touche ne sont pas mis en file : <code>KeyEvent.Type</code> a une valeur <code>Break</code>, mais seuls les appuis atteignent le tampon. Les relâchements de Maj, Ctrl et Alt mettent à jour l'état des modificateurs et sont sinon ignorés.</li>
+<li>Les dispositions allemande, espagnole et turque portent leurs caractères AltGr ; les dispositions française et britannique pas encore (<code>@</code>, <code>#</code>, <code>{</code> en AZERTY), si bien que leur touche Alt droite reste un simple Alt. Les touches mortes ne sont pas composées : les <code>¨</code>, <code>~</code>, <code>´</code> et <code>`</code> de la disposition turque sortent tels quels.</li>
+<li>Un clavier PS/2 est publié une seule fois, pendant l'étape des pilotes, quand le pilote de clavier s'est lié au nœud du port clavier du pilote 8042 et que sa réinitialisation a reçu une réponse ; un clavier virtio présent au démarrage l'est une seule fois, quand l'étape propose son périphérique. Un clavier USB est publié quand son nœud est lié et retiré quand ce nœud est retiré, tout comme un clavier virtio dont la fonction PCI se trouve derrière un emplacement PCI Express de branchement à chaud, que le pilote du port racine publie et retire : ce sont donc ces claviers-là que l'on peut brancher et débrancher pendant que le noyau s'exécute ; un modificateur maintenu sur un clavier débranché reste enfoncé jusqu'à ce qu'on l'enfonce sur un autre clavier.</li>
+</ul>
+<p><a id="how-it-works"></a></p>
+<h2 id="fonctionnement">Fonctionnement</h2>
+<p>Chaque appui de touche sur le clavier PS/2 lève l'IRQ 1 sur x64 ; le gestionnaire d'interruption du pilote 8042 lit l'octet sur le port de données du contrôleur et le remet au <code>Ps2Access</code> du port clavier, dont la source réveille le gestionnaire d'interruption du pilote de clavier : celui-ci intègre le préfixe 0xE0 et le bit de relâchement dans des scancodes du jeu 1 (l'Alt droite devenant 0x60) et les signale, à travers le récepteur du clavier, au consommateur du gestionnaire. Un clavier virtio dépose plutôt un enregistrement d'événement dans sa file : l'interruption de la file (un message MSI-X sur PCI, la ligne GIC de l'emplacement sur MMIO) planifie la vidange du pilote sur le thread de travail du kit de pilotes, ou bien la vidange s'exécute toutes les 20 ms quand aucune interruption n'a pu être routée, et la vidange convertit le code de touche Linux en ce même scancode du jeu 1 et le signale, à travers le récepteur du clavier, au consommateur du gestionnaire, qui alimente <code>KeyboardManager</code> comme le fait celui du clavier PS/2. Les rapports de 8 octets du protocole boot d'un clavier USB arrivent sur son pipe d'interruption IN, livrés par l'interruption du pilote de contrôleur hôte (un message MSI-X sur xHCI, la ligne d'interruption héritée de la fonction sur EHCI et OHCI) ou, quand aucune n'a pu être routée, par sa scrutation toutes les 20 ms ; la routine de <code>UsbKeyboardDriver</code> qui les traite compare chaque rapport au précédent pour en tirer les mêmes scancodes du jeu 1 et les signale à travers le même récepteur, et les touches de verrouillage allument ses voyants par <code>SetLeds</code>, un transfert de contrôle SET_REPORT sur le thread de travail du kit. Les touches de verrouillage allument aussi les voyants du clavier PS/2, par <code>SetLeds</code> (0xED et l'octet des voyants) sur le thread de travail du kit. Le gestionnaire du clavier oriente les touches de verrouillage et de modification vers les propriétés d'état, et convertit tout le reste, à travers la disposition active, en un <code>KeyEvent</code> placé dans le tampon de touches. <code>ReadKey()</code> met le CPU en pause jusqu'à ce qu'une interruption livre l'événement suivant ; <code>TryReadKey()</code> se contente de retirer de la file. <code>Console.ReadLine</code> et <code>Console.ReadKey</code> sont des plugs posés sur la même file, si bien que la saisie de la console et les événements de touche bruts n'entrent jamais en conflit.</p>
+<pre><code>Console.ReadLine / Console.ReadKey        (plugs, Cosmos.Kernel.Plugs)
+        │
+KeyboardManager ── KeyEvent queue ◀── active layout
+        │                                    ▲
+        │                              raw scan codes
+        │                                    │
+PS/2 keyboard over the driver kit (the 8042, IRQ 1, x64)  /  virtio-keyboard over the driver kit (PCI, MMIO)  /  USB keyboard over the driver kit (xHCI, EHCI, OHCI)
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/user/keyboard.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

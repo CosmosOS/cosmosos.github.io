@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
       <title>Coding Guidelines | Cosmos Gen 3 </title>
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.95/docs/articles/dev/coding-guidelines.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/articles/dev/coding-guidelines.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -313,7 +313,7 @@ name appears twice in the tree:</p>
     Display/                 ← IDisplay, its facets, DisplayMode, DisplaySink, DisplayConsumer, FirmwareDisplay
     Input/
     Network/                 ← INetworkInterface, NetworkSink, NetworkConsumer, MacAddress
-    Storage/                 ← IBlockDevice, BlockConsumer
+    Storage/                 ← IBlockDevice, its facet IRemovableMedia, BlockConsumer
   DriverKit/                 ← how a driver finds and binds a device
     Driver.cs                ← the driver and its binding: matching, probing, the node tree
     DeviceBinding.cs
@@ -1290,7 +1290,7 @@ public static class PageAllocator { ... }
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.95/docs/articles/dev/coding-guidelines.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/articles/dev/coding-guidelines.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

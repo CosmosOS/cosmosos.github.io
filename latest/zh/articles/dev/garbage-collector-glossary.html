@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>垃圾回收器术语表 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="垃圾回收器术语表 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/dev/garbage-collector-glossary.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="garbage-collector-glossary"></a></p>
+<h1 id="垃圾回收器术语表">垃圾回收器术语表</h1>
+<p>这些简短的背景说明介绍通用的 GC 概念，<a href="garbage-collector.html">垃圾回收器</a>和<a href="garbage-collector-gcinfo.html">精确栈扫描</a>两篇文章都以这些概念为基础。每一页先单独解释概念本身，最后用一句话说明 OrionGC 如何应用它。调度方面的对应说明见<a href="scheduler-glossary.html">调度器术语表</a>。</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>摘要</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="gc-concepts/stop-the-world.html">全局停顿（stop-the-world）</a></td>
+<td>在整个垃圾回收期间，所有线程都处于暂停状态</td>
+</tr>
+<tr>
+<td><a href="gc-concepts/mark-and-sweep.html">标记-清除</a></td>
+<td>标记可达的对象，就地清除其余对象</td>
+</tr>
+<tr>
+<td><a href="gc-concepts/non-moving.html">移动式与非移动式</a></td>
+<td>存活对象是否可能被重新定位</td>
+</tr>
+<tr>
+<td><a href="gc-concepts/gc-generations.html">分代</a></td>
+<td>按对象年龄划分的堆，以及单一代能避免什么</td>
+</tr>
+<tr>
+<td><a href="gc-concepts/bump-allocation.html">指针碰撞分配</a></td>
+<td>通过在全新的空间中向前推进指针来分配</td>
+</tr>
+<tr>
+<td><a href="gc-concepts/tlab.html">TLAB</a></td>
+<td>每线程缓冲区，使分配的快速路径无需任何同步</td>
+</tr>
+<tr>
+<td><a href="gc-concepts/gc-roots.html">GC 根</a></td>
+<td>可达性的起点</td>
+</tr>
+<tr>
+<td><a href="gc-concepts/conservative-vs-precise.html">精确扫描与保守扫描</a></td>
+<td>确切知道栈上哪些字是引用，还是靠猜测</td>
+</tr>
+<tr>
+<td><a href="gc-concepts/safepoint.html">安全点</a></td>
+<td>编译器生成的表能准确描述 GC 状态的代码位置</td>
+</tr>
+<tr>
+<td><a href="gc-concepts/funclet.html">Funclet</a></td>
+<td>被编译成独立小函数、拥有各自栈帧的异常处理程序</td>
+</tr>
+<tr>
+<td><a href="gc-concepts/finalization.html">终结与复活</a></td>
+<td>回收前运行的清理代码，以及死对象重新变得可达</td>
+</tr>
+<tr>
+<td><a href="gc-concepts/object-header.html">运行时对象头</a></td>
+<td>紧挨在每个对象之前的簿记字（哈希码、瘦锁）</td>
+</tr>
+<tr>
+<td><a href="gc-concepts/aba-problem.html">ABA 问题</a></td>
+<td>当值可能被回收再利用时，无锁代码为什么需要版本标签</td>
+</tr>
+</tbody>
+</table>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/dev/garbage-collector-glossary.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

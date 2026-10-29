@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>Le tick et le quantum | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Le tick et le quantum | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/sched-concepts/scheduler-tick.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="the-tick-and-the-quantum"></a></p>
+<h1 id="le-tick-et-le-quantum">Le tick et le quantum</h1>
+<p>Un ordonnanceur <a href="preemption.html">préemptif</a> a besoin d'un moyen de reprendre la main sur un thread qui ne la rend pas, et le moyen habituel est une interruption périodique du minuteur, le tick. Un minuteur est programmé pour interrompre le CPU à intervalles de quelques millisecondes, et chaque interruption donne la main au noyau, qui impute ce temps au thread en cours d'exécution et décide s'il s'est exécuté assez longtemps. Le quantum, ou tranche de temps, est la durée pendant laquelle un thread peut s'exécuter avant que l'ordonnanceur n'en considère un autre. Il se compte en ticks : il peut donc valoir un tick ou plusieurs, mais jamais moins d'un, car l'ordonnanceur ne peut pas préempter plus finement que la cadence des interruptions du minuteur.</p>
+<p>Un minuteur peut aussi être programmé une interruption à la fois. Un minuteur ponctuel est réglé sur l'instant où la prochaine décision est due, la fin du quantum en cours ou l'échéance la plus proche, et le noyau le reprogramme depuis chaque interruption. Les noyaux qui fonctionnent ainsi, souvent dits tickless, évitent de réveiller pour rien un CPU inactif et peuvent respecter une échéance qui ne tombe pas sur un tick, au prix d'une reprogrammation du minuteur à chaque décision.</p>
+<p>Le piège, c'est la comptabilité au tick. Imputer une période au thread en cours d'exécution à chaque interruption relève de l'échantillonnage, non de la mesure : un thread qui s'exécute entre deux ticks et se bloque avant le suivant ne se voit rien imputer, et le thread qui se trouve en cours d'exécution au moment où tombe le tick se voit imputer la période entière. Sur de nombreux ticks, les échantillons se compensent pour les threads qui s'exécutent longtemps, mais un thread qui se réveille, travaille brièvement puis se rendort peut ne se voir imputer presque rien. Un tick qui arrive en retard est en outre imputé comme s'il était à l'heure, à moins que le noyau ne lise une horloge.</p>
+<p>Dans Cosmos, le chemin de démarrage arme le tick de l'ordonnanceur à <code>SchedulerManager.DefaultQuantumNs</code>, soit 10 ms. Sur x64, il provient du minuteur de l'APIC local en mode périodique ; sur ARM64, le Generic Timer est réarmé depuis chaque interruption, un minuteur ponctuel employé comme tick périodique. Chaque tick rend d'abord prêts les threads endormis dont l'échéance est passée, puis appelle le <code>OnTick</code> de la politique avec <code>elapsedNs</code>, la période configurée et non une mesure. C'est à la politique de l'imputer à <code>SchedulerThread.TotalRuntime</code> ; un quantum plus long qu'un tick est un compteur que la politique décrémente d'un tick à l'autre ; et renvoyer <code>true</code> déclenche un réordonnancement avant le retour de l'interruption. <code>SchedulerDiagnostics.TickPeriodNs</code> indique la dernière période transmise par le minuteur, qui suit un réajustement de la période, ce que ne fait pas <code>DefaultQuantumNs</code>, et rien ne permet encore à une politique de programmer elle-même la prochaine interruption. Voir <a href="../scheduler.html#timer-sources">Sources de minuteur</a>, <a href="../scheduler.html#the-tick">Le tick</a> et <a href="../../user/scheduler-plugging.html#real-time-notes">Remarques sur le temps réel</a>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/sched-concepts/scheduler-tick.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

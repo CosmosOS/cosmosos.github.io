@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+      <title>Scheduler glossary | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Scheduler glossary | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/articles/dev/scheduler-glossary.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="scheduler-glossary">Scheduler glossary</h1>
+
+<p>These notes give the background on the scheduling concepts that the contributor article on the <a href="scheduler.html">Scheduler</a> and the guide to <a href="../user/scheduler-plugging.html">Writing a scheduler</a> build on, for a reader who has not written a scheduler before. Each page explains the concept on its own, then closes with how Cosmos applies it. The table groups them in three parts: how a thread gets the CPU and loses it, what code that runs against the tick has to respect, then the properties a policy is judged by. The rules for hook code also build on a note from the driver glossary, <a href="../user/driver-concepts/interrupt-context.html">interrupt context</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Summary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="sched-concepts/policy-and-mechanism.html">Policy and mechanism</a></td>
+<td>Deciding which thread runs, kept apart from the code that switches threads</td>
+</tr>
+<tr>
+<td><a href="sched-concepts/run-queue.html">Thread states and the run queue</a></td>
+<td>Running, ready and blocked threads, the structure ready threads wait in, and the idle thread</td>
+</tr>
+<tr>
+<td><a href="sched-concepts/preemption.html">Preemption</a></td>
+<td>The kernel takes the CPU away on an interrupt; threads never have to volunteer</td>
+</tr>
+<tr>
+<td><a href="sched-concepts/scheduler-tick.html">The tick and the quantum</a></td>
+<td>The timer interrupt that gives the scheduler control, the time slice, and accounting by sample</td>
+</tr>
+<tr>
+<td><a href="sched-concepts/context-switch.html">Context switch</a></td>
+<td>Saving one thread's registers and restoring another's, and when the switch actually happens</td>
+</tr>
+<tr>
+<td><a href="sched-concepts/instruction-boundary.html">Interrupts at instruction boundaries</a></td>
+<td>An interrupt lands after one instruction and before the next; nothing longer is atomic against it</td>
+</tr>
+<tr>
+<td><a href="sched-concepts/spinlocks-and-masking.html">Spinlocks and interrupt masking</a></td>
+<td>Why a lock does not keep out an interrupt handler on the same CPU, and what does</td>
+</tr>
+<tr>
+<td><a href="sched-concepts/virtual-time-fair-share.html">Virtual-time fair-share</a></td>
+<td>Weighted CPU shares, enforced by always running the thread whose virtual clock is furthest behind</td>
+</tr>
+<tr>
+<td><a href="sched-concepts/starvation.html">Starvation and aging</a></td>
+<td>Ready threads that never run, and the guards against it</td>
+</tr>
+<tr>
+<td><a href="sched-concepts/priority-inversion.html">Priority inversion and inheritance</a></td>
+<td>A high-priority thread stuck behind a lock holder that a medium-priority thread preempts</td>
+</tr>
+<tr>
+<td><a href="sched-concepts/real-time-scheduling.html">Real-time scheduling</a></td>
+<td>Deadlines, Rate Monotonic and EDF, utilization bounds and admission control</td>
+</tr>
+<tr>
+<td><a href="sched-concepts/cpu-affinity.html">CPU affinity and load balancing</a></td>
+<td>Per-CPU run queues, placement, migration and pinned threads</td>
+</tr>
+</tbody>
+</table>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/articles/dev/scheduler-glossary.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

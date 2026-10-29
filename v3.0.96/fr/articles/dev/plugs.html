@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>Plugs | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Plugs | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/plugs.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="plugs">Plugs</h1>
+
+<p>Un plug remplace des membres d'un type existant au niveau IL : le patcher (<code>cosmos-patcher</code>, construit sur Mono.Cecil) réécrit l'assembly cible avant qu'ILC ne le compile, si bien que le code de la BCL et du runtime reçoit des implémentations propres au noyau sans aucune modification des sources. Le mécanisme, le pipeline du patcher et la place des plugs dans le build sont traités dans la documentation du pipeline de build ; cette page explique comment en écrire un.</p>
+<hr>
+<p><a id="attributes"></a></p>
+<h2 id="attributs">Attributs</h2>
+<p>Gen3 implémente trois attributs liés aux plugs, tous définis dans <a href="https://github.com/CosmosOS/Cosmos/tree/gen3/src/Cosmos.Build.API/Attributes">Cosmos.Build.API</a> :</p>
+<table>
+<thead>
+<tr>
+<th>Attribut</th>
+<th>Appliqué à</th>
+<th>Effet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[Plug]</code></td>
+<td>classe</td>
+<td>Désigne la classe comme source de remplacement pour un type cible</td>
+</tr>
+<tr>
+<td><code>[PlugMember]</code></td>
+<td>méthode, propriété, champ</td>
+<td>Remplace le membre correspondant du type cible</td>
+</tr>
+<tr>
+<td><code>[PlatformSpecific]</code></td>
+<td>classe ou membre</td>
+<td>Ne conserve l'élément que lors d'un patch pour les architectures indiquées</td>
+</tr>
+</tbody>
+</table>
+<h3 id="plug"><code>[Plug]</code></h3>
+<p>Nomme le type cible, soit sous la forme <code>typeof(...)</code> lorsque le type est accessible publiquement, soit sous la forme d'une chaîne contenant le nom qualifié complet pour les types internes (<code>[Plug(&quot;Internal.Runtime.CompilerHelpers.StartupCodeHelpers&quot;)]</code>). <code>IsOptional = true</code> ignore le plug en silence lorsque le type cible n'existe pas dans la compilation ; un <code>TargetName</code> mal orthographié sur un plug non optionnel fait échouer le build. Voir <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.API/Attributes/PlugAttribute.cs">PlugAttribute.cs</a>.</p>
+<h3 id="plugmember"><code>[PlugMember]</code></h3>
+<p>Remplace le membre cible dont le nom et la signature correspondent à ceux du membre du plug. Un argument de type chaîne prend le pas sur la correspondance par nom, et c'est ainsi que l'on désigne les constructeurs et les accesseurs de propriété : <code>[PlugMember(&quot;.ctor&quot;)]</code>, <code>[PlugMember(&quot;get_Address&quot;)]</code>. Les signatures doivent correspondre exactement à celle du membre cible, à un ajout près pour les membres d'instance, décrit plus bas ; en cas de différence, le patcher ne peut pas raccorder le membre. Voir <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.API/Attributes/PlugMemberAttribute.cs">PlugMemberAttribute.cs</a>.</p>
+<h3 id="platformspecific"><code>[PlatformSpecific]</code></h3>
+<p>Restreint une classe ou un membre de plug à certaines architectures au moment du patch : <code>[PlatformSpecific(PlatformArchitecture.X64)]</code>. Voir <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.API/Attributes/PlatformSpecificAttribute.cs">PlatformSpecificAttribute.cs</a>.</p>
+<hr>
+<p><a id="the-athis-convention"></a></p>
+<h2 id="la-convention-athis">La convention <code>aThis</code></h2>
+<p>Les classes de plug sont statiques : un membre d'instance est donc remplacé par une méthode statique dont le premier paramètre est l'instance cible, nommé par convention <code>aThis</code>. Le patcher redirige les références à <code>this</code> vers ce paramètre :</p>
+<pre><code class="lang-csharp">using System.Net;
+using Cosmos.Build.API.Attributes;
+
+namespace Cosmos.Kernel.Plugs.System.Net;
+
+[Plug(typeof(IPEndPoint))]
+public static class IPEndPointPlug
+{
+    [PlugMember(&quot;.ctor&quot;)]
+    public static void Ctor(IPEndPoint aThis, IPAddress address, int port)
+    {
+        // runs in place of the target constructor
+    }
+
+    [PlugMember(&quot;get_Address&quot;)]
+    public static IPAddress? get_Address(IPEndPoint aThis)
+    {
+        // runs in place of the property getter
+        return null;
+    }
+
+    [PlugMember]
+    public static long Seek(IPEndPoint aThis, long offset)
+    {
+        // instance method: name and remaining signature match the target
+        return 0;
+    }
+
+    [PlugMember]
+    public static bool StaticMethod()
+    {
+        // static member: no aThis
+        return true;
+    }
+}
+</code></pre>
+<hr>
+<p><a id="accessing-private-and-internal-state"></a></p>
+<h2 id="accéder-à-létat-privé-et-interne">Accéder à l'état privé et interne</h2>
+<p>Les attributs <code>[Expose]</code> (injecter de nouveaux membres privés dans le type cible) et <code>[FieldAccess]</code> (lier un paramètre d'une méthode de plug à un champ privé de la cible) de Gen2 ne sont pas implémentés dans le patcher de gen3 ; leur portage est suivi dans <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/458">#458</a>. D'ici là, un plug dispose de deux options :</p>
+<ul>
+<li><strong>Stockage annexe.</strong> Conservez l'état propre à chaque instance dans la classe de plug elle-même, indexé par l'instance (<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Plugs/System/Net/IPEndPointPlug.cs">IPEndPointPlug.cs</a> le fait avec des dictionnaires). Cela remplace entièrement l'état de la cible au lieu de le lire : chaque membre qui touche à cet état doit donc lui aussi être remplacé par un plug.</li>
+<li><strong><code>[UnsafeAccessor]</code> / <code>[UnsafeAccessorType]</code>.</strong> Le mécanisme d'accesseurs du runtime atteint directement les membres privés et internes. C'est l'échappatoire non supportée de la <a href="public-api.html">politique d'API publique</a> ; voir <a href="accessing-internals.html">Accéder aux éléments internes</a> pour ce qu'il permet et ne permet pas (notamment : il ne peut pas renvoyer par référence un champ dont le type est lui-même inaccessible).</li>
+</ul>
+<hr>
+<p><a id="pitfalls"></a></p>
+<h2 id="pièges">Pièges</h2>
+<ul>
+<li>Un plug dont le <code>TargetName</code> ne se résout pas fait échouer le build, sauf si <code>IsOptional</code> est défini ; un plug optionnel qui cesse en silence de correspondre continue de compiler pendant que la cible s'exécute sans patch, c'est pourquoi il vaut mieux utiliser des plugs non optionnels pour tout ce dont dépend le bon fonctionnement.</li>
+<li>Une classe <code>[Plug]</code> dont les membres n'ont pas <code>[PlugMember]</code> ne patche rien, et aucune erreur n'est levée : la classe compile, la cible s'exécute sans patch. Cela a déjà provoqué de véritables échecs silencieux (un <code>NativeMemory</code> sans plug est parti dans une récursion jusqu'à une triple faute) : vérifiez donc que l'attribut est présent sur chaque membre censé remplacer quelque chose.</li>
+<li>Une différence de signature (y compris un paramètre <code>aThis</code> manquant ou de mauvais type) signifie que le membre n'est pas raccordé.</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/plugs.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

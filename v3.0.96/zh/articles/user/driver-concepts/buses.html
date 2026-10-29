@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>总线与枚举 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="总线与枚举 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/user/driver-concepts/buses.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="buses-and-enumeration"></a></p>
+<h1 id="总线与枚举">总线与枚举</h1>
+<p>总线把设备连接到处理器，而枚举是软件查明总线上有哪些设备的方式。PCI 和 USB 可以被枚举，因为每个设备都在一个可预测的位置应答，并给出关于自身的标准描述：软件在每个 PCI 地址读取厂商 ID，空插槽读出的值所有位均为 1（<a href="pci.html">PCI</a>），软件还会向每个新的 <a href="usb.html">USB</a> 设备索取它的描述符。</p>
+<p>其他设备没有提供这样一个可供询问的位置。PC 的 <a href="ps2.html">PS/2</a> 控制器位于固定的 I/O 端口，ARM 机器的设备位于固定的内存地址，而每次 PCI 扫描的起点，即 PCI 主机桥，也属于这一类。读取一个无人应答的地址可能引发异常，而能应答的设备也没有标准的方式说明自己是什么，因此必须把这些平台设备描述给内核。在 PC 和 ARM 服务器上，由固件的 ACPI 表描述它们。在许多 ARM 开发板上，则由设备树描述：设备树是引导加载程序交出的一种结构，其节点列出每个设备的寄存器、中断和兼容字符串（compatible），兼容字符串就是该设备所遵循的编程模型的名称。布局固定的机器，例如 QEMU 的 virt 机器，也可以由内核中的一张表来描述。</p>
+<p>这两类设备组合成一棵树。描述给出根节点，而作为总线控制器的根节点，其驱动程序会枚举自己的总线，并把发现的设备作为子节点发布，供其他驱动程序绑定：PCI 主机产生 PCI 功能，其中一个功能可能是 USB 控制器，它又产生 USB 设备。</p>
+<p>陷阱在于没有任何东西能证实一份描述。描述遗漏的设备是不可见的，而描述列出但实际不存在的设备，会让驱动程序去探测空地址。</p>
+<p>在驱动工具包中，平台节点在启动时由机器描述发布：在 x64 上是固定的 PC 布局，包括 8042 控制器（<code>pnp0303</code>）和 PCI 主机（<code>pci-host-legacy</code>）；在 ARM64 上是来自 ACPI 或设备树的 PCI 主机，以及每个已占用的 <code>virtio,mmio</code> 插槽，后者来自设备树或 virt 机器的固定布局（<a href="../drivers.html#platform-nodes">平台节点</a>）。驱动程序用 <code>PlatformMatch.Compatible</code> 匹配它们，总线驱动程序用 <code>binding.PublishChild</code> 添加子节点，因此每个节点的 <code>Parent</code> 和 <code>Children</code> 构成了这棵树（<a href="../drivers.html#publishing-child-nodes">发布子节点</a>，<a href="../drivers.html#buses">总线</a>）。</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/user/driver-concepts/buses.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

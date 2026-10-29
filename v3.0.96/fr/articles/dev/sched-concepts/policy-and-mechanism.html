@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>Politique et m&#233;canisme | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Politique et m&#233;canisme | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/sched-concepts/policy-and-mechanism.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="policy-and-mechanism"></a></p>
+<h1 id="politique-et-mécanisme">Politique et mécanisme</h1>
+<p>Un ordonnanceur assure deux tâches différentes. Le mécanisme effectue le travail : il sauvegarde les registres du thread qui quitte le CPU et restaure ceux du thread qui arrive, tient la liste des threads existants, et fait passer chacun d'eux entre les états en cours d'exécution, en attente et prêt. La politique prend les décisions : quel thread prêt s'exécute ensuite, pendant combien de temps, et à quelle place un thread réveillé s'insère. Séparer les deux permet de changer la politique sans toucher au code qui doit être parfaitement juste pour que le noyau survive à un changement de contexte, et permet à un même mécanisme de servir une politique à partage équitable, une politique temps réel ou une simple rotation.</p>
+<p>La frontière entre les deux est une interface. Le mécanisme appelle la politique à des points fixes, quand un thread est créé, devient prêt, se bloque, se termine ou épuise son temps, et lui demande le thread suivant quand il s'apprête à changer de thread. La politique répond à partir de ses propres données de suivi et n'effectue jamais elle-même le changement : tout ce qu'elle doit savoir lui parvient par ces appels, et tout ce qu'elle décide repart par leurs valeurs de retour.</p>
+<p>Le piège, c'est que la frontière porte ses propres règles. Le mécanisme appelle la politique dans un ordre qu'il a choisi, dans un contexte qu'il a choisi, et s'appuie sur des invariants que la politique doit maintenir, comme ne jamais tenir deux fois le même thread dans sa file. Une politique qui prend la bonne décision au mauvais moment, ou qui garde une entrée en double, casse le mécanisme aussi sûrement qu'un bug dans le changement de contexte lui-même, et la panne se manifeste loin de la politique, sous la forme d'un thread qui ne s'exécute plus jamais.</p>
+<p>Dans Cosmos, la politique est <code>IScheduler</code>, une interface calquée sur le trait <code>EkibenScheduler</code> d'Ekiben, une API d'ordonnanceurs interchangeables, et le mécanisme est <code>SchedulerManager</code>. Le gestionnaire tient le registre des threads, fixe chaque <code>SchedulerThread.State</code> (une politique lit l'état mais ne l'écrit jamais) et reçoit le tick du minuteur, et les stubs d'interruption sauvegardent et restaurent les registres ; la politique conserve ses données de suivi dans l'emplacement <code>SchedulerData</code> de chaque thread et de chaque CPU. La politique installée au démarrage est Stride, et un noyau en installe une autre à l'exécution avec <code>SchedulerManager.SetScheduler</code>, qui lui confie tous les threads vivants. Voir <a href="../scheduler.html#overview">Vue d'ensemble</a> et <a href="../../user/scheduler-plugging.html#the-interface">L'interface</a>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/sched-concepts/policy-and-mechanism.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

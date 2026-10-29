@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
       <title>Interface IVfsSuperblock | Cosmos Gen 3 </title>
@@ -143,6 +143,42 @@ Interface IVfsSuperblock
   <h4 class="section">Property Value</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_FileSystem_IVfsSuperblock_IsReadOnly_" data-uid="Cosmos.Kernel.System.FileSystem.IVfsSuperblock.IsReadOnly*"></a>
+
+  <h3 id="Cosmos_Kernel_System_FileSystem_IVfsSuperblock_IsReadOnly" data-uid="Cosmos.Kernel.System.FileSystem.IVfsSuperblock.IsReadOnly">
+  IsReadOnly
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>True when the driver cannot write this volume, whatever flags it was
+mounted with: a CD-ROM image, a medium the driver only reads. The VFS
+then refuses every mutation under the mount, and <code>System.IO</code>
+reports them as a read-only file system. A driver that writes leaves
+the default.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool IsReadOnly { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
     <dd></dd>
   </dl>
 

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>时钟节拍与时间片 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="时钟节拍与时间片 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/dev/sched-concepts/scheduler-tick.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="the-tick-and-the-quantum"></a></p>
+<h1 id="时钟节拍与时间片">时钟节拍与时间片</h1>
+<p><a href="preemption.html">抢占式</a>调度器需要一种办法，从不肯交出控制权的线程手中收回控制权，常用的办法是周期性的定时器中断，即时钟节拍（tick）。定时器被设置为每隔几毫秒中断一次，每次中断都会进入内核，内核把这段时间记到正在运行的线程名下，并判断它是否已经运行得足够久。时间片（quantum，或称 time slice）是一个线程在调度器考虑另一个线程之前可以运行的时长。它以节拍为单位计数，因此可以是一个或多个节拍，但绝不会少于一个：调度器的抢占粒度不可能比定时器中断更细。</p>
+<p>定时器也可以每次只设置一个中断。一次性定时器被设定在下一次决策到期的时刻，即当前时间片结束时或最近的截止时间，内核在每次中断中重新设置它。以这种方式工作的内核通常称为无节拍（tickless）内核，它们避免无谓地唤醒空闲的 CPU，并能满足不落在节拍上的截止时间，代价是每次决策都要重新设置定时器。</p>
+<p>陷阱在于按节拍记账。每次中断给正在运行的线程记上一个周期，这是采样，而不是测量：一个在两个节拍之间运行、并在下一个节拍到来之前阻塞的线程不会被记上任何时间，而节拍到来时恰好在运行的线程则被记上整个周期。经过许多节拍之后，对长时间运行的线程来说，这些采样会逐渐平均下来；但一个醒来、短暂工作后又睡眠的线程，几乎可以一直不被记账。此外，除非内核读取时钟，否则迟到的节拍也会被当作准时到达来记账。</p>
+<p>在 Cosmos 中，启动路径把调度器节拍设为 <code>SchedulerManager.DefaultQuantumNs</code>，即 10 ms。在 x64 上，它来自以周期模式运行的本地 APIC 定时器；在 ARM64 上，Generic Timer 在每次中断中重新设置，即把一次性定时器当作周期性节拍来用。每个节拍先把截止时间已过的睡眠线程设为就绪，然后调用策略的 <code>OnTick</code>，传入 <code>elapsedNs</code>，即配置的周期，而不是测量值。把它计入 <code>SchedulerThread.TotalRuntime</code> 是策略的工作；长于一个节拍的时间片是策略在各个节拍之间递减的计数器；返回 <code>true</code> 会在中断返回之前重新调度。<code>SchedulerDiagnostics.TickPeriodNs</code> 报告定时器最近一次传入的周期，它会随周期的重新调整而变化，<code>DefaultQuantumNs</code> 则不会；目前还没有任何机制能让策略自己设置下一次中断。参见<a href="../scheduler.html#timer-sources">定时器源</a>、<a href="../scheduler.html#the-tick">节拍</a>和<a href="../../user/scheduler-plugging.html#real-time-notes">实时说明</a>。</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/dev/sched-concepts/scheduler-tick.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

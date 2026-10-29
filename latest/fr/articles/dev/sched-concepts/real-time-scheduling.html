@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>Ordonnancement temps r&#233;el | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Ordonnancement temps r&#233;el | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/sched-concepts/real-time-scheduling.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="real-time-scheduling"></a></p>
+<h1 id="ordonnancement-temps-réel">Ordonnancement temps réel</h1>
+<p>Un système temps réel n'est correct que si son travail se termine à temps. Ce travail est en général décrit comme un ensemble de tâches qui activent chacune une instance à chaque période, avec un temps d'exécution dans le pire cas et une échéance, souvent la fin de la période. En temps réel strict, une échéance manquée est une défaillance, comme dans un contrôleur de moteur ; en temps réel souple, une échéance manquée dégrade le résultat, comme un son qui grésille. La question à laquelle un ordonnanceur temps réel répond à l'avance est l'ordonnançabilité : étant donné les tâches, chaque échéance sera-t-elle respectée ?</p>
+<p>Deux politiques classiques y répondent sur un seul CPU. Rate Monotonic donne à chaque tâche une priorité fixe tirée de sa période, d'autant plus haute que la période est courte, et c'est la meilleure attribution à priorités fixes pour de telles tâches. Un ensemble de n tâches est ordonnançable à coup sûr quand son utilisation totale, la somme des rapports entre le temps d'exécution et la période de chaque tâche, reste sous <code>n(2^(1/n) - 1)</code>, une borne qui descend vers 69 % environ quand n grandit. L'ordonnancement par échéance la plus proche d'abord (EDF) exécute toujours l'instance prête dont l'échéance est la plus proche, une priorité qui change à chaque activation, et respecte toutes les échéances jusqu'à 100 % d'utilisation. Les deux échouent aussi différemment : en surcharge, Rate Monotonic manque d'abord les échéances de ses tâches les moins prioritaires, alors qu'EDF en surcharge peut manquer des échéances en cascade sur toutes les tâches. Le contrôle d'admission maintient un système sous sa borne en refusant, dès sa création, une tâche qui ferait passer l'utilisation au-dessus, au lieu de la laisser provoquer des échéances manquées plus tard.</p>
+<p>Le piège, c'est tout ce que l'analyse suppose borné. Les garanties ne tiennent que si chaque coût est connu : le temps de décision de l'ordonnanceur lui-même, la latence d'interruption, le temps pendant lequel un thread moins prioritaire tient un verrou dont une tâche a besoin, et la granularité du minuteur qui active les instances. Une sélection dont le coût croît linéairement avec le nombre de threads, un verrou sans <a href="priority-inversion.html">héritage de priorité</a> ou un <a href="scheduler-tick.html">tick</a> plus grossier que l'échéance la plus courte rompent la garantie alors même que chaque tâche reste dans son propre budget.</p>
+<p>Dans Cosmos, rien n'est temps réel par défaut : la politique Stride répartit le temps par parts, non par échéances. Une politique peut implémenter Rate Monotonic ou EDF sur <code>IScheduler</code>, et doit apporter son propre contrôle d'admission par un point d'entrée qui lui est propre, puisqu'aucun hook ne peut refuser un thread et que rien dans le noyau ne limite l'utilisation. Il manque aussi des éléments côté noyau. Le tick tourne à une période fixe, 10 ms dès le démarrage, si bien qu'une échéance est au mieux respectée au tick près, et aucun canal ne permet à une politique de programmer la prochaine interruption du minuteur pour son échéance la plus proche. <code>OnTick</code> et <code>PickNext</code> s'ajoutent à la latence d'interruption, leur coût doit donc être borné, et le <code>Mutex</code> n'a pas d'héritage de priorité. Voir <a href="../../user/scheduler-plugging.html#real-time-notes">Remarques sur le temps réel</a>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/sched-concepts/real-time-scheduling.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

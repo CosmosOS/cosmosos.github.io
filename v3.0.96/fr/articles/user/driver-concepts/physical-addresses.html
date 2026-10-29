@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>Adresses physiques | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Adresses physiques | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/user/driver-concepts/physical-addresses.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="physical-addresses"></a></p>
+<h1 id="adresses-physiques">Adresses physiques</h1>
+<p>Le code qui s'exécute sur un CPU où la pagination est active ne désigne jamais la mémoire directement. Chaque pointeur qu'il manipule est une adresse virtuelle, que l'unité de gestion mémoire traduit à travers les tables de pages en une adresse physique, c'est-à-dire l'emplacement que transporte réellement le bus mémoire, dans la RAM ou dans l'espace de registres d'un périphérique. La traduction se fait page par page, généralement 4 Kio à la fois, et des pages virtuelles voisines ne correspondent pas forcément à des pages physiques voisines.</p>
+<p>Un périphérique se trouve en dehors de cette traduction. Quand il lit ou écrit la mémoire par <a href="dma.html">DMA</a>, il place une adresse sur le bus sans aucune table de pages à consulter ; un pilote lui donne donc l'adresse physique d'un tampon, jamais le pointeur qu'utilise son propre code. Une IOMMU peut offrir aux périphériques une traduction qui leur est propre ; sans elle, l'adresse vue par le périphérique est l'adresse physique. La séparation joue aussi dans l'autre sens : les <a href="registers.html">registres</a> d'un périphérique se trouvent à une adresse physique, que le noyau mappe dans l'espace d'adressage virtuel avant que le CPU puisse les atteindre.</p>
+<p>Deux contraintes en découlent. Un tampon contigu en mémoire virtuelle peut être dispersé sur plusieurs pages physiques, alors qu'un périphérique à qui l'on demande de transférer N octets depuis une adresse lit N octets physiquement consécutifs ; un pilote alloue donc de la mémoire physiquement contiguë, ou décrit un tampon dispersé sous la forme d'une liste de fragments. Les périphériques imposent aussi un alignement : un registre qui contient une adresse de base ignore souvent ses bits de poids faible, et certaines structures ne doivent pas franchir une frontière de page.</p>
+<p>Le piège est que les deux sortes d'adresses sont de simples entiers. Rien n'empêche un pilote de remettre une adresse virtuelle à un périphérique, et celui-ci lit ou écrit alors un emplacement physique sans rapport, sans qu'aucune faute ne signale où cela se produit.</p>
+<p>Dans le kit de pilotes, un <code>DmaBuffer</code> obtenu par <code>binding.AllocateDma(length, alignment)</code> fournit les deux vues à la fois : il est physiquement contigu, commence au moins sur une frontière de 4 Kio, et porte <code>Span</code> pour le CPU et <code>PhysicalAddress</code> pour le périphérique. Les fenêtres mémoire d'un nœud (<code>DeviceResource.PhysicalBase</code>, et <code>PciBar.Base</code> pour un BAR mémoire) sont des adresses physiques que <code>MapRegisters</code> et <code>MapRegion</code> rendent accessibles, et le noyau ne configure aucune IOMMU : c'est donc une adresse physique qu'utilise un périphérique. Voir <a href="../drivers.html#dma-memory">Mémoire DMA</a> et <a href="../drivers.html#bar-resources">Ressources BAR</a>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/user/driver-concepts/physical-addresses.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

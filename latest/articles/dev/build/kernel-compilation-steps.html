@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
       <title>Kernel Compilation Steps | Cosmos Gen 3 </title>
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.95/docs/articles/dev/build/kernel-compilation-steps.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/articles/dev/build/kernel-compilation-steps.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -139,6 +139,7 @@
     COSMOS_COBJ --&gt; LINK
     LINKER_SCRIPT[&quot;linker.ld&quot;] --&gt; LINK
     LIMINE_CONF[&quot;limine.conf&quot;] --&gt; FINAL_ISO
+    ISO_FILES[&quot;isoFiles/ + CosmosIsoFile items&quot;] --&gt; FINAL_ISO
 
     style CS fill:#e1f5e1
     style ASM_SRC fill:#e1f5e1
@@ -146,6 +147,7 @@
     style PLUGS fill:#e1f5e1
     style LINKER_SCRIPT fill:#e1f5e1
     style LIMINE_CONF fill:#e1f5e1
+    style ISO_FILES fill:#e1f5e1
     
     style PUBLISH fill:#ffe1e1
 </code></pre>
@@ -248,7 +250,7 @@
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.95/docs/articles/dev/build/kernel-compilation-steps.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/articles/dev/build/kernel-compilation-steps.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

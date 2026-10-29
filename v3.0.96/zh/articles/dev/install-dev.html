@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>开发容器配置 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="开发容器配置 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/dev/install-dev.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="dev-container-setup"></a></p>
+<h1 id="开发容器配置">开发容器配置</h1>
+<p>在开发 gen3 或为其做贡献时，我们提供了一个<a href="https://containers.dev/">开发容器</a>（Dev Container），用来搭建一个包含所有必需工具的一致环境。容器创建后，<code>postCreateCommand</code> 脚本会构建所有 Cosmos 包，并安装所需的全局工具。</p>
+<p>如果你不想使用 Docker，也可以手动运行该脚本，把框架直接安装到你的主机上。</p>
+<h2 id="linux--macos-postcreatecommandsh">Linux / macOS (<code>postCreateCommand.sh</code>)</h2>
+<p>在仓库根目录下运行该脚本：</p>
+<pre><code class="lang-bash">./.devcontainer/postCreateCommand.sh
+</code></pre>
+<p><a id="what-it-does"></a></p>
+<h3 id="脚本做了什么">脚本做了什么</h3>
+<ol>
+<li><strong>清除 NuGet 缓存</strong>中所有已有的 <code>cosmos.*</code> 包，以确保还原过程是干净的。</li>
+<li><strong>删除所有构建产物</strong>（<code>artifacts/</code>）以及 <code>src/</code> 下的中间 <code>obj</code> 文件夹。</li>
+<li><strong>注册一个本地 NuGet 源</strong>，位于 <code>artifacts/package/release</code>，使还原时优先使用本地构建的包。</li>
+<li><strong>按依赖顺序构建并打包每个 Cosmos 包</strong>：
+<ul>
+<li>基础库（<code>Cosmos.Build.API</code>、<code>Cosmos.Build.Common</code>）</li>
+<li>构建工具（<code>Cosmos.Build.Asm</code>、<code>Cosmos.Build.CC</code>、<code>Cosmos.Build.Ilc</code>、<code>Cosmos.Build.Patcher</code>、<code>Cosmos.Patcher</code>、<code>Cosmos.Tools</code>）</li>
+<li>面向 x64 和 ARM64 的原生运行时包（<code>Cosmos.Kernel.Native.*</code>）</li>
+<li>与架构无关的内核包（<code>Cosmos.Kernel.Drivers</code>、<code>Cosmos.Kernel.Debug</code>、<code>Cosmos.Kernel.Boot.Limine</code>、<code>Cosmos.Kernel.SourceGenerators</code>）</li>
+<li>特定于架构的 HAL 包（<code>Cosmos.Kernel.HAL.X64</code>、<code>Cosmos.Kernel.HAL.ARM64</code>）</li>
+<li>同时为 <code>linux-x64</code> 和 <code>linux-arm64</code> 构建的多架构内核包（<code>Cosmos.Kernel.Core</code>、<code>Cosmos.Kernel.HAL</code>、<code>Cosmos.Kernel.System</code>、<code>Cosmos.Kernel.Plugs</code>、<code>Cosmos.Kernel</code>）</li>
+<li>SDK 和模板（<code>Cosmos.Sdk</code>、<code>Cosmos.Build.Templates</code>）</li>
+</ul>
+</li>
+<li><strong>还原</strong>主解决方案（<code>nativeaot-patcher.slnx</code>）。</li>
+<li><strong>安装全局 .NET 工具</strong>：<code>ilc</code>、<code>Cosmos.Patcher</code> 和 <code>Cosmos.Tools</code>。</li>
+</ol>
+<h2 id="windows-postcreatecommandps1">Windows (<code>postCreateCommand.ps1</code>)</h2>
+<p>在仓库根目录下运行该 PowerShell 脚本：</p>
+<pre><code class="lang-powershell">.\.devcontainer\postCreateCommand.ps1
+</code></pre>
+<p>Windows 脚本使用 PowerShell 中的等效操作，执行与 Linux 脚本相同的步骤：</p>
+<ol>
+<li><strong>清除 NuGet 缓存</strong>，即 <code>%USERPROFILE%\.nuget\packages\cosmos.*</code> 下的内容。</li>
+<li><strong>删除所有构建产物</strong>以及 <code>src/</code> 下的 <code>obj</code> 文件夹。</li>
+<li><strong>注册本地 NuGet 源</strong>，位于 <code>artifacts/package/release</code>。</li>
+<li><strong>构建并打包每个 Cosmos 包</strong>，依赖顺序与 Linux 上相同。</li>
+<li><strong>还原</strong>主解决方案。</li>
+<li><strong>安装全局 .NET 工具</strong>：<code>ilc</code>、<code>Cosmos.Patcher</code> 和 <code>Cosmos.Tools</code>。</li>
+</ol>
+<p><a id="verifying-the-setup"></a></p>
+<h2 id="验证配置">验证配置</h2>
+<p>脚本完成后，确认包已经生成：</p>
+<pre><code class="lang-bash">ls artifacts/package/release/*.nupkg
+</code></pre>
+<p>然后验证全局工具是否可用：</p>
+<pre><code class="lang-bash">ilc --version
+cosmos.patcher --version
+cosmos --version
+</code></pre>
+<p>如果任何一步失败，重新运行脚本即可：它被设计为幂等的，会在重新构建之前清理之前的状态。</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/dev/install-dev.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

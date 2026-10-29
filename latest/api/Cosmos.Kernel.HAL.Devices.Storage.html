@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
       <title>Namespace Cosmos.Kernel.HAL.Devices.Storage | Cosmos Gen 3 </title>
@@ -102,6 +102,17 @@ Block-level read/write only; partitioning and filesystems sit above this.</p>
 and <a class="xref" href="Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice.html#Cosmos_Kernel_HAL_Devices_Storage_IBlockDevice_Flush">Flush()</a> throw on failure (device error, timeout,
 out-of-range request). A return without an exception means the
 operation completed on the device.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.html">IRemovableMedia</a></dt>
+      <dd><p>A block device whose medium is read-only, removable, or both: a CD-ROM
+drive, a write-protected card. Optional facet on an
+<a class="xref" href="Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice.html">IBlockDevice</a>, found by a type test on the published
+object. The storage manager reads it to carry a read-only medium as one
+whole-medium partition without scanning it for a table, and to order it
+after every writable disk; a kernel reads it to tell a CD from a disk.
+Any context.</p>
 </dd>
     </dl>
 

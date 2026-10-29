@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>Traduire la documentation | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Traduire la documentation | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/translations.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="translating-the-docs"></a></p>
+<h1 id="traduire-la-documentation">Traduire la documentation</h1>
+<p>La documentation est publiée en anglais, en français et en chinois simplifié, et les pages anglaises sont la référence que suivent les deux autres. Cette page explique comment une page traduite est organisée et générée, comment ses titres conservent les ancres anglaises, comment elle enregistre la page anglaise dont elle est issue, comment le build de la documentation signale une traduction qui a pris du retard, et ce que fait un contributeur quand une page anglaise change.</p>
+<hr>
+<p><a id="how-the-languages-are-laid-out"></a></p>
+<h2 id="organisation-des-langues">Organisation des langues</h2>
+<p>Une langue est un dossier de <code>docs/</code> qui reproduit l'arborescence anglaise : <code>docs/fr/articles/user/timers.md</code> est la traduction française de <code>docs/articles/user/timers.md</code>, et <code>docs/zh/</code> contient la traduction chinoise au même chemin relatif. Comme les chemins sont les mêmes, un lien relatif tel que <code>drivers.md#platform-nodes</code> s'écrit de la même façon dans toutes les langues et mène à la page de sa propre langue.</p>
+<p>Chaque dossier de langue est un projet docfx à part entière, avec un <code>docfx.json</code> qui le génère dans un sous-dossier du site anglais, <code>_site/fr/</code> et <code>_site/zh/</code>, et le <code>docs/docfx.json</code> racine exclut ces dossiers afin que le site anglais ne les publie pas une seconde fois. Une langue reprend les images et les vidéos de l'arborescence anglaise, si bien qu'une traduction référence <code>images/mouse-paint.mp4</code> exactement comme la page anglaise, et elle reprend la référence d'API générée dans <code>docs/api/</code>, publiée en anglais dans toutes les langues parce qu'elle provient de la documentation XML du code source. Par-dessus la couche commune <code>templates/custom</code>, une langue ajoute <code>templates/&lt;folder&gt;/token.json</code>, les chaînes propres au thème (la zone de recherche, « Dans cet article », les libellés des notes et des avertissements) dans cette langue, et définit <code>_lang</code>, que docfx écrit sur l'élément <code>&lt;html&gt;</code>.</p>
+<p>Partager des fichiers avec l'arborescence anglaise a deux conséquences, car docfx cherche sur le disque le fichier que nomme une page ou une toc, à côté de cette page ou de cette toc, avant de placer les fichiers dans le site. L'entrée API d'un <code>toc.yml</code> racine traduit indique <code>../api/</code> là où l'anglais indique <code>api/</code>. Et dans un build traduit, chaque image et chaque vidéo, qui n'existe que dans l'arborescence anglaise, serait signalée comme <code>InvalidFileLink</code> alors même que le build la copie au bon endroit du site ; le <code>docfx.json</code> d'une langue abaisse donc cette règle au niveau <code>info</code>. <code>docs-i18n.py check</code> couvre ce que la règle ne signale plus : il exige qu'une traduction pointe exactement vers les cibles de sa page anglaise, que le build anglais valide, il exige que chaque entrée d'un <code>toc.yml</code> traduit désigne une page de sa propre langue, ou la référence d'API via <code>../api/</code>, et il signale chaque page anglaise qui n'a pas de traduction.</p>
+<p>C'est par l'attribut <code>lang</code> que <code>templates/custom/public/main.js</code> sait dans quelle langue est une page. Le script ajoute à côté de la barre de navigation un menu déroulant des langues, qui ouvre la même page dans la langue choisie et se rabat sur la page d'accueil de cette langue quand la page n'y existe pas, et il place en tête de chaque article traduit un bandeau indiquant que la page anglaise fait référence, avec un lien vers elle. Le menu déroulant des versions conserve la page, sa section et sa langue quand la version choisie les possède. Une version figée avant l'arrivée d'une langue n'a pas de dossier pour cette langue : sur ses pages, le menu déroulant des langues la désactive, et le menu des versions d'une page traduite mène à la page anglaise de cette version.</p>
+<p>Chaque langue a aussi son propre index de recherche, construit par docfx à partir de ses propres pages. Le thème y cherche avec lunr, qui découpe le texte en mots aux espaces et à la ponctuation ; le site français ajoute le stemmer français de lunr à l'anglais via <code>lunrLanguages</code> dans <code>main.js</code>. Le chinois ne met pas d'espace entre les mots, si bien que lunr indexerait une phrase chinoise entière comme un seul mot et n'y trouverait jamais un mot qu'elle contient. Le site chinois remplace donc le worker de recherche du thème par <code>templates/zh/public/search-worker.min.js</code>, qui recherche des sous-chaînes et parle le protocole qu'attend la zone de recherche du thème. Ce protocole appartient au modèle modern de docfx et peut changer à chaque version de docfx, c'est pourquoi <code>build-docs.yml</code>, <code>release.yml</code> et le <code>Makefile</code> installent une version de docfx épinglée. <code>check</code> avertit quand le thème généré ne mentionne plus le nom de fichier du worker ou ses messages ; testez la recherche chinoise sur un build local avant de monter de version.</p>
+<p>Ce qui reste en anglais, c'est ce que le lecteur copie ou ce qui est généré : les blocs de code, commentaires compris, les diagrammes SVG et la référence d'API. Tout le reste d'une page est traduit, y compris les titres, les tableaux, les textes de lien et les descriptions d'images.</p>
+<p><a id="headings-keep-their-english-anchors"></a></p>
+<h2 id="les-titres-gardent-leurs-ancres-anglaises">Les titres gardent leurs ancres anglaises</h2>
+<p>docfx dérive l'identifiant d'un titre de son texte, si bien qu'un titre traduit reçoit un autre identifiant que le titre anglais, et qu'un titre chinois reçoit un identifiant écrit en chinois. Chaque lien de la forme <code>page.md#anchor</code> écrit d'après le titre anglais manquerait alors sa section, et le menu déroulant des langues ne pourrait pas garder le lecteur au même endroit. Les traductions portent donc aussi les identifiants anglais : <code>.github/scripts/docs-i18n.py stamp</code> place une ligne <code>&lt;a id=&quot;english-id&quot;&gt;&lt;/a&gt;</code> devant chaque titre traduit dont l'identifiant propre diffère de l'identifiant anglais, titre de la page compris.</p>
+<p>Au chargement, <code>main.js</code> reporte chacun de ces identifiants sur le titre qui le suit et supprime l'ancre, avant que le thème ne construise la liste « Dans cet article » et les liens des titres. Une page traduite a alors exactement les identifiants de la page anglaise ; sans JavaScript, les ancres suffisent à mener un lien à sa section. Sans cette étape, la liste pointerait vers les identifiants traduits, que le menu déroulant des langues ne peut pas transposer dans une autre langue, et l'identifiant propre d'un titre traduit pourrait masquer l'identifiant anglais d'un autre titre : le titre chinois de la page des plugs, <code>Plug</code>, reçoit l'identifiant <code>plug</code>, qui est l'identifiant anglais de sa section <code>[Plug]</code>.</p>
+<p><code>stamp</code> associe les titres par position, c'est pourquoi une traduction doit avoir exactement les titres de la page anglaise : le même nombre, aux mêmes niveaux, dans le même ordre. Un traducteur n'écrit jamais ces ancres à la main. Relancer <code>stamp</code> sur un fichier remplace les ancres qu'il avait écrites auparavant, celles qui portent un identifiant de titre anglais, et laisse toute autre ancre en place.</p>
+<p><code>stamp</code> calcule les identifiants anglais comme le fait docfx plutôt que de les lire dans le site généré, afin de fonctionner avant tout build. Quand le site anglais a été généré, <code>check</code> compare les identifiants qu'il calcule à ceux que docfx a écrits, et signale une page dont les titres emploient une syntaxe que le script ne suit pas avant qu'une ancre erronée n'atteigne une traduction.</p>
+<p><a id="the-source-hash"></a></p>
+<h2 id="le-hash-de-la-source">Le hash de la source</h2>
+<p><code>stamp</code> enregistre aussi la page anglaise dont la traduction est issue. Il écrit le hash de blob git de la page anglaise comme <code>source_hash</code> dans le front matter de la traduction, ou sur une ligne de commentaire <code># source_hash:</code> en tête d'un <code>toc.yml</code> traduit. Le hash change à chaque modification de la page anglaise, si bien que le comparer à la page anglaise actuelle indique si la traduction la suit toujours.</p>
+<p>Le README du dépôt est lui aussi traduit, dans <code>README_FR.md</code> et <code>README_CN.md</code> placés à côté de lui, vers lesquels mène la ligne de liens de langues sous les badges de chaque README. Une traduction du README suit <code>README.md</code> paragraphe par paragraphe, mais ses liens mènent à la documentation de sa propre langue (<code>https://cosmosos.github.io/fr/...</code>) et les libellés de ses badges sont traduits, si bien que <code>check</code> ne compare pas sa forme à celle de <code>README.md</code>. <code>stamp README_FR.md</code> écrit le hash de <code>README.md</code> dans un commentaire <code>&lt;!-- source_hash: ... --&gt;</code> sur sa première ligne, que GitHub n'affiche pas, et <code>check</code> signale une traduction du README manquante, non estampillée ou périmée. Le workflow de la documentation se lance aussi quand un README change, afin qu'une traduction du README périmée apparaisse dans son résumé.</p>
+<p><a id="checking-the-translations"></a></p>
+<h2 id="vérifier-les-traductions">Vérifier les traductions</h2>
+<p><code>python3 .github/scripts/docs-i18n.py check</code> parcourt chaque page anglaise et signale, pour chaque langue, une traduction manquante, une traduction périmée (son <code>source_hash</code> ne correspond plus à la page anglaise), une traduction orpheline (la page anglaise n'existe plus) et une traduction dont la forme ne correspond plus à la page anglaise : des titres, des blocs de code, des cibles de liens, du code inline, des lignes de tableau ou des paragraphes différents, une ligne restée identique à une ligne anglaise de six mots ou plus, un tiret que la charte de rédaction interdit, ou une entrée de toc qui sort du dossier de la langue. Un fichier qu'il ne peut pas lire, par exemple un fichier qui n'est pas enregistré en UTF-8, est signalé comme n'importe quel autre constat.</p>
+<p>Le workflow de la documentation le lance après avoir généré les trois sites. Chaque page qui a des constats devient une annotation d'avertissement sur l'exécution du workflow, et la liste complète va dans le résumé de l'exécution, puisque GitHub n'affiche que les dix premières annotations d'une étape. L'étape ne fait jamais échouer le build, parce qu'une modification en anglais ne doit pas attendre quelqu'un qui sait écrire le français et le chinois ; la traduction périmée continue d'être publiée, sous son bandeau, jusqu'à ce que quelqu'un la mette à jour. En local, <code>--strict</code> le fait sortir avec une erreur, <code>--lang fr</code> le limite à une langue, et une liste de chemins anglais (relatifs à <code>docs/</code>, ou <code>README.md</code>) le limite à ces pages.</p>
+<p><a id="when-you-change-an-english-page"></a></p>
+<h2 id="quand-vous-modifiez-une-page-anglaise">Quand vous modifiez une page anglaise</h2>
+<p>Vous n'êtes pas tenu de mettre à jour les traductions dans la même pull request. Si vous le pouvez, modifiez les deux traductions pour qu'elles disent ce que dit désormais la page anglaise, en gardant leurs titres alignés sur les siens, puis estampillez-les :</p>
+<pre><code class="lang-bash">python3 .github/scripts/docs-i18n.py stamp docs/fr/articles/user/timers.md docs/zh/articles/user/timers.md
+python3 .github/scripts/docs-i18n.py check articles/user/timers.md
+</code></pre>
+<p>Une nouvelle page anglaise va dans le <code>toc.yml</code> de son dossier, comme d'habitude. Tant qu'elle n'est pas traduite, <code>check</code> la signale comme manquante dans chaque langue et signale le <code>toc.yml</code> traduit comme différent de l'anglais ; les tables des matières traduites ne la listent qu'une fois la traduction faite, puisqu'un build traduit ne signale une page absente qu'au niveau <code>info</code> et publierait l'entrée comme un lien cassé (<code>check</code> signale une telle entrée). Une page renommée ou supprimée emporte ses traductions avec elle, sinon <code>check</code> les signale comme orphelines.</p>
+<p>Le déploiement conserve les fichiers déjà publiés, parce que les versions publiées sont rangées à côté du site de développement dans le dépôt Pages. Une traduction supprimée reste donc en ligne, et le menu déroulant des langues, qui trouve une page en demandant son URL, l'ouvre encore ; supprimez-la aussi du dépôt Pages.</p>
+<p><a id="adding-a-language"></a></p>
+<h2 id="ajouter-une-langue">Ajouter une langue</h2>
+<p>Une nouvelle langue demande :</p>
+<ul>
+<li>un dossier de <code>docs/</code> avec son <code>docfx.json</code> (copiez <code>docs/fr/docfx.json</code> et changez le dossier de sortie, la couche de modèle et <code>_lang</code>). Le nom du dossier ne doit pas ressembler à un dossier de version (<code>v1.2.3</code>, <code>latest</code>), que <code>main.js</code> prend pour une version publiée ;</li>
+<li>son dossier dans la liste <code>exclude</code> du <code>docs/docfx.json</code> racine ;</li>
+<li>un <code>toc.yml</code> racine dont l'entrée API indique <code>../api/</code> ;</li>
+<li>un <code>templates/&lt;folder&gt;/token.json</code> avec les chaînes du thème ;</li>
+<li>dans <code>main.js</code>, une entrée dans la liste <code>languages</code>, le texte du bandeau, et le stemmer lunr de la langue dans <code>lunrLanguages</code> quand lunr en a un ;</li>
+<li>pour une langue qui s'écrit sans espace entre les mots, un worker de recherche par sous-chaîne comme <code>templates/zh/public/search-worker.min.js</code>, et dans <code>docs-i18n.py</code> la vérification qu'une page contient du texte dans cette écriture, comme celle du chinois ;</li>
+<li>une traduction du README à côté de <code>README.md</code>, son nom de fichier dans <code>READMES</code> dans <code>docs-i18n.py</code>, et son lien dans la ligne de langues de chaque README.</li>
+</ul>
+<p>Le <code>Makefile</code>, <code>build-docs.yml</code> et <code>release.yml</code> trouvent les langues par leur <code>docs/&lt;folder&gt;/docfx.json</code>, tout comme <code>docs-i18n.py</code> pour les pages, si bien qu'ils n'ont besoin d'aucune autre modification.</p>
+<p><a id="terms"></a></p>
+<h2 id="termes">Termes</h2>
+<p>Les traductions emploient un seul terme pour un même concept sur toutes les pages. Le tableau ci-dessous liste les termes retenus, afin qu'une traduction nouvelle ou mise à jour se lise comme les pages qui l'entourent.</p>
+<table>
+<thead>
+<tr>
+<th>English</th>
+<th>Français</th>
+<th>简体中文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>kernel</td>
+<td>noyau</td>
+<td>内核</td>
+</tr>
+<tr>
+<td>driver</td>
+<td>pilote</td>
+<td>驱动程序</td>
+</tr>
+<tr>
+<td>device</td>
+<td>périphérique</td>
+<td>设备</td>
+</tr>
+<tr>
+<td>driver kit</td>
+<td>kit de pilotes</td>
+<td>驱动工具包</td>
+</tr>
+<tr>
+<td>binding (a driver to a device)</td>
+<td>liaison</td>
+<td>绑定</td>
+</tr>
+<tr>
+<td>match, matching</td>
+<td>correspondance</td>
+<td>匹配</td>
+</tr>
+<tr>
+<td>probe</td>
+<td>sonder</td>
+<td>探测</td>
+</tr>
+<tr>
+<td>hot-plug</td>
+<td>branchement à chaud</td>
+<td>热插拔</td>
+</tr>
+<tr>
+<td>host controller</td>
+<td>contrôleur hôte</td>
+<td>主机控制器</td>
+</tr>
+<tr>
+<td>register</td>
+<td>registre</td>
+<td>寄存器</td>
+</tr>
+<tr>
+<td>descriptor ring</td>
+<td>anneau de descripteurs</td>
+<td>描述符环</td>
+</tr>
+<tr>
+<td>interrupt</td>
+<td>interruption</td>
+<td>中断</td>
+</tr>
+<tr>
+<td>interrupt context</td>
+<td>contexte d'interruption</td>
+<td>中断上下文</td>
+</tr>
+<tr>
+<td>interrupt handler</td>
+<td>gestionnaire d'interruption</td>
+<td>中断处理程序</td>
+</tr>
+<tr>
+<td>kind (device kind, bus kind)</td>
+<td>type (type de périphérique, type de bus)</td>
+<td>种类（设备种类，总线种类）</td>
+</tr>
+<tr>
+<td>thread</td>
+<td>thread</td>
+<td>线程</td>
+</tr>
+<tr>
+<td>scheduler</td>
+<td>ordonnanceur</td>
+<td>调度器</td>
+</tr>
+<tr>
+<td>scheduling policy</td>
+<td>politique d'ordonnancement</td>
+<td>调度策略</td>
+</tr>
+<tr>
+<td>run queue</td>
+<td>file d'exécution</td>
+<td>运行队列</td>
+</tr>
+<tr>
+<td>preemption</td>
+<td>préemption</td>
+<td>抢占</td>
+</tr>
+<tr>
+<td>tick source</td>
+<td>source de ticks</td>
+<td>节拍源</td>
+</tr>
+<tr>
+<td>context switch</td>
+<td>changement de contexte</td>
+<td>上下文切换</td>
+</tr>
+<tr>
+<td>lock, spinlock</td>
+<td>verrou, spinlock</td>
+<td>锁，自旋锁</td>
+</tr>
+<tr>
+<td>timer, alarm</td>
+<td>minuteur, alarme</td>
+<td>定时器，闹钟</td>
+</tr>
+<tr>
+<td>callback</td>
+<td>callback</td>
+<td>回调</td>
+</tr>
+<tr>
+<td>garbage collector</td>
+<td>ramasse-miettes</td>
+<td>垃圾回收器</td>
+</tr>
+<tr>
+<td>heap, stack</td>
+<td>tas, pile</td>
+<td>堆，栈</td>
+</tr>
+<tr>
+<td>GC root</td>
+<td>racine</td>
+<td>根</td>
+</tr>
+<tr>
+<td>safepoint</td>
+<td>point sûr</td>
+<td>安全点</td>
+</tr>
+<tr>
+<td>write barrier</td>
+<td>barrière d'écriture</td>
+<td>写屏障</td>
+</tr>
+<tr>
+<td>finalizer</td>
+<td>finaliseur</td>
+<td>终结器</td>
+</tr>
+<tr>
+<td>plug, patcher</td>
+<td>plug, patcher</td>
+<td>plug，patcher</td>
+</tr>
+<tr>
+<td>feature switch</td>
+<td>commutateur de fonctionnalité</td>
+<td>功能开关</td>
+</tr>
+<tr>
+<td>public API surface</td>
+<td>surface d'API publique</td>
+<td>公共 API 面</td>
+</tr>
+<tr>
+<td>experimental seam</td>
+<td>point d'extension expérimental</td>
+<td>实验性扩展点</td>
+</tr>
+<tr>
+<td>framebuffer</td>
+<td>framebuffer</td>
+<td>帧缓冲区</td>
+</tr>
+<tr>
+<td>block device</td>
+<td>périphérique bloc</td>
+<td>块设备</td>
+</tr>
+<tr>
+<td>filesystem</td>
+<td>système de fichiers</td>
+<td>文件系统</td>
+</tr>
+<tr>
+<td>test kernel, test suite</td>
+<td>noyau de test, suite de tests</td>
+<td>测试内核，测试套件</td>
+</tr>
+</tbody>
+</table>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/translations.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

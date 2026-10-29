@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>裁剪与功能开关 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="裁剪与功能开关 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/user/driver-concepts/trimming.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="trimming-and-feature-switches"></a></p>
+<h1 id="裁剪与功能开关">裁剪与功能开关</h1>
+<p>AOT（ahead-of-time，提前）编译器在程序运行之前就能看到整个程序。它从入口点出发，沿着每一次调用、每一个被构造的类型以及每一个可能被到达的虚方法前进，编译它所到达的部分，并把其余一切排除在镜像之外。这就是裁剪（trimming）。它让基于大型库构建的内核保持小巧，同时也意味着代码必须可达才会存在：一个没有任何地方引用的类不会出现在镜像中，无论它来自哪个程序集。</p>
+<p>功能开关在构建时决定可达性。它是一个具名设置，在编译程序时固定下来，并通过一个编译器知道的属性来读取。编译器把对该属性的每一次读取都替换为开关的值，因此由关闭的开关守卫的分支测试的是常量 <code>false</code>，永远不会执行，并会被删除，只有该分支才能到达的所有内容也随之删除。用这种方式关闭一个子系统，是把它的代码从镜像中移除，而不是在运行时跳过它。</p>
+<p>陷阱在于守卫之外的引用。裁剪删除的是不可达的代码，而不是被守卫的代码：只要留在镜像中的任何代码引用了某个类型，即使它的开关已关闭，该类型也会保留下来。开关同时也是一项构建设置，因此关闭某个功能后编译的内核无法在运行时打开它；代码根本不在那里。</p>
+<p>在 Cosmos 中，内核 <code>.csproj</code> 中的每个 <code>CosmosEnable*</code> 属性都会成为一个标记为 <code>Trim=&quot;true&quot;</code> 的 <code>RuntimeHostConfigurationOption</code>，并作为 <code>--feature:</code> 参数传给 NativeAOT 编译器 ILC（<a href="../../dev/build/ilc-build.html">Cosmos.Build.Ilc</a>）。ILC 替换的属性位于 Core 的 <code>CosmosFeatures</code> 中，标记为 <code>[FeatureSwitchDefinition]</code>；<code>Cosmos.Kernel.System</code> 中的 <code>KernelFeatures</code> 则是内核读取的公共视图。有些开关会关闭其他开关：关闭 <code>CosmosEnableInterrupts</code> 时，<code>Sdk.targets</code> 还会关闭定时器、键盘、鼠标、网络、存储、调度器和 PCI 的开关；关闭 <code>CosmosEnableScheduler</code> 时，则会关闭终结器线程的开关（<code>CosmosEnableFinalizerThread</code>）。驱动程序清单把这些开关用作守卫：声明为 <code>[Driver(Feature = DriverFeature.Network)]</code> 的驱动程序在 <code>if (KernelFeatures.Network)</code> 内注册，而由于没有其他代码会构造内置驱动程序，关闭 <code>CosmosEnableNetwork</code> 构建的内核根本不包含任何网络驱动程序。参见<a href="../drivers.html#the-attribute-and-the-manifest">特性与清单</a>和<a href="../../dev/build/driver-manifest.html#feature-guards">功能守卫</a>。</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/user/driver-concepts/trimming.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

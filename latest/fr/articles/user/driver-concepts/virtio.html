@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>Virtio | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Virtio | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/user/driver-concepts/virtio.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="virtio">Virtio</h1>
+
+<p>Un hyperviseur peut émuler une vraie carte réseau registre par registre, mais chaque accès à un registre que fait l'invité est une sortie coûteuse de la machine virtuelle vers l'hyperviseur, et le pilote d'une vraie carte en fait beaucoup par paquet. Virtio est une famille de périphériques paravirtuels : des périphériques conçus pour être implémentés par un hyperviseur, qui réduisent les accès aux registres au minimum et font leur travail en mémoire partagée. Une seule spécification définit des cartes réseau, des périphériques bloc, des GPU, des périphériques d'entrée et d'autres encore, chacun avec un numéro de type de périphérique.</p>
+<p>Le même périphérique peut atteindre l'invité par différents transports. Sur <a href="pci.html">PCI</a>, c'est une fonction d'identifiant de fabricant 0x1AF4 dont les capacités indiquent où se trouvent ses registres virtio ; sur MMIO, c'est un bloc de registres à une adresse fixe que décrit la plateforme. Au-dessus du transport, le protocole est le même.</p>
+<p>La mise en service d'un périphérique est un échange qui passe par son registre d'état. Le pilote réinitialise le périphérique en écrivant 0, positionne ACKNOWLEDGE et DRIVER, puis négocie les fonctionnalités : le périphérique propose un bitmap de fonctionnalités optionnelles, le pilote écrit en retour le sous-ensemble qu'il comprend et positionne FEATURES_OK, et un périphérique qui efface à nouveau ce bit refuse le sous-ensemble. Le bit 32, VIRTIO_F_VERSION_1, marque un périphérique qui suit la spécification 1.0 plutôt que l'interface héritée. Le pilote met ensuite en place ses virtqueues et positionne DRIVER_OK, et le périphérique est actif. Une virtqueue est un <a href="descriptor-rings.html">anneau de descripteurs</a> en trois parties : une table de descripteurs, un anneau disponible où le pilote propose des tampons, et un anneau utilisé où le périphérique les rend. Le pilote écrit dans un registre de notification quand l'anneau disponible grandit, et le périphérique lève une interruption quand l'anneau utilisé grandit à son tour.</p>
+<p>Le piège est d'agir selon les fonctionnalités demandées plutôt que selon les fonctionnalités négociées : une fonctionnalité hors de l'ensemble négocié est désactivée, et certaines fonctionnalités changent la disposition des données qu'échange le périphérique.</p>
+<p>Dans le kit de pilotes, <code>VirtioAccess</code> mène cet échange. Le kit réinitialise le périphérique et positionne ACKNOWLEDGE et DRIVER avant chaque sondage ; <code>NegotiateFeatures</code> prend les 32 bits de poids faible que comprend un pilote, ajoute VIRTIO_F_VERSION_1 quand le périphérique le propose et renvoie <code>false</code> quand FEATURES_OK ne reste pas positionné ; <code>TryCreateQueue</code> construit une <code>Virtqueue</code> dans la mémoire DMA de la liaison ; et <code>SetDriverOk</code> vient avant le premier <code>Notify</code>. Un pilote appelle <code>Reset()</code> dans <code>OnDetach</code> pour que le périphérique cesse d'écrire dans des anneaux que le kit s'apprête à libérer ; voir <a href="../drivers.html#the-virtio-access-object">L'objet d'accès virtio</a> et <a href="../drivers.html#queues">Files</a>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/user/driver-concepts/virtio.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

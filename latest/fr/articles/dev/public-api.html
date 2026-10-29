@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>Suivi de l&#39;API publique | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Suivi de l&#39;API publique | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/public-api.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="public-api-tracking"></a></p>
+<h1 id="suivi-de-lapi-publique">Suivi de l'API publique</h1>
+<p>La surface publique des packages du noyau est déclarée dans des fichiers texte versionnés dans le dépôt, imposée par des analyseurs Roslyn au moment du build, protégée contre les changements cassants au moment de la publication d'une version, et publiée sous la forme d'un site de documentation figé par version. Cette page expose la politique qui décide de ce qui est public, puis les trois mécanismes et le processus de contribution qu'ils imposent.</p>
+<hr>
+<p><a id="the-policy"></a></p>
+<h2 id="la-politique">La politique</h2>
+<p>Trois règles décident de ce qui est public :</p>
+<ol>
+<li><p><strong>Un seul anneau supporté.</strong> <code>Cosmos.Kernel.System</code> est l'API sur laquelle les noyaux s'appuient : suivie, documentée, figée à chaque version, et c'est là, et seulement là, que s'appliquent les cycles de dépréciation. Un type de contrat issu d'un autre assembly ne devient public par ricochet que lorsqu'un noyau peut en obtenir un, ou en fournir un de façon utile, à travers l'anneau. <code>IBlockDevice</code> dans <code>Cosmos.Kernel.HAL</code> est le seul contrat de périphérique qui remplit cette condition, et il la remplit des deux côtés : <code>StorageManager.PrimaryDevice</code>, <code>Devices</code> et <code>GetDevice</code> remettent un périphérique au noyau, DevKernel lit et écrit des blocs directement à travers lui, 31 membres publics en prennent un en paramètre, et les suites Fat et File en implémentent chacune un qui leur est propre et le pilotent, sans détenir aucun octroi sur <code>Cosmos.Kernel.HAL</code> (l'octroi de la suite Fat porte sur l'anneau, ce qui est une autre question). <code>MacAddress</code> le suit, parce que le point d'extension des paquets et <code>NetworkManager.MacAddress</code> en remettent tous deux un. Les contrats du VFS n'en font pas partie : rien sous l'anneau n'en implémente ni n'en appelle un, si bien qu'ils sont déclarés dans l'anneau lui-même, dans <code>Cosmos.Kernel.System.FileSystem</code>, à côté de <code>VfsManager</code> et des handles. Tout le reste de ces autres assemblies est interne, y compris les contrats qu'une méthode <code>Register</code> se trouve nommer : la source de ticks et les périphériques réseau ne sont enregistrés que par le <code>LibraryInitializer</code> propre à cet assembly et par son consommateur réseau, les périphériques d'entrée sont les types de périphériques <code>IKeyboard</code> et <code>IPointer</code> du kit de pilotes, et un noyau lit <code>KeyboardManager.ReadKey</code>, <code>MouseManager.X</code> et <code>NetworkManager.LinkUp</code>, jamais le périphérique. Les contrats de plateforme (<code>IPortIO</code>, <code>ICpuOps</code>, <code>IPowerOps</code>, <code>IInterruptController</code>, <code>IRQContext</code>) et le contrat de démarrage <code>IPlatformInitializer</code> ne sont pas publics non plus, puisque <code>PlatformHAL</code> est interne et qu'aucun noyau ne peut en enregistrer ni en obtenir un.</p>
+<p>Méfiez-vous de la version affaiblie de ce critère, « une signature de l'anneau le nomme ». Elle laisse passer tout ce pour quoi quelqu'un a un jour écrit une surcharge de <code>Register</code> et recale un contrat identique pour lequel personne ne l'a fait, et c'est ainsi que <code>IKeyboardDevice</code> et <code>IGraphicDevice</code> se sont retrouvés de part et d'autre de la même question. <code>IGraphicDevice</code> a depuis été supprimé, quand l'écran est passé sur le kit de pilotes : un écran est désormais un type de périphérique du kit, <code>IDisplay</code> sur le point d'extension expérimental, et un noyau lit <code>DisplayManager</code> et dessine à travers <code>Canvas</code>. <code>IKeyboardDevice</code> a suivi quand le clavier et la souris PS/2 sont passés sur le kit : un clavier est désormais un type de périphérique du kit, <code>IKeyboard</code> sur le point d'extension expérimental.</p>
+<p><code>INetworkDevice</code> montre jusqu'où ce critère affaibli peut porter un type. Treize membres de l'anneau en prenaient un, ce qui paraît décisif jusqu'à ce que vous comptiez ce qu'un noyau fait du handle : il lit <code>Name</code>, <code>MacAddress</code>, <code>LinkUp</code> et <code>Ready</code>, et vérifie qu'il n'est pas null. Dans DevKernel comme dans la suite réseau, rien n'a jamais appelé <code>Enable</code>, <code>Disable</code>, <code>Initialize</code> ou <code>Send</code> dessus, rien n'a demandé <code>GetDevice(1)</code>, et <code>RegisterDevice</code> n'avait qu'un seul appelant, le <code>LibraryInitializer</code> propre à cet assembly. <code>NetworkManager</code> exposait déjà <code>LinkUp</code> et <code>Send</code> en façade du périphérique principal, si bien que la façade était à moitié construite et que les appelants passaient par-dessus. Ajouter les quatre informations manquantes l'a achevée, et le contrat est devenu interne, ce que <code>KeyboardManager</code> et <code>MouseManager</code> avaient fait depuis le début.</p>
+<p>Masquer un contrat ne doit pas masquer une capacité avec lui. <code>INetworkDevice</code> était le seul moyen de désigner un périphérique, si bien que l'anneau s'est doté de <code>NetworkAdapter</code>, un handle portant l'index d'enregistrement, avec <code>NetworkManager.GetAdapter</code>, un <code>NetworkManager.Primary</code> modifiable, une surcharge de <code>IPConfig.Enable</code> qui prend un adaptateur, et <code>NetworkAdapter.IPConfig</code> pour la configuration en vigueur sur l'un d'eux. L'anneau possède le handle, un noyau en obtient réellement un, et les membres qu'un noyau n'appelait jamais restent derrière lui.</p>
+<p>Le critère s'applique ensuite de nouveau, membre par membre, car un type qui mérite sa place n'emporte pas toute sa classe avec lui. <code>SoftwareTimer</code> est public : <code>TimerManager.Schedule</code> en renvoie un et <code>Cancel</code> le reprend. L'entrée de registre qui se trouve derrière ne l'est pas : <code>TimerManager</code> la construit, et ses <code>SetActive</code>, <code>Tick</code> et <code>Invoke</code> appartiennent à la source de ticks qui possède le registre ; un noyau qui les appellerait ferait avancer le compte à rebours d'un autre minuteur, exécuterait depuis un contexte de thread un callback prévu pour le contexte d'interruption, ou désactiverait une entrée sans la retirer du registre. Ce que le handle laisse public, <code>TimeoutNs</code>, <code>Recurring</code> et <code>IsActive</code>, c'est ce qu'un appelant peut y lire sans casser ce qui se trouve derrière. Le handle et l'entrée sont deux types pour une raison de couches plutôt que de politique : <code>TickSource</code> détient le registre et le fait avancer depuis le chemin d'interruption, et la HAL ne peut pas référencer l'anneau, si bien que l'entrée, <code>TimerEntry</code>, reste interne dans <code>Cosmos.Kernel.HAL.Timers</code> à côté de <code>TickSource</code>, et que <code>SoftwareTimer</code> est le handle propre à l'anneau qui en enveloppe une, dans <code>Cosmos.Kernel.System.Timers</code>, à côté du gestionnaire qui le distribue.</p>
+<p>Un corollaire de cette même règle : l'anneau ne doit pas documenter une capacité qu'il n'offre pas. <code>TimerManager.Schedule</code> et <code>ScheduleRecurring</code> disaient tous deux aux noyaux d'utiliser <code>AlarmSystem</code> pour les callbacks qui ont besoin du contexte de thread, alors que <code>AlarmSystem</code> est interne à <code>Cosmos.Kernel.Core</code>. L'anneau distribuait donc la moitié en contexte d'interruption, où un callback ne doit ni bloquer, ni allouer, ni prendre de verrou, et désignait la moitié sûre à travers un mur. <code>AlarmManager</code> est le chemin de l'anneau vers elle, et transmet les appels à l'implémentation interne ; c'est un gestionnaire distinct plutôt que trois méthodes de plus sur <code>TimerManager</code>, parce qu'appeler la mauvaise provoque un interblocage, et que c'est le nom du gestionnaire qui rend le contexte visible au site d'appel. Deux gestionnaires entre lesquels un noyau choisit selon le contexte d'exécution ne doivent pas différer en plus par leur forme, si bien que <code>Schedule</code> et <code>ScheduleRecurring</code> prennent <code>(Action callback, TimeSpan delay)</code> sur les deux et que <code>Cancel</code> ne renvoie <code>true</code>, sur les deux, que si le callback était encore en attente. Faire converger la forme rend la seule chose qui ne peut pas converger digne d'être énoncée sur l'anneau : les appels de planification propres à une alarme se mettent en attente sur un mutex, si bien qu'ils ne peuvent être faits que depuis un contexte de thread, tandis que ceux du minuteur masquent les interruptions et peuvent être faits depuis n'importe où. Ce qui reste différent, c'est ce que chacun renvoie : <code>AlarmSystem</code> possède ses alarmes et est interne à <code>Cosmos.Kernel.Core</code>, si bien que l'anneau ne peut renvoyer qu'un identifiant <code>ulong</code> pour une alarme, tandis que l'autre renvoie un <code>SoftwareTimer</code> qui enveloppe l'entrée détenue par le registre de la source de ticks.</p>
+<p>Ce même nouveau passage a supprimé <code>NetworkConfigManager</code>. Il se présentait comme le gestionnaire de <code>IPConfig</code>, mais n'en détenait que la moitié : configurer un périphérique écrivait la même configuration dans la liste de routage de <code>IPConfig</code>, dans la liste du gestionnaire indexée par périphérique et dans son pointeur courant, trois stockages écrits ensemble et vidés séparément, et les deux méthodes <code>Remove</code> qui les auraient désynchronisés étaient toutes deux du code mort. La recherche par périphérique est passée sur <code>NetworkAdapter.IPConfig</code>, où l'anneau garde déjà toutes les autres informations propres à chaque périphérique, et la liste de routage est devenue le seul stockage. <code>DnsConfig</code> garde sa propre liste au lieu de recevoir un gestionnaire assorti, parce qu'une liste de serveurs de noms est globale au résolveur alors qu'une configuration IPv4 appartient à un seul périphérique.
+Un membre qui ne peut répondre qu'une seule valeur n'est pas un membre. <code>Address.IsIpv4</code> lisait <code>Parts.Length == 4</code> sur un type dont chaque constructeur produit exactement quatre octets, si bien qu'il valait la constante <code>true</code>, <code>IsIpv6</code> la constante <code>false</code>, et que l'exception « pas la même famille » de <code>CompareTo</code> comparait la constante à elle-même. <code>MacAddress.IsValid</code> a connu le même sort pour la même raison. Supprimez ces membres plutôt que de les renommer : un renommage conserve la place dans l'anneau et ne prouve rien ; ce même passage a supprimé <code>Address.IsLoopbackAddress</code>, <code>IsAPIPA</code> et <code>CIDRToAddress</code> parce que rien ne les appelait, tandis que <code>IsBroadcastAddress</code>, <code>ToUInt32</code> et <code>ToSpan</code> sont devenus internes parce que quelque chose les appelait. L'anneau ne doit pas non plus offrir une troisième formulation d'une question à laquelle il répond déjà de deux façons : <code>NetworkManager.HasDevice</code> était <code>DeviceCount &gt; 0</code> et <code>Primary.IsValid</code> sous un troisième nom.</p>
+<p>La casse des acronymes suit la règle .NET, qu'il vaut la peine d'énoncer parce qu'elle ne va que dans un sens : un acronyme de deux lettres reste en capitales (<code>IPPacket</code>, <code>SourceIP</code>), un acronyme de trois lettres ou plus passe en Pascal case (<code>IcmpType</code>, <code>UdpDataLength</code>, <code>MacAddress</code>). <code>NetworkManager.MacAddress</code> était donc déjà correct, et <code>EthernetPacket.DestinationMAC</code> ainsi que le type d'adresse lui-même, alors nommé <code>MACAddress</code>, ne l'étaient pas. Un renommage de cette passe ne compile pas : <code>TcpPacket.TCPFlags</code> ne peut pas devenir <code>TcpFlags</code>, parce que l'enum <code>TcpFlags</code> vit dans le même espace de noms et que le corps de la classe évalue <code>(byte)TcpFlags.SYN</code>, qu'une propriété de type <code>byte</code> portant ce nom masquerait (CS1061). Elle s'appelle <code>FlagBits</code>. Les noms de champs du format sur le fil qui reflètent un en-tête gardent leur graphie, c'est pourquoi <code>TcpFlags.ACK</code> et <code>DnsPacket.AnswerRRs</code> restent tels quels. Les noms d'espaces de noms et de dossiers suivent eux aussi la règle : les espaces de noms des protocoles sous <code>Cosmos.Kernel.System.Network.Protocols</code> sont <code>Arp</code>, <code>Dns</code>, <code>Tcp</code>, <code>Udp</code> et <code>IPv4.Dhcp</code>, tandis que <code>IPv4</code> et <code>IPv6</code> gardent leurs deux capitales.</p>
+</li>
+<li><p><strong>Des points d'extension expérimentaux choisis.</strong> Les points d'extension sont ouverts délibérément et marqués <code>[Experimental]</code> : publics et utilisables dès maintenant, sans promesse de compatibilité, et promus en stable par le retrait de l'attribut une fois qu'ils ont fait leurs preuves. En référencer un est une erreur de build tant que le projet consommateur ne supprime pas son identifiant de diagnostic, ce qui vaut acceptation de ce contrat par le consommateur. Le point d'extension de politique d'ordonnancement dans Core est le premier, le point d'extension des paquets dans System le deuxième ; le kit de pilotes dans la HAL est le troisième.</p>
+</li>
+<li><p><strong>Tout le reste est interne.</strong> La visibilité n'est jamais le mécanisme d'extension ; ce sont les points d'extension qui le sont. Les assemblies du projet lui-même et les noyaux de test en boîte blanche atteignent les éléments internes via <code>InternalsVisibleTo</code> ; tous les autres passent par <code>[UnsafeAccessor]</code>/<code>[UnsafeAccessorType]</code> (<a href="accessing-internals.html">Accéder aux éléments internes</a>) et acceptent que les éléments internes changent sans préavis.</p>
+</li>
+</ol>
+<p>Le critère d'application est mécanique : <code>examples/DevKernel</code> doit compiler sans aucun octroi <code>InternalsVisibleTo</code>. Si DevKernel a besoin d'un symbole, ce symbole devient public ou reçoit une façade dans <code>Cosmos.Kernel.System</code> ; sinon, il reste interne.</p>
+<p>Un type public de l'anneau n'est pas destiné aux noyaux. <code>Cosmos.Kernel.System.Internal.KernelEntry</code> enregistre et démarre le noyau pour le point d'entrée que génère le build, et ce code généré est compilé dans l'assembly même du noyau, si bien qu'il ne peut appeler qu'un membre public, de la même façon que le manifeste des pilotes généré appelle le <code>DriverRegistry.Register</code> public. Le type est suivi comme le reste de l'anneau et marqué <code>[EditorBrowsable(EditorBrowsableState.Never)]</code>, et dans l'anneau l'espace de noms <code>Cosmos.Kernel.System.Internal</code> ne contient que ce type : c'est l'espace de noms que les <code>CosmosEntryPoint</code> et <code>DriverManifest</code> générés déclarent déjà dans l'assembly de chaque noyau. Le code du noyau atteint le noyau en cours d'exécution via <code>Kernel.Current</code>. Tous deux ont remplacé une classe <code>Global</code> placée à la racine, qui réunissait la plomberie et le noyau en cours d'exécution, au sommet de l'anneau à côté de <code>Kernel</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Assembly</th>
+<th>Surface</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Cosmos.Kernel.System</code></td>
+<td>L'anneau supporté</td>
+</tr>
+<tr>
+<td><code>Cosmos.Kernel.HAL</code></td>
+<td>Le point d'extension du kit de pilotes (<code>[Experimental]</code>), <code>IBlockDevice</code> et <code>MacAddress</code>, suivis ; le contrat de démarrage, l'horloge du firmware, la classe de base de la source de ticks et ses entrées de minuteur, les ports : internes</td>
+</tr>
+<tr>
+<td><code>Cosmos.Kernel.Drivers</code></td>
+<td>Les vingt-cinq classes de pilotes livrées, avec leurs constructeurs sans paramètre et leurs redéfinitions de <code>Driver</code>, et rien d'autre : le manifeste généré dans chaque noyau les construit, et un package ne peut pas octroyer ses éléments internes à un noyau qu'il ne connaît pas. Tout le reste (les objets d'état, les transports, la facette de l'adaptateur SVGA) est interne, relu par les suites de tests via <code>InternalsVisibleTo</code> ; suivi, et exclu de la référence d'API ; un assembly de pilotes tenu à la couche User</td>
+</tr>
+<tr>
+<td><code>Cosmos.Kernel.Core</code></td>
+<td>Le point d'extension de l'ordonnanceur (<code>[Experimental]</code>) et rien d'autre, suivi</td>
+</tr>
+<tr>
+<td>Assemblies d'architecture, Native, Plugs, Debug, Boot.Limine, <code>Cosmos.Kernel</code></td>
+<td>Internes, <code>InternalsVisibleTo</code> pour les assemblies du projet</td>
+</tr>
+</tbody>
+</table>
+<p>La dernière ligne relève de la politique plutôt que d'une application suivie : ces assemblies ne sont pas suivis, et leurs types publics restants diminuent à mesure qu'on y touche.</p>
+<p>Les points d'extension expérimentaux portent des identifiants de diagnostic :</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Point d'extension</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>COSMOS0001</code></td>
+<td>Le point d'extension de politique d'ordonnancement : <code>IScheduler</code>, <code>SchedulerManager</code>, <code>SchedulerThread</code>, <code>PerCpuState</code>, <code>SchedulerExtensible</code>, <code>InterruptMaskScope</code>, <code>SchedulerThreadState</code>, <code>SchedulerThreadFlags</code> (<a href="../user/scheduler-plugging.html">Ordonnanceur - Écrire un ordonnanceur</a>)</td>
+</tr>
+<tr>
+<td><code>COSMOS0002</code></td>
+<td>Le point d'extension des paquets : tous les types publics de la sous-arborescence <code>Cosmos.Kernel.System.Network.Protocols</code> (<code>EthernetPacket</code> et <code>InternetPacket</code> à sa racine, puis les types de paquets <code>Arp</code>, <code>Dns</code>, <code>IPv4</code>, <code>IPv4.Dhcp</code>, <code>Tcp</code> et <code>Udp</code>), ainsi que les membres de trois types stables de <code>Cosmos.Kernel.System.Network</code> qui transmettent, injectent ou renvoient des paquets : <code>NetworkStack.Send</code>/<code>HandlePacket</code>, <code>UdpClient.Send</code>/<code>ReceivePacket</code> et <code>IcmpClient.Send</code>/<code>ReceivePacket</code> (<a href="../user/network.html#crafting-packets">Réseau - Forger des paquets</a>)</td>
+</tr>
+<tr>
+<td><code>COSMOS0003</code></td>
+<td>Le point d'extension du kit de pilotes : tous les types de <code>Cosmos.Kernel.HAL.DriverKit</code> (<code>Driver</code>, <code>DriverAttribute</code>, <code>DeviceBinding</code>, <code>DeviceNode</code>, <code>DriverRegistry</code>, les types de sondage et de détachement), <code>Cosmos.Kernel.HAL.DriverKit.Resources</code> (<code>DeviceResource</code>, <code>RegisterWindow</code>, <code>DeviceRegion</code>, <code>DmaBuffer</code> et leur vocabulaire), <code>Cosmos.Kernel.HAL.DriverKit.Interrupts</code> (<code>InterruptSource</code>, <code>InterruptHandle</code>, <code>InterruptHandler</code>, <code>InterruptContext</code>, <code>InterruptTrampoline</code>), <code>Cosmos.Kernel.HAL.DriverKit.Threading</code> (<code>DeviceLock</code>, <code>DeviceLockScope</code>, <code>DeviceEvent</code>, <code>DriverThread</code>, <code>WorkItem</code>), <code>Cosmos.Kernel.HAL.Devices.Display</code> (le type de périphérique écran : <code>IDisplay</code>, <code>DisplayMode</code>, <code>DisplaySink</code> et les facettes d'écran <code>IDisplayModes</code> et <code>IHardwareCursor</code>), <code>Cosmos.Kernel.HAL.Devices.Input</code> (les types de périphériques clavier et pointeur : <code>IKeyboard</code>, <code>KeyboardLeds</code>, <code>KeyboardSink</code>, <code>IPointer</code>, <code>PointerButtons</code>, <code>PointerSink</code>), <code>Cosmos.Kernel.HAL.Devices.Network</code> (le type de périphérique réseau : <code>INetworkInterface</code>, <code>NetworkSink</code>, mais pas le <code>MacAddress</code> stable), <code>Cosmos.Kernel.HAL.Devices.Storage</code> (la facette de périphérique bloc <code>IRemovableMedia</code>, mais pas l'<code>IBlockDevice</code> stable), <code>Cosmos.Kernel.HAL.DriverKit.Buses.Synthetic</code> (le bus de test), <code>Cosmos.Kernel.HAL.DriverKit.Buses.Platform</code> (le type de bus plateforme : <code>PlatformIdentity</code>, <code>PlatformMatch</code>), <code>Cosmos.Kernel.HAL.DriverKit.Buses.Ps2</code> (le type de bus PS/2 : <code>Ps2Port</code>, <code>Ps2Identity</code>, <code>Ps2Match</code>, <code>Ps2Access</code>, <code>Ps2Controller</code>), <code>Cosmos.Kernel.HAL.DriverKit.Buses.Pci</code> (le type de bus PCI : <code>PciIdentity</code>, <code>PciMatch</code>, <code>PciAccess</code>, <code>PciBar</code>, <code>PciHostAccess</code>, <code>PciFunctionDescription</code>), <code>Cosmos.Kernel.HAL.DriverKit.Buses.Virtio</code> (le type de bus virtio : <code>VirtioIdentity</code>, <code>VirtioMatch</code>, <code>VirtioDeviceType</code>, <code>VirtioAccess</code>, <code>VirtioTransport</code>, <code>Virtqueue</code>, <code>VirtqueueLayout</code>, <code>VirtqueueDescriptorFlags</code>, <code>VirtioInterruptStatus</code>) et <code>Cosmos.Kernel.HAL.DriverKit.Buses.Usb</code> (le type de bus USB : <code>UsbIdentity</code>, <code>UsbMatch</code>, <code>UsbAccess</code>, <code>UsbBus</code>, <code>UsbHostController</code>, <code>UsbDevice</code>, <code>UsbPipe</code>, <code>UsbEndpoint</code>, <code>UsbSetupPacket</code>, <code>UsbReportHandler</code>, <code>UsbHubProtocol</code>, <code>UsbClassCode</code> et les enums <code>UsbSpeed</code>, <code>UsbEndpointType</code>, <code>UsbRequestType</code>, <code>UsbStandardRequest</code>, <code>UsbDescriptorType</code> et <code>UsbTransferStatus</code>) ; et, sous le même identifiant mais hors de la HAL, <code>ICanvas3DFactory</code> dans <code>Cosmos.Kernel.System.Graphics.Rendering3D</code>, la facette définie par l'anneau qu'un écran implémente lorsqu'il fait du rendu 3D (<a href="../user/drivers.html">Écrire un pilote</a>)</td>
+</tr>
+</tbody>
+</table>
+<p>Le point d'extension du kit de pilotes a deux garde-fous qui lui sont propres, parce qu'un pilote est le seul consommateur que la politique attend en dehors de l'arborescence. Un projet qui déclare <code>&lt;CosmosDriverAssembly&gt;true&lt;/CosmosDriverAssembly&gt;</code> est tenu à la surface dont dispose un tiers : l'analyseur de couches le traite comme un assembly User quel que soit son nom, jugé sur les types et les membres que son code nomme (issus de <code>Cosmos.Kernel.System</code> et de <code>Cosmos.Kernel.HAL</code>, rien de plus bas), <code>NAOT0008</code> y interdit <code>[UnsafeAccessor]</code> et <code>[UnsafeAccessorType]</code>, et <code>NAOT0009</code> interdit à tout assembly <code>Cosmos.*</code> référencé de lui octroyer ses éléments internes. La moitié de cette dernière règle qui couvre toute l'arborescence est la cible <code>CosmosForbidDriverAssemblyGrants</code> de <code>Directory.Build.targets</code>, qui fait échouer tout projet dont un <code>InternalsVisibleTo</code> nomme un assembly listé dans <code>CosmosDriverAssemblyNames</code> (<code>Directory.Build.props</code>), la liste que rejoint chaque assembly de pilotes de l'arborescence. Aujourd'hui, elle nomme <code>Cosmos.Kernel.Drivers</code>, le package où vivent les pilotes livrés (les pilotes de l'hôte PCI et du port racine PCI Express, le pilote Intel E1000E, les pilotes de transport virtio PCI et MMIO, les pilotes virtio-net et virtio-input, les pilotes d'affichage virtio-gpu, VMware SVGA II, AMD DCN 3.1.5 et graphiques intégrés Intel, les pilotes de stockage AHCI, NVMe et virtio-blk, le pilote HD Audio, les pilotes des contrôleurs hôtes xHCI, EHCI et OHCI, du hub USB, du clavier HID boot, de la souris HID boot et du stockage de masse USB, et les pilotes 8042, clavier PS/2 et souris PS/2, vingt-cinq en tout, que chaque noyau reçoit via <code>Cosmos.Kernel</code> ; le déplacement du pilote virtio-blk depuis la bibliothèque de la suite Drivers n'a changé que son espace de noms), ainsi que la bibliothèque de la suite Drivers, <code>Cosmos.Kernel.Tests.Drivers.Library</code> ; tous deux sont compilés sous cette propriété, si bien que le compilateur apporte la preuve que chacun n'appelle que ce qu'un auteur de noyau peut appeler. <code>Cosmos.Kernel.Drivers</code> suit sa propre surface dans <code>PublicAPI.Shipped.txt</code> et <code>PublicAPI.Unshipped.txt</code>, sans le préfixe <code>[COSMOS0003]</code>, parce que ses pilotes dérivent du kit expérimental sans être eux-mêmes expérimentaux. Cette surface se limite aux classes de pilotes que construit le manifeste généré ; rien dans l'assembly n'est destiné à être appelé par un noyau, si bien que le reste est interne, octroyé aux suites qui relisent l'état des pilotes, et que l'assembly est exclu de la référence d'API. L'autre garde-fou est la cible <code>CosmosGuardHalPromotion</code> du projet HAL, qui s'exécute après son build, lit <code>PublicAPI.Shipped.txt</code> et <code>PublicAPI.Unshipped.txt</code>, et échoue sur toute ligne de symbole qui ne porte ni le préfixe <code>[COSMOS0003]</code> que l'analyseur écrit pour un symbole <code>[Experimental]</code>, ni <code>*REMOVED*</code>, à moins que la ligne n'appartienne à l'un des contrats de périphérique stables que nomme sa liste <code>_CosmosStableHalTypes</code>, <code>IBlockDevice</code> et <code>MacAddress</code>. La stabilité est marquée type par type plutôt que par dossier : un type du point d'extension qui perd son attribut, ce qui est la manière dont une promotion se produit par accident, provoque une erreur de build où qu'il se trouve, et promouvoir réellement un type est une modification délibérée de cette liste.</p>
+<hr>
+<p><a id="behaviour-when-a-feature-is-compiled-out"></a></p>
+<h2 id="comportement-quand-une-fonctionnalité-est-exclue-de-la-compilation">Comportement quand une fonctionnalité est exclue de la compilation</h2>
+<p>Chaque commutateur de fonctionnalité (<code>CosmosEnableStorage</code>, <code>CosmosEnableMouse</code> et les autres) peut laisser un gestionnaire de l'anneau sans aucun sous-système derrière lui. Une seule règle décide alors de ce que font ses membres :</p>
+<table>
+<thead>
+<tr>
+<th>Type de membre</th>
+<th>Comportement quand la fonctionnalité est désactivée</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Une lecture capable d'exprimer « rien ici »</td>
+<td>Renvoie la réponse honnête : <code>0</code>, <code>null</code>, <code>false</code>, une liste vide, un handle invalide</td>
+</tr>
+<tr>
+<td>Une méthode <code>Try</code>, ou tout membre dont le <code>bool</code> signifie déjà « cela n'a pas eu lieu »</td>
+<td>Renvoie <code>false</code></td>
+</tr>
+<tr>
+<td>Tout le reste</td>
+<td>Lève une <code>InvalidOperationException</code> qui nomme le commutateur à activer</td>
+</tr>
+</tbody>
+</table>
+<p>Les lectures répondent pour qu'un noyau puisse décider en fonction de leur résultat, et <code>KernelFeatures</code> répond directement à la question posée à la compilation. Les actions lèvent une exception parce que l'alternative serait une opération silencieusement sans effet, qui ressemblerait à un bug du noyau plutôt qu'à un commutateur laissé désactivé dans son <code>.csproj</code>. La ligne du milieu repose sur la forme plutôt que sur le préfixe <code>Try</code> : <code>TimerManager.Cancel</code> et <code>AlarmManager.Cancel</code> renvoient déjà <code>false</code> pour un callback qui n'était pas en attente, un sous-système exclu de la compilation n'est qu'une raison de plus pour qu'il ne soit pas en attente, et un chemin de nettoyage ne devrait pas avoir à vérifier le commutateur avant de pouvoir s'exécuter.</p>
+<p>Deux membres ne peuvent pas suivre la moitié consacrée aux lectures, et le disent dans leur documentation XML : <code>KeyboardManager.Peek</code> et <code>ReadKey</code> renvoient un <code>KeyEvent</code> non nullable, si bien qu'ils n'ont aucune valeur pour dire « aucune touche », et <code>ReadKey</code> bloquerait sinon sur une interruption qu'aucun clavier ne déclenchera.</p>
+<hr>
+<p><a id="how-a-member-reports-failure"></a></p>
+<h2 id="comment-un-membre-signale-un-échec">Comment un membre signale un échec</h2>
+<p>Le tableau sur l'exclusion de la compilation n'est qu'un cas d'une règle plus large. Un membre de l'anneau dispose d'exactement un canal pour dire qu'il n'a pas fonctionné, et c'est la forme du membre qui détermine de quel canal il s'agit.</p>
+<table>
+<thead>
+<tr>
+<th>Le membre est</th>
+<th>Il le signale par</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Une lecture qui possède sa propre valeur vide</td>
+<td>cette valeur : <code>0</code>, <code>null</code>, <code>false</code>, une liste vide, un handle invalide</td>
+</tr>
+<tr>
+<td>Une opération qui échoue pour des raisons sur lesquelles l'appelant peut agir</td>
+<td>un <code>bool</code>, avec le préfixe <code>Try</code> quand elle a aussi un <code>out</code></td>
+</tr>
+<tr>
+<td>Une opération dont l'appelant doit distinguer les échecs</td>
+<td>une enum de résultat, comme <code>SchedulerDiagnostics.RequestKill</code> renvoie <code>ThreadKillResult</code></td>
+</tr>
+<tr>
+<td>Tout ce qui est atteint dans un état qu'un noyau correct ne peut pas produire</td>
+<td>une exception, documentée avec <code>&lt;exception&gt;</code>, et jamais une <code>Exception</code> nue</td>
+</tr>
+</tbody>
+</table>
+<p>Quatre règles rendent ce tableau utilisable.</p>
+<p><strong>Un <code>Try</code> ne lève pas d'exception pour l'échec que porte son propre booléen.</strong> <code>IVfsFileHandle</code> se partage exactement sur ce point : <code>TrySeek</code>, <code>TryFlush</code>, <code>TrySetAttr</code> et <code>TryStat</code> répondent <code>false</code> pour un handle qui a été libéré, tandis que <code>Read</code> et <code>Write</code> lèvent une exception, parce qu'un nombre d'octets n'a aucune valeur qui signifie « le handle n'existe plus » plutôt que « aucun octet n'a été transféré ». Un <code>Try</code> qui atteint, pour le compte de l'appelant, une recherche dans un <code>Dictionary</code>, un indexeur ou un <code>Dequeue</code> prend à sa charge les vérifications d'argument et de vacuité qui, sinon, lèveraient une exception à travers lui : <code>VfsManager.TryMount</code> protège le nom du pilote comme le fait <code>RegisterFileSystem</code>, et <code>KeyboardManager.TryReadKey</code> prend la touche avec <code>TryDequeue</code>, un seul appel dont le booléen est la réponse, plutôt qu'avec un test de <code>Count</code> suivi d'un <code>Dequeue</code> qui lève une exception quand le test s'est trompé.</p>
+<p><strong>C'est la forme qui décide, pas le préfixe.</strong> La ligne du milieu du tableau sur l'exclusion de la compilation le dit déjà, et cela s'applique ici de la même façon. <code>IInodeOperations</code> écrit le côté pilote du VFS avec de simples verbes, <code>Lookup</code>, <code>Create</code>, <code>Mkdir</code>, <code>Rename</code>, à côté d'un <code>IVfsDirectoryHandle</code> qui écrit le côté consommateur sous la forme <code>TryLookup</code>, <code>TryCreateFile</code>, <code>TryCreateDirectory</code>, <code>TryRename</code>. Les deux sont des membres <code>Try</code> au regard de toutes les règles de cette page. Cette différence de nommage mérite d'être conservée, parce qu'elle indique de quel côté du VFS se trouve le lecteur, mais elle n'accorde aucune exemption.</p>
+<p><strong>Chaque <code>out</code> de type référence nullable d'un <code>Try</code> porte <code>[NotNullWhen(true)]</code>, et seulement là où chaque chemin qui renvoie true l'assigne.</strong> Sans cet attribut, chaque site d'appel paie un <code>!</code> ou un <code>x != null</code> redondant, et la redondance est invisible : le compilateur ne sait pas distinguer une clause qui protège d'un vrai trou d'une clause qui ne protège de rien. L'attribut est vérifié aux points de retour de la méthode qui le déclare, mais l'analyse de flux n'est pas interprocédurale, si bien qu'une méthode qui relaie le <code>out</code> d'une autre a besoin que celle-ci soit annotée elle aussi : <code>FatInodeOperations.Create</code> ne peut pas prouver sa propre postcondition tant que <code>FatSuperblock.AllocateDirectoryEntry</code> n'est pas annotée. Ne mettez jamais l'attribut sur un paramètre d'entrée. C'est légal et Roslyn le respecte à cet endroit, comme dans l'usage qu'en fait <code>string.IsNullOrEmpty</code>, si bien qu'il cesse de signifier « le out est renseigné » et se met à affirmer que l'argument de l'appelant n'était pas null. <code>IVfsFileSystemType.TryFormat</code> a été livré exactement ainsi, quatre lignes sous une phrase de documentation disant que <code>null</code> sélectionne les valeurs par défaut du pilote.</p>
+<p><strong>Une valeur sentinelle qui entre en collision avec une valeur réelle a besoin d'un second membre qui les distingue.</strong> <code>SchedulerDiagnostics.GetRunQueueCount</code> renvoie <code>0</code> pour une file vide comme pour un identifiant de CPU au-delà de la fin, et c'est honnête parce que <code>CpuCount</code> indique la plage ; ajouter un <code>TryGetRunQueueCount</code> à côté serait une troisième formulation d'une question à laquelle l'anneau répond déjà. <code>MacAddress.None</code> et un <code>MacAddress</code> null sont deux sentinelles pour une seule question, si bien que les membres qui peuvent renvoyer l'une ou l'autre précisent laquelle et renvoient à <code>NetworkAdapter.Ready</code>.</p>
+<hr>
+<p><a id="property-or-method"></a></p>
+<h2 id="propriété-ou-méthode">Propriété ou méthode</h2>
+<p>Une valeur que détient l'anneau est une propriété. Une opération est une méthode. La surface se partage déjà ainsi, et de loin : 268 propriétés, dont 223 en lecture seule, 34 avec un setter et 11 avec un <code>init</code>, contre trois méthodes <code>Set</code> et deux méthodes <code>Get</code> qui renvoient une valeur stockée. La règle mérite d'être écrite surtout pour les cas qui semblent devoir imposer la forme méthode et ne le font pas.</p>
+<p>Le travail ne l'impose pas. Le setter de <code>KernelConsole.Font</code> masque les interruptions, prend le verrou de la console, réalloue la grille de cellules, ramène le curseur à l'origine et redessine le canvas, et c'est une propriété. Atteindre le périphérique ne l'impose pas non plus : le setter de <code>Canvas3D.Camera</code> appelle un hook virtuel que le backend VMware redéfinit pour invalider l'état du périphérique qui en dérive. La validation non plus : <code>NetworkManager.Primary</code> lève <code>ArgumentException</code> pour un handle qui ne désigne aucun périphérique, <code>TimerManager.Frequency</code> lève <code>ArgumentOutOfRangeException</code> pour une fréquence que la source de ticks ne peut pas obtenir par division, et ce sont toutes deux des propriétés. Une garde de commutateur de fonctionnalité non plus, et c'est pourquoi <code>MouseManager.Sensitivity</code> lève une exception depuis son setter pour la même raison que <code>TimerManager.Wait</code>, et reste une propriété.</p>
+<p>Trois membres méritent la forme méthode côté écriture, chacun pour quelque chose qu'une affectation ne peut pas exprimer.</p>
+<table>
+<thead>
+<tr>
+<th>Membre</th>
+<th>Pourquoi ce n'est pas une propriété</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MouseManager.SetPosition(x, y)</code></td>
+<td>Deux coordonnées qui doivent être appliquées ensemble, puis bornées l'une par rapport à l'autre</td>
+</tr>
+<tr>
+<td><code>MouseManager.SetScreenSize(width, height)</code></td>
+<td>Même chose, et la méthode borne de nouveau le pointeur dans les nouvelles limites</td>
+</tr>
+<tr>
+<td><code>KeyboardManager.SetLayout(layout)</code></td>
+<td>Les deux moitiés ne peuvent pas partager un type. La lecture est honnêtement <code>KeyboardLayout?</code>, null tant qu'aucun clavier ne s'est enregistré et null pour de bon quand la fonctionnalité est exclue de la compilation, alors qu'une disposition null laisserait le chemin d'interruption sans rien pour décoder. Les deux formes refusent null à l'exécution ; seul un paramètre non nullable le diagnostique aussi à la compilation</td>
+</tr>
+</tbody>
+</table>
+<p>Une propriété en lecture seule n'oblige pas à lui adjoindre une jumelle <code>Set</code>, et c'est justement l'association des deux qu'il faut repérer. <code>TimerManager</code> détenait la seule de la surface : une propriété pour lire le tick et une méthode pour le modifier, ce qui ressemble à un oubli plutôt qu'à une décision, et qui cachait que l'écriture n'était jamais vérifiée. Le périphérique rejette une fréquence qu'il ne peut pas obtenir par division, mais son <code>SetFrequency</code> renvoyait <code>void</code>, si bien que <code>SetFrequency(5)</code> rendait la main normalement sans avoir rien fait. C'est désormais une seule propriété, et le périphérique indique s'il a accepté la valeur. <code>KeyboardManager</code> est la seule paire restante, et c'est une méthode des deux côtés plutôt qu'une moitié de chaque forme : puisque l'écriture ne peut pas devenir un setter, la lecture reste <code>GetLayout()</code> pour que les deux noms soient symétriques.</p>
+<p>Le côté lecture passe le même critère. Une propriété renvoie une valeur que le type détient déjà. Une méthode sert à une lecture qui la calcule (<code>TcpPacket.GetFlags</code> construit une chaîne, <code>TrueTypeFont.GetMaxAdvance</code> mesure chaque caractère imprimable), qui alloue à chaque appel (<code>IcmpPacket.GetIcmpData</code> et <code>UdpPacket.GetUdpData</code> copient chacune la charge utile hors de la trame), ou qui prend un paramètre sélectionnant la valeur voulue (<code>NetworkManager.GetAdapter(index)</code>, <code>SchedulerDiagnostics.GetRunQueueCount(cpuId)</code>, <code>TrueTypeFont.GetAscent(sizePx)</code>).</p>
+<p>Ces deux critères traversent les lectures qui renvoient un tableau, ce qui mérite d'être dit parce que « elle renvoie un tableau » n'est pas le critère. <code>Font.Data</code>, <code>Image.RawData</code>, <code>EthernetPacket.RawData</code>, <code>TcpOption.Data</code>, <code>DhcpOption.Data</code> et <code>DnsAnswer.Address</code> remettent un tableau que le type stocke, et ce sont des propriétés. <code>IcmpPacket.GetIcmpData</code> et <code>UdpPacket.GetUdpData</code> construisent une nouvelle copie à chaque appel, et ce sont des méthodes ; <code>UdpData</code> était une propriété qui faisait exactement cela jusqu'à son renommage, si bien que <code>packet.UdpData[i]</code> dans une boucle copiait toute la charge utile à chaque itération. <code>Canvas.GetBuffer</code> est la seule lecture de tableau qui soit une méthode pour une valeur que le type stocke, et elle l'est parce qu'affecter <code>Canvas.Mode</code> remplace ce tableau sous les pieds d'un appelant qui le détient déjà, si bien que la forme d'appel indique qu'il faut le redemander après un changement de mode. <code>.editorconfig</code> règle CA1819 sur <code>warning</code>, ce qui les ferait toutes basculer ; la présente règle est plus étroite, et les six propriétés restent.</p>
+<p>Un paramètre <code>out</code> n'est pas une troisième option. <code>GetGcStats</code>, sur la façade mémoire aujourd'hui nommée <code>MemoryDiagnostics</code>, renvoyait ainsi deux compteurs du ramasse-miettes, au milieu de cinq propriétés, et les séparer n'a rien coûté : ce sont deux champs que le ramasse-miettes écrit à des moments différents sans aucun verrou qui les couvre ensemble, si bien que la méthode à paramètres out ne donnait pas non plus à l'appelant une paire cohérente. <code>TrueTypeFont.GetLineMetrics(sizePx, out ascent, out descent, out lineGap)</code> garde son groupe parce que les trois valeurs proviennent d'une seule lecture mise à l'échelle des métriques verticales de la police, et qu'un appelant qui en voudrait deux paierait sinon ce coût deux fois. Tous les autres <code>out</code> de la surface appartiennent à un membre <code>Try</code>, qui relève déjà du tableau des échecs ci-dessus.</p>
+<p>Deux règles portent sur les ensembles de surcharges, et visent toutes deux à ce que l'anneau ne fasse pas de l'écriture évidente la mauvaise.</p>
+<p><strong>Un <code>bool</code> qui change ce que produit un membre est une seconde formulation, pas une option.</strong> <code>Log.WriteNumber(x, hex: true)</code> affichait exactement ce qu'affiche <code>Log.WriteHex(x)</code>, aucun site d'appel ne le passait nulle part, et le paramètre a disparu. <code>WriteHex</code> et <code>WriteHexWithPrefix</code> sont l'unique réponse de l'anneau pour l'hexadécimal, séparées selon la seule distinction qui soit une vraie question.</p>
+<p><strong>Une surcharge <code>params</code> prend un <code>ReadOnlySpan</code>, pas un tableau.</strong> <code>Log</code> promet des écritures sans allocation pour les chaînes et les nombres, or <code>Log.Write(&quot;text&quot;)</code> se liait à <code>Write(params object?[])</code>, qui alloue un tableau pour son unique argument ; la couche des plugs payait ce prix à chaque acquisition et à chaque libération de <code>Monitor</code>, c'est-à-dire à chaque <code>lock</code> du code de la BCL. <code>params ReadOnlySpan&lt;object?&gt;</code> donne le même appel sur chaque site et le compilateur construit la liste sur la pile, si bien que l'allocation disparaît quel que soit le nombre d'arguments, et non pour le seul nombre qu'aurait couvert une jumelle typée. Ce qui reste, c'est le boxing d'un type valeur, et le remède est la surcharge typée au site d'appel : <code>Log.WriteNumber(n)</code>, pas <code>Log.Write(n)</code>.</p>
+<hr>
+<p><a id="naming"></a></p>
+<h2 id="nommage">Nommage</h2>
+<p>Deux règles portent l'essentiel ; le reste de cette section consigne ce qu'elles ont tranché et ce qu'elles ont délibérément laissé en l'état.</p>
+<p><strong>Un type de l'anneau ou d'un point d'extension doit pouvoir être nommé sans alias using.</strong> <code>ImplicitUsings</code> est activé dans tout le dépôt, si bien que <code>System</code>, <code>System.Collections.Generic</code>, <code>System.IO</code>, <code>System.Linq</code>, <code>System.Net.Http</code>, <code>System.Threading</code> et <code>System.Threading.Tasks</code> sont visibles dans chaque fichier de noyau, que l'auteur les ait demandés ou non. Un type public de Cosmos dont le nom simple correspond à l'un des leurs n'est pas une question de préférence de nommage, c'est une erreur de compilation dans le fichier du lecteur. Le point d'extension de l'ordonnanceur en a livré deux : <code>Thread</code> et <code>ThreadState</code>. L'exemple de la section <a href="../user/scheduler-plugging.html#attaching-state">Attacher un état</a> tient en trois lignes de signatures de hooks, et, compilé contre l'anneau, il produisait trois <code>CS0104: 'Thread' is an ambiguous reference between 'Cosmos.Kernel.Core.Scheduler.Thread' and 'System.Threading.Thread'</code>. L'arborescence avait déjà voté à main levée : onze fichiers du projet portaient douze lignes d'alias, huit écrivant <code>using SchedThread =</code>, deux <code>using SchedulerThread =</code> et un <code>using SchedThreadState =</code>, et l'exemple de politique présent dans l'arborescence, que <a href="../user/scheduler-plugging.html#round-robin">le guide d'écriture d'un ordonnanceur</a> présente comme « exactement comme le ferait une politique utilisateur », avait besoin de <code>using Thread =</code> à sa troisième ligne pour compiler. Ils s'appellent désormais <code>SchedulerThread</code> et <code>SchedulerThreadState</code>, avec <code>ThreadFlags</code> qui les suit pour que la famille reste une seule famille, et les douze alias sont supprimés plutôt que réécrits.</p>
+<p>Le nom vers lequel se tourne le correctif évident était le mauvais. <code>KernelThread</code> n'entre en collision avec rien de ce que voit le compilateur, et c'est bien là le problème : l'anneau livre déjà <code>KernelThreadInfo</code> et <code>KernelThreadState</code> dans <code>Cosmos.Kernel.System.Diagnostics</code>, comme projection du type du point d'extension, si bien que <code>KernelThread.State</code> renverrait <code>Core.Scheduler.ThreadState</code> alors que <code>KernelThreadInfo.State</code> renvoie <code>Diagnostics.KernelThreadState</code>, et qu'un lecteur qui associerait les deux se tromperait sans que rien ne le lui signale. Une confusion silencieuse est pire que la confusion bruyante qu'elle remplace. <code>SchedulerThread</code> correspond à son espace de noms, correspond à ce que neuf fichiers avaient choisi spontanément, et laisse la paire <code>KernelThread*</code> sans ambiguïté du côté de l'anneau.</p>
+<p>Les trois autres noms simples en collision sur le point d'extension sont <code>Monitor</code>, <code>Mutex</code> et <code>SpinLock</code>. Tous trois sont internes, si bien qu'ils coûtent un alias dans le code du projet et rien sur l'anneau.</p>
+<p><strong>Un membre ne répète pas son type déclarant.</strong> <code>Image.Depth</code> était la quatrième façon d'écrire un même concept dans l'espace de noms graphique, à côté de <code>Mode.ColorDepth</code>, du paramètre <code>colorDepth</code> de <code>Canvas</code> et du paramètre de constructeur <code>color</code> de <code>Image</code> lui-même, qui désignait une profondeur dans un espace de noms où <code>color</code> désigne par ailleurs un <code>System.Drawing.Color</code>. Les deux s'appellent désormais <code>ColorDepth</code>. Trois membres conservent une répétition parce qu'elle mérite sa place :</p>
+<table>
+<thead>
+<tr>
+<th>Membre</th>
+<th>Pourquoi la répétition reste</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Canvas3D.DrawLine3D</code></td>
+<td><code>Canvas3D</code> hérite de <code>Canvas.DrawLine(Color, int, int, int, int)</code>, si bien que les deux peuvent être appelées sur un même objet. Le suffixe indique dans quel espace de coordonnées se situe l'appel ; le retirer laisserait deux opérations de tracé de ligne portant le même nom, distinguées seulement par les types de leurs arguments</td>
+</tr>
+<tr>
+<td><code>ColorDepth.ColorDepth4</code> .. <code>ColorDepth32</code></td>
+<td>La répétition n'apparaît qu'en position qualifiée, où elle est sans ambiguïté. <code>Bpp4</code>..<code>Bpp32</code> perdrait le mot « depth », abrégerait à l'encontre des recommandations .NET, et entrerait en collision, dans la tête du lecteur, avec le <code>bytesPerPixel</code> de six fichiers et le <code>BitsPerPixel</code> de trois autres. Gen2 les écrit de la même façon</td>
+</tr>
+<tr>
+<td><code>PCScreenFont.DefaultFont</code></td>
+<td><code>PCScreenFont.Default</code> est déjà pris par la classe imbriquée qui contient les constantes, et le mot est un contrat plutôt qu'une simple graphie : <code>Sdk.props</code> émet <code>Cosmos.Kernel.System.Graphics.Fonts.DefaultFont</code> comme option de configuration de l'hôte du runtime associée à la propriété <code>CosmosDefaultFont</code>, et la ressource incorporée est <code>DefaultFont.psf</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Une valeur, un mot.</strong> Le stockage dit <code>Sector</code> : <code>StartSector</code>, <code>SectorCount</code>, <code>newStartSector</code> dans <code>Gpt</code>, <code>Mbr</code>, <code>Partition</code> et <code>PartitionManager</code>. <code>Ebr</code> disait <code>Lba</code>, et la section 07 a accentué le problème en une seule signature portant les deux, <code>TryAddLogical(device, extendedStartLba, extendedSectorCount, systemId, sectorCount, out startSector)</code>, dont le propre <code>&lt;param&gt;</code> décrivait le out comme « Absolute LBA ». Les paramètres sont désormais <code>extendedStartSector</code> et <code>newStartSector</code>. FAT et GPT gardent <code>Lba</code> là où le terme nomme un champ que le format sur disque nomme ainsi (<code>FatStartLba</code>, <code>PrimaryHeaderLba</code>) : la règle est un mot par valeur, pas un mot par assembly.</p>
+<p>Les structures stat du VFS écrivent en toutes lettres les abréviations C, en vertu de la même règle. <code>VfsStatFs.MaxNameLength</code> reprend le mot que <code>IVfsSuperblock.MaxNameLength</code> utilisait déjà pour la même valeur, <code>VfsStat.InodeNumber</code> celui qu'utilise <code>Ext2Inode</code>, et les horodatages sont <code>AccessTime</code>, <code>ModificationTime</code> et <code>ChangeTime</code>, comme les nomme <code>System.Formats.Tar</code>. Deux valeurs qui se ressemblent gardent deux mots : <code>VfsStat.PreferredBlockSize</code> est <code>st_blksize</code>, la taille d'E/S préférée (un secteur sur FAT), tandis que <code>VfsStatFs.BlockSize</code> est <code>f_bsize</code>, l'unité dans laquelle comptent <code>Blocks</code> et <code>FreeBlocks</code> (un cluster sur FAT). <code>VfsStat</code> n'a pas de <code>BlockSize</code>, parce que <code>Blocks * BlockSize</code> s'y lirait comme un nombre d'octets, ce qu'il n'est pas sur ext2, dont le <code>st_blocks</code> compte des unités de 512 octets. La documentation de chaque champ conserve son nom POSIX.</p>
+<p><strong>Un membre ne prend pas le nom qu'utilise la BCL pour un autre type.</strong> <code>IPConfig.IPAddress</code> renvoyait un <code>Cosmos.Kernel.System.Network.IPv4.Address</code> dans un fichier où <code>System.Net.IPAddress</code> est visible et utilisé, et <a href="../user/network.html">Réseau</a> montrait les deux sens à quinze lignes d'écart. C'est désormais <code>IPConfig.Address</code>, qui s'accorde avec <code>EndPoint.Address</code> et forme un triplet avec <code>SubnetMask</code> et <code>DefaultGateway</code>.</p>
+<p><strong><code>Initialize</code>, pas <code>Init</code>.</strong> 63 membres répartis dans les quatre assemblies l'écrivaient en entier, et un seul membre de la surface suivie l'abrégeait. Le <code>InitKeys</code> de la classe de base des dispositions était un membre abstrait protégé avec sept redéfinitions, implémenté par tout noyau qui écrit sa propre disposition de clavier, si bien qu'il s'appelle désormais <code>KeyboardLayout.InitializeKeys</code> ; l'abréviation survit sur six fonctions utilitaires internes de <code>Cosmos.Kernel.Core</code> que l'anneau ne régit pas. Un membre abstrait ne peut pas bénéficier d'une transition par <code>[Obsolete]</code>, ce qui rend le renommage gratuit tant que <code>Shipped</code> est vide et impossible à corriger ensuite.</p>
+<p><strong>Un type suivi déclare un espace de noms que possède son propre assembly.</strong> <code>MacAddress</code> (alors <code>MACAddress</code>) déclarait autrefois <code>Cosmos.Kernel.HAL.Devices.Network</code> depuis <code>Cosmos.Kernel.HAL.Interfaces</code>, un espace de noms qui appartenait à <code>Cosmos.Kernel.HAL</code>. Rien n'échouait à la compilation, parce qu'un espace de noms n'est pas une frontière de référence, mais l'arborescence d'API publiée montrait une branche <code>Cosmos.Kernel.HAL</code> pour un type livré par un autre package. Les contrats de périphérique ont depuis été déplacés dans <code>Cosmos.Kernel.HAL</code> lui-même, et chacun y déclare l'espace de noms de son dossier, à côté des autres types de sa catégorie de périphériques : <code>IBlockDevice</code> dans <code>Cosmos.Kernel.HAL.Devices.Storage</code> et <code>MacAddress</code> dans <code>Cosmos.Kernel.HAL.Devices.Network</code>. <code>SoftwareTimer</code> se trouvait dans <code>Cosmos.Kernel.HAL.Platform</code>, à côté de la source de ticks qui le pilote, seul type public d'un espace de noms par ailleurs interne ; c'est désormais le handle propre à l'anneau dans <code>Cosmos.Kernel.System.Timers</code>, qui enveloppe une entrée de registre restée interne à côté de la source de ticks. Le <code>INetworkDevice</code> interne est passé dans <code>Cosmos.Kernel.System.Network</code>, à côté de la seule pile qui en pilote un. Un espace de noms fait partie de ce qu'une version fige, si bien qu'un tel déplacement est gratuit tant que <code>PublicAPI.Shipped.txt</code> est encore vide, et constitue ensuite un changement cassant.</p>
+<p><strong><code>Info</code> est un instantané, <code>Diagnostics</code> la vue à travers laquelle un noyau le lit.</strong> Dans <code>Cosmos.Kernel.System.Diagnostics</code>, un type <code>Info</code> est une struct en lecture seule copiée depuis un objet vivant en une seule lecture sans verrou : <code>DeviceNodeInfo</code>, <code>DeviceOfferInfo</code>, <code>PublishedDeviceInfo</code>, <code>KernelThreadInfo</code>, et <code>DriverInfo</code> pour une entrée du manifeste des pilotes. Un type <code>Diagnostics</code> est la vue de diagnostic statique d'un sous-système, qui distribue ces instantanés quand il en a : <code>DriverDiagnostics</code>, <code>SchedulerDiagnostics</code> et <code>MemoryDiagnostics</code>. Une vue n'est pas forcément en lecture seule : <code>SchedulerDiagnostics.RequestKill</code> et <code>MemoryDiagnostics.Collect</code> agissent. Les trois vues portaient elles aussi le suffixe <code>Info</code> jusqu'à ce qu'on lui donne un seul sens, et l'instantané de pilote n'avait besoin d'un mot supplémentaire dans son nom que parce que la vue détenait le nom simple. <code>Log</code> garde son nom : il écrit, ce n'est donc ni une vue ni un instantané.</p>
+<p>Deux points que cette section a examinés et laissés en l'état. <code>Manager</code> désigne le point d'entrée de l'anneau pour un sous-système, et non le fait que le type détienne l'état du sous-système : <code>AlarmManager</code> transmet les appels à une implémentation interne à <code>Cosmos.Kernel.Core</code>, et c'est exactement sur ce terrain qu'il est défendu plus haut, si bien que le fait que <code>PartitionManager</code> soit sans état à côté de <code>Gpt</code>, <code>Mbr</code> et <code>Ebr</code> montre que le suffixe fonctionne, et non qu'il échoue. Par ailleurs, deux types de l'anneau sont imbriqués dans le type qui les produit, <code>KeyEvent.KeyEventType</code> et <code>PartitionManager.PartitionLocation</code> ; la règle 1 décide si un type est public, pas de l'endroit où il est déclaré, et un nom qui n'a pas de sens indépendamment de son producteur est précisément ce qui justifie l'imbrication. <code>VfsMount</code> en était un troisième, imbriqué dans <code>VfsManager</code>. Il est désormais de premier niveau, à côté de <code>VfsManager</code> dans <code>Cosmos.Kernel.System.FileSystem</code>, parce que cet espace de noms contient tout le VFS et que tous les autres types que remet le gestionnaire (<code>IVfsFileHandle</code>, <code>IVfsDirectoryHandle</code>, <code>VfsStat</code>, <code>VfsStatFs</code>) y étaient déjà de premier niveau.</p>
+<hr>
+<p><a id="the-declared-surface"></a></p>
+<h2 id="la-surface-déclarée">La surface déclarée</h2>
+<p>Les projets y adhèrent avec <code>&lt;CosmosTrackPublicApi&gt;true&lt;/CosmosTrackPublicApi&gt;</code> dans leur <code>.csproj</code> (câblé dans <code>Directory.Build.props</code>). Cela couvre <code>Cosmos.Kernel.System</code>, <code>Cosmos.Kernel.Core</code>, <code>Cosmos.Kernel.HAL</code> et <code>Cosmos.Kernel.Drivers</code>.</p>
+<p>Le site d'API publie ces quatre mêmes projets et aucun autre : <code>docs/docfx.json</code> les liste, et un assembly qui n'est pas suivi n'est pas publié. Les deux listes ont déjà divergé une fois, ce qui a mis sur le site les 28 types publics de <code>Cosmos.Kernel.Boot.Limine</code> et l'unique type public de <code>Cosmos.Kernel.Debug</code>, sous une politique qui les déclare tous deux internes, ainsi que deux entrées qui ne produisaient rien uniquement parce qu'elles ne déclarent, par hasard, aucun type public.</p>
+<p>La règle ne va que dans un sens. Un assembly non suivi dans lequel subsistent des types publics n'est pas une raison de le publier ; c'est le reliquat que décrit la dernière ligne du tableau de la politique.</p>
+<p>Ce reliquat ne se limite pas à ce qu'entraîne <code>Cosmos.Kernel</code>. <code>Cosmos.Sdk</code> donne à chaque noyau une <code>PackageReference</code> directe vers <code>Cosmos.Kernel.Core.X64</code> ou <code>Cosmos.Kernel.Core.ARM64</code> selon l'architecture, si bien que la liste de complétion d'un noyau contient 13 types publics sur x64 (<code>ApicManager</code>, <code>Idt</code>, <code>IoApic</code>, <code>LocalApic</code>, <code>DeviceMapper</code> et les enregistrements MADT d'ACPI) et 7 sur arm64 (la famille <code>GIC</code> plus <code>AcpiGic</code> et <code>DeviceMapper</code>), qui atteignent l'utilisateur sans passer du tout par l'agrégateur. <code>Cosmos.Kernel.HAL.X64</code> et <code>Cosmos.Kernel.HAL.ARM64</code> n'en ont aucun, si bien que la couche d'architecture est déjà à moitié propre.</p>
+<p>Un projet qui a adhéré référence <a href="https://github.com/dotnet/roslyn-analyzers/blob/main/src/PublicApiAnalyzers/PublicApiAnalyzers.Help.md">Microsoft.CodeAnalysis.PublicApiAnalyzers</a>, qui exige que chaque symbole <code>public</code> figure dans l'un des deux fichiers situés à côté du <code>.csproj</code> :</p>
+<table>
+<thead>
+<tr>
+<th>Fichier</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PublicAPI.Shipped.txt</code></td>
+<td>La surface de la dernière version. Figée : elle ne change que lorsqu'une version est publiée.</td>
+</tr>
+<tr>
+<td><code>PublicAPI.Unshipped.txt</code></td>
+<td>La surface ajoutée, modifiée ou supprimée depuis. Vidée dans <code>Shipped</code> au moment de la publication.</td>
+</tr>
+</tbody>
+</table>
+<p>Deux diagnostics imposent ce contrat, tous deux signalés comme des erreurs de build :</p>
+<table>
+<thead>
+<tr>
+<th>Règle</th>
+<th>Signification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RS0016</code></td>
+<td>Un symbole public existe dans le code mais n'est déclaré dans aucun des deux fichiers.</td>
+</tr>
+<tr>
+<td><code>RS0017</code></td>
+<td>Un symbole déclaré n'existe plus dans le code.</td>
+</tr>
+</tbody>
+</table>
+<p>En conséquence, toute modification de la surface publique, délibérée ou accidentelle, doit arriver dans le même commit qu'un diff de <code>PublicAPI.Unshipped.txt</code>, là où la revue peut la voir.</p>
+<p>Trois catégories restent en dehors de ces fichiers, les deux premières grâce à des réglages de <code>.editorconfig</code> qui passent <code>RS0016</code>/<code>RS0017</code> à <code>none</code> sous leurs chemins :</p>
+<ul>
+<li>Les répertoires de code tiers embarqué sous <code>Cosmos.Kernel.System/ThirdParty/</code> (<code>SharpZipLib</code>, le décodeur PNG BigGustave, le rastériseur TrueType LunarFonts). C'est cette exemption qui a permis de faire ce nettoyage sans remuer la surface déclarée ; les trois arborescences sont désormais entièrement <code>internal</code>, si bien qu'elle n'exempte actuellement rien et demeure comme règle permanente pour la prochaine arborescence tierce embarquée.</li>
+<li>Le fichier généré <code>KernelVersion.g.cs</code> qui porte <code>Kernel.VersionString</code> : le format de l'API déclarée enregistre les valeurs des constantes, et celle-ci change à chaque estampille de version.</li>
+<li>Les symboles <code>internal</code>, y compris tout ce qui est exposé aux noyaux de test via <code>InternalsVisibleTo</code>.</li>
+</ul>
+<p><a id="changing-the-public-api"></a></p>
+<h3 id="modifier-lapi-publique">Modifier l'API publique</h3>
+<ol>
+<li>Faites la modification du code. Le build échoue alors avec <code>RS0016</code> ou <code>RS0017</code>.</li>
+<li>Lancez <code>make api</code> depuis la racine du dépôt. La commande recompile les projets suivis et applique les correctifs de code de l'analyseur à <code>PublicAPI.Unshipped.txt</code>. Le correctif rapide de l'IDE (« Add to public API ») sur chaque diagnostic est équivalent.</li>
+<li>Commitez le diff du fichier txt avec le code.</li>
+</ol>
+<p>Supprimer ou modifier un symbole déjà livré est enregistré comme une ligne <code>*REMOVED*</code> dans <code>Unshipped</code>, ce qui correspond exactement à ce que c'est : un changement cassant, visible comme tel dans la PR. Avant la première version, tant que <code>Shipped</code> est vide, une suppression retire simplement la ligne.</p>
+<p>Le correctif de code insère une nouvelle ligne à sa place dans l'ordre de tri et ne touche jamais aux lignes déjà présentes, si bien que l'ordre du fichier est celui qu'a laissé la dernière main qui l'a modifié. Son comparateur est <code>OrdinalIgnoreCase</code> avec <code>Ordinal</code> pour départager les égalités, ce que ne fait aucun tri du shell : un <code>LC_ALL=C sort</code> a un jour été exécuté sur <code>Cosmos.Kernel.System/PublicAPI.Unshipped.txt</code> et a laissé 19 lignes à des endroits où le correctif de code ne les aurait jamais placées, dont les six entrées <code>abstract</code> et les quatre entrées <code>const</code> qui doivent figurer en tête. Aucun analyseur ne lit la position des lignes, si bien que rien ne l'a signalé et que rien ne le signalera. Triez avec le comparateur même de l'analyseur, ou laissez le fichier au correctif de code :</p>
+<pre><code>python3 -c &quot;p='src/Cosmos.Kernel.System/PublicAPI.Unshipped.txt'; L=open(p).read().split(chr(10)); L=[l for l in L if l]; open(p,'w').write(chr(10).join([L[0]]+sorted(L[1:],key=lambda s:(s.upper(),s)))+chr(10))&quot;
+</code></pre>
+<hr>
+<p><a id="package-validation"></a></p>
+<h2 id="validation-des-packages">Validation des packages</h2>
+<p>Le même indicateur <code>CosmosTrackPublicApi</code> active la <a href="https://learn.microsoft.com/en-us/dotnet/fundamentals/package-validation/overview">validation des packages NuGet</a> sur le projet, et <code>Directory.Build.props</code> contient le réglage de la version de référence :</p>
+<pre><code class="lang-xml">&lt;CosmosApiBaselineVersion&gt;&lt;/CosmosApiBaselineVersion&gt;
+</code></pre>
+<p>La propriété reste vide jusqu'à ce que la première version de Gen3 soit publiée sur NuGet.org. Une fois qu'elle est fixée à cette version, deux garde-fous s'activent d'eux-mêmes :</p>
+<ul>
+<li><code>PackageValidationBaselineVersion</code> fait que chaque pack compare le package à la version de référence et échoue en cas de changement cassant au niveau binaire.</li>
+<li>L'étape <code>API compatibility guard</code> de <code>release.yml</code> télécharge le package de référence depuis NuGet.org et exécute <a href="https://learn.microsoft.com/en-us/dotnet/fundamentals/apicompat/global-tool">Microsoft.DotNet.ApiCompat.Tool</a> contre celui qui vient d'être construit, comme ultime barrière avant la publication.</li>
+</ul>
+<p>Un changement cassant intentionnel est enregistré dans un fichier <code>CompatibilitySuppressions.xml</code> à côté du projet (<code>dotnet pack /p:ApiCompatGenerateSuppressionFile=true</code> le génère), si bien qu'il devient lui aussi un diff que la revue peut examiner.</p>
+<hr>
+<p><a id="versioned-docs"></a></p>
+<h2 id="documentation-versionnée">Documentation versionnée</h2>
+<p>Le site de documentation à la racine de <code>gh-pages</code> suit la branche main : c'est la documentation de développement, reconstruite par <code>build-docs.yml</code> à chaque push touchant la documentation. Les versions en reçoivent des copies figées à côté, publiées par le job <code>publish-docs</code> de <code>release.yml</code> quand un tag <code>v*</code> est poussé :</p>
+<table>
+<thead>
+<tr>
+<th>Chemin</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/</code></td>
+<td>Documentation de développement, suit main.</td>
+</tr>
+<tr>
+<td><code>/vX.Y.Z/</code></td>
+<td>La documentation telle que construite depuis le tag <code>vX.Y.Z</code>, jamais reconstruite.</td>
+</tr>
+<tr>
+<td><code>/latest/</code></td>
+<td>Alias de la version la plus récente, URL stable pour les liens externes.</td>
+</tr>
+<tr>
+<td><code>/versions.json</code></td>
+<td>La liste des versions, de la plus récente à la plus ancienne, plus le marqueur <code>latest</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Le menu déroulant des versions dans la barre de navigation du site provient de <code>docs/templates/custom/public/main.js</code>. Il lit <code>versions.json</code>, liste <code>dev</code> plus chaque version, et maintient le lecteur sur la même page d'une version à l'autre quand la page existe dans celle-ci. Il n'apparaît qu'une fois que <code>versions.json</code> existe, c'est-à-dire après la première version taguée ; d'ici là, le site se comporte exactement comme avant.</p>
+<p>Les déploiements de développement utilisent <code>keep_files: true</code> pour ne jamais effacer les dossiers <code>v*/</code>, au prix de pages de développement supprimées qui subsistent sur la branche jusqu'à ce qu'elles soient écrasées.</p>
+<hr>
+<p><a id="release-checklist"></a></p>
+<h2 id="liste-de-contrôle-de-publication">Liste de contrôle de publication</h2>
+<p>Ce que la publication d'une version change dans ce système :</p>
+<ol>
+<li>Posez le tag <code>vX.Y.Z</code>. La CI construit les packages, exécute le garde-fou de compatibilité d'API, publie sur NuGet.org et fige la documentation <code>/vX.Y.Z/</code>.</li>
+<li>Déplacez le contenu de <code>PublicAPI.Unshipped.txt</code> dans <code>PublicAPI.Shipped.txt</code> (en retirant les paires <code>*REMOVED*</code>), en laissant <code>Unshipped</code> vide.</li>
+<li>Réglez <code>CosmosApiBaselineVersion</code> dans <code>Directory.Build.props</code> sur <code>X.Y.Z</code> pour que le cycle suivant soit validé par rapport à cette version.</li>
+</ol>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/public-api.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>调度器术语表 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="调度器术语表 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/dev/scheduler-glossary.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="scheduler-glossary"></a></p>
+<h1 id="调度器术语表">调度器术语表</h1>
+<p>这些说明为从未编写过调度器的读者提供调度概念方面的背景知识，贡献者文档中关于<a href="scheduler.html">调度器</a>的文章以及<a href="../user/scheduler-plugging.html">编写调度器</a>指南都以这些知识为基础。每一页先单独解释概念本身，最后说明 Cosmos 如何应用它。下表把它们分为三个部分：线程如何获得和失去 CPU，与时钟节拍并发运行的代码必须遵守什么，以及评判一个策略所依据的特性。钩子代码的规则还以驱动程序术语表中的一篇说明为基础：<a href="../user/driver-concepts/interrupt-context.html">中断上下文</a>。</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>摘要</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="sched-concepts/policy-and-mechanism.html">策略与机制</a></td>
+<td>决定哪个线程运行，并与切换线程的代码分开</td>
+</tr>
+<tr>
+<td><a href="sched-concepts/run-queue.html">线程状态与运行队列</a></td>
+<td>运行、就绪和阻塞的线程，就绪线程在其中等待的结构，以及空闲线程</td>
+</tr>
+<tr>
+<td><a href="sched-concepts/preemption.html">抢占</a></td>
+<td>内核在中断到来时收回 CPU；线程从不需要主动让出</td>
+</tr>
+<tr>
+<td><a href="sched-concepts/scheduler-tick.html">时钟节拍与时间片</a></td>
+<td>让调度器获得控制权的定时器中断、时间片，以及基于采样的记账</td>
+</tr>
+<tr>
+<td><a href="sched-concepts/context-switch.html">上下文切换</a></td>
+<td>保存一个线程的寄存器并恢复另一个线程的寄存器，以及切换实际发生的时机</td>
+</tr>
+<tr>
+<td><a href="sched-concepts/instruction-boundary.html">指令边界上的中断</a></td>
+<td>中断落在一条指令之后、下一条指令之前；任何更长的序列相对于它都不是原子的</td>
+</tr>
+<tr>
+<td><a href="sched-concepts/spinlocks-and-masking.html">自旋锁与中断屏蔽</a></td>
+<td>为什么锁挡不住同一 CPU 上的中断处理程序，以及什么能挡住它</td>
+</tr>
+<tr>
+<td><a href="sched-concepts/virtual-time-fair-share.html">基于虚拟时间的公平份额</a></td>
+<td>按权重分配的 CPU 份额，通过始终运行虚拟时钟最落后的线程来保证</td>
+</tr>
+<tr>
+<td><a href="sched-concepts/starvation.html">饥饿与老化</a></td>
+<td>从不运行的就绪线程，以及防止这种情况的手段</td>
+</tr>
+<tr>
+<td><a href="sched-concepts/priority-inversion.html">优先级反转与优先级继承</a></td>
+<td>高优先级线程卡在一个锁持有者之后，而该持有者又被中优先级线程抢占</td>
+</tr>
+<tr>
+<td><a href="sched-concepts/real-time-scheduling.html">实时调度</a></td>
+<td>截止时间、速率单调（Rate Monotonic）与 EDF、利用率界限和准入控制</td>
+</tr>
+<tr>
+<td><a href="sched-concepts/cpu-affinity.html">CPU 亲和性与负载均衡</a></td>
+<td>每 CPU 运行队列、放置、迁移和被固定的线程</td>
+</tr>
+</tbody>
+</table>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/dev/scheduler-glossary.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

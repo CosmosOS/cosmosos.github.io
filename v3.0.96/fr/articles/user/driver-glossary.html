@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>Glossaire des pilotes | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Glossaire des pilotes | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/user/driver-glossary.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="driver-glossary"></a></p>
+<h1 id="glossaire-des-pilotes">Glossaire des pilotes</h1>
+<p>Ces notes donnent le contexte sur les concepts de matériel, de système d'exploitation et de build sur lesquels s'appuient <a href="drivers.html">Écrire un pilote</a> et la page contributeur consacrée au <a href="../dev/build/driver-manifest.html">Manifeste des pilotes</a>, pour un lecteur qui n'a jamais écrit de pilote. Chaque page explique d'abord le concept en lui-même, puis se termine par la façon dont Cosmos l'applique. Le tableau les regroupe en quatre parties : comment un pilote atteint un périphérique, comment le périphérique et le pilote se signalent l'un à l'autre, les bus, puis comment un noyau en vient à embarquer un pilote et en choisit un pour chaque périphérique. Le contexte d'interruption s'appuie aussi sur deux notes d'ordonnancement de la documentation contributeur, la <a href="../dev/sched-concepts/preemption.html">préemption</a> et la <a href="../dev/sched-concepts/instruction-boundary.html">frontière d'instruction</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Résumé</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="driver-concepts/registers.html">MMIO et E/S de port</a></td>
+<td>Atteindre les registres d'un périphérique par la mémoire ou par des ports, et la façon dont les mappages les mettent en cache</td>
+</tr>
+<tr>
+<td><a href="driver-concepts/physical-addresses.html">Adresses physiques</a></td>
+<td>Adresses virtuelles face aux adresses physiques, contiguïté physique, et l'alignement qu'exigent les périphériques</td>
+</tr>
+<tr>
+<td><a href="driver-concepts/dma.html">DMA</a></td>
+<td>Des périphériques qui lisent et écrivent eux-mêmes la mémoire : bus mastering, cohérence, limites à 32 bits</td>
+</tr>
+<tr>
+<td><a href="driver-concepts/barriers.html">Barrières mémoire</a></td>
+<td>Ordonner les lectures et les écritures mémoire du CPU pour qu'un périphérique les voie dans l'ordre</td>
+</tr>
+<tr>
+<td><a href="driver-concepts/descriptor-rings.html">Anneaux de descripteurs</a></td>
+<td>Des tableaux circulaires de descripteurs partagés avec un périphérique : propriété, tête et queue, doorbells</td>
+</tr>
+<tr>
+<td><a href="driver-concepts/interrupt-delivery.html">Acheminement des interruptions</a></td>
+<td>Les IRQ, l'acquittement du périphérique, le déclenchement sur front et sur niveau, INTx face à MSI-X</td>
+</tr>
+<tr>
+<td><a href="driver-concepts/interrupt-context.html">Contexte d'interruption</a></td>
+<td>Pourquoi un gestionnaire d'interruption ne peut pas attendre, pourquoi celui d'un pilote ne doit pas allouer, et comment son travail est découpé</td>
+</tr>
+<tr>
+<td><a href="driver-concepts/buses.html">Bus et énumération</a></td>
+<td>Les bus énumérables, les périphériques de plateforme décrits par le firmware, et l'arbre des nœuds</td>
+</tr>
+<tr>
+<td><a href="driver-concepts/firmware-handoff.html">Passage de relais du firmware</a></td>
+<td>Ce que l'UEFI configure avant que le noyau ne s'exécute, et ce que Cosmos en conserve</td>
+</tr>
+<tr>
+<td><a href="driver-concepts/pci.html">PCI</a></td>
+<td>La fonction PCI, son espace de configuration, les codes de classe, les capacités et les BAR</td>
+</tr>
+<tr>
+<td><a href="driver-concepts/hot-plug.html">Branchement à chaud</a></td>
+<td>Des périphériques qui arrivent et repartent pendant l'exécution, et le retrait inopiné</td>
+</tr>
+<tr>
+<td><a href="driver-concepts/virtio.html">Virtio</a></td>
+<td>Les périphériques paravirtuels : les transports, l'échange d'état, la négociation des fonctionnalités et les virtqueues</td>
+</tr>
+<tr>
+<td><a href="driver-concepts/usb.html">USB</a></td>
+<td>Interfaces, endpoints, types de transfert, endpoints interrupt scrutés, énumération, les trois interfaces de contrôleur hôte avec leurs compagnons et leurs hubs, le protocole boot HID</td>
+</tr>
+<tr>
+<td><a href="driver-concepts/ps2.html">PS/2 et le contrôleur 8042</a></td>
+<td>Le contrôleur 8042, ses deux ports, les commandes, les acquittements et le balayage</td>
+</tr>
+<tr>
+<td><a href="driver-concepts/source-generators.html">Générateurs de source</a></td>
+<td>Des plug-ins du compilateur qui ajoutent du code au moment du build, à la place de la réflexion, et la façon dont les propriétés de build leur parviennent</td>
+</tr>
+<tr>
+<td><a href="driver-concepts/trimming.html">Trimming et commutateurs de fonctionnalité</a></td>
+<td>Laisser le code inaccessible hors de l'image, et les commutateurs fixés au build qui rendent une branche inaccessible</td>
+</tr>
+<tr>
+<td><a href="driver-concepts/driver-matching.html">Correspondance des pilotes</a></td>
+<td>Tables de correspondances, spécificité et rang, et une dernière clé déterministe quand plusieurs pilotes conviennent à un même périphérique</td>
+</tr>
+</tbody>
+</table>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/user/driver-glossary.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

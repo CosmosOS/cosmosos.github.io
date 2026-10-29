@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>D&#233;marrage du noyau | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="D&#233;marrage du noyau | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/user/startup.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="kernel-startup"></a></p>
+<h1 id="démarrage-du-noyau">Démarrage du noyau</h1>
+<p>Dans cet article, nous verrons ce qui se passe entre la mise sous tension et le premier appel à la méthode <code>Run()</code> de votre noyau : la chaîne de démarrage, les phases d'initialisation et le cycle de vie <code>BeforeRun</code>/<code>Run</code>/<code>AfterRun</code> sur lequel repose votre noyau.</p>
+<p>Les principales différences si vous venez de Gen2 :</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Gen2</th>
+<th>Gen3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Compilateur</td>
+<td>IL2CPU</td>
+<td>.NET NativeAOT (ILC) + le patcher IL de Cosmos</td>
+</tr>
+<tr>
+<td>Firmware</td>
+<td>BIOS</td>
+<td>UEFI, sur x64 et ARM64</td>
+</tr>
+<tr>
+<td>Chargeur d'amorçage</td>
+<td>Limine</td>
+<td>Limine</td>
+</tr>
+<tr>
+<td>Mécanique du point d'entrée</td>
+<td>IL2CPU émet l'appel à <code>Kernel.Start()</code></td>
+<td>Un générateur de source émet <code>CosmosEntryPoint.Main()</code></td>
+</tr>
+<tr>
+<td>Cycle de vie</td>
+<td><code>BeforeRun</code> / <code>Run</code> / <code>AfterRun</code></td>
+<td><code>BeforeRun</code> / <code>Run</code> / <code>AfterRun</code> (inchangé)</td>
+</tr>
+</tbody>
+</table>
+<p><a id="the-boot-chain"></a></p>
+<h2 id="la-chaîne-de-démarrage">La chaîne de démarrage</h2>
+<pre><code>UEFI firmware
+    │
+Limine            loads kernel.elf, maps it in the higher half, sets up the framebuffer
+    │
+kmain()           native C bootstrap (Cosmos.Kernel/Bootstrap/kmain.c)
+    ├─ Phase 1    CPU: enable SIMD, initialize the serial port
+    ├─ Phase 2    Platform: RSDP + HHDM from Limine, early ACPI parse (MADT, MCFG)
+    ├─ Phase 3    Managed runtime: heap, GC, type system, library initializers
+    └─ Phase 4    User kernel: Main(argc, argv) → Kernel.Start()
+</code></pre>
+<p>Le chargeur d'amorçage <a href="https://limine-bootloader.org/">Limine</a> charge l'ELF du noyau produit par le pipeline de build, puis saute vers <code>kmain()</code>, un petit code d'amorçage en C compilé dans chaque noyau. À partir de là :</p>
+<ul>
+<li><strong>Phase 1 : CPU.</strong> SIMD est activé en premier (le code généré par NativeAOT utilise les registres XMM dès la toute première instruction) et le port série est initialisé, si bien que tout ce qui suit cette ligne est journalisé. Sur ARM64, la vérification d'alignement est également désactivée à ce stade.</li>
+<li><strong>Phase 2 : plateforme.</strong> Le code d'amorçage demande à Limine le RSDP ACPI et le décalage du mappage direct en moitié haute, puis effectue une analyse ACPI précoce : la MADT (où se trouvent les contrôleurs d'interruptions et les CPU) et la MCFG (où se trouve l'espace de configuration PCIe).</li>
+<li><strong>Phase 3 : runtime managé.</strong> Le chemin de démarrage de NativeAOT s'exécute. C'est là que le monde C# prend vie, un package à la fois (voir la section suivante).</li>
+<li><strong>Phase 4 : noyau utilisateur.</strong> Le code d'amorçage construit <code>argv</code> à partir de la ligne de commande du noyau et appelle le <code>Main</code> managé, qui aboutit au <code>Start()</code> de votre noyau.</li>
+</ul>
+<p><a id="phase-3-how-the-managed-kernel-comes-up"></a></p>
+<h2 id="phase-3--comment-le-noyau-managé-démarre">Phase 3 : comment le noyau managé démarre</h2>
+<p>Chaque package Cosmos fournit un <em>initialiseur de bibliothèque</em> que le runtime exécute avant la moindre ligne de votre code. Le SDK les ordonne en trois temps : le tas d'abord, puis les initialiseurs propres au runtime, puis les bibliothèques du noyau, chacune après les packages qu'elle référence.</p>
+<ol>
+<li><strong>Cosmos.Kernel.Core</strong> : découpe le tas dans la carte mémoire de Limine, initialise le ramasse-miettes, puis enregistre le système de types (champs statiques, constructeurs statiques immédiats, initialiseurs de module). Rien n'alloue avant cette étape.</li>
+<li><strong>Les initialiseurs propres au runtime</strong> (<code>System.Private.CoreLib</code> et ses compagnons) : l'<code>OutOfMemoryException</code> préallouée, l'exécuteur de constructeurs de classe, le chargeur de types et les callbacks de réflexion, les métadonnées de trace de pile. L'exécuteur de constructeurs de classe est créé ici : un champ statique dont le type a un constructeur statique paresseux peut donc être lu à partir de cette étape, et pas avant.</li>
+<li><strong>Cosmos.Kernel.HAL</strong> : HAL de la plateforme ; le device tree transmis par le chargeur d'amorçage, s'il y en a un, est enregistré (<code>[Firmware] Device tree at 0x..., N bytes</code>, ou <code>[Firmware] No device tree</code> sur q35 et lors d'un démarrage ACPI de la machine virt) ; le contrôleur d'interruptions, le matériel de la plateforme (APIC/GIC, minuteurs), puis les nœuds de plateforme racines de la machine sont publiés dans le kit de pilotes juste après <code>InitializeHardware</code> (sur x64, le contrôleur clavier 8042, <code>platform:i8042@60</code>, puis l'hôte PCI, <code>platform:pci@cf8</code> ; sur ARM64, l'hôte ECAM issu de la MCFG ou du device tree et un nœud <code>platform:virtio_mmio@...</code> par emplacement occupé, issu du device tree ou de la fenêtre de la machine virt, selon ce que disent les commutateurs), où ils attendent l'étape des pilotes. Les contrôleurs 8042, AHCI, NVMe et les contrôleurs hôtes USB (xHCI, EHCI, OHCI) ne sont pas initialisés ici : leurs pilotes vivent dans le kit de pilotes et les lient pendant l'étape des pilotes. Enfin, dès que les graphismes sont activés, avec ou sans interruptions, le framebuffer transmis par Limine est enregistré (<code>[KERNEL]   - Recording the firmware framebuffer...</code>) pour que l'étape des pilotes le publie comme écran du firmware.</li>
+<li><strong>Cosmos.Kernel</strong> : les gestionnaires d'exceptions du CPU et l'ordonnanceur (un thread inactif par CPU, préemption sur un quantum de 10 ms).</li>
+<li><strong>Cosmos.Kernel.System</strong> : les gestionnaires de services <code>TimerManager</code>, <code>KeyboardManager</code>, <code>MouseManager</code>, <code>NetworkManager</code>, <code>DisplayManager</code>, <code>StorageManager</code>. <code>KeyboardManager</code>, <code>MouseManager</code>, <code>NetworkManager</code>, <code>DisplayManager</code> et <code>StorageManager</code> installent chacun ici leur consommateur du kit de pilotes, avant l'étape des pilotes, pour qu'un clavier, un pointeur, une interface, un écran ou un disque publié par un pilote du kit parvienne à son gestionnaire, tout comme l'écran du firmware que l'étape des pilotes publie en premier ; aucun périphérique réseau de plateforme n'est enregistré ici, et la première interface publiée par un pilote du kit devient l'interface principale. Aucun clavier ni aucune souris de plateforme n'est enregistré ici non plus : les périphériques PS/2 arrivent par les consommateurs pendant l'étape des pilotes, comme tout autre périphérique d'entrée. Les disques du gestionnaire de stockage arrivent tous par son consommateur pendant l'étape des pilotes.</li>
+</ol>
+<p>Chacune des étapes 3 à 5 est conditionnée par un commutateur de fonctionnalité (<code>CosmosEnableInterrupts</code>, <code>CosmosEnablePCI</code>, <code>CosmosEnableTimer</code>, <code>CosmosEnableKeyboard</code>, <code>CosmosEnableMouse</code>, <code>CosmosEnableNetwork</code>, <code>CosmosEnableStorage</code>, <code>CosmosEnableGraphics</code>, <code>CosmosEnableScheduler</code>, tous à <code>true</code> par défaut, et <code>CosmosEnableUsb</code>, activé par défaut dès que le commutateur du clavier, de la souris ou du stockage l'est). Mettez-en un à <code>false</code> dans votre <code>.csproj</code> : le sous-système correspondant est alors ignoré ici et exclu de la compilation du noyau.</p>
+<p><a id="the-generated-entry-point"></a></p>
+<h2 id="le-point-dentrée-généré">Le point d'entrée généré</h2>
+<p>Vous n'écrivez jamais de <code>Main</code> pour un noyau Cosmos. Le SDK fournit un générateur de source qui l'émet à partir de la propriété de projet <code>CosmosKernelClass</code> :</p>
+<pre><code class="lang-csharp">// &lt;auto-generated/&gt; CosmosEntryPoint.g.cs
+namespace Cosmos.Kernel.System.Internal;
+
+public static class CosmosEntryPoint
+{
+    public static void Main()
+    {
+        global::Cosmos.Kernel.System.Internal.DriverManifest.Register();
+        global::Cosmos.Kernel.System.Internal.KernelEntry.Start(new global::MyOS.Kernel());
+    }
+}
+</code></pre>
+<p><code>DriverManifest</code> est le second fichier généré : la liste des classes de pilotes que le noyau embarque, enregistrée avant le démarrage du noyau pour que l'étape des pilotes de <code>Start()</code> puisse leur proposer des périphériques. Un noyau sans pilote qui lui soit propre embarque tout de même les vingt-cinq que Cosmos livre dans <code>Cosmos.Kernel.Drivers</code> : le pilote de l'hôte PCI, le pilote de port racine PCI Express, le pilote Intel E1000E, les pilotes de transport virtio PCI et MMIO, les pilotes virtio-net, virtio-input et virtio-blk, les quatre pilotes d'affichage, virtio-gpu, VMware SVGA II, AMD DCN 3.1.5 et la partie graphique intégrée d'Intel, les deux pilotes de stockage, AHCI et NVMe, le pilote HD Audio, les sept pilotes USB, les contrôleurs hôtes xHCI, EHCI et OHCI avec les pilotes de classe hub, clavier HID boot, souris HID boot et stockage de masse, et les trois pilotes PS/2, le contrôleur 8042 avec les pilotes de classe clavier et souris, dont vingt-deux dépendent d'un commutateur de fonctionnalité (les sept pilotes USB de <code>CosmosEnableUsb</code>, le clavier et la souris PS/2 de <code>CosmosEnableKeyboard</code> et <code>CosmosEnableMouse</code>, le pilote HD Audio de <code>CosmosEnableAudio</code>). La page <a href="../dev/build/driver-manifest.html">Manifeste des pilotes</a> décrit comment la liste est construite et comment un projet exclut un pilote ou choisit d'en inclure un.</p>
+<p><code>CosmosKernelClass</code> vaut <code>&lt;RootNamespace&gt;.Kernel</code> par défaut : une classe nommée <code>Kernel</code> dans l'espace de noms racine de votre projet est donc prise en compte automatiquement. Pour utiliser un autre type, définissez la propriété explicitement :</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;CosmosKernelClass&gt;MyOS.Boot.MyKernel&lt;/CosmosKernelClass&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p><code>KernelEntry.Start</code> enregistre ensuite cette instance comme <code>Kernel.Current</code> et appelle son <code>Start()</code>. <code>KernelEntry</code> est une mécanique de démarrage réservée à ce code généré, publique parce que ce code est compilé dans l'assembly de votre noyau ; votre propre code ne l'appelle jamais.</p>
+<h2 id="syskernelstart">Sys.Kernel.Start()</h2>
+<p><code>Cosmos.Kernel.System.Kernel</code> est la classe de base abstraite de tout noyau utilisateur. Son <code>Start()</code> pilote l'ensemble du cycle de vie :</p>
+<ol>
+<li>Active les interruptions matérielles (tout ce qui précède s'est exécuté avec les interruptions désactivées).</li>
+<li>Démarre le thread des finaliseurs lorsque <code>CosmosEnableFinalizerThread</code> est activé, ce qui est le cas par défaut dès que l'ordonnanceur l'est : à partir de là, les finaliseurs s'exécutent sur leur propre thread plutôt que sur le thread qui a effectué la collecte ou l'allocation (<a href="../dev/garbage-collector.html#finalization">Finalisation</a>).</li>
+<li>Exécute l'étape des pilotes : le kit journalise son manifeste, publie le framebuffer du firmware enregistré en phase 3 comme écran du firmware (l'écran principal du gestionnaire d'affichage jusqu'à ce qu'un pilote d'affichage en publie un), puis chaque nœud publié par les bus est proposé aux pilotes listés dans le manifeste du noyau, d'abord les nœuds de plateforme placés en phase 3 (le pilote 8042 publie ses deux nœuds de port PS/2 depuis son sondage, et les pilotes clavier et souris les lient pendant l'étape), puis chaque fonction PCI trouvée par le pilote de l'hôte PCI et chacune de celles qu'un pilote de port racine a trouvées derrière son emplacement de branchement à chaud, puis chaque périphérique virtio qu'un pilote de transport a publié sous une fonction ou un emplacement, et l'étape rend la main une fois que chaque nœud, enfants compris, a été proposé ; les pilotes AHCI, NVMe, virtio-blk et stockage de masse USB publient ici les disques qu'ils trouvent (les pilotes de contrôleurs hôtes énumèrent leurs ports racines pendant leur sondage, si bien qu'une clé présente au démarrage est elle aussi publiée pendant l'étape), et le gestionnaire de stockage enregistre et analyse chacun d'eux au cours de la publication : <code>StorageManager.Partitions</code> est donc rempli au moment où l'étape rend la main. Le thread de branchement à chaud de chaque pilote de contrôleur hôte USB, démarré pendant son sondage, suit ensuite les périphériques branchés ou retirés ; il a besoin de l'ordonnanceur. Le thread d'emplacement du pilote de port racine fait de même pour un périphérique branché dans un emplacement de branchement à chaud PCI Express ou retiré de celui-ci, en plaçant les registres de celui qui arrive ; il a lui aussi besoin de l'ordonnanceur.</li>
+<li>Appelle <code>OnBoot()</code>, dont l'implémentation par défaut initialise la <code>KernelConsole</code> graphique sur l'écran devenu principal à ce moment-là, ce qui fait fonctionner <code>Console.WriteLine</code>.</li>
+<li>Désactive le moteur de rendu de texte du démarrage précoce : jusqu'ici, le journal de démarrage que vous voyez à l'écran est le journal série recopié par un module minimal d'écriture dans le framebuffer ; désormais, l'écran appartient à <code>Console</code> et au <a href="graphics.html">Canvas</a>.</li>
+<li>Appelle <code>BeforeRun()</code> une fois.</li>
+<li>Appelle <code>Run()</code> en boucle jusqu'à ce que <code>Stop()</code> soit appelé.</li>
+<li>Appelle <code>AfterRun()</code> une fois.</li>
+<li>Arrête le CPU. Il n'y a aucun système d'exploitation auquel revenir : un noyau ne se termine jamais.</li>
+</ol>
+<p><a id="stopping-the-machine"></a></p>
+<h2 id="arrêter-la-machine">Arrêter la machine</h2>
+<p>L'étape 9 ci-dessus est l'endroit où un noyau aboutit de lui-même. <code>Power</code> vous permet d'y arriver délibérément, et ses trois membres diffèrent par la portée de leur effet :</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.System;
+
+Power.Halt();      // park this CPU until an interrupt wakes it
+Power.Reboot();    // restart the machine; does not return
+Power.Shutdown();  // power off; does not return
+</code></pre>
+<p><code>Halt()</code> est le seul qui rend la main. Il met le CPU en attente plutôt que de le faire tourner à vide : c'est donc ce qu'une boucle inactive doit appeler au lieu de <code>while (true) { }</code>, qui consume un cœur et, sur un noyau à un seul CPU, empêche l'ordonnanceur de progresser.</p>
+<p><code>Reboot()</code> et <code>Shutdown()</code> ne rendent pas la main en cas de succès. Tous deux passent par les opérations d'alimentation de la plateforme et, lorsque le firmware n'en propose aucune, se rabattent sur la mise en attente définitive du CPU plutôt que de continuer, ce qui explique que le compilateur les considère comme ne retournant jamais.</p>
+<p>Pour terminer la boucle principale sans arrêter la machine, appelez <code>Stop()</code> sur votre noyau. <code>Run()</code> cesse d'être appelé, <code>AfterRun()</code> s'exécute une fois, et le CPU s'arrête.</p>
+<p>Le code statique, qui n'a pas de <code>this</code> sur lequel l'appeler, atteint l'instance en cours d'exécution par <code>Kernel.Current</code>, que le point d'entrée généré définit avant le démarrage de votre noyau (il vaut <code>null</code> jusque-là, y compris dans le constructeur de votre noyau) :</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.System;
+
+Kernel.Current?.Stop();
+</code></pre>
+<p><a id="a-minimal-kernel"></a></p>
+<h2 id="un-noyau-minimal">Un noyau minimal</h2>
+<pre><code class="lang-csharp">using System;
+using Sys = Cosmos.Kernel.System;
+
+namespace MyOS;
+
+public class Kernel : Sys.Kernel
+{
+    protected override void BeforeRun()
+    {
+        Console.WriteLine(&quot;Cosmos booted successfully!&quot;);
+    }
+
+    protected override void Run()
+    {
+        Console.Write(&quot;Input: &quot;);
+        string? input = Console.ReadLine();
+        Console.Write(&quot;Text typed: &quot;);
+        Console.WriteLine(input);
+    }
+}
+</code></pre>
+<ul>
+<li><code>BeforeRun()</code> : initialisation unique (monter un <a href="filesystem.html">système de fichiers</a>, configurer le <a href="network.html">réseau</a>, dessiner un écran d'accueil).</li>
+<li><code>Run()</code> : le corps de votre boucle principale. Il est rappelé dès qu'il rend la main, il n'a donc pas besoin de boucler lui-même ; gardez-le réentrant.</li>
+<li><code>Stop()</code> : appelez-le depuis n'importe où pour sortir de la boucle une fois le <code>Run()</code> en cours terminé.</li>
+<li><code>AfterRun()</code> : nettoyage facultatif une fois la boucle terminée.</li>
+</ul>
+<p>Une exception non interceptée dans <code>Run()</code> se propage hors de la boucle : enveloppez donc le corps dans un <code>try</code>/<code>catch</code> si l'échec d'une commande ne doit pas faire tomber le noyau.</p>
+<p><a id="customizing-startup"></a></p>
+<h2 id="personnaliser-le-démarrage">Personnaliser le démarrage</h2>
+<p><code>OnBoot()</code> s'exécute avant que la console n'existe : c'est le bon endroit pour vos propres initialisations précoces. Les interruptions sont déjà activées et l'étape des pilotes a eu lieu, si bien qu'un périphérique lié par un pilote est utilisable à partir d'ici ; le code qui doit s'exécuter avec les interruptions désactivées a sa place dans une redéfinition de <code>Start()</code> lui-même :</p>
+<pre><code class="lang-csharp">protected override void OnBoot()
+{
+    base.OnBoot();   // keep the KernelConsole setup; drop this line to boot headless
+
+    // your early initialization here
+}
+</code></pre>
+<p>Un noyau headless qui veut plus tard une sortie <code>Console</code> appelle lui-même <code>KernelConsole.Initialize()</code> : c'est la seule voie sur l'anneau supporté, <code>Console.WriteLine</code> ne fait pas apparaître la console de lui-même. L'appel est idempotent : il peut donc être fait sans risque, que <code>base.OnBoot()</code> se soit déjà exécuté ou non, et il renvoie <code>false</code> lorsque les graphismes sont exclus de la compilation, qu'aucun écran n'est publié ou que l'écran n'a aucun mode.</p>
+<p>Pour un contrôle total, vous pouvez redéfinir <code>Start()</code> lui-même et prendre en main le cycle de vie : l'implémentation par défaut dans <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.System/Kernel.cs"><code>Cosmos.Kernel.System/Kernel.cs</code></a> est courte et constitue un bon point de départ à copier.</p>
+<p><a id="the-kernel-command-line"></a></p>
+<h2 id="la-ligne-de-commande-du-noyau">La ligne de commande du noyau</h2>
+<p>Limine transmet une ligne de commande au noyau : l'entrée <code>cmdline:</code> du fichier <code>Bootloader/limine.conf</code> de votre projet de noyau. Elle se récupère de la manière standard :</p>
+<pre><code class="lang-csharp">foreach (string arg in Environment.GetCommandLineArgs())
+{
+    Console.WriteLine(arg);
+}
+</code></pre>
+<p><a id="watching-a-boot"></a></p>
+<h2 id="observer-un-démarrage">Observer un démarrage</h2>
+<p>Chacune des phases ci-dessus journalise sur le port série (COM1), que <code>cosmos run</code> relie à votre terminal, et c'est la première chose à lire lorsqu'un noyau ne démarre pas :</p>
+<pre><code>========================================
+  CosmosOS v3.0.62 (gen3)
+  Architecture: x86-64
+========================================
+[KMAIN] Phase 1: CPU initialization
+[KMAIN] Phase 2: Platform initialization
+[KMAIN]   - RSDP found at: 0xFFFF8000000F52D0
+[KMAIN]   - Initializing ACPI...
+[KMAIN] Phase 3: Managed kernel initialization
+[KERNEL]   - Initializing heap...
+[KERNEL]   - Initializing garbage collector...
+[KERNEL]   - Initializing HAL...
+[KERNEL]   - Recording the firmware device tree...
+[Firmware] No device tree
+[KERNEL]   - Initializing interrupts...
+[KERNEL]   - Initializing platform hardware...
+[KERNEL]   - Publishing platform nodes...
+[KERNEL]   - Recording the firmware framebuffer...
+[KERNEL]   - Initializing scheduler...
+[KMAIN] Phase 4: User kernel
+[KernelEntry] Registering kernel
+[Kernel] Enabling interrupts...
+[Kernel] Starting drivers...
+[Drivers] manifest: HdAudioDriver(prio 0) EhciDriver(prio 0) OhciDriver(prio 0) PcieRootPortDriver(prio 0) VirtioPciTransportDriver(prio 0) XhciDriver(prio 0) AmdDcnDriver(prio 0) IntelGraphicsDriver(prio 0) VmwareSvgaDriver(prio 0) E1000EDriver(prio 0) AhciDriver(prio 0) NvmeDriver(prio 0) I8042Driver(prio 0) PciHostDriver(prio 0) VirtioMmioTransportDriver(prio 0) Ps2KeyboardDriver(prio 0) Ps2MouseDriver(prio 0) UsbHubDriver(prio 0) UsbKeyboardDriver(prio 0) UsbMouseDriver(prio 0) UsbMassStorageDriver(prio 0) VirtioGpuDriver(prio 0) VirtioInputDriver(prio 0) VirtioNetDriver(prio 0) VirtioBlkDriver(prio 0)
+[Display] primary: firmware &quot;framebuffer&quot; (the only display)
+[Drivers] firmware published display &quot;framebuffer&quot; (consumed)
+[Drivers] engine started, worker thread
+...
+[StorageManager] sata0 registered by AhciDriver (primary)
+[Drivers] pci:0000:00:03.0 AhciDriver published block &quot;sata0&quot; (consumed)
+...
+[Kernel] Calling OnBoot()...
+[Kernel] Calling BeforeRun()...
+[Kernel] Entering main loop...
+[Kernel] Calling Run()...
+</code></pre>
+<p>Les deux lignes <code>sata0</code> apparaissent quand un disque est attaché (<code>cosmos run --disk disk.img</code>) : le pilote AHCI du kit le publie pendant l'étape des pilotes, et le gestionnaire de stockage l'enregistre au cours de la publication en analysant ses partitions, ce qui explique que la ligne du gestionnaire précède celle du kit. Avec une clé USB (<code>cosmos run --disk disk.img,usb</code>), ce sont les lignes du pilote xHCI qui apparaissent à leur place : le périphérique trouvé par le parcours des ports racines pendant le sondage, la ligne du contrôleur, puis le nœud d'interface de la clé proposé au pilote de stockage de masse et son disque enregistré pendant ce sondage :</p>
+<pre><code>[Drivers] pci:0000:00:03.0 XhciDriver: usb 1-1: 46f4:0001 SuperSpeed, 1 interface(s)
+[Drivers] pci:0000:00:03.0 XhciDriver: version 0x100, 64 slots, 8 ports, 32-byte contexts, 0 scratchpad buffers, events via message interrupt, 1 device(s)
+[Drivers] pci:0000:00:03.0 offer XhciDriver -&gt; bound
+[Drivers] usb:1-1:0 UsbMassStorageDriver: usb0 (LUN 0): QEMU QEMU HARDDISK, 524288 blocks of 512 bytes
+[StorageManager] usb0 registered by UsbMassStorageDriver (primary)
+[Drivers] usb:1-1:0 UsbMassStorageDriver published block &quot;usb0&quot; (consumed)
+[Drivers] usb:1-1:0 UsbMassStorageDriver: 1 unit(s), max LUN 0
+[Drivers] usb:1-1:0 offer UsbMassStorageDriver -&gt; bound
+</code></pre>
+<p>Pour un débogage interactif en plus du journal série, consultez <a href="debugging.html">Déboguer avec VSCode et QEMU</a>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/user/startup.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

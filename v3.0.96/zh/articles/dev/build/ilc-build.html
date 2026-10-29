@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title> | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content=" | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/dev/build/ilc-build.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="overview"></a></p>
+<h2 id="概述">概述</h2>
+<p><code>Cosmos.ilc.Build</code> 将原生 AOT 编译器 <a href="https://github.com/dotnet/runtime/blob/main/docs/design/coreclr/botr/ilc-architecture.md">ILCompiler</a> 接入 MSBuild 流水线。它接收 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Patcher"><code>Cosmos.Build.Patcher</code></a> 输出的修补后程序集，并将其转换为原生目标文件，这些目标文件随后会与 CosmosOS 的平台库链接。</p>
+<hr>
+<p><a id="flow-chart"></a></p>
+<h2 id="流程图">流程图</h2>
+<pre><code class="lang-mermaid">flowchart TD
+    A[ResolveIlcPath] --&gt; B[WriteIlcRsp]
+    B --&gt; C[CompileWithIlc]
+    C --&gt; D[Native binary]
+</code></pre>
+<hr>
+<p><a id="parameters"></a></p>
+<h2 id="参数">参数</h2>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IlcToolsPath</code></td>
+<td>从 <code>Microsoft.DotNet.ILCompiler</code> 运行时包中解析出的 <code>ilc</code> 可执行文件的路径。</td>
+<td>自动解析</td>
+</tr>
+<tr>
+<td><code>IlcIntermediateOutputPath</code></td>
+<td>写入 <code>.ilc.rsp</code> 和 <code>.o</code> 文件的目录。</td>
+<td><code>$(IntermediateOutputPath)/cosmos/native/</code></td>
+</tr>
+<tr>
+<td><code>IlcSystemModule</code></td>
+<td>用作 ILCompiler 入口点的系统模块。</td>
+<td><code>System.Private.CoreLib</code></td>
+</tr>
+<tr>
+<td><code>UnmanagedEntryPointsAssembly</code></td>
+<td>其方法通过 <code>--generateunmanagedentrypoints</code> 导出的程序集。</td>
+<td><code>Cosmos.Kernel.Runtime</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a id="tasks"></a></p>
+<h2 id="任务">任务</h2>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>说明</th>
+<th>依赖于</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ResolveIlcPath</code></td>
+<td>下载并定位 ILCompiler，同时设置 <code>IlcToolsPath</code>。</td>
+<td><code>Build</code></td>
+</tr>
+<tr>
+<td><code>WriteIlcRsp</code></td>
+<td>生成 ILCompiler 响应文件，其中列出输入、引用和选项。</td>
+<td><code>ResolveIlcPath</code></td>
+</tr>
+<tr>
+<td><code>CheckIlcCache</code></td>
+<td>对输入、引用和响应文件计算哈希，并与上一次编译的哈希进行比较。</td>
+<td><code>WriteIlcRsp</code></td>
+</tr>
+<tr>
+<td><code>CompileWithIlc</code></td>
+<td>使用响应文件运行 <code>ilc</code> 以生成原生目标文件，除非 <code>CheckIlcCache</code> 发现该目标文件已是最新。</td>
+<td><code>WriteIlcRsp</code>, <code>CheckIlcCache</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a id="detailed-workflow"></a></p>
+<h2 id="详细工作流程">详细工作流程</h2>
+<ol>
+<li><strong>ResolveIlcPath</strong> 使用 <code>GetPackageDirectory</code> 查找 <code>runtime.&lt;RID&gt;.Microsoft.DotNet.ILCompiler</code> 包，并设置 <code>IlcToolsPath</code>。</li>
+<li><strong>WriteIlcRsp</strong> 创建 <code>$(IlcIntermediateOutputPath)$(AssemblyName).ilc.rsp</code>，从 <code>$(IntermediateOutputPath)/cosmos</code> 收集修补后的程序集，从 <code>cosmos/ref</code> 收集引用，并加入 <code>--runtimeknob</code> 和 <code>--feature</code> 标志等 ILCompiler 选项。</li>
+<li><strong>CheckIlcCache</strong> 对输入程序集、引用程序集和响应文件计算一个 SHA-256 哈希，并将其与上一次编译留下的 <code>.ilc-hash</code> 进行比较。响应文件是有意纳入键中的：在内核的 <code>.csproj</code> 中切换一个功能开关不会改变任何程序集，只会改变响应文件中的 <code>--runtimeknob</code> 参数，如果键只基于程序集计算，就会保留按旧值编译的目标文件。</li>
+<li><strong>CompileWithIlc</strong> 使用生成的响应文件执行 <code>ilc</code>，在 <code>$(IlcIntermediateOutputPath)</code> 中生成 <code>$(AssemblyName).o</code>，并写入新的哈希。哈希一致时，该步骤会被跳过，日志中输出 <code>ILC cache hit</code>。</li>
+<li>原生二进制文件随后可以进一步打包，例如集成到引导加载程序中。</li>
+</ol>
+<hr>
+<p><a id="outputs"></a></p>
+<h2 id="输出">输出</h2>
+<ul>
+<li>响应文件：<code>$(IntermediateOutputPath)/cosmos/native/$(AssemblyName).ilc.rsp</code>，列出输入、引用和 ILCompiler 选项。</li>
+<li>原生目标文件：<code>$(IntermediateOutputPath)/cosmos/native/$(AssemblyName).o</code>，由 <code>CompileWithIlc</code> 生成，用于链接。</li>
+<li>缓存键：<code>$(IntermediateOutputPath)/cosmos/native/.ilc-hash</code>，即编译该目标文件时所用输入的哈希。</li>
+</ul>
+<p>注：</p>
+<ul>
+<li>ILC 解析的引用程序集位于 <code>$(IntermediateOutputPath)/cosmos/ref/</code> 下，来自 Patcher 步骤。</li>
+</ul>
+<hr>
+<p><a id="related-components"></a></p>
+<h2 id="相关组件">相关组件</h2>
+<ul>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Ilc"><code>Cosmos.Build.Ilc</code></a></li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Patcher"><code>Cosmos.Build.Patcher</code></a></li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher"><code>Cosmos.Patcher</code></a></li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/dev/build/ilc-build.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

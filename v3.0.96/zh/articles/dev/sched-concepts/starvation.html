@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>饥饿与老化 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="饥饿与老化 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/dev/sched-concepts/starvation.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="starvation-and-aging"></a></p>
+<h1 id="饥饿与老化">饥饿与老化</h1>
+<p>线程已经就绪、可以运行，调度器却始终不选中它，这就是饥饿（starvation）。严格优先级很容易导致这种情况：只要有任何更高优先级的线程就绪，较低优先级的线程就不会运行，而一个繁忙的高优先级等级可以无限期地把它挡在 CPU 之外。对线程分等级的调度器用老化（aging）来保护低等级：线程等待得越久，它的优先级就被提得越高；或者用周期性提升：每隔一段时间把所有线程拉回最高等级。<a href="virtual-time-fair-share.html">公平份额</a>调度器从构造上就避免了饥饿，因为每个权重为正的线程都会得到自己的份额，但被唤醒线程的放置方式可能让饥饿重新出现：一个在虚拟时间上被放置得远远落后于其他线程的线程会先运行，直到追上它们为止，在此期间它一直占着 CPU，其他所有线程都得不到运行。</p>
+<p>陷阱在于，饥饿通常是一个簿记错误，而不是策略本身的性质。一个离开了运行队列却再也没有被放回的线程、一个把同一线程保存了两次的队列，以及一个顺序已被破坏的有序队列，从外部看都一样：某个线程不再运行，而策略中没有任何一条规则说它应该如此。当一个线程在一个本不应让任何线程饥饿的策略下陷入饥饿时，首先要检查的是每个就绪线程是否恰好入队一次。</p>
+<p>在 Cosmos 中，Stride 策略的 <code>OnThreadYield</code> 会在线程落后时把它的 <code>Pass</code> 提升到该 CPU 的 <code>GlobalPass</code>，因此一个很早就启动的线程（例如空闲线程）无法一直排在后来创建的线程前面。唤醒放置也以同样的方式设防，分两步进行。被唤醒的线程不是以它离开时的 <code>Pass</code> 重新入队，而是以 <code>GlobalPass</code> 加 <code>Remain</code> 重新入队，<code>Remain</code> 是它挂起时的偏移量：<code>Remain</code> 在挂起时就被冻结，因此睡得更久并不会让它变小，长时间的睡眠也就换不来排在所有其他线程前面的长时间运行。上限（落后 <code>GlobalPass</code> 绝不超过两个 <code>Stride1</code>）约束的是线程挂起时就已经是很大负值的 <code>Remain</code>，而线程离开 CPU 时施加的下限让这种情况很少出现。管理器则在自己这一侧维护只入队一次的规则。对已经是 <code>Ready</code> 或 <code>Running</code> 的线程进行唤醒不起任何作用，而一次切换只有在离开 CPU 的线程仍为 <code>Running</code> 时才把它放回队列，因为在 Stride 的有序队列中，第二个条目会在线程的 <code>Pass</code> 上升时保持原位，而只取队首的 <code>PickNext</code> 将永远到达不了排在它后面的线程。对线程分等级的策略会自带防护：MLFQ 示意实现每隔几个节拍就把所有线程重置到最高等级。参见 <a href="../scheduler.html#the-stride-policy">Stride 策略</a>和<a href="../../user/scheduler-plugging.html#worked-sketches">示意实现</a>。</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/dev/sched-concepts/starvation.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

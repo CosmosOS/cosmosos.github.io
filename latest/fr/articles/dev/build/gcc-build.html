@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title> | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content=" | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/build/gcc-build.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><code>Cosmos.Build.GCC</code> compile les sources C en fichiers objets, qui sont ensuite liés à la sortie de NativeAOT.</p>
+<hr>
+<p><a id="flow-chart"></a></p>
+<h2 id="diagramme-de-flux">Diagramme de flux</h2>
+<pre><code class="lang-mermaid">flowchart TD
+    A[GetGCC] --&gt; B[FindCSourceFilesForGCC]
+    B --&gt; C[BuildGCC]
+    C --&gt; D[.o/.obj files under cosmos/cobj]
+</code></pre>
+<hr>
+<p><a id="parameters"></a></p>
+<h2 id="paramètres">Paramètres</h2>
+<table>
+<thead>
+<tr>
+<th>Nom</th>
+<th>Description</th>
+<th>Valeur par défaut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GCCPath</code></td>
+<td>Chemin complet ou nom de l'exécutable <code>gcc</code>. Défini par <code>GetGCC</code> selon le système d'exploitation, redéfinissable dans votre projet.</td>
+<td>Unix : <code>gcc</code> ; Windows : <code>x86_64-elf-gcc</code></td>
+</tr>
+<tr>
+<td><code>GCCProject</code></td>
+<td>Un ou plusieurs répertoires dans lesquels chercher les fichiers <code>*.c</code> (sans récursion). Prend en charge la substitution par un sous-dossier d'architecture.</td>
+<td>aucun</td>
+</tr>
+<tr>
+<td><code>GCCOutputPath</code></td>
+<td>Répertoire des fichiers objets compilés.</td>
+<td><code>$(IntermediateOutputPath)/cosmos/cobj/</code></td>
+</tr>
+<tr>
+<td><code>GCCCompilerFlags</code></td>
+<td>Options de compilation supplémentaires transmises à GCC.</td>
+<td><code>-O2 -fno-stack-protector -nostdinc -fno-builtin</code>, plus les options propres à l'architecture</td>
+</tr>
+</tbody>
+</table>
+<p>Remarques :</p>
+<ul>
+<li>Lorsque <code>RuntimeIdentifier</code> est défini (par exemple <code>linux-x64</code>), <code>FindCSourceFilesForGCC</code> privilégie un sous-dossier d'architecture s'il existe (par exemple <code>&lt;dir&gt;/x64/</code>).</li>
+<li>Sous Windows, l'outil par défaut est un compilateur croisé (<code>x86_64-elf-gcc</code>) ; sous Unix, c'est <code>gcc</code>. Vous pouvez redéfinir <code>GCCPath</code>.</li>
+</ul>
+<hr>
+<p><a id="tasks"></a></p>
+<h2 id="tâches">Tâches</h2>
+<table>
+<thead>
+<tr>
+<th>Tâche</th>
+<th>Description</th>
+<th>Dépend de</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GetGCC</code></td>
+<td>Résout <code>GCCPath</code> selon le système d'exploitation (Unix : <code>gcc</code>, Windows : <code>x86_64-elf-gcc</code>).</td>
+<td>aucune</td>
+</tr>
+<tr>
+<td><code>FindCSourceFilesForGCC</code></td>
+<td>Nettoie les entrées de <code>@(GCCProject)</code> et applique les substitutions d'architecture.</td>
+<td><code>Build</code></td>
+</tr>
+<tr>
+<td><code>BuildGCC</code></td>
+<td>Invoque <code>GCCBuildTask</code> pour compiler chaque fichier <code>*.c</code> de chaque répertoire de <code>@(GCCProject)</code>.</td>
+<td><code>FindCSourceFilesForGCC; GetGCC</code></td>
+</tr>
+<tr>
+<td><code>CleanGCC</code></td>
+<td>Supprime <code>$(IntermediateOutputPath)/cosmos/cobj/</code>.</td>
+<td><code>Clean</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a id="detailed-workflow"></a></p>
+<h2 id="déroulement-détaillé">Déroulement détaillé</h2>
+<ol>
+<li><code>GetGCC</code> définit <code>GCCPath</code> en fonction du système d'exploitation hôte. Vous pouvez redéfinir <code>GCCPath</code> dans votre fichier de projet si nécessaire.</li>
+<li><code>FindCSourceFilesForGCC</code> :
+<ul>
+<li>Retire de <code>@(GCCProject)</code> les chemins qui n'existent pas (en émettant des avertissements).</li>
+<li>Si <code>RuntimeIdentifier</code> est défini et qu'un sous-dossier d'architecture correspondant existe (par exemple <code>x64</code>), le dossier est remplacé par ce sous-dossier.</li>
+<li>Journalise la liste finale des répertoires de projets C.</li>
+</ul>
+</li>
+<li><code>BuildGCC</code> :
+<ul>
+<li>S'assure que <code>GCCOutputPath</code> (<code>$(IntermediateOutputPath)/cosmos/cobj/</code>) existe et supprime les objets obsolètes.</li>
+<li>Pour chaque répertoire de <code>@(GCCProject)</code>, appelle <code>GCCBuildTask</code>, qui compile chaque fichier <code>*.c</code> de ce répertoire (sans récursion).</li>
+<li>Chaque fichier est compilé séparément en un objet nommé <code>&lt;name&gt;-&lt;sha1&gt;.(obj|o)</code>, dont l'empreinte est calculée à partir du contenu du fichier ; l'extension est <code>.obj</code> sous Windows et <code>.o</code> ailleurs.</li>
+</ul>
+</li>
+<li><code>CleanGCC</code> supprime le répertoire <code>cosmos/cobj</code> pendant <code>Clean</code>.</li>
+</ol>
+<hr>
+<p><a id="outputs"></a></p>
+<h2 id="sorties">Sorties</h2>
+<ul>
+<li>Fichiers objets dans <code>$(IntermediateOutputPath)/cosmos/cobj/</code>, nommés <code>&lt;sourceName&gt;-&lt;sha1&gt;.(obj|o)</code>.</li>
+</ul>
+<hr>
+<p><a id="related-components"></a></p>
+<h2 id="composants-associés">Composants associés</h2>
+<ul>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.CC"><code>Cosmos.Build.GCC</code></a></li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/build/gcc-build.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

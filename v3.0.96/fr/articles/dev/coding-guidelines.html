@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>R&#232;gles de codage | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="R&#232;gles de codage | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/coding-guidelines.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="coding-guidelines"></a></p>
+<h1 id="règles-de-codage">Règles de codage</h1>
+<p>Ce document établit le style de code et les modèles d'architecture de Cosmos Gen3. Ces règles garantissent une base de code propre, moderne et cohérente entre tous les contributeurs.</p>
+<p><a id="table-of-contents"></a></p>
+<h2 id="table-des-matières">Table des matières</h2>
+<ul>
+<li><a href="#1-project-architecture">1. Architecture du projet</a></li>
+<li><a href="#2-naming-conventions">2. Conventions de nommage</a></li>
+<li><a href="#3-file-organization">3. Organisation des fichiers</a></li>
+<li><a href="#4-class--type-design">4. Conception des classes et des types</a></li>
+<li><a href="#5-kernel-lifecycle">5. Cycle de vie du noyau</a></li>
+<li><a href="#6-hal-architecture">6. Architecture de la HAL</a></li>
+<li><a href="#7-plug-system">7. Système de plugs</a></li>
+<li><a href="#8-native-interop">8. Interopérabilité native</a></li>
+<li><a href="#9-architecture-specific-code">9. Code spécifique à une architecture</a></li>
+<li><a href="#10-memory--safety">10. Mémoire et sûreté</a></li>
+<li><a href="#11-error-handling">11. Gestion des erreurs</a></li>
+<li><a href="#12-nullable-reference-types">12. Types référence nullables</a></li>
+<li><a href="#13-modern-c--net-10-idioms">13. Idiomes modernes de C# / .NET 10</a></li>
+<li><a href="#14-aot-constraints">14. Contraintes AOT</a></li>
+<li><a href="#15-documentation">15. Documentation</a></li>
+<li><a href="#16-testing">16. Tests</a></li>
+<li><a href="#17-public-api-surface">17. Surface d'API publique</a></li>
+</ul>
+<hr>
+<p><a id="1-project-architecture"></a></p>
+<h2 id="1-architecture-du-projet">1. Architecture du projet</h2>
+<p><a id="layer-dependency-rules"></a></p>
+<h3 id="règles-de-dépendance-entre-couches">Règles de dépendance entre couches</h3>
+<p>Le projet est découpé en couches strictes. Les dépendances vont <strong>uniquement vers le bas</strong>. Ces règles sont <strong>appliquées à la compilation</strong> par l'analyseur Roslyn <code>LayerAnalyzer</code> de <code>Cosmos.Build.Analyzer.Patcher</code>, qui juge un projet sur les types et les membres que son code nomme, et non sur la liste de références que construit la restauration, et qui signale une seule fois chaque assembly utilisé par-delà une frontière, à sa première utilisation. Un noyau utilisateur, ainsi qu'un assembly de pilotes (<code>&lt;CosmosDriverAssembly&gt;true&lt;/CosmosDriverAssembly&gt;</code>, voir <a href="public-api.html">Suivi de l'API publique</a>), peuvent aussi nommer ce qu'offre <code>Cosmos.Kernel.HAL</code> : le point d'extension du kit de pilotes et les contrats de périphériques (<code>IBlockDevice</code>, <code>MacAddress</code>).</p>
+<pre><code>User Kernel (DevKernel, test kernels)
+Cosmos.Kernel.Drivers (the shipped drivers, a driver assembly held to the User layer)
+    └── Cosmos.Kernel.System        ← high-level OS APIs (Console, Graphics, Network)
+         └── Cosmos.Kernel.HAL      ← hardware abstraction (shared logic, boot and device contracts)
+              ├── Cosmos.Kernel.HAL.X64        ← x64 platform code (machine description, line routing, PIT, RTC)
+              ├── Cosmos.Kernel.HAL.ARM64      ← ARM64 platform code (machine description, line routing, generic timer, RTC)
+              └── Cosmos.Kernel.Core   ← low-level runtime (memory, scheduler, serial)
+                   ├── Cosmos.Kernel.Native.X64       ← x64 assembly (.s)
+                   ├── Cosmos.Kernel.Native.ARM64     ← ARM64 assembly (.s)
+                   └── Cosmos.Kernel.Native.MultiArch ← cross-platform native C code (ACPI, libc stubs)
+</code></pre>
+<p>Pour le graphe de dépendances complet, la description des projets et les règles, voir <a href="kernel-project-layout.html">Organisation d'un projet de noyau</a>.</p>
+<p><a id="when-to-create-a-new-project"></a></p>
+<h3 id="quand-créer-un-nouveau-projet">Quand créer un nouveau projet</h3>
+<ul>
+<li>Un nouveau matériel que les bus du kit atteignent (une fonction PCI, un périphérique virtio, une interface USB, un port PS/2, un nœud de plateforme) → une classe <code>[Driver]</code> dans <code>Cosmos.Kernel.Drivers</code>, écrite sur le point d'extension public (<a href="../user/drivers.html">Écrire un pilote</a>) ; l'agrégateur embarque le paquet, si bien que chaque noyau le reçoit. Un nouveau type de bus → une identité, une correspondance, un objet d'accès et un chemin dans le kit. Le code HAL multiplateforme va dans <code>Cosmos.Kernel.HAL</code>, le code de plateforme dans <code>Cosmos.Kernel.HAL.X64</code>/<code>Cosmos.Kernel.HAL.ARM64</code>.</li>
+<li>Nouvelle fonctionnalité de niveau OS, API utilisateur exposée → dans <code>Cosmos.Kernel.System</code>.</li>
+<li>Nouvelle préoccupation du runtime bas niveau → dans <code>Cosmos.Kernel.Core</code>.</li>
+</ul>
+<hr>
+<p><a id="2-naming-conventions"></a></p>
+<h2 id="2-conventions-de-nommage">2. Conventions de nommage</h2>
+<p>Certaines règles de nommage essentielles sont appliquées par <code>.editorconfig</code> ; le tableau ci-dessous documente l'ensemble des règles de nommage :</p>
+<table>
+<thead>
+<tr>
+<th>Élément</th>
+<th>Convention</th>
+<th>Exemple</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Espace de noms</td>
+<td><code>Cosmos.Kernel.{Layer}.{Category}</code> (le projet, puis ses dossiers)</td>
+<td><code>Cosmos.Kernel.Core.Scheduler</code></td>
+</tr>
+<tr>
+<td>Classe/struct publique</td>
+<td>PascalCase</td>
+<td><code>GarbageCollector</code>, <code>Thread</code></td>
+</tr>
+<tr>
+<td>Interface</td>
+<td><code>I</code> + PascalCase</td>
+<td><code>IScheduler</code>, <code>IPlatformInitializer</code></td>
+</tr>
+<tr>
+<td>Méthode/propriété publique</td>
+<td>PascalCase</td>
+<td><code>InitializeStack()</code>, <code>StackPointer</code></td>
+</tr>
+<tr>
+<td>Champ privé/interne</td>
+<td><code>_camelCase</code></td>
+<td><code>_currentScheduler</code>, <code>_kernel</code></td>
+</tr>
+<tr>
+<td>Champ statique privé/interne</td>
+<td><code>s_camelCase</code></td>
+<td><code>s_cursorPattern</code>, <code>s_nextThreadId</code></td>
+</tr>
+<tr>
+<td>Constante</td>
+<td>PascalCase</td>
+<td><code>DefaultStackSize</code>, <code>MaxThreadCount</code></td>
+</tr>
+<tr>
+<td>Constante privée</td>
+<td>PascalCase</td>
+<td><code>COM1_BASE</code> (les registres matériels utilisent UPPER_SNAKE pour la lisibilité)</td>
+</tr>
+<tr>
+<td>Variable locale</td>
+<td>camelCase</td>
+<td><code>stackTop</code>, <code>entryPoint</code></td>
+</tr>
+<tr>
+<td>Paramètre</td>
+<td>camelCase</td>
+<td><code>cpuState</code>, <code>threadId</code></td>
+</tr>
+<tr>
+<td>Paramètre de type</td>
+<td><code>T</code> + PascalCase</td>
+<td><code>TValue</code>, <code>TKey</code></td>
+</tr>
+<tr>
+<td>Membre d'énumération</td>
+<td>PascalCase</td>
+<td><code>ThreadState.Running</code></td>
+</tr>
+</tbody>
+</table>
+<p>Dans <code>Cosmos.Kernel.System.Diagnostics</code>, un suffixe indique ce qu'est un type : un type <code>*Diagnostics</code> est la vue de diagnostic statique d'un sous-système (<code>DriverDiagnostics</code>, <code>SchedulerDiagnostics</code>, <code>MemoryDiagnostics</code>), qui sert surtout à lire mais peut aussi agir (<code>SchedulerDiagnostics.RequestKill</code>, <code>MemoryDiagnostics.Collect</code>), et un type <code>*Info</code> est une struct d'instantané en lecture seule que remet une telle vue (<code>DriverInfo</code>, <code>DeviceNodeInfo</code>, <code>KernelThreadInfo</code>). Voir <a href="public-api.html#naming">Suivi de l'API publique</a>.</p>
+<p><a id="avoid"></a></p>
+<h3 id="à-éviter">À éviter</h3>
+<ul>
+<li>La notation hongroise (<code>m_</code>, <code>p_</code>, <code>g_</code>) : utilisez le préfixe <code>_</code> pour les champs privés uniquement.</li>
+<li>L'ancien style <code>mStopped</code> : utilisez <code>_stopped</code>.</li>
+<li>Les abréviations, sauf si elles sont universellement comprises (<code>GC</code>, <code>CPU</code>, <code>HAL</code>, <code>IO</code>, <code>IP</code>, <code>MAC</code>).</li>
+</ul>
+<hr>
+<p><a id="3-file-organization"></a></p>
+<h2 id="3-organisation-des-fichiers">3. Organisation des fichiers</h2>
+<p><a id="one-type-per-file"></a></p>
+<h3 id="un-type-par-fichier">Un type par fichier</h3>
+<p>Chaque type public a son propre fichier, nommé d'après le type :</p>
+<pre><code>Cosmos.Kernel.Core/
+  Scheduler/
+    SchedulerThread.cs
+    SchedulerThreadState.cs
+    IScheduler.cs
+    SchedulerManager.cs
+    PerCpuState.cs
+</code></pre>
+<p>Deux sortes de compagnons partagent le fichier du type principal, qui garde le nom de ce dernier : le compagnon étroitement couplé propre à un type, comme <code>GptPartitionEntry</code> pour <code>Gpt</code>, ou <code>TcpFlags</code> et <code>TcpOption</code> pour <code>TcpPacket</code>, et une famille de sous-classes, comme <code>IcmpEchoRequest</code> et <code>IcmpEchoReply</code> pour <code>IcmpPacket</code>. Une implémentation n'est pas un compagnon de son interface : 24 fichiers déclarent une interface de premier niveau, et chacun d'eux déclare cette interface et rien d'autre.</p>
+<p><a id="partial-classes-for-large-types"></a></p>
+<h3 id="classes-partielles-pour-les-gros-types">Classes partielles pour les gros types</h3>
+<p>Répartissez les grosses classes sur plusieurs fichiers avec <code>partial</code>. Nommez les fichiers <code>{ClassName}.{Aspect}.cs</code> :</p>
+<pre><code>Memory/
+  GarbageCollector.cs              ← core structure, fields, initialization
+  GarbageCollector.Alloc.cs        ← allocation methods
+  GarbageCollector.Mark.cs         ← mark phase
+  GarbageCollector.Sweep.cs        ← sweep phase
+  GarbageCollector.GCHandler.cs    ← GC handle table
+  GarbageCollector.Frozen.cs       ← frozen segment support
+</code></pre>
+<p><a id="architecture-specific-files"></a></p>
+<h3 id="fichiers-spécifiques-à-une-architecture">Fichiers spécifiques à une architecture</h3>
+<p>Pour les types qui ont besoin d'une implémentation par architecture au sein du même projet, utilisez un suffixe :</p>
+<pre><code>Scheduler/
+  ThreadContext.X64.cs             ← x64-specific context layout
+  ThreadContext.ARM64.cs           ← ARM64-specific context layout
+</code></pre>
+<p>Ils sont compilés de manière conditionnelle via le <code>.csproj</code> :</p>
+<pre><code class="lang-xml">&lt;ItemGroup Condition=&quot;'$(CosmosArch)' != 'arm64'&quot;&gt;
+    &lt;Compile Remove=&quot;Scheduler\ThreadContext.ARM64.cs&quot; /&gt;
+&lt;/ItemGroup&gt;
+</code></pre>
+<p>Ce n'est autorisé pour l'instant que dans <code>Cosmos.Kernel.Core</code>, mais cela pourrait changer à l'avenir.</p>
+<p><a id="namespaces-follow-folders"></a></p>
+<h3 id="les-espaces-de-noms-suivent-les-dossiers">Les espaces de noms suivent les dossiers</h3>
+<p>L'espace de noms d'un fichier est le nom de son projet suivi des dossiers situés entre le projet et le fichier : <code>Cosmos.Kernel.Core/Scheduler/SchedulerThread.cs</code> déclare <code>Cosmos.Kernel.Core.Scheduler</code>. Le build l'impose avec IDE0130 au niveau erreur pour chaque projet <code>src/Cosmos.Kernel*</code>, pour les noyaux de test, pour les tests unitaires côté hôte de <code>tests/Cosmos.Kernel.Tests.System</code> et pour <code>examples/DevKernel</code>, si bien que <code>dotnet build</code> échoue sur un fichier qui s'en écarte (la CI de formatage vérifie les projets de <code>nativeaot-patcher.slnx</code>, qui laisse de côté les noyaux de test). Déplacez le fichier ou corrigez l'espace de noms plutôt que d'ajouter une exemption. Les exemptions, chacune avec sa raison, terminent <code>.editorconfig</code> : les noms qu'ILC reconnaît par leur nom complet (chaque <code>LibraryInitializer</code>, <code>EagerStaticClassConstructionAttribute</code>, <code>Core/Runtime/Stdllib.cs</code>), le <code>IsExternalInit</code> des générateurs de source (le marqueur d'accesseur init du compilateur C#, qui doit se trouver dans <code>System.Runtime.CompilerServices</code>), les dossiers <code>Bridge/Import</code> et <code>Bridge/Export</code>, dont les fichiers partagent l'espace de noms <code>Bridge</code> du projet, le code tiers embarqué sous <code>Cosmos.Kernel.System/ThirdParty/</code> et les copies de dotnet/runtime sous <code>Cosmos.Kernel.Core/Runtime/Internal/</code>. IDE0130 ne vérifie ni un espace de noms qui contient un type partiel réparti sur plusieurs fichiers (chaque classe <code>[LibraryImport]</code>) ni un espace de noms imbriqué ; ceux-là suivent la règle sans vérification.</p>
+<p><a id="driver-folders"></a></p>
+<h3 id="dossiers-des-pilotes">Dossiers des pilotes</h3>
+<p><code>Cosmos.Kernel.Drivers</code> range chaque pilote à trois niveaux de profondeur, le type de bus, puis la catégorie, puis le pilote, et l'espace de noms de chaque fichier suit son dossier :</p>
+<pre><code>Cosmos.Kernel.Drivers/
+  Pci/                       ← the bus kind the driver matches on (PciMatch)
+    Bus/                     ← a bus driver: its binding publishes child nodes
+      Xhci/
+        XhciDriver.cs        ← Cosmos.Kernel.Drivers.Pci.Bus.Xhci
+    Storage/                 ← otherwise, what it publishes (a block device)
+      Nvme/
+        NvmeDriver.cs
+  Virtio/
+    Display/
+      VirtioGpu/
+        VirtioGpuDriver.cs   ← Cosmos.Kernel.Drivers.Virtio.Display.VirtioGpu
+</code></pre>
+<p>Le type de bus est celui sur lequel le pilote établit sa correspondance, nommé d'après son type de correspondance : <code>Pci</code>, <code>Platform</code>, <code>Ps2</code>, <code>Usb</code> ou <code>Virtio</code>. La catégorie est <code>Bus</code> pour un pilote de bus et, sinon, nomme ce que le pilote publie : <code>Audio</code>, <code>Display</code>, <code>Input</code> (un clavier ou un pointeur), <code>Network</code> ou <code>Storage</code> (un périphérique bloc). Le dossier du pilote est le nom de la classe sans <code>Driver</code>, sauf si un type du dossier porte déjà ce nom, car un espace de noms ne doit pas partager son nom avec l'un de ses types : les pilotes de transport se trouvent dans <code>VirtioPci</code> et <code>VirtioMmio</code>, à côté de leurs classes <code>VirtioPciTransport</code> et <code>VirtioMmioTransport</code>. Les types d'état, de protocole et de vocabulaire d'un pilote restent dans son dossier, dans des sous-dossiers quand ils sont nombreux (<code>VmwareSvga/Enums</code>, <code>VmwareSvga/Structs</code>). L'espace de noms fait partie du nom de type complet que désigne <code>CosmosDriverExclude</code> et selon lequel le manifeste trie (<a href="build/driver-manifest.html">Manifeste des pilotes</a>), si bien que déplacer un pilote change les deux.</p>
+<p><a id="hal-folders"></a></p>
+<h3 id="dossiers-de-la-hal">Dossiers de la HAL</h3>
+<p><code>Cosmos.Kernel.HAL</code> donne à chaque concept un dossier de premier niveau, et aucun nom de dossier n'apparaît deux fois dans l'arborescence :</p>
+<pre><code>Cosmos.Kernel.HAL/
+  Experimentals.cs           ← the seam's diagnostic ID (COSMOS0003)
+  Boot/                      ← internal: IPlatformInitializer, PlatformHAL
+  Timers/                    ← internal: TickSource, TimerEntry
+  Internal/                  ← the LibraryInitializer ILC finds by full name
+  Devices/                   ← what a device is, a folder per category
+    Audio/                   ← IAudioOutput, AudioFormat, AudioSink, AudioConsumer
+    Display/                 ← IDisplay, its facets, DisplayMode, DisplaySink, DisplayConsumer, FirmwareDisplay
+    Input/
+    Network/                 ← INetworkInterface, NetworkSink, NetworkConsumer, MacAddress
+    Storage/                 ← IBlockDevice, its facet IRemovableMedia, BlockConsumer
+  DriverKit/                 ← how a driver finds and binds a device
+    Driver.cs                ← the driver and its binding: matching, probing, the node tree
+    DeviceBinding.cs
+    Resources/               ← what a binding hands out: RegisterWindow, DeviceRegion, DmaBuffer
+    Interrupts/              ← InterruptSource, InterruptHandle, InterruptHandler, InterruptContext
+    Threading/               ← DeviceLock, DeviceEvent, DriverThread, WorkItem
+    Buses/
+      Pci/                   ← PciIdentity, PciMatch, PciAccess, PciLineInterruptSource, …
+      Usb/
+    Engine/                  ← internal: DeviceRegistry, DriverEngine, Arbitration, DriverLog
+</code></pre>
+<p>Une catégorie de périphériques sous <code>Devices/</code> contient tout ce qui concerne ce type de périphérique : le contrat qu'un pilote implémente, ses facettes et son vocabulaire, le récepteur par lequel le pilote rend compte (les périphériques bloc n'en ont pas) et le consommateur interne de l'anneau supporté, qui apprend l'arrivée et le départ de chaque périphérique et reçoit ses comptes rendus. Les catégories sont celles sous lesquelles <code>Cosmos.Kernel.Drivers</code> range ses pilotes (<a href="#driver-folders">Dossiers des pilotes</a>), moins <code>Bus</code>. <code>Display/</code> contient aussi <code>FirmwareDisplay</code>, l'écran que le moteur publie sur le framebuffer de démarrage qu'a lu le <code>BootFirmware</code> du Core. La HAL n'a pas de dossier pour le firmware : lire ce que transmettent le chargeur d'amorçage et le firmware demande des pointeurs, cela revient donc au Core (<a href="#unsafe-code">Code unsafe</a>).</p>
+<p>La racine <code>DriverKit/</code> contient le pilote et sa liaison : <code>Driver</code> et son attribut, le registre, <code>DeviceBinding</code>, l'arbre des nœuds avec ses classes de base d'identité et de correspondance, et le vocabulaire du sondage et du détachement. Ce qu'une liaison remet à un pilote se trouve un dossier plus bas, rangé par préoccupation : <code>Resources/</code> pour les moyens d'atteindre le matériel (ressources, fenêtres de registres, régions mappées, tampons DMA), <code>Interrupts/</code> pour les sources et le contrat du gestionnaire d'interruption, et <code>Threading/</code> pour les verrous, les événements, les threads et les éléments de travail avec lesquels un pilote se synchronise. Un pilote nomme la racine, puis les dossiers qu'il utilise.</p>
+<p>Un type de bus sous <code>DriverKit/Buses/</code> donne à chaque rôle le même nom dans chaque dossier : <code>&lt;Bus&gt;Identity</code>, <code>&lt;Bus&gt;Match</code>, <code>&lt;Bus&gt;Access</code> quand un pilote atteint le périphérique à travers le bus (le bus de plateforme n'en a pas : un pilote de plateforme mappe les ressources de son nœud, et seul le nœud hôte PCI porte un objet d'accès, le <code>PciHostAccess</code> du dossier PCI), <code>&lt;Bus&gt;InterruptSource</code> quand le bus délivre ses propres interruptions (sur PCI et sur le bus de plateforme, le nom dit aussi comment : <code>PciLineInterruptSource</code>, <code>PciMessageInterruptSource</code>, <code>PlatformLineInterruptSource</code>), et le vocabulaire propre au bus à côté d'eux. La classe de base que l'hôte d'un bus implémente pour le kit garde le nom qu'utilise sa spécification (<code>Ps2Controller</code>, <code>UsbHostController</code>, <code>VirtioTransport</code>) plutôt qu'un suffixe commun à tous les bus ; celle du bus de plateforme est <code>PlatformLineRouting</code>, que la description de la machine implémente.</p>
+<p>La stabilité est marquée sur chaque type, et non par dossier. Chaque type public de la HAL porte <code>[Experimental(Experimentals.DriverKitSeamDiagId)]</code>, sauf les deux contrats stables, <code>IBlockDevice</code> et <code>MacAddress</code>, et la cible <code>CosmosGuardHalPromotion</code> du projet HAL fait échouer le build dès qu'un autre type public perd l'attribut (<a href="public-api.html#the-policy">Suivi de l'API publique</a>).</p>
+<p><a id="member-order"></a></p>
+<h3 id="ordre-des-membres">Ordre des membres</h3>
+<p>Il n'y a pas de convention de séparateurs à suivre. Quatre fichiers du ramasse-miettes portent des en-têtes <code>// --- Section Name ---</code>, écrits trois semaines avant cette page, et les fichiers des pilotes d'affichage de <code>Cosmos.Kernel.Drivers</code> ont ensuite été écrits pour s'y conformer. Les 353 autres fichiers des quatre assemblies suivis, hors code tiers embarqué, ne le font pas, aucun fichier n'a jamais été converti et aucun analyseur ne le vérifie. Il n'y a pas non plus d'ordre des membres à décrire : sur 131 types qui ont trois sortes de membres ou plus, on compte 93 ordres distincts, et l'ordre unique qui s'en approche le mieux en couvre 43.</p>
+<p>Deux ordres valent tout de même d'être suivis, parce qu'un lecteur les vérifie sans quitter l'écran :</p>
+<ul>
+<li>Les champs et les constantes viennent avant les membres qui les lisent, et non après la première méthode.</li>
+<li>Les constructeurs viennent après les champs et les propriétés et avant les méthodes, et une fabrique statique se place avec les constructeurs dont elle tient lieu.</li>
+</ul>
+<p>Si vous voulez un modèle de la forme complète avec séparateurs pour un nouveau fichier, <code>Cosmos.Kernel.Drivers/Virtio/Display/VirtioGpu/VirtioGpuDriver.cs</code> est le fichier qui la montre. Ne convertissez pas un fichier existant à cette forme.</p>
+<p><a id="using-directives"></a></p>
+<h3 id="directives-using">Directives using</h3>
+<ul>
+<li>Placez les directives <code>using</code> <strong>en dehors</strong> de l'espace de noms.</li>
+<li>Triez les espaces de noms <code>System</code> en premier.</li>
+<li>Utilisez des espaces de noms de portée fichier (par ex. <code>namespace Cosmos.Kernel.Core.Scheduler;</code>). Les arborescences de code tiers embarqué sous <code>ThirdParty/</code> (BigGustave, SharpZipLib, LunarFonts) et les copies de dotnet/runtime gardent la forme en bloc afin de rester comparables par diff avec l'amont, et <code>Core/Runtime/Stdllib.cs</code> ne peut pas du tout prendre la forme de portée fichier : il déclare quatre espaces de noms, dont un imbriqué, ce qui provoque l'erreur CS8955.</li>
+</ul>
+<hr>
+<p><a id="4-class--type-design"></a></p>
+<h2 id="4-conception-des-classes-et-des-types">4. Conception des classes et des types</h2>
+<p><a id="static-utility-classes"></a></p>
+<h3 id="classes-utilitaires-statiques">Classes utilitaires statiques</h3>
+<p>Utilisez une <code>static class</code> pour les utilitaires du noyau sans état, qui n'ont aucun état par instance.</p>
+<p><a id="managers"></a></p>
+<h3 id="gestionnaires">Gestionnaires</h3>
+<p>Utilisez une <code>static class</code>. Les gestionnaires coordonnent l'état d'un sous-système sans exiger d'instance. La mise en place sur le chemin de démarrage est une méthode <code>internal static void Initialize()</code> appelée depuis <code>LibraryInitializer</code>, jamais depuis un noyau :</p>
+<pre><code class="lang-csharp">// Simple manager: no underlying instance to expose
+public static class TimerManager
+{
+    private static TickSource? s_tickSource;
+
+    public static bool IsInitialized =&gt; s_tickSource is not null;
+
+    internal static void RegisterTickSource(TickSource tickSource) { ... }
+    public static void Wait(uint ms) { ... }
+}
+
+// Manager wrapping a pluggable implementation: expose via Current
+public static class SchedulerManager
+{
+    private static IScheduler? s_currentScheduler;
+
+    public static IScheduler? Current =&gt; s_currentScheduler;
+
+    internal static void Initialize(uint cpuCount) { ... }
+}
+</code></pre>
+<p>N'ajoutez une propriété <code>Current</code> que lorsque le gestionnaire enveloppe une implémentation interchangeable (par ex. <code>IScheduler</code> pour plusieurs algorithmes d'ordonnancement). La plupart des gestionnaires n'en ont pas besoin.</p>
+<p>Ne gardez pas d'indicateur <code>_initialized</code> séparé à côté de l'état qu'il représente. Dérivez <code>IsInitialized</code> de cet état, et faites en sorte qu'<code>Initialize</code> se protège de la réentrance sur ce même champ, en l'assignant en dernier pour qu'aucun lecteur ne voie <code>IsInitialized</code> passer à vrai avant que l'état qui le sous-tend n'existe.</p>
+<p>Quand un gestionnaire se trouve derrière un commutateur de fonctionnalité, ses membres suivent la règle de <a href="public-api.html#behaviour-when-a-feature-is-compiled-out">Suivi de l'API publique</a> : les lectures répondent honnêtement quand la fonctionnalité est désactivée, les actions lèvent une exception qui nomme le commutateur.</p>
+<p><a id="structs-for-low-level-data"></a></p>
+<h3 id="structs-pour-les-données-bas-niveau">Structs pour les données bas niveau</h3>
+<p>Utilisez <code>struct</code> avec <code>[StructLayout(LayoutKind.Sequential)]</code> pour les données qui correspondent à une disposition matérielle ou mémoire :</p>
+<pre><code class="lang-csharp">[StructLayout(LayoutKind.Sequential)]
+internal struct FreeBlock
+{
+    public unsafe MethodTable* MethodTable;
+    public nuint Size;
+    public unsafe FreeBlock* Next;
+}
+</code></pre>
+<p><a id="enums"></a></p>
+<h3 id="énumérations">Énumérations</h3>
+<p>Utilisez <code>enum</code> pour les machines à états et les indicateurs. Appliquez <code>[Flags]</code> lorsque c'est approprié :</p>
+<pre><code class="lang-csharp">public enum ThreadState
+{
+    Ready,
+    Running,
+    Blocked,
+    Sleeping,
+    Dead
+}
+
+[Flags]
+public enum ThreadFlags
+{
+    None = 0,
+    IsIdle = 1 &lt;&lt; 0,
+    IsKernel = 1 &lt;&lt; 1
+}
+</code></pre>
+<p><a id="types-compared-by-value"></a></p>
+<h3 id="types-comparés-par-valeur">Types comparés par valeur</h3>
+<p>Un type dont l'identité est son contenu (<code>Address</code>, <code>MacAddress</code>, <code>Mode</code>) est <code>sealed</code>, garde son état dans des membres en lecture seule définis par le constructeur, et implémente <code>IEquatable&lt;T&gt;</code> à côté de <code>Equals(object?)</code> et <code>GetHashCode()</code>. Les trois concordent : deux instances égales au sens de <code>Equals</code> ont le même hachage, et <code>GetHashCode</code> ne lève jamais d'exception. L'ordre, quand il existe, passe par <code>IComparable&lt;T&gt;</code>, jamais par l'<code>IComparable</code> non générique. Un appelant qui a besoin des octets reçoit un <code>ReadOnlySpan&lt;byte&gt;</code> ; le tableau sous-jacent n'est jamais remis, parce qu'un appelant qui peut y écrire change l'identité derrière chaque dictionnaire dont la valeur est la clé.</p>
+<pre><code class="lang-csharp">public sealed class Address : IComparable&lt;Address&gt;, IEquatable&lt;Address&gt;
+{
+    public ImmutableArray&lt;byte&gt; Parts { get; }
+
+    public Address(ReadOnlySpan&lt;byte&gt; buffer) { ... }
+
+    public ReadOnlySpan&lt;byte&gt; ToSpan()
+    {
+        return Parts.AsSpan();
+    }
+
+    public bool Equals(Address? other)
+    {
+        return other is not null &amp;&amp; Parts.SequenceEqual(other.Parts);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as Address);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Id);
+    }
+
+    public int CompareTo(Address? other)
+    {
+        return other is null ? 1 : Id.CompareTo(other.Id);
+    }
+}
+</code></pre>
+<p><a id="registered-instances"></a></p>
+<h3 id="instances-enregistrées">Instances enregistrées</h3>
+<p>Quand le sous-système doit voir chaque instance vivante (<code>TcpConnection.Connections</code>), le constructeur est privé et une fabrique statique crée et enregistre l'instance (<code>TcpConnection.CreateConnection</code>). Le registre reste privé, et le retrait libère l'instance afin que ce qu'elle a emprunté retourne à son pool.</p>
+<hr>
+<p><a id="5-kernel-lifecycle"></a></p>
+<h2 id="5-cycle-de-vie-du-noyau">5. Cycle de vie du noyau</h2>
+<p><a id="user-kernel-pattern"></a></p>
+<h3 id="modèle-du-noyau-utilisateur">Modèle du noyau utilisateur</h3>
+<p>Les noyaux utilisateur héritent de <code>Cosmos.Kernel.System.Kernel</code> et redéfinissent les méthodes du cycle de vie :</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.System;
+
+namespace MyKernel;
+
+public class Kernel : Cosmos.Kernel.System.Kernel
+{
+    protected override void BeforeRun()
+    {
+        // One-time setup (after boot, before main loop)
+        Console.WriteLine(&quot;Booted!&quot;);
+    }
+
+    protected override void Run()
+    {
+        // Called in a loop until Stop() is called
+        string? input = Console.ReadLine();
+        ProcessCommand(input);
+    }
+
+    protected override void AfterRun()
+    {
+        // Cleanup (after main loop exits)
+    }
+}
+</code></pre>
+<p><strong>Règles :</strong></p>
+<ul>
+<li>Redéfinissez <code>OnBoot()</code> uniquement pour personnaliser le démarrage (l'implémentation par défaut démarre <code>KernelConsole</code>).</li>
+<li>Redéfinissez <code>BeforeRun()</code> pour la mise en place unique, une fois le système prêt.</li>
+<li><code>Run()</code> est le corps de la boucle principale : gardez-le ciblé.</li>
+<li>Appelez <code>Stop()</code> pour sortir proprement de la boucle principale.</li>
+<li>Il faut éviter de revenir du noyau : la classe de base arrête le CPU après <code>AfterRun()</code>.</li>
+</ul>
+<hr>
+<p><a id="6-hal-architecture"></a></p>
+<h2 id="6-architecture-de-la-hal">6. Architecture de la HAL</h2>
+<p><a id="interface-driven-hal"></a></p>
+<h3 id="hal-pilotée-par-des-interfaces">HAL pilotée par des interfaces</h3>
+<p>Les services de plateforme passent par des interfaces. Les implémentations sont enregistrées au démarrage :</p>
+<pre><code class="lang-csharp">// Interface (Cosmos.Kernel.Core, internal: no kernel registers or obtains one)
+internal interface ICpuOps
+{
+    void Halt();
+    void DisableInterrupts();
+    void EnableInterrupts();
+}
+
+// Implementation (Cosmos.Kernel.HAL.X64)
+public class X64CpuOps : ICpuOps
+{
+    public void Halt()
+    {
+        Native.Cpu.Halt();
+    }
+
+    // ...
+}
+</code></pre>
+<p><a id="platform-initializer-pattern"></a></p>
+<h3 id="modèle-de-linitialiseur-de-plateforme">Modèle de l'initialiseur de plateforme</h3>
+<p>Chaque architecture fournit une fabrique qui crée tous les composants propres à la plateforme. La fabrique, le contrat et tout ce qu'elle renvoie sont internes à la HAL : un noyau n'en installe jamais. L'initialiseur est aussi la description de la machine : il publie les nœuds de plateforme racines auxquels un pilote de bus se lie, à partir des sources que connaît la plateforme : les tables ACPI, le device tree que le chargeur d'amorçage a transmis, ou une table propre à chaque machine ; et il ne contient aucun pilote de périphérique.</p>
+<pre><code class="lang-csharp">internal class X64PlatformInitializer : IPlatformInitializer
+{
+    public string PlatformName =&gt; &quot;x86-64&quot;;
+    public PlatformArchitecture Architecture =&gt; PlatformArchitecture.X64;
+
+    public IPortIO CreatePortIO()
+    {
+        return new X64PortIO();
+    }
+
+    public ICpuOps CreateCpuOps()
+    {
+        return new X64CpuOps();
+    }
+
+    public IInterruptController CreateInterruptController()
+    {
+        return new X64InterruptController();
+    }
+
+    public TickSource CreateTickSource()
+    {
+        return new PIT();
+    }
+
+    public void PublishPlatformNodes()
+    {
+        // the 8042 and the PCI host, with their port ranges and lines
+    }
+
+    public uint GetCpuCount()
+    {
+        return /* ACPI/MADT */ 1;
+    }
+
+    public void InitializeHardware()
+    {
+        // ACPI, APIC, timers
+    }
+
+    public void StartSchedulerTimer(uint quantumMs)
+    {
+        // Configure PIT/APIC timer for preemptive scheduling
+    }
+}
+</code></pre>
+<p><a id="adding-a-new-device"></a></p>
+<h3 id="ajouter-un-nouveau-périphérique">Ajouter un nouveau périphérique</h3>
+<p>Écrivez une classe <code>[Driver]</code> dans <code>Cosmos.Kernel.Drivers</code> sur le kit et publiez le périphérique par sa liaison (<a href="../user/drivers.html">Écrire un pilote</a>). Quand le périphérique se trouve sur un bus que le kit ne connaît pas :</p>
+<ol>
+<li>Ajoutez le type de bus au kit, dans son propre dossier sous <code>DriverKit/Buses/</code> : une identité, une correspondance, un objet d'accès quand un pilote atteint le périphérique à travers le bus, une source d'interruptions quand le bus délivre ses propres interruptions, et un format de chemin (<a href="#hal-folders">Dossiers de la HAL</a>).</li>
+<li>Publiez ses nœuds depuis la description de la machine (<code>PublishPlatformNodes</code>) ou depuis un pilote de bus (<code>PublishChild</code>).</li>
+<li>Écrivez le pilote feuille sur l'objet d'accès.</li>
+</ol>
+<p>Rien d'autre que du code de plateforme ne va dans <code>Cosmos.Kernel.HAL.X64</code> ou <code>Cosmos.Kernel.HAL.ARM64</code>. Le parseur du device tree est du code Core, sous <code>Cosmos.Kernel.Core/Firmware</code>, à côté des autres lecteurs de ce que transmet le firmware ; la description ARM64 ne fait que le lire.</p>
+<p><a id="hal-registration"></a></p>
+<h3 id="enregistrement-de-la-hal">Enregistrement de la HAL</h3>
+<pre><code class="lang-csharp">// At boot (from the library initializer, or from OnBoot):
+PlatformHAL.Initialize(new X64PlatformInitializer());
+</code></pre>
+<hr>
+<p><a id="7-plug-system"></a></p>
+<h2 id="7-système-de-plugs">7. Système de plugs</h2>
+<p>Les plugs remplacent des méthodes de la BCL au niveau IL. Le patcher recâble les appels au moment du build. Pour la documentation complète sur les attributs de plug (<code>[Plug]</code>, <code>[PlugMember]</code>, <code>[PlatformSpecific]</code>) et le modèle de plug, voir <a href="plugs.html">Plugs</a>.</p>
+<p><a id="when-to-use-plugs-vs-other-approaches"></a></p>
+<h3 id="quand-utiliser-les-plugs-plutôt-que-dautres-approches">Quand utiliser les plugs plutôt que d'autres approches</h3>
+<table>
+<thead>
+<tr>
+<th>Scénario</th>
+<th>Approche</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Remplacer une méthode de la BCL</td>
+<td>Plug</td>
+</tr>
+<tr>
+<td>Ajouter une API au niveau du noyau</td>
+<td>Nouvelle classe dans <code>Cosmos.Kernel.System</code></td>
+</tr>
+<tr>
+<td>Fournir un stub du runtime</td>
+<td><code>[RuntimeExport]</code> dans Core</td>
+</tr>
+<tr>
+<td>Appeler du code natif</td>
+<td><code>[LibraryImport]</code> dans Core</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a id="8-native-interop"></a></p>
+<h2 id="8-interopérabilité-native">8. Interopérabilité native</h2>
+<p><a id="c-callable-from-native"></a></p>
+<h3 id="c-appelable-depuis-le-code-natif">C# appelable depuis le code natif</h3>
+<p>Il existe deux modèles selon l'appelant :</p>
+<p><strong><code>[RuntimeExport]</code></strong> : pour les stubs du runtime NativeAOT (appelés par le runtime lui-même). Ils correspondent aux déclarations <code>[RuntimeImport]</code> de <a href="https://github.com/dotnet/runtime/blob/main/src/coreclr/nativeaot/System.Private.CoreLib/src/System/Runtime/RuntimeImports.cs"><code>System.Private.CoreLib/RuntimeImports.cs</code></a> :</p>
+<pre><code class="lang-csharp">[RuntimeExport(&quot;RhNewArray&quot;)]
+internal static unsafe void* RhNewArray(MethodTable* pEEType, int length)
+{
+    return GarbageCollector.AllocArray(pEEType, length);
+}
+</code></pre>
+<p><strong><code>[UnmanagedCallersOnly]</code></strong> : pour les méthodes C# appelables depuis du code C natif (ponts) :</p>
+<pre><code class="lang-csharp">[UnmanagedCallersOnly(EntryPoint = &quot;__cosmos_serial_write&quot;)]
+public static void CosmosSerialWrite(byte* str)
+{
+    // C code calls this via the symbol __cosmos_serial_write
+}
+</code></pre>
+<p>Utilisez <code>[RuntimeExport]</code> pour les exports qu'exigent le runtime ou l'ABI (par exemple les stubs <code>Rh*</code> et les symboles libc/math ou mémoire comme <code>ceil</code>, <code>sqrt</code>, <code>memmove</code>, <code>memset</code>). Préférez <code>[UnmanagedCallersOnly]</code> pour les autres callbacks du code natif vers le code managé (gestionnaires d'interruption, ponts vers des bibliothèques C, etc.).</p>
+<p><a id="native-callable-from-c"></a></p>
+<h3 id="code-natif-appelable-depuis-c">Code natif appelable depuis C#</h3>
+<p>Le modèle P/Invoke moderne pour appeler des routines en assembleur :</p>
+<pre><code class="lang-csharp">[LibraryImport(&quot;*&quot;, EntryPoint = &quot;_native_cpu_rdtsc&quot;)]
+[SuppressGCTransition]
+private static partial ulong NativeReadTSC();
+</code></pre>
+<p><strong>Règles :</strong></p>
+<ul>
+<li>Utilisez <code>LibraryImport</code> (et non <code>DllImport</code>) : il est généré par source et compatible AOT.</li>
+<li>Utilisez <code>&quot;*&quot;</code> comme nom de bibliothèque (lien vers le binaire du noyau lui-même).</li>
+<li>Ajoutez <code>[SuppressGCTransition]</code> pour les appels sur des chemins critiques qui ne déclenchent pas de GC.</li>
+<li>Gardez les méthodes d'interopérabilité native <code>private</code> et enveloppez-les dans une API publique propre.</li>
+<li>Les noms des points d'entrée en assembleur utilisent <code>_snake_case</code> avec un préfixe de catégorie : <code>_native_cpu_rdtsc</code>, <code>_native_io_write_byte</code>.</li>
+</ul>
+<hr>
+<p><a id="9-architecture-specific-code"></a></p>
+<h2 id="9-code-spécifique-à-une-architecture">9. Code spécifique à une architecture</h2>
+<p><a id="conditional-compilation"></a></p>
+<h3 id="compilation-conditionnelle">Compilation conditionnelle</h3>
+<p>Utilisez <code>#if ARCH_X64</code> / <code>#if ARCH_ARM64</code> pour le code qui diffère selon l'architecture. Pour l'instant, ce n'est toléré que dans <code>Cosmos.Kernel.Core</code>, et c'est voué à disparaître.</p>
+<pre><code class="lang-csharp">public static void ComWrite(byte value)
+{
+#if ARCH_ARM64
+    while ((Native.MMIO.Read32(PL011_BASE + PL011_FR) &amp; FR_TXFF) != 0) ;
+    Native.MMIO.Write8(PL011_BASE + PL011_DR, value);
+#else
+    while ((Native.IO.Read8(COM1_BASE + REG_LSR) &amp; LSR_TX_EMPTY) == 0) ;
+    Native.IO.Write8(COM1_BASE + REG_DATA, value);
+#endif
+}
+</code></pre>
+<p><a id="when-to-use-what"></a></p>
+<h3 id="quand-utiliser-quoi">Quand utiliser quoi</h3>
+<table>
+<thead>
+<tr>
+<th>Modèle</th>
+<th>Quand</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>#if ARCH_X64</code></td>
+<td>Même classe, petites différences de code (par ex. le pilote série)</td>
+</tr>
+<tr>
+<td>Fichiers séparés (<code>*.X64.cs</code>)</td>
+<td>Même classe, gros blocs par architecture (par ex. ThreadContext)</td>
+</tr>
+<tr>
+<td>Projets HAL séparés</td>
+<td>Implémentations différentes derrière une interface commune</td>
+</tr>
+<tr>
+<td>Projets Native séparés</td>
+<td>Code assembleur (<code>.s</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><a id="guard-rules"></a></p>
+<h3 id="règles-de-garde">Règles de garde</h3>
+<ul>
+<li>Le chemin <code>#else</code> par défaut doit être x64 (la cible de développement la plus courante).</li>
+<li>Ayez toujours les deux chemins : pas de <code>#if</code> isolé sans l'autre architecture.</li>
+<li>Demandez-vous si le code n'a pas plutôt sa place dans une implémentation de la HAL que dans un <code>#if</code>.</li>
+</ul>
+<hr>
+<p><a id="10-memory--safety"></a></p>
+<h2 id="10-mémoire-et-sûreté">10. Mémoire et sûreté</h2>
+<p><a id="unsafe-code"></a></p>
+<h3 id="code-unsafe">Code unsafe</h3>
+<p>Le code unsafe se trouve dans <code>Cosmos.Kernel.Core</code> et ses projets d'architecture (<code>Cosmos.Kernel.Core.X64</code>, <code>Cosmos.Kernel.Core.ARM64</code>), ainsi que dans les éléments situés hors des couches (<code>Cosmos.Kernel.Boot.Limine</code>, <code>Cosmos.Kernel.Plugs</code>, <code>Cosmos.Kernel.Debug</code> et l'agrégateur <code>Cosmos.Kernel</code>). <code>Cosmos.Kernel.HAL</code>, ses projets de plateforme, <code>Cosmos.Kernel.System</code> et <code>Cosmos.Kernel.Drivers</code> sont compilés avec <code>&lt;AllowUnsafeBlocks&gt;false&lt;/AllowUnsafeBlocks&gt;</code>, si bien que le compilateur y refuse tout pointeur. Ce dont ces couches ont besoin en mémoire, le Core le leur fournit par adresse :</p>
+<ul>
+<li><code>MemoryBlock</code> (<code>Core/Memory/</code>, le type de gen2) est une vue sur la mémoire située à une adresse : <code>Span</code> et <code>AsSpan&lt;T&gt;</code> la lisent et l'écrivent. <code>PageAllocator.AllocBlock</code> fournit des pages sous forme de bloc et <code>PageAllocator.Free(MemoryBlock)</code> les reprend. Une ressource du kit (<code>DeviceRegion</code>, <code>DmaBuffer</code>) détient un bloc et refuse de donner son span une fois sa liaison démantelée.</li>
+<li><code>AddressSpace.HhdmOffset</code> est le décalage de la moitié haute de Limine, lu à un seul endroit.</li>
+<li><code>Core/Firmware/</code> lit ce que transmettent le chargeur d'amorçage et le firmware : le framebuffer, le device tree, l'heure de démarrage, l'entrée MCFG de l'ACPI et l'horloge EFI (<code>BootFirmware</code>, <code>DeviceTree</code>, <code>AcpiMcfg</code>, <code>EfiRtc</code>).</li>
+</ul>
+<p>Une structure que le périphérique lit sur place, comme un anneau de virtqueue, est atteinte par <code>MemoryMarshal.Cast</code> et <code>MemoryMarshal.AsRef</code> sur un tel span, avec <code>Volatile.Read</code> pour un champ que le périphérique écrit. Quand une couche au-dessus du Core a besoin de ce que seul un pointeur donne, la solution est un point d'entrée dans le Core, pas un bloc <code>unsafe</code>. Au sein du Core, limitez <code>unsafe</code> aux endroits où il est nécessaire :</p>
+<pre><code class="lang-csharp">// Good: unsafe scoped to where needed
+public static unsafe void WriteString(string str)
+{
+    fixed (char* ptr = str)
+    {
+        for (int i = 0; i &lt; str.Length; i++)
+        {
+            ComWrite((byte)ptr[i]);
+        }
+    }
+}
+
+// Good: unsafe class for types that inherently work with pointers
+public unsafe class Thread : SchedulerExtensible
+{
+    public ThreadContext* GetContext()
+    {
+        return (ThreadContext*)StackPointer;
+    }
+}
+</code></pre>
+<p><a id="memory-allocation"></a></p>
+<h3 id="allocation-mémoire">Allocation mémoire</h3>
+<pre><code class="lang-csharp">// Kernel heap allocation (manual, non-GC)
+void* ptr = MemoryOp.Alloc(size);
+MemoryOp.Free(ptr);
+
+// GC-managed allocation (via RuntimeExport stubs)
+// Happens automatically through normal C# object creation
+List&lt;int&gt; list = new();  // uses RhAllocateNewArray under the hood
+</code></pre>
+<p><a id="pointer-safety"></a></p>
+<h3 id="sûreté-des-pointeurs">Sûreté des pointeurs</h3>
+<ul>
+<li>Vérifiez toujours les pointeurs avant de les déréférencer dans le code du GC ou de parcours.</li>
+<li>Utilisez <code>nuint</code> pour les adresses (et non <code>uint</code>, ce qui évite la troncature en 64 bits).</li>
+<li>Utilisez <code>nint</code>/<code>nuint</code> pour l'arithmétique de pointeurs, et non <code>int</code>/<code>uint</code>.</li>
+<li>Utilisez <code>stackalloc</code> pour les petits tampons à courte durée de vie plutôt qu'une allocation sur le tas.</li>
+</ul>
+<p><a id="buffers"></a></p>
+<h3 id="tampons">Tampons</h3>
+<table>
+<thead>
+<tr>
+<th>Tampon</th>
+<th>Utilisation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Petit, de taille fixe, limité à un appel</td>
+<td><code>stackalloc</code></td>
+</tr>
+<tr>
+<td>De taille variable, conservé d'un appel à l'autre (un tampon de réception)</td>
+<td><code>ArrayPool&lt;T&gt;.Shared.Rent</code>, rendu depuis <code>Dispose()</code></td>
+</tr>
+<tr>
+<td>Entrée en lecture seule</td>
+<td>Un paramètre <code>ReadOnlySpan&lt;T&gt;</code>, pas <code>byte[]</code></td>
+</tr>
+<tr>
+<td>Copie</td>
+<td><code>source.CopyTo(destination)</code> sur des spans, pas <code>Buffer.BlockCopy</code></td>
+</tr>
+</tbody>
+</table>
+<p>Un tableau emprunté est au moins aussi long que demandé, et pas exactement aussi long : le propriétaire suit donc la longueur et le décalage qu'il utilise et expose la partie vivante sous forme de <code>ReadOnlySpan&lt;T&gt;</code>, jamais le tableau. <code>TcpConnection</code> sert de modèle : <code>_data</code>, <code>_dataOffset</code> et <code>_dataLength</code> derrière <code>Data =&gt; _data.AsSpan().Slice(_dataOffset, _dataLength)</code>, avec <code>AppendToData</code> qui écrit sur place tant que le tableau emprunté a de la place et <code>Dispose</code> qui le rend.</p>
+<p><a id="critical-sections"></a></p>
+<h3 id="sections-critiques">Sections critiques</h3>
+<pre><code class="lang-csharp">// Preferred: scoped interrupt disable
+using (InternalCpu.DisableInterruptsScope())
+{
+    // Interrupts disabled here
+    // Re-enabled automatically at scope exit
+}
+</code></pre>
+<hr>
+<p><a id="11-error-handling"></a></p>
+<h2 id="11-gestion-des-erreurs">11. Gestion des erreurs</h2>
+<p><a id="kernel-panic"></a></p>
+<h3 id="panique-du-noyau">Panique du noyau</h3>
+<p>Pour les erreurs irrécupérables, utilisez <code>Panic.Halt()</code>. Elle désactive les interruptions, affiche le message ainsi que la méthode, le fichier et la ligne de l'appelant, puis arrête le CPU :</p>
+<pre><code class="lang-csharp">if (ptr == null)
+    Panic.Halt(&quot;Memory allocation failed&quot;);
+</code></pre>
+<p>Les informations sur l'appelant sont remplies par le compilateur : passez donc le message et rien d'autre. <code>Panic.Halt</code> est <code>[DoesNotReturn]</code>, ce qui permet au code situé après une vérification de nullité de déréférencer la valeur que cette vérification vient d'écarter.</p>
+<h3 id="exceptions">Exceptions</h3>
+<p>Les exceptions fonctionnent, mais utilisez-les avec discernement :</p>
+<pre><code class="lang-csharp">// Good: validate at API boundaries
+public static void RescanPartitions(IBlockDevice device)
+{
+    ArgumentNullException.ThrowIfNull(device);
+    // ...
+}
+
+// Good: feature guards
+private static void ThrowIfKeyboardDisabled()
+{
+    if (!CosmosFeatures.KeyboardEnabled)
+        throw new InvalidOperationException(&quot;Console input requires keyboard feature.&quot;);
+}
+
+// Bad: exceptions in interrupt handlers, GC, or scheduler hot paths
+// These paths cannot allocate (exception objects are heap-allocated)
+</code></pre>
+<p><a id="argument-checks"></a></p>
+<h3 id="vérification-des-arguments">Vérification des arguments</h3>
+<p>Quand la vérification tient en une seule comparaison, le helper de levée d'exception remplace le <code>if</code> et le <code>throw</code> écrits à la main. Le paramètre nommé est celui dont la valeur dérive, afin qu'un appelant qui lit l'exception trouve l'argument à corriger :</p>
+<pre><code class="lang-csharp">ArgumentNullException.ThrowIfNull(device);
+ArgumentOutOfRangeException.ThrowIfNegative(width);
+ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, MaxPartitions);
+ArgumentOutOfRangeException.ThrowIfNotEqual(buffer.Length, 4, nameof(buffer));
+ArgumentOutOfRangeException.ThrowIfGreaterThan(blockCount, (ulong)data.Length / sector, nameof(blockCount));
+ObjectDisposedException.ThrowIf(_disposed, this);
+</code></pre>
+<p>Un intervalle se vérifie avec deux helpers, un par borne (<code>ThrowIfLessThan</code> puis <code>ThrowIfGreaterThan</code>), et non avec un seul <code>||</code> écrit à la main. Une condition qu'aucun helper n'exprime (<code>sectorCount &gt; host.BlockCount - startSector</code>) garde le <code>throw</code> explicite, tout comme une vérification qui doit journaliser avant de lever l'exception. Le nom du paramètre est toujours <code>nameof(x)</code>, jamais un littéral de chaîne, et jamais le message : <code>new ArgumentOutOfRangeException(&quot;Invalid offset or size&quot;)</code> nomme un paramètre appelé <code>Invalid offset or size</code>.</p>
+<p><a id="when-to-panic-vs-throw"></a></p>
+<h3 id="quand-paniquer-quand-lever-une-exception">Quand paniquer, quand lever une exception</h3>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Défaillance matérielle, état corrompu</td>
+<td><code>Panic.Halt()</code></td>
+</tr>
+<tr>
+<td>Erreur interne du GC ou de l'allocateur</td>
+<td><code>Panic.Halt()</code></td>
+</tr>
+<tr>
+<td>Utilisation invalide de l'API</td>
+<td><code>throw</code> de l'exception appropriée</td>
+</tr>
+<tr>
+<td>Fonctionnalité absente à l'exécution, dans un membre qui agit sur elle</td>
+<td><code>throw InvalidOperationException</code> en nommant le commutateur</td>
+</tr>
+<tr>
+<td>Fonctionnalité absente à l'exécution, dans un membre qui répond à une question</td>
+<td>Renvoyer <code>0</code>/<code>null</code>/<code>false</code>/vide</td>
+</tr>
+<tr>
+<td>Erreur visible par l'utilisateur dans le shell du noyau</td>
+<td><code>try/catch</code> + affichage d'un message d'erreur</td>
+</tr>
+</tbody>
+</table>
+<p>Le type levé est un type qu'un appelant peut intercepter par son nom : <code>InvalidOperationException</code>, <code>ArgumentException</code> et ses sous-classes, <code>NotSupportedException</code>. On n'écrit pas de <code>throw new Exception(...)</code> nu (CA2201). Le canal qu'utilise un membre de l'anneau supporté pour signaler un échec, et les cas où un <code>Try</code> renvoie plutôt <code>false</code>, sont décrits dans <a href="public-api.html#how-a-member-reports-failure">Suivi de l'API publique</a>.</p>
+<hr>
+<p><a id="12-nullable-reference-types"></a></p>
+<h2 id="12-types-référence-nullables">12. Types référence nullables</h2>
+<p>Les types référence nullables sont activés dans toute la solution (<code>&lt;Nullable&gt;enable&lt;/Nullable&gt;</code> dans <code>Directory.Build.props</code>). Les annotations font partie du contrat de l'API : un type référence sans <code>?</code> promet qu'il n'est jamais null. Le code nouveau ou modifié ne doit pas introduire d'avertissements de nullabilité : annotez honnêtement au lieu de faire taire les avertissements.</p>
+<p><a id="rules"></a></p>
+<h3 id="règles">Règles</h3>
+<table>
+<thead>
+<tr>
+<th>Modèle</th>
+<th>Utilisation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>T?</code> sur les champs, les paramètres, les retours</td>
+<td>Toute valeur qui peut légitimement être null</td>
+</tr>
+<tr>
+<td><code>?? throw</code></td>
+<td>Convertir une valeur nullable en valeur obligatoire</td>
+</tr>
+<tr>
+<td><code>ArgumentNullException.ThrowIfNull(arg)</code></td>
+<td>Validation des arguments aux frontières de l'API</td>
+</tr>
+<tr>
+<td>Helpers de garde <code>[MemberNotNull(...)]</code></td>
+<td>Vérifications d'initialisation que le compilateur peut suivre</td>
+</tr>
+<tr>
+<td><code>is null</code> / <code>is not null</code></td>
+<td>Tous les tests de null (pas <code>== null</code> / <code>!= null</code>). Un pointeur garde <code>== null</code> : les patterns ne sont pas autorisés sur les types pointeur</td>
+</tr>
+<tr>
+<td>Initialisation par sentinelle (<code>= []</code>)</td>
+<td>Les champs pour lesquels null et vide veulent dire la même chose</td>
+</tr>
+<tr>
+<td><code>[NotNullWhen(true)]</code> sur le <code>out</code> d'une méthode <code>Try</code></td>
+<td>La valeur que remplit un retour <code>true</code> ; voir <a href="public-api.html#how-a-member-reports-failure">Comment un membre signale un échec</a></td>
+</tr>
+<tr>
+<td><code>[MemberNotNullWhen(true, ...)]</code> sur un <code>bool Initialize()</code></td>
+<td>Un retour <code>true</code> qui garantit un membre statique à l'appelant (<code>KernelConsole.Initialize</code> et <code>Default</code>)</td>
+</tr>
+<tr>
+<td><code>T?[]</code></td>
+<td>Un tableau dont les emplacements peuvent être vides (<code>IrqDelegate?[]</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><a id="honest-annotations"></a></p>
+<h3 id="annotations-honnêtes">Annotations honnêtes</h3>
+<p>Un membre qui peut renvoyer <code>null</code> est déclaré avec <code>?</code> : ne le cachez jamais derrière <code>!</code> pour préserver une ancienne signature. À l'inverse, n'ajoutez pas de vérifications de null à l'exécution pour des valeurs que les annotations garantissent déjà : pas de <code>if (buffer == null) throw</code> sur un paramètre non nullable, pas de <code>?? &quot;fallback&quot;</code> sur un retour non nullable.</p>
+<pre><code class="lang-csharp">// Declare what can actually be null: callers are forced to handle it
+public static IScheduler? Current =&gt; _currentScheduler;
+
+public static PerCpuState? GetCpuState(uint cpuId)
+{
+    return _cpuStates?[cpuId];
+}
+
+// Prefer a sentinel over a nullable field when null and empty mean the same thing
+private byte[] _window = [];                 // not: private byte[]? _window;
+</code></pre>
+<p><a id="guard-helpers"></a></p>
+<h3 id="helpers-de-garde">Helpers de garde</h3>
+<p>Les gestionnaires à initialisation différée exposent des gardes <code>ThrowIf*NotInitialized()</code> annotées avec <code>[MemberNotNull(...)]</code> et les appellent au début des points d'entrée publics (voir <a href="#4-class--type-design">Gestionnaires</a>). Un seul appel prouve que le champ est non null pour le reste de la méthode, sans <code>!</code> ni vérification à chaque ligne :</p>
+<pre><code class="lang-csharp">private static PerCpuState[]? s_cpuStates;
+
+[MemberNotNull(nameof(s_cpuStates))]
+private static void ThrowIfCpuStateNotInitialized()
+{
+    if (s_cpuStates is null)
+    {
+        throw new InvalidOperationException($&quot;{nameof(SchedulerManager)} not initialized&quot;);
+    }
+}
+
+public static void CreateThread(uint cpuId, Thread thread)
+{
+    ThrowIfCpuStateNotInitialized();
+
+    PerCpuState state = s_cpuStates[cpuId];   // no warning, no !
+    // ...
+}
+</code></pre>
+<p>La même famille d'attributs couvre un initialiseur <code>bool</code> : <code>[MemberNotNullWhen(true, nameof(Default))]</code> sur <code>KernelConsole.Initialize()</code> permet à l'appelant de lire <code>KernelConsole.Default</code> dans <code>if (KernelConsole.Initialize())</code> sans garde de sa part.</p>
+<p><a id="callers-of-a-try"></a></p>
+<h3 id="appelants-dun-try">Appelants d'un <code>Try</code></h3>
+<p>Une fois qu'un <code>Try</code> annoté a renvoyé <code>true</code>, son <code>out</code> est non null et aucun site d'appel ne le teste à nouveau : <code>if (!TryOpen(path, out handle) || handle == null)</code> s'écrit <code>if (!TryOpen(path, out handle))</code>. <code>Dictionary&lt;TKey, TValue&gt;.TryGetValue</code> est annoté de la même façon par la BCL, si bien qu'un <code>&amp;&amp; value != null</code> placé après lui ne protège de rien quand <code>TValue</code> est non nullable. Un test redondant n'est pas inoffensif : il masque le seul endroit où une garde est réelle.</p>
+<p><a id="required-values"></a></p>
+<h3 id="valeurs-obligatoires">Valeurs obligatoires</h3>
+<p>Utilisez <code>?? throw</code> là où un résultat null est une erreur de programmation :</p>
+<pre><code class="lang-csharp">Address source = IPConfig.FindNetwork(destination)
+    ?? throw new InvalidOperationException(&quot;No network route to destination&quot;);
+
+public MacAddress MacAddress
+{
+    get
+    {
+        return _macAddress ?? throw new InvalidOperationException($&quot;{nameof(_macAddress)} is null&quot;);
+    }
+}
+</code></pre>
+<p><a id="constructors"></a></p>
+<h3 id="constructeurs">Constructeurs</h3>
+<p>Chaque constructeur doit laisser initialisés tous les membres non nullables. Supprimez les constructeurs sans paramètre inutilisés au lieu de les laisser empoisonner le type :</p>
+<pre><code class="lang-csharp">// Bad: leaves RawData null and forces nullable noise on every user of the class
+internal IcmpPacket()
+{
+}
+</code></pre>
+<p><a id="the--operator"></a></p>
+<h3 id="lopérateur-">L'opérateur <code>!</code></h3>
+<p>L'opérateur de tolérance null <code>!</code> est un dernier recours pour les invariants que l'analyse de flux ne peut pas voir (par ex. un champ garanti non null tant qu'un indicateur de garde vaut <code>true</code>). Si l'invariant peut s'exprimer avec <code>[MemberNotNull]</code> ou <code>[NotNullWhen]</code>, utilisez plutôt l'attribut.</p>
+<p><a id="enforcement"></a></p>
+<h3 id="contrôle">Contrôle</h3>
+<p>La CI de formatage (<code>dotnet format --severity error</code>) impose les règles de style de traitement du null définies dans <code>.editorconfig</code> : <code>csharp_style_throw_expression</code>, <code>dotnet_style_coalesce_expression</code>, <code>dotnet_style_null_propagation</code>, <code>csharp_style_prefer_null_check_over_type_check</code>, <code>csharp_style_pattern_matching_over_as_with_null_check</code>, <code>dotnet_style_prefer_is_null_check_over_reference_equality_method</code> et <code>csharp_style_conditional_delegate_call</code>.</p>
+<p>Les avertissements de nullabilité (<code>CS86xx</code>) ne sont pas encore des erreurs : n'en introduisez pas de nouveaux.</p>
+<hr>
+<p><a id="13-modern-c--net-10-idioms"></a></p>
+<h2 id="13-idiomes-modernes-de-c--net-10">13. Idiomes modernes de C# / .NET 10</h2>
+<p>Le projet cible <code>&lt;LangVersion&gt;latest&lt;/LangVersion&gt;</code> et .NET 10. Utilisez partout les fonctionnalités modernes du langage.</p>
+<p><a id="modern-patterns"></a></p>
+<h3 id="modèles-modernes">Modèles modernes</h3>
+<pre><code class="lang-csharp">// File-scoped namespaces
+namespace Cosmos.Kernel.Core.Scheduler;
+
+// Expression bodies for a property, indexer or accessor that fits on one line
+public string PlatformName =&gt; &quot;x86-64&quot;;
+
+// Pattern matching
+switch (args[i])
+{
+    case null:
+        WriteString(&quot;null&quot;);
+        break;
+    case string s:
+        WriteString(s);
+        break;
+    case int n:
+        WriteNumber(n);
+        break;
+}
+
+// Null-conditional and coalescing
+IBlockDevice? device = StorageManager.PrimaryDevice;
+if (device?.BlockSize is not &gt; 0)
+{
+    return;
+}
+
+Address ip = config?.Address ?? defaultAddress;
+
+// Collection expressions
+DeviceResource[] resources = [DeviceResource.PortRange(0x60, 1), DeviceResource.PortRange(0x64, 1)];
+
+// Target-typed new
+Thread thread = new();
+List&lt;int&gt; items = new();
+
+// Numeric separators for readability
+public const nuint DefaultStackSize = 64 * 1024;
+public static long TscFrequency { get; set; } = 1_000_000_000;
+
+// stackalloc for small buffers (no heap allocation)
+Span&lt;byte&gt; buffer = stackalloc byte[64];
+
+// field keyword: auto-property with validation without a manual backing field
+public int Priority
+{
+    get =&gt; field;
+    set =&gt; field = value &gt;= 0 ? value : throw new ArgumentOutOfRangeException();
+}
+
+// Interpolation, not concatenation
+Serial.WriteString($&quot;[{Table[(int)Status]}] {packet}\n&quot;);
+
+// required members for state the constructor cannot take; derive what follows from it
+public sealed class DhcpOption
+{
+    public required byte Type { get; init; }
+    public required byte[] Data { get; init; }
+    public byte Length =&gt; (byte)Data.Length;
+}
+
+// One dictionary call carries the answer
+if (!s_clients.TryGetValue(port, out UdpClient? client))
+{
+    return;
+}
+s_registeredTypes.TryAdd(name, fileSystemType);
+cache[id] = mac;                        // upsert: no ContainsKey first
+
+// readonly on every field assigned only at its declaration or in a constructor
+private readonly Canvas _canvas;
+private static readonly ArrayPool&lt;byte&gt; s_arrayPool = ArrayPool&lt;byte&gt;.Shared;
+
+// Auto-property over a field behind a pass-through accessor
+public static KernelConsole? Default { get; private set; }
+</code></pre>
+<p>Trois limites s'appliquent aux deux derniers. <code>readonly</code> sur un champ dont le type est une struct mutable (<code>SpinLock</code>) est une erreur : chaque appel de méthode agirait sur une copie défensive, et le verrou ne serait jamais pris. L'analyseur derrière <code>dotnet_style_readonly_field</code> ne sait pas quelles méthodes de struct modifient l'état, si bien que sa suggestion n'est retenue que pour les types référence et pour les structs sans membre qui modifie l'état. Un champ qu'un plug atteint par son nom (<code>[FieldAccess]</code>) reste un champ : le champ de stockage d'une propriété automatique porte un nom généré par le compilateur. Enfin, un initialiseur statique qui alloue est un constructeur de classe, qui s'exécute au premier accès en passant par un verrou qui a besoin d'un thread courant : un type accessible depuis la mise en route des périphériques (<code>MacAddress</code>, dont n'importe quel pilote peut lire <code>None</code> et <code>Broadcast</code>) garde ses champs statiques remplis à la demande, avec un commentaire qui explique pourquoi.</p>
+<p><a id="avoid-1"></a></p>
+<h3 id="à-éviter-1">À éviter</h3>
+<pre><code class="lang-csharp">// Don't use var when type isn't obvious
+var x = GetValue();           // Bad: what type is x?
+int count = GetValue();       // Good: explicit type
+
+// Don't use var for built-in types
+var i = 0;                    // Bad
+int i = 0;                    // Good
+
+// Don't use this. qualification
+this._field = value;          // Bad
+_field = value;               // Good
+
+// Don't allocate arrays in hot paths when Span works
+byte[] temp = new byte[16];       // Bad in hot path: heap allocation
+Span&lt;byte&gt; temp = stackalloc byte[16]; // Good: stack allocation
+
+// Always use braces, no single-line if/for/while without braces
+if (ptr == null) return;          // Bad
+if (ptr == null)                  // Bad
+    return;
+
+if (ptr == null)                  // Good
+{
+    return;
+}
+
+// Don't give a method, constructor, operator or local function an expression body
+public void Halt() =&gt; Native.Cpu.Halt();     // Bad
+
+public void Halt()                           // Good
+{
+    Native.Cpu.Halt();
+}
+
+// Don't wrap an expression body: past one line, a property takes a get block
+public bool IsFixedRoot =&gt;                   // Bad
+    Parent is null &amp;&amp; Superblock.Boot.Type != FatType.Fat32;
+
+public bool IsFixedRoot                      // Good
+{
+    get
+    {
+        return Parent is null &amp;&amp; Superblock.Boot.Type != FatType.Fat32;
+    }
+}
+
+// Don't compare a bool to a literal
+if (applied == false)             // Bad
+if (!applied)                     // Good
+
+// Don't test a key, then index; the lookup answers once
+if (map.ContainsKey(key))         // Bad: two lookups
+{
+    device = map[key];
+}
+
+// Don't loop on a literal; the condition says what ends the loop
+while (true)                      // Bad: nothing in the header bounds it
+{
+    if (pos &gt;= end)
+    {
+        break;
+    }
+    pos += Step(pos);
+}
+
+while (pos &lt; end)                 // Good: the bound is the condition
+{
+    pos += Step(pos);
+}
+</code></pre>
+<blockquote>
+<p>Les accolades sont imposées par <code>.editorconfig</code> (<code>csharp_prefer_braces = true:error</code>) et par la CI (<code>dotnet format style --severity error</code>).</p>
+</blockquote>
+<p>Les méthodes, les constructeurs, les opérateurs et les fonctions locales prennent un corps en bloc, même pour une seule instruction : un <code>=&gt;</code> renvoyé à la ligne cache l'endroit où commence le corps. Une propriété, un indexeur ou un accesseur n'utilise <code>=&gt;</code> que si le membre entier tient sur une ligne, et une lambda garde son <code>=&gt;</code>. Les arborescences de code tiers embarqué sous <code>ThirdParty/</code> suivent elles aussi cette règle, et le README de chacune liste les membres qu'elle a modifiés. <code>.editorconfig</code> consigne cette règle dans les options <code>csharp_style_expression_bodied_*</code> au niveau <code>silent</code>, si bien que la CI ne l'impose pas.</p>
+<p><a id="bounded-loops"></a></p>
+<h3 id="boucles-bornées">Boucles bornées</h3>
+<p>On n'écrit pas <code>while (true)</code>. L'en-tête d'une boucle énonce ce qui la termine : un compteur, une borne sur un indice, une échéance, un indicateur que le corps positionne quand il a trouvé ce qu'il cherchait. Avec la borne dans l'en-tête, un lecteur vérifie en un seul endroit que chaque chemin progresse vers elle ; avec <code>while (true)</code>, la sortie se trouve là où il y a un <code>break</code> ou un <code>return</code>, et la boucle qui a perdu sa sortie lors d'une modification se lit exactement comme celle qui n'en a jamais eu. Les trois sortes de boucles qui semblent non bornées ont chacune une borne à énoncer :</p>
+<table>
+<thead>
+<tr>
+<th>Boucle</th>
+<th>En-tête</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Une analyse qui parcourt un tampon</td>
+<td><code>while (pos &lt; end &amp;&amp; !closed)</code>, avec la fin de l'analyse comme borne et un indicateur pour l'enregistrement qui la clôt</td>
+</tr>
+<tr>
+<td>Une attente sur le matériel ou sur un autre thread</td>
+<td><code>while (!ready &amp;&amp; Stopwatch.GetTimestamp() &lt; deadline)</code> ou <code>while (!ready &amp;&amp; attempts++ &lt; MaxAttempts)</code> ; une scrutation sans budget est le blocage que suit <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/365">#365</a></td>
+</tr>
+<tr>
+<td>La boucle principale d'un noyau, ou un arrêt qui ne revient jamais</td>
+<td><code>while (!_stopped)</code> pour la première ; le second arrête le CPU dans le corps de sa boucle, tourner y est donc voulu et <code>while (true) { Halt(); }</code> reste</td>
+</tr>
+</tbody>
+</table>
+<p>La dernière ligne est la seule exemption : une méthode qui ne revient jamais et dont le corps de boucle arrête le CPU, comme celle sur laquelle <code>Power.Reboot</code> et <code>Power.Shutdown</code> se rabattent quand la plateforme ne sait faire ni l'un ni l'autre, et comme le fait <code>Kernel.Start</code> après <code>AfterRun</code>. Une boucle au corps vide ne relève pas de cette exemption : elle brûle le CPU pour n'aller nulle part, et doit plutôt arrêter le CPU. Tout le reste énonce sa borne. Les boucles <code>while (true)</code> existantes dans <code>src/</code> sont antérieures à cette règle et sont converties à mesure que le code qui les entoure est modifié, pas en une seule passe ; aucun analyseur ne le vérifie.</p>
+<p><a id="feature-switches"></a></p>
+<h3 id="commutateurs-de-fonctionnalité">Commutateurs de fonctionnalité</h3>
+<p>Utilisez <code>[FeatureSwitchDefinition]</code> pour activer ou désactiver des fonctionnalités à la compilation (retirées par le trimming de l'éditeur de liens NativeAOT). Tous les indicateurs de fonctionnalité se trouvent dans <code>Cosmos.Kernel.Core.CosmosFeatures</code> :</p>
+<pre><code class="lang-csharp">// In CosmosFeatures.cs: one property per feature
+[FeatureSwitchDefinition(&quot;Cosmos.Kernel.HAL.Interrupts.Enabled&quot;)]
+public static bool InterruptsEnabled
+{
+    get
+    {
+        return AppContext.TryGetSwitch(&quot;Cosmos.Kernel.HAL.Interrupts.Enabled&quot;, out bool enabled) ? enabled : true;
+    }
+}
+
+// The ILC linker trims the dead branch entirely
+if (CosmosFeatures.KeyboardEnabled)
+{
+    // This code is removed from the binary when keyboard is disabled
+}
+</code></pre>
+<hr>
+<p><a id="14-aot-constraints"></a></p>
+<h2 id="14-contraintes-aot">14. Contraintes AOT</h2>
+<p>NativeAOT impose des limitations strictes. <strong>Tout le code du noyau doit être compatible AOT.</strong></p>
+<p>.NET 10 a amélioré NativeAOT avec des binaires plus petits et une prise en charge plus large des plateformes, mais les contraintes fondamentales demeurent.</p>
+<p><a id="forbidden"></a></p>
+<h3 id="interdit">Interdit</h3>
+<ul>
+<li><code>System.Reflection.Emit</code> (pas de génération de code à l'exécution).</li>
+<li>Le mot-clé <code>dynamic</code>.</li>
+<li><code>Assembly.Load</code> à l'exécution.</li>
+<li><code>Type.GetType(&quot;...&quot;)</code> par chaîne à l'exécution (les types doivent être atteignables statiquement).</li>
+<li><code>MakeGenericType</code> / <code>MakeGenericMethod</code> à l'exécution (les instanciations génériques doivent être connues à la compilation).</li>
+</ul>
+<p><a id="use-with-caution"></a></p>
+<h3 id="à-utiliser-avec-prudence">À utiliser avec prudence</h3>
+<ul>
+<li><strong>Méthodes virtuelles génériques</strong> : NativeAOT doit générer toutes les instanciations possibles à la compilation. Évitez les dispatchs virtuels génériques profondément imbriqués ou ouverts.</li>
+<li><strong>LINQ</strong> : de nombreux opérateurs LINQ allouent des itérateurs et des fermetures. À éviter sur les chemins critiques (GC, ordonnanceur, gestionnaires d'interruption).</li>
+</ul>
+<hr>
+<h2 id="15-documentation">15. Documentation</h2>
+<p><a id="license-header"></a></p>
+<h3 id="en-tête-de-licence">En-tête de licence</h3>
+<p>Chaque fichier <code>.cs</code> doit commencer par l'en-tête de licence (imposé par <code>.editorconfig</code>) :</p>
+<pre><code class="lang-csharp">// This code is licensed under the BSD 3-Clause license (see LICENSE for details)
+</code></pre>
+<p><a id="xml-documentation"></a></p>
+<h3 id="documentation-xml">Documentation XML</h3>
+<p>Documentez toutes les API <strong>publiques</strong> avec <code>&lt;summary&gt;</code>. Restez concis :</p>
+<pre><code class="lang-csharp">/// &lt;summary&gt;
+/// Triggers a kernel panic with the specified message.
+/// Disables interrupts and halts the CPU.
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;message&quot;&gt;The panic message describing the error.&lt;/param&gt;
+public static void Halt(string message) { ... }
+</code></pre>
+<p><strong>Règles :</strong></p>
+<ul>
+<li>Documentez les classes, les interfaces, les méthodes et les propriétés publiques.</li>
+<li>Ne documentez pas les membres évidents (<code>get</code>/<code>set</code> pour des noms de propriétés qui parlent d'eux-mêmes).</li>
+<li>Utilisez <code>&lt;param&gt;</code> pour les paramètres non évidents.</li>
+<li>Utilisez <code>&lt;returns&gt;</code> quand la valeur de retour mérite une explication.</li>
+<li>Utilisez <code>&lt;see cref=&quot;...&quot;/&gt;</code> pour référencer les types liés.</li>
+<li>Ne documentez pas les détails d'implémentation privés, sauf si la logique est complexe.</li>
+</ul>
+<p><a id="inline-comments"></a></p>
+<h3 id="commentaires-dans-le-code">Commentaires dans le code</h3>
+<p>Utilisez-les avec parcimonie, uniquement quand le code ne s'explique pas de lui-même :</p>
+<pre><code class="lang-csharp">// Stack layout (growing downward from top):
+// [StackBase + stackSize] = Top of usable stack
+// [contextAddr] = Start of ThreadContext (where StackPointer points)
+// [StackBase] = Bottom of stack
+
+// Align context to 16 bytes (required for XMM operations)
+contextAddr = (contextAddr + 0xF) &amp; ~(nuint)0xF;
+</code></pre>
+<p>Le code mis en commentaire est supprimé ; l'historique le conserve. Un <code>TODO</code> nomme ce qui manque et pourquoi cela peut attendre ; un doute sur le code (<code>// is this correct?</code>) est une issue, pas un commentaire. Un membre au corps vide n'est pas un espace réservé : on ne l'écrit pas tant qu'il ne fait rien.</p>
+<p><a id="16-testing"></a></p>
+<h2 id="16-tests">16. Tests</h2>
+<p>Pour le guide de test complet (tests unitaires, tests d'intégration du noyau, protocole UART, CI, écriture de noyaux de test), voir <a href="testing.html">Tests</a>.</p>
+<p>La logique qui n'a pas besoin de matériel (l'arithmétique du tampon de réception de <code>TcpConnection</code>, l'analyse des adresses) est testée unitairement dans le processus hôte depuis <code>tests/Cosmos.Kernel.Tests.System</code> (NUnit) : une fixture imbriquée par membre testé, nommée d'après lui, des noms de tests de la forme <code>WhenX_AndY_ResultZ</code>, et <code>[TestCase(..., ExpectedResult = ...)]</code> pour les tables de valeurs. Le projet bénéficie d'une autorisation <code>InternalsVisibleTo</code> accordée par <code>Cosmos.Kernel.System</code>.</p>
+<p><strong>Couverture de code :</strong> ajoutez le label <code>run-coverage</code> à une pull request pour déclencher la CI de couverture. Elle exécute les suites de tests du noyau et indique quels chemins de code sont couverts par les tests d'intégration.</p>
+<hr>
+<p><a id="17-public-api-surface"></a></p>
+<h2 id="17-surface-dapi-publique">17. Surface d'API publique</h2>
+<p>Trois règles décident de ce qui est <code>public</code> (la politique complète et ses mécanismes sont décrits dans <a href="public-api.html">Suivi de l'API publique</a>) :</p>
+<ol>
+<li><strong>Un seul anneau supporté.</strong> <code>Cosmos.Kernel.System</code> est l'API sur laquelle les noyaux sont programmés, plus les types de contrat qu'exposent ses signatures (les contrats de périphériques de la HAL, <code>IBlockDevice</code> et <code>MacAddress</code>, et les interfaces de plateforme du Core). Seule cette surface est suivie, documentée et couverte par des cycles de dépréciation.</li>
+<li><strong>Des points d'extension expérimentaux choisis.</strong> Un point d'extension hors de l'anneau est ouvert délibérément et marqué <code>[Experimental(&quot;COSMOSxxxx&quot;)]</code> : utilisable dès maintenant, sans promesse de compatibilité, promu en retirant l'attribut. N'ouvrez jamais un point d'extension en rendant simplement quelque chose public.</li>
+<li><strong>Tout le reste est <code>internal</code>.</strong> La visibilité n'est pas le mécanisme d'extension. Les assemblies du projet lui-même et les noyaux de test en boîte blanche utilisent <code>InternalsVisibleTo</code> ; le code externe utilise <code>[UnsafeAccessor]</code> (<a href="accessing-internals.html">Accéder aux éléments internes</a>) à ses propres risques.</li>
+</ol>
+<p>Les règles pratiques qui en découlent :</p>
+<pre><code class="lang-csharp">// Good: new user-facing capability lands as a Cosmos.Kernel.System facade
+public static class MemoryDiagnostics { public static ulong FreePages =&gt; PageAllocator.FreePageCount; }
+
+// Bad: making the Core type public so a kernel can reach it
+public static class PageAllocator { ... }
+</code></pre>
+<ul>
+<li><strong>Les nouveaux types sont <code>internal</code> par défaut.</strong> Rendre un symbole <code>public</code> dans un projet suivi est une décision soumise à revue : le build échoue (<code>RS0016</code>) tant que <code>make api</code> ne l'a pas consigné dans <code>PublicAPI.Unshipped.txt</code>, et le diff du txt a sa place dans le même commit.</li>
+<li><strong>Le test qui fait foi est DevKernel.</strong> <code>examples/DevKernel</code> se compile sans aucune autorisation <code>InternalsVisibleTo</code> ; tout ce dont il a besoin doit venir de l'anneau supporté.</li>
+<li><strong>La surface suivie doit être documentée.</strong> Activer <code>CosmosTrackPublicApi</code> transforme les documentations XML manquantes (<code>CS1591</code>) en erreurs de build pour les symboles publics du projet.</li>
+<li><strong>Un noyau de test en boîte blanche reçoit une autorisation <code>InternalsVisibleTo</code></strong>, avec, dans le <code>.csproj</code> qui l'accorde, un commentaire qui indique ce qu'il observe ; il ne force jamais un symbole à devenir public.</li>
+</ul>
+<hr>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/coding-guidelines.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

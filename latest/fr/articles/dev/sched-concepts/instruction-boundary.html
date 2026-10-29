@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>Interruptions aux fronti&#232;res d&#39;instruction | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Interruptions aux fronti&#232;res d&#39;instruction | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/sched-concepts/instruction-boundary.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="interrupts-at-instruction-boundaries"></a></p>
+<h1 id="interruptions-aux-frontières-dinstruction">Interruptions aux frontières d'instruction</h1>
+<p>Un cœur de CPU exécute une instruction machine à la fois, et il n'accepte une interruption en attente qu'à la jointure entre deux d'entre elles : l'instruction courante se termine, la suivante n'a pas commencé, et le cœur saute vers le gestionnaire d'interruption depuis ce point précis. « Une interruption peut se déclencher entre deux instructions quelconques » signifie exactement cela : toute paire d'instructions adjacentes dans le flux d'instructions est un point d'acheminement valide. Une instruction est atomique vis-à-vis des interruptions ; rien de plus long ne l'est.</p>
+<p>Le code compilé transforme une ligne de code source en de nombreuses instructions, si bien qu'une ligne contient de nombreuses frontières. Même <code>x++</code> est un chargement, une addition et un stockage : une interruption peut tomber après le chargement et avant le stockage, le gestionnaire d'interruption peut s'exécuter longtemps, réveiller d'autres threads ou passer entièrement à un autre thread, et le code interrompu reprend ensuite sans aucun moyen de savoir que quoi que ce soit s'est produit, sur un état qui a pu changer à son insu. Une séquence de plusieurs instructions n'est atomique vis-à-vis des interruptions que si les interruptions sont masquées autour d'elle, ou si le matériel propose l'opération entière sous la forme d'une seule instruction atomique (un <code>CompareExchange</code>, par exemple).</p>
+<p>Dans le noyau Cosmos, c'est la contrainte autour de laquelle l'ordonnanceur est construit : chaque transition du cycle de vie s'exécute avec les interruptions désactivées, et les primitives bloquantes suivent le <a href="../scheduler.html#the-park-protocol">protocole de mise en attente</a>, pour qu'un réveil acheminé sur l'une de ces frontières, au milieu d'une mise en attente, ne soit jamais perdu. C'est aussi pourquoi un thread préempté est rarement arrêté sur un <a href="../gc-concepts/safepoint.html">point sûr</a> et fait l'objet du <a href="../gc-concepts/conservative-vs-precise.html">parcours conservateur</a>. Voir <a href="../scheduler.html#preemption">Préemption</a>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/sched-concepts/instruction-boundary.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

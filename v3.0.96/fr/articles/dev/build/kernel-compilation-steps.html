@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>&#201;tapes de compilation du noyau | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="&#201;tapes de compilation du noyau | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/build/kernel-compilation-steps.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="kernel-compilation-steps"></a></p>
+<h1 id="étapes-de-compilation-du-noyau">Étapes de compilation du noyau</h1>
+<p>Ce document décrit le pipeline de build complet qui transforme le code C# du noyau en une image ISO amorçable, au moyen de la compilation .NET NativeAOT, d'un patching IL sur mesure et de la génération de code natif.</p>
+<p><a id="compilation-flow-chart"></a></p>
+<h2 id="diagramme-du-flux-de-compilation">Diagramme du flux de compilation</h2>
+<pre><code class="lang-mermaid">flowchart TD
+    CS[C# Source Code] --&gt; ROSLYN[Roslyn Compiler]
+    PLUGS[Plug Definitions] --&gt; ANALYZER[Cosmos.Build.Analyzer.Patcher]
+    ANALYZER -.-&gt; |Validates| ROSLYN
+    ROSLYN --&gt; IL[IL Assembly]
+
+    subgraph &quot;Cosmos.Build.Patcher&quot;
+        PATCHER[IL Patcher]
+        PATCHER --&gt; |cosmos.patcher| PATCHED[Patched Assemblies]
+        PATCHED --&gt; COSMOS_REF[&quot;$(IntermediateOutputPath)/cosmos/ref/&quot;]
+        PATCHED --&gt; COSMOS_ROOT[&quot;$(IntermediateOutputPath)/cosmos/&quot;]
+    end
+    IL --&gt; PATCHER
+    PLUGS --&gt; PATCHER
+
+    subgraph &quot;Cosmos.Build.Ilc&quot;
+        ILC[NativeAOT Compiler]
+        ILC --&gt; |ilc| NATIVE[&quot;Native Object (.o)&quot;]
+        NATIVE --&gt; COSMOS_NATIVE[&quot;$(IntermediateOutputPath)/cosmos/native/&quot;]
+    end
+    COSMOS_REF --&gt; ILC
+    COSMOS_ROOT --&gt; ILC
+
+    subgraph &quot;Cosmos.Build.Asm&quot;
+        ASM_BUILD[Clang Integrated Assembler]
+        ASM_BUILD --&gt; |clang --target=...-elf -c| ASM_OBJ[&quot;Assembly Objects (.obj)&quot;]
+        ASM_OBJ --&gt; COSMOS_ASM[&quot;$(IntermediateOutputPath)/cosmos/asm/&quot;]
+    end
+    ASM_SRC[&quot;Assembly Files (.s)&quot;] --&gt; ASM_BUILD
+
+    subgraph &quot;Cosmos.Build.CC&quot;
+        CC_BUILD[Clang Compiler]
+        CC_BUILD --&gt; |&quot;clang --target=...&quot;| C_OBJ[&quot;C Objects (.obj)&quot;]
+        C_OBJ --&gt; COSMOS_COBJ[&quot;$(IntermediateOutputPath)/cosmos/cobj/&quot;]
+    end
+    C_SRC[&quot;C Source Files (.c)&quot;] --&gt; CC_BUILD
+
+    subgraph &quot;Cosmos.Build.Common&quot;
+        LINK[Link Target]
+        LINK --&gt; |ld.lld| ELF[&quot;ELF Binary ($(OutputPath)/$(AssemblyName).elf)&quot;]
+        ELF --&gt; FINAL_ISO[BuildISO Target]
+        FINAL_ISO  --&gt; |xorriso + Limine| ISO_OUT[&quot;$(OutputPath)/cosmos/$(AssemblyName).iso&quot;]
+        ISO_OUT --&gt; |PublishISO| PUBLISH[&quot;$(PublishDir)/$(AssemblyName).iso&quot;]
+    end
+    
+    COSMOS_NATIVE --&gt; LINK
+    COSMOS_ASM --&gt; LINK
+    COSMOS_COBJ --&gt; LINK
+    LINKER_SCRIPT[&quot;linker.ld&quot;] --&gt; LINK
+    LIMINE_CONF[&quot;limine.conf&quot;] --&gt; FINAL_ISO
+    ISO_FILES[&quot;isoFiles/ + CosmosIsoFile items&quot;] --&gt; FINAL_ISO
+
+    style CS fill:#e1f5e1
+    style ASM_SRC fill:#e1f5e1
+    style C_SRC fill:#e1f5e1
+    style PLUGS fill:#e1f5e1
+    style LINKER_SCRIPT fill:#e1f5e1
+    style LIMINE_CONF fill:#e1f5e1
+    style ISO_FILES fill:#e1f5e1
+    
+    style PUBLISH fill:#ffe1e1
+</code></pre>
+<p><a id="prerequisites"></a></p>
+<h2 id="prérequis">Prérequis</h2>
+<table>
+<thead>
+<tr>
+<th>Outil</th>
+<th>Rôle</th>
+<th>Version requise</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>.NET SDK</strong></td>
+<td>Compilation principale</td>
+<td>10.0+</td>
+</tr>
+<tr>
+<td><strong>Clang</strong></td>
+<td>Compilation du C et de l'assembleur (x64/ARM64 via --target)</td>
+<td>Chaîne d'outils LLVM</td>
+</tr>
+<tr>
+<td><strong>ld.lld</strong></td>
+<td>Édition de liens ELF</td>
+<td>Chaîne d'outils LLVM</td>
+</tr>
+<tr>
+<td><strong>xorriso</strong></td>
+<td>Création de l'ISO</td>
+<td>Dernière version</td>
+</tr>
+</tbody>
+</table>
+<p><a id="key-components"></a></p>
+<h2 id="composants-principaux">Composants principaux</h2>
+<ul>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Sdk"><code>Cosmos.Sdk</code></a> : orchestration par le SDK MSBuild</li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Patcher"><code>Cosmos.Build.Patcher</code></a> : infrastructure de patching IL</li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Ilc"><code>Cosmos.Build.Ilc</code></a> : intégration de NativeAOT</li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Asm"><code>Cosmos.Build.Asm</code></a> : compilation de l'assembleur</li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.CC"><code>Cosmos.Build.CC</code></a> : compilation du C (Clang)</li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Common"><code>Cosmos.Build.Common</code></a> : édition de liens et création de l'ISO</li>
+</ul>
+<p><a id="example-project"></a></p>
+<h2 id="projet-dexemple">Projet d'exemple</h2>
+<p>Implémentation de référence : <code>examples/DevKernel/DevKernel.csproj</code></p>
+<p><a id="output-summary"></a></p>
+<h2 id="récapitulatif-des-sorties">Récapitulatif des sorties</h2>
+<table>
+<thead>
+<tr>
+<th>Étape</th>
+<th>Chemin de sortie</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Patching</td>
+<td><code>$(IntermediateOutputPath)/cosmos/</code></td>
+<td>Assembly principal patché</td>
+</tr>
+<tr>
+<td>Patching</td>
+<td><code>$(IntermediateOutputPath)/cosmos/ref/</code></td>
+<td>Assemblies de référence</td>
+</tr>
+<tr>
+<td>NativeAOT</td>
+<td><code>$(IntermediateOutputPath)/cosmos/native/</code></td>
+<td>Fichiers objets natifs (.o)</td>
+</tr>
+<tr>
+<td>Assembleur</td>
+<td><code>$(IntermediateOutputPath)/cosmos/asm/</code></td>
+<td>Objets produits par l'assembleur Clang (.obj)</td>
+</tr>
+<tr>
+<td>Code C</td>
+<td><code>$(IntermediateOutputPath)/cosmos/cobj/</code></td>
+<td>Objets Clang (.o/.obj)</td>
+</tr>
+<tr>
+<td>Édition de liens</td>
+<td><code>$(OutputPath)/$(AssemblyName).elf</code></td>
+<td>Noyau ELF lié</td>
+</tr>
+<tr>
+<td>ISO</td>
+<td><code>$(OutputPath)/cosmos/$(AssemblyName).iso</code></td>
+<td>Image ISO amorçable</td>
+</tr>
+<tr>
+<td>Publication</td>
+<td><code>$(PublishDir)/$(AssemblyName).iso</code></td>
+<td>ISO publiée</td>
+</tr>
+</tbody>
+</table>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/build/kernel-compilation-steps.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

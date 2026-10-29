@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
       <title>Class StorageManager | Cosmos Gen 3 </title>
@@ -215,9 +215,11 @@ string keeps its index.
   
   </h3>
 
-  <div class="markdown level1 summary"><p>Every registered block device, in the manager's order: kit disks by
-node path, then hand-registered disks in registration order. Empty
-before initialization and when storage support is compiled out.</p>
+  <div class="markdown level1 summary"><p>Every registered block device, in the manager's order: writable
+devices first, kit disks by node path, then hand-registered disks in
+registration order, and read-only media (a CD-ROM drive) after them
+in the same order. Empty before initialization and when storage
+support is compiled out.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -351,10 +353,12 @@ is GPT-, MBR-, or unpartitioned.</p>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the primary block device: the first entry of <a class="xref" href="Cosmos.Kernel.System.Storage.StorageManager.html#Cosmos_Kernel_System_Storage_StorageManager_Devices">Devices</a>
-in the manager's order (a kit disk before a hand-registered one, the
+in the manager's order (a writable disk before a read-only medium
+such as a CD-ROM, a kit disk before a hand-registered one, the
 lowest node path among kit disks, then registration order), or
 <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> when storage is compiled out or no device is
-registered.</p>
+registered. A kernel booted from a CD with no disk attached gets
+the CD.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 

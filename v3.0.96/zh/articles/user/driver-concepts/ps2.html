@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>PS/2 与 8042 控制器 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="PS/2 与 8042 控制器 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/user/driver-concepts/ps2.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="ps2-and-the-8042-controller"></a></p>
+<h1 id="ps2-与-8042-控制器">PS/2 与 8042 控制器</h1>
+<p>PS/2 是 IBM 兼容 PC 的键盘和鼠标接口。每个设备都通过一条串行线路与主板上的一个控制器通信，这个控制器就是 8042，得名于 PC/AT 所用的 Intel 微控制器；许多 PC 仍然提供它，有时由固件模拟。它的第一个端口供键盘使用，第二个端口（即辅助端口）供鼠标使用；CPU 通过两个 <a href="registers.html">I/O 端口</a>访问它：<code>0x60</code> 双向传送数据字节，<code>0x64</code> 在读取时是状态寄存器，在写入时接收控制器命令。键盘端口触发 IRQ 1，鼠标端口触发 IRQ 12。</p>
+<p>命令分为两个层级。控制器自身的命令写入 <code>0x64</code>，用于读写其配置字节、运行自检，以及测试或启用各个端口。设备的命令则以数据形式写入 <code>0x60</code>（发往第二个端口时，先向 <code>0x64</code> 写入 <code>0xD4</code>）：复位、识别、设置键盘指示灯、启用扫描。设备以 <code>0xFA</code> 确认每个命令字节，或以 <code>0xFE</code> 要求重发该字节，随后发送应答（如有）；设备通过自检后，会以 <code>0xAA</code> 应答复位命令。</p>
+<p>启用扫描后，键盘为每次按键发送一个码，为每次松开发送另一个码，这些码属于三套扫描码中的一套；控制器可以把第 2 套转换为更早的第 1 套。鼠标开始报告后，会发送 3 字节的移动数据包，滚轮鼠标则为 4 字节。陷阱在于共享的数据端口：命令的确认和应答不带任何标记地混在数据流中到达，因此在用户打字时发送命令的驱动程序必须对读到的字节加以区分。</p>
+<p>在驱动工具包中，<code>I8042Driver</code> 掌管控制器：它测试控制器及其两个端口，开启转换，使键盘端口送出第 1 套扫描码，连接 IRQ 1 和 IRQ 12（或改为轮询），并为每个正常工作的端口发布一个节点。类驱动程序通过 <code>Ps2Access</code> 与设备通信，其 <code>TryCommand</code> 会等待每个 <code>Acknowledge</code>，收到 <code>Resend</code> 时重发，最多重发 <code>MaxResends</code> 次，并收集应答；其余所有字节都汇入数据流，由中断处理程序通过 <code>TryReceive</code> 取出。参见 <a href="../drivers.html#ps2-devices">PS/2 设备</a>和 <a href="../drivers.html#the-ps2-access-object">PS/2 访问对象</a>。</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/user/driver-concepts/ps2.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

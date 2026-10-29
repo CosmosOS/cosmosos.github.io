@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title> | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content=" | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/dev/build/patcher-build.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="overview"></a></p>
+<h2 id="概述">概述</h2>
+<p><code>Cosmos.Patcher.Build</code> 将 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher"><code>Cosmos.Patcher</code></a> 工具接入 MSBuild 流水线。<code>Cosmos.Patcher</code> 通过应用 CosmosOS 风格的 plug 来重写候选程序集中的 IL，使 .NET Core 框架能够在 NativeAOT 目标上运行。静态分析由 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Analyzer.Patcher"><code>Cosmos.Patcher.Analyzer</code></a> 提供，它会在 C# 编译期间、任何 IL 被重写之前报告 plug 错误。</p>
+<hr>
+<p><a id="net-assembly-structure"></a></p>
+<h2 id="net-程序集结构">.NET 程序集结构</h2>
+<p>.NET 程序集（<code>.dll</code> 或 <code>.exe</code>）是一个包含元数据和 IL 代码的可移植可执行文件。patcher 使用 Mono.Cecil 操作这些结构。</p>
+<pre><code>┌─────────────────────────────────────────────────────────────────────┐
+│                        AssemblyDefinition                           │
+│  ┌───────────────────────────────────────────────────────────────┐  │
+│  │ Name: &quot;MyAssembly&quot;                                            │  │
+│  │ Version: 1.0.0.0                                              │  │
+│  │ CustomAttributes: [AssemblyInfo, ...]                         │  │
+│  └───────────────────────────────────────────────────────────────┘  │
+│                              │                                      │
+│                              ▼                                      │
+│  ┌───────────────────────────────────────────────────────────────┐  │
+│  │                   ModuleDefinition[0]                         │  │
+│  │  ┌─────────────────────────────────────────────────────────┐  │  │
+│  │  │ Name: &quot;MyAssembly.dll&quot;                                  │  │  │
+│  │  │ AssemblyReferences: [mscorlib, System.Runtime, ...]     │  │  │
+│  │  │ TypeReferences: [external type tokens]                  │  │  │
+│  │  └─────────────────────────────────────────────────────────┘  │  │
+│  │                           │                                   │  │
+│  │                           ▼                                   │  │
+│  │  ┌─────────────────────────────────────────────────────────┐  │  │
+│  │  │                  TypeDefinition[0]                      │  │  │
+│  │  │  ┌───────────────────────────────────────────────────┐  │  │  │
+│  │  │  │ FullName: &quot;MyNamespace.MyClass&quot;                   │  │  │  │
+│  │  │  │ BaseType: System.Object                           │  │  │  │
+│  │  │  │ Interfaces: [IDisposable, ...]                    │  │  │  │
+│  │  │  │ CustomAttributes: [Plug, Serializable, ...]       │  │  │  │
+│  │  │  │                                                   │  │  │  │
+│  │  │  │  ┌─────────────────────────────────────────────┐  │  │  │  │
+│  │  │  │  │            FieldDefinition[0]               │  │  │  │  │
+│  │  │  │  │  Name, FieldType, Attributes, Constant      │  │  │  │  │
+│  │  │  │  ├─────────────────────────────────────────────┤  │  │  │  │
+│  │  │  │  │            FieldDefinition[n]               │  │  │  │  │
+│  │  │  │  └─────────────────────────────────────────────┘  │  │  │  │
+│  │  │  │                                                   │  │  │  │
+│  │  │  │  ┌─────────────────────────────────────────────┐  │  │  │  │
+│  │  │  │  │          PropertyDefinition[0]              │  │  │  │  │
+│  │  │  │  │  Name, PropertyType, GetMethod, SetMethod   │  │  │  │  │
+│  │  │  │  ├─────────────────────────────────────────────┤  │  │  │  │
+│  │  │  │  │          PropertyDefinition[n]              │  │  │  │  │
+│  │  │  │  └─────────────────────────────────────────────┘  │  │  │  │
+│  │  │  │                                                   │  │  │  │
+│  │  │  │  ┌─────────────────────────────────────────────┐  │  │  │  │
+│  │  │  │  │           MethodDefinition[0]               │  │  │  │  │
+│  │  │  │  │  Name, ReturnType, Parameters, Attributes   │  │  │  │  │
+│  │  │  │  │                                             │  │  │  │  │
+│  │  │  │  │  ┌───────────────────────────────────────┐  │  │  │  │  │
+│  │  │  │  │  │           MethodBody                  │  │  │  │  │  │
+│  │  │  │  │  │  Variables: [local0, local1, ...]     │  │  │  │  │  │
+│  │  │  │  │  │  MaxStackSize: 8                      │  │  │  │  │  │
+│  │  │  │  │  │  InitLocals: true                     │  │  │  │  │  │
+│  │  │  │  │  │                                       │  │  │  │  │  │
+│  │  │  │  │  │  Instructions:                        │  │  │  │  │  │
+│  │  │  │  │  │   IL_0000: ldarg.0                    │  │  │  │  │  │
+│  │  │  │  │  │   IL_0001: call .ctor                 │  │  │  │  │  │
+│  │  │  │  │  │   IL_0006: ldstr &quot;Hello&quot;              │  │  │  │  │  │
+│  │  │  │  │  │   IL_000B: call Console.WriteLine     │  │  │  │  │  │
+│  │  │  │  │  │   IL_0010: ret                        │  │  │  │  │  │
+│  │  │  │  │  │                                       │  │  │  │  │  │
+│  │  │  │  │  │  ExceptionHandlers:                   │  │  │  │  │  │
+│  │  │  │  │  │   [try/catch/finally blocks]          │  │  │  │  │  │
+│  │  │  │  │  └───────────────────────────────────────┘  │  │  │  │  │
+│  │  │  │  ├─────────────────────────────────────────────┤  │  │  │  │
+│  │  │  │  │           MethodDefinition[n]               │  │  │  │  │
+│  │  │  │  └─────────────────────────────────────────────┘  │  │  │  │
+│  │  │  └───────────────────────────────────────────────────┘  │  │  │
+│  │  ├─────────────────────────────────────────────────────────┤  │  │
+│  │  │                  TypeDefinition[n]                      │  │  │
+│  │  └─────────────────────────────────────────────────────────┘  │  │
+│  └───────────────────────────────────────────────────────────────┘  │
+│  ┌───────────────────────────────────────────────────────────────┐  │
+│  │                   ModuleDefinition[n]                         │  │
+│  └───────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<p><a id="flow-chart"></a></p>
+<h2 id="流程图">流程图</h2>
+<pre><code class="lang-mermaid">flowchart TD
+    A[SetupPatcher] --&gt; B[FindPluggedAssembliesTask]
+    B --&gt; C{AssembliesToPatch}
+    C --&gt;|for each| D[PatcherTask]
+    D --&gt; E[Program patch]
+    E --&gt; F[PatchCommand.Execute]
+    F --&gt; G[PlugScanner.LoadPlugs]
+    G --&gt; H[PlugPatcher.PatchAssembly]
+    H --&gt; I[ProcessPlugMembers]
+    I --&gt; J[MethodResolver.ResolveMethod]
+    J --&gt; K[MethodPatcher.PatchMethod]
+    K --&gt; L[ILCloner.CloneInstructions]
+    L --&gt; M[TypeImporter.SafeImport*]
+    I --&gt; N[PropertyPatcher.PatchProperty]
+    I --&gt; O[FieldPatcher.PatchField]
+    K --&gt; P[Patched assemblies]
+    N --&gt; P
+    O --&gt; P
+    A --&gt; X[CleanPatcher]
+</code></pre>
+<hr>
+<p><a id="parameters"></a></p>
+<h2 id="参数">参数</h2>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EnablePatching</code></td>
+<td>启用或禁用修补。</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>CosmosPatcherExe</code></td>
+<td><code>Cosmos.Patcher</code> 可执行文件的路径。</td>
+<td>Windows 上为 <code>%USERPROFILE%\.dotnet\tools\cosmos.patcher.exe</code>，Unix 上为 <code>cosmos.patcher</code></td>
+</tr>
+<tr>
+<td><code>PatcherOutputPath</code></td>
+<td>写入修补后程序集的目录。</td>
+<td><code>$(IntermediateOutputPath)/cosmos/ref/</code></td>
+</tr>
+<tr>
+<td><code>PlugReference</code></td>
+<td>要包含的 plug 程序集的名称。</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a id="tasks"></a></p>
+<h2 id="任务">任务</h2>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>说明</th>
+<th>依赖于</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SetupPatcher</code></td>
+<td>收集候选程序集，解析 plug 引用，并准备输出目录。</td>
+<td><code>Build</code>, <code>ResolveIlcPath</code></td>
+</tr>
+<tr>
+<td><code>RunPatcher</code></td>
+<td>对 <code>AssembliesToPatch</code> 中的每一项执行 <code>Cosmos.Patcher</code>。</td>
+<td><code>SetupPatcher</code></td>
+</tr>
+<tr>
+<td><code>CleanPatcher</code></td>
+<td>删除 patcher 生成的文件。</td>
+<td><code>Clean</code></td>
+</tr>
+<tr>
+<td><code>FindPluggedAssembliesTask</code></td>
+<td>筛选候选程序集，只保留包含目标类型的程序集。</td>
+<td><code>SetupPatcher</code></td>
+</tr>
+<tr>
+<td><code>PatcherTask</code></td>
+<td>围绕 <code>Cosmos.Patcher</code> 的 MSBuild 包装器，用于自定义场景。</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a id="detailed-workflow"></a></p>
+<h2 id="详细工作流程">详细工作流程</h2>
+<ol>
+<li><p><strong>SetupPatcher</strong> 收集输出程序集和引用程序集，解析 plug 引用，并将它们存放在 <code>$(IntermediateOutputPath)/cosmos</code> 中。</p>
+</li>
+<li><p><strong>FindPluggedAssembliesTask</strong> 使用 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/PlugScanner.cs"><code>PlugScanner.FindPluggedAssemblies</code></a> 将 plug 的目标与候选程序集交叉比对，并生成 <code>AssembliesToPatch</code>。</p>
+</li>
+<li><p><strong>RunPatcher</strong> 遍历 <code>AssembliesToPatch</code>，对每个程序集，由 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Patcher/Tasks/PatcherTask.cs"><code>PatcherTask</code></a> 启动 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher"><code>Cosmos.Patcher</code></a> CLI（<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/Program.cs"><code>Program</code></a> → <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/PatchCommand.cs"><code>PatchCommand.Execute</code></a>）。在 <code>Execute</code> 内部：</p>
+<ul>
+<li>目标程序集和 plug 程序集通过 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/Resolution/PatcherAssemblyLoader.cs"><code>PatcherAssemblyLoader</code></a> 读取，并配合一个 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/Resolution/PatcherAssemblyResolver.cs"><code>PatcherAssemblyResolver</code></a>，它会搜索目标、plug 和输出所在的目录，以及 <code>RunPatcher</code> 通过 <code>--search</code> 传入的目录（<code>cosmos/ref</code> 和每个候选程序集所在的目录）。把修补后的程序集写回时，需要解析其常量所用的类型：如果某个 <code>const</code> 字段或某个默认参数的类型是来自另一个 Cosmos 程序集的枚举，就必须找到该程序集，而 Mono.Cecil 的默认解析器只会在当前目录和宿主运行时中查找。</li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/PlugScanner.cs"><code>PlugScanner.LoadPlugs</code></a> 在这些程序集中发现 plug 类型。</li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/Patching/PlugPatcher.cs"><code>PlugPatcher.PatchAssembly</code></a> 按 <code>[Plug]</code> 目标对 plug 分组，并借助以下组件修补每个目标类型：
+<ul>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/Resolution/MethodResolver.cs"><code>MethodResolver</code></a> 按名称和参数类型匹配 plug 签名（包括构造函数和 <code>aThis</code> 参数）。</li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/Patching/PlugPatcher.Method.cs"><code>PlugPatcher.Method</code></a> 交换或克隆 IL，并去除 P/Invoke 元数据。</li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/IL/ILCloner.cs"><code>ILCloner</code></a> 克隆指令、重新映射参数并修正分支目标。</li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/IL/TypeImporter.cs"><code>TypeImporter</code></a> 安全地导入类型、方法和字段引用，并修正那些会导致无效 IL 元数据的自引用。</li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/Patching/PlugPatcher.Property.cs"><code>PlugPatcher.Property</code></a> 将 getter 和 setter 连接到 plug 实现。</li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher/Patching/PlugPatcher.Field.cs"><code>PlugPatcher.Field</code></a> 复制常量值并重定向字段访问。</li>
+</ul>
+</li>
+<li>修补后的程序集被写入 <code>PatcherOutputPath</code>。</li>
+</ul>
+</li>
+<li><p><strong>CleanPatcher</strong> 在清理项目时删除修补后的输出。</p>
+</li>
+<li><p><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Analyzer.Patcher"><code>Cosmos.Patcher.Analyzer</code></a> 在编译期间验证 plug 规则，以便在修补之前发现错误。</p>
+</li>
+</ol>
+<hr>
+<p><a id="outputs"></a></p>
+<h2 id="输出">输出</h2>
+<ul>
+<li>修补后的应用程序集：<code>$(IntermediateOutputPath)/cosmos/$(AssemblyName)_patched.dll</code>，即应用 plug 之后的项目主输出。</li>
+<li>供 ILC 使用的引用程序集：<code>$(IntermediateOutputPath)/cosmos/ref/*.dll</code>，有 plug 适用时会被修补；否则原样复制，供解析使用。</li>
+<li>中间目录会在 <code>$(IntermediateOutputPath)/cosmos/</code> 下按需创建。</li>
+</ul>
+<p>注：</p>
+<ul>
+<li>只有当 <code>EnablePatching</code> 为 <code>true</code>，并且在 <code>SetupPatcher</code> 计算出 <code>@(AssembliesToPatch)</code> 和目标位置之后，<code>RunPatcher</code> 才会运行。</li>
+</ul>
+<hr>
+<p><a id="related-components"></a></p>
+<h2 id="相关组件">相关组件</h2>
+<ul>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher"><code>Cosmos.Patcher</code></a></li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Analyzer.Patcher"><code>Cosmos.Patcher.Analyzer</code></a></li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/dev/build/patcher-build.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

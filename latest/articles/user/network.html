@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
       <title>Network | Cosmos Gen 3 </title>
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.95/docs/articles/user/network.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/articles/user/network.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -217,7 +217,14 @@ if (second.IsValid
     Console.WriteLine(&quot;Configured the second adapter&quot;);
 }
 </code></pre>
-<p>DHCP needs no handle: <code>SendDiscoverPacket</code> runs the exchange on every registered device.</p>
+<p>DHCP configures one adapter at a time. <code>new DhcpClient()</code> runs the exchange on the primary adapter and <code>new DhcpClient(adapter)</code> on the one the handle names; the other adapters keep their configuration either way. <code>SendReleasePacket()</code> gives that adapter's address back to the server and leaves it unconfigured:</p>
+<pre><code class="lang-csharp">NetworkAdapter second = NetworkManager.GetAdapter(1);
+
+if (second.IsValid &amp;&amp; new DhcpClient(second).SendDiscoverPacket() != -1)
+{
+    Console.WriteLine(&quot;Second adapter: &quot; + second.IPConfig?.Address.ToString());
+}
+</code></pre>
 <h3 id="read-the-configuration-back">Read the configuration back</h3>
 <p>Each adapter carries the configuration in force on it, or <code>null</code> while it is unconfigured:</p>
 <pre><code class="lang-csharp">Console.WriteLine(NetworkManager.Primary.IPConfig?.Address.ToString());
@@ -517,7 +524,7 @@ Network device                                          (e1000e or virtio-net, o
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.95/docs/articles/user/network.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/articles/user/network.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

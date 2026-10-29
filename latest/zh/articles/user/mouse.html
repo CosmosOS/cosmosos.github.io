@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>鼠标 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="鼠标 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/user/mouse.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="mouse"></a></p>
+<h1 id="鼠标">鼠标</h1>
+<p>本文将介绍 Cosmos Gen3 上的鼠标输入：如何跟踪指针位置、响应按键按下和滚轮滚动，以及如何用图形 API 绘制光标。</p>
+<p>如果你从 Gen2 迁移过来，主要区别如下：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Gen2</th>
+<th>Gen3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>管理器 API</td>
+<td><code>Cosmos.System.MouseManager</code></td>
+<td>相同的模型，位于 <code>Cosmos.Kernel.System.Input</code></td>
+</tr>
+<tr>
+<td>按键状态</td>
+<td><code>MouseState</code> 标志枚举</td>
+<td><code>LeftButton</code>、<code>RightButton</code>、<code>MiddleButton</code> 布尔值</td>
+</tr>
+<tr>
+<td>位置</td>
+<td><code>X</code>、<code>Y</code> 被限制在屏幕尺寸内</td>
+<td>相同</td>
+</tr>
+<tr>
+<td>滚轮</td>
+<td><code>ScrollDelta</code> + <code>ResetScrollDelta()</code></td>
+<td>相同</td>
+</tr>
+<tr>
+<td>光标</td>
+<td>由你的代码绘制</td>
+<td>由你的代码绘制</td>
+</tr>
+<tr>
+<td>设备</td>
+<td>PS/2 鼠标</td>
+<td>带滚轮的 PS/2 鼠标（x64）、virtio-mouse 和 USB 鼠标，全部基于驱动工具包（q35 和所有 PC 上的 8042；virtio 在两种架构上基于 PCI，在 ARM64 上还可基于 MMIO；USB 在两种架构上都基于 xHCI、EHCI 或 OHCI 控制器）</td>
+</tr>
+</tbody>
+</table>
+<p>如果你发现 bug 或任何异常，请在我们的仓库中<a href="https://github.com/CosmosOS/Cosmos/issues/new/choose">提交 issue</a>。</p>
+<p><a id="enable-the-mouse-in-your-kernel"></a></p>
+<h2 id="在内核中启用鼠标">在内核中启用鼠标</h2>
+<p>鼠标支持由一个功能开关控制。请确保内核的 <code>.csproj</code> 没有将其关闭（默认值为 <code>true</code>）：</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;CosmosEnableMouse&gt;true&lt;/CosmosEnableMouse&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p>下面的代码片段依赖以下 <code>using</code>；绘图类型来自<a href="graphics.html">图形</a>一文：</p>
+<pre><code class="lang-csharp">using System.Drawing;
+using Cosmos.Kernel.System.Graphics;
+using Cosmos.Kernel.System.Graphics.Fonts;
+using Cosmos.Kernel.System.Input;
+</code></pre>
+<p>与键盘一样，在驱动阶段，PS/2 鼠标（x64）由驱动工具包的 <code>Ps2MouseDriver</code> 绑定，virtio 鼠标由 <code>VirtioInputDriver</code> 绑定，USB 鼠标由 <code>UsbMouseDriver</code> 绑定，每个鼠标都会发布给管理器的消费者，由后者完成注册（<a href="drivers.html#ps2-devices">PS/2 设备</a>、<a href="drivers.html#virtio-devices">virtio 设备</a>、<a href="drivers.html#usb-devices">USB 设备</a>）；你的内核一开始运行，<code>MouseManager</code> 就已就绪。</p>
+<p>USB 鼠标还需要 USB 驱动程序，即 <code>CosmosEnableUsb</code>。你不必设置它：不设置时，只要 <code>CosmosEnableMouse</code> 开启，它就开启。将其设为 <code>false</code> 会保留 PS/2 和 virtio 鼠标，并连同主机控制器驱动程序一起去掉 USB 鼠标。</p>
+<p>要在 QEMU 中试用 USB 鼠标，请向 <code>cosmos run</code> 传入 <code>--mouse usb-mouse</code>：启动器会添加一个 <code>qemu-xhci</code> 控制器（或复用 USB 磁盘或 <code>usb-kbd</code> 键盘已经带来的那个控制器），并把鼠标插到它上面，两种架构都是如此。<code>--usb-controller ehci</code>、<code>ohci</code> 或 <code>ehci-ohci</code> 则会改为放置一个 EHCI、一个 OHCI，或一个带 OHCI 伴随控制器的 EHCI，每个 USB 设备都固定连接到它的某个根端口。</p>
+<p><a id="position-and-buttons"></a></p>
+<h2 id="位置与按键">位置与按键</h2>
+<p><code>MouseManager</code> 是一组静态属性，由中断处理程序保持更新：<code>X</code> 和 <code>Y</code> 表示指针位置，<code>LeftButton</code>、<code>RightButton</code> 和 <code>MiddleButton</code> 表示按键。在你绘制光标之前，屏幕上不会有光标，因此鼠标代码就是一个每帧读取这些属性的渲染循环：</p>
+<pre><code class="lang-csharp">Canvas canvas = Canvas.GetFullScreen();
+Font font = PCScreenFont.DefaultFont;
+
+/* Clamp the pointer to the actual screen */
+MouseManager.SetScreenSize(canvas.Width, canvas.Height);
+
+while (true)
+{
+    canvas.Clear(Color.MidnightBlue);
+
+    canvas.DrawString(&quot;X: &quot; + MouseManager.X + &quot;   Y: &quot; + MouseManager.Y,
+        font, Color.White, 40, 40);
+    canvas.DrawString(&quot;Buttons: &quot;
+        + (MouseManager.LeftButton ? &quot;L&quot; : &quot;-&quot;)
+        + (MouseManager.MiddleButton ? &quot;M&quot; : &quot;-&quot;)
+        + (MouseManager.RightButton ? &quot;R&quot; : &quot;-&quot;),
+        font, Color.White, 40, 100);
+
+    /* A minimal cursor: a white dot with a black outline */
+    canvas.DrawFilledCircle(Color.White, MouseManager.X, MouseManager.Y, 6);
+    canvas.DrawCircle(Color.Black, MouseManager.X, MouseManager.Y, 6);
+
+    canvas.Display();
+    Thread.Sleep(15);
+}
+</code></pre>
+<!-- video: 光标圆点跟随鼠标移动，同时位置读数不断更新，每按下一个按键，L、M、R 指示就会亮起 -->
+<p><video src="images/mouse-cursor.mp4" controls autoplay muted loop playsinline style="max-width:100%"></video></p>
+<p>在启动时调用一次 <code>SetScreenSize</code>：管理器会把 <code>X</code> 和 <code>Y</code> 限制在该范围内（默认值为 1024x768，很少与帧缓冲区一致）。如果想要真正的箭头光标，请改为 blit 一张小位图，而不是画圆。</p>
+<p><a id="painting-with-the-mouse"></a></p>
+<h2 id="用鼠标绘画">用鼠标绘画</h2>
+<p>按键只是普通的布尔值，因此一个绘画程序只需几个 <code>if</code>。笔画累积在一个离屏画布上（参见<a href="graphics.html#off-screen-canvases">离屏画布</a>），这样光标就可以绘制在其上方而不会擦除笔画：</p>
+<pre><code class="lang-csharp">Canvas screen = Canvas.GetFullScreen();
+MouseManager.SetScreenSize(screen.Width, screen.Height);
+
+Canvas paint = new Canvas(screen.Width, screen.Height);
+paint.Clear(Color.MidnightBlue);
+
+while (true)
+{
+    if (MouseManager.LeftButton)
+    {
+        paint.DrawFilledCircle(Color.Gold, MouseManager.X, MouseManager.Y, 6);
+    }
+
+    if (MouseManager.RightButton)
+    {
+        paint.Clear(Color.MidnightBlue);
+    }
+
+    screen.DrawCanvas(paint, 0, 0);
+    screen.DrawFilledCircle(Color.White, MouseManager.X, MouseManager.Y, 6);
+    screen.DrawCircle(Color.Black, MouseManager.X, MouseManager.Y, 6);
+    screen.Display();
+
+    Thread.Sleep(15);
+}
+</code></pre>
+<!-- video: 按住左键画出金色笔画，右键单击清空画布，然后再次绘画 -->
+<p><video src="images/mouse-paint.mp4" controls autoplay muted loop playsinline style="max-width:100%"></video></p>
+<p><a id="the-scroll-wheel"></a></p>
+<h2 id="滚轮">滚轮</h2>
+<p>滚轮的移动累积在 <code>MouseManager.ScrollDelta</code> 中，每滚动一格计一个单位。驱动程序从不将其清零：读取它、应用它，然后调用 <code>ResetScrollDelta()</code>，以免同一次移动被应用两次。</p>
+<pre><code class="lang-csharp">Canvas canvas = Canvas.GetFullScreen();
+Font font = PCScreenFont.DefaultFont;
+
+int radius = 60;
+
+while (true)
+{
+    int delta = MouseManager.ScrollDelta;
+    if (delta != 0)
+    {
+        radius = Math.Clamp(radius + delta * 10, 12, 320);
+        MouseManager.ResetScrollDelta();
+    }
+
+    canvas.Clear(Color.MidnightBlue);
+    canvas.DrawString(&quot;Scroll to resize the circle. Radius: &quot; + radius,
+        font, Color.White, 40, 40);
+    canvas.DrawFilledCircle(Color.DeepSkyBlue,
+        canvas.Width / 2, canvas.Height / 2, radius);
+    canvas.Display();
+
+    Thread.Sleep(15);
+}
+</code></pre>
+<!-- video: 随着滚轮向两个方向滚动，圆形不断变大和缩小 -->
+<p><video src="images/mouse-scroll.mp4" controls autoplay muted loop playsinline style="max-width:100%"></video></p>
+<p><a id="sensitivity-and-pointer-control"></a></p>
+<h2 id="灵敏度与指针控制">灵敏度与指针控制</h2>
+<p><code>MouseManager</code> 还有两个可调项：</p>
+<ul>
+<li><code>Sensitivity</code> 会乘以每个移动增量（默认值为 <code>1.0f</code>）；小于 1 的值让指针变慢，大于 1 的值让它变快。</li>
+<li><code>SetPosition(x, y)</code> 以编程方式移动指针，并将其限制在屏幕范围内，例如在打开一个场景时把指针居中。</li>
+</ul>
+<p><a id="current-limitations"></a></p>
+<h2 id="当前限制">当前限制</h2>
+<ul>
+<li>仅支持相对定位设备。没有绝对（数位板）输入，因此在虚拟机窗口中，客户机指针不会与宿主机光标一一对应地移动。</li>
+<li>滚轮的水平倾斜会被忽略；只有垂直滚轮的数据会进入 <code>ScrollDelta</code>。</li>
+<li>PS/2 鼠标只发布一次，即在驱动阶段，当鼠标驱动程序绑定了 8042 驱动程序的辅助端口节点且其复位得到应答时；启动时就存在的 virtio 鼠标也只发布一次，即在驱动阶段提供其设备时。USB 鼠标在其节点被绑定时发布，在节点被撤回时撤下；其 PCI 功能位于 PCI Express 热插拔插槽之后、由根端口驱动程序发布和撤回的 virtio 鼠标也是如此。因此，可以在内核运行时插入和拔出的正是这些鼠标。</li>
+<li>USB 鼠标以 HID 启动协议驱动，所有 PC 鼠标都支持该协议：三个按键、8 位的 X 和 Y 增量，以及在带滚轮的鼠标上，紧随其后那个字节中的滚轮数据。额外的按键、水平倾斜，以及某些鼠标在其自身报告协议中提供的更高精度，都不会被读取。</li>
+</ul>
+<p><a id="how-it-works"></a></p>
+<h2 id="工作原理">工作原理</h2>
+<p>在 x64 上，PS/2 鼠标会为移动数据包的每个字节触发 IRQ 12，8042 驱动程序读取该字节并将其交给辅助端口的 <code>Ps2Access</code>。鼠标驱动程序的中断处理程序负责组装由按键和 X/Y 增量构成的 3 个字节；一旦探测启用了 IntelliMouse 协议（采样率序列 200、100、80），再加上滚轮字节扩展为 4 个字节。它会丢弃不可能作为数据包开头的字节，并为每个数据包通过指针接收器向管理器的消费者交付一份报告。virtio 鼠标通过 PCI 或 MMIO，以其队列中事件记录的形式提供同样的信息：驱动工具包的 <code>VirtioInputDriver</code> 在工具包的工作线程上取出这些记录（由队列的中断唤醒，如果无法路由任何中断，则每 20 ms 唤醒一次），把轴事件和按键事件合并为每个同步事件一份报告，并通过指针接收器将其交给管理器的消费者。USB 鼠标的启动报告到达其中断 IN 管道，由主机控制器驱动程序的中断送达（在 xHCI 上是 MSI-X 消息，在 EHCI 和 OHCI 上是该功能的传统中断线），如果无法路由任何中断，则由其每 20 ms 一次的轮询送达；<code>UsbMouseDriver</code> 的处理程序把每份报告转换为一次相对移动（HID 与管理器一样让 Y 轴朝下，其滚轮值则取反，使正值表示向下滚动，与 PS/2 一致），并通过同一个接收器交出。无论哪种方式，增量最终都会到达 <code>MouseManager</code>，它会应用 <code>Sensitivity</code>，把增量加到 <code>X</code> 和 <code>Y</code> 上，将结果限制在屏幕尺寸内，并更新按键布尔值；滚轮增量累积在 <code>ScrollDelta</code> 中，直到轮询方将其取走。你的渲染循环只会读取状态，因此不需要加锁。</p>
+<pre><code>Render loop (reads X/Y, buttons, ScrollDelta)
+        │
+MouseManager ── Sensitivity, screen clamping, ScrollDelta accumulation
+        │
+PS/2 mouse over the driver kit (the 8042, IRQ 12, x64)  /  virtio-mouse over the driver kit (PCI, MMIO)  /  USB mouse over the driver kit (xHCI, EHCI, OHCI)
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/user/mouse.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

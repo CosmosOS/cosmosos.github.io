@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title> | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content=" | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/dev/garbage-collector.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><img src="images/orion-gc.jpg" alt="猎户座的 212 小时曝光照片"></p>
+<p><em>OrionGC 名字的由来。图片来源与版权：<a href="https://apod.nasa.gov/apod/ap151123.html">Stanislav Volskiy</a>，APOD 2015 年 11 月 23 日。</em></p>
+<p><a id="overview"></a></p>
+<h2 id="概述">概述</h2>
+<p>垃圾回收器（在运行时配置表中自称 <strong>OrionGC</strong>）是一个<a href="gc-concepts/stop-the-world.html">全局停顿（stop-the-world）</a>、<a href="gc-concepts/non-moving.html">非移动式</a>、<a href="gc-concepts/mark-and-sweep.html">标记-清除</a>的回收器，只有<a href="gc-concepts/gc-generations.html">单一代</a>。每次垃圾回收都会暂停所有线程，标记仍然可达的对象，就地释放其余对象，并且从不改变存活对象的地址。每个带链接的术语都在<a href="garbage-collector-glossary.html">术语表</a>中有一段简短的背景说明。回收器管理四类内存：</p>
+<ul>
+<li><a href="#regular-heap">常规 GC 堆</a>，每个 <code>new</code> 都在这里分配；</li>
+<li><a href="#pinned-heap">固定对象堆</a>，用于地址绝不能改变的对象；</li>
+<li><a href="#handle-store">GC 句柄存储区</a>，即从堆外持有的、指向堆对象的引用；</li>
+<li><a href="#frozen-segments">冻结段</a>，即编入内核二进制文件的只读对象，从不回收。</li>
+</ul>
+<p>GC 通常在多线程内核中运行，但并不依赖多线程。<a href="scheduler.html">调度器</a>运行时，调度器会从定时器中断中抢占线程，把每个存活线程保存在一个供 GC 扫描的全局登记表中，并把每个线程的分配状态存放在该线程的 <code>SchedulerThread</code> 控制块上；中断处理程序同样会分配内存（调度器节拍、输入驱动程序）。在调度器启动之前，或者在把调度器编译排除的内核中，GC 以同样的方式工作，只使用一个静态分配上下文，并把当前栈作为唯一的栈根。无论哪种模式，都没有专门的 GC 线程：垃圾回收在触发它的那个线程上运行，位于 <code>InternalCpu.DisableInterruptsScope()</code> 内部，因此任何线程切换或中断处理程序都无法看到回收进行到一半的堆。</p>
+<p>由于每个线程和中断处理程序都可能分配内存，分配经由每线程的 <a href="gc-concepts/tlab.html">TLAB</a>（线程本地分配缓冲区，thread-local allocation buffer）进行：每个线程在自己的缓冲区内递增指针，除了一个全局的已分配字节计数器之外，只有当缓冲区用尽、需要重新填充时才会触及共享状态。垃圾回收是最后的手段。重新填充失败时，回收器首先扩展堆；只有当页分配器本身已无内存可给，或被显式调用时，<code>Collect()</code> 才会运行。</p>
+<p>标记从<a href="gc-concepts/gc-roots.html">根</a>开始，根是存在于堆外、持有引用的位置。OrionGC 扫描三组根：触发回收的线程的栈，依据 NativeAOT 的 GCInfo 进行<a href="gc-concepts/conservative-vs-precise.html">精确</a>扫描（参见<a href="garbage-collector-gcinfo.html">精确栈扫描（GCInfo）</a>）；其他所有已注册线程的栈和保存的寄存器，以保守方式扫描；以及强 GC 句柄（使目标保持存活的那些句柄类型）。静态字段无需单独扫描：在模块初始化期间，持有各模块静态字段的对象被收集到由一个强句柄保持存活的主干数组中，因此句柄扫描会传递地到达每个静态字段。</p>
+<p>这种扫描上的划分制约着整个设计。被抢占的线程可能停在任意一条指令上，因此它的栈只能保守扫描，而保守引用会固定其目标：一个看起来像堆指针的字可能只是一个整数，所以回收器永远不能移动它看似指向的对象。反过来，非移动式又让其余部分保持简单：对象地址终生稳定，固定也没有任何代价。单一代意味着没有<a href="gc-concepts/gc-generations.html">写屏障和记忆集</a>；引用存储被编译为普通的写操作。贯穿始终的取舍是以吞吐量换取简单性和可验证性：每次回收都扫描整个堆，但每个结构都可以手动遍历，统计也是精确的，精确到<a href="#tests">测试套件</a>所断言的已释放对象数量。设计所放弃的内容汇总在<a href="#limitations-and-evolution">局限与演进</a>中。</p>
+<p>代码位于 <code>src/Cosmos.Kernel.Core/Memory/GarbageCollector/</code>。<code>GarbageCollector</code> 类本身是一个按阶段拆分的静态分部类（<code>.Alloc</code>、<code>.Tlab</code>、<code>.Mark</code>、<code>.Sweep</code> 等）；段、句柄和 TLAB 结构体各有自己的类型，<code>GcInfo/</code> 文件夹包含精确栈扫描的解码器。完整的文件清单见本文末尾的<a href="#source-files">源文件</a>。</p>
+<hr>
+<p><a id="core-structures"></a></p>
+<h2 id="核心结构">核心结构</h2>
+<p>四种数据形态是本文其余所有内容的基础：编译器为每个托管类型生成的类型描述符、GC 眼中的对象、描述死空间的空闲块，以及每线程的分配状态。后续每一节都建立在它们之上。</p>
+<h3 id="methodtable">MethodTable</h3>
+<p>ILC（NativeAOT 的预先编译器；参见<a href="build/kernel-compilation-steps.html">内核编译步骤</a>）编译的每个托管类型都有一个 <code>MethodTable</code>，这是一个位于内核数据段中的类型描述符，从不位于 GC 堆上。GC 会读取其中的几个字段：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RawBaseSize</code></td>
+<td>固定大小对象的字节大小</td>
+</tr>
+<tr>
+<td><code>BaseSize</code> / <code>ComponentSize</code></td>
+<td>数组和字符串的基础大小加每元素大小</td>
+</tr>
+<tr>
+<td><code>HasComponentSize</code></td>
+<td>对数组和字符串为 true</td>
+</tr>
+<tr>
+<td><code>ContainsGCPointers</code></td>
+<td>如果实例包含 GC 必须追踪的引用，则为 true</td>
+</tr>
+</tbody>
+</table>
+<p>由于 <code>MethodTable</code> 指针总是位于内核空间、堆之外，GC 将其用作有效性过滤器：如果候选对象的第一个字为 null、指向 GC 堆内部，或位于 <code>AddressSpace.KernelSpaceStart</code> 之下，它就不可能是真正的对象。</p>
+<p>这些字段唯一没有描述的，是实例内部引用所在的位置。这一布局存放在紧挨 <code>MethodTable</code> 之前的 GCDesc 中（参见 <a href="#gcdesc">GCDesc</a>）。</p>
+<p><a id="object-header"></a></p>
+<h3 id="对象头">对象头</h3>
+<p>GC 堆上的每个对象都以一个 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GCObject.cs"><code>GCObject</code></a> 头开始：</p>
+<table>
+<thead>
+<tr>
+<th>偏移</th>
+<th>大小（x64）</th>
+<th>内容</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>8 字节</td>
+<td><code>MethodTable*</code></td>
+<td>第 0 位兼作标记位</td>
+</tr>
+<tr>
+<td>8</td>
+<td>4 字节</td>
+<td><code>Length</code></td>
+<td>元素数量；只有数组和字符串有这个槽</td>
+</tr>
+<tr>
+<td>8、12 或 16</td>
+<td>对象其余部分</td>
+<td>字段或元素</td>
+<td>固定大小对象的字段从 8 开始；字符串的字符从 12 开始；数组元素从 16 开始（<code>Length</code> 之后有 4 字节填充）</td>
+</tr>
+</tbody>
+</table>
+<p><code>MethodTable</code> 指针是对齐的，因此第 0 位通常为零。<code>Mark()</code> 设置该位，<code>Unmark()</code> 清除该位，<code>GetMethodTable()</code> 在解引用之前将其屏蔽掉。对于数组和字符串，<code>ComputeSize()</code> 返回 <code>BaseSize + Length * ComponentSize</code>，对其他所有对象返回 <code>RawBaseSize</code>。</p>
+<h3 id="freeblock">FreeBlock</h3>
+<p>死空间由链接到按大小类别划分的空闲链表中的 <code>FreeBlock</code> 条目描述。<code>FreeBlock</code> 的布局使清除阶段可以像遍历对象一样跨过它：作为标识的 <code>MethodTable</code> 位于偏移 0，<code>Size</code> 位于 <code>GCObject.Length</code> 所在的位置：</p>
+<table>
+<thead>
+<tr>
+<th>偏移</th>
+<th>大小（x64）</th>
+<th>内容</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>8 字节</td>
+<td><code>MethodTable*</code></td>
+<td>指向用来标识空闲块的 <code>s_freeMethodTable</code></td>
+</tr>
+<tr>
+<td>8</td>
+<td>4 字节</td>
+<td><code>Size</code></td>
+<td>此空闲块的总大小（其后有 4 字节填充）</td>
+</tr>
+<tr>
+<td>16</td>
+<td>8 字节</td>
+<td><code>Next*</code></td>
+<td>同一大小类别中的下一个空闲块</td>
+</tr>
+</tbody>
+</table>
+<p>块头为 24 字节，这就是 <code>MinBlockSize</code> 为 24 的原因：每次分配都至少向上取整到这个大小，因此任何对象以后都可以就地转换成空闲块。</p>
+<h3 id="alloccontext-tlab">AllocContext (TLAB)</h3>
+<p><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/AllocContext.cs"><code>AllocContext</code></a> 是每线程的分配状态（即 <a href="gc-concepts/tlab.html">TLAB</a> 本身），内联存放在每个 <code>SchedulerThread</code> 上（另有一个静态后备上下文，在调度器运行之前使用；当调度器被编译排除时，则在内核的整个生命周期中使用）：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AllocPtr</code></td>
+<td>当前分配指针，向 <code>AllocLimit</code> 推进</td>
+</tr>
+<tr>
+<td><code>AllocLimit</code></td>
+<td>TLAB 的末尾；到达它会强制重新填充</td>
+</tr>
+<tr>
+<td><code>AllocBytes</code></td>
+<td>该线程在常规堆上累计分配的字节数</td>
+</tr>
+<tr>
+<td><code>AllocBytesUoh</code></td>
+<td>该线程在固定堆上累计分配的字节数</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a id="memory-layout"></a></p>
+<h2 id="内存布局">内存布局</h2>
+<p>本节回答托管内存位于何处，以及 GC 如何在其中定位：先讲一个段及其砖表的构成，再讲段如何串成两个堆的链，然后是位于堆旁边的两个结构（句柄存储区和冻结段），最后是刻意置于 GC 管辖范围之外的内容。</p>
+<p><a id="segments"></a></p>
+<h3 id="段">段</h3>
+<p>段是来自页分配器（<code>PageType.GCHeap</code>）的一段连续页。<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GCSegment.cs"><code>GCSegment</code></a> 头位于这次分配的基址处，其后依次是该段的砖表、8 个保留字节，然后是可用区域：</p>
+<div style="overflow-x:auto">
+<img src="images/diagrams/gc-segment-layout.svg" alt="一个 GC 段的内存布局：GCSegment 头、砖表、8 个保留字节，然后是可用区域。Start 指向第一个可用字节，Bump 指向已分配对象与空闲空间的分界，End 指向最后一个字节之后的位置，Next 指向下一个段。" style="width:100%;min-width:620px;max-width:760px">
+</div>
+<p>这条带状图是按地址顺序排列的一次连续分配，左侧是按页对齐的基址。<code>Start</code> 指向保留槽之后的第一个字节，<code>Bump</code> 指向下一次分配将落在的分界处（它向 <code>End</code> 推进，<code>End</code> 位于段最后一个字节之后），<code>Next</code> 把各个段链接成下文所示的链。<code>TotalSize</code> 等于 <code>End - Start</code>；<code>UsedSize</code> 统计清除之前正在使用的字节数。</p>
+<ul>
+<li><code>Start</code> 到 <code>Bump</code> 之间存放已分配的对象，以及先前的垃圾回收留下的空闲块。</li>
+<li><code>Bump</code> 到 <code>End</code> 之间是从未使用过的空间；<a href="gc-concepts/bump-allocation.html">指针碰撞分配</a>从 <code>Bump</code> 处分出内存并将其推进。</li>
+<li><code>Start</code> 之前之所以有 8 个保留字节，是因为运行时会在 <code>objRef - 4</code> 处写入一个<a href="gc-concepts/object-header.html">运行时对象头</a>（标识哈希或瘦锁）。对于段中的第一个对象，这次写入必须落在保留的填充区，而不是段自身的元数据上。</li>
+</ul>
+<p>段的分配逻辑位于 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GCSegmentManager.cs"><code>GCSegmentManager</code></a> 中。<code>AllocateSegment(requestedSize)</code> 把请求至少提升到一页，确定砖表的大小，把总大小向上取整为整页，并把新段追加到其管理器的链表中。按页取整产生的余量归入可用区域，因此 <code>TotalSize</code> 通常略大于请求的大小。</p>
+<p><a id="brick-table"></a></p>
+<h3 id="砖表">砖表</h3>
+<p>在标记期间，GC 有时持有的地址指向对象中间而非对象起始处：指向数组元素的 <code>ref</code>，或 <code>Span&lt;T&gt;</code> 内部的引用（参见<a href="#interior-pointers">内部指针</a>）。要标记该对象，GC 必须先找到对象的起始位置，而堆内存没有提供回溯的途径：对象首尾相接，没有反向指针，因此从任意内部地址找到起始位置唯一可靠的方法，是从 <code>Start</code> 开始逐个对象遍历段，直到遇到包含该地址的对象。</p>
+<p>砖表（brick table）本意是缩短这一遍历：它是每个段上一份粗粒度的对象起始位置索引，使查找可以跳到目标附近，只需向前走很短一段距离。标准 .NET GC 为同样的目的维护着一张砖表，名字就来源于此。</p>
+<p>具体机制是：可用区域被划分为若干块，每块含 255 个指针大小的槽（约 2 KiB，这一大小使槽索引能放进一个字节），表中每块存一个字节，记录该块中最后一个已登记对象起始位置的槽索引，从 1 开始计数（0 表示没有）。<code>GCSegment.MarkObject(addr)</code> 在分配时登记起始位置：在固定堆上登记每个对象，而在常规堆上只登记从段中以指针碰撞方式分出的每个缓冲区，实际上也就是每个 TLAB。</p>
+<p>这张表目前只写不读，因为它的条目不能安全地作为遍历的起点。它们是不完整的：TLAB 中第一个对象之后的对象从不登记，而从空闲链表回收再利用的 TLAB 根本不会添加条目。它们也是过时的：当清除把 <code>Bump</code> 往回移，或从空闲链表重新填充而复用空间时，没有任何操作会抹掉条目，而且 <code>MarkObject</code> 只会增大条目，因此一个旧条目可能指向某个存活对象的中间，从那里开始的遍历会把对象数据当作对象头来读。因此，内部指针查找总是从 <code>Start</code> 开始遍历。由于段很小，这样做的代价仍然很低：新段的大小按需要它的那次请求确定，至少一页，TLAB 重新填充时为 8 KiB，或者恰好容纳一个大对象。</p>
+<p><a id="segment-chains"></a></p>
+<h3 id="段链">段链</h3>
+<p><a id="regular-heap"></a></p>
+<h4 id="常规堆">常规堆</h4>
+<p>常规链就是托管堆，即内核 C# 代码中每个 <code>new</code> 背后的内存。类实例、数组、字符串和装箱值都在它的某个段中开始自己的生命周期；用户代码从不选择段，由分配器来选择。扩展堆意味着向链中追加一个段；收缩堆意味着把一个空段归还给页分配器。标准 .NET GC 也以同样的方式组织其堆，使用从更大的预留空间中划出的段或区域。</p>
+<div class="NOTE">
+<h5>注意</h5>
+<p>官方文档：<a href="https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/fundamentals">垃圾回收的基本原理</a>。</p>
+</div>
+<p><a id="pinned-heap"></a></p>
+<h4 id="固定堆">固定堆</h4>
+<p>固定链之所以存在，是因为对象的地址有时会逃出 GC 的管辖范围：交给设备做 DMA 的缓冲区、传给本机代码的结构体、用 <code>fixed</code> 取得的指针。在会压缩堆的标准 .NET 中，这类对象必须被固定，以免在操作进行中被移动；固定可以是临时的（<code>fixed</code> 语句，或以 <code>GCHandleType.Pinned</code> 调用 <code>GCHandle.Alloc</code>），也可以是终生的，即把对象分配在专门的固定对象堆上（<code>GC.AllocateArray&lt;T&gt;(length, pinned: true)</code>），这样可以防止长期固定的对象使主堆碎片化。在 OrionGC 中没有任何东西会移动，因此固定不会增加任何约束；固定链用自己的一份段列表来遵循运行时的固定堆标志（具体机制参见<a href="#pinned-allocation">固定分配</a>）。</p>
+<div class="NOTE">
+<h5>注意</h5>
+<p>官方文档：<a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/fixed">fixed 语句</a>、<a href="https://learn.microsoft.com/en-us/dotnet/api/system.gc.allocatearray">GC.AllocateArray</a>、<a href="https://devblogs.microsoft.com/dotnet/internals-of-the-poh/">固定对象堆的内部机制</a>。</p>
+</div>
+<p>两个堆都把各自的段保存在单链表中，每个链表由自己的 <code>GCSegmentManager</code> 实例拥有（常规堆为 <code>s_segmentManager</code>，固定堆为 <code>s_pinnedSegmentManager</code>）：</p>
+<div style="overflow-x:auto">
+<img src="images/diagrams/gc-segment-chains.svg" alt="两条段链，画法相同。常规堆：Segments 指向 Seg 0（FULL），Next 链接经过 Seg 1（SEMIFULL）和省略的其他段到达 Seg N（FREE），然后是 null；TailSegment 指向 Seg N；s_lastSegment 和 s_currentSegment 指向 Seg 1。固定堆：形状相同，从 Pin 0（FULL）、Pin 1（SEMIFULL）一直到 Pin N（FREE），再到 null；TailSegment 指向 Pin N，s_currentPinnedSegment 指向 Pin 1。" style="width:100%;min-width:620px;max-width:760px">
+</div>
+<p><code>s_lastSegment</code> 是下一次指针碰撞尝试开始的段；<code>s_currentSegment</code> 与它保持一致（每个更新点都给两者赋同一个段）。带 <code>GC_ALLOC_PINNED_OBJECT_HEAP</code> 标志分配的对象则进入固定链。</p>
+<p>每次垃圾回收之后，两条链中的段都按 FULL、SEMIFULL、FREE 的顺序重新分组，跨越多于一页的空段会归还给页分配器（参见<a href="#segment-reordering">段重排</a>）。</p>
+<p>为了快速排除任意值，GC 缓存了覆盖常规段的一个边界框（<code>s_gcHeapMin</code> / <code>s_gcHeapMax</code>）。<code>IsInGCHeap</code> 先检查边界框，再遍历段列表；落在边界框之外，或在边界框之内但处于段与段之间的值，会通过一次简单的线性遍历与固定链进行比对（<code>IsInPinnedHeap</code>）。每当段的变化设置了 <code>s_heapRangeDirty</code>，边界框就会被惰性地重新计算。</p>
+<p><a id="handle-store"></a></p>
+<h3 id="句柄存储区">句柄存储区</h3>
+<p>GC 句柄是对托管对象的一种引用，它不在常规的根扫描之列，并且有明确的生命周期：代码分配句柄、使用它，然后释放它。C# 代码主要通过三种形式接触句柄。<code>GCHandle.Alloc</code> 在本机代码持有对象的原始指针期间让对象保持存活（并可选地固定），这是互操作的模式。<code>WeakReference</code> 观察一个对象而不让它保持存活，这是缓存的模式。<code>DependentHandle</code> 是 <code>ConditionalWeakTable</code> 背后的机制，它把一个对象的生命周期绑定到另一个对象上，借此可以给无法修改的对象附加额外状态。内核运行时本身也是客户端：它的内部缓存以及概述中提到的静态字段主干都通过句柄持有。</p>
+<div class="NOTE">
+<h5>注意</h5>
+<p>官方文档：<a href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.gchandle">GCHandle</a>、<a href="https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/weak-references">弱引用</a>、<a href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.dependenthandle">DependentHandle</a>。</p>
+</div>
+<p>存储区由唯一的 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GCHandleManager.cs"><code>GCHandleManager</code></a>（<code>s_gCHandleManager</code> 实例）拥有，并按句柄类型组织：每种句柄类型一个 <code>GCHandleSegmentStore</code>，依赖句柄另有一个单独的存储区。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>值</th>
+<th>是否让目标保持存活？</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Weak</code></td>
+<td>0</td>
+<td>否</td>
+<td>一旦标记发现目标已死即被置空，早于<a href="gc-concepts/finalization.html">终结</a>可能使其复活之时</td>
+</tr>
+<tr>
+<td><code>WeakTrackResurrection</code></td>
+<td>1</td>
+<td>否</td>
+<td>只有在终结之后目标仍然已死时才被置空</td>
+</tr>
+<tr>
+<td><code>Normal</code></td>
+<td>2</td>
+<td>是</td>
+<td>作为强根扫描</td>
+</tr>
+<tr>
+<td><code>Pinned</code></td>
+<td>3</td>
+<td>是</td>
+<td>作为强根扫描；目标反正位于非移动式堆上</td>
+</tr>
+<tr>
+<td>依赖句柄</td>
+<td>6</td>
+<td>视条件而定</td>
+<td>主对象存于 <code>Object</code>，次对象存于 <code>ExtraInfo</code>；对应运行时的 <code>HNDTYPE_DEPENDENT</code>。枚举中没有与之对应的具名成员</td>
+</tr>
+</tbody>
+</table>
+<p>每个存储区是由 <code>GCHandleSegment</code> 页组成的链表。一个段是一个 4 KiB 的页：16 字节的头，后面跟着 170 个各 24 字节的句柄槽：</p>
+<div style="overflow-x:auto">
+<img src="images/diagrams/gc-handle-store.svg" alt="句柄存储区。上半部分：一个 GCHandleSegmentStore 是由 GCHandleSegment 页组成的链表，_head 指向 Page 0，Next 链接经过 Page 1 和省略的其他页到达 Page N，然后是 null；_tail 指向 Page N，分配时先尝试尾部。下半部分：在一个 4 KiB 的页内，16 字节的头（Next 和打包的 _freeHead 字）之后是 170 个 24 字节的 GCHandle 槽；_freeHead 保存第一个空闲槽的索引，空闲槽通过 ExtraInfo 链接到下一个空闲索引。" style="width:100%;min-width:620px;max-width:760px">
+</div>
+<p>一个 <code>GCHandle</code> 槽是 <code>{ GCObject* Object; nint ExtraInfo; GCHandleType Type; }</code>。空闲槽被打上哨兵类型 <code>(GCHandleType)(-1)</code>，并通过 <code>ExtraInfo</code> 串成段内的空闲链表。链表头、存活计数和一个 <a href="gc-concepts/aba-problem.html">ABA</a> 版本标签被打包进一个 64 位字，用 <code>Interlocked.CompareExchange</code> 更新，因此在一个段内，槽的分配和释放都是无锁的。当存储区的每个段都已满时，存储区再分配一页，并在存储区自己的 IRQ 安全自旋锁保护下追加该页：否则，两个线程同时扩展存储区时会各自把一个段链接到同一个尾部，第二次链接会让第一个段成为孤儿，其中的句柄再也不会被任何一次垃圾回收扫描或置空。这条链只增不减，因此查找有空位的段时可以不加锁读取它；回收器在遍历存储区、把指向已死目标的句柄置空时会获取该锁。</p>
+<p>交给运行时的句柄值就是其槽的地址。分配、<code>RhHandleSet</code>、依赖句柄次对象的访问以及释放，都会把 <code>IntPtr</code> 转换回 <code>GCHandle*</code>。</p>
+<p>在垃圾回收期间，<code>Normal</code> 和 <code>Pinned</code> 存储区作为根扫描，依赖句柄由一个收敛循环处理，弱句柄则从不扫描；参见<a href="#handles-during-marking">标记期间的句柄</a>。</p>
+<p><a id="frozen-segments"></a></p>
+<h3 id="冻结段">冻结段</h3>
+<p>内容在构建时就已知的对象，无需在运行时构造。ILC 把字符串字面量、冻结数组和预初始化的静态数据作为现成的对象布置在内核二进制文件的数据段中，因此它们从第一条指令起就存在于永不改变的地址上，不占用堆空间，也不给回收器带来任何开销。这没有对应的 C# API；只要代码使用字符串字面量以及编译器能够预先求值的静态数据，就会自动获得这一点。上游 .NET 把它称为非 GC 堆。</p>
+<div class="NOTE">
+<h5>注意</h5>
+<p>官方文档：<a href="https://github.com/dotnet/runtime/blob/main/docs/design/features/NonGC-Heap.md">非 GC 堆设计说明</a>。</p>
+</div>
+<p>运行时在启动时通过 <code>RhRegisterFrozenSegment</code> 注册每个这样的区域，<code>ManagedModule</code> 则直接注册每个模块的 <code>FrozenObjectRegion</code>。GC 把它们记录在一个由 <code>FrozenSegmentInfo</code> 节点组成的链表中，这些节点从一个以指针碰撞方式分配的元数据页中划出：</p>
+<div style="overflow-x:auto">
+<img src="images/diagrams/gc-frozen-segments.svg" alt="冻结段登记表。s_frozenSegments 指向第一个 FrozenSegmentInfo 节点 Info 0；Next 链接通向 Info 1，然后是 null。每个节点的 Start 向下指向一个只读对象区域，例如字符串字面量和冻结数组。这些节点从一个以指针碰撞方式分配的元数据页中划出。" style="width:100%;min-width:620px;max-width:760px">
+</div>
+<p>冻结段不参与标记和清除。<code>IsInFrozenSegment</code> 回答成员关系查询（以 <code>AllocSize</code> 为界），<code>GetObjectGeneration</code> 把冻结对象报告为不属于任何 GC 代。置身标记阶段之外，依赖于一个内核并不验证的假设：冻结对象绝不能持有指向常规堆对象的唯一引用（参见<a href="#limitations-and-evolution">局限与演进</a>）。</p>
+<p><a id="what-the-gc-does-not-touch"></a></p>
+<h3 id="gc-不触及的内存">GC 不触及的内存</h3>
+<p>内核中 malloc 风格的堆（<code>Memory/Heap/</code> 中的 SmallHeap、MediumHeap、LargeHeap）不属于 GC。托管对象从不位于其中，清除阶段也刻意从不遍历它们：一个存活的非托管块，如果它的第一个字恰好存放着一个 GC 堆指针，就会与一个未标记的对象头无法区分，清除它就会释放仍在使用的内存（issue <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/386">#386</a>，由 <code>GC_MallocHeapNotSwept</code> 测试覆盖）。它们唯一的入口 <code>Heap</code>（<code>Alloc</code>、<code>Free</code>、<code>Realloc</code>，以及垃圾回收之后对小堆空页的修剪）用自己的一把 IRQ 安全自旋锁保护各子堆的链，就像 <code>PageAllocator</code> 用锁保护其页表那样：线程栈、运行时的非托管块以及 <code>NativeMemory</code> 会从任意线程在那里分配。</p>
+<hr>
+<p><a id="allocation"></a></p>
+<h2 id="分配">分配</h2>
+<p>本节回答一个 <code>new</code> 如何在寥寥几条指令内变成一个指针，以及快速路径用尽时会发生什么。请求从运行时导出的辅助函数出发，经过线程的 TLAB；未命中时依次退回到空闲链表、段内指针碰撞、新段，最后才是一次垃圾回收。</p>
+<p><a id="runtime-bridge"></a></p>
+<h3 id="运行时桥接">运行时桥接</h3>
+<p>NativeAOT 运行时调用 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Runtime/Memory.cs"><code>Memory.cs</code></a> 中的导出函数。分配类导出最终都汇集到 <code>GarbageCollector.AllocObject(size, flags)</code>；在 GC 初始化之前，它们会退回到启动分配器（<code>MemoryOp.Alloc</code> 加上显式清零）。</p>
+<table>
+<thead>
+<tr>
+<th>运行时导出</th>
+<th>映射到</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RhpNewFast</code></td>
+<td><code>AllocObject(RawBaseSize)</code></td>
+<td>固定大小的对象</td>
+</tr>
+<tr>
+<td><code>RhpNewArray</code>、<code>RhpNewArrayFast</code>、<code>RhpNewPtrArrayFast</code></td>
+<td><code>AllocObject(BaseSize + length * ComponentSize)</code></td>
+<td>数组；长度为负时返回 null</td>
+</tr>
+<tr>
+<td><code>RhNewArray</code></td>
+<td>不带标志的 <code>RhAllocateNewArray</code></td>
+<td>数组</td>
+</tr>
+<tr>
+<td><code>RhAllocateNewArray</code></td>
+<td><code>AllocObject(size, flags)</code></td>
+<td>带分配标志的数组</td>
+</tr>
+<tr>
+<td><code>RhAllocateNewObject</code></td>
+<td><code>AllocObject(RawBaseSize, flags)</code></td>
+<td>带标志的对象（为 GC 静态字段分配时与固定标志一起使用）</td>
+</tr>
+<tr>
+<td><code>RhNewString</code>、<code>RhNewVariableSizeObject</code></td>
+<td><code>RhpNewArray</code></td>
+<td>字符串及其他可变大小的对象</td>
+</tr>
+</tbody>
+</table>
+<p>句柄和冻结段的导出：</p>
+<table>
+<thead>
+<tr>
+<th>运行时导出</th>
+<th>映射到</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RhpHandleAlloc</code></td>
+<td><code>AllocateHandler(obj, type, IntPtr.Zero)</code></td>
+<td>分配给定类型的句柄</td>
+</tr>
+<tr>
+<td><code>RhpHandleAllocDependent</code></td>
+<td><code>AllocateHandler(primary, (GCHandleType)6, secondary)</code></td>
+<td>为一对主对象/次对象分配依赖句柄</td>
+</tr>
+<tr>
+<td><code>RhHandleSet</code></td>
+<td><code>HandleSetPrimary</code></td>
+<td>让已有句柄指向新的目标</td>
+</tr>
+<tr>
+<td><code>RhHandleFree</code></td>
+<td><code>FreeHandle</code></td>
+<td>把槽归还到所在段的空闲链表</td>
+</tr>
+<tr>
+<td><code>RhRegisterFrozenSegment</code></td>
+<td><code>RegisterFrozenSegment</code></td>
+<td>在启动时注册冻结区域</td>
+</tr>
+<tr>
+<td><code>RhUpdateFrozenSegment</code></td>
+<td><code>UpdateFrozenSegment</code></td>
+<td>更新已注册冻结区域的边界</td>
+</tr>
+</tbody>
+</table>
+<p>终结相关的导出位于 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Runtime/GC.cs"><code>GC.cs</code></a> 中，与 <code>RhGetMaxGcGeneration</code> 放在一起，为 <code>GC</code> 类的终结器方法和 <code>GC.MaxGeneration</code> 提供支持；它们所作用的对象见<a href="#finalization">终结</a>：</p>
+<table>
+<thead>
+<tr>
+<th>运行时导出</th>
+<th>映射到</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RhSuppressFinalize</code></td>
+<td><code>SuppressFinalize</code></td>
+<td><code>GC.SuppressFinalize</code>：取消该对象的每一次注册</td>
+</tr>
+<tr>
+<td><code>RhReRegisterForFinalize</code></td>
+<td><code>TryRegisterForFinalize</code></td>
+<td><code>GC.ReRegisterForFinalize</code>：再注册一次该对象；返回 false 时 CoreLib 抛出 <code>OutOfMemoryException</code></td>
+</tr>
+<tr>
+<td><code>RhWaitForPendingFinalizers</code></td>
+<td><code>WaitPendingFinalizers</code></td>
+<td><code>GC.WaitForPendingFinalizers</code>：等待终结器线程完成一轮，或在该线程关闭时在调用线程上运行队列</td>
+</tr>
+<tr>
+<td><code>RhGetMaxGcGeneration</code></td>
+<td>返回 <code>0</code></td>
+<td><code>GC.MaxGeneration</code>：回收器只有单一代</td>
+</tr>
+</tbody>
+</table>
+<p>在各种分配标志中，<code>GC_ALLOC_PINNED_OBJECT_HEAP</code> 和 <code>GC_ALLOC_FINALIZE</code> 会被遵循。终结标志与 .NET 中一样，是请求为该对象注册终结：<code>RhpNewFinalizable</code> 是 ILC 在每次 <code>new</code> 一个带终结器的类型时调用的辅助函数，它会传入该标志；<code>RhNewObject</code> 是 CoreLib 在 <code>MemberwiseClone</code>、<code>GetUninitializedObject</code> 和反射中走的慢速路径，它会让可终结类型经由那个辅助函数分配；而不带该标志分配这类类型的对象（来自不设置该标志的调用者的 <code>RhAllocateNewObject</code>）则不会被注册，其内存被回收时终结器不会运行。对齐标志和可选清零标志会被接受但忽略，常规堆上的分配总是以清零状态交付。</p>
+<p><a id="allocation-flow"></a></p>
+<h3 id="分配流程">分配流程</h3>
+<p><code>AllocObject</code> 完全在 <code>DisableInterruptsScope</code> 内运行：中断处理程序同样会分配内存（调度器节拍、输入），而在同一个上下文上交错进行的重新填充会把来自两个不同 TLAB 的指针混在一起（issue <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/382">#382</a>）。</p>
+<pre><code class="lang-mermaid">flowchart TD
+    REQ[&quot;AllocObject(size, flags)&quot;] --&gt; PINNED{Pinned flag?}
+    PINNED --&gt;|yes| PIN[&quot;AllocPinnedObject:
+    bump in current pinned segment,
+    or allocate a new pinned segment&quot;]
+    PINNED --&gt;|no| ALIGN[&quot;Align size, enforce 24-byte minimum&quot;]
+    ALIGN --&gt; TLAB{&quot;Fits in the thread's TLAB?&quot;}
+    TLAB --&gt;|yes| RET[&quot;Advance AllocPtr, return&quot;]
+    TLAB --&gt;|no| REFILL[&quot;RefillAllocContext&quot;]
+    REFILL --&gt;|success| RET
+    REFILL --&gt;|failure| GC[&quot;Collect()&quot;]
+    GC --&gt; REFILL2[&quot;RefillAllocContext (retry)&quot;]
+    REFILL2 --&gt;|success| RET
+    REFILL2 --&gt;|failure| NULL[&quot;return null&quot;]
+</code></pre>
+<p>快速路径只有两次指针操作：如果 <code>AllocPtr + size &lt;= AllocLimit</code>，就推进指针并返回。其余一切都在重新填充时发生。</p>
+<p><a id="tlab-refill"></a></p>
+<h3 id="tlab-重新填充">TLAB 重新填充</h3>
+<p><code>RefillAllocContext</code>（位于 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.Tlab.cs"><code>GarbageCollector.Tlab.cs</code></a>）替换一个已用尽的 TLAB，先尝试代价低的来源，再尝试代价高的来源：首先是回收再利用的<a href="#free-lists">空闲链表</a>空间，然后是段中从未使用过的空间，然后是新页，只有在其他一切都失败时才进行垃圾回收。</p>
+<pre><code class="lang-mermaid">flowchart TD
+    REF[&quot;RefillAllocContext(size)&quot;] --&gt; STAMP[&quot;Stamp the old TLAB's unused
+    tail back to the free list&quot;]
+    STAMP --&gt; S1{&quot;1. Free-list block of
+    max(size, TlabSize)?&quot;}
+    S1 --&gt;|found| OK[&quot;New TLAB, object
+    carved from its start&quot;]
+    S1 --&gt;|none| S2{&quot;2. Bump that size
+    in s_lastSegment?&quot;}
+    S2 --&gt;|fits| OK
+    S2 --&gt;|full| S3{&quot;3. Largest free-list block
+    that still fits the object?
+    (AllocLargestFromFreeListRaw)&quot;}
+    S3 --&gt;|&quot;found: taken whole as a
+    smaller-than-usual TLAB&quot;| OK
+    S3 --&gt;|none| S4{&quot;4. Walk all segments from
+    s_lastSegment (wrapping once),
+    else a new segment
+    (AllocateObjectSlowRaw)&quot;}
+    S4 --&gt;|space found| OK
+    S4 --&gt;|none| Q{&quot;5. Request smaller
+    than TlabSize?&quot;}
+    Q --&gt;|yes| S5{&quot;Exact-size retry:
+    free list, then segment
+    walk / new segment&quot;}
+    Q --&gt;|no| FAIL[&quot;Refill failed:
+    AllocObjectSlow runs Collect()
+    and retries the refill once&quot;]
+    S5 --&gt;|found| OK
+    S5 --&gt;|none| FAIL
+</code></pre>
+<p><code>TlabSize</code> 为 8 KiB。第 3 步让部分存活的段保持可用：清除之后，幸存的对象把空闲空间切成小于 8 KiB 的块，坚持要求完整大小 TLAB 的重新填充在那里总会失败，转而扩展堆；把最大的块整块取作一个比平常小的 TLAB，就能回收利用这部分空间。</p>
+<p>注意整体的顺序：堆会在尝试垃圾回收之前先扩展。只有当页分配器本身已无内存可给时，<code>Collect</code> 才会运行；如果其后的重新填充重试也失败，分配就返回 null。</p>
+<p><a id="free-lists"></a></p>
+<h3 id="空闲链表">空闲链表</h3>
+<p>在非移动式回收器中，清除回收的空间留在原处，散布在幸存的对象之间，指针碰撞分配无法触及它们：<code>Bump</code> 游标只会向从未使用过的空间推进。空闲链表就是让这些分散的空间得以再次使用的方式。清除找到的每个空洞，以及每个归还的 TLAB 尾部，都会登记为一个 <a href="#freeblock">FreeBlock</a>，TLAB 重新填充会先从这些链表中取用，再动用段中的新空间。</p>
+<p>找到合适的空洞必须很快，因此这些块被分到 12 个大小类别中，即从 16 到 32768 字节的 2 的幂；查找会直接跳到能满足请求的最小类别，而不是扫描一条长链表。它沿类别逐级向上，取第一个恰好合适或剩余至少 24 字节的块；剩余部分成为一个独立的空闲块，并重新登记。24 字节的下限就是 <code>MinBlockSize</code>，即仍能容纳一个 <code>FreeBlock</code> 头的最小空间。大于 32768 字节的块登记在最后一个类别下。</p>
+<p>空闲链表从不跨越一次垃圾回收而保留：回收开始时清空它们，再由清除阶段重建。清除会把相邻的死空间合并成新的、更大的连续区间，因此在它之前记录的条目所描述的块已不复存在；从零开始重建，无需额外的簿记就能让链表保持可信。</p>
+<p>有一条规则保护相邻对象：当一段死空间被登记为空闲块时，它的最后 8 个字节（<code>ReservedHeaderSlotSize</code>）不计入该块。这些字节紧挨着该区间后面的对象，正是运行时写入该对象<a href="gc-concepts/object-header.html">运行时对象头</a>（标识哈希或瘦锁，位于 <code>objRef - 4</code>）的位置；如果把它们回收再利用，新的分配就可能覆盖一个存活邻居的对象头。因此，登记需要至少 32 字节的区间：块本身的 <code>MinBlockSize</code>（24）加上 8 字节的尾部。已经在链表中的块可以完整分配，这就是拆分一个块时只需要 24 字节剩余的原因。</p>
+<p><a id="returning-tlabs"></a></p>
+<h3 id="归还-tlab">归还 TLAB</h3>
+<p><code>Collect</code> 首先归还每个分配上下文：每个已注册线程的 TLAB 以及静态后备上下文（<code>ReturnAllAllocContexts</code>）。至少 32 字节的空隙（即<a href="#free-lists">空闲链表</a>中的登记下限）会被就地打上 <code>FreeBlock</code> 标记并压入空闲链表；更小的空隙只是被清零，以免清除阶段被过时数据绊倒。之后，每个上下文都是 <code>null</code>/<code>null</code>，并在下次使用时重新填充。</p>
+<p><a id="pinned-allocation"></a></p>
+<h3 id="固定分配">固定分配</h3>
+<p>固定对象完全绕过 TLAB：<code>AllocPinnedObject</code> 在当前固定段中以指针碰撞方式分配，当前段已满时再分配一个新的固定段。固定分配从不从空闲链表中取用（不过清除阶段在固定段中发现的空闲空间确实会流入这些链表）。固定堆是为地址必须保持稳定的对象而设的，例如 <code>ManagedModule.InitializeStatics</code> 以固定标志分配的 GC 静态字段基对象。</p>
+<hr>
+<p><a id="collection"></a></p>
+<h2 id="回收">回收</h2>
+<p>一次垃圾回收先标记所有可达对象，再回收所有不可达对象。下面的阶段顺序是由依赖关系决定的：必须在任何操作遍历堆之前归还 TLAB；弱句柄只能在标记完成后才能判定；带终结器的死对象在两类弱句柄的置空之间被复活；空闲链表由清空它们的清除阶段重建；段链最后整理，以便下一次分配落在合适的位置。终结器本身在屏蔽中断的区段之外运行：<code>SignalPendingFinalizers</code> 运行它们或唤醒终结器线程，当调用者仍处于中断屏蔽状态时，则把它们留给下一次分配。<code>Collect()</code> 返回释放的对象数：</p>
+<pre><code class="lang-mermaid">sequenceDiagram
+    participant App as Caller
+    participant GC as GarbageCollector
+    participant PA as PageAllocator
+
+    App-&gt;&gt;GC: Collect()
+    activate GC
+    Note over GC: Interrupts disabled
+    GC-&gt;&gt;GC: ReturnAllAllocContexts (stamp TLAB gaps)
+    GC-&gt;&gt;GC: Clear all free lists
+    GC-&gt;&gt;GC: MarkPhase (stacks, finalizer queue, handles)
+    GC-&gt;&gt;GC: ClearShortWeakHandles
+    GC-&gt;&gt;GC: MarkFinalizableObjects (queue and revive the dead finalizable objects)
+    GC-&gt;&gt;GC: ScanDependentHandles (secondaries of the revived)
+    GC-&gt;&gt;GC: ClearLongWeakHandles (resurrection-tracking, dependent)
+    GC-&gt;&gt;GC: SweepPhase (rebuild free lists)
+    GC-&gt;&gt;GC: Reorder regular segments, free empty ones
+    GC-&gt;&gt;GC: Reorder pinned segments, free empty ones
+    GC-&gt;&gt;PA: Free(empty multi-page segments)
+    GC-&gt;&gt;GC: RecomputeHeapRange
+    Note over GC: Interrupts enabled
+    GC-&gt;&gt;GC: SignalPendingFinalizers
+    deactivate GC
+    GC--&gt;&gt;App: freed object count
+</code></pre>
+<p>第 0 代的大小和碎片情况会在各阶段之前和之后各做一次快照，回收耗时则用于计算 <code>GetLastGCPercentTimeInGC</code>。</p>
+<p><a id="mark-phase"></a></p>
+<h3 id="标记阶段">标记阶段</h3>
+<p>标记阶段借助一个工作列表找出所有可达对象。<code>MarkPhase</code> 重置标记栈，扫描栈根，标记仍在终结器队列中等待的对象（它们在终结器运行之前一直保持存活，参见<a href="#finalization">终结</a>），然后扫描 GC 句柄。</p>
+<p>栈扫描是混合式的：</p>
+<ul>
+<li><strong>触发 GC 的线程</strong>以<strong>精确</strong>方式扫描。它通过一条托管调用链到达回收器，因此其栈上的每个返回地址都是一个调用点<a href="gc-concepts/safepoint.html">安全点（safepoint）</a>，在那里 GCInfo 是有效的。<code>PreciseScanCurrentThread</code> 逐个遍历它的栈帧，并准确报告编译器标明为存活的槽，包括异常 <a href="gc-concepts/funclet.html">funclet</a> 的栈帧。该机制有专门的文章：<a href="garbage-collector-gcinfo.html">精确栈扫描（GCInfo）</a>。</li>
+<li><strong>其他每个已注册线程</strong>都是在任意指令处被抢占的，在那里查询 GCInfo 毫无意义。这些线程采用<strong>保守</strong>扫描：每个保存的寄存器以及栈上每个指针大小的字都被视为潜在的引用。要取代这条最后的保守路径，需要返回地址劫持，该工作在 issue <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/385">#385</a> 中跟踪。已死的线程会被跳过。</li>
+</ul>
+<p>两种扫描都需要知道栈在哪里结束，而启动线程（即内核的主线程）没有调度器分配的栈：它运行在引导加载程序的栈上，因此对它的扫描终止于 <code>kmain</code> 记录的栈顶（<code>BootStack.Top</code>）。在 ARM64 上，它运行在 EL1t 下，使用 <code>SP_EL0</code>，而中断会把上下文保存在 <code>SP_EL1</code> 栈上。因此，中断桩代码把 <code>SP_EL0</code> 保存到上下文的栈指针槽中；当保存的 <code>SPSR</code> 表明处于 EL1t 时，保守扫描就从这个值开始。如果改为从保存的上下文开始，扫描就会从 <code>SP_EL1</code> 栈一直扫到 <code>BootStack.Top</code>，跨越大半个地址空间。</p>
+<p>没有单独的静态根扫描阶段。<code>ManagedModule.InitializeStatics</code> 把每个模块的 GC 静态字段基对象存入一个主干数组，该数组可从一个强（<code>Normal</code>）GC 句柄到达，因此扫描句柄存储区就能传递地覆盖所有静态字段（<code>GC_StaticOnlyReachability</code> 测试证明了这一点）。</p>
+<p>每个候选指针，无论来自哪个根，都要经过 <code>TryMarkRoot(value)</code>：先做一次代价很低的成员关系测试，然后进入排空工作列表的标准标记循环：</p>
+<pre><code class="lang-mermaid">flowchart TD
+    ROOT[&quot;TryMarkRoot(value)&quot;] --&gt; INHEAP{&quot;IsInGCHeap(value)?
+    (regular or pinned segments)&quot;}
+    INHEAP --&gt;|no| DROP[&quot;Rejected: not a heap object&quot;]
+    INHEAP --&gt;|yes| PUSH[&quot;PushMarkStack(value)&quot;]
+    PUSH --&gt; POP{&quot;Mark stack empty?&quot;}
+    POP --&gt;|yes| DONE[&quot;Done, next root&quot;]
+    POP --&gt;|no| READ[&quot;PopMarkStack(),
+    GetMethodTable() masks
+    off the mark bit&quot;]
+    READ --&gt; MT{&quot;Plausible MethodTable?
+    (not null, not inside the GC heap,
+    not below KernelSpaceStart)&quot;}
+    MT --&gt;|no| POP
+    MT --&gt;|yes| MARKED{&quot;IsMarked?&quot;}
+    MARKED --&gt;|yes| POP
+    MARKED --&gt;|no| SET[&quot;Mark(): set bit 0
+    of the MethodTable word&quot;]
+    SET --&gt; PTRS{&quot;ContainsGCPointers?&quot;}
+    PTRS --&gt;|no| POP
+    PTRS --&gt;|yes| ENUM[&quot;EnumerateReferences():
+    PushMarkStack() for
+    each child reference&quot;]
+    ENUM --&gt; POP
+</code></pre>
+<p>这两个验证步骤正是保守扫描得以安全的原因：候选值可能是恰好位于某个寄存器或栈槽中的任意位模式，因此在把它当作对象之前，它必须既落在某个堆段内，又带有一个看似合理的 <code>MethodTable</code> 指针（即 <a href="#methodtable">MethodTable</a> 一节中的有效性过滤器）。精确根也经过同样的检查，只是从不会失败。</p>
+<p>标记栈初始为一页（512 个条目），满时通过复制到更大的页分配中来扩展。如果扩展失败，回收器会记录一条警告并丢弃该指针，因此此时的分配失败可能导致标记不足；没有任何后备方案。</p>
+<h4 id="gcdesc">GCDesc</h4>
+<p><code>EnumerateReferences</code> 解码 ILC 紧挨每个 <code>MethodTable</code> 之前存放的 <strong>GCDesc</strong>。位于 <code>MT[-1]</code> 的字是 <code>numSeries</code>，它决定采用两种布局中的哪一种。</p>
+<p>普通序列（<code>numSeries &gt; 0</code>），用于常规对象和引用数组。表中各行按内存顺序排列，低地址在前；GCDesc 从 <code>MethodTable</code> 向下增长：</p>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MT[-1]</code> 之下，向下延伸</td>
+<td>从 <code>GCDescSeries[numSeries-1]</code> 到 <code>GCDescSeries[0]</code>，每项包含 <code>SeriesSize</code> 和 <code>StartOffset</code>；第 0 项离计数字最近</td>
+</tr>
+<tr>
+<td><code>MT[-1]</code></td>
+<td><code>numSeries</code>（正数）</td>
+</tr>
+<tr>
+<td><code>MT[0]</code>、<code>MT[1]</code>、...</td>
+<td><code>MethodTable</code> 本身的字段</td>
+</tr>
+</tbody>
+</table>
+<p>每个 <code>GCDescSeries</code> 描述一段连续的引用。<code>SeriesSize</code> 存储时以对象大小作为偏置，因此扫描器计算 <code>SeriesSize + objectSize</code> 得到字节数，并从 <code>obj + StartOffset</code> 开始遍历相应数量的字。</p>
+<p>值序列（<code>numSeries &lt; 0</code>），用于包含引用的结构体数组，布局方式相同：</p>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MT[-2]</code> 之下，向下延伸</td>
+<td><code>ValSerieItem</code> 条目，每项包含 <code>Nptrs</code>（指针数）和 <code>Skip</code>（要跳过的字节数）；第 0 项离偏移字最近</td>
+</tr>
+<tr>
+<td><code>MT[-2]</code></td>
+<td>元素数据的 <code>startOffset</code></td>
+</tr>
+<tr>
+<td><code>MT[-1]</code></td>
+<td><code>numSeries</code>（负数；条目数为其绝对值）</td>
+</tr>
+<tr>
+<td><code>MT[0]</code>、<code>MT[1]</code>、...</td>
+<td><code>MethodTable</code> 本身的字段</td>
+</tr>
+</tbody>
+</table>
+<p>扫描器把游标置于 <code>obj + startOffset</code>，对数组的每个元素遍历 <code>ValSerieItem</code> 条目：读取 <code>Nptrs</code> 个指针，然后跳过 <code>Skip</code> 个字节，每个元素重复 <code>|numSeries|</code> 次。</p>
+<p><a id="interior-pointers"></a></p>
+<h3 id="内部指针">内部指针</h3>
+<p>指向数组元素的 <code>ref</code>、<code>Span&lt;T&gt;</code> 的 <code>_reference</code>，或任何其他 byref，都可能是指向某个对象的唯一存活引用。这样的指针并不指向对象头，因此 <code>TryMarkRoot</code> 的 MethodTable 检查会丢弃它，对象就会在仍被使用时被回收（issue <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/384">#384</a>，已由 <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/376">#376</a> 引入的内部指针支持针对精确扫描的栈帧修复；以保守方式扫描的线程仍会漏掉它们，参见<a href="#limitations-and-evolution">局限与演进</a>）。</p>
+<p>精确栈扫描为触发 GC 的线程解决了这个问题。GCInfo 用 <code>GC_CALL_INTERIOR</code> 标记 byref 槽，扫描的根回调在标记之前用 <code>GetParentObject</code> 把它们解析为所在的对象：</p>
+<pre><code class="lang-mermaid">flowchart TD
+    BYREF[&quot;Byref slot tagged GC_CALL_INTERIOR&quot;] --&gt; SEG[&quot;Find the segment containing
+    the address: regular chain,
+    then pinned chain&quot;]
+    SEG --&gt; FOUND{&quot;Segment found, and
+    address below its Bump?&quot;}
+    FOUND --&gt;|no| NONE[&quot;Mark nothing&quot;]
+    FOUND --&gt;|yes| WALK[&quot;Walk from Start with the sweep's rules:
+    free block by its Size, filler word
+    by one word, object by its aligned size&quot;]
+    WALK --&gt; HIT{&quot;Address inside
+    an object?&quot;}
+    HIT --&gt;|&quot;no (free block or filler)&quot;| NONE
+    HIT --&gt;|yes| MARK[&quot;TryMarkRoot on that object&quot;]
+</code></pre>
+<p>这次查找中有三个刻意的选择：</p>
+<ul>
+<li><strong>按地址查找两条链。</strong> 槽的 <code>GC_CALL_PINNED</code> 标志描述的是栈槽（一个固定的局部变量，也就是 <code>fixed</code> 语句所创建的东西），而不是对象来自哪个堆：指向常规堆数组的 <code>fixed</code> 指针，以及覆盖 <code>GC.AllocateArray&lt;T&gt;(n, pinned: true)</code> 数组的普通 <code>Span&lt;T&gt;</code>，都是普通的槽。固定堆清除得到的空闲区间也会流入共享的空闲链表，因此常规堆的 TLAB 可能位于固定段之内。</li>
+<li><strong>从 <code>Start</code> 开始。</strong> <a href="#brick-table">砖表</a>不能安全地作为遍历的起点，因此每次查找都从段中的第一个对象开始遍历。</li>
+<li><strong>采用<a href="#sweep-phase">清除</a>的步进规则。</strong> 遍历以 <code>SweepSegment</code> 的方式对每个字分类，并按 <code>Align(ComputeSize())</code>（即分配器预留的大小）跨过对象，因此找到的对象也正是 <code>SweepSegment</code> 作为对象起始处访问、并为下一轮取消标记的对象。单独的 <code>ComputeSize()</code> 不能作为步长：字符串以及元素为 1 或 2 字节的数组，其大小不是指针大小的整数倍。</li>
+</ul>
+<p>落在空闲块中、填充区中或 <code>Bump</code> 之后的地址不会标记任何东西，而不会被当作对象头交给 <code>TryMarkRoot</code>。</p>
+<p>保守扫描仍然只接受恰好命中对象头的指针。<code>GC_InteriorPointerRoot</code> 是验收测试：一个只能通过指向第 8 个元素的 <code>ref int</code> 到达的 <code>int[2100]</code>，必须在一次垃圾回收及随后的大量分配之后存活下来。前两个选择各有自己的测试单元格（cell）：<code>GC_InteriorPointerRootMidTlab</code> 以一个在其 TLAB 中位于另一个对象之后的数组为根，因此它的起始位置从未登记在砖表中；<code>GC_InteriorPointerRootPinnedHeap</code> 通过一个普通 byref 以固定堆数组为根；<code>GC_InteriorPointerRootFixed</code> 则仅通过一个 <code>fixed</code> 指针以常规堆数组为根。</p>
+<p><a id="handles-during-marking"></a></p>
+<h3 id="标记期间的句柄">标记期间的句柄</h3>
+<p>句柄扫描在栈扫描之后进行，分两轮：</p>
+<ol>
+<li>先把所有 <code>Normal</code> 句柄，再把所有 <code>Pinned</code> 句柄，作为强根标记。</li>
+<li>依赖句柄运行到不动点：每当某个句柄的主对象已标记而次对象未标记时，就标记次对象，循环一直重复，直到某一轮不再标记任何新对象为止。这样可以处理一个依赖句柄的次对象是另一个依赖句柄主对象的链。</li>
+</ol>
+<p>弱句柄从不扫描。标记完成后，回收器把每个目标未被标记的弱句柄置空，分两步进行，分别位于终结之前和之后。<code>ClearShortWeakHandles</code> 先置空 <code>Weak</code> 存储区中的句柄，因此短弱引用一旦发现其目标已死就会读到 null，即使有终结器使目标复活也是如此。随后，带终结器的死对象连同它们引用的对象一起入队并被标记，依赖句柄循环再运行一次，处理挂在它们身上的次对象。最后，<code>ClearLongWeakHandles</code> 置空 <code>WeakTrackResurrection</code> 存储区中的句柄，以及主对象仍未标记的依赖句柄，并把它们的次对象也清零，因为句柄已不再让它保持存活。被置空的句柄仍保持已分配状态，因为其所有者仍持有它，会从中读到 null，之后再释放它或给它设置新的目标。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>是否作为根扫描？</th>
+<th>标记后的清理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Weak</code></td>
+<td>否</td>
+<td>若目标未标记，在终结之前置空</td>
+</tr>
+<tr>
+<td><code>WeakTrackResurrection</code></td>
+<td>否</td>
+<td>若目标在终结之后仍未标记，则置空</td>
+</tr>
+<tr>
+<td><code>Normal</code></td>
+<td>是</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>Pinned</code></td>
+<td>是</td>
+<td>无</td>
+</tr>
+<tr>
+<td>依赖句柄（6）</td>
+<td>主对象已标记时扫描次对象</td>
+<td>若主对象在终结之后仍未标记，则置空</td>
+</tr>
+</tbody>
+</table>
+<p><a id="sweep-phase"></a></p>
+<h3 id="清除阶段">清除阶段</h3>
+<pre><code class="lang-mermaid">flowchart TD
+    SWEEP[&quot;SweepPhase()&quot;] --&gt; SEG[&quot;SweepSegment() for each regular segment&quot;]
+    SWEEP --&gt; PIN[&quot;SweepPinnedHeap()&quot;]
+
+    SEG --&gt; WALK[&quot;Linear walk from Start to Bump&quot;]
+    WALK --&gt; READ{Classify word at ptr}
+    READ --&gt;|&quot;MT == s_freeMethodTable&quot;| ACCUM[&quot;Old free block:
+    fold into free run, advance by Size&quot;]
+    READ --&gt;|&quot;implausible MethodTable&quot;| FILLER[&quot;Filler word:
+    fold into free run, advance one word&quot;]
+    READ --&gt;|marked object| LIVE[&quot;Unmark, flush free run
+    to the free list&quot;]
+    READ --&gt;|unmarked object| DEAD[&quot;Dead: extend free run,
+    advance by object size&quot;]
+    ACCUM --&gt; READ
+    FILLER --&gt; READ
+    LIVE --&gt; READ
+    DEAD --&gt; READ
+</code></pre>
+<p>清除阶段从 <code>Start</code> 到 <code>Bump</code> 线性遍历每个段，把连续的死空间累积成一个空闲区间。有三类非存活的字会被并入该区间：</p>
+<ul>
+<li>先前垃圾回收留下的空闲块（第一个字等于空闲标识 <code>MethodTable</code>），按其存储的大小跨过；</li>
+<li>第一个字不可能是 <code>MethodTable</code> 的填充字（为 null、低于内核空间，或位于 GC 堆内部）。它们来自太小而无法打上标记的已清零 TLAB 空隙、在空隙旁边写入 <code>objRef - 4</code> 处的运行时对象头，或过时数据。它们每次跳过一个指针大小的字；</li>
+<li>未标记的对象，计为已释放。</li>
+</ul>
+<p>遇到已标记的对象时，会为下一轮取消其标记，并把待处理的区间作为 <code>FreeBlock</code> 写入空闲链表（减去 8 字节的保留尾部，这部分会被清理而不是回收再利用）。小于 32 字节的区间（即<a href="#free-lists">空闲链表</a>中的登记下限）会被丢弃，成为下一次清除时的填充。到达 <code>Bump</code> 的区间则改为通过把 <code>Bump</code> 往回移来回收，正是这一点让清空的段可以归还给页分配器。</p>
+<p>固定堆用同样的遍历方式清除，只是没有空闲块分支；它的空闲区间同样进入共享的空闲链表。如果清除遇到不可能的大小（零，或超出段末尾），就在本次垃圾回收中放弃该段，而不是走进已损坏的数据。</p>
+<p><a id="segment-reordering"></a></p>
+<h3 id="段重排">段重排</h3>
+<p>清除之后，每条链都在一轮中重新分组：先是 FULL 段，然后是 SEMIFULL 段，最后是 FREE 段。大于一页的空段归还给页分配器；单页的空段则保留，作为现成的容量。<code>s_lastSegment</code>（对固定链而言是 <code>s_currentPinnedSegment</code>）指向第一个半满段，没有则指向第一个空闲段，使下一次分配落在可用空间中。两次重排都会把堆范围标记为已失效，<code>Collect</code> 在最后重新计算边界框。</p>
+<hr>
+<p><a id="finalization"></a></p>
+<h2 id="终结">终结</h2>
+<p>带终结器（<code>~ClassName</code>）的类型要求回收器在回收对象内存之前运行这段代码，<a href="gc-concepts/finalization.html">概念页</a>解释了为什么这会迫使一个死对象多保留一次垃圾回收。实现位于 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.Finalizer.cs"><code>GarbageCollector.Finalizer.cs</code></a> 中，基于两个对象指针数组，它们存放在各自专用的页中，因此添加条目从不在 GC 堆上分配，回收器也不会意外地扫描到它们。</p>
+<p>登记表 <code>s_finalizable</code> 保存每个终结器尚未运行的存活对象。<code>AllocObject</code> 会把每个分配时带有 <code>GC_ALLOC_FINALIZE</code> 的对象加入其中（<code>RhpNewFinalizable</code> 在每次 <code>new</code> 一个带终结器的类型时传入该标志，参见<a href="#runtime-bridge">运行时桥接</a>），而 <code>GC.ReRegisterForFinalize</code> 会为一个未被抑制终结的对象再添加一个条目；与 .NET 一样，注册两次的对象会被终结两次。当登记表无法扩展时，分配仍然成功，回收器记录一条警告，该对象则永远不会被终结；只有 <code>GC.ReRegisterForFinalize</code> 会报告这一失败，CoreLib 会把它转为 <code>OutOfMemoryException</code>。登记表不是根。在一次垃圾回收中，当根已标记、短弱句柄已置空之后，<code>MarkFinalizableObjects</code> 把每个没有被任何东西到达的已注册对象移入队列 <code>s_finalizerQueue</code>，然后才标记入队的对象及其引用的对象。在标记任何一个之前先把它们全部入队，意味着一个只被另一个可终结死对象引用的对象，会在同一次垃圾回收中被终结，这与 .NET 的做法相同。从这时起，队列就是一个根：<code>MarkPhase</code> 在之后的每次垃圾回收中都会标记其中的条目，因此对象及其引用的一切在其终结器运行之前都保持存活，而它的内存由此后第一次再次发现它已死的垃圾回收来回收。如果队列无法扩展，这些死对象就保持已注册且存活的状态，由下一次垃圾回收重试。</p>
+<p><code>GC.SuppressFinalize</code> 在对象的<a href="gc-concepts/object-header.html">运行时对象头</a>中设置一个标志。运行时对象头是对象之前的 4 个字节，CoreLib 在其中保存标识哈希码和瘦锁；该标志位于 CoreLib 为回收器保留的三个位之一（即 .NET 的 <code>BIT_SBLK_FINALIZER_RUN</code>）。登记表和队列都不受影响，因此这次调用只需一次原子或操作。如果一次垃圾回收发现某个带此标志的对象已死，会把它从登记表中删除而不是入队，该对象随后被清除；如果某一轮在队列中遇到一个带此标志的条目，即在某次垃圾回收将其入队之后才被抑制终结的条目（由与它一同死亡的另一个终结器抑制，或通过一个跟踪复活的弱引用抑制），就会跳过它并清除该标志，这也与 .NET 的做法相同。对带此标志的对象调用 <code>GC.ReRegisterForFinalize</code> 会清除该标志，其原有注册重新生效；对于已被垃圾回收删除、此后又被另一个终结器保持存活的对象，它会重新添加一次注册，此前要对登记表和队列做一次线性扫描，只有这条罕见路径才需付出这一代价。分配器会在交付的每个可终结对象上清除该标志：它不会把对象头字清零，而一个回收再利用的块，其起始处可能正是某个被抑制终结的对象死去的地方。</p>
+<p>终结器从不在垃圾回收内部运行，因为垃圾回收期间中断是屏蔽的；在其他任何屏蔽中断的地方也不运行：终结器是任意代码，可能会分配内存、获取锁或触发垃圾回收。它们在哪里运行取决于 <code>GarbageCollector.ThreadedFinalizer</code>。当 <code>CosmosEnableFinalizerThread</code> 开关打开时，<code>Kernel.Start</code> 会在启用中断之后立即打开它；在每个带调度器的内核中，该开关默认是打开的（<code>Sdk.targets</code> 会随调度器一起关闭它）。以关闭该开关的方式构建的内核，或重写了 <code>Start</code> 的内核，会让它保持关闭。只有 Core 和受支持层能够访问该属性，因为 <code>GarbageCollector</code> 是 internal 的。</p>
+<p>当它关闭时，终结器在执行垃圾回收的线程上、紧接着垃圾回收之后运行。如果垃圾回收是在中断屏蔽的情况下运行的（<code>Heap.Collect</code> 就是如此，分配器在内存耗尽时发起的垃圾回收也是如此），终结器则改在下一个进行分配的线程上运行。分配器在分配之前而不是之后检查队列，因此新对象不会在终结器运行期间被清除。<code>GC.WaitForPendingFinalizers</code> 在调用线程上运行队列。</p>
+<p>打开 <code>ThreadedFinalizer</code> 会启动一个内核线程，分轮运行终结器。当调度器被编译排除时，它不起作用；如果线程无法启动，会记录一条警告，该属性保持关闭。此后，一次垃圾回收，或一次发现队列非空的分配，只需获取该线程的监视器来请求一轮运行；如果已有待处理的请求或某一轮正在运行，连这一步也省去；它从不等待这一轮完成。<code>GC.WaitForPendingFinalizers</code> 请求一轮运行，并等待一个在其请求之后开始的轮次结束。当中断被屏蔽、没有待处理的内容，或由终结器调用它时，它会立即返回，因为否则线程会等待自己。关闭 <code>ThreadedFinalizer</code> 会在当前轮次结束后停止该线程，由执行垃圾回收的线程重新运行终结器；正在进行的等待，或在停止期间开始的等待，会一直持续到线程退出为止，因为在此之前队列归该线程所有，随后它会在调用线程上运行最后一轮留下的内容。终结器不能关闭它，因为线程会等待自己退出，所以这样的调用会被记录并忽略。</p>
+<p>同一时刻只运行一轮：<code>RunPendingFinalizers</code> 在屏蔽中断的情况下占用一个标志，如果另一轮持有该标志则立即返回，触发垃圾回收的终结器也不例外。这一轮逐个取出队列中的条目，只有在发现队列为空时才结束，并在同一个屏蔽中断的步骤中释放该标志，因此一次垃圾回收在某一轮期间入队的内容，会由这一轮来运行。终结器未捕获而抛出的异常会被记录，这一轮继续运行下一个终结器，而 .NET 在这种情况下会终止进程。</p>
+<p><code>GCMemoryInfo.FinalizationPendingCount</code> 报告上一次垃圾回收在队列中留下了多少个对象。它很少降到零：CoreLib 的 <code>Gen2GcCallback</code>（<code>ArrayPool</code> 用它来修剪自身）会在自己的终结器中重新注册自己，以便在每次垃圾回收之后被回调，因此每次垃圾回收都会再次发现它已死。</p>
+<hr>
+<p><a id="statistics-and-memory-info"></a></p>
+<h2 id="统计与内存信息">统计与内存信息</h2>
+<p><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.Info.cs"><code>GarbageCollector.Info.cs</code></a> 为运行时的内存查询提供支持：</p>
+<ul>
+<li><code>GetStats(out totalCollections, out totalObjectsFreed)</code> 公开两个累计计数器。<code>Collect()</code> 的返回值和这些计数器都是精确的：测试套件会断言其差值相符。</li>
+<li><code>GetSimpleMemoryInfo()</code> 填充 <code>RhGetMemoryInfo</code> 背后的快照，<code>GC.GetGCMemoryInfo()</code> 读取的就是它：堆大小（常规段与固定段的已占用范围）、碎片字节数（所有空闲链表块的总和）、已提交字节数（段、冻结段、标记栈、空闲链表页、句柄存储区页）、固定对象数（固定堆对象加上 <code>Pinned</code> 句柄）、回收序号，以及<a href="gc-concepts/gc-generations.html">被回收代</a>（始终为 0；回收器不分代，因此提升的字节数也始终为 0）。<code>RhGetMemoryInfo</code> 在快照之外还添加了待终结数，它读取自 <code>GetFinalizationPendingCount()</code>：即上一次垃圾回收在终结器队列中留下的对象数。</li>
+<li><code>GetTotalAllocatedBytes()</code> / <code>GetTotalAllocatedBytesPrecise()</code> 为 <code>GC.GetTotalAllocatedBytes()</code> 提供支持；精确版本会减去每个存活 TLAB 未使用的尾部。</li>
+<li><code>GetLastGCPercentTimeInGC()</code> 由上一次垃圾回收的耗时以及距前一次垃圾回收的间隔推算得出。</li>
+<li><code>Variables</code> 是运行时配置表；它报告 <code>GCName = &quot;OrionGC&quot;</code>，服务器 GC、并发 GC 和大页均为关闭。</li>
+</ul>
+<hr>
+<p><a id="limitations-and-evolution"></a></p>
+<h2 id="局限与演进">局限与演进</h2>
+<p>上述每个选择都有所舍弃。本节把这些棘手之处集中在一处，并在有出路时给出出路。</p>
+<ul>
+<li><strong>全堆停顿。</strong> 单一代且没有并发，意味着每次垃圾回收都要在关闭中断的情况下扫描每个存活对象。在堆很小时，这是正确的取舍；更大的堆则需要分代（以及随之而来的写屏障和记忆集）或增量标记。</li>
+<li><strong>全局停顿依赖于单 CPU。</strong> 调度器目前在 CPU 0 上运行一切（<code>SchedulerManager.GetCurrentCpuId()</code> 返回 0），因此关闭中断就能停住所有赋值器（mutator）。多核内核需要先实现一次跨 CPU 会合，这一保证才能重新成立。</li>
+<li><strong>保守扫描会过度保留对象，并阻碍移动。</strong> 在被抢占的线程上，一个恰好像堆地址的整数会让一个死对象保持存活，而这些栈看似引用的任何东西都永远不能被移动。出路是返回地址劫持（<a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/385">#385</a>），它能让每个线程都被精确扫描。</li>
+<li><strong>内部指针只在精确路径上解析。</strong> 仅由被抢占线程的栈保持存活的 byref，必须恰好命中对象头才能被找到（<a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/376">#376</a>、<a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/384">#384</a>）。</li>
+<li><strong>冻结段不被追踪。</strong> 持有某个常规堆对象唯一引用的冻结对象，并不能让该对象保持存活。冻结对象通常只引用其他冻结数据，因此不应存在这样的引用，但也没有任何机制验证这一点。</li>
+<li><strong><a href="#finalization">终结</a>同样依赖于单 CPU。</strong> 同一时刻只运行一轮，是靠一个在屏蔽中断时占用的标志来保证的，而这只能排除共享同一个 CPU 的线程。</li>
+<li><strong>没有终结器线程时，终结器在借用的线程上运行。</strong> 当 <code>CosmosEnableFinalizerThread</code> 关闭，或没有调度器时，终结器在接下来执行垃圾回收或分配的那个线程上运行，并处于该线程持有的任何普通 <code>SpinLock</code> 之下：<code>KernelConsole</code> 在持有其锁时进行分配，因此从那里向控制台写入的终结器会让 CPU 在自己身上自旋。正因如此，终结器线程默认是打开的；内核自带的终结器（<code>Monitor</code>、<code>WeakReference</code>、<code>ConditionalWeakTable</code>、<code>SafeHandle</code>）使用 IRQ 安全的锁，或者不使用锁。</li>
+<li><strong>标记栈扩展失败可能导致标记不足。</strong> 如果标记栈在垃圾回收中途无法扩展，指针会被丢弃并记录一条警告，而一个未被标记的存活对象将会被清除。目前还没有溢出后备方案。</li>
+<li><strong>分配失败返回 null。</strong> 当连一次垃圾回收都无法释放足够的内存时，分配辅助函数返回 null；分配器没有通往 <code>OutOfMemoryException</code> 的路径。</li>
+</ul>
+<p>淘汰保守路径是关键所在：一旦每个线程都能被精确扫描，移动对象就不再是不可能的，压缩或分代就会成为可选的设计方案，而不再是行不通的选项。</p>
+<hr>
+<p><a id="tests"></a></p>
+<h2 id="测试">测试</h2>
+<p><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/tests/Kernels/Cosmos.Kernel.Tests.GarbageCollector/Kernel.cs"><code>tests/Kernels/Cosmos.Kernel.Tests.GarbageCollector</code></a> 中的内核测试套件运行 96 个测试（<code>make test KERNEL=GarbageCollector</code>）。重点包括：</p>
+<ul>
+<li>精确的回收统计（<code>GC_CollectBasic</code>、<code>GC_UnreachableExactCount</code>），</li>
+<li>弱句柄和依赖句柄的行为（<code>GC_WeakReference</code>、<code>GC_DependentHandle</code>、<code>GC_DependentHandleCleanup</code>），以及两个线程同时扩展句柄存储区（<code>GC_HandleStore_ConcurrentSegmentGrowth</code>），</li>
+<li>内部指针根（<code>GC_InteriorPointerRoot</code>，即 #384 的验收测试，以及 <code>GC_InteriorPointerRootMidTlab</code>、<code>GC_InteriorPointerRootPinnedHeap</code>、<code>GC_InteriorPointerRootFixed</code>），</li>
+<li>通过句柄主干实现的静态字段可达性（<code>GC_StaticOnlyReachability</code>），</li>
+<li>精确栈扫描与 funclet 栈帧（<code>GC_PreciseStackScan</code>、<code>GC_FuncletNoFalseRoot</code>、<code>GC_FuncletNoCrashOnAllocInCatch</code>、<code>GC_StackScanPaddingStress</code>），</li>
+<li>malloc 堆保持不被触及（<code>GC_MallocHeapNotSwept</code>），</li>
+<li>反复垃圾回收下的多线程分配（<code>GC_MultithreadChurnUnderCollect</code>），</li>
+<li>当位于引导加载程序栈上的主线程被切换出去时，由工作线程执行的一次垃圾回收（<code>GC_CollectFromWorkerThread</code>），</li>
+<li>TLAB 统计与空隙标记（<code>GC_TLAB_*</code>），</li>
+<li>内存信息的接线（<code>GC_Info_*</code>），</li>
+<li>在执行垃圾回收的线程上进行的终结（<code>GC_Finalizer_*</code>，位于 <code>FinalizerTests.cs</code>）：终结器每次注册只运行一次且只针对不可达对象，复活、抑制与重新注册（瘦锁旁边的抑制标志、残留在回收再利用的对象头字中的过时标志，以及在已被垃圾回收删除的对象上的情形），与弱句柄和依赖句柄之间的顺序，会分配、触发垃圾回收或抛出异常的终结器，在中断屏蔽时进行的分配，以及待终结数和 <code>GC.MaxGeneration</code>，</li>
+<li>终结器线程（<code>GC_FinalizerThread_*</code>，位于 <code>FinalizerThreadTests.cs</code>，首先是 <code>GC_FinalizerThread_OnByDefault</code>，它检查 <code>Kernel.Start</code> 已打开该线程，并为检查执行垃圾回收线程的那些单元格将其关闭）：启动、停止和重启该线程，等待它的各轮运行，包括被一次停止打断的一轮，以及在该线程上运行的同样的终结器行为。</li>
+</ul>
+<hr>
+<p><a id="source-files"></a></p>
+<h2 id="源文件">源文件</h2>
+<table>
+<thead>
+<tr>
+<th>领域</th>
+<th>路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GC 核心</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.cs"><code>src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.cs</code></a></td>
+</tr>
+<tr>
+<td>分配</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.Alloc.cs"><code>GarbageCollector.Alloc.cs</code></a>、<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.Tlab.cs"><code>GarbageCollector.Tlab.cs</code></a></td>
+</tr>
+<tr>
+<td>标记阶段</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.Mark.cs"><code>GarbageCollector.Mark.cs</code></a>、<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.PreciseStack.cs"><code>GarbageCollector.PreciseStack.cs</code></a></td>
+</tr>
+<tr>
+<td>GCInfo 解码器（精确扫描）</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/tree/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GcInfo"><code>GcInfo/</code></a>，参见<a href="garbage-collector-gcinfo.html">精确栈扫描</a></td>
+</tr>
+<tr>
+<td>清除阶段</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.Sweep.cs"><code>GarbageCollector.Sweep.cs</code></a></td>
+</tr>
+<tr>
+<td>段</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GCSegment.cs"><code>GCSegment.cs</code></a>、<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GCSegmentManager.cs"><code>GCSegmentManager.cs</code></a></td>
+</tr>
+<tr>
+<td>GC 句柄</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GCHandle.cs"><code>GCHandle.cs</code></a>、<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GCHandleSegment.cs"><code>GCHandleSegment.cs</code></a>、<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GCHandleManager.cs"><code>GCHandleManager.cs</code></a>、<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.GCHandler.cs"><code>GarbageCollector.GCHandler.cs</code></a></td>
+</tr>
+<tr>
+<td>终结</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.Finalizer.cs"><code>GarbageCollector.Finalizer.cs</code></a></td>
+</tr>
+<tr>
+<td>固定堆</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.PinnedHeap.cs"><code>GarbageCollector.PinnedHeap.cs</code></a></td>
+</tr>
+<tr>
+<td>冻结段</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.Frozen.cs"><code>GarbageCollector.Frozen.cs</code></a></td>
+</tr>
+<tr>
+<td>统计</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.Info.cs"><code>GarbageCollector.Info.cs</code></a></td>
+</tr>
+<tr>
+<td>对象头</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GCObject.cs"><code>GCObject.cs</code></a></td>
+</tr>
+<tr>
+<td>TLAB 结构体</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/AllocContext.cs"><code>AllocContext.cs</code></a></td>
+</tr>
+<tr>
+<td>运行时导出</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Runtime/Memory.cs"><code>src/Cosmos.Kernel.Core/Runtime/Memory.cs</code></a></td>
+</tr>
+<tr>
+<td>模块与静态字段初始化</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Runtime/ManagedModule.cs"><code>src/Cosmos.Kernel.Core/Runtime/ManagedModule.cs</code></a></td>
+</tr>
+<tr>
+<td>页分配器</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/PageAllocator.cs"><code>src/Cosmos.Kernel.Core/Memory/PageAllocator.cs</code></a></td>
+</tr>
+</tbody>
+</table>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/dev/garbage-collector.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

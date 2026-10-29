@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+      <title>PCI (Peripheral Component Interconnect) | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="PCI (Peripheral Component Interconnect) | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/articles/user/driver-concepts/pci.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="pci-peripheral-component-interconnect">PCI (Peripheral Component Interconnect)</h1>
+
+<p>PCI, and PCI Express after it with the same software model, connects most devices in a PC and in many ARM machines. Software addresses a device by where it sits: a segment (a group of buses), a bus number, a device number on that bus (0 to 31) and a function number (0 to 7). The function is the unit a driver binds, because one physical device can hold up to eight independent functions, such as a graphics card and its audio controller.</p>
+<p>Each function has a configuration space, 256 bytes in classic PCI and 4 KiB in PCI Express, which opens with a standard header. Its vendor id and device id name the exact chip, and three class bytes (class, subclass and programming interface) say what kind of device it is. Optional features such as MSI-X (<a href="interrupt-delivery.html">interrupt delivery</a>) are announced in a capability list, a chain of entries that each hold an id and the offset of the next. The header also holds the command register, whose bits decide whether the function answers memory accesses, answers I/O port accesses, and may start DMA on its own (<a href="dma.html">bus mastering</a>).</p>
+<p>A function's registers have no fixed address. Each of its six base address registers (BARs) asks for a memory window or an I/O port range of a fixed size, and a 64-bit memory BAR takes two of the six slots. Something must give every BAR an address, and the firmware does so during boot (<a href="firmware-handoff.html">firmware handoff</a>), which leaves a device plugged in later without one (<a href="hot-plug.html">hot-plug</a>).</p>
+<p>Configuration space is reached in one of two ways. The legacy x86 mechanism writes a function's address to port 0xCF8, moves the data through port 0xCFC, and reaches only the first 256 bytes. ECAM (enhanced configuration access mechanism) maps every function's full 4 KiB into a memory window, whose base ACPI or the device tree gives.</p>
+<p>The trap is a match on the class alone. A class says what a device does, not how it is programmed: every network controller is class 0x02, whoever made it, so a driver matching that class is offered chips whose registers it has never seen. The class bytes pin down a programming model only where a standard defines one, such as xHCI, EHCI, OHCI, AHCI, NVMe or HD Audio.</p>
+<p>In the driver kit, <code>PciMatch</code> tests the header fields of a <code>PciIdentity</code>, whose node path is <code>pci:&lt;segment&gt;:&lt;bus&gt;:&lt;device&gt;.&lt;function&gt;</code> (<a href="../drivers.html#pci-identity-and-match">PCI identity and match</a>), and <code>PciAccess</code> offers <code>FindCapability</code> and the command register bits as <code>EnableMemorySpace</code>, <code>EnableIoSpace</code> and <code>EnableBusMastering</code> (<a href="../drivers.html#the-pci-access-object">The PCI access object</a>). <code>Node.Resources</code> holds the BARs as the firmware assigned them, or as the kit placed them behind a hot-plug slot, <code>None</code> marking an unassigned slot or the upper half of a 64-bit BAR (<a href="../drivers.html#bar-resources">BAR resources</a>). The x64 host is <code>pci-host-legacy</code>, where a configuration access past offset 255 throws, and the ARM64 host is <code>pci-host-ecam-generic</code> (<a href="../drivers.html#platform-nodes">Platform nodes</a>).</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/articles/user/driver-concepts/pci.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

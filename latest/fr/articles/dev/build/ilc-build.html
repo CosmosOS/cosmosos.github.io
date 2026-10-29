@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title> | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content=" | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/build/ilc-build.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="overview"></a></p>
+<h2 id="vue-densemble">Vue d'ensemble</h2>
+<p><code>Cosmos.ilc.Build</code> intègre le compilateur AOT natif <a href="https://github.com/dotnet/runtime/blob/main/docs/design/coreclr/botr/ilc-architecture.md">ILCompiler</a> au pipeline MSBuild. Il consomme les assemblies patchés produits par <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Patcher"><code>Cosmos.Build.Patcher</code></a> et les transforme en fichiers objets natifs, liés ensuite aux bibliothèques de la plateforme pour CosmosOS.</p>
+<hr>
+<p><a id="flow-chart"></a></p>
+<h2 id="diagramme-de-flux">Diagramme de flux</h2>
+<pre><code class="lang-mermaid">flowchart TD
+    A[ResolveIlcPath] --&gt; B[WriteIlcRsp]
+    B --&gt; C[CompileWithIlc]
+    C --&gt; D[Native binary]
+</code></pre>
+<hr>
+<p><a id="parameters"></a></p>
+<h2 id="paramètres">Paramètres</h2>
+<table>
+<thead>
+<tr>
+<th>Nom</th>
+<th>Description</th>
+<th>Valeur par défaut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IlcToolsPath</code></td>
+<td>Chemin de l'exécutable <code>ilc</code>, résolu à partir du pack de runtime <code>Microsoft.DotNet.ILCompiler</code>.</td>
+<td>résolu automatiquement</td>
+</tr>
+<tr>
+<td><code>IlcIntermediateOutputPath</code></td>
+<td>Répertoire dans lequel les fichiers <code>.ilc.rsp</code> et <code>.o</code> sont écrits.</td>
+<td><code>$(IntermediateOutputPath)/cosmos/native/</code></td>
+</tr>
+<tr>
+<td><code>IlcSystemModule</code></td>
+<td>Module système utilisé comme point d'entrée d'ILCompiler.</td>
+<td><code>System.Private.CoreLib</code></td>
+</tr>
+<tr>
+<td><code>UnmanagedEntryPointsAssembly</code></td>
+<td>Assemblies dont les méthodes sont exportées via <code>--generateunmanagedentrypoints</code>.</td>
+<td><code>Cosmos.Kernel.Runtime</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a id="tasks"></a></p>
+<h2 id="tâches">Tâches</h2>
+<table>
+<thead>
+<tr>
+<th>Tâche</th>
+<th>Description</th>
+<th>Dépend de</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ResolveIlcPath</code></td>
+<td>Télécharge et localise ILCompiler, puis définit <code>IlcToolsPath</code>.</td>
+<td><code>Build</code></td>
+</tr>
+<tr>
+<td><code>WriteIlcRsp</code></td>
+<td>Produit le fichier de réponse d'ILCompiler, qui liste les entrées, les références et les options.</td>
+<td><code>ResolveIlcPath</code></td>
+</tr>
+<tr>
+<td><code>CheckIlcCache</code></td>
+<td>Calcule l'empreinte des entrées, des références et du fichier de réponse, et la compare à celle de la dernière compilation.</td>
+<td><code>WriteIlcRsp</code></td>
+</tr>
+<tr>
+<td><code>CompileWithIlc</code></td>
+<td>Exécute <code>ilc</code> avec le fichier de réponse pour produire un fichier objet natif, sauf si <code>CheckIlcCache</code> a constaté que l'objet est à jour.</td>
+<td><code>WriteIlcRsp</code>, <code>CheckIlcCache</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a id="detailed-workflow"></a></p>
+<h2 id="déroulement-détaillé">Déroulement détaillé</h2>
+<ol>
+<li><strong>ResolveIlcPath</strong> utilise <code>GetPackageDirectory</code> pour trouver le package <code>runtime.&lt;RID&gt;.Microsoft.DotNet.ILCompiler</code> et définit <code>IlcToolsPath</code>.</li>
+<li><strong>WriteIlcRsp</strong> crée <code>$(IlcIntermediateOutputPath)$(AssemblyName).ilc.rsp</code> en rassemblant les assemblies patchés depuis <code>$(IntermediateOutputPath)/cosmos</code>, les références depuis <code>cosmos/ref</code> et des options d'ILCompiler telles que <code>--runtimeknob</code> et les options <code>--feature</code>.</li>
+<li><strong>CheckIlcCache</strong> calcule une seule empreinte SHA-256 sur les assemblies d'entrée, les assemblies de référence et le fichier de réponse, et la compare à <code>.ilc-hash</code>, issu de la dernière compilation. Le fichier de réponse fait partie de la clé à dessein : un commutateur de fonctionnalité basculé dans le <code>.csproj</code> du noyau ne modifie aucun assembly, seulement les arguments <code>--runtimeknob</code> du fichier de réponse, et une clé calculée sur les seuls assemblies conserverait l'objet compilé pour l'ancienne valeur.</li>
+<li><strong>CompileWithIlc</strong> exécute <code>ilc</code> avec le fichier de réponse généré, produit <code>$(AssemblyName).o</code> dans <code>$(IlcIntermediateOutputPath)</code> et écrit la nouvelle empreinte. Lorsque l'empreinte correspondait, l'étape est sautée et le journal affiche <code>ILC cache hit</code>.</li>
+<li>Le binaire natif est alors prêt pour la suite de l'empaquetage, par exemple l'intégration au chargeur d'amorçage.</li>
+</ol>
+<hr>
+<p><a id="outputs"></a></p>
+<h2 id="sorties">Sorties</h2>
+<ul>
+<li>Fichier de réponse : <code>$(IntermediateOutputPath)/cosmos/native/$(AssemblyName).ilc.rsp</code>, qui liste les entrées, les références et les options d'ILCompiler.</li>
+<li>Objet natif : <code>$(IntermediateOutputPath)/cosmos/native/$(AssemblyName).o</code>, produit par <code>CompileWithIlc</code> pour l'édition de liens.</li>
+<li>Clé de cache : <code>$(IntermediateOutputPath)/cosmos/native/.ilc-hash</code>, l'empreinte des entrées à partir desquelles l'objet a été compilé.</li>
+</ul>
+<p>Remarques :</p>
+<ul>
+<li>Les assemblies de référence résolus par ILC se trouvent sous <code>$(IntermediateOutputPath)/cosmos/ref/</code> et proviennent de l'étape du Patcher.</li>
+</ul>
+<hr>
+<p><a id="related-components"></a></p>
+<h2 id="composants-associés">Composants associés</h2>
+<ul>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Ilc"><code>Cosmos.Build.Ilc</code></a></li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Patcher"><code>Cosmos.Build.Patcher</code></a></li>
+<li><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Patcher"><code>Cosmos.Patcher</code></a></li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/build/ilc-build.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

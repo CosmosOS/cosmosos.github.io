@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>Tests | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Tests | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/testing.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="testing"></a></p>
+<h1 id="tests">Tests</h1>
+<p>NativeAOT-Patcher dispose de deux niveaux de tests complémentaires : des <strong>tests unitaires</strong>, qui s'exécutent dans le processus hôte, pour la chaîne d'outils utilisée au moment du build (patcher, scanner, analyseur) et pour la logique des bibliothèques du noyau qui n'a besoin d'aucun matériel, et des <strong>tests d'intégration du noyau</strong>, qui exécutent des images de noyau compilées dans QEMU et rapportent leurs résultats via un protocole UART binaire.</p>
+<hr>
+<p><a id="unit-tests"></a></p>
+<h2 id="tests-unitaires">Tests unitaires</h2>
+<p>Les tests unitaires se trouvent dans les projets <code>tests/Cosmos.Tests.*</code> (xunit) et dans <code>tests/Cosmos.Kernel.Tests.System</code> (NUnit), et s'exécutent avec l'exécuteur de tests standard de .NET. Ils ne nécessitent ni QEMU ni aucune infrastructure particulière. La CI exécute chacun d'eux comme un job distinct du workflow <code>.NET Tests</code> (<code>.github/workflows/dotnet.yml</code>) à chaque push et à chaque pull request.</p>
+<p><a id="running-unit-tests"></a></p>
+<h3 id="exécuter-les-tests-unitaires">Exécuter les tests unitaires</h3>
+<pre><code class="lang-bash">dotnet test tests/Cosmos.Tests.Patcher            # one toolchain project
+dotnet test tests/Cosmos.Kernel.Tests.System      # the kernel library tests
+</code></pre>
+<p><a id="test-projects"></a></p>
+<h3 id="projets-de-test">Projets de test</h3>
+<ul>
+<li><strong>Cosmos.Tests.Build.Asm</strong> : vérifie que la tâche de build de l'assembleur s'exécute via clang.
+<ul>
+<li><code>Test1</code></li>
+</ul>
+</li>
+<li><strong>Cosmos.Tests.Build.Analyzer.Patcher</strong> : vérifie que le code ne contient pas d'erreurs d'architecture de plug.
+<ul>
+<li><code>Test_AnalyzeAccessedMember</code></li>
+<li><code>Test_MethodNotImplemented</code></li>
+<li><code>Test_StaticConstructorTooManyParameters</code></li>
+<li><code>Test_StaticConstructorNotImplemented</code></li>
+</ul>
+</li>
+<li><strong>Cosmos.Tests.Scanner</strong> : vérifie que tous les plugs requis sont correctement détectés.
+<ul>
+<li><code>LoadPlugMethods_ShouldReturnPublicStaticMethods</code></li>
+<li><code>LoadPlugMethods_ShouldReturnEmpty_WhenNoMethodsExist</code></li>
+<li><code>LoadPlugMethods_ShouldContainAddMethod_WhenPlugged</code></li>
+<li><code>LoadPlugs_ShouldFindPluggedClasses</code></li>
+<li><code>LoadPlugs_ShouldIgnoreClassesWithoutPlugAttribute</code></li>
+<li><code>LoadPlugs_ShouldHandleOptionalPlugs</code></li>
+<li><code>FindPluggedAssemblies_ShouldReturnMatchingAssemblies</code></li>
+</ul>
+</li>
+<li><strong>Cosmos.Tests.SourceGenerators</strong> : exécute <code>CosmosEntryPointGenerator</code> et <code>DriverManifestGenerator</code> sur des compilations en mémoire et vérifie à l'identique le point d'entrée généré, le manifeste des pilotes et les diagnostics <code>COSMOSGEN</code> ; <code>FeatureParityTests</code> maintient <code>DriverFeature</code>, <code>KernelFeatures</code> et les stubs de test en phase, <code>ReferencedDriverTests</code> couvre les pilotes provenant d'assemblys référencés, publics ou sous une autorisation <code>InternalsVisibleTo</code>, et <code>CachingTests</code> vérifie que l'ajout d'un pilote laisse le point d'entrée en cache.</li>
+<li><strong>Cosmos.Tests.Patcher</strong> : s'assure que les plugs sont correctement appliqués aux méthodes et aux types cibles.
+<ul>
+<li><code>PatchAssembly_ShouldSkipWhenNoMatchingPlugs</code></li>
+<li><code>PatchObjectWithAThis_ShouldPlugInstanceCorrectly</code></li>
+<li><code>PatchConstructor_ShouldPlugCtorCorrectly</code></li>
+<li><code>PatchProperty_ShouldPlugProperty</code></li>
+<li><code>PatchType_ShouldReplaceAllMethodsCorrectly</code></li>
+<li><code>PatchType_ShouldPlugAssembly</code></li>
+<li><code>AddMethod_BehaviorBeforeAndAfterPlug</code></li>
+</ul>
+</li>
+<li><strong>Cosmos.Kernel.Tests.System</strong> : exerce, dans le processus hôte, la logique de <code>Cosmos.Kernel.System</code> qui n'a besoin d'aucun matériel (le tampon de réception de <code>TcpConnection</code>, l'identité et le formatage d'<code>Address</code>, la lecture WAV de <code>WaveHeader</code>, <code>MemoryAudioStream</code> et <code>WaveAudioStream</code>, ce dernier sur un <code>IVfsFileHandle</code> en mémoire, et l'onde carrée que <code>ToneAudioStream</code> génère pour <code>Console.Beep</code>). Une fixture imbriquée par membre testé, avec une autorisation <code>InternalsVisibleTo</code> accordée par la bibliothèque.
+<ul>
+<li><code>AppendToData.WhenBothData_AndOtherAreEmpty_DataIsEmpty</code></li>
+<li><code>AppendToData.WhenDataIsNotEmpty_AndOtherIsEmpty_DataDoesNotChange</code></li>
+<li><code>AppendToData.WhenDataIsNotEmpty_AndOtherIsNotEmpty_OtherIsAppendedToData</code></li>
+<li><code>AppendToData.WhenPartOfDataWasRead_AndOtherIsAppended_TheUnreadDataIsKept</code></li>
+<li><code>AppendToData.WhenPartOfDataWasRead_AndOtherOutgrowsTheBuffer_TheUnreadDataIsKept</code></li>
+<li><code>AppendToData.WhenAllDataWasRead_AndOtherIsAppended_OnlyOtherIsKept</code></li>
+<li><code>AdvanceDataOffset.WhenAdvancingByZero_NoChangesAreMade</code></li>
+<li><code>AdvanceDataOffset.WhenAdvancingByOneAndLengthIsTwo_OnlyLastElementRemains</code></li>
+<li><code>AdvanceDataOffset.WhenAdvancingByTwoAndLengthIsTwo_DataLengthIsZero</code></li>
+<li><code>Constructors.GivenPackedValue_SplitsItMostSignificantOctetFirst</code></li>
+<li><code>Constructors.GivenBufferAndOffset_ReadsFourBytesFromTheOffset</code></li>
+<li><code>Constructors.GivenSpanOfWrongLength_Throws</code></li>
+<li><code>Id.GivenOctets_PacksThemMostSignificantFirst</code></li>
+<li><code>Equality.GivenTheSameOctets_TwoInstancesAreEqualAndHashAlike</code></li>
+<li><code>Equality.GivenDifferentOctets_TwoInstancesAreNotEqual</code></li>
+<li><code>Equality.GivenNull_IsNotEqual</code></li>
+<li><code>CompareTo.GivenTwoAddresses_OrdersByPackedValue</code></li>
+<li><code>CompareTo.GivenNull_OrdersAfterIt</code></li>
+<li><code>Formatting.GivenAddress_WritesDottedDecimal</code></li>
+<li><code>IsBroadcastAddress.GivenAllOnes_IsTrue</code></li>
+<li><code>IsBroadcastAddress.GivenAnyOtherAddress_IsFalse</code></li>
+</ul>
+</li>
+<li><strong>Cosmos.Tests.NativeWrapper</strong> : contient des ressources du runtime ; aucun test unitaire.</li>
+<li><strong>Cosmos.Tests.NativeLibrary</strong> : fournit du code natif utilisé dans les tests ; aucun test unitaire.</li>
+</ul>
+<hr>
+<p><a id="kernel-integration-tests"></a></p>
+<h2 id="tests-dintégration-du-noyau">Tests d'intégration du noyau</h2>
+<p>Les tests d'intégration du noyau compilent un véritable noyau NativeAOT, le démarrent dans QEMU et renvoient leurs résultats à l'hôte via un protocole UART binaire. Ces tests exercent l'ensemble du pipeline de build et d'exécution.</p>
+<p><a id="test-suites"></a></p>
+<h3 id="suites-de-tests">Suites de tests</h3>
+<table>
+<thead>
+<tr>
+<th>Suite</th>
+<th>Tests</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>HelloWorld</strong></td>
+<td>3</td>
+<td>Arithmétique de base, logique booléenne, comparaison d'entiers</td>
+</tr>
+<tr>
+<td><strong>Memory</strong></td>
+<td>74</td>
+<td>Boxing/unboxing, égalité de structures, allocation mémoire, collections, copie mémoire, traduction d'adresses</td>
+</tr>
+<tr>
+<td><strong>Drivers</strong></td>
+<td>63 par cellule</td>
+<td>Kit de pilotes sur le bus synthétique : manifeste, arbitrage, publication, interruptions, travail différé, démontage, enfants, un écran qui atteint le gestionnaire d'écrans, un périphérique bloc qui atteint le gestionnaire de stockage ; sur x64, l'hôte PCI et le pilote E1000E sur la carte réseau par défaut de q35 ; sur la cellule usb-kbd, le pilote xHCI et le pilote de clavier USB sur un usb-kbd branché au démarrage, d'abord décliné par le propre pilote de la suite, avec une touche injectée via QMP, puis débranché et rebranché ; sur les cellules usb-kbd-ehci, usb-kbd-ohci, usb-kbd-ehci-ohci et usb-kbd-ohci-hub, les pilotes EHCI et OHCI et le pilote de clavier USB sur le même clavier, sur un usb-ehci, sur un pci-ohci, sur un EHCI ICH9 qui confie le clavier pleine vitesse à son compagnon pci-ohci, et derrière un usb-hub sur un pci-ohci ; sur la cellule usb-mouse, le pilote de souris USB sur un usb-mouse branché au démarrage, avec des événements de pointeur injectés via QMP ; sur x64, le pilote 8042 et les pilotes de clavier et de souris PS/2 sur le contrôleur intégré de q35, avec une touche et des événements de pointeur injectés via QMP ; sur les cellules virtio-blk-pci et virtio-blk-mmio, le pilote virtio-blk sur le disque de la cellule ; sur virtio-blk-pci, le pilote de port racine PCI Express sur le port derrière lequel se trouve le disque, avec le disque retiré puis rebranché</td>
+</tr>
+<tr>
+<td><strong>Pci</strong></td>
+<td>8</td>
+<td>Le nœud d'hôte PCI du kit de pilotes, son mécanisme de configuration et les nœuds de fonction qu'il publie, lus via <code>DriverDiagnostics</code>, le <code>PciHostAccess</code> de l'hôte et le <code>PciAccess</code> des nœuds, comparés à un parcours brut des bus de l'hôte</td>
+</tr>
+<tr>
+<td><strong>Virtio</strong></td>
+<td>14 par cellule</td>
+<td>Les pilotes virtio sur le kit de pilotes, sur les deux transports et avec ACPI désactivé : les nœuds réseau, d'entrée et bloc liés, l'interface consommée avec son lien, son adresse MAC et son mode d'interruption par cellule, le disque enregistré, et la fonction PCI ou l'emplacement MMIO lié par son pilote de transport</td>
+</tr>
+<tr>
+<td><strong>Graphic</strong></td>
+<td>25</td>
+<td>Le canvas 2D, les polices et les images sur chaque cellule ; le gestionnaire d'écrans et l'écran principal par cellule ; le pilote d'écran virtio-gpu sur les cellules virtio-gpu ; l'adaptateur VMware SVGA II via ses facettes et ses tests de flux FIFO SVGA3D sur vmware-svga</td>
+</tr>
+<tr>
+<td><strong>Audio</strong></td>
+<td>22 par cellule</td>
+<td>La pile audio sur deux cellules, <code>bare</code> et <code>hda</code> : le pilote Intel HD Audio lié à l'<code>intel-hda</code> de QEMU, la sortie qu'il publie et le gestionnaire audio qui la liste, le contrat de format, le moteur de flux qui vide le tampon circulaire et son interruption de complétion là où la ligne est connectée, ainsi que le lecteur et la lecture en arrière-plan qui mènent un flux jusqu'au bout, en arrêtent un avant la fin et lisent un fichier WAV depuis la mémoire, et <code>Console.Beep</code> qui joue sa tonalité sur la sortie et rend la main aussitôt lorsque la sortie est occupée ; sur bare, un gestionnaire sans sortie qui refuse de jouer et un <code>Console.Beep</code> qui rend la main aussitôt ; sur les deux, <code>Console.Beep</code> qui refuse les arguments que Windows refuse</td>
+</tr>
+<tr>
+<td><strong>Storage</strong></td>
+<td>84 par cellule</td>
+<td>Le gestionnaire de stockage et les périphériques bloc qui se trouvent derrière lui, sur sept profils, <code>ahci</code>, <code>nvme</code>, <code>usb</code>, <code>usb-ehci</code>, <code>usb-ohci</code>, <code>virtio-blk-pci</code> et <code>virtio-blk-mmio</code> (arm64), chacun combiné avec le modificateur <code>acpi-off</code> sur x64 (12 cellules) et avec <code>gicv2</code>, <code>gicv3</code> et <code>acpi-off</code> sur arm64 (42 cellules) : le disque publié par l'<code>AhciDriver</code>, le <code>NvmeDriver</code>, l'<code>UsbMassStorageDriver</code> ou le <code>VirtioBlkDriver</code> du kit, soumis aux mêmes assertions d'E/S bloc, de table de partitions, de cycle de vie des partitions et de redémarrage ; sur x64 le CD de démarrage que l'<code>AhciDriver</code> du kit publie à côté de lui ; la vue du disque par le kit dans <code>DriverDiagnostics</code> sur chaque cellule ; le mode d'interruption NVMe par cellule ; le branchement à chaud USB sur les cellules usb et le branchement à chaud PCI Express sur les cellules virtio-blk-pci</td>
+</tr>
+<tr>
+<td><strong>Random</strong></td>
+<td>16</td>
+<td>Le CSPRNG du noyau : tests à réponse connue de BLAKE2s et ChaCha20, effacement rapide de clé, détection de RDSEED/RDRAND et de RNDRRS/RNDR, ensemencement, et <code>RandomNumberGenerator</code>, <code>GetInt32</code> et <code>Guid.NewGuid</code> par-dessus, à travers un réensemencement et depuis deux threads</td>
+</tr>
+<tr>
+<td><strong>Iso9660</strong></td>
+<td>51</td>
+<td>Le pilote ISO 9660 sur deux images que xorriso construit à la compilation depuis les arborescences de fixtures de la suite : montage sur les géométries CD et disque et refus d'un périphérique vide, corrompu ou trop court, noms, attributs, horodatages, liens symboliques, zones de continuation et répertoires relocalisés de Rock Ridge, noms bruts de niveau 1 recherchés sans la casse, lectures entières, par morceaux, après seek et ligne par ligne, le montage en lecture seule via <code>System.IO</code> (<code>IOException</code>) et <code>VfsManager</code> (<code>false</code>), démontage et remontage ; sur x64 le CD de démarrage lui-même, le lecteur ATAPI que l'<code>AhciDriver</code> du kit publie, monté et relu avec les fichiers que la suite livre dessus par <code>isoFiles/</code> et <code>CosmosIsoFile</code></td>
+</tr>
+</tbody>
+</table>
+<p><a id="helloworld-tests"></a></p>
+<h4 id="tests-helloworld">Tests HelloWorld</h4>
+<ul>
+<li><code>Test_BasicArithmetic</code> : addition (2+2=4)</li>
+<li><code>Test_BooleanLogic</code> : assertions vrai/faux</li>
+<li><code>Test_IntegerComparison</code> : opérateurs d'égalité et de comparaison</li>
+</ul>
+<p><a id="memory-tests"></a></p>
+<h4 id="tests-memory">Tests Memory</h4>
+<p><strong>Boxing/unboxing (11 tests) :</strong></p>
+<ul>
+<li><code>Boxing_Char</code>, <code>Boxing_Int32</code>, <code>Boxing_Byte</code>, <code>Boxing_Long</code></li>
+<li><code>Boxing_Nullable</code>, <code>Boxing_Interface</code>, <code>Boxing_CustomStruct</code></li>
+<li><code>Boxing_ArrayCopy</code>, <code>Boxing_Enum</code>, <code>Boxing_ValueTuple</code>, <code>Boxing_NullInterface</code></li>
+</ul>
+<p><strong>Égalité de structures (3 tests) :</strong> le <code>ValueType.Equals</code>/<code>GetHashCode</code> hérité et <code>EqualityComparer&lt;T&gt;.Default</code> sur une structure comparée octet par octet, sur un <code>record struct</code> doté d'un champ de type référence (son propre <code>Equals</code> généré), et sur une structure simple dotée d'un champ de type référence, que CoreLib compare champ par champ via le <code>__GetFieldHelper</code> injecté par ILC et <code>RhBoxAny</code></p>
+<ul>
+<li><code>StructEquals_BitwiseFields</code>, <code>StructEquals_RecordStructReferenceField</code>, <code>StructEquals_ReferenceField</code></li>
+</ul>
+<p><strong>Allocation mémoire (8 tests) :</strong></p>
+<ul>
+<li><code>Memory_CharArray</code>, <code>Memory_StringAllocation</code>, <code>Memory_IntArray</code></li>
+<li><code>Memory_StringConcat</code>, <code>Memory_StringBuilder</code></li>
+<li><code>Memory_ZeroLengthArray</code>, <code>Memory_EmptyString</code>, <code>Memory_LargeAllocation</code></li>
+</ul>
+<p><strong>Collections génériques - List (14 tests) :</strong></p>
+<ul>
+<li><code>Collections_ListInt</code>, <code>Collections_ListString</code>, <code>Collections_ListByte</code></li>
+<li><code>Collections_ListLong</code>, <code>Collections_ListStruct</code></li>
+<li><code>Collections_ListContains</code>, <code>Collections_ListIndexOf</code>, <code>Collections_ListRemoveAt</code></li>
+<li><code>Collections_ListInsert</code>, <code>Collections_ListRemove</code>, <code>Collections_ListClear</code></li>
+<li><code>Collections_ListToArray</code>, <code>Collections_ListForeach</code>, <code>Collections_ListEmpty</code></li>
+</ul>
+<p><strong>Collections génériques - Dictionary (9 tests) :</strong></p>
+<ul>
+<li><code>Collections_DictCustomComparer</code>, <code>Collections_DictAddGet</code>, <code>Collections_DictIndexer</code></li>
+<li><code>Collections_DictContains</code>, <code>Collections_DictRemove</code>, <code>Collections_DictClear</code></li>
+<li><code>Collections_DictTryGetValue</code>, <code>Collections_DictKeysValues</code>, <code>Collections_DictEmpty</code></li>
+</ul>
+<p><strong>Collections génériques - IEnumerable (1 test) :</strong></p>
+<ul>
+<li><code>Collections_IEnumerable</code></li>
+</ul>
+<p><strong>Copie mémoire / SIMD (15 tests) :</strong></p>
+<ul>
+<li><code>MemCopy_8Bytes</code>, <code>MemCopy_16Bytes</code>, <code>MemCopy_24Bytes</code>, <code>MemCopy_32Bytes</code></li>
+<li><code>MemCopy_48Bytes</code>, <code>MemCopy_64Bytes</code>, <code>MemCopy_80Bytes</code>, <code>MemCopy_128Bytes</code></li>
+<li><code>MemCopy_256Bytes</code>, <code>MemCopy_264Bytes</code></li>
+<li><code>MemSet_64Bytes</code>, <code>MemMove_Overlap</code>, <code>MemMove_Overlap_DestBeforeSrc</code></li>
+<li><code>MemCopy_0Bytes</code>, <code>MemCopy_1Byte</code></li>
+</ul>
+<p><strong>Array.Copy (5 tests) :</strong></p>
+<ul>
+<li><code>ArrayCopy_IntArray</code>, <code>ArrayCopy_ByteArray</code>, <code>ArrayCopy_LargeArray</code></li>
+<li><code>ArrayCopy_ZeroLength</code>, <code>ArrayCopy_Overlap</code></li>
+</ul>
+<p><strong>Ramasse-miettes (22 tests) :</strong></p>
+<ul>
+<li><code>GC_IsEnabled</code>, <code>GC_GetStats</code>, <code>GC_CollectBasic</code>, <code>GC_StatsIncrement</code></li>
+<li><code>GC_ExactCollectionCount</code>, <code>GC_ObjectSurvival</code>, <code>GC_StringSurvival</code></li>
+<li><code>GC_ArraySurvival</code>, <code>GC_ListSurvival</code>, <code>GC_UnreachableExactCount</code></li>
+<li><code>GC_ObjectGraphSurvival</code>, <code>GC_MixedTypeSurvival</code>, <code>GC_AllocAfterCollect</code></li>
+<li><code>GC_WeakReference</code>, <code>GC_LargeAllocCollect</code>, <code>GC_StructArraySurvival</code></li>
+<li><code>GC_DictSurvival</code>, <code>GC_PageAccounting</code>, <code>GC_DependentHandle</code></li>
+<li><code>GC_DependentHandleCleanup</code>, <code>GC_HandleStoreIntegrity</code>, <code>GC_PinnedHeapReuse</code></li>
+</ul>
+<p><a id="drivers-tests"></a></p>
+<h4 id="tests-drivers">Tests Drivers</h4>
+<p>La suite se compose de deux projets. <code>tests/Kernels/Cosmos.Kernel.Tests.Drivers</code> est le noyau : le harnais (<code>Kernel.cs</code> et ses deux consommateurs, <code>TestKeyboardConsumer</code> et <code>TestPointerConsumer</code>), doté d'une autorisation <code>InternalsVisibleTo</code> accordée par <code>Cosmos.Kernel.HAL</code>, qu'il emploie pour ses consommateurs et, dans les groupes matériels, pour atteindre les états des pilotes livrés via <code>DriverEngine.Nodes</code> : <code>TestKeyboardConsumer</code> dérive du <code>KeyboardConsumer</code> interne et <code>TestPointerConsumer</code> du <code>PointerConsumer</code> interne, et tous deux sont installés via le <code>DeviceRegistry.SetConsumer</code> interne dans <code>BeforeRun</code>, où ils remplacent pour l'exécution les consommateurs clavier et pointeur propres à l'anneau supporté, ce qui illustre la règle d'un seul consommateur par type. <code>tests/Kernels/Cosmos.Kernel.Tests.Drivers.Library</code> contient toutes les classes <code>[Driver]</code> que la suite met en œuvre ainsi que les types d'état et d'identité dont elles ont besoin : un assembly de pilotes (<code>&lt;CosmosDriverAssembly&gt;true&lt;/CosmosDriverAssembly&gt;</code>, listé dans <code>CosmosDriverAssemblyNames</code>) qui ne reçoit d'autorisation d'aucun projet et n'est écrit que sur le point d'extension public, si bien que le fait qu'il compile prouve qu'un tiers peut écrire chacun de ces pilotes. Le noyau référence la bibliothèque et s'exécute sur huit cellules sur x64 et neuf sur arm64 : <code>bare</code>, <code>usb-kbd</code> (un contrôleur qemu-xhci avec un usb-kbd branché au démarrage), <code>usb-kbd-ehci</code> (le même clavier sur un usb-ehci), <code>usb-kbd-ohci</code> (sur un pci-ohci), <code>usb-kbd-ehci-ohci</code> (un EHCI ICH9 avec un compagnon pci-ohci sur ses ports et un clavier <code>usb_version=1</code>, que l'EHCI confie au compagnon), <code>usb-kbd-ohci-hub</code> (un pci-ohci avec un usb-hub sur le port racine 1 et le clavier derrière lui), <code>usb-mouse</code> (le xHCI avec un usb-mouse), <code>virtio-blk-pci</code> (un disque virtio-blk derrière un port racine PCI Express) et, sur arm64, <code>virtio-blk-mmio</code> (le même disque dans la fenêtre de la machine virt) ; il fait fonctionner les pilotes de la bibliothèque via le bus synthétique, sans aucun matériel derrière aucun nœud, et les pilotes livrés sur ce que porte chaque cellule (les groupes Matériel, Hôte USB, Clavier USB, Souris USB, PS/2, virtio-blk et Port racine PCI Express ci-dessous), et attend le kit via <code>SyntheticBus.WaitForQueuedJobs</code>. Il est compilé avec <code>CosmosEnableFat</code> désactivé et avec un élément <code>CosmosDriverExclude</code> et un élément <code>CosmosDriverInclude</code> qui nomment des types de la bibliothèque, si bien que la politique du manifeste est elle aussi testée. Chaque assertion lit <code>DriverDiagnostics</code> ou les propres pilotes et consommateur de la suite, jamais le journal série.</p>
+<p>Les quatre cellules EHCI et OHCI illustrent le champ <code>usbController</code> du catalogue de profils : <code>xhci</code> (la valeur par défaut, <code>qemu-xhci</code>), <code>ehci</code> (<code>usb-ehci</code>), <code>ohci</code> (<code>pci-ohci</code> avec six ports racines) ou <code>ehci-ohci</code> (<code>ich9-usb-ehci1</code> avec un compagnon <code>pci-ohci</code> sur ses six ports), avec <code>usbDeviceVersion</code> fixé à 1 sur la cellule à compagnon pour que le clavier de QEMU ne présente que le jeu de descripteurs pleine vitesse, et <code>usbHub</code>, qui place un usb-hub sur le port racine 1 avec le clavier derrière lui, ce que le lanceur et le catalogue n'acceptent que sur les deux modèles OHCI, le hub de QEMU étant pleine vitesse. Sur les trois modèles autres que le xHCI, le lanceur attribue un port racine fixe à chaque périphérique (le 1 au clavier, le 2 à la souris, les clés à partir du 3), car QEMU insérerait sinon son propre hub sur le dernier port libre, et les quatre profils indiquent <code>nic: none</code>, car l'e1000e par défaut de q35 partage la ligne héritée des contrôleurs et son pilote la réclamerait en premier, les laissant en scrutation. <code>cosmos run --usb-controller &lt;xhci|ehci|ohci|ehci-ohci&gt;</code> offre le même choix pour un noyau lancé à la main, pris en compte uniquement lorsqu'un périphérique USB est attaché.</p>
+<p>L'ordre du manifeste pour les pilotes de la bibliothèque suit la règle des assemblys référencés : le générateur les trie par nom d'assembly puis par nom de type complet, tous deux en ordre ordinal, après les propres pilotes du noyau. <code>Manifest_Order_ReferencedByTypeName</code> vérifie que <code>TieFirstDriver</code> précède <code>TieSecondDriver</code> en vertu de cette seule règle (<code>F</code> est trié avant <code>S</code>) ; l'endroit où les deux sont déclarés n'y joue aucun rôle. <code>Interrupt_WorkItemDeferredToWorker</code> prouve le report sans demander au moteur où l'élément s'est exécuté : le gestionnaire d'interruption relève le nombre d'exécutions de l'élément de travail au moment où il retourne, interruptions encore désactivées, de sorte qu'un nombre inchangé signifie que l'élément ne s'est pas exécuté dans <code>RaiseInterrupt</code>, et l'exécution constatée après <code>WaitForQueuedJobs</code> est celle du worker.</p>
+<p><strong>Manifeste (6 tests) :</strong></p>
+<ul>
+<li><code>Manifest_HighPriorityDriver_Present</code>, <code>Manifest_FatFeatureDriver_Absent</code>, <code>Manifest_ExcludedDriver_Absent</code></li>
+<li><code>Manifest_OptInDriver_Present</code>, <code>Manifest_OptOutDriver_Absent</code>, <code>Manifest_Order_ReferencedByTypeName</code></li>
+</ul>
+<p><strong>Moteur (2 tests) :</strong></p>
+<ul>
+<li><code>Engine_Started_WithWorker</code>, <code>BootPath_NodeFromConstructor_Bound</code></li>
+</ul>
+<p><strong>Arbitrage (5 tests) :</strong></p>
+<ul>
+<li><code>Arbitration_ByPriority</code>, <code>Arbitration_BySpecificity</code>, <code>Arbitration_TieByManifestOrder</code></li>
+<li><code>Decline_UnwindsResources</code>, <code>ThrowingProbe_RecordedAsFailed</code></li>
+</ul>
+<p><strong>Périphérique clavier (7 tests) :</strong></p>
+<ul>
+<li><code>Publish_ReachesConsumer</code>, <code>WindowAndDma_Contents</code></li>
+<li><code>Interrupt_HandlerReadsWindow_ReportsKey</code>, <code>Interrupt_WorkItemDeferredToWorker</code>, <code>Interrupt_MaskUnmask</code></li>
+<li><code>Periodic_FiresAtLeastThreeTimes</code>, <code>BlockingHandler_FaultRecorded</code></li>
+</ul>
+<p><strong>Écran (1 test) :</strong></p>
+<ul>
+<li><code>Publish_Display_ReachesDisplayManager</code> : le <code>DisplayDriver</code> de la bibliothèque publie un <code>DisplayState</code>, un écran dans un unique mode fixe 64x32 sans framebuffer ; <code>DisplayManager.Count</code> augmente de un, l'écran est trouvé par son chemin de nœud dans <code>DriverDiagnostics</code> avec <code>IsConsumed</code>, rapporte le mode du pilote, est l'écran principal (un écran de pilote l'emporte sur celui du firmware) et fournit l'état comme facette mais aucun <code>IDisplayModes</code> ; après la rétractation, il a quitté le gestionnaire et la liste des publications, n'a plus de facette, et l'écran principal est de nouveau celui du firmware, ou aucun</li>
+</ul>
+<p><strong>Périphérique bloc (1 test) :</strong></p>
+<ul>
+<li><code>Publish_Block_ReachesStorageManager</code> : le <code>BlockDriver</code> de la bibliothèque publie un <code>BlockState</code>, un disque vierge de 64 blocs nommé <code>synthetic-block</code> sur un tableau d'octets ; <code>StorageManager.DeviceCount</code> augmente de un, <code>Devices</code> contient l'état, <code>GetPartitions</code> n'y trouve rien, il est le disque principal lorsque rien d'autre n'a été enregistré, et <code>DriverDiagnostics</code> le liste sous son nœud comme un périphérique bloc consommé, non retiré, nommé par le pilote ; après la rétractation, le nombre, la liste et le disque principal sont redevenus ce qu'ils étaient, l'entrée publiée a disparu, et le pilote a enregistré un sondage et un détachement. L'UART transporte <code>[StorageManager] synthetic-block registered by BlockDriver (primary)</code> et <code>[StorageManager] synthetic-block unregistered (no primary)</code>, lus dans le journal, sans assertion</li>
+</ul>
+<p><strong>Rétractation (3 tests) :</strong></p>
+<ul>
+<li><code>Retract_DetachOrderAndAccounting</code>, <code>Retract_DriverThreadExited</code>, <code>Retract_SinkReportDiscarded</code></li>
+</ul>
+<p><strong>Enfants (3 tests) :</strong></p>
+<ul>
+<li><code>Children_PublishedFromProbe</code>, <code>UnmatchedNode_UnboundWithNoOffers</code>, <code>Children_RetractedWithParent</code></li>
+</ul>
+<p><strong>Diagnostics (1 test) :</strong></p>
+<ul>
+<li><code>DriverDiagnostics_OutOfRange_ReturnsFalse</code></li>
+</ul>
+<p><strong>Matériel (5 tests) :</strong></p>
+<ul>
+<li><code>Hardware_PciHost_Bound</code>, <code>Hardware_E1000E_NodeBound</code>, <code>Hardware_E1000E_DeviceConsumed</code></li>
+<li><code>Hardware_E1000E_LinkUp</code>, <code>Hardware_E1000E_Transmit</code></li>
+</ul>
+<p>Le groupe Matériel fait fonctionner les pilotes livrés sur du matériel réel (émulé) sans profil dédié : le q35 de QEMU ajoute un e1000e par défaut chaque fois qu'une cellule ne passe aucun <code>-netdev</code>, si bien que la cellule x64 bare de la suite porte déjà le contrôleur, tandis que la carte réseau par défaut de virt est une fonction virtio-net-pci que lie le <code>VirtioNetDriver</code> du kit ; les quatre tests E1000E sont donc ignorés sur arm64 avec <code>no e1000e on this machine</code>, et sur les quatre cellules EHCI et OHCI, dont les profils indiquent <code>nic: none</code> pour laisser libre la ligne héritée des contrôleurs, ils sont ignorés sur x64 aussi. Leur condition d'exécution est un nœud <code>DriverDiagnostics</code> dont le <code>BusName</code> est <code>pci</code> et dont la <code>Description</code> commence par <code>8086:10d3</code>. <code>Hardware_PciHost_Bound</code> est inconditionnel : un nœud <code>platform</code> dont la description contient <code>pci-host-</code> est <code>Bound</code> par <code>PciHostDriver</code>. <code>Hardware_E1000E_NodeBound</code> constate que la fonction est <code>Bound</code> par <code>E1000EDriver</code> avec un périphérique publié et au moins sept ressources détenues (la fenêtre de registres, les quatre tampons DMA, l'élément de travail de vidage et son enregistrement périodique, plus le handle d'interruption lorsque la ligne est connectée) ; <code>Hardware_E1000E_DeviceConsumed</code> trouve un périphérique publié de type <code>Network</code> à ce chemin de nœud, avec <code>IsConsumed</code> à vrai et un <code>NetworkManager.MacAddress</code> non nul ; <code>Hardware_E1000E_LinkUp</code> scrute <code>NetworkManager.LinkUp</code> pendant 2 s au plus ; et <code>Hardware_E1000E_Transmit</code> emploie l'autorisation HAL du noyau pour atteindre l'<code>E1000EState</code> du nœud via <code>DriverEngine.Nodes</code>, envoie une trame de diffusion de 60 octets via <code>NetworkManager.Send</code> et vérifie que <code>FramesTransmitted</code> a augmenté.</p>
+<p><strong>Hôte USB (3 tests) :</strong></p>
+<ul>
+<li><code>Usb_XhciHost_Bound</code>, <code>Usb_EhciHost_Bound</code>, <code>Usb_OhciHost_Bound</code></li>
+</ul>
+<p>Un test par pilote d'hôte livré, chacun s'exécutant sur les cellules dont le bus porte sa fonction et ignoré ailleurs avec <code>no xHCI controller on this cell</code>, <code>no EHCI controller on this cell</code> ou <code>no OHCI controller on this cell</code> : le test xHCI sur usb-kbd et usb-mouse, le test EHCI sur usb-kbd-ehci et usb-kbd-ehci-ohci, le test OHCI sur usb-kbd-ohci, usb-kbd-ohci-hub et usb-kbd-ehci-ohci, la seule cellule à deux contrôleurs. La condition d'exécution est un nœud <code>DriverDiagnostics</code> dont le <code>BusName</code> est <code>pci</code> et dont la <code>Description</code> contient <code>class 0c.03.30</code>, <code>class 0c.03.20</code> ou <code>class 0c.03.10</code>, soit la fonction xHCI, EHCI ou OHCI, trouvé dans <code>BeforeRun</code> quel que soit son état, de sorte qu'un sondage qui a échoué donne un test échoué plutôt qu'un test ignoré. Chaque test constate que la fonction est <code>Bound</code> par son pilote avec une ressource détenue et, via l'autorisation HAL, que son état (<code>XhciState</code>, <code>EhciState</code> ou <code>OhciState</code>) fait tourner le thread de branchement à chaud et reçoit ses événements par une interruption ou par scrutation, jamais les deux ni aucun des deux ; l'EHCI et l'OHCI sont des fonctions INTx uniquement, si bien que sur les cellules x64 conçues pour eux, où le profil a laissé la ligne libre, l'interruption doit être le chemin utilisé, tandis que sur arm64, qui ne route aucune ligne héritée, ils scrutent. Le numéro de bus suit l'ordre de liaison : le xHCI et un EHCI ou OHCI seul sont le bus 1 avec au moins un périphérique, le clavier ou la souris branché au démarrage, dont le nœud se trouve sous celui du contrôleur. Sur usb-kbd-ehci-ohci, l'EHCI, lié en premier, est le bus 1, sans enfant ni périphérique et avec <code>CompanionPortsReleased</code> au moins égal à 1, le clavier pleine vitesse étant passé au compagnon par le bit de propriété du port, et l'OHCI, lié en second, est le bus 2 avec le clavier ; sur usb-kbd-ohci-hub, le bus de l'OHCI contient au moins deux périphériques, le hub et le clavier derrière lui, dont le nœud se trouve sous celui du hub, lié par <code>UsbHubDriver</code>, lui-même sous celui du contrôleur.</p>
+<p><strong>Clavier USB (6 tests) :</strong></p>
+<ul>
+<li><code>Usb_Keyboard_BoundAfterDecline</code>, <code>Usb_Keyboard_SetLedsRoundTrip</code>, <code>Usb_Keyboard_KeyInjected</code></li>
+<li><code>Usb_Keyboard_Unplug_RetractsNode</code>, <code>Usb_Keyboard_Replug_PublishesAgain</code>, <code>Usb_Keyboard_Replug_SetLeds</code></li>
+</ul>
+<p>Ils s'exécutent sur les cinq cellules usb-kbd, quel que soit l'hôte auquel le clavier est rattaché, et sont ignorés avec <code>no USB host controller on this cell</code> sur les cellules sans contrôleur et avec <code>no USB keyboard on this cell</code> sur usb-mouse. La condition d'exécution est un nœud <code>usb</code> dont la <code>Description</code> se termine par <code>class 03.01.01</code>, l'interface HID de clavier en mode boot, surmonté d'un nœud de fonction hôte, trouvé dans <code>BeforeRun</code>, qui voit chaque périphérique présent au démarrage puisque les sondages des hôtes parcourent les ports racines à l'étape des pilotes (sur la cellule à hub, le clavier se trouve une offre plus bas, publié par le sondage du hub, et il est attendu) : <code>usb:1-5:0</code> sur le xHCI (le xHCI de QEMU numérote ses ports USB 3 de 1 à 4 et ses ports USB 2 de 5 à 8), <code>usb:1-1:0</code> sur un EHCI ou un OHCI seul, qui numérotent leurs ports à partir de 1, <code>usb:2-1:0</code> sur la cellule à compagnon, où le clavier appartient à l'OHCI, et <code>usb:1-1.1:0</code> derrière le hub. L'état de l'hôte est lu via le <code>UsbHostView</code> de la suite, les cinq mêmes membres (<code>HotPlugRunning</code>, <code>HasInterrupt</code>, <code>IsPolling</code>, <code>Bus</code>, <code>PipesClosed</code>) pris sur celui des trois types d'état qui détient le nœud. <code>Usb_Keyboard_BoundAfterDecline</code> est la preuve du refus après ouverture : l'<code>UsbDeclineDriver</code> de la bibliothèque correspond au même triplet d'interface avec la priorité 1, ouvre le pipe d'interruption du clavier dans son sondage et décline avec <code>declined after opening a pipe</code>, si bien que la première offre du nœud est déclinée avec <code>ReleasedResourceCount</code> à 1, le pipe que le kit a fermé, et que la seconde va à l'<code>UsbKeyboardDriver</code> livré, lié avec un périphérique publié, le clavier <code>usb-keyboard</code> consommé par le gestionnaire de l'anneau supporté. <code>Usb_Keyboard_SetLedsRoundTrip</code> appelle <code>SetLeds</code> sur l'<code>UsbKeyboardState</code> et relit <code>LastLedReport</code> à 0x03 et <code>LastLedStatus</code> à <code>Success</code>. <code>Usb_Keyboard_KeyInjected</code> demande au moteur <code>key-press a</code> et attend, en scrutant toutes les 50 ms pendant 8 s au plus, deux rapports du clavier USB dans le consommateur de la suite, le code d'appui 0x1E puis son relâchement, avec les <code>KeyEvents</code> du pilote augmentés de deux : c'est le seul test qui exécute une complétion de pipe d'interruption sur chaque hôte, ce que l'ordonnancement périodique de l'EHCI et la file des transferts terminés de l'OHCI n'obtiennent d'aucune autre cellule. <code>Usb_Keyboard_Unplug_RetractsNode</code> demande au moteur <code>usb-kbd-unplug</code> et attend, en scrutant toutes les 50 ms pendant 8 s au plus, que le nœud quitte l'arbre et que le bus libère son périphérique : le nœud est <code>Retracted</code>, sa liaison <code>IsDetaching</code>, le périphérique publié a disparu, le nombre de nœuds, le nombre de périphériques et le <code>ChildCount</code> du parent (le nœud de l'hôte, ou celui du hub sur la cellule à hub) ont baissé de un, le <code>WithdrawnCount</code> du consommateur de la suite a augmenté de un et le <code>PipesClosed</code> de l'hôte vaut au moins un. <code>Usb_Keyboard_Replug_PublishesAgain</code> demande <code>usb-kbd-plug</code> et attend un nouveau nœud de clavier lié, de nouveau décliné par <code>UsbDeclineDriver</code> et cette fois publié au consommateur de la suite : sur le xHCI, QEMU choisit le port libre suivant, si bien que le nœud est <code>usb:1-6:0</code>, tandis que sur l'EHCI et l'OHCI le moteur fixe le port que le clavier a quitté, si bien que le chemin est celui qu'il avait, et l'un ou l'autre est journalisé, <code>[DriversTests] replugged keyboard at usb:1-6:0</code>, sans assertion ; <code>Usb_Keyboard_Replug_SetLeds</code> écrit un rapport de LED via le nouvel état. Les lignes <code>[Monitor] usb-kbd-unplug: done</code> et <code>[Monitor] usb-kbd-plug: done</code> du moteur et les lignes <code>withdrew keyboard</code>, <code>retracted</code> et <code>usb 1-5: disconnected</code> du kit (<code>usb 1-1: disconnected</code> sur un EHCI ou un OHCI seul, <code>usb 2-1: disconnected</code> sur la cellule à compagnon et <code>usb 1-1.1: disconnected</code> derrière le hub) sont lues sur l'UART, sans assertion ; les décomptes par cellule figurent sous le groupe Port racine PCI Express ci-dessous.</p>
+<p><strong>Souris USB (4 tests) :</strong></p>
+<ul>
+<li><code>Usb_Mouse_Bound</code>, <code>Usb_Mouse_MovementInjected</code>, <code>Usb_Mouse_ButtonInjected</code>, <code>Usb_Mouse_WheelInjected</code></li>
+</ul>
+<p>Ils s'exécutent sur la cellule usb-mouse et sont ignorés avec <code>no USB host controller on this cell</code> sur les cellules sans contrôleur et avec <code>no USB mouse on this cell</code> sur les cellules usb-kbd. La condition d'exécution est un nœud <code>usb</code> dont la <code>Description</code> se termine par <code>class 03.01.02</code>, l'interface HID de souris en mode boot, <code>usb:1-5:0</code>, trouvé dans <code>BeforeRun</code> comme celui du clavier. <code>Usb_Mouse_Bound</code> constate qu'il est <code>Bound</code> par l'<code>UsbMouseDriver</code> livré dès la première offre, sous le nœud du contrôleur, sans ressource ni interruption et avec un périphérique publié, le pointeur <code>usb-mouse</code> consommé par le gestionnaire de souris de l'anneau supporté. Les trois autres demandent au moteur les événements de pointeur du groupe PS/2, que QEMU confie à son usb-mouse plutôt qu'à la souris PS/2 de q35 dès que le pipe du pilote l'a scrutée : <code>Usb_Mouse_MovementInjected</code> demande <code>mouse-move 10 0</code> et attend, en scrutant toutes les 50 ms pendant 8 s au plus, que le consommateur de pointeur de la suite totalise 10 par 0 depuis <code>usb-mouse</code>, sans bouton ni molette, et lit dans l'<code>UsbMouseState</code>, via l'autorisation HAL, un rapport transmis, aucun rapport tronqué et un dernier rapport de 4 octets, la partie boot plus l'octet de molette de QEMU ; <code>Usb_Mouse_ButtonInjected</code> demande <code>mouse-button left down</code> puis <code>up</code> et lit le bouton gauche depuis <code>usb-mouse</code>, puis aucun ; <code>Usb_Mouse_WheelInjected</code> demande <code>mouse-button wheel-down down</code> puis <code>up</code> et lit un total de molette de +1, le défilement vers le bas de l'anneau supporté, ce qui fixe la négation de la molette HID par le pilote.</p>
+<p><strong>PS/2 (7 tests) :</strong></p>
+<ul>
+<li><code>Ps2_Controller_Bound</code>, <code>Ps2_Keyboard_Bound</code>, <code>Ps2_Keyboard_KeyInjected</code>, <code>Ps2_Keyboard_SetLedsRoundTrip</code></li>
+<li><code>Ps2_Mouse_Bound</code>, <code>Ps2_Mouse_MovementInjected</code>, <code>Ps2_Mouse_ButtonInjected</code></li>
+</ul>
+<p>Ils s'exécutent sur chaque cellule x64 et sont ignorés sur arm64 avec <code>no 8042 on this cell</code> ; <code>Ps2_Keyboard_KeyInjected</code> est aussi ignoré sur chaque cellule usb-kbd avec <code>a usb-kbd on this cell takes the host's keys</code>, puisque QEMU confie <code>send-key</code> à un clavier USB lorsqu'il y en a un, et <code>Ps2_Mouse_MovementInjected</code> et <code>Ps2_Mouse_ButtonInjected</code> sont ignorés sur usb-mouse avec <code>a usb-mouse on this cell takes the host's pointer events</code>, puisque QEMU confie les événements de pointeur à une souris USB dès qu'elle est scrutée. La condition d'exécution est un nœud <code>DriverDiagnostics</code> dont le <code>BusName</code> est <code>platform</code> et dont la <code>Description</code> contient <code>pnp0303</code>. <code>Ps2_Controller_Bound</code> constate que <code>platform:i8042@60</code> est <code>Bound</code> par <code>I8042Driver</code> avec deux ressources, deux interruptions, deux enfants et quatre ressources détenues et, via l'autorisation HAL, que son <code>I8042State</code> est à double canal et piloté par interruptions. <code>Ps2_Keyboard_Bound</code> et <code>Ps2_Mouse_Bound</code> lisent les nœuds <code>ps2:kbd</code> et <code>ps2:aux</code> placés sous lui, liés par <code>Ps2KeyboardDriver</code> et <code>Ps2MouseDriver</code>, avec <code>ps2-keyboard</code> et <code>ps2-mouse</code> publiés et consommés, un clavier MF2 et une souris à molette. <code>Ps2_Keyboard_KeyInjected</code> demande au moteur <code>key-press a</code> et attend, en scrutant toutes les 50 ms pendant 8 s au plus, deux rapports dans le consommateur de la suite : le code d'appui 0x1E puis son relâchement, venant du clavier PS/2. <code>Ps2_Keyboard_SetLedsRoundTrip</code> appelle <code>SetLeds</code> sur le <code>Ps2KeyboardState</code> et relit l'octet 0x06 envoyé avec la commande 0xED, acquitté. <code>Ps2_Mouse_MovementInjected</code> demande <code>mouse-move 10 0</code> et lit un rapport relatif de 10 par 0 venant de <code>ps2-mouse</code> dans le consommateur de pointeur de la suite ; <code>Ps2_Mouse_ButtonInjected</code> demande <code>mouse-button left down</code> puis <code>up</code> et lit le bouton gauche dans les boutons, puis aucun. Les lignes <code>[Monitor] key-press a: done</code>, <code>[Monitor] mouse-move 10 0: done</code>, <code>[Monitor] mouse-button left down: done</code> et <code>[Monitor] mouse-button left up: done</code> du moteur sont lues dans sa sortie, sans assertion.</p>
+<p><strong>virtio-blk (6 tests) :</strong></p>
+<ul>
+<li><code>VirtioBlk_Bound</code>, <code>VirtioBlk_TransportMatchesCell</code>, <code>VirtioBlk_CapacityMatchesImage</code></li>
+<li><code>VirtioBlk_ReadWriteRoundTrip</code>, <code>VirtioBlk_FlushCompletes</code>, <code>VirtioBlk_InterruptOrPolled</code></li>
+</ul>
+<p>Ils s'exécutent sur les cellules virtio-blk-pci et virtio-blk-mmio. Le groupe est ignoré sur bare, sur les cellules usb-kbd et sur usb-mouse avec <code>no virtio-blk device on this cell</code> ; le pilote testé est le <code>VirtioBlkDriver</code> livré, que la bibliothèque de cette suite a d'abord hébergé. La condition d'exécution est un nœud <code>DriverDiagnostics</code> dont le <code>BusName</code> est <code>virtio</code> et dont la <code>Description</code> commence par <code>type 2 </code>, et chaque corps de test lit le <code>VirtioBlkState</code> du nœud via l'autorisation HAL. <code>VirtioBlk_Bound</code> constate que le nœud est <code>Bound</code> par <code>VirtioBlkDriver</code> avec un périphérique publié, consommé, non retiré et nommé d'après l'état, à savoir <code>vblk0</code>, d'indice 0 dans <code>StorageManager.Devices</code>. <code>VirtioBlk_TransportMatchesCell</code> constate que le chemin commence par <code>virtio:pci:</code> lorsqu'une fonction virtio-blk (<code>1af4:1001</code> ou <code>1af4:1042</code>) se trouve sur le bus PCI et par <code>virtio:mmio:</code> sinon, et que le parent est <code>Bound</code> par <code>VirtioPciTransportDriver</code> ou <code>VirtioMmioTransportDriver</code> avec un enfant. <code>VirtioBlk_CapacityMatchesImage</code> lit 524288 blocs de 512 octets, l'image de 256 Mio du moteur, accessible en écriture, avec au moins un bloc par requête. <code>VirtioBlk_ReadWriteRoundTrip</code> sauvegarde un bloc au LBA 200000 et les 130 blocs qui le suivent, écrit un motif sur chacun, relit les deux à l'identique, puis réécrit le contenu sauvegardé et le relit à l'identique ; 130 blocs font 66560 octets, plus que les 65536 qu'une requête transfère, si bien que le découpage s'exécute. <code>VirtioBlk_FlushCompletes</code> vide le cache et lit une requête terminée de plus lorsque FLUSH a été négocié, et aucune sinon. <code>VirtioBlk_InterruptOrPolled</code> constate que le disque reçoit ses complétions par l'interruption de la file ou par scrutation, jamais les deux ni aucun des deux, et que l'aller-retour a déclenché l'interruption lorsqu'il y en a une de connectée ; le mode n'est pas fixé, puisque ces cellules ne portent aucun modificateur GIC (le disque x64 et le disque MMIO arm64 fonctionnent par interruption, le disque PCI arm64 scrute sur le GICv2 par défaut). Sur arm64, le moteur attache l'ISO de démarrage via un contrôleur virtio-scsi plutôt que via <code>-cdrom</code>, que la machine virt transforme en une fonction virtio-blk à part entière, si bien que le seul périphérique virtio-blk d'une cellule est le disque que son profil attache.</p>
+<p><strong>Port racine PCI Express (3 tests) :</strong></p>
+<ul>
+<li><code>Pci_RootPort_Bound</code>, <code>Pci_HotPlug_Unplug_RetractsNode</code>, <code>Pci_HotPlug_Replug_PublishesAgain</code></li>
+</ul>
+<p>Ils s'exécutent sur la cellule virtio-blk-pci, dont le moteur place le disque derrière un <code>pcie-root-port</code> dédié, et sont ignorés ailleurs avec <code>no PCI Express root port on this cell</code>. La condition d'exécution est un nœud <code>pci</code> dont la <code>Description</code> commence par <code>1b36:000c</code>, le port racine générique de QEMU, et chaque corps de test lit son <code>PcieRootPortState</code> via l'autorisation HAL. <code>Pci_RootPort_Bound</code> constate que le port est <code>Bound</code> par <code>PcieRootPortDriver</code> avec un enfant ; que l'emplacement est occupé et alimenté, son thread en cours d'exécution, ses événements reçus par une interruption par message ou par scrutation, jamais les deux ni aucun des deux, derrière un bus secondaire ; que l'enfant est <code>Bound</code> par <code>VirtioPciTransportDriver</code> avec le nœud virtio sous lui ; que les ressources mémoire de l'enfant se trouvent dans la fenêtre mémoire ou préchargeable du port, décodée à partir des propres registres du port ; et que la ressource 0 du port est une fenêtre mémoire, le BAR0 qui contient sa table MSI-X, et que ses ressources 1 à 5 sont <code>None</code>. <code>Pci_HotPlug_Unplug_RetractsNode</code> demande au moteur <code>pci-unplug 0</code> et attend, en scrutant toutes les 50 ms pendant 8 s au plus, que le nœud de fonction quitte l'arbre et que le port ait traité le bouton d'attention : aucun enfant, un retrait de plus, l'emplacement vide et hors tension. Le nœud de fonction est alors <code>Retracted</code>, le nombre de nœuds a baissé de deux (la fonction et le nœud virtio sous elle), les périphériques publiés et les disques du gestionnaire de stockage ont baissé de un, et le port est toujours <code>Bound</code> avec un enfant de moins. <code>Pci_HotPlug_Replug_PublishesAgain</code> demande <code>pci-plug 0</code> et attend un nœud de fonction au même chemin, un nouvel objet, <code>Bound</code> par <code>VirtioPciTransportDriver</code> avec son nœud virtio <code>Bound</code> par <code>VirtioBlkDriver</code>, le disque enregistré, une arrivée de plus et l'emplacement sous tension ; le nombre de nœuds a alors remonté de deux, l'emplacement est occupé, les ressources mémoire de la nouvelle fonction se trouvent dans les fenêtres du port, où le kit les a placées puisque QEMU laisse non assignés les registres d'une fonction ajoutée à chaud, et <code>vblk0</code> est publié et consommé. Les lignes <code>slot 1: attention button, 1 functions retracted, slot powered off</code> et <code>slot 1: device arrived, 1 functions published</code> du port et <code>[Monitor] pci-unplug 0: done</code> et <code>[Monitor] pci-plug 0: done</code> du moteur sont lues sur l'UART et dans la sortie du moteur, sans assertion. Par cellule : sur x64, bare 41 réussis et 22 ignorés, usb-kbd 47 et 16, usb-kbd-ehci 43 et 20, usb-kbd-ohci 43 et 20, usb-kbd-ehci-ohci 44 et 19, usb-kbd-ohci-hub 43 et 20, usb-mouse 44 et 19, virtio-blk-pci 50 et 13 ; sur arm64, bare 30 et 33, usb-kbd 37 et 26, usb-kbd-ehci 37 et 26, usb-kbd-ohci 37 et 26, usb-kbd-ehci-ohci 38 et 25, usb-kbd-ohci-hub 37 et 26, usb-mouse 35 et 28, virtio-blk-pci 39 et 24, virtio-blk-mmio 36 et 27 ; 355 réussis, 149 ignorés et 0 échoué sur 504 sur x64, 326, 241 et 0 sur 567 sur arm64.</p>
+<p><a id="pci-tests"></a></p>
+<h4 id="tests-pci">Tests Pci</h4>
+<p><code>tests/Kernels/Cosmos.Kernel.Tests.Pci</code> examine la prise en charge de PCI par le kit de pilotes avec huit tests sur les deux architectures (le démarrage EDK2 d'arm64 fournit ACPI, si bien que MCFG est présent et que le nœud d'hôte ECAM y existe). Quatre tests d'hôte sont inconditionnels. <code>Host_PlatformNode_BoundByPciHostDriver</code> : un nœud <code>platform</code> dont la description contient <code>pci-host-</code> est <code>Bound</code> avec le <code>DriverName</code> <code>PciHostDriver</code>. <code>Host_ConfigMechanism_MatchesCompatible</code> : le nœud de plateforme qui porte un <code>PciHostAccess</code>, trouvé dans <code>DriverEngine.Nodes</code> via l'autorisation HAL du noyau, décode au moins un bus ; compatible avec <code>pci-host-legacy</code>, son mécanisme est <code>PciConfigSpace.Ports</code>, 256 octets par fonction, et son unique ressource est la plage de 8 ports à 0xCF8 ; compatible avec <code>pci-host-ecam-generic</code>, son mécanisme est un <code>PciEcamConfigSpace</code>, 4096 octets par fonction, et son unique ressource est une fenêtre mémoire de 1 Mio par bus que l'hôte mappe ; chaque nœud de fonction sur le segment et les bus de l'hôte est atteint via ce même mécanisme. <code>Host_PublishesPciNodes</code> : au moins un nœud <code>pci</code> a le chemin de l'hôte comme <code>ParentPath</code>, et chacun de ces nœuds a un <code>ResourceCount</code> de 6 et un <code>InterruptCount</code> égal à sa ligne héritée plus une source par message décrit : le <code>PciAccess</code> du nœud est lu et le nombre comparé à <code>1 + Math.Min(pci.MessageInterruptCount, PciHostAccess.MaxDescribedMessages)</code>, 32 au plus, lorsque <code>pci.IsMsiXCapable</code>, et à 1 sinon ; le <code>Describe()</code> de la première source commence par <code>line</code> et, sur une fonction compatible MSI-X, celui de la deuxième est égal à <code>message 0 of </code> suivi de la taille de la table, comparé en ordinal. <code>Host_NodeCount_MatchesConfigSpaceScan</code> : un parcours brut de chaque bus que l'hôte décode, via <code>PciHostAccess.ReadConfig16</code> et <code>ReadConfig8</code> (fonction 0 des périphériques 0 à 31, et fonctions 1 à 7 lorsque le type d'en-tête porte le bit multifonction ; une fonction est présente lorsque son identifiant de fabricant ne vaut ni 0xFFFF ni 0x0000), trouve au moins une fonction, et exactement autant qu'il y a de nœuds dotés d'un <code>PciIdentity</code> sur le segment et les bus de l'hôte. Quatre tests d'espace de configuration s'exécutent sur chaque nœud de fonction (un nœud doté d'un <code>PciIdentity</code> et d'un <code>PciAccess</code>) et sont ignorés avec <code>no PCI function node in the tree, the PCI host was not described or published nothing</code> lorsqu'il n'y en a aucun. <code>ConfigSpace_VendorId_NotAllOnes</code> : <code>PciAccess.ReadConfig16(0x00)</code> ne vaut ni 0xFFFF ni 0x0000 et est égal au <code>VendorId</code> de l'identité. <code>ConfigSpace_DeviceId_NotAllOnes</code> : <code>ReadConfig16(0x02)</code> ne vaut pas 0xFFFF et est égal à <code>DeviceId</code>. <code>ConfigSpace_ClassCode_InRange</code> : le <code>ClassCode</code> de l'identité vaut au plus 0x13 et <code>ReadConfig8(0x0B)</code> lui est égal. <code>ConfigSpace_VendorRead_StableAcrossCalls</code> : deux lectures de l'identifiant de fabricant via le nœud concordent, et concordent avec la lecture brute du même registre par l'hôte. Les deux cellules par défaut portent une fonction compatible MSI-X (l'e1000e de q35, le virtio-net-pci de virt) et des fonctions sans cette capacité (le pont hôte), si bien que la formule par nœud couvre tous les cas de figure ; le projet supprime <code>COSMOS0003</code>, puisque <code>DeviceNode</code>, <code>DeviceResource</code>, <code>PlatformIdentity</code>, <code>PciHostAccess</code>, <code>PciIdentity</code> et <code>PciAccess</code> sont expérimentaux.</p>
+<p><a id="virtio-tests"></a></p>
+<h4 id="tests-virtio">Tests Virtio</h4>
+<p><code>tests/Kernels/Cosmos.Kernel.Tests.Virtio</code> valide les pilotes virtio de <code>Cosmos.Kernel.Drivers</code> sur les deux transports avec les mêmes assertions. Ses deux profils attachent une carte réseau, un clavier, une souris et un disque bloc virtio à chaque cellule, et chacun s'exécute avec et sans ACPI : <code>virtio-pci</code> et <code>virtio-pci+acpi-off</code> sur x64 et arm64 (les cellules arm64 démarrent avec <code>gic-version=3</code>, puisque c'est l'ITS qui route les messages MSI-X de la fonction), <code>virtio-mmio</code> et <code>virtio-mmio+acpi-off</code> sur arm64 seulement, via la fenêtre virtio-mmio de la machine virt (q35 n'en a pas) ; les cellules arm64 acpi-off sont celles sur lesquelles le chargeur d'amorçage transmet un arbre de périphériques, si bien que l'hôte ECAM et les emplacements en proviennent. Le transport que présente une cellule est une propriété du profil, non de l'architecture, si bien que le même noyau sert chaque cellule arm64 et détecte le transport à l'exécution : <code>BeforeRun</code> capture le nœud virtio-net (un nœud <code>DriverDiagnostics</code> dont le <code>BusName</code> est <code>virtio</code> et dont la <code>Description</code> commence par <code>type 1 </code>), les nœuds virtio-input (<code>type 18 </code>), le nœud virtio-blk (<code>type 2 </code>) et le nœud de fonction PCI (<code>BusName</code> <code>pci</code>, <code>Description</code> commençant par <code>1af4:1041</code> ou <code>1af4:1000</code>), dont la présence fait de la cellule une cellule PCI. Le noyau conserve une autorisation HAL à deux fins, atteindre l'état de liaison d'un nœud via <code>DriverEngine.Nodes</code> comme le fait la suite Drivers et lire <code>PlatformHAL.Architecture</code> pour la seule cellule dont le mode d'interruption en dépend, et supprime <code>COSMOS0003</code>.</p>
+<p>Les quatorze tests : <code>Net_DriverBound</code> (le nœud réseau est <code>Bound</code> par <code>VirtioNetDriver</code>), <code>Net_TransportMatchesCell</code> (son <code>Path</code> commence par <code>virtio:pci:</code> sur la cellule PCI et par <code>virtio:mmio:</code> sinon), <code>Net_DeviceReady</code> (un périphérique <code>Network</code> publié au chemin du nœud avec <code>IsConsumed</code> à vrai, <code>NetworkManager.DeviceCount</code> au moins égal à 1 et <code>NetworkManager.Ready</code>), <code>Net_LinkUp</code> (<code>NetworkManager.LinkUp</code> : le backend user de QEMU signale le lien actif immédiatement), <code>Net_MacAddressProgrammed</code> (<code>NetworkManager.MacAddress</code> non nul et pas entièrement à zéro), <code>Net_InterruptModeMatchesCell</code> (<code>VirtioNetState.HasInterrupt</code> du nœud à vrai et <code>IsPolling</code> à faux sur chaque cellule sauf la cellule PCI arm64 sous acpi-off, où l'ITS n'est pas découvert et le pilote scrute, si bien que les deux indicateurs y valent l'inverse ; ailleurs, MSI-X route sur PCI, la ligne GIC sur MMIO), <code>Input_KeyboardBound</code> et <code>Input_MouseBound</code> (un nœud <code>type 18</code> <code>Bound</code> par <code>VirtioInputDriver</code> dont le périphérique publié <code>Keyboard</code>, respectivement <code>Pointer</code>, est consommé), <code>Blk_DriverBound</code> (un nœud <code>type 2</code> <code>Bound</code> par <code>VirtioBlkDriver</code> dont le périphérique <code>Block</code> publié est <code>vblk0</code>, consommé et non retiré, le seul disque du gestionnaire de stockage) et <code>Blk_TransportMatchesCell</code> (son chemin nomme le transport de la cellule et, sur la cellule PCI, la fonction virtio-blk est <code>Bound</code> par <code>VirtioPciTransportDriver</code> avec un enfant), puis deux par transport. Sur la cellule PCI, <code>Pci_FunctionBoundByTransport</code> (le nœud de fonction est <code>Bound</code> par <code>VirtioPciTransportDriver</code> avec un <code>ChildCount</code> de 1) et <code>Pci_Version1Negotiated</code> (<code>VirtioNetState.Version1Negotiated</code> ; le virtio-mmio de QEMU est legacy par défaut, si bien que la cellule MMIO ne le vérifie pas), ignorés ailleurs avec <code>this cell presents virtio over MMIO</code>. Sur la cellule MMIO, <code>Mmio_SlotBoundByTransport</code> (un nœud <code>platform</code> dont la <code>Description</code> contient <code>virtio,mmio</code> est <code>Bound</code> par <code>VirtioMmioTransportDriver</code> avec un <code>ChildCount</code> de 1, l'assertion qui détecte une fenêtre MMIO perdue) et <code>Mmio_AnyLayoutNegotiated</code> (<code>VirtioNetState.AnyLayoutNegotiated</code> sur le périphérique legacy, dont QEMU active par défaut la propriété <code>any_layout</code>), ignorés ailleurs avec <code>this cell presents virtio over PCI</code>. Les cellules <code>virtio-net-pci</code> et <code>virtio-net-mmio</code> de la suite Network exercent le chemin de données du même pilote sans modification des tests. Par cellule, 12 réussis et 2 ignorés sur chacune des deux cellules de x64 (<code>24/28</code>) et sur chacune des quatre d'arm64 (<code>48/56</code>).</p>
+<p><a id="graphic-tests"></a></p>
+<h4 id="tests-graphic">Tests Graphic</h4>
+<p><code>tests/Kernels/Cosmos.Kernel.Tests.Graphic</code> s'exécute sur trois profils, <code>bare</code>, <code>vmware-svga</code> (x64 uniquement, l'adaptateur se programme par E/S de ports) et <code>virtio-gpu</code> (un virtio-gpu-pci ajouté à côté de l'adaptateur par défaut de la machine, sur les deux architectures), et enregistre les mêmes 25 tests sur chaque cellule : un test propre à une cellule s'exécute là où se trouve son périphérique et est ignoré ailleurs, avec <code>no virtio-gpu device on this cell, needs the virtio-gpu profile</code> ou <code>VMware SVGA II adapter not present, needs the vmware-svga profile</code>. La cellule est déterminée dans <code>BeforeRun</code> à partir de l'arbre des périphériques, jamais à partir du nom du profil ni du pilote qui s'est lié, si bien qu'un pilote d'écran qui n'a pas réussi à se lier fait échouer la suite au lieu de la faire ignorer : un nœud <code>pci</code> dont la <code>Description</code> commence par <code>15ad:0405</code> désigne la cellule vmware-svga, un nœud <code>pci</code> commençant par <code>1af4:1050</code> ou un nœud <code>virtio</code> commençant par <code>type 16 </code> désigne la cellule virtio-gpu, et l'absence des deux désigne bare. La suite atteint les états des pilotes de <code>Cosmos.Kernel.Drivers</code> via les facettes de <code>DisplayManager.Primary</code> et ne détient aucune autorisation ; le projet supprime <code>COSMOS0003</code> pour les facettes.</p>
+<p>Les tests 2D (9), sur chaque cellule : <code>PCScreenFont_ChangeFont</code>, <code>Bitmap_Basic</code>, <code>Png_Decode</code>, <code>Ttf_Render</code>, <code>ColorClass_Basic</code>, <code>Canvas_Basic</code>, <code>VirtualCanvas_Basic</code>, <code>Canvas_CopyPixels_Overlap</code>, <code>Canvas_Compositing</code> (valeurs de mélange exactes de <code>DrawImage</code> et d'un <code>DrawPoint</code> translucide sur un pixel opaque, <code>DrawArray</code> qui copie sans transformation, l'alpha conservé sur un calque transparent et combiné sur un calque translucide, <code>DrawCanvas</code> et <code>DrawImage</code> avec et sans opacité, le <code>DrawCanvas</code> étiré à 200 % et à 150 %, découpé en haut à gauche et avec une opacité qui mélange chaque ligne répétée sur son propre arrière-plan, ainsi que les surcharges de <code>DrawImage</code> par région et mise à l'échelle) ; <code>Bitmap_Basic</code> charge aussi un BMP 32 bits sans alpha comme opaque. Les tests d'écran (4), sur chaque cellule : <code>Display_PrimaryPresent</code> (un écran principal existe, le canvas de la console a sa largeur et un <code>Name</code> commençant par son <code>DriverName</code>), <code>Display_PrimaryMatchesCell</code> (bare : l'écran principal est celui du firmware et c'est le seul ; virtio-gpu : l'écran de <code>VirtioGpuDriver</code> est principal à côté de celui du firmware ; vmware-svga : l'écran de <code>VmwareSvgaDriver</code> est le seul et <code>DriverDiagnostics</code> ne liste aucun écran sans chemin de nœud, l'écran du firmware ayant été retiré), <code>Display_ListedInDriverDiagnostics</code> (chaque écran du gestionnaire est un périphérique <code>Display</code> consommé dans <code>DriverDiagnostics</code>, avec un <code>NodePath</code> nul pour celui du firmware et pour lui seul) et <code>Display_ModeRequest_FollowsFacet</code> (<code>Canvas.GetFullScreen(new Mode(640, 480, ColorDepth.ColorDepth32))</code> rapporte 640x480 lorsque l'écran principal propose <code>IDisplayModes</code>, et la taille réelle sinon ; il s'exécute après les tests de facettes, seul <code>Canvas3D_Discovery</code> venant après lui, puisqu'il change le mode qu'ils mesurent). <code>VirtioGpu_DriverState</code> (1), sur les cellules virtio-gpu : l'écran principal fournit un <code>VirtioGpuState</code> qui n'est pas en faute, a une interruption ou scrute, compte au moins un scanout, correspond à la taille de l'écran principal et a envoyé les quatre commandes du sondage ; un <code>Display()</code> du canvas de la console augmente <code>FlushCount</code> de un et <code>CommandsSent</code> de deux. Les tests SVGA (9), sur vmware-svga : <code>Svga_AdapterFacet</code> (<code>ISvgaAdapter</code> avec des capacités, <code>FifoMin</code> inférieur à <code>FifoMax</code>, aucune 3D négociée sur QEMU, pas d'<code>ICanvas3DFactory</code>, le scanout activé puisque la console a programmé un mode), <code>Svga_DisplayModesFacet</code> (<code>IDisplayModes</code> listant 1024x768x32, le mode par défaut choisi par la console), <code>Svga_HardwareCursorFacet</code> (<code>IHardwareCursor</code> ; <code>TryDefine</code> renvoie false sur QEMU, qui n'a pas de curseur alpha ; <code>Set(1, 1, false)</code> ne lève pas d'exception), puis les tests de flux FIFO, dont chacun capture <code>NextCommand</code>, relit mot double par mot double les commandes que ses appels ont écrites, puis revient en arrière : <code>Canvas3D_SceneSetup_Fifo</code> ouvre le bloc en reprogrammant le propre mode de l'écran (pour que la FIFO revienne à son début), en désactivant le scanout via la facette (pour que l'hôte ne consomme rien) et en créant via <code>CreateCanvas3D</code> le canvas SVGA3D que partagent les tests suivants, et fixe la mise en place de la scène (contexte, cibles de couleur et de profondeur dimensionnées au canvas, les deux liaisons de cibles de rendu, viewport, plage de profondeur, sept états de rendu, l'étage sans texture) ; <code>Canvas3D_MeshUpload_Fifo</code> (pour chaque flux, un <code>SURFACE_DEFINE</code> de tampon et un <code>SURFACE_DMA</code> depuis la région du framebuffer, surfaces 3, 4 et 5 pour le cube), <code>Canvas3D_MeshValidation</code>, <code>Canvas3D_DrawCube_Fifo</code>, <code>Canvas3D_CameraCaching_Fifo</code> et <code>Canvas3D_DisposedTexture_Rejected</code> (<code>CreateTexture</code> définit et téléverse une surface A8R8G8B8, <code>Dispose</code> la détruit, et un maillage qui la référence est rejeté sans écriture) suivent, et le dernier rétablit le scanout. <code>Camera3D_Defaults</code> et <code>Canvas3D_Discovery</code> (2), sur chaque cellule : <code>Canvas.GetFullScreen()</code> n'est un <code>Canvas3D</code> sur aucune cellule de la CI. Par cellule sur x64 : bare 15 réussis et 10 ignorés, vmware-svga 24 réussis et 1 ignoré, virtio-gpu 16 réussis et 9 ignorés ; arm64 exécute bare et virtio-gpu. Le journal UART contient le démarrage de chaque cellule dans l'ordre, avec la ligne <code>[Display] primary</code> de chacune.</p>
+<p><a id="audio-tests"></a></p>
+<h4 id="tests-audio">Tests Audio</h4>
+<p><code>tests/Kernels/Cosmos.Kernel.Tests.Audio</code> s'exécute sur deux profils sur les deux architectures, <code>bare</code> et <code>hda</code>, qui ajoute l'<code>intel-hda</code> de QEMU avec le codec <code>hda-duplex</code> que le lanceur attache à côté et laisse la carte réseau par défaut désactivée, et enregistre les mêmes 22 tests sur chaque cellule. La carte réseau est désactivée parce que le kit attribue une ligne héritée à un seul gestionnaire d'interruption et en refuse un second, et sur q35 l'e1000e par défaut prend la ligne que le contrôleur partage avec lui. Le moteur fait jouer le contrôleur dans le backend <code>none</code> de QEMU (<code>-audiodev none</code>) : un runner de CI n'a pas de serveur audio, et le backend par défaut de QEMU échoue alors à ouvrir la voix de sortie du codec, tandis que <code>none</code> absorbe quand même les trames au débit du flux, si bien que le moteur de flux de l'invité avance en temps réel. La cellule est déterminée dans <code>BeforeRun</code> à partir de l'arbre des périphériques, un nœud <code>pci</code> dont la <code>Description</code> se termine par <code>class 04.03.00</code>, jamais à partir du nom du profil, si bien qu'un pilote qui n'a pas réussi à se lier fait échouer la suite au lieu de la faire ignorer ; les tests de périphérique sont ignorés sur bare avec <code>no HD Audio controller on this cell, needs the hda profile</code>. La suite détient une autorisation <code>InternalsVisibleTo</code> de <code>Cosmos.Kernel.System</code> pour compter les complétions que la sortie principale a signalées (<code>AudioManager.Completions</code>) et pour lire les formats que liste son contrat, une autre de <code>Cosmos.Kernel.Drivers</code> pour savoir si le <code>HdAudioState</code> du pilote a connecté la ligne de la fonction, et supprime <code>COSMOS0003</code> pour <code>AudioFormat</code> et <code>AudioBitDepth</code> ainsi que <code>CA1416</code> pour <code>Console.Beep(int, int)</code>, que .NET n'implémente que sous Windows.</p>
+<p>Les tests du gestionnaire (3) : <code>Feature_Enabled</code> (<code>KernelFeatures.Audio</code> et <code>AudioManager.IsEnabled</code>), <code>Manager_CountMatchesCell</code> (une sortie à l'indice 0, la principale, sur hda ; aucune, et chaque indice vide, sur bare) et, sur bare seulement, <code>Manager_PlayWithoutOutputRefused</code> (<code>AudioManager.Play</code> et <code>TryStartPlayback</code> refusent tous deux et ne rendent aucune lecture). Les tests du pilote (2), sur hda : <code>Driver_BoundByHdAudioDriver</code> (le nœud du contrôleur est <code>Bound</code> par <code>HdAudioDriver</code>, qui a publié un périphérique et n'a enregistré aucune faute) et <code>Driver_OutputListedInDiagnostics</code> (<code>DriverDiagnostics</code> liste un périphérique <code>hda</code> sur le nœud du contrôleur, publié par <code>HdAudioDriver</code>, consommé et non retiré). Les tests de sortie (7), sur hda : <code>Output_IdentityMatchesNode</code>, <code>Output_DefaultFormat</code> (16 bits signé, stéréo, à 48 kHz, inactive, non réservée, et l'unique disposition que liste le contrat), <code>Output_TrySetFormat_AcceptsDerivableRates</code> (44,1, 96, 22,05, 8 et 192 kHz, puis retour à 48), <code>Output_TrySetFormat_RefusesOtherLayouts</code> (mono, 16 bits non signé, 8, 24 et 32 bits, une fréquence que le lien ne peut pas dériver et une fréquence nulle, le format restant inchangé), <code>Output_WritableWhileStopped</code>, <code>Output_EngineDrainsRing</code> (une sortie démarrée refuse un changement de format, accepte des trames entières jusqu'à ce qu'une écriture revienne incomplète, et libère de la place à mesure que son moteur lit le tampon circulaire) et <code>Output_CompletionsFollowLine</code> (avec la ligne connectée, un flux en cours déclenche l'interruption de tampon terminé et le pilote la signale via son récepteur ; sans ligne, le flux s'exécute et rien n'est signalé ; le journal UART indique lequel des deux : <code>line connected</code> sur x64, <code>no line</code> sur arm64, où le kit ne route aucune ligne héritée PCI). Les tests du lecteur (5), sur hda : <code>Player_PlaysStreamToEnd</code> et <code>Player_RefusesUnsupportedFormat</code> sur le thread appelant, <code>Playback_CompletesOnThread</code> (<code>AudioManager.TryStartPlayback</code> réserve la sortie immédiatement, si bien qu'une seconde lecture est refusée, et la lecture se termine <code>Completed</code> avec le flux lu jusqu'au bout et l'objet qu'elle possède libéré), <code>Playback_StopEndsEarly</code> (un flux de trois secondes arrêté une fois la sortie en marche se termine <code>Stopped</code> sans avoir été lu jusqu'au bout) et <code>Wave_FromMemoryPlays</code> (un fichier WAV construit en mémoire, avec un bloc <code>LIST</code> de longueur impaire avant <code>data</code>, se lit avec la disposition et la longueur qu'il déclare, et est joué). Les tests de <code>Console.Beep</code> (5) : <code>Beep_RejectsOutOfRange</code> sur les deux cellules (36 Hz, 32768 Hz, une durée nulle et une durée négative lèvent <code>ArgumentOutOfRangeException</code>, comme sous Windows), puis sur hda <code>Beep_PlaysForItsDuration</code> (<code>Console.Beep(440, 300)</code> retient l'appelant au moins la moitié de sa durée, mesurée avec le <code>Stopwatch</code>, rend la main dans la limite de 2 s et laisse la sortie libérée et arrêtée), <code>Beep_DefaultPlaysWindowsTone</code> (<code>Console.Beep()</code> joue ses 200 ms de la même façon au lieu d'écrire un caractère de sonnerie dans un terminal) et <code>Beep_WhileOutputBusyReturnsAtOnce</code> (avec une lecture en arrière-plan qui occupe la sortie, un bip d'une seconde rend la main en moins de 500 ms et la lecture continue), et sur bare seulement <code>Beep_WithoutOutputReturnsAtOnce</code> (les deux surcharges rendent la main en moins de 500 ms, sans lever d'exception). Chaque attente scrute avec <code>TimerManager.Wait</code>, qui laisse l'ordonnanceur exécuter le thread de lecture entre-temps, avec une limite de 2 s mesurée sur le <code>Stopwatch</code>, jamais un nombre de pauses, si bien que les attentes d'un test restent ensemble dans la fenêtre de blocage de 10 s du moteur. Par architecture, bare rapporte 5 réussis et 17 ignorés et hda 20 réussis et 2 ignorés, soit 25 réussis et 19 ignorés sur 44.</p>
+<p><a id="storage-tests"></a></p>
+<h4 id="tests-storage">Tests Storage</h4>
+<p><code>tests/Kernels/Cosmos.Kernel.Tests.Storage</code> s'exécute sur sept profils, <code>ahci</code>, <code>nvme</code>, <code>usb</code>, <code>usb-ehci</code>, <code>usb-ohci</code>, <code>virtio-blk-pci</code> et <code>virtio-blk-mmio</code> (arm64 uniquement), chacun attachant un disque (les trois profils usb attachent la même clé sur un qemu-xhci, un usb-ehci et un pci-ohci, en SuperSpeed, haute vitesse et pleine vitesse), combinés avec le modificateur <code>acpi-off</code> sur x64 (12 cellules) et avec <code>gicv2</code>, <code>gicv3</code> et <code>acpi-off</code> sur arm64 (42 cellules), et enregistre les mêmes 84 tests sur chaque cellule : 4 de gestionnaire, 1 de scan au démarrage, 2 de profil, 1 de diagnostics des pilotes, 12 de périphérique, 7 de partitions, 42 de cycle de vie des partitions (modification du MBR, la chaîne d'EBR, <code>PartitionManager</code>, le superfloppy), 2 sondages de bornes, 2 MMIO/PCI, 5 de branchement à chaud USB, 5 de branchement à chaud PCI et 1 de redémarrage. <code>BeforeRun</code> prend la première entrée inscriptible de <code>StorageManager.Devices</code> comme disque de la cellule : sur x64, l'ISO depuis laquelle la cellule a démarré est attachée comme <code>ide-cd</code> sur le contrôleur AHCI de q35, et l'<code>AhciDriver</code> du kit la publie à côté du disque sous le nom <code>cdrom0</code>, le support en lecture seule que <code>Manager_BootCdRegistered</code> vérifie (son nom, ses secteurs de 2048 octets, sa facette <code>IRemovableMedia</code>, la partition unique couvrant tout le support que le gestionnaire porte pour lui, l'<code>IOException</code> qu'une écriture lève) et que chaque décompte que la suite compare au disque unique du moteur laisse de côté (<code>Manager_DuplicateRegistrationIgnored</code> compare les totaux bruts avant et après un second enregistrement, où le lecteur entre des deux côtés) ; le test est ignoré sur arm64, où le moteur attache l'ISO comme un lecteur virtio-scsi qu'aucun pilote ne lie. Chaque test qui a besoin d'un disque est ignoré là où aucun ne s'est lié, avec <code>no block device bound for this profile</code> (<code>no block device bound for partition-table tests</code> dans les deux groupes de partitions), ce qui constitue un échec de <code>Manager_ExactlyOneDevice</code> sur chaque cellule : sur x64, PCI s'énumère avec ou sans ACPI, et sur arm64 les cellules acpi-off obtiennent l'hôte ECAM de l'arbre de périphériques que le firmware n'expose que dans ce cas. Les disques des cellules ahci et nvme sont publiés par l'<code>AhciDriver</code> et le <code>NvmeDriver</code> du kit, ceux des cellules usb, usb-ehci et usb-ohci par l'<code>UsbMassStorageDriver</code> du kit, ceux des cellules virtio-blk par le <code>VirtioBlkDriver</code> du kit, et le consommateur du gestionnaire de stockage enregistre chacun d'eux pendant l'étape des pilotes. <code>Profile_DeviceKindMatches</code> compare le nom du disque au profil (<code>sata0</code>, <code>nvme0n1</code>, <code>usb0</code>, <code>vblk0</code>) ; <code>Manager_DeviceListedInDriverDiagnostics</code> le trouve dans <code>DriverDiagnostics</code> comme un périphérique bloc consommé, non retiré, avec le <code>DriverName</code> que la cellule attend, sur chaque profil ; <code>Profile_NvmeInterruptModeMatches</code> lit <code>HasInterrupt</code> sur le <code>Controller</code> du <code>NvmeNamespace</code> et le fixe là où la cellule le détermine (interruption sur les deux cellules nvme x64, puisque l'APIC local démarre à partir d'<code>IA32_APIC_BASE</code> et route MSI-X même lorsque acpi-off ne laisse aucune MADT, et sur arm64 gicv3 ; scrutation sur gicv2 et sur les cellules arm64 acpi-off, où l'ITS n'est pas découvert), et est ignoré ailleurs (<code>not an NVMe profile</code>, <code>interrupt mode not pinned by this cell</code>). Les groupes de périphérique et de partitions pilotent le disque via <code>IBlockDevice</code> et les tables de partitions de l'anneau supporté ; <code>Boot_PartitionScanMatchesBootState</code> valide le scan que le gestionnaire a effectué au démarrage, avant <code>BeforeRun</code> (au sein de la publication, sur chaque cellule) ; les deux sondages MMIO/PCI relogent le BAR du contrôleur NVMe au-dessus de 4 Gio sur x64 pendant qu'aucune commande n'est en cours, via le <code>PciAccess</code> du nœud <code>pci</code> du contrôleur (trouvé dans <code>DriverEngine.Nodes</code> via l'autorisation HAL par la classe 01, sous-classe 08) : <code>Mmio_HighBar_RemappedOnDemand</code> relit le registre VS à travers le BAR relogé après <code>EnsureMmioMapped</code>, et <code>Pci_DescribeBar64_ReadsLiveConfig</code> compare le BAR0 du nœud publié aux registres bruts, puis décrit à nouveau la fonction via l'hôte PCI et lit l'adresse relogée en entier dans la nouvelle description ; les tests de branchement à chaud retirent puis rebranchent la clé via les requêtes à l'hôte du moteur, en vérifiant que le disque quitte le gestionnaire et son nœud <code>usb:</code> l'arbre, qu'un fichier ouvert dessus échoue avec <code>IOException</code>, et que la clé revient en tant que <code>usb0</code> avec ses données, sur le port racine libre suivant sur le xHCI et sur le port qu'elle a quitté sur l'EHCI et l'OHCI, où le moteur la fixe, et, sur les cellules virtio-blk-pci, les tests <code>PciHotPlug_*</code> retirent le disque de son port racine et le rebranchent via <code>pci-unplug</code> et <code>pci-plug</code>, en vérifiant que le disque quitte le gestionnaire et ses nœuds de fonction et virtio l'arbre, qu'une lecture sur le disque retiré échoue avec <code>IOException</code>, et qu'il revient en tant que <code>vblk0</code> au même chemin de nœud avec ses données. Le premier test de chaque groupe de branchement à chaud vérifie que le thread qui suit le changement s'exécute, le thread de branchement à chaud de l'état du contrôleur hôte (<code>XhciState</code>, <code>EhciState</code> ou <code>OhciState</code>, selon celui que porte la cellule) ou le thread d'emplacement du <code>PcieRootPortState</code>, lu via l'autorisation HAL, et toutes les attentes qui suivent une requête à l'hôte partagent une même échéance de 8 s sur le <code>Stopwatch</code> : la requête est le dernier message du protocole avant elles, si bien qu'un changement qui ne se produit jamais fait échouer ses assertions dans la fenêtre de blocage de 10 s du moteur au lieu de coûter la cellule ; et <code>Boot_RebootAfterGptWrite</code>, le dernier, écrit une GPT et redémarre, si bien que chaque cellule dotée d'un disque démarre deux fois et que le scan du second démarrage trouve la partition. Sur x64, les douze cellules rapportent 898 réussis, 110 ignorés et 0 échoué sur 1008 ; sur arm64, les quarante-deux exécutent chacune les mêmes 84 tests, 3528 au total, avec les mêmes résultats par cellule, sauf <code>Manager_BootCdRegistered</code>, ignoré là-bas. Les suites Fat et File pilotent un périphérique bloc en mémoire et ne nomment jamais le gestionnaire, si bien que le déplacement des pilotes de stockage dans le kit les a laissées inchangées.</p>
+<p><a id="random-tests"></a></p>
+<h4 id="tests-random">Tests Random</h4>
+<p><code>tests/Kernels/Cosmos.Kernel.Tests.Random</code> vérifie le CSPRNG du noyau dans <code>Cosmos.Kernel.Core/Security</code> (voir <a href="../user/random.html">Nombres aléatoires</a>) via l'autorisation que Core accorde à la suite. Les tests à réponse connue (6) : <code>ChaCha20_Block_Rfc8439</code> (RFC 8439, section 2.3.2), <code>ChaCha20_Keystream_Rfc8439</code> (section 2.4.2, le texte clair « sunscreen » de 114 octets, donc un dernier bloc partiel), <code>Blake2s_Abc_Rfc7693</code> (annexe B), <code>Blake2s_Empty</code> (<code>69217a30...1ed0eef9</code>), <code>Blake2s_SelfTest_Rfc7693</code> (le hachage global de l'annexe E sur des hachages avec et sans clé de 0 à 1024 octets, pour des tailles d'empreinte de 16 à 32) et <code>FastKeyErasure_NextKeyNeverOutput</code> (une requête via <code>FastKeyErasure</code> : la clé suivante est formée des 32 premiers octets du flux de clé de la clé retirée, la sortie en est le reste et ne contient jamais la clé suivante, et la zone de travail est effacée). Les tests d'entropie (2) : <code>Hardware_Detection</code> (la détection par CPUID ou <code>ID_AA64ISAR0_EL1</code> s'exécute, et une instruction annoncée fournit des mots qui ne sont ni nuls, ni entièrement à un, ni répétés) et <code>KernelRandom_Seeding</code> (l'ensemencement se termine, et puise dans l'instruction lorsqu'une instruction est annoncée) ; les deux journalisent ce dont dispose la cellule, et le verdict de santé de la gigue est journalisé, sans assertion. Les tests de la BCL (8) : <code>Fill_TwoDrawsDiffer</code>, <code>Fill_ZeroLength</code> (les requêtes vides de la BCL, et <code>KernelRandom.Fill</code> appelé directement avec un nombre de 0, un nombre négatif et un tampon nul, que la BCL ne transmet jamais), <code>Fill_64KiB_Statistics</code> (équilibre des bits à 1 % près de la moitié, chaque valeur d'octet entre 144 et 368 fois, aucun mot de 8 octets en double), <code>Create_GetBytes_NonZero</code>, <code>GetInt32_Range</code>, <code>Guid_NewGuid_Differ</code> (version 4), <code>Fill_AcrossReseed</code> (au-delà des intervalles de réensemencement par requêtes et par octets, chacun devant faire augmenter <code>KernelRandom.ReseedCount</code>) et <code>Fill_ConcurrentThreads</code> (deux threads libérés ensemble par une barrière de départ effectuent des tirages pendant 300 ms, soit de nombreux quanta de l'ordonnanceur, pendant que le thread principal attend sur le minuteur : un numéro de séquence partagé pris avant chaque tirage doit montrer leurs tirages entrelacés, le générateur doit se réensemencer entre-temps, et deux de leurs tirages ne peuvent pas partager leurs 8 premiers octets). Les cellules x64 s'exécutent sous le CPU <code>host</code> de KVM ou le CPU <code>max</code> de TCG, qui disposent de RDSEED et RDRAND ; le <code>cortex-a72</code> d'arm64 n'a pas FEAT_RNG, si bien que cette cellule exerce le chemin reposant sur la gigue seule, et son journal contient l'avertissement signalant la gigue seule.</p>
+<p><a id="iso9660-tests"></a></p>
+<h4 id="tests-iso9660">Tests Iso9660</h4>
+<p><code>tests/Kernels/Cosmos.Kernel.Tests.Iso9660</code> vérifie le pilote ISO 9660 de <code>Cosmos.Kernel.System/FileSystem/Iso9660</code> sur les deux architectures, sans profil. Ses images ne sont pas commitées : le fichier projet lance xorriso, l'outil avec lequel chaque ISO Cosmos est construit (résolu par la cible <code>GetXorriso</code> de <code>Cosmos.Build.Common</code>), sur les arborescences de <code>Fixtures/</code> à la compilation, avec le propriétaire, les modes et tous les horodatages figés (2026-10-28 12:00:00 UTC) pour que les octets ne dépendent ni du checkout, ni de l'horloge, ni du fuseau horaire, et embarque les deux images dans le noyau, qui les lit via le <code>ResourceManager</code> de Core (l'autorisation est dans <code>Cosmos.Kernel.Core.csproj</code>). <code>Fixtures/rockridge/</code> est mappé avec Rock Ridge : un nom de 140 caractères dont l'entrée <code>NM</code> déborde dans une continuation <code>CE</code>, un répertoire au-delà de la profondeur 8 que xorriso relocalise dans <code>rr_moved</code> (<code>CL</code>, <code>RE</code>, <code>PL</code>), quarante entrées qui étalent un répertoire sur quatre blocs logiques, un fichier de 10 000 octets qui se termine par un bloc partiel, un motif de 200 Kio que la compilation génère, un fichier vide, des liens symboliques vers un fichier, vers un répertoire et vers rien, et un répertoire vide. <code>Fixtures/level1/</code> est mappé avec les seuls identifiants de niveau 1 et un descripteur Joliet que le pilote doit ignorer. L'image Rock Ridge est montée deux fois, depuis un périphérique à secteurs de 2048 octets (un CD) et depuis un à secteurs de 512 octets (une clé USB sur laquelle l'image a été écrite).</p>
+<p>Les cellules : le montage (<code>Test_Mount_*</code>, <code>Test_StatFs</code>, <code>Test_FormatAndDestroy_Refused</code>), le listage (<code>Test_RootListing_*</code>, <code>Test_Listing_*</code>), la recherche (<code>Test_Lookup_*</code> : noms exacts avec Rock Ridge, sans la casse au niveau 1, le nom long, le répertoire relocalisé, <code>.</code> et <code>..</code>), la lecture (<code>Test_Read_*</code> : entière, par morceaux de 4 097 octets pour que la tête, le corps et la queue d'une lecture s'exécutent tous, après seek, ligne par ligne, avec le nombre de lectures du périphérique borné pour un fichier de 200 Kio), les attributs (<code>Test_Attributes_*</code> : lecture seule, les horodatages figés, des numéros d'inode distincts pour les entrées qui partagent un extent), les liens symboliques (<code>Test_Symlink_*</code>), les refus (<code>Test_ReadOnly_*</code> : chaque modification est une simple <code>IOException</code> via <code>System.IO</code> et <code>false</code> via <code>VfsManager</code>), <code>Test_Unmount_And_Remount</code> et <code>Test_TwoMounts_SameDevice</code>, et le CD de démarrage (<code>Test_BootCd_*</code>), sur x64 seulement : l'ISO depuis laquelle la cellule a démarré, que le moteur attache comme <code>ide-cd</code> sur le contrôleur AHCI de q35 et que l'<code>AhciDriver</code> du kit publie sous le nom <code>cdrom0</code>, est trouvée dans <code>StorageManager.Devices</code> par sa facette en lecture seule, lue au secteur 16 pour le descripteur de volume primaire, portée par le gestionnaire comme une partition unique couvrant tout le support, montée depuis le lecteur pour relire <code>limine.conf</code> et le nombre magique ELF de l'image de ce noyau, une écriture refusée avec <code>IOException</code>, puis lue par ce montage pour les fichiers que le projet de la suite livre sur sa propre ISO (<code>isoFiles/shipped/</code>, à la racine de l'ISO avec son dossier, un nom avec des espaces et un fichier <code>.cs</code> que la compilation doit laisser hors du code compilé, et deux fichiers de fixture en éléments <code>CosmosIsoFile</code>, l'un renommé par son <code>IsoPath</code>, l'autre placé par un <code>IsoPath</code> qui se termine par <code>/</code>), puis montée depuis cette partition pour relire le même <code>limine.conf</code> ; sur arm64 le moteur attache l'ISO comme un lecteur virtio-scsi qu'aucun pilote ne lie, et les quatre cellules sont ignorées avec <code>the boot medium is not a block device on this cell</code>.</p>
+<p><a id="running-kernel-tests"></a></p>
+<h3 id="exécuter-les-tests-du-noyau">Exécuter les tests du noyau</h3>
+<p><a id="from-vs-code"></a></p>
+<h4 id="depuis-vs-code">Depuis VS Code</h4>
+<p><strong>Avec les tâches (recommandé) :</strong></p>
+<ol>
+<li>Appuyez sur <code>Ctrl+Shift+P</code> → « Tasks: Run Task »</li>
+<li>Sélectionnez l'une des tâches suivantes :
+<ul>
+<li><strong>Run Test: HelloWorld (x64)</strong> : sortie console + XML</li>
+<li><strong>Run Test: HelloWorld (x64, Console Only)</strong> : sortie console uniquement</li>
+<li><strong>Run Test: HelloWorld (ARM64)</strong> : test ARM64 avec sortie XML</li>
+<li><strong>Dev Test: HelloWorld (x64)</strong> : mode développeur avec sortie détaillée</li>
+</ul>
+</li>
+</ol>
+<p><strong>Déboguer l'exécuteur de tests :</strong></p>
+<ol>
+<li>Ouvrez le panneau Exécuter et déboguer (<code>Ctrl+Shift+D</code>)</li>
+<li>Sélectionnez une configuration :
+<ul>
+<li><strong>Debug Test Runner (HelloWorld x64)</strong></li>
+<li><strong>Debug Test Runner (HelloWorld ARM64)</strong></li>
+</ul>
+</li>
+<li>Appuyez sur <code>F5</code></li>
+</ol>
+<p><a id="from-the-command-line"></a></p>
+<h4 id="depuis-la-ligne-de-commande">Depuis la ligne de commande</h4>
+<pre><code class="lang-bash"># Run test with XML output
+dotnet run --project tests/Cosmos.TestRunner.Engine/Cosmos.TestRunner.Engine.csproj -- \
+  tests/Kernels/Cosmos.Kernel.Tests.HelloWorld \
+  x64 \
+  60 \
+  test-results.xml
+
+# Run test with console output only
+dotnet run --project tests/Cosmos.TestRunner.Engine/Cosmos.TestRunner.Engine.csproj -- \
+  tests/Kernels/Cosmos.Kernel.Tests.HelloWorld \
+  x64 \
+  60
+</code></pre>
+<p><strong>Arguments :</strong></p>
+<ol>
+<li>Chemin du projet de noyau (absolu ou relatif)</li>
+<li>Architecture : <code>x64</code> ou <code>arm64</code></li>
+<li>Délai d'expiration en secondes</li>
+<li><em>(Facultatif)</em> Chemin de la sortie XML (format JUnit)</li>
+<li><em>(Facultatif)</em> Mode : <code>ci</code> ou <code>dev</code></li>
+</ol>
+<p><strong>Délais d'expiration recommandés :</strong></p>
+<table>
+<thead>
+<tr>
+<th>Suite</th>
+<th>x64</th>
+<th>ARM64</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HelloWorld</td>
+<td>60 s</td>
+<td>90 s</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>180 s</td>
+<td>300 s</td>
+</tr>
+<tr>
+<td>Drivers</td>
+<td>60 s</td>
+<td>120 s</td>
+</tr>
+<tr>
+<td>Pci</td>
+<td>60 s</td>
+<td>90 s</td>
+</tr>
+<tr>
+<td>Graphic</td>
+<td>60 s</td>
+<td>90 s</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>90 s</td>
+<td>180 s</td>
+</tr>
+</tbody>
+</table>
+<p><a id="output-formats"></a></p>
+<h3 id="formats-de-sortie">Formats de sortie</h3>
+<p><a id="console-colored"></a></p>
+<h4 id="console-en-couleurs">Console (en couleurs)</h4>
+<pre><code>================================================================================
+Starting test suite: HelloWorld Basic Tests
+Architecture: x64
+Time: 2025-11-05 04:06:48
+================================================================================
+[1] Test_BasicArithmetic: PASSED (15ms)
+[2] Test_BooleanLogic: PASSED (12ms)
+[3] Test_IntegerComparison: PASSED (10ms)
+================================================================================
+Suite: HelloWorld Basic Tests
+Total tests: 3 | Passed: 3 | Failed: 0 | Skipped: 0 | Duration: 0.04s
+================================================================================
+ALL TESTS PASSED
+================================================================================
+</code></pre>
+<p><a id="xml-junit-format"></a></p>
+<h4 id="xml-format-junit">XML (format JUnit)</h4>
+<pre><code class="lang-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-16&quot;?&gt;
+&lt;testsuites name=&quot;HelloWorld Basic Tests&quot; tests=&quot;3&quot; failures=&quot;0&quot; skipped=&quot;0&quot; time=&quot;0.037&quot;&gt;
+  &lt;testsuite name=&quot;HelloWorld Basic Tests&quot; tests=&quot;3&quot; failures=&quot;0&quot; skipped=&quot;0&quot; time=&quot;0.037&quot;&gt;
+    &lt;properties&gt;
+      &lt;property name=&quot;architecture&quot; value=&quot;x64&quot; /&gt;
+    &lt;/properties&gt;
+    &lt;testcase name=&quot;Test_BasicArithmetic&quot; classname=&quot;HelloWorld Basic Tests&quot; time=&quot;0.015&quot; /&gt;
+    &lt;testcase name=&quot;Test_BooleanLogic&quot; classname=&quot;HelloWorld Basic Tests&quot; time=&quot;0.012&quot; /&gt;
+    &lt;testcase name=&quot;Test_IntegerComparison&quot; classname=&quot;HelloWorld Basic Tests&quot; time=&quot;0.010&quot; /&gt;
+  &lt;/testsuite&gt;
+&lt;/testsuites&gt;
+</code></pre>
+<p><a id="exit-codes"></a></p>
+<h3 id="codes-de-sortie">Codes de sortie</h3>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Signification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>Tous les tests ont réussi (les tests ignorés sont acceptés)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Des tests ont échoué ou une erreur d'exécution s'est produite</td>
+</tr>
+<tr>
+<td>137</td>
+<td>Délai dépassé (SIGKILL)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a id="uart-debug-protocol"></a></p>
+<h2 id="protocole-de-débogage-uart">Protocole de débogage UART</h2>
+<p>Les noyaux de test renvoient leurs résultats au moteur hôte via un protocole binaire intégré au flux série (UART) de QEMU. Le protocole est défini dans <code>tests/Cosmos.TestRunner.Protocol/</code> et a été porté depuis le connecteur de débogage de CosmosOS.</p>
+<p><a id="framing"></a></p>
+<h3 id="trames">Trames</h3>
+<p>Chaque message commence par une signature magique de 4 octets, suivie de l'octet de commande et d'une longueur de charge utile de 2 octets en little-endian :</p>
+<pre><code>[Magic: 4 bytes][Command: 1 byte][Length: 2 bytes LE][Payload: N bytes]
+</code></pre>
+<ul>
+<li><strong>Magic</strong> : <code>0x07 0x08 0x74 0x19</code> (c'est-à-dire <code>0x19740807</code> en little-endian, <code>SerialSignature</code> dans <code>Consts.cs</code>)</li>
+<li><strong>Command</strong> : l'une des constantes <code>Ds2Vs</code> (voir le tableau ci-dessous)</li>
+<li><strong>Length</strong> : nombre d'octets de charge utile qui suivent</li>
+</ul>
+<p>Après le message <code>TestSuiteEnd</code> final, le noyau envoie aussi un marqueur de fin de 8 octets (<code>0xDE 0xAD 0xBE 0xEF 0xCA 0xFE 0xBA 0xBE</code>) pour que le moteur puisse tuer QEMU immédiatement, sans attendre l'expiration complète du délai.</p>
+<p><a id="commands-kernel--host-ds2vs"></a></p>
+<h3 id="commandes-noyau--hôte-ds2vs">Commandes (noyau → hôte, <code>Ds2Vs</code>)</h3>
+<p>Les commandes propres à l'exécuteur de tests occupent la plage <strong>100-109</strong>. Les commandes de débogage d'origine de CosmosOS (0-25) sont également définies, mais l'exécuteur de tests ne les utilise pas.</p>
+<table>
+<thead>
+<tr>
+<th>Commande</th>
+<th>Valeur</th>
+<th>Format de la charge utile</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TestSuiteStart</code></td>
+<td>100</td>
+<td><code>[ExpectedTests: 2 LE][SuiteName: UTF-8]</code></td>
+<td>Envoyée une fois, au début de la suite de tests</td>
+</tr>
+<tr>
+<td><code>TestStart</code></td>
+<td>101</td>
+<td><code>[TestNumber: 2 LE][TestName: UTF-8]</code></td>
+<td>Envoyée avant l'exécution de chaque test</td>
+</tr>
+<tr>
+<td><code>TestPass</code></td>
+<td>102</td>
+<td><code>[TestNumber: 2 LE][DurationMs: 4 LE]</code></td>
+<td>Envoyée lorsqu'un test réussit</td>
+</tr>
+<tr>
+<td><code>TestFail</code></td>
+<td>103</td>
+<td><code>[TestNumber: 2 LE][ErrorMessage: UTF-8]</code></td>
+<td>Envoyée lorsqu'une assertion échoue</td>
+</tr>
+<tr>
+<td><code>TestSkip</code></td>
+<td>104</td>
+<td><code>[TestNumber: 2 LE][SkipReason: UTF-8]</code></td>
+<td>Envoyée lorsqu'un test est explicitement ignoré</td>
+</tr>
+<tr>
+<td><code>TestSuiteEnd</code></td>
+<td>105</td>
+<td><code>[Total: 2 LE][Passed: 2 LE][Failed: 2 LE]</code></td>
+<td>Envoyée une fois, à la fin de la suite de tests</td>
+</tr>
+<tr>
+<td><code>ArchitectureInfo</code></td>
+<td>106</td>
+<td><code>[ArchId: 1][CpuCount: 1]</code></td>
+<td>Envoyée au démarrage du noyau (identifiants d'architecture : 1=x86, 2=x64, 3=ARM32, 4=ARM64)</td>
+</tr>
+<tr>
+<td><code>CoverageData</code></td>
+<td>107</td>
+<td><code>[HitCount: 2 LE][MethodId: 2 LE]...</code></td>
+<td>Envoyée après la fin de la suite par un noyau compilé avec la couverture de code</td>
+</tr>
+<tr>
+<td><code>TestDestructiveReached</code></td>
+<td>108</td>
+<td><code>[TestNumber: 2 LE]</code></td>
+<td>Envoyée par <code>TR.RunDestructive</code> juste avant une action qui ne revient jamais (redémarrage, arrêt)</td>
+</tr>
+<tr>
+<td><code>HostRequest</code></td>
+<td>109</td>
+<td><code>[Request: ASCII]</code></td>
+<td>Demande au moteur de modifier la machine sous l'invité en cours d'exécution (voir ci-dessous)</td>
+</tr>
+</tbody>
+</table>
+<p><a id="message-flow"></a></p>
+<h3 id="flux-de-messages">Flux de messages</h3>
+<p>Une session typique se présente ainsi :</p>
+<pre><code>→ TestSuiteStart  (suiteName=&quot;HelloWorld Basic Tests&quot;, expectedTests=3)
+→ TestStart       (testNumber=1, testName=&quot;Test_BasicArithmetic&quot;)
+→ TestPass        (testNumber=1, durationMs=15)
+→ TestStart       (testNumber=2, testName=&quot;Test_BooleanLogic&quot;)
+→ TestPass        (testNumber=2, durationMs=12)
+→ TestStart       (testNumber=3, testName=&quot;Test_IntegerComparison&quot;)
+→ TestPass        (testNumber=3, durationMs=10)
+→ TestSuiteEnd    (total=3, passed=3, failed=0)
+→ [0xDE 0xAD 0xBE 0xEF 0xCA 0xFE 0xBA 0xBE]  ← termination marker
+</code></pre>
+<p><a id="parser"></a></p>
+<h3 id="analyseur">Analyseur</h3>
+<p><code>tests/Cosmos.TestRunner.Engine/Protocol/UartMessageParser.cs</code> lit le journal UART brut capturé par QEMU (<code>uart-output.log</code>), y recherche octet par octet la signature magique, valide l'octet de commande et la longueur, puis transmet le message à la fonction d'analyse appropriée.</p>
+<p>Détection de corruption : la charge utile de <code>TestSuiteEnd</code> est validée en vérifiant <code>total == passed + failed</code>. Si cet invariant n'est pas respecté (par exemple parce qu'une interruption de minuteur intercalée a corrompu des octets UART), le message de fin est ignoré et les résultats se rabattent sur les compteurs suivis individuellement.</p>
+<p><a id="host-requests"></a></p>
+<h3 id="requêtes-à-lhôte">Requêtes à l'hôte</h3>
+<p>Un test appelle <code>TR.RequestHost(request)</code> lorsqu'il a besoin que la machine soit modifiée sous lui, ou que l'hôte agisse, et le moteur exécute la requête dès que la trame apparaît sur l'UART, via le moniteur QMP de QEMU pour les requêtes qui portent sur la machine et via son propre serveur de test TCP pour <code>tcp-connect</code> :</p>
+<table>
+<thead>
+<tr>
+<th>Requête</th>
+<th>Effet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>usb-unplug [n]</code></td>
+<td>Retire la clé USB <code>n</code> (0 par défaut) du contrôleur hôte USB que nomme le profil</td>
+</tr>
+<tr>
+<td><code>usb-plug [n]</code></td>
+<td>La rebranche, sur la même image disque et le même bus, et sur le port racine qu'elle a quitté là où le contrôleur fixe les ports (les modèles EHCI et OHCI)</td>
+</tr>
+<tr>
+<td><code>pci-unplug [n]</code></td>
+<td>Supprime de QEMU le disque PCI branchable à chaud <code>n</code> (0 par défaut), ce qui actionne le bouton d'attention de l'emplacement et achève le retrait lorsque l'invité met l'emplacement hors tension</td>
+</tr>
+<tr>
+<td><code>pci-plug [n]</code></td>
+<td>Le rajoute derrière le même port racine, sur la même image disque ; l'invité met l'emplacement sous tension et place les registres de la fonction</td>
+</tr>
+<tr>
+<td><code>usb-kbd-unplug</code></td>
+<td>Retire le clavier USB du profil du contrôleur hôte USB que nomme le profil</td>
+</tr>
+<tr>
+<td><code>usb-kbd-plug</code></td>
+<td>Le rebranche, sur le même bus, sur le port qu'il a quitté là où le contrôleur fixe les ports (derrière le hub lorsque le profil en demande un) et avec le même <code>usb_version</code></td>
+</tr>
+<tr>
+<td><code>key-press &lt;qcode&gt;</code></td>
+<td>Appuie sur une touche puis la relâche, désignée par son nom QKeyCode de QEMU (<code>a</code>, <code>ret</code>, <code>spc</code>, ...) ; QEMU la relâche après sa durée de maintien par défaut de 100 ms</td>
+</tr>
+<tr>
+<td><code>mouse-move &lt;dx&gt; &lt;dy&gt;</code></td>
+<td>Déplace le pointeur de <code>dx</code>, <code>dy</code> en unités du périphérique, sous la forme d'un seul <code>input-send-event</code> portant deux événements relatifs</td>
+</tr>
+<tr>
+<td><code>mouse-button &lt;left or middle or right&gt; &lt;down or up&gt;</code></td>
+<td>Appuie sur un bouton du pointeur ou le relâche</td>
+</tr>
+<tr>
+<td><code>tcp-connect</code></td>
+<td>Connecte le serveur de test TCP du moteur au serveur TCP du noyau sur le port 5558 et exécute l'échange d'écho <code>TEST_FROM_HOST</code> ; le <code>TCP_ServerAccept</code> de la suite Network l'envoie juste après <code>listener.Start()</code>, si bien que le SYN part pendant que l'écouteur est actif (le port 5558 est un <code>hostfwd</code>, que slirp accepte immédiatement côté hôte et livre à l'invité selon son propre calendrier de retransmission, à 6 puis 12 s d'intervalle : une connexion effectuée selon une horloge manquait un écouteur apparu tardivement, #3361)</td>
+</tr>
+</tbody>
+</table>
+<p>Rien ne répond. Le test attend lui-même le changement, et doit le constater dans les 10 s : passé ce délai sans message du protocole, le moteur considère que le noyau est figé. Les requêtes clavier ne prennent pas d'indice : un profil a au plus un clavier <code>usb-kbd</code> ; les requêtes PCI indexent les disques branchables à chaud du profil (<code>&quot;hotplug&quot;: true</code> sur un disque <code>virtio-blk</code>). Chaque cellule lance QEMU avec un moniteur ; une requête que l'exécution ne peut pas mener à bien est signalée puis abandonnée (<code>[Monitor] usb-kbd-unplug failed: the profile attaches no USB keyboard</code>), et le test de l'invité échoue par expiration du délai. Les tests <code>UsbHotPlug_*</code> et <code>PciHotPlug_*</code> de la suite Storage et les tests <code>Usb_Keyboard_*</code>, <code>Usb_Mouse_*</code>, <code>Ps2_*</code> et <code>Pci_HotPlug_*</code> de la suite Drivers en sont des exemples.</p>
+<p><a id="host--kernel-commands-vs2ds"></a></p>
+<h3 id="commandes-hôte--noyau-vs2ds">Commandes hôte → noyau (<code>Vs2Ds</code>)</h3>
+<p>L'exécuteur de tests n'envoie actuellement aucune commande au noyau. La classe <code>Vs2Ds</code> (<code>Noop=0</code>, <code>Continue=4</code>, <code>Ping=17</code>) est héritée du connecteur de débogage de CosmosOS et réservée à un usage futur.</p>
+<hr>
+<p><a id="project-structure"></a></p>
+<h2 id="structure-du-projet">Structure du projet</h2>
+<pre><code>tests/
+├── Cosmos.TestRunner.Engine/        # Host-side test runner
+│   ├── Engine.cs                    # Main orchestration
+│   ├── Engine.Build.cs              # NativeAOT build pipeline
+│   ├── Program.cs                   # CLI entry point
+│   ├── TestConfiguration.cs         # Configuration
+│   ├── TestResults.cs               # Result model
+│   ├── Hosts/                       # QEMU host implementations
+│   │   ├── IQemuHost.cs
+│   │   ├── QemuMonitor.cs           # The QMP monitor: USB and PCI hot-plug, key and pointer injection
+│   │   ├── QemuX64Host.cs
+│   │   └── QemuARM64Host.cs
+│   ├── OutputHandlers/              # Result output formats
+│   │   ├── OutputHandlerBase.cs
+│   │   ├── OutputHandlerConsole.cs  # Colored terminal output
+│   │   ├── OutputHandlerXml.cs      # JUnit XML output
+│   │   └── MultiplexingOutputHandler.cs
+│   └── Protocol/
+│       └── UartMessageParser.cs     # Binary message parser
+├── Cosmos.TestRunner.Framework/     # In-kernel test framework
+│   ├── TestRunner.cs                # Start / Run / Skip / Finish
+│   └── Assert.cs                    # Assertion helpers
+├── Cosmos.TestRunner.Protocol/      # Shared protocol definitions
+│   ├── Consts.cs                    # Magic signature and constants
+│   └── Messages.cs                  # Typed message classes
+├── Cosmos.Kernel.Tests.System/      # Unit tests: Cosmos.Kernel.System (NUnit)
+├── Cosmos.Tests.Build.Asm/          # Unit tests: Clang assembly build task
+├── Cosmos.Tests.Build.Analyzer.Patcher/ # Unit tests: plug analyzer
+├── Cosmos.Tests.Scanner/            # Unit tests: plug scanner
+├── Cosmos.Tests.Patcher/            # Unit tests: IL patcher
+├── Cosmos.Tests.SourceGenerators/   # Unit tests: entry point and driver manifest generator
+├── Cosmos.Tests.NativeWrapper/      # Runtime assets (no tests)
+├── Cosmos.Tests.NativeLibrary/      # Native code for tests (no tests)
+└── Kernels/                         # Kernel test projects
+    ├── Cosmos.Kernel.Tests.HelloWorld/
+    │   ├── Kernel.cs
+    │   └── Bootloader/limine.conf
+    └── Cosmos.Kernel.Tests.Memory/
+        ├── Kernel.cs
+        └── Bootloader/limine.conf
+</code></pre>
+<p><code>tests/Cosmos.Kernel.Tests.System/</code> contient les tests côté hôte de <code>Cosmos.Kernel.System</code>. Il prend une référence de projet sur la bibliothèque et une autorisation <code>InternalsVisibleTo</code> accordée par celle-ci, et ses dossiers reflètent ceux de la bibliothèque (<code>Network/</code>, <code>Network/Protocols/</code>, <code>Input/</code>, <code>FileSystem/Ext2/</code>).</p>
+<hr>
+<p><a id="writing-a-test-kernel"></a></p>
+<h2 id="écrire-un-noyau-de-test">Écrire un noyau de test</h2>
+<p><a id="minimal-example"></a></p>
+<h3 id="exemple-minimal">Exemple minimal</h3>
+<p>Les noyaux de test héritent de <code>Cosmos.Kernel.System.Kernel</code> et exécutent tous les tests dans <code>BeforeRun()</code>. Utilisez l'alias <code>TR</code> pour <code>TestRunner</code> et <code>Assert</code> pour les assertions.</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.Core.IO;
+using Cosmos.TestRunner.Framework;
+using Sys = Cosmos.Kernel.System;
+using TR = Cosmos.TestRunner.Framework.TestRunner;
+
+namespace Cosmos.Kernel.Tests.MyTests;
+
+public class Kernel : Sys.Kernel
+{
+    protected override void BeforeRun()
+    {
+        // Initialize test suite (expectedTests must equal the total number of TR.Run + TR.Skip calls)
+        TR.Start(&quot;My Test Suite&quot;, expectedTests: 3);
+
+        TR.Run(&quot;Test_Addition&quot;, () =&gt;
+        {
+            int result = 2 + 2;
+            Assert.Equal(4, result);
+        });
+
+        TR.Run(&quot;Test_StringOps&quot;, () =&gt;
+        {
+            string str = &quot;Hello&quot;;
+            Assert.Equal(&quot;Hello&quot;, str);
+            Assert.NotNull(str);
+        });
+
+        // Mark unsupported operations as skipped rather than letting them crash
+        // TR.Skip also counts toward expectedTests
+        TR.Skip(&quot;Test_Unsupported&quot;, &quot;Feature not implemented&quot;);
+
+        TR.Finish();
+
+        Serial.WriteString(&quot;[Tests Complete - System Halting]\n&quot;);
+        Stop();
+    }
+
+    protected override void Run()
+    {
+        // Tests completed in BeforeRun, nothing to do here
+    }
+
+    protected override void AfterRun()
+    {
+        Cosmos.Kernel.Kernel.Halt();
+    }
+}
+</code></pre>
+<p><a id="kernel-lifecycle"></a></p>
+<h3 id="cycle-de-vie-du-noyau">Cycle de vie du noyau</h3>
+<p>La classe de base <code>Sys.Kernel</code> pilote un cycle de vie fixe :</p>
+<ol>
+<li><code>OnBoot()</code> : initialisation du système (appelée automatiquement, rarement redéfinie)</li>
+<li><code>BeforeRun()</code> : <strong>exécutez tous les tests ici</strong>, puis appelez <code>Stop()</code></li>
+<li><code>Run()</code> : appelée en boucle jusqu'à l'appel de <code>Stop()</code> ; laissez-la vide pour les noyaux de test</li>
+<li><code>AfterRun()</code> : appelée une fois après la sortie de la boucle ; appelez <code>Cosmos.Kernel.Kernel.Halt()</code> ici</li>
+</ol>
+<p><a id="available-assertions"></a></p>
+<h3 id="assertions-disponibles">Assertions disponibles</h3>
+<pre><code class="lang-csharp">// Equality: typed overloads (int, uint, long, byte, bool, string, byte[], int[])
+Assert.Equal(expected, actual);
+Assert.Equal&lt;T&gt;(expected, actual);   // Generic overload (requires IEquatable&lt;T&gt;)
+
+// Null checks
+Assert.Null(obj);
+Assert.NotNull(obj);
+
+// Boolean
+Assert.True(condition);
+Assert.True(condition, &quot;message&quot;);
+Assert.False(condition);
+
+// Manual failure
+Assert.Fail(&quot;Custom error message&quot;);
+</code></pre>
+<blockquote>
+<p><code>Assert</code> utilise un état d'échec statique (sans exceptions) pour rester compatible avec NativeAOT.
+Seul le premier échec de chaque test est enregistré ; les assertions suivantes du même bloc <code>TR.Run</code> sont tout de même évaluées.</p>
+</blockquote>
+<p><a id="test-status"></a></p>
+<h3 id="statut-des-tests">Statut des tests</h3>
+<table>
+<thead>
+<tr>
+<th>Statut</th>
+<th>Quand</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Réussi</strong></td>
+<td>Le test s'est terminé sans échec d'assertion</td>
+</tr>
+<tr>
+<td><strong>Échoué</strong></td>
+<td>Une assertion a positionné l'état d'échec dans <code>TR.Run</code></td>
+</tr>
+<tr>
+<td><strong>Ignoré</strong></td>
+<td>Le test a été explicitement marqué via <code>TR.Skip(name, reason)</code></td>
+</tr>
+</tbody>
+</table>
+<p><a id="adding-a-new-test-suite"></a></p>
+<h3 id="ajouter-une-suite-de-tests">Ajouter une suite de tests</h3>
+<ol>
+<li>Créez un projet de noyau sous <code>tests/Kernels/Cosmos.Kernel.Tests.{Name}/</code></li>
+<li>Copiez le <code>.csproj</code> et <code>Bootloader/limine.conf</code> d'une suite existante ; mettez à jour le chemin de l'ELF dans <code>limine.conf</code></li>
+<li>Implémentez les tests avec <code>TestRunner.Framework</code></li>
+<li>Ajoutez un job de CI dans <code>.github/workflows/kernel-tests.yml</code> :
+<ul>
+<li>Copiez un job <code>*-tests</code> existant, renommez-le et mettez à jour le chemin du noyau</li>
+<li>Ajoutez un job <code>{name}-results</code> correspondant, qui produit le commentaire de PR</li>
+<li>Ajoutez le nouveau job aux dépendances de <code>test-summary</code></li>
+</ul>
+</li>
+<li>Ajoutez des tâches VS Code dans <code>.vscode/tasks.json</code></li>
+</ol>
+<hr>
+<p><a id="ci-integration"></a></p>
+<h2 id="intégration-ci">Intégration CI</h2>
+<p>Le workflow de CI (<code>.github/workflows/kernel-tests.yml</code>) exécute les tests d'intégration du noyau sur x64 et sur ARM64.</p>
+<p><strong>Jobs :</strong></p>
+<ul>
+<li><code>helloworld-tests</code> : build matriciel pour x64/arm64</li>
+<li><code>helloworld-results</code> : produit le commentaire de PR combiné dans un artefact <code>pr-comment-helloworld</code></li>
+<li><code>memory-tests</code> : build matriciel pour x64/arm64</li>
+<li><code>memory-results</code> : produit le commentaire de PR combiné dans un artefact <code>pr-comment-memory</code></li>
+<li>une paire de ce type par suite, jusqu'à <code>fat-tests</code>/<code>fat-results</code>, <code>file-tests</code>/<code>file-results</code> et <code>iso9660-tests</code>/<code>iso9660-results</code></li>
+<li><code>test-summary</code> : récapitulatif final de l'état</li>
+</ul>
+<p><strong>Déclencheurs :</strong></p>
+<ul>
+<li>Push sur <code>main</code></li>
+<li>Pull requests (n'importe quelle branche)</li>
+<li>Déclenchement manuel avec choix de l'architecture</li>
+</ul>
+<p><strong>Commentaires de PR :</strong> chaque suite de tests reçoit un commentaire avec des lignes distinctes pour x64 et arm64, qui indique le nombre de tests, la durée et des liens vers les artefacts. Les jobs <code>*-results</code> ne font que produire le commentaire : une exécution <code>pull_request</code> pour une pull request issue d'un fork dispose d'un jeton en lecture seule et ne peut pas publier. <code>.github/workflows/kernel-test-comment.yml</code> s'exécute sur <code>workflow_run</code> une fois que Kernel Tests ou Kernel Coverage se termine, dans le dépôt de base et avec un accès en écriture quelle que soit l'origine de la pull request, télécharge les artefacts <code>pr-comment-*</code> et publie ou met à jour les commentaires. Il ne fait confiance au numéro de PR d'un artefact que lorsque la tête de cette pull request est le commit de tête de l'exécution, et GitHub l'exécute depuis la branche par défaut, si bien qu'une modification de ce fichier ne prend effet qu'après la fusion.</p>
+<p><strong>Artefacts (conservés 30 jours) :</strong></p>
+<ul>
+<li><code>test-results-{suite}-{arch}.xml</code> : résultats JUnit XML</li>
+<li><code>uart-log-{suite}-{arch}</code> : sortie UART complète</li>
+<li><code>{Suite}-Test-ISO-{arch}</code> : ISO de noyau démarrable + ELF</li>
+</ul>
+<p><a id="example-ci-step"></a></p>
+<h3 id="exemple-détape-ci">Exemple d'étape CI</h3>
+<pre><code class="lang-yaml">- name: Run Cosmos Tests
+  run: |
+    dotnet run --project tests/Cosmos.TestRunner.Engine/Cosmos.TestRunner.Engine.csproj -- \
+      tests/Kernels/Cosmos.Kernel.Tests.HelloWorld \
+      x64 \
+      120 \
+      test-results.xml \
+      ci
+
+- name: Publish Test Results
+  uses: dorny/test-reporter@v1
+  if: always()
+  with:
+    name: Cosmos Tests
+    path: test-results.xml
+    reporter: java-junit
+</code></pre>
+<hr>
+<p><a id="performance-reference"></a></p>
+<h2 id="performances-de-référence">Performances de référence</h2>
+<table>
+<thead>
+<tr>
+<th>Étape</th>
+<th>x64</th>
+<th>ARM64</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Build du noyau</td>
+<td>~60 s</td>
+<td>~70 s</td>
+</tr>
+<tr>
+<td>Exécution de HelloWorld</td>
+<td>2-5 s</td>
+<td>5-10 s</td>
+</tr>
+<tr>
+<td>Exécution de Memory</td>
+<td>60-120 s</td>
+<td>120-240 s</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a id="troubleshooting"></a></p>
+<h2 id="dépannage">Dépannage</h2>
+<p><a id="timeout"></a></p>
+<h3 id="délai-dépassé">Délai dépassé</h3>
+<ul>
+<li>Augmentez l'argument de délai d'expiration</li>
+<li>Consultez <code>uart-output.log</code> pour repérer des problèmes de démarrage</li>
+<li>Vérifiez que QEMU est installé : <code>qemu-system-x86_64 --version</code></li>
+</ul>
+<p><a id="build-failures"></a></p>
+<h3 id="échecs-de-build">Échecs de build</h3>
+<ul>
+<li>Exécutez <code>.devcontainer/postCreateCommand.sh</code> pour recompiler le framework</li>
+<li>Restaurez les paquets NuGet : <code>dotnet restore</code></li>
+<li>Vérifiez que le SDK .NET 9 est installé</li>
+</ul>
+<p><a id="arm64-issues"></a></p>
+<h3 id="problèmes-sur-arm64">Problèmes sur ARM64</h3>
+<ul>
+<li>Assurez-vous que le firmware UEFI est présent : <code>~/.cosmos/tools/qemu/share/qemu/edk2-aarch64-code.fd</code></li>
+<li>Utilisez un délai d'expiration plus long (90 s et plus pour HelloWorld, 180 s et plus pour Memory)</li>
+</ul>
+<p><a id="ud-exceptions-invalid-opcode"></a></p>
+<h3 id="exceptions-ud-opcode-invalide">Exceptions #UD (opcode invalide)</h3>
+<p>Certaines opérations peuvent déclencher des fautes d'opcode invalide selon l'état du runtime. Utilisez <code>TR.Skip()</code> pour les marquer au lieu de laisser le noyau planter.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/testing.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

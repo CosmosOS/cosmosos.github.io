@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>致谢 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="致谢 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="images/favicon.ico">
+      <link rel="stylesheet" href="public/docfx.min.css">
+      <link rel="stylesheet" href="public/main.css">
+      <meta name="docfx:navrel" content="toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/credits.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="index.html">
+            <img id="logo" class="svg" src="images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="credits"></a></p>
+<h1 id="致谢">致谢</h1>
+<p>Cosmos Gen3 站在其他开源项目的肩膀上。本页列出随 Cosmos 一起分发的第三方组件及其许可证。</p>
+<p><a id="vendored-source-code"></a></p>
+<h2 id="内嵌源代码">内嵌源代码</h2>
+<p>复制到本仓库中的代码（本地改动记录在源代码旁的 <code>README.md</code> 中）：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>许可证</th>
+<th>用途</th>
+<th>位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/EliotJones/BigGustave">BigGustave</a></td>
+<td>Unlicense</td>
+<td>PNG 解码（<code>Cosmos.Kernel.System.Graphics.Png</code>）</td>
+<td><code>src/Cosmos.Kernel.System/ThirdParty/BigGustave/</code></td>
+</tr>
+<tr>
+<td><a href="https://github.com/icsharpcode/SharpZipLib">SharpZipLib</a></td>
+<td>MIT</td>
+<td>为 PNG 解码器提供托管的 DEFLATE/zlib 解压缩</td>
+<td><code>src/Cosmos.Kernel.System/ThirdParty/SharpZipLib/</code></td>
+</tr>
+<tr>
+<td><a href="https://github.com/Relfos/LunarFonts">LunarFonts</a></td>
+<td>MIT</td>
+<td>TrueType 字体加载与光栅化（<code>TrueTypeFont</code>）</td>
+<td><code>src/Cosmos.Kernel.System/ThirdParty/LunarFonts/</code></td>
+</tr>
+<tr>
+<td><a href="https://github.com/fcambus/spleen">Spleen</a></td>
+<td>BSD-2-Clause</td>
+<td>控制台和画布默认使用的 16x32 字体</td>
+<td><code>src/Cosmos.Kernel.System/Graphics/Fonts/</code></td>
+</tr>
+<tr>
+<td><a href="https://github.com/Samma2009/Cosm3D">Cosm3D</a></td>
+<td>MIT</td>
+<td>VMware SVGA II 显示驱动程序的 SVGA3D 命令层与画布（<code>Cosmos.Kernel.Drivers.Pci.Display.VmwareSvga.VmwareSvga3D</code>、<code>VmwareSvgaCanvas3D</code>）</td>
+<td><code>src/Cosmos.Kernel.Drivers/Pci/Display/VmwareSvga/</code>：<code>VmwareSvga3D.cs</code>、<code>VmwareSvgaCanvas3D.cs</code> 以及 <code>Enums/</code> 和 <code>Structs/</code> 中的词汇类型</td>
+</tr>
+</tbody>
+</table>
+<p>PNG 集成借鉴了 <a href="https://github.com/Szymekk44/CosmosPNG">CosmosPNG</a>（Unlicense），它最早将 BigGustave 引入 Cosmos Gen2；TrueType 集成借鉴了 <a href="https://github.com/GoldenretriverYT/CosmosTTF">CosmosTTF</a>（MIT），它最早将 LunarFonts 引入 Cosmos Gen2。</p>
+<p>VMware SVGA II 集成源自 <a href="https://github.com/Samma2009/Cosm3D">Cosm3D</a> 的 gen3 移植版（Cosm3D 是 <a href="https://sourceforge.net/projects/vmware-svga">VMware 的 3D SVGA II 规范</a>的一个实现），而该移植本身基于 gen2 的 SVGA II 驱动程序；它以 <code>VmwareSvgaDriver</code> 的形式位于 <code>Cosmos.Kernel.Drivers</code> 中，构建在驱动工具包之上。</p>
+<p><a id="shipped-binaries-and-dependencies"></a></p>
+<h2 id="随附的二进制文件与依赖项">随附的二进制文件与依赖项</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>许可证</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/limine-bootloader/limine">Limine</a></td>
+<td>BSD-2-Clause</td>
+<td>每个内核 ISO 中包含的引导加载程序</td>
+</tr>
+<tr>
+<td><a href="https://github.com/dotnet/runtime">.NET Runtime</a></td>
+<td>MIT</td>
+<td>内核构建所基于的基础类库和 NativeAOT 编译器（ILC）</td>
+</tr>
+<tr>
+<td><a href="https://github.com/jbevain/cecil">Mono.Cecil</a></td>
+<td>MIT</td>
+<td><code>cosmos-patcher</code> 中的 IL 读取与重写</td>
+</tr>
+</tbody>
+</table>
+<p><a id="build-and-test-tools"></a></p>
+<h2 id="构建与测试工具">构建与测试工具</h2>
+<p>它们不随 Cosmos 分发，但构建或测试 Cosmos 时需要：<a href="https://yasm.tortall.net/">YASM</a>、GNU binutils/GCC、<a href="https://www.gnu.org/software/xorriso/">xorriso</a> 和 <a href="https://www.qemu.org/">QEMU</a>。</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/credits.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

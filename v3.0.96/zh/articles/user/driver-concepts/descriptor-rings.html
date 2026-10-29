@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>描述符环 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="描述符环 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/user/driver-concepts/descriptor-rings.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="descriptor-rings"></a></p>
+<h1 id="描述符环">描述符环</h1>
+<p>一个要搬运数据包流或磁盘块流的设备，不能每次只交给它一个缓冲区：那样驱动程序就得等待每一次传输，而一阵突发到达的帧也会无处落脚。描述符环（descriptor ring）同时解决了这两个问题：它是位于 <a href="dma.html">DMA</a> 内存中的一个固定数组，由一些小记录（即描述符）组成，驱动程序和设备都会读写它。每个描述符保存一个数据缓冲区的<a href="physical-addresses.html">物理地址</a>和长度，外加一些状态位；这个数组被当作循环队列使用，用到最后一项之后会绕回第一项。</p>
+<p>任何时刻，每个描述符都只属于其中一方。驱动程序填写自己拥有的描述符并把它们交出去；设备按顺序处理属于自己的描述符，处理完一个就交还一个。有两种约定可以标记这条分界线，二者常常结合使用。在第一种约定中，尾索引是驱动程序放入下一个描述符的位置，头索引是设备取走下一个描述符的位置，从头到尾之间的各项属于设备。在第二种约定中，每个描述符带有一个所有权位或“完成”位，由交出该描述符的一方翻转。网卡维护两个环：一个接收环，由驱动程序放入空缓冲区；一个发送环，由驱动程序填入要发出的帧。</p>
+<p>驱动程序通过写一个寄存器来告诉设备有新的描述符已就绪，这个寄存器就是门铃，通常就是尾寄存器本身。反方向则不需要寄存器：驱动程序根据设备写入描述符的状态得知哪些描述符已经完成，因此一次中断或一次轮询就能回收一整批描述符。</p>
+<p>陷阱在于顺序。设备一看到门铃或所有权位，就可能读取描述符，因此描述符的内容必须先到达内存；驱动程序也必须先读取“完成”位，再读取受它保护的缓冲区长度或数据。<a href="barriers.html">内存屏障</a>同时保证这两点。</p>
+<p>在驱动工具包中，环位于由 <code>binding.AllocateDma</code> 分配的 <code>DmaBuffer</code> 中：交出描述符之前调用 <code>DmaBuffer.WriteBarrier()</code>，读取“完成”位之后调用 <code>DmaBuffer.ReadBarrier()</code>，门铃则通过 <code>RegisterWindow</code> 写入，它的写入自带屏障。Virtio 设备使用工具包自己的环，即 <code>Virtqueue</code>（<a href="virtio.html">virtio</a>）；参见 <a href="../drivers.html#dma-memory">DMA 内存</a>和<a href="../drivers.html#queues">队列</a>。</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/user/driver-concepts/descriptor-rings.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

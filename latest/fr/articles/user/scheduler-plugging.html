@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>&#201;crire un ordonnanceur | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="&#201;crire un ordonnanceur | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/user/scheduler-plugging.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="writing-a-scheduler"></a></p>
+<h1 id="écrire-un-ordonnanceur">Écrire un ordonnanceur</h1>
+<p>Dans cet article, nous verrons comment écrire une politique d'ordonnancement pour Cosmos Gen3 : comment l'installer, l'interface qu'elle implémente, où elle conserve son état et les règles sous lesquelles ses hooks s'exécutent, puis des esquisses des algorithmes classiques et ce qui manque encore à une politique temps réel.</p>
+<p>L'ordonnanceur du noyau est divisé en deux, un <a href="../dev/sched-concepts/policy-and-mechanism.html">mécanisme et une politique</a>. Le mécanisme bascule d'un thread à l'autre, tient le registre des threads, reçoit le tick du minuteur et permet au ramasse-miettes de trouver chaque thread, et il ne change jamais. Tout ce qui décide quel thread s'exécute et quand passe par une seule interface, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/IScheduler.cs"><code>IScheduler</code></a>, et la politique installée au démarrage est Stride, un ordonnanceur à <a href="../dev/sched-concepts/virtual-time-fair-share.html">partage équitable par temps virtuel</a>. Vous écrivez une politique lorsque vous voulez ordonner les threads autrement : par priorité fixe, par échéance, en simple rotation, ou sans préemption pendant que vous traquez une condition de course. Chaque terme lié dispose d'une courte note de contexte dans le <a href="../dev/scheduler-glossary.html">glossaire de l'ordonnanceur</a>, et le mécanisme lui-même est décrit dans <a href="../dev/scheduler.html">Ordonnanceur</a>, dans la documentation contributeur.</p>
+<p>Si vous trouvez des bugs ou quelque chose d'anormal, merci de <a href="https://github.com/CosmosOS/Cosmos/issues/new/choose">soumettre une issue</a> sur notre dépôt.</p>
+<hr>
+<p><a id="experimental-status"></a></p>
+<h2 id="statut-expérimental">Statut expérimental</h2>
+<p>Les types du point d'extension (<code>IScheduler</code>, <code>SchedulerManager</code>, <code>SchedulerThread</code>, <code>PerCpuState</code>, <code>SchedulerExtensible</code>, <code>InterruptMaskScope</code>, <code>SchedulerThreadState</code>, <code>SchedulerThreadFlags</code>) portent <code>[Experimental(&quot;COSMOS0001&quot;)]</code> : ils sont utilisables dès aujourd'hui mais ne promettent aucune compatibilité, et ils rejoignent la surface stable par le retrait de l'attribut une fois éprouvés. Les référencer provoque une erreur de build tant que le projet n'a pas pris acte de ce contrat :</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;NoWarn&gt;$(NoWarn);COSMOS0001&lt;/NoWarn&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p>Consultez <a href="../dev/public-api.html">Suivi de l'API publique</a> pour savoir comment les points d'extension expérimentaux s'inscrivent dans la politique de surface d'API.</p>
+<hr>
+<p><a id="replacing-the-policy"></a></p>
+<h2 id="remplacer-la-politique">Remplacer la politique</h2>
+<p>Remplacer la politique se fait en trois étapes :</p>
+<ol>
+<li>Implémentez <code>IScheduler</code> dans votre projet de noyau, en conservant la comptabilité de l'algorithme dans les emplacements de données par thread et par CPU (<a href="#attaching-state">Attacher un état</a>). Le point d'extension est public, si bien qu'une politique n'a besoin d'aucun accès aux éléments internes de <code>Cosmos.Kernel.Core</code>.</li>
+<li>Respectez les <a href="#kernel-constraints">contraintes du noyau</a> : les hooks s'exécutent en contexte d'interruption ou avec les interruptions masquées, sur l'état vivant de l'ordonnanceur.</li>
+<li>Installez-la avec <code>SchedulerManager.SetScheduler</code>.</li>
+</ol>
+<p>Un noyau installe sa politique une fois qu'il a démarré, par exemple depuis <code>BeforeRun</code> :</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.Core.Scheduler;
+using Sys = Cosmos.Kernel.System;
+
+namespace MyOS;
+
+public class Kernel : Sys.Kernel
+{
+    protected override void BeforeRun()
+    {
+        SchedulerManager.SetScheduler(new MyScheduler());
+    }
+
+    protected override void Run()
+    {
+        // The kernel's main loop, which runs on the boot thread.
+    }
+}
+</code></pre>
+<p>Vous ne pouvez pas passer avant la politique par défaut. Le noyau installe Stride pendant son démarrage, avant l'étape des pilotes, si bien qu'au moment où votre code s'exécute, Stride gère déjà le thread de démarrage, le thread de travail du kit de pilotes et tout thread qu'un pilote a lancé. <code>SetScheduler</code> les déplace tous : la politique sortante reçoit <code>OnThreadExit</code> pour chaque thread vivant et <code>ShutdownCpu</code> pour chaque CPU, puis votre politique reçoit <code>InitializeCpu</code> pour chaque CPU, <code>OnThreadCreate</code> pour chaque thread vivant et <code>OnThreadReady</code> pour chacun de ceux qui sont dans l'état <code>Ready</code>. L'échange complet s'exécute avec les interruptions masquées, et chaque CPU réordonnance à sa prochaine sortie d'interruption, si bien que votre politique choisit dans sa propre structure d'exécution à partir de ce moment. Pour revenir à Stride plus tard, conservez la politique que renvoie <code>SchedulerManager.Current</code> avant l'échange et réinstallez-la ; la classe <code>StrideScheduler</code> elle-même est interne.</p>
+<p>L'ordonnanceur doit être compilé dans le noyau. Avec <code>CosmosEnableScheduler</code> désactivé, ou avec <code>CosmosEnableInterrupts</code> ou <code>CosmosEnableTimer</code> désactivé, ce qui le désactive aussi, <code>SetScheduler</code> lève <code>InvalidOperationException</code>.</p>
+<hr>
+<p><a id="the-interface"></a></p>
+<h2 id="linterface">L'interface</h2>
+<p>Le gestionnaire appelle la politique à des points fixes de la vie d'un thread et garde tout le reste : il fixe chaque <code>SchedulerThread.State</code>, tient le registre des threads, demande un réordonnancement quand un thread se réveille, rend au ramasse-miettes le tampon d'allocation d'un thread qui se termine, effectue le changement de contexte et exécute le thread inactif quand <code>PickNext</code> renvoie <code>null</code>, si bien qu'une politique n'a rien de tout cela à refaire. Le diagramme suit un thread à travers les hooks :</p>
+<pre><code class="lang-mermaid">flowchart TD
+    Install[&quot;SchedulerManager.SetScheduler(new MyScheduler())&lt;br/&gt;the outgoing policy gets OnThreadExit and ShutdownCpu&quot;] --&gt;|&quot;every CPU&quot;| InitCpu[&quot;InitializeCpu(state)&lt;br/&gt;your per-CPU record in state.SchedulerData&quot;]
+    InitCpu --&gt;|&quot;every live thread&quot;| Create
+    Start[&quot;A thread is created&lt;br/&gt;Thread.Start&quot;] --&gt; Create[&quot;OnThreadCreate(state, thread)&lt;br/&gt;your per-thread record in thread.SchedulerData&quot;]
+    Create --&gt;|&quot;first start, or Ready at the swap&quot;| Ready[&quot;OnThreadReady(state, thread)&lt;br/&gt;insert it into your run structure&quot;]
+    Ready --&gt; Queue[(&quot;Your run structure&lt;br/&gt;queue, sorted list, heap, ...&quot;)]
+    Queue --&gt; Pick[&quot;PickNext(state)&lt;br/&gt;remove and return the next thread, or null for the idle thread&quot;]
+    Pick --&gt;|&quot;switches to it&quot;| Running[&quot;The current thread runs&quot;]
+    Pick --&gt;|&quot;another thread was picked&quot;| Requeue[&quot;OnThreadYield(state, previous)&lt;br/&gt;put the thread switched out back, if it was still running&quot;]
+    Requeue --&gt; Queue
+    Running --&gt;|&quot;timer interrupt&quot;| Tick[&quot;OnTick(state, current, elapsedNs)&lt;br/&gt;charge the time, return true to preempt&quot;]
+    Tick --&gt;|&quot;true&quot;| Pick
+    Running --&gt;|&quot;Thread.Yield, or another thread woken:&lt;br/&gt;next interrupt exit&quot;| Pick
+    Running --&gt;|&quot;blocks or sleeps&quot;| Blocked[&quot;OnThreadBlocked(state, thread)&lt;br/&gt;take it out, keep what survives the park&quot;]
+    Blocked --&gt;|&quot;next interrupt exit&quot;| Pick
+    Blocked -.-&gt;|&quot;woken&quot;| Ready
+    Running --&gt;|&quot;returns&quot;| Gone[&quot;OnThreadExit(state, thread)&lt;br/&gt;take it out everywhere, drop the record&quot;]
+    Queue -.-&gt;|&quot;killed while queued&quot;| Gone
+</code></pre>
+<p>La plupart des hooks reçoivent le <code>PerCpuState</code> sur lequel ils opèrent, et s'exécutent soit avec les interruptions masquées par le gestionnaire, soit dans le contexte d'interruption lui-même ; les exceptions sont signalées plus bas. Une politique qui n'a pas besoin d'un hook le laisse vide. Le tableau indique quand chaque membre est appelé et ce qu'il doit faire :</p>
+<table>
+<thead>
+<tr>
+<th>Membre</th>
+<th>Appelé quand</th>
+<th>Contrat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Name</code></td>
+<td><code>SchedulerDiagnostics.SchedulerName</code> le lit</td>
+<td>Un nom d'affichage pour les journaux</td>
+</tr>
+<tr>
+<td><code>InitializeCpu(state)</code></td>
+<td>une fois par CPU, quand la politique est installée</td>
+<td>Allouer la comptabilité par CPU dans <code>state.SchedulerData</code></td>
+</tr>
+<tr>
+<td><code>ShutdownCpu(state)</code></td>
+<td>une fois par CPU, quand la politique est remplacée</td>
+<td>La libérer, en laissant un emplacement propre pour la politique entrante</td>
+</tr>
+<tr>
+<td><code>OnThreadCreate(state, thread)</code></td>
+<td>un thread est créé, et une fois pour chaque thread vivant quand la politique est installée</td>
+<td>Allouer la comptabilité par thread dans <code>thread.SchedulerData</code> ; ne pas encore mettre le thread en file</td>
+</tr>
+<tr>
+<td><code>OnThreadReady(state, thread)</code></td>
+<td>un thread devient exécutable : son premier lancement, un réveil, un sommeil expiré, ou l'état <code>Ready</code> lors de l'échange</td>
+<td>Placer le thread et l'insérer dans la structure d'exécution, une seule fois. Le gestionnaire écrit <code>Ready</code> après le retour du hook, si bien que <code>thread.State</code> indique encore lequel des quatre cas s'applique : <code>Created</code>, <code>Blocked</code>, <code>Sleeping</code> ou <code>Ready</code></td>
+</tr>
+<tr>
+<td><code>OnThreadBlocked(state, thread)</code></td>
+<td>un thread se bloque sur une primitive ou s'endort</td>
+<td>Retirer le thread de la structure d'exécution ; sauvegarder ce qui doit survivre à la mise en attente</td>
+</tr>
+<tr>
+<td><code>OnThreadYield(state, thread)</code></td>
+<td>un changement de contexte retire le thread du CPU alors qu'il est encore <code>Running</code>, préempté ou cédant sa place</td>
+<td>Réinsérer le thread</td>
+</tr>
+<tr>
+<td><code>OnThreadExit(state, thread)</code></td>
+<td>un thread se termine, ou <code>SchedulerDiagnostics.RequestKill</code> le tue pendant qu'il attend dans la structure d'exécution, et pour chaque thread vivant quand la politique est remplacée</td>
+<td>Le retirer partout et abandonner sa comptabilité</td>
+</tr>
+<tr>
+<td><code>OnTick(state, current, elapsedNs)</code></td>
+<td>à chaque tick du minuteur, dans l'interruption du minuteur</td>
+<td>Comptabiliser le temps écoulé ; renvoyer <code>true</code> pour demander un réordonnancement. <code>elapsedNs</code> est l'intervalle de tick configuré, pas une mesure</td>
+</tr>
+<tr>
+<td><code>PickNext(state)</code></td>
+<td>à chaque réordonnancement, en contexte d'interruption</td>
+<td>Retirer et renvoyer le prochain thread à exécuter, ou renvoyer <code>null</code> pour exécuter le thread inactif</td>
+</tr>
+<tr>
+<td><code>OnPickFailed(state, thread)</code></td>
+<td>jamais pour l'instant</td>
+<td>Remettre en place un thread que le mécanisme a choisi mais vers lequel il n'a pas pu basculer</td>
+</tr>
+<tr>
+<td><code>SelectCpu(thread, currentCpu, cpuCount)</code></td>
+<td>jamais pour l'instant</td>
+<td>Choisir un CPU de départ pour un thread ; respecter <code>SchedulerThreadFlags.Pinned</code></td>
+</tr>
+<tr>
+<td><code>OnThreadMigrate(thread, fromState, toState)</code></td>
+<td>depuis le <code>Balance</code> de la politique elle-même</td>
+<td>Déplacer la comptabilité du thread, et toute base de temps virtuel, d'un CPU à l'autre</td>
+</tr>
+<tr>
+<td><code>Balance(state, allCpuStates)</code></td>
+<td>jamais pour l'instant</td>
+<td>Rééquilibrer la charge entre les CPU ; respecter <code>Pinned</code></td>
+</tr>
+<tr>
+<td><code>SetPriority(state, thread, priority)</code> / <code>GetPriority(thread)</code></td>
+<td><code>SchedulerManager.SetPriority</code> ; <code>SchedulerDiagnostics</code> lit <code>GetPriority</code> à chaque instantané de thread</td>
+<td>La priorité est définie par la politique : Stride la lit comme un nombre de tickets, une politique temps réel la lirait comme un niveau de priorité. Aucun des deux n'est appelé avec les interruptions masquées</td>
+</tr>
+<tr>
+<td><code>GetRunQueueCount(state)</code> / <code>GetRunQueueThread(state, index)</code></td>
+<td><code>SchedulerDiagnostics</code> lit la structure d'exécution</td>
+<td>Introspection en lecture seule ; protégez-la vous-même (voir <a href="#kernel-constraints">contraintes du noyau</a>)</td>
+</tr>
+</tbody>
+</table>
+<p>Quatre d'entre eux n'ont aucun appelant sur lequel une politique puisse compter. <code>SelectCpu</code> et <code>Balance</code> ne sont jamais appelés, parce que le noyau s'exécute sur un seul CPU (<a href="../dev/sched-concepts/cpu-affinity.html">affinité CPU et équilibrage de charge</a>) ; <code>OnPickFailed</code> n'est jamais appelé, parce que le changement de contexte va toujours vers le thread que <code>PickNext</code> a renvoyé ; et <code>SetPriority</code> n'est atteint qu'au travers de <code>SchedulerManager.SetPriority</code>, que rien dans le noyau n'appelle. Implémentez les quatre, mais ne comptez pas sur leur exécution. <code>Name</code>, <code>SelectCpu</code> et <code>GetPriority</code> ne reçoivent aucun <code>PerCpuState</code>, et <code>InitializeCpu</code> et <code>ShutdownCpu</code> s'exécutent en contexte de thread, à l'intérieur de l'échange masqué.</p>
+<p>Un thread en cours d'exécution que <code>RequestKill</code> tue est seulement marqué <code>Dead</code> : il quitte le CPU au changement de contexte suivant sans passer par <code>OnThreadYield</code> et n'atteint jamais <code>OnThreadExit</code>, si bien que son enregistrement reste dans l'emplacement.</p>
+<p><code>PickNext</code> s'exécute à chaque réordonnancement, pas seulement après que <code>OnTick</code> a renvoyé <code>true</code>. Un réveil, un blocage, un <code>Thread.Yield</code> ou un échange de politique demande un réordonnancement, et la sortie d'interruption matérielle suivante appelle <code>PickNext</code> pour y répondre : sans appeler <code>OnTick</code> du tout quand cette interruption n'est pas le tick, et quelle que soit la réponse de <code>OnTick</code> quand c'est le tick (<a href="../dev/sched-concepts/context-switch.html">changement de contexte</a>). Le thread présent sur le CPU n'est normalement pas dans la structure d'exécution à ce moment-là (<a href="../dev/sched-concepts/run-queue.html">états des threads et file d'exécution</a>) : il ne repasse par <code>OnThreadYield</code> qu'une fois que <code>PickNext</code> en a choisi un autre. L'exception est un thread qui s'est bloqué et a été réveillé avant que le changement de contexte ne le retire du CPU : il est <code>Ready</code> et déjà en file, et <code>PickNext</code> peut le rendre comme n'importe quel autre thread en file. Une politique qui classe les threads, et qui ne doit donc pas laisser chaque réveil déloger le thread courant, compare le meilleur thread en file avec <code>state.CurrentThread</code> et renvoie <code>state.CurrentThread</code> lui-même tant que le <code>State</code> de ce thread vaut encore <code>Running</code>, ce qui le garde sur le CPU. Ne renvoyez jamais un thread qui est <code>Blocked</code>, <code>Sleeping</code> ou <code>Dead</code> : le gestionnaire ne le vérifie pas. Renvoyer <code>null</code> exécute le thread inactif, qui est le propre thread de démarrage du noyau, si bien qu'un <code>OnTick</code> qui renvoie <code>true</code> alors que rien n'est en file lui donne le CPU.</p>
+<p><strong>Garder le thread courant, c'est aussi le garder pendant son propre <code>Thread.Yield</code>.</strong> <code>PickNext</code> ne sait pas pourquoi il s'exécute, et <code>Thread.Yield</code> demande le même réordonnancement qu'un réveil. <code>Thread.Start</code> s'appuie sur ce réordonnancement : il appelle <code>Thread.Yield</code> en boucle jusqu'à ce que le nouveau thread se soit exécuté pour la première fois, si bien qu'une politique qui garde le thread appelant face à un nouveau thread qui ne le surclasse pas ne laisse jamais ce dernier s'exécuter, et l'appel ne revient jamais. Une politique qui garde le thread courant donne donc à un thread en file encore <code>Created</code> sa première exécution au réordonnancement suivant. Toute autre boucle qui attend au moyen de <code>Thread.Yield</code> un thread que la politique classe plus bas tourne indéfiniment de la même façon.</p>
+<hr>
+<p><a id="attaching-state"></a></p>
+<h2 id="attacher-un-état">Attacher un état</h2>
+<p><code>SchedulerThread</code> et <code>PerCpuState</code> héritent tous deux de <code>SchedulerExtensible</code>, qui porte exactement un emplacement <code>object?</code>, <code>SchedulerData</code>, réservé à la politique active. Allouez dans les hooks de création, et lisez l'emplacement avec <code>as</code> :</p>
+<pre><code class="lang-csharp">public sealed class MyThreadData { public ulong Deadline; }
+public sealed class MyCpuData { public List&lt;SchedulerThread&gt; Queue { get; } = new(SchedulerThread.MaxThreadCount); }
+
+public void OnThreadCreate(PerCpuState state, SchedulerThread thread)
+    =&gt; thread.SchedulerData = new MyThreadData();
+
+public bool OnTick(PerCpuState state, SchedulerThread current, ulong elapsedNs)
+{
+    MyThreadData? data = current.SchedulerData as MyThreadData;
+    if (data is null) { return true; }   // exited: get it off the CPU
+    ...
+}
+</code></pre>
+<p>Lisez l'emplacement avec <code>as</code>, jamais avec un cast, et gérez <code>null</code> dans chaque hook. <code>OnThreadExit</code> vide l'emplacement, si bien qu'un thread peut perdre son enregistrement entre un tick et le hook qui l'observe, et déréférencer l'emplacement vide échoue à l'intérieur de l'interruption du minuteur. Un cast n'aiderait pas ici, puisque caster <code>null</code> donne <code>null</code>, et il lèverait une exception sur un emplacement contenant autre chose que votre enregistrement ; <code>as</code> transforme les deux cas en <code>null</code>, que l'unique vérification traite.</p>
+<p>Un enregistrement écrit par une autre politique n'est pas un cas qu'un hook doit gérer, parce que <code>SetScheduler</code> réinstalle chaque thread vivant (<a href="#replacing-the-policy">Remplacer la politique</a>). Un thread qui arrive déjà en cours d'exécution, en revanche, en est un. Le thread présent sur le CPU lors de l'échange (le thread de démarrage quand Stride est installé au démarrage, ou le thread qui appelle <code>SetScheduler</code> plus tard) atteint <code>OnThreadCreate</code> dans l'état <code>Running</code> et n'est jamais transmis à <code>OnThreadReady</code>, si bien qu'une politique qui compte ses threads exécutables ou leurs poids le prend en compte à cet endroit, sans le mettre en file. C'est pour cette raison que Stride ajoute les tickets du thread à son total dans <code>OnThreadCreate</code>.</p>
+<p>Un emplacement par objet, c'est tout le budget. Une politique qui a besoin de plusieurs valeurs définit une classe qui les regroupe, comme le fait Stride avec un enregistrement par thread et un par CPU.</p>
+<hr>
+<p><a id="kernel-constraints"></a></p>
+<h2 id="contraintes-du-noyau">Contraintes du noyau</h2>
+<p>Les hooks s'exécutent dans la fenêtre la plus sensible du noyau, si bien que quatre règles n'ont rien de facultatif.</p>
+<p><strong>Un hook ne peut pas attendre.</strong> <code>OnTick</code> s'exécute dans l'interruption du minuteur, et <code>PickNext</code> et <code>OnThreadYield</code> dans la sortie d'interruption, quelle qu'elle soit, qui porte le réordonnancement (<a href="driver-concepts/interrupt-context.html">contexte d'interruption</a>) ; <code>OnThreadReady</code> peut aussi s'exécuter dans une interruption quand le tick ou le gestionnaire d'interruption d'un périphérique réveille un thread, et les autres hooks du cycle de vie s'exécutent avec les interruptions masquées, sur le thread qui a appelé le gestionnaire, quel qu'il soit. Dans un cas comme dans l'autre, aucun autre thread et aucun tick ne peut s'exécuter sur ce CPU avant le retour du hook, si bien qu'un hook qui bloque, se met en attente ou attend un autre thread attend indéfiniment.</p>
+<p><strong>N'allouez pas sur le chemin du tick.</strong> L'allocation est sûre en contexte d'interruption dans ce noyau, mais une allocation dans <code>OnTick</code> ou <code>PickNext</code> peut déclencher une collecte à l'intérieur d'une interruption. Allouez dans <code>OnThreadCreate</code> et <code>InitializeCpu</code>, où la création d'un thread en paie déjà le coût, et donnez-y aux collections leur capacité, puisqu'une liste qui grandit dans <code>OnThreadReady</code> ou <code>OnThreadYield</code> alloue sur le même chemin.</p>
+<p><strong>Comparez les threads avec <code>ReferenceEquals</code>.</strong> <code>List&lt;T&gt;.Remove</code>, <code>Contains</code> et <code>IndexOf</code> passent par <code>EqualityComparer&lt;T&gt;.Default</code>, qui nécessite des fonctions d'assistance du runtime que le noyau ne fournit pas. Parcourez avec <code>ReferenceEquals</code> et retirez avec <code>RemoveAt</code>, comme le fait Stride.</p>
+<p><strong>Masquez les interruptions sur les points d'entrée que le gestionnaire ne masque pas.</strong> Un hook qui modifie la structure d'exécution peut être interrompu à mi-parcours par le tick, sauf si les interruptions sont masquées (<a href="../dev/sched-concepts/spinlocks-and-masking.html">spinlocks et masquage des interruptions</a>). Le gestionnaire les masque autour des hooks du cycle de vie et des deux hooks par CPU, et les hooks du tick s'exécutent dans l'interruption elle-même, mais quatre hooks ne bénéficient d'aucun masquage : <code>SetPriority</code>, <code>GetPriority</code>, <code>GetRunQueueCount</code> et <code>GetRunQueueThread</code>. Le spinlock par CPU que le gestionnaire tient autour de <code>SetPriority</code> n'y change rien, parce qu'il écarte un autre appelant et que le tick ne prend aucun verrou. Ces quatre-là, et tout point d'entrée qu'une politique ajoute elle-même, comme un setter de réglage ou une lecture de statistiques, masquent eux-mêmes les interruptions :</p>
+<pre><code class="lang-csharp">public int GetRunQueueCount(PerCpuState state)
+{
+    using (SchedulerManager.MaskInterrupts())
+    {
+        MyCpuData? data = state.SchedulerData as MyCpuData;
+        return data is null ? 0 : data.Queue.Count;
+    }
+}
+</code></pre>
+<p>Masquer à l'intérieur d'un hook rend un appel atomique, et rien de plus : un appelant qui lit <code>GetRunQueueCount</code> puis parcourt les indices a besoin de son propre masquage autour de tout le parcours.</p>
+<hr>
+<p><a id="worked-sketches"></a></p>
+<h2 id="esquisses-commentées">Esquisses commentées</h2>
+<p>Les mêmes questions reviennent pour chaque algorithme : ce qu'il faut stocker par thread et par CPU, quelle forme prend la structure d'exécution, ce qui déclenche la préemption dans <code>OnTick</code>, et ce qui doit survivre à une mise en attente. Les esquisses ci-dessous y répondent pour les algorithmes classiques. Toute politique qui classe les threads (MLFQ, priorité fixe, EDF) a aussi besoin de la comparaison dans <code>PickNext</code> que décrit <a href="#the-interface">L'interface</a>, qui garde le thread courant quand rien en file ne le surclasse, ainsi que de l'exception de première exécution pour un thread <code>Created</code> qui l'accompagne ; les tableaux omettent l'une et l'autre.</p>
+<h3 id="round-robin">Round-robin</h3>
+<p>Une file FIFO avec <a href="../dev/sched-concepts/preemption.html">préemption</a> à quantum fixe :</p>
+<table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>Comportement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PerCpuState.SchedulerData</code></td>
+<td>Une file de threads</td>
+</tr>
+<tr>
+<td><code>SchedulerThread.SchedulerData</code></td>
+<td>Un compteur de quantum restant</td>
+</tr>
+<tr>
+<td><code>OnThreadReady</code></td>
+<td>Ajouter en fin de file avec un quantum neuf</td>
+</tr>
+<tr>
+<td><code>OnThreadBlocked</code></td>
+<td>Retirer de la file : le thread qui se bloque est généralement celui en cours d'exécution, qui n'est pas en file, mais un thread réveillé avant d'avoir quitté le CPU est en file alors qu'il s'exécute encore</td>
+</tr>
+<tr>
+<td><code>OnTick</code></td>
+<td>Imputer <code>elapsedNs</code> sur le quantum ; à zéro, renvoyer <code>true</code> si un autre thread est en file, ou accorder sur place un quantum neuf</td>
+</tr>
+<tr>
+<td><code>OnThreadYield</code></td>
+<td>Remettre en fin de file, réinitialiser le quantum</td>
+</tr>
+<tr>
+<td><code>PickNext</code></td>
+<td>Retirer la tête de file</td>
+</tr>
+</tbody>
+</table>
+<p>L'ordre FIFO borne déjà la latence à <code>quantum * queue depth</code>, si bien que le round-robin n'a besoin d'aucune logique de placement au réveil.</p>
+<p>Cette esquisse existe sous la forme d'une politique complète écrite uniquement sur le point d'extension public, exactement comme le serait celle d'un noyau : <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/tests/Kernels/Cosmos.Kernel.Tests.Threading/RoundRobinScheduler.cs"><code>RoundRobinScheduler</code></a> sur GitHub. Son quantum est de deux <a href="../dev/sched-concepts/scheduler-tick.html">ticks</a>, si bien que sa comptabilité doit se maintenir pendant le tick intermédiaire. Un noyau teste une telle politique en conditions réelles, après l'avoir installée, parce que <code>PerCpuState</code> et <code>SchedulerThread</code> n'ont pas de constructeur public et que les hooks ne peuvent pas être pilotés sur vos propres objets. Vérifiez ce que seul un noyau en cours d'exécution montre : que les nouveaux threads obtiennent le CPU, qu'un thread qui tourne en boucle est préempté quand son quantum expire, que deux threads qui bouclent se partagent le CPU comme la politique l'entend, et que <code>SchedulerDiagnostics.GetRunQueueCount</code> diminue quand un thread se bloque et remonte quand il se réveille. Ne vérifiez pas par assertion l'ordre dans lequel les threads atteignent leur délégué : ce n'est pas l'ordre dans lequel ils sont devenus prêts, parce qu'un thread préempté dans son code de démarrage repart en fin de file comme n'importe quel autre.</p>
+<p>Les deux sens de l'échange méritent aussi d'être testés. À l'aller, la politique reçoit le thread de démarrage et tous les autres threads vivants par <code>OnThreadCreate</code>, et doit malgré tout lire chaque emplacement avec <code>as</code>, pour la raison donnée dans <a href="#attaching-state">Attacher un état</a>. Au retour, la politique sauvegardée depuis <code>SchedulerManager.Current</code> les reçoit de la même façon, si bien qu'un thread qui reste vivant au travers des deux échanges change de politique, et qu'un thread qui boucle et reste en exécution au travers d'eux devrait continuer à progresser sous chacune.</p>
+<p><a id="multi-level-feedback-queue-mlfq"></a></p>
+<h3 id="file-multiniveau-à-rétroaction-mlfq">File multiniveau à rétroaction (MLFQ)</h3>
+<p>Plusieurs niveaux de priorité ; les threads sont rétrogradés quand ils consomment un quantum complet et promus quand ils se bloquent tôt :</p>
+<table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>Comportement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PerCpuState.SchedulerData</code></td>
+<td>Un tableau de files, une par niveau</td>
+</tr>
+<tr>
+<td><code>SchedulerThread.SchedulerData</code></td>
+<td>Niveau courant et compteur de quantum consommé</td>
+</tr>
+<tr>
+<td><code>OnThreadReady</code></td>
+<td>Mettre en file au niveau courant du thread</td>
+</tr>
+<tr>
+<td><code>OnThreadBlocked</code></td>
+<td>Retirer de sa file et promouvoir d'un niveau : le thread s'est bloqué avant l'épuisement de son quantum, il est donc traité comme interactif</td>
+</tr>
+<tr>
+<td><code>OnTick</code></td>
+<td>Imputer le temps ; à la fin du quantum du niveau, marquer le thread pour rétrogradation et renvoyer <code>true</code></td>
+</tr>
+<tr>
+<td><code>OnThreadYield</code></td>
+<td>Remettre en file au niveau du thread, un niveau plus bas s'il était marqué pour rétrogradation</td>
+</tr>
+<tr>
+<td><code>PickNext</code></td>
+<td>Parcourir les niveaux de haut en bas, retirer la tête de la première file non vide</td>
+</tr>
+<tr>
+<td>périodique (par exemple tous les N ticks dans <code>OnTick</code>)</td>
+<td>Remettre tous les threads au niveau le plus haut, la remontée classique contre la <a href="../dev/sched-concepts/starvation.html">famine</a></td>
+</tr>
+</tbody>
+</table>
+<p>MLFQ ne suit aucun temps virtuel ; toute sa comptabilité tient en niveaux entiers.</p>
+<p><a id="fixed-priority-preemptive-fpp"></a></p>
+<h3 id="priorité-fixe-préemptive-fpp">Priorité fixe préemptive (FPP)</h3>
+<p>La politique par défaut de la plupart des RTOS (FreeRTOS, Zephyr, ThreadX) : le thread exécutable de plus haute priorité s'exécute toujours, en FIFO au sein d'un niveau :</p>
+<table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>Comportement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PerCpuState.SchedulerData</code></td>
+<td>Un tableau de files indexé par priorité</td>
+</tr>
+<tr>
+<td><code>SchedulerThread.SchedulerData</code></td>
+<td>Une priorité statique</td>
+</tr>
+<tr>
+<td><code>OnThreadReady</code></td>
+<td>Mettre en file à la fin du niveau du thread ; le réordonnancement que le gestionnaire demande à chaque réveil exécute <code>PickNext</code> à la sortie d'interruption suivante, et c'est ainsi qu'un réveil de priorité plus haute préempte</td>
+</tr>
+<tr>
+<td><code>OnThreadBlocked</code> / <code>OnThreadYield</code></td>
+<td>Retirer de son niveau / remettre en file à la fin de son niveau</td>
+</tr>
+<tr>
+<td><code>OnTick</code></td>
+<td>Renvoyer <code>true</code> si un niveau au-dessus de celui du thread courant n'est pas vide (priorité pure, pas de quantum)</td>
+</tr>
+<tr>
+<td><code>PickNext</code></td>
+<td>Parcours de haut en bas, retirer la première tête</td>
+</tr>
+<tr>
+<td><code>SetPriority</code></td>
+<td>Déplacer le thread d'un niveau à l'autre, à l'intérieur de <code>SchedulerManager.MaskInterrupts()</code></td>
+</tr>
+</tbody>
+</table>
+<p>Rate Monotonic est une FPP dont les priorités sont attribuées à partir de la période de chaque thread : plus la période est courte, plus la priorité est haute (<a href="../dev/sched-concepts/real-time-scheduling.html">ordonnancement temps réel</a>). Le point d'extension ne transporte aucune période, si bien que la politique la reçoit par un point d'entrée qui lui est propre, ou l'encode dans la valeur passée à <code>SetPriority</code>. Elle doit aussi maintenir elle-même l'utilisation totale sous la borne d'ordonnançabilité, et comme aucun hook ne peut refuser un thread (<code>OnThreadCreate</code> ne renvoie rien), ce contrôle d'admission a sa place dans le point d'entrée propre à la politique, que le noyau appelle avant de lancer le thread.</p>
+<p><a id="earliest-deadline-first-edf"></a></p>
+<h3 id="échéance-la-plus-proche-dabord-edf">Échéance la plus proche d'abord (EDF)</h3>
+<p>Priorité dynamique selon l'échéance absolue. Earliest Deadline First est optimal sur un seul CPU, puisqu'il respecte chaque échéance jusqu'à 100 % d'utilisation là où Rate Monotonic en garantit environ 69 %, et il est plus difficile à analyser en surcharge :</p>
+<table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>Comportement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PerCpuState.SchedulerData</code></td>
+<td>Un tas min ordonné par échéance absolue</td>
+</tr>
+<tr>
+<td><code>SchedulerThread.SchedulerData</code></td>
+<td>Période, échéance relative, échéance absolue, les deux premières reçues par un point d'entrée propre à la politique, comme pour Rate Monotonic</td>
+</tr>
+<tr>
+<td><code>OnThreadReady</code></td>
+<td><code>absolute = now + relative</code>, insérer dans le tas</td>
+</tr>
+<tr>
+<td><code>OnThreadBlocked</code> / <code>OnThreadYield</code></td>
+<td>Retirer du tas / réinsérer avec son échéance absolue inchangée</td>
+</tr>
+<tr>
+<td><code>OnTick</code></td>
+<td>Renvoyer <code>true</code> si l'échéance de la racine du tas est antérieure à celle du thread courant</td>
+</tr>
+<tr>
+<td><code>PickNext</code></td>
+<td>Extraire la racine</td>
+</tr>
+</tbody>
+</table>
+<p><a id="fifo-cooperative"></a></p>
+<h3 id="fifo-coopératif">FIFO (coopératif)</h3>
+<p>Une politique de débogage, utile pour traquer une condition de course qui disparaît sous préemption : une seule file, <code>OnTick</code> renvoie toujours <code>false</code>, et <code>PickNext</code> garde le thread courant tant qu'il est encore <code>Running</code>, si bien qu'un thread s'exécute jusqu'à ce qu'il se bloque, s'endorme ou se termine. Sans cette vérification dans <code>PickNext</code>, chaque réveil ailleurs ferait tout de même changer de thread, parce que le gestionnaire réordonnance à chacun d'eux. La vérification a deux coûts. Un thread limité par le calcul qui ne se bloque jamais garde le CPU pour de bon, et il en irait de même d'un thread à l'intérieur de <code>Thread.Start</code>, qui attend au moyen de <code>Thread.Yield</code> la première exécution du nouveau thread, si bien que <code>PickNext</code> doit laisser s'exécuter en premier un thread encore <code>Created</code>.</p>
+<hr>
+<p><a id="real-time-notes"></a></p>
+<h2 id="remarques-sur-le-temps-réel">Remarques sur le temps réel</h2>
+<p>La séparation entre politique et mécanisme fait du framework une base plausible pour un noyau <a href="../dev/sched-concepts/real-time-scheduling.html">temps réel</a>. Le changement de contexte n'alloue rien, si bien que son coût est déterministe ; une mise en sommeil temporisée fournit le réveil dont une tâche périodique a besoin, et <code>SetPriority</code> est le levier qu'utiliserait un protocole de priorité. L'affinité n'est là qu'à moitié : une politique respecte <code>SchedulerThreadFlags.Pinned</code>, mais seuls les threads inactifs le portent, puisqu'un noyau peut lire <code>SchedulerThread.Flags</code> mais pas le modifier. Un build temps réel dur doit encore ajouter des éléments des deux côtés de l'interface.</p>
+<p>Le côté politique doit borner son propre coût et surveiller sa charge. Tout ce qui se trouve dans <code>OnTick</code> et <code>PickNext</code> s'ajoute à la latence d'interruption dans le pire cas, si bien que l'insertion triée linéaire de Stride ne conviendrait pas, alors que des FIFO par priorité ou un tas maintiennent les hooks en O(log n) ou mieux. Rien n'empêche non plus la surréservation, et c'est à la politique d'ajouter elle-même le contrôle d'admission que décrit l'esquisse Rate Monotonic.</p>
+<p>Au côté noyau, il manque l'héritage de priorité et un tick piloté par les échéances. Le mutex propre au noyau, interne à <code>Cosmos.Kernel.Core</code> et sur lequel reposent les attentes de moniteur bas niveau de CoreLib, réveille ses threads en attente dans l'ordre FIFO et transmet la propriété directement au premier d'entre eux, sans remontée de priorité pour le détenteur : c'est équitable, mais exposé à l'<a href="../dev/sched-concepts/priority-inversion.html">inversion de priorité</a>. Un protocole d'héritage, qui élève le détenteur à la priorité du plus prioritaire des threads en attente par <code>SetPriority</code> et la rétablit à la libération, dispose de son hook mais d'aucune implémentation. Le tick de l'ordonnanceur s'exécute à une période fixe, 10 ms dès le démarrage. Sur ARM64, son minuteur, le Generic Timer, est déjà réarmé en mode ponctuel à chaque interruption ; sur x64, le tick provient du minuteur APIC local périodique, qu'il faudrait faire passer à un réarmement ponctuel. Dans les deux cas, la pièce manquante est un canal de la politique vers le minuteur, afin que la prochaine interruption soit programmée pour la prochaine échéance plutôt que selon une période fixe.</p>
+<hr>
+<p><a id="summary"></a></p>
+<h2 id="résumé">Résumé</h2>
+<table>
+<thead>
+<tr>
+<th>Tâche</th>
+<th>Appel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Installer une politique</td>
+<td><code>SchedulerManager.SetScheduler(policy)</code></td>
+</tr>
+<tr>
+<td>Conserver la politique installée, pour la réinstaller plus tard</td>
+<td><code>SchedulerManager.Current</code></td>
+</tr>
+<tr>
+<td>Attacher un état par CPU</td>
+<td><code>state.SchedulerData = new MyCpuData()</code>, dans <code>InitializeCpu</code></td>
+</tr>
+<tr>
+<td>Attacher un état par thread</td>
+<td><code>thread.SchedulerData = new MyThreadData()</code>, dans <code>OnThreadCreate</code></td>
+</tr>
+<tr>
+<td>Relire l'un ou l'autre</td>
+<td><code>SchedulerData as MyRecord</code>, en gérant <code>null</code></td>
+</tr>
+<tr>
+<td>Mettre en file un thread exécutable</td>
+<td><code>OnThreadReady</code>, <code>OnThreadYield</code></td>
+</tr>
+<tr>
+<td>Retirer un thread</td>
+<td><code>OnThreadBlocked</code>, <code>OnThreadExit</code></td>
+</tr>
+<tr>
+<td>Choisir le thread suivant</td>
+<td><code>PickNext</code>, en renvoyant <code>state.CurrentThread</code> pour le garder ou <code>null</code> pour le thread inactif</td>
+</tr>
+<tr>
+<td>Préempter sur le tick</td>
+<td><code>true</code> renvoyé par <code>OnTick</code></td>
+</tr>
+<tr>
+<td>Protéger un point d'entrée que le gestionnaire ne protège pas</td>
+<td><code>using (SchedulerManager.MaskInterrupts())</code></td>
+</tr>
+<tr>
+<td>Changer la priorité d'un thread</td>
+<td><code>SchedulerManager.SetPriority(cpuId, thread, priority)</code></td>
+</tr>
+<tr>
+<td>Lire la structure d'exécution pendant l'exécution</td>
+<td><code>SchedulerDiagnostics.GetRunQueueCount(cpuId)</code>, <code>SchedulerDiagnostics.TryGetRunQueueThread(cpuId, index, out info)</code></td>
+</tr>
+<tr>
+<td>Lire la période du tick</td>
+<td><code>SchedulerDiagnostics.TickPeriodNs</code></td>
+</tr>
+</tbody>
+</table>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/user/scheduler-plugging.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

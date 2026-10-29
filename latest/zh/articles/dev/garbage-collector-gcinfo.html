@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title> | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content=" | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/dev/garbage-collector-gcinfo.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="overview"></a></p>
+<h2 id="概述">概述</h2>
+<p>栈扫描可以<a href="gc-concepts/conservative-vs-precise.html">猜测或确知</a>哪些栈字是对象引用。本文讨论确知的一方：ILC 为每个方法生成的 <strong>GCInfo</strong> 元数据，GC 如何用它逐帧遍历触发回收的线程，以及决定它能覆盖哪些线程的<a href="gc-concepts/safepoint.html">安全点（safepoint）</a>约束。本文接续垃圾回收器一文中的<a href="garbage-collector.html#mark-phase">标记阶段</a>一节。</p>
+<div class="NOTE">
+<h5>注意</h5>
+<p>状态：精确扫描已对触发 GC 的线程以及异常 <a href="gc-concepts/funclet.html">funclet</a> 栈帧生效，并且会把内部指针解析到其父对象（epic <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/348">#348</a> 的第 1 至 3 阶段和第 5 阶段，内部指针支持来自 <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/376">#376</a>/<a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/384">#384</a>）。在<a href="#the-safepoint-constraint">返回地址劫持</a>落地之前（<a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/385">#385</a>），在调度器中被抢占的线程仍使用保守扫描。</p>
+</div>
+<hr>
+<p><a id="why-precise-scanning"></a></p>
+<h2 id="为什么需要精确扫描">为什么需要精确扫描</h2>
+<p><a href="gc-concepts/conservative-vs-precise.html">保守扫描</a>不知道哪些栈字是引用，因此把每个指针大小的字都当作候选（在 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.Mark.cs"><code>GarbageCollector.Mark.cs</code></a> 中由 <code>ScanThreadStack</code> 和 <code>ScanMemoryRange</code> 把候选交给 <code>TryMarkRoot</code>），并保留那些落在 GC 堆内且带有看似合理的 <code>MethodTable</code> 的字。这些只是合理性过滤，而非证明，由此带来两个问题。</p>
+<p><strong>过度生根。</strong> 遗留在已失效的溢出槽中，或尚未被覆盖的被调用者栈帧中的任何过时堆指针，都会成为一个<a href="gc-concepts/gc-roots.html">根</a>，于是它指向的死对象会在这次回收中存活下来，连同它传递引用的一切。经由强引用产生的虚假根会悄无声息地造成泄漏。而让弱引用目标保持存活的虚假根至少是可见的：一个本应被置空的弱句柄仍然能解析，CI 捕获的正是这种情况。</p>
+<p><strong>布局脆弱性。</strong> 过时指针是否位于被扫描的槽中，完全取决于编译的偶然结果，因此每当代码生成发生变化，正确性也随之变化。issue <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/346">#346</a> 就是典型：给一个在栈上分配的结构体（<code>InterruptScope</code>，内联在每条 GC 和调度器路径周围）增加一个 8 字节字段，使其下方的槽发生移动，一个过时的数组指针恰好落在扫描读取的位置，弱引用测试随之失败。增加字段、引入局部变量或升级编译器，都属于同一类故障，直到触发线程的扫描变为精确扫描为止。</p>
+<p>一个诱人的折中办法是保留保守扫描，但只读取沿帧指针链遍历找到的存活帧范围。这在这里并不安全：ILC 编译的许多函数没有帧指针，因此这条链会悄无声息地跳过一些帧。异常分派可以容忍跳过一帧；GC 却不能，因为漏掉一个根会释放存活对象，并在清除阶段变成释放后使用（use-after-free），这比它原本要消除的过度生根严格更糟。向编译器询问引用在哪里，才是唯一正确的途径。</p>
+<hr>
+<p><a id="what-gcinfo-is"></a></p>
+<h2 id="gcinfo-是什么">GCInfo 是什么</h2>
+<p>ILC 编译一个方法时，会在机器码之外生成一个小的 GCInfo 数据块（blob），它只回答一个问题：</p>
+<blockquote>
+<p>如果执行位于该方法内代码偏移 N 处时发生 GC，哪些 CPU 寄存器和哪些栈槽持有存活的对象引用，其中哪些是内部指针，哪些被固定？</p>
+</blockquote>
+<p>每个方法一个数据块。正是它让精确扫描成为可能：GC 不再猜测哪些栈字看起来像指针，而是去问编译器。</p>
+<p><a id="where-it-lives-in-the-binary"></a></p>
+<h3 id="它在二进制文件中的位置">它在二进制文件中的位置</h3>
+<p>在运行时找到该数据块依赖于 ELF 的栈展开机制，因此下文会反复出现四个 DWARF 术语。每个二进制文件都带有一个 <code>.eh_frame</code> 节：这是一张每个函数对应一项的表（每一项是一个 <strong>FDE</strong>，即帧描述条目（frame description entry）），其中的调用帧信息（<strong>CFI</strong>）规则让运行时可以从该函数内的任意一条指令重建调用者的寄存器。每个 FDE 还可以指向一块语言特定数据（<strong>LSDA</strong>），这是一块自由格式的区域，展开器本身从不解释它。NativeAOT 把它的每方法记录放在这个 LSDA 指针后面。</p>
+<p>ILC 为每个方法向 <code>.dotnet_eh_table</code> 节写入一条记录，布局为 <code>[LSDA header][GCInfo blob][EH clauses]</code>。链接器会保留该节及其边界：参见 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Templates/Linker/linker.x64.ld"><code>linker.x64.ld</code></a> 和 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Templates/Linker/linker.arm64.ld"><code>linker.arm64.ld</code></a> 中的 <code>*(.dotnet_eh_table)</code> 以及 <code>__dotnet_eh_table_start</code> / <code>__dotnet_eh_table_end</code>。方法的 DWARF <code>.eh_frame</code> FDE 携带一个指向该记录 LSDA 头的指针，<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Runtime/GcInfo/MethodGcInfoLookup.cs"><code>MethodGcInfoLookup</code></a> 遍历 <code>.eh_frame</code>，把指令指针解析到这个头。因此，从一个 IP 出发，只需走过一个 LSDA 头就能到达 GCInfo 数据块。无需修改构建流水线、链接后工具或 patcher。</p>
+<p><code>.dotnet_eh_table</code> 节由这样的记录依次组成，每个方法一条，每条按以下顺序排布：</p>
+<table>
+<thead>
+<tr>
+<th>记录部分</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LSDA 头，第 0 字节</td>
+<td><code>unwindBlockFlags</code>：<code>UBF_FUNC_KIND_MASK</code> 0x03（ROOT / HANDLER / FILTER）、<code>UBF_FUNC_HAS_EHINFO</code> 0x04、<code>UBF_FUNC_HAS_ASSOCIATED_DATA</code> 0x10</td>
+</tr>
+<tr>
+<td>仅 funclet 记录</td>
+<td>一个指向主方法 LSDA 的 int32 自相对偏移，外加一个 int32 起始增量；funclet 复用其主方法的 GCInfo</td>
+</tr>
+<tr>
+<td>若有 <code>HAS_ASSOCIATED_DATA</code></td>
+<td>int32 指针</td>
+</tr>
+<tr>
+<td>若有 <code>HAS_EHINFO</code></td>
+<td>int32 指针</td>
+</tr>
+<tr>
+<td><strong>GCInfo 数据块</strong></td>
+<td>按位紧凑编码（见下文）；精确扫描解码的正是这一部分</td>
+</tr>
+<tr>
+<td>EH 子句</td>
+<td>try/catch/finally 表</td>
+</tr>
+</tbody>
+</table>
+<p>方法的 <code>.eh_frame</code> FDE 让其 LSDA 指针指向该记录的第一个字节，GCInfo 查询所用的代码偏移为 <code>ip - methodStart</code>。</p>
+<div class="NOTE">
+<h5>注意</h5>
+<p>上游参考：LSDA 头的布局就是 NativeAOT 运行时在 <a href="https://github.com/dotnet/runtime/blob/main/src/coreclr/nativeaot/Runtime/unix/UnixNativeCodeManager.cpp"><code>UnixNativeCodeManager.cpp</code></a> 的 <code>FindMethodInfo</code> / <code>GetCodeOffset</code> 中解析的格式。</p>
+</div>
+<p><a id="whats-inside-the-blob"></a></p>
+<h3 id="数据块内部有什么">数据块内部有什么</h3>
+<p>GCInfo 是一个紧密的按位打包流；每个字段只占用最少的位数，没有任何内容按字节对齐。逻辑上它分为三部分：</p>
+<table>
+<thead>
+<tr>
+<th>部分</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>头部</strong></td>
+<td>标志（版本由运行时固定，不编码在数据块中）、代码长度（等于 FDE 的 PC 范围，可用于合理性检查）、栈槽偏移所相对的栈基址寄存器（<code>SP</code> 或帧寄存器）、是否存在 GS cookie 或泛型上下文、安全点数量，以及完全可中断范围的数量。</td>
+</tr>
+<tr>
+<td><strong>槽表</strong></td>
+<td>该方法曾用于存放对象引用的全部槽。每个槽要么是寄存器（按编号），要么是栈槽（基址寄存器加有符号偏移）。每个槽的标志：<code>GC_SLOT_INTERIOR</code>（值指向对象中间，而非对象头）和 <code>GC_SLOT_PINNED</code>（目标不得移动）。未跟踪的槽在整个方法体内都存活，位于表的末尾。</td>
+</tr>
+<tr>
+<td><strong>存活性</strong></td>
+<td>哪些槽在哪些代码偏移处存活。完全可中断范围编码的存活性对其中任意 IP 都有效；部分可中断的方法只按<strong>安全点</strong>（调用点）编码存活性。</td>
+</tr>
+</tbody>
+</table>
+<p><a id="a-tiny-worked-example"></a></p>
+<h3 id="一个小型示例">一个小型示例</h3>
+<pre><code class="lang-csharp">static void Foo()
+{
+    byte[] a = new byte[128];     // 'a' is an object reference
+    Bar();                        // ←(I) call site = safepoint; 'a' still needed below, so live here
+    GC.KeepAlive(a);
+    string s = Compute();         // 's' is an object reference; 'a' is now dead
+    Console.WriteLine(s);         // ←(II) call site = safepoint; 's' live, 'a' dead here
+}
+</code></pre>
+<p>ILC 为 <code>Foo</code> 生成的 GCInfo，从概念上看如下。首先是槽表：</p>
+<table>
+<thead>
+<tr>
+<th>槽</th>
+<th>位置</th>
+<th>持有</th>
+<th>标志</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>寄存器 <code>RSI</code></td>
+<td><code>s</code></td>
+<td>无</td>
+</tr>
+<tr>
+<td>1</td>
+<td>栈，帧基址 - 0x18</td>
+<td><code>a</code></td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<p>持有一个指向数组的 <code>ref</code> 的方法会增加一个标记为 <code>INTERIOR</code> 的槽，<code>fixed</code> 块则会增加一个标记为 <code>PINNED</code> 的槽；<code>Foo</code> 两者都没有。然后是这些槽在整个方法体上的存活性，从偏移 0x00 到代码长度：</p>
+<table>
+<thead>
+<tr>
+<th>代码偏移</th>
+<th>存活的槽</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x00 至 0x4A</td>
+<td>无</td>
+</tr>
+<tr>
+<td>0x4A 至 0x6C</td>
+<td>仅槽 1（数组）</td>
+</tr>
+<tr>
+<td>0x6C 至代码长度</td>
+<td>仅槽 0（字符串）</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>Foo</code> 的栈帧位于栈上、IP 处于 <code>Bar()</code> 之后的返回地址时发生 GC。代码偏移解析为安全点（I），GCInfo 只报告持有 <code>a</code> 的槽，<code>byte[128]</code> 被保留。仅此而已。</li>
+<li>IP 处于 <code>WriteLine</code> 之后的返回地址时发生 GC。安全点（II）只报告持有 <code>s</code> 的寄存器。<code>byte[128]</code> 没有被报告，因而被回收，尽管它的过时指针仍留在 <code>a</code> 的栈槽中。最后这种情况恰恰是保守扫描会弄错的。</li>
+</ul>
+<div class="NOTE">
+<h5>注意</h5>
+<p>上游参考：权威的格式与解码器语义是 <a href="https://github.com/dotnet/runtime/blob/main/src/coreclr/vm/gcinfodecoder.cpp"><code>gcinfodecoder.cpp</code></a> 中的 <code>GcInfoDecoder::EnumerateLiveSlots</code>（NativeAOT 使用 <code>GCINFODECODER_NO_EE</code> 构建它），类型定义在 <a href="https://github.com/dotnet/runtime/blob/main/src/coreclr/inc/gcinfotypes.h"><code>gcinfotypes.h</code></a> 和 <a href="https://github.com/dotnet/runtime/blob/main/src/coreclr/inc/gcinfodecoder.h"><code>gcinfodecoder.h</code></a> 中。内核的解码器是对其所需 v4 子集的直接移植。</p>
+</div>
+<hr>
+<p><a id="how-the-precise-scan-walks-a-thread"></a></p>
+<h2 id="精确扫描如何遍历线程">精确扫描如何遍历线程</h2>
+<p>扫描逐帧遍历触发 GC 的线程。对于每一帧，它有两个输入：IP（指向该方法代码内部的返回地址）和一个 <code>REGDISPLAY</code>，即保存该帧寄存器状态的结构体。两者都来自为异常处理构建的机制：<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Runtime/ExceptionHandling/ExceptionHelper.cs"><code>ExceptionHelper.cs</code></a> 中的 CFI 展开器逐帧重建调用者的寄存器状态，一个小型原生桩代码（<code>_native_capture_regdisplay</code>）为扫描自身的栈帧填充初始的 <code>REGDISPLAY</code>。</p>
+<p>驱动遍历的是 <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.PreciseStack.cs"><code>GarbageCollector.PreciseStack.cs</code></a> 中的 <code>PreciseScanCurrentThread</code>，它由 <code>ScanStackRoots</code> 分派调用，且只针对触发 GC 的线程。遍历在第一帧之后最多进行 256 步展开。</p>
+<pre><code class="lang-mermaid">flowchart TD
+    START[&quot;Frame: REGDISPLAY + IP&quot;] --&gt; LOOKUP{&quot;IP has GCInfo?
+    (MethodGcInfoLookup)&quot;}
+    LOOKUP --&gt;|&quot;no, but CFI exists
+    (asm trampoline)&quot;| STEP[&quot;Report nothing,
+    step through&quot;]
+    LOOKUP --&gt;|&quot;no CFI at all
+    (IRQ entry, bootloader)&quot;| FALLBACK[&quot;Conservative-scan the rest
+    of this stack, then stop&quot;]
+    LOOKUP --&gt;|yes| DECODE[&quot;GcInfoDecoder.EnumerateLiveSlots
+    (REGDISPLAY, codeOffset)&quot;]
+    DECODE --&gt; RESOLVE[&quot;Resolve each live slot to an address:
+    register slot: saved register location,
+    stack slot: base register + offset&quot;]
+    RESOLVE --&gt; MARK[&quot;For each reported ref:
+    interior: GetParentObject() walks its segment,
+    then TryMarkRoot()&quot;]
+    STEP --&gt; UNWIND
+    MARK --&gt; UNWIND[&quot;UnwindOneFrameWithCFI():
+    caller's REGDISPLAY + IP&quot;]
+    UNWIND --&gt; START
+</code></pre>
+<p>对于每个被报告的槽，回调（<code>PreciseRootTrampoline</code>）会做以下两件事之一：</p>
+<ul>
+<li>普通引用直接传给 <code>TryMarkRoot</code>；对于精确报告的根，常规的堆范围检查和 <code>MethodTable</code> 检查只是无害的双重保险。</li>
+<li>标记为 <code>GC_CALL_INTERIOR</code> 的槽持有指向对象中间的指针（byref，或 span 的引用）。回调用 <code>GetParentObject</code> 把它解析为所在的对象：<code>GetParentObject</code> 在任一条链中找到包含该地址的段，并从段的第一个对象开始遍历；逐步的机制见<a href="garbage-collector.html#interior-pointers">垃圾回收器：内部指针</a>。槽的 <code>GC_CALL_PINNED</code> 标志不起任何作用：它表示该槽是一个被固定的局部变量（<code>fixed</code> 语句的局部变量），而不表示对象位于哪个堆上。不落在任何对象内的地址不会标记任何东西。这就是对仅能通过 byref 到达的对象的修复（issue <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/384">#384</a>）。</li>
+</ul>
+<p>没有 GCInfo 的栈帧分为两类。仍带有 <code>.cfi</code> 指令的手写汇编跳板（<code>RhpCallCatchFunclet</code>、<code>RhpCallFilterFunclet</code>、<code>RhpCallFinallyFunclet</code>、<code>RhpThrowEx</code>）会被直接跨过，不报告任何内容：两侧的托管栈帧覆盖了它保存寄存器的位置，而正在传播的异常对象仍会被报告，因为栈中更深处的托管栈帧（funclet 主体中的异常局部变量、桩代码调用的托管分派器 <code>RhThrowEx</code>）把它保存在由它们自己的 GCInfo 描述的槽中。完全没有 CFI 的栈帧（中断入口桩代码、引导加载程序）会终止遍历：扫描器以保守方式扫描剩余的栈范围，然后停止，而不是崩溃。如果展开器在遍历中途失败，或者某个方法的槽表超出解码器的固定缓冲区，也会执行同样的保守收尾。有两种退出方式更为严厉：展开得到的栈帧未通过合理性检查（IP 为零，或栈指针没有增大或离开了栈），或者遍历用完了 256 帧的上限，这两种情况都会直接停止扫描而不做保守收尾，更早的栈帧在这次回收中都不会被扫描。</p>
+<p><a href="gc-concepts/funclet.html">Funclet</a> 栈帧（catch、filter 和 finally 主体）没有自己的 GCInfo。它们的 LSDA 头重定向到主方法的记录，代码偏移相对于主方法的起始地址解析，因此 funclet 会在它实际运行的栈帧上，使用父方法的槽表进行扫描。filter funclet 在异常抛出的过程中运行，因此父方法的未跟踪槽在那里可能已经过时，不会被报告（<code>NoReportUntracked</code>）；catch 和 finally funclet 正常报告它们，而标记是幂等的，因此与父栈帧重复报告也无害。</p>
+<hr>
+<p><a id="the-safepoint-constraint"></a></p>
+<h2 id="安全点约束">安全点约束</h2>
+<p>GCInfo 只在<a href="gc-concepts/safepoint.html">安全点</a>上有效：对于部分可中断的方法是调用点，对于完全可中断的范围则是其中的任意 IP。因此，对某个线程进行精确扫描是否可靠，取决于 GC 运行时该线程的指令指针位于何处：</p>
+<ol>
+<li><p><strong>触发 GC 的线程。</strong> 它通过一条进入分配器的托管调用链到达回收器，因此其栈上的每个返回地址都是调用点安全点。对该线程进行精确扫描是可靠的。异常 funclet 栈帧同样是通过分派器的 <code>call</code> 进入的，因此它们也是安全点。</p>
+</li>
+<li><p><strong>停驻在调度器中的线程。</strong> 位于运行队列中、被阻塞或正在睡眠的线程，是在任意指令处被定时器 IRQ 抢占的，那里不一定是安全点，因此在那里查询它的 GCInfo 可能毫无意义。被抢占的 IP 可能碰巧落在完全可中断范围内，此时查询是有效的，但这没有任何保证：大多数方法体只在调用点处有描述，因此一个只是有时精确的扫描，对其他所有停止位置仍然需要保守回退。标准 NativeAOT 用返回地址劫持解决这个问题：在扫描这样的线程之前，运行时把栈上的某个返回地址改写为一个桩代码的地址，让线程运行到这次返回，使其停驻在桩代码处（这在构造上就是一个安全点），对它进行精确扫描，然后恢复真正的返回地址。Cosmos 目前还没有这样的子系统；这是 issue <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/385">#385</a>。</p>
+</li>
+</ol>
+<p>在此之前，除触发 GC 的线程之外的其他线程仍使用<a href="garbage-collector.html#mark-phase">垃圾回收器：标记阶段</a>中描述的保守扫描。这些线程及其保存的寄存器状态来自调度器的线程登记表；参见<a href="scheduler.html">调度器</a>。</p>
+<hr>
+<p><a id="source-files"></a></p>
+<h2 id="源文件">源文件</h2>
+<table>
+<thead>
+<tr>
+<th>组成部分</th>
+<th>位置</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>精确的逐帧遍历</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.PreciseStack.cs"><code>GarbageCollector.PreciseStack.cs</code></a></td>
+<td>遍历循环、根回调、内部指针解析；由 <code>GarbageCollector.Mark.cs</code> 中的 <code>ScanStackRoots</code> 分派到这里</td>
+</tr>
+<tr>
+<td>GCInfo v4 解码器</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GcInfo/GcInfoDecoder.cs"><code>GcInfoDecoder.cs</code></a>、<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GcInfo/GcSlotTable.cs"><code>GcSlotTable.cs</code></a>、<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GcInfo/GcInfoTypes.cs"><code>GcInfoTypes.cs</code></a>、<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GcInfo/GcInfoBitStreamReader.cs"><code>GcInfoBitStreamReader.cs</code></a></td>
+<td>头部、槽表、<code>EnumerateLiveSlots</code>；<code>gcinfodecoder.cpp</code> 的移植</td>
+</tr>
+<tr>
+<td>从 IP 查找 GCInfo</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Runtime/GcInfo/MethodGcInfoLookup.cs"><code>MethodGcInfoLookup.cs</code></a>、<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Bridge/Import/EhFrameNative.cs"><code>EhFrameNative.cs</code></a></td>
+<td>内核唯一的 <code>.eh_frame</code> / LSDA 解析器：IP → FDE → LSDA → GCInfo 数据块，包括从 funclet 到主方法的重定向；也为异常展开器服务</td>
+</tr>
+<tr>
+<td>CFI 展开器、<code>REGDISPLAY</code></td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Runtime/ExceptionHandling/ExceptionHelper.cs"><code>ExceptionHelper.cs</code></a>（+ <code>ExceptionHelper.X64.cs</code> / <code>ExceptionHelper.ARM64.cs</code>、<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Runtime/ExceptionHandling/RegisterContext.X64.cs"><code>RegisterContext.X64.cs</code></a> / <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Runtime/ExceptionHandling/RegisterContext.ARM64.cs"><code>RegisterContext.ARM64.cs</code></a>）</td>
+<td><code>UnwindOneFrameWithCFI</code> 执行 DWARF 调用帧指令以重建调用者的寄存器状态，为 <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/227">#227</a> 而构建</td>
+</tr>
+<tr>
+<td><code>_native_capture_regdisplay</code> 桩代码</td>
+<td><code>src/Cosmos.Kernel.Native.X64/CPU/ContextCapture.s</code>、<code>src/Cosmos.Kernel.Native.ARM64/CPU/ContextCapture.s</code>、<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Bridge/Import/ContextSwitchNative.cs"><code>ContextSwitchNative.cs</code></a></td>
+<td>为触发 GC 的线程填充初始的 <code>REGDISPLAY</code></td>
+</tr>
+<tr>
+<td>保留 <code>.dotnet_eh_table</code>，并提供 <code>__dotnet_eh_table_start/end</code></td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Templates/Linker/linker.x64.ld"><code>linker.x64.ld</code></a>、<a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Build.Templates/Linker/linker.arm64.ld"><code>linker.arm64.ld</code></a></td>
+<td>运行时可通过 FDE 的 LSDA 访问 GCInfo</td>
+</tr>
+<tr>
+<td>保守扫描（停驻的线程）</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.Mark.cs"><code>GarbageCollector.Mark.cs</code></a></td>
+<td><code>ScanThreadStack</code> / <code>ScanMemoryRange</code> / <code>TryMarkRoot</code>；在劫持落地之前保留的部分</td>
+</tr>
+<tr>
+<td>测试</td>
+<td><code>tests/Kernels/Cosmos.Kernel.Tests.GarbageCollector</code></td>
+<td><code>GC_GcInfoDecoder</code>、<code>GC_PreciseStackScan</code>、<code>GC_FuncletNoFalseRoot</code>、<code>GC_FuncletNoCrashOnAllocInCatch</code>、<code>GC_StackScanPaddingStress</code>、<code>GC_InteriorPointerRoot</code>、<code>GC_InteriorPointerRootMidTlab</code>、<code>GC_InteriorPointerRootPinnedHeap</code>、<code>GC_InteriorPointerRootFixed</code></td>
+</tr>
+<tr>
+<td>劫持桩代码</td>
+<td>尚未编写</td>
+<td><a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/385">#385</a>，epic 的第 4 阶段</td>
+</tr>
+</tbody>
+</table>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/dev/garbage-collector-gcinfo.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

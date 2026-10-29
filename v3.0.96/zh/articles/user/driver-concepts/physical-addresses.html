@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>物理地址 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="物理地址 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/user/driver-concepts/physical-addresses.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="physical-addresses"></a></p>
+<h1 id="物理地址">物理地址</h1>
+<p>在启用了分页的 CPU 上运行的代码从不直接指明内存。它持有的每个指针都是虚拟地址，内存管理单元通过页表把它转换成物理地址，也就是内存总线实际传送的位置，位于 RAM 中或设备的寄存器空间中。转换以页为单位进行，通常每次 4 KiB，相邻的虚拟页不一定映射到相邻的物理页。</p>
+<p>设备位于这一转换之外。设备通过 <a href="dma.html">DMA</a> 读写内存时，会把地址直接放到总线上，没有页表可查，因此驱动程序交给它的是缓冲区的物理地址，绝不是驱动程序自身代码使用的指针。IOMMU 可以为设备提供它们自己的地址转换；没有 IOMMU 时，设备地址就是物理地址。这种分离在反方向上同样存在：设备的<a href="registers.html">寄存器</a>位于某个物理地址上，内核要先把它映射到虚拟地址空间，CPU 才能访问。</p>
+<p>由此产生两个约束。在虚拟内存中连续的缓冲区可能分散在多个物理页上，而被要求从某个地址传输 N 字节的设备，读取的是物理上连续的 N 个字节，因此驱动程序要么分配物理连续的内存，要么把分散的缓冲区描述为一个片段列表。设备还有对齐要求：保存基址的寄存器常常忽略其低位，有些结构不能跨越页边界。</p>
+<p>陷阱在于这两种地址都只是普通整数。没有任何机制阻止驱动程序把虚拟地址交给设备，而设备随后会读写一个毫不相干的物理位置，也没有任何故障能指出问题出在哪里。</p>
+<p>在驱动工具包中，由 <code>binding.AllocateDma(length, alignment)</code> 得到的 <code>DmaBuffer</code> 同时提供这两种视图：它是物理连续的，起始地址至少按 4 KiB 边界对齐，并带有供 CPU 使用的 <code>Span</code> 和供设备使用的 <code>PhysicalAddress</code>。节点的内存窗口（<code>DeviceResource.PhysicalBase</code>，以及内存 BAR 的 <code>PciBar.Base</code>）都是物理地址，由 <code>MapRegisters</code> 和 <code>MapRegion</code> 使其可以访问；内核不设置任何 IOMMU，所以设备使用的就是物理地址。参见 <a href="../drivers.html#dma-memory">DMA 内存</a>和 <a href="../drivers.html#bar-resources">BAR 资源</a>。</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/user/driver-concepts/physical-addresses.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

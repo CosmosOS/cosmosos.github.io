@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+      <title>Interrupt context | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Interrupt context | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/articles/user/driver-concepts/interrupt-context.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="interrupt-context">Interrupt context</h1>
+
+<p>When a device raises an interrupt, the CPU stops the running code at the next <a href="../../dev/sched-concepts/instruction-boundary.html">instruction boundary</a> and jumps to a handler. The handler is not a thread: it borrows the stack of whatever it interrupted and runs with interrupts masked, so nothing else runs on that CPU until it returns, not even the timer tick that drives <a href="../../dev/sched-concepts/preemption.html">preemption</a>. A handler runs in interrupt context, and everything else in thread context.</p>
+<p>A handler therefore cannot wait. Waiting means giving the CPU to another thread, and a handler has no thread to park: one that sleeps, waits for an event or spins on a lock the interrupted code holds waits forever. Kernels split interrupt work in two. The top half, in the handler, acknowledges the device and wakes whoever waits. The bottom half runs later in thread context, where it may block and take ordinary locks.</p>
+<p>Data a handler shares with a thread needs a spin lock that disables interrupts while held, or the handler can fire on the holder's CPU and spin forever on a thread that cannot run until the handler returns. Such a lock is held briefly, never across a wait.</p>
+<p>In the driver kit, a handler acknowledges through its register window and hands off through its <code>InterruptContext</code>: <code>Mask()</code> masks its source, <code>Signal(DeviceEvent)</code> wakes a waiting thread, and <code>Schedule(WorkItem)</code> queues the bottom half on the kit worker, while <code>DeviceLock.Acquire()</code> is the spin lock that disables interrupts. The guard catches calls to <code>DeviceBinding</code> methods and to some access-object members, such as <code>UsbAccess</code> transfers and <code>Ps2Access.TryCommand</code>: it halts the kernel in a real interrupt, naming the member, and throws in a synthetic dispatch, where the kit records the fault and masks the source.</p>
+<p>The kit also adds a rule of its own: a driver's handler must not allocate. The kernel's own handlers do, and the garbage collector tolerates it; this is a safety rule, because an allocation can pull in runtime machinery that misbehaves in interrupt context, notably interface dispatch resolution and exception throwing. Nothing detects an allocation: the guard runs only inside those kit members, never in the driver's own code. See <a href="../drivers.html#the-two-execution-contexts-and-the-guard">The two execution contexts and the guard</a>, <a href="../drivers.html#work-items">Work items</a> and <a href="../drivers.html#device-locks">Device locks</a>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/articles/user/driver-concepts/interrupt-context.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

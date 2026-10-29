@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>内存屏障 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="内存屏障 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/user/driver-concepts/barriers.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="memory-barriers"></a></p>
+<h1 id="内存屏障">内存屏障</h1>
+<p>程序的加载（load）和存储（store）不一定按源代码列出的顺序到达内存。编译器可能重排它认为彼此独立的访问，CPU 也可能让较晚的存储先于较早的存储变得可见，或者让较晚的加载先于较早的加载执行，只要正在运行的线程察觉不到即可。设备却能察觉：它自行读写 <a href="dma.html">DMA</a> 内存，只能看到 CPU 的存储变得可见的顺序。</p>
+<p>交出一个<a href="descriptor-rings.html">描述符</a>就能说明这个问题。驱动程序先填好地址和长度，再设置把描述符交给设备的标志；如果标志先变得可见，设备就会按旧的长度工作。完成则是与之对称的情形：驱动程序读取设备设置的标志，再读取该标志表明已就绪的数据，而提前加载了数据的 CPU 返回的是设备写入之前的内容。在描述符和标志之间放一道写屏障，可以让之前的每次存储都先于之后的任何存储变得可见。在标志和数据之间放一道读屏障，可以防止之后的加载跑到它前面。两者还都会阻止编译器把访问移到屏障的另一侧。</p>
+<p>陷阱在于，x64 自身就会保持存储与存储之间、加载与加载之间的顺序，所以缺少屏障在那里不会造成任何危害。问题会在 ARM64 上暴露出来，它的内存模型允许这两类访问都被重排，因此只在 x64 上测试过的驱动程序可能长期带着这个 bug。</p>
+<p>在驱动工具包中，<code>DmaBuffer.WriteBarrier()</code> 和 <code>DmaBuffer.ReadBarrier()</code> 就是这两种屏障：在 ARM64 上是真正的栅栏（fence）指令，在 x64 上不生成任何指令，但仍会阻止编译器把访问移到它们的另一侧。每次 <code>RegisterWindow</code> 写入之前都有一道写屏障，每次读取之后都有一道读屏障，因此填好描述符之后的门铃写入不需要自己的屏障；而 <code>DeviceRegion</code> 不带任何屏障，由驱动程序自己放置。参见 <a href="../drivers.html#dma-memory">DMA 内存</a>和<a href="../drivers.html#register-windows">寄存器窗口</a>。</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/user/driver-concepts/barriers.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

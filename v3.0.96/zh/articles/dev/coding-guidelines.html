@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>编码规范 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="编码规范 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/dev/coding-guidelines.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="coding-guidelines"></a></p>
+<h1 id="编码规范">编码规范</h1>
+<p>本文档确立了 Cosmos Gen3 的编码风格与架构模式。这些规范确保所有贡献者共同维护一个整洁、现代且一致的代码库。</p>
+<p><a id="table-of-contents"></a></p>
+<h2 id="目录">目录</h2>
+<ul>
+<li><a href="#1-project-architecture">1. 项目架构</a></li>
+<li><a href="#2-naming-conventions">2. 命名约定</a></li>
+<li><a href="#3-file-organization">3. 文件组织</a></li>
+<li><a href="#4-class--type-design">4. 类与类型设计</a></li>
+<li><a href="#5-kernel-lifecycle">5. 内核生命周期</a></li>
+<li><a href="#6-hal-architecture">6. HAL 架构</a></li>
+<li><a href="#7-plug-system">7. Plug 系统</a></li>
+<li><a href="#8-native-interop">8. 原生互操作</a></li>
+<li><a href="#9-architecture-specific-code">9. 架构相关代码</a></li>
+<li><a href="#10-memory--safety">10. 内存与安全</a></li>
+<li><a href="#11-error-handling">11. 错误处理</a></li>
+<li><a href="#12-nullable-reference-types">12. 可空引用类型</a></li>
+<li><a href="#13-modern-c--net-10-idioms">13. 现代 C# / .NET 10 惯用法</a></li>
+<li><a href="#14-aot-constraints">14. AOT 约束</a></li>
+<li><a href="#15-documentation">15. 文档</a></li>
+<li><a href="#16-testing">16. 测试</a></li>
+<li><a href="#17-public-api-surface">17. 公共 API 面</a></li>
+</ul>
+<hr>
+<p><a id="1-project-architecture"></a></p>
+<h2 id="1-项目架构">1. 项目架构</h2>
+<p><a id="layer-dependency-rules"></a></p>
+<h3 id="层依赖规则">层依赖规则</h3>
+<p>项目划分为严格的层次。依赖关系<strong>只能向下</strong>。这些规则由 <code>Cosmos.Build.Analyzer.Patcher</code> 中的 Roslyn 分析器 <code>LayerAnalyzer</code> <strong>在编译时强制执行</strong>：它依据项目代码所引用的类型和成员来判定，而不是依据还原（restore）生成的引用列表，并且对每个跨越边界使用的程序集只在其首次使用处报告一次。用户内核以及驱动程序程序集（<code>&lt;CosmosDriverAssembly&gt;true&lt;/CosmosDriverAssembly&gt;</code>，参见<a href="public-api.html">公共 API 跟踪</a>）还可以引用 <code>Cosmos.Kernel.HAL</code> 提供的内容：驱动工具包扩展点和设备契约（<code>IBlockDevice</code>、<code>MacAddress</code>）。</p>
+<pre><code>User Kernel (DevKernel, test kernels)
+Cosmos.Kernel.Drivers (the shipped drivers, a driver assembly held to the User layer)
+    └── Cosmos.Kernel.System        ← high-level OS APIs (Console, Graphics, Network)
+         └── Cosmos.Kernel.HAL      ← hardware abstraction (shared logic, boot and device contracts)
+              ├── Cosmos.Kernel.HAL.X64        ← x64 platform code (machine description, line routing, PIT, RTC)
+              ├── Cosmos.Kernel.HAL.ARM64      ← ARM64 platform code (machine description, line routing, generic timer, RTC)
+              └── Cosmos.Kernel.Core   ← low-level runtime (memory, scheduler, serial)
+                   ├── Cosmos.Kernel.Native.X64       ← x64 assembly (.s)
+                   ├── Cosmos.Kernel.Native.ARM64     ← ARM64 assembly (.s)
+                   └── Cosmos.Kernel.Native.MultiArch ← cross-platform native C code (ACPI, libc stubs)
+</code></pre>
+<p>完整的依赖关系图、项目说明和规则，请参见<a href="kernel-project-layout.html">内核项目结构</a>。</p>
+<p><a id="when-to-create-a-new-project"></a></p>
+<h3 id="何时创建新项目">何时创建新项目</h3>
+<ul>
+<li>工具包的总线能够到达的新硬件（一个 PCI 功能、一个 virtio 设备、一个 USB 接口、一个 PS/2 端口、一个平台节点）→ 在 <code>Cosmos.Kernel.Drivers</code> 中编写一个 <code>[Driver]</code> 类，基于公共扩展点实现（<a href="../user/drivers.html">编写驱动程序</a>）；聚合项目会携带这个包，因此每个内核都会获得它。新的总线种类 → 在工具包中添加一个标识、一个匹配、一个访问对象和一个路径。跨平台 HAL 代码放在 <code>Cosmos.Kernel.HAL</code> 中，平台代码放在 <code>Cosmos.Kernel.HAL.X64</code>/<code>Cosmos.Kernel.HAL.ARM64</code> 中。</li>
+<li>新的操作系统级功能、对外暴露的用户 API → 放在 <code>Cosmos.Kernel.System</code> 中。</li>
+<li>新的底层运行时关注点 → 放在 <code>Cosmos.Kernel.Core</code> 中。</li>
+</ul>
+<hr>
+<p><a id="2-naming-conventions"></a></p>
+<h2 id="2-命名约定">2. 命名约定</h2>
+<p>部分核心命名规则由 <code>.editorconfig</code> 强制执行；下表记录了完整的命名规范：</p>
+<table>
+<thead>
+<tr>
+<th>元素</th>
+<th>约定</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>命名空间</td>
+<td><code>Cosmos.Kernel.{Layer}.{Category}</code>（项目名，然后是其文件夹）</td>
+<td><code>Cosmos.Kernel.Core.Scheduler</code></td>
+</tr>
+<tr>
+<td>公共类/结构体</td>
+<td>PascalCase</td>
+<td><code>GarbageCollector</code>, <code>Thread</code></td>
+</tr>
+<tr>
+<td>接口</td>
+<td><code>I</code> + PascalCase</td>
+<td><code>IScheduler</code>, <code>IPlatformInitializer</code></td>
+</tr>
+<tr>
+<td>公共方法/属性</td>
+<td>PascalCase</td>
+<td><code>InitializeStack()</code>, <code>StackPointer</code></td>
+</tr>
+<tr>
+<td>私有/内部字段</td>
+<td><code>_camelCase</code></td>
+<td><code>_currentScheduler</code>, <code>_kernel</code></td>
+</tr>
+<tr>
+<td>私有/内部静态字段</td>
+<td><code>s_camelCase</code></td>
+<td><code>s_cursorPattern</code>, <code>s_nextThreadId</code></td>
+</tr>
+<tr>
+<td>常量</td>
+<td>PascalCase</td>
+<td><code>DefaultStackSize</code>, <code>MaxThreadCount</code></td>
+</tr>
+<tr>
+<td>私有常量</td>
+<td>PascalCase</td>
+<td><code>COM1_BASE</code>（硬件寄存器使用 UPPER_SNAKE 以提高可读性）</td>
+</tr>
+<tr>
+<td>局部变量</td>
+<td>camelCase</td>
+<td><code>stackTop</code>, <code>entryPoint</code></td>
+</tr>
+<tr>
+<td>参数</td>
+<td>camelCase</td>
+<td><code>cpuState</code>, <code>threadId</code></td>
+</tr>
+<tr>
+<td>类型参数</td>
+<td><code>T</code> + PascalCase</td>
+<td><code>TValue</code>, <code>TKey</code></td>
+</tr>
+<tr>
+<td>枚举成员</td>
+<td>PascalCase</td>
+<td><code>ThreadState.Running</code></td>
+</tr>
+</tbody>
+</table>
+<p>在 <code>Cosmos.Kernel.System.Diagnostics</code> 中，后缀表明类型的性质：<code>*Diagnostics</code> 类型是某个子系统的静态诊断视图（<code>DriverDiagnostics</code>、<code>SchedulerDiagnostics</code>、<code>MemoryDiagnostics</code>），它主要用于读取，但也可以执行操作（<code>SchedulerDiagnostics.RequestKill</code>、<code>MemoryDiagnostics.Collect</code>）；<code>*Info</code> 类型则是这种视图交出的只读快照结构体（<code>DriverInfo</code>、<code>DeviceNodeInfo</code>、<code>KernelThreadInfo</code>）。参见<a href="public-api.html#naming">公共 API 跟踪</a>。</p>
+<p><a id="avoid"></a></p>
+<h3 id="避免">避免</h3>
+<ul>
+<li>匈牙利命名法（<code>m_</code>、<code>p_</code>、<code>g_</code>），<code>_</code> 前缀只用于私有字段。</li>
+<li>旧式的 <code>mStopped</code> 写法，请使用 <code>_stopped</code>。</li>
+<li>缩写，除非是公认的缩写（<code>GC</code>、<code>CPU</code>、<code>HAL</code>、<code>IO</code>、<code>IP</code>、<code>MAC</code>）。</li>
+</ul>
+<hr>
+<p><a id="3-file-organization"></a></p>
+<h2 id="3-文件组织">3. 文件组织</h2>
+<p><a id="one-type-per-file"></a></p>
+<h3 id="每个文件一个类型">每个文件一个类型</h3>
+<p>每个公共类型都有自己的文件，以该类型命名：</p>
+<pre><code>Cosmos.Kernel.Core/
+  Scheduler/
+    SchedulerThread.cs
+    SchedulerThreadState.cs
+    IScheduler.cs
+    SchedulerManager.cs
+    PerCpuState.cs
+</code></pre>
+<p>有两类伴随类型与主类型共用一个文件，文件仍以主类型命名：一是某个类型自身紧密耦合的伴随类型，例如 <code>Gpt</code> 的 <code>GptPartitionEntry</code>，<code>TcpPacket</code> 的 <code>TcpFlags</code> 和 <code>TcpOption</code>；二是子类家族，例如 <code>IcmpPacket</code> 的 <code>IcmpEchoRequest</code> 和 <code>IcmpEchoReply</code>。实现类不是其接口的伴随类型：有 24 个文件声明了顶层接口，每个文件都只声明该接口，别无其他。</p>
+<p><a id="partial-classes-for-large-types"></a></p>
+<h3 id="大型类型使用分部类">大型类型使用分部类</h3>
+<p>使用 <code>partial</code> 将大型类拆分到多个文件中。文件命名为 <code>{ClassName}.{Aspect}.cs</code>：</p>
+<pre><code>Memory/
+  GarbageCollector.cs              ← core structure, fields, initialization
+  GarbageCollector.Alloc.cs        ← allocation methods
+  GarbageCollector.Mark.cs         ← mark phase
+  GarbageCollector.Sweep.cs        ← sweep phase
+  GarbageCollector.GCHandler.cs    ← GC handle table
+  GarbageCollector.Frozen.cs       ← frozen segment support
+</code></pre>
+<p><a id="architecture-specific-files"></a></p>
+<h3 id="架构相关文件">架构相关文件</h3>
+<p>对于在同一项目内需要按架构分别实现的类型，使用后缀：</p>
+<pre><code>Scheduler/
+  ThreadContext.X64.cs             ← x64-specific context layout
+  ThreadContext.ARM64.cs           ← ARM64-specific context layout
+</code></pre>
+<p>这些文件通过 <code>.csproj</code> 进行条件编译：</p>
+<pre><code class="lang-xml">&lt;ItemGroup Condition=&quot;'$(CosmosArch)' != 'arm64'&quot;&gt;
+    &lt;Compile Remove=&quot;Scheduler\ThreadContext.ARM64.cs&quot; /&gt;
+&lt;/ItemGroup&gt;
+</code></pre>
+<p>目前只允许在 <code>Cosmos.Kernel.Core</code> 中这样做，但将来可能会改变。</p>
+<p><a id="namespaces-follow-folders"></a></p>
+<h3 id="命名空间与文件夹一致">命名空间与文件夹一致</h3>
+<p>文件的命名空间是其项目名称加上项目与文件之间的各级文件夹：<code>Cosmos.Kernel.Core/Scheduler/SchedulerThread.cs</code> 声明的是 <code>Cosmos.Kernel.Core.Scheduler</code>。构建通过错误级别的 IDE0130 对所有 <code>src/Cosmos.Kernel*</code> 项目、测试内核、<code>tests/Cosmos.Kernel.Tests.System</code> 中的主机端单元测试以及 <code>examples/DevKernel</code> 强制执行这一点，因此偏离规则的文件会让 <code>dotnet build</code> 失败（格式检查 CI 检查的是 <code>nativeaot-patcher.slnx</code> 中的项目，其中不包含测试内核）。请移动文件或修正命名空间，而不是添加豁免。各项豁免及其理由列在 <code>.editorconfig</code> 的末尾：ILC 按完整名称匹配的名称（每个 <code>LibraryInitializer</code>、<code>EagerStaticClassConstructionAttribute</code>、<code>Core/Runtime/Stdllib.cs</code>），源代码生成器的 <code>IsExternalInit</code>（C# 编译器的 init 访问器标识，必须位于 <code>System.Runtime.CompilerServices</code> 中），<code>Bridge/Import</code> 和 <code>Bridge/Export</code> 文件夹（其中的文件共用项目的 <code>Bridge</code> 命名空间），<code>Cosmos.Kernel.System/ThirdParty/</code> 下引入的第三方代码，以及 <code>Cosmos.Kernel.Core/Runtime/Internal/</code> 下的 dotnet/runtime 镜像代码。IDE0130 不检查包含跨文件分部类型的命名空间（每个 <code>[LibraryImport]</code> 类都属于这种情况），也不检查嵌套命名空间；这些命名空间同样遵循该规则，只是不受检查。</p>
+<p><a id="driver-folders"></a></p>
+<h3 id="驱动程序文件夹">驱动程序文件夹</h3>
+<p><code>Cosmos.Kernel.Drivers</code> 将每个驱动程序放在三层深的位置，依次是总线种类、类别和驱动程序本身，每个文件的命名空间都与其文件夹一致：</p>
+<pre><code>Cosmos.Kernel.Drivers/
+  Pci/                       ← the bus kind the driver matches on (PciMatch)
+    Bus/                     ← a bus driver: its binding publishes child nodes
+      Xhci/
+        XhciDriver.cs        ← Cosmos.Kernel.Drivers.Pci.Bus.Xhci
+    Storage/                 ← otherwise, what it publishes (a block device)
+      Nvme/
+        NvmeDriver.cs
+  Virtio/
+    Display/
+      VirtioGpu/
+        VirtioGpuDriver.cs   ← Cosmos.Kernel.Drivers.Virtio.Display.VirtioGpu
+</code></pre>
+<p>总线种类是驱动程序进行匹配所依据的总线，以其匹配类型命名：<code>Pci</code>、<code>Platform</code>、<code>Ps2</code>、<code>Usb</code> 或 <code>Virtio</code>。总线驱动程序的类别为 <code>Bus</code>，其他驱动程序的类别则表示它发布的内容：<code>Audio</code>、<code>Display</code>、<code>Input</code>（键盘或指针）、<code>Network</code> 或 <code>Storage</code>（块设备）。驱动程序文件夹的名称是去掉 <code>Driver</code> 的类名，除非文件夹内已有类型使用了这个名称，因为命名空间不得与其中的某个类型同名：传输驱动程序位于 <code>VirtioPci</code> 和 <code>VirtioMmio</code> 中，旁边是它们的 <code>VirtioPciTransport</code> 和 <code>VirtioMmioTransport</code> 类。驱动程序的状态、协议和词汇类型都留在它的文件夹中，数量多时放在子文件夹里（<code>VmwareSvga/Enums</code>、<code>VmwareSvga/Structs</code>）。命名空间是完整类型名的一部分，而 <code>CosmosDriverExclude</code> 引用的正是完整类型名，清单也按它排序（<a href="build/driver-manifest.html">驱动程序清单</a>），因此移动驱动程序会同时影响这两者。</p>
+<p><a id="hal-folders"></a></p>
+<h3 id="hal-文件夹">HAL 文件夹</h3>
+<p><code>Cosmos.Kernel.HAL</code> 为每个概念提供一个顶层文件夹，整个目录树中没有重复的文件夹名：</p>
+<pre><code>Cosmos.Kernel.HAL/
+  Experimentals.cs           ← the seam's diagnostic ID (COSMOS0003)
+  Boot/                      ← internal: IPlatformInitializer, PlatformHAL
+  Timers/                    ← internal: TickSource, TimerEntry
+  Internal/                  ← the LibraryInitializer ILC finds by full name
+  Devices/                   ← what a device is, a folder per category
+    Audio/                   ← IAudioOutput, AudioFormat, AudioSink, AudioConsumer
+    Display/                 ← IDisplay, its facets, DisplayMode, DisplaySink, DisplayConsumer, FirmwareDisplay
+    Input/
+    Network/                 ← INetworkInterface, NetworkSink, NetworkConsumer, MacAddress
+    Storage/                 ← IBlockDevice, its facet IRemovableMedia, BlockConsumer
+  DriverKit/                 ← how a driver finds and binds a device
+    Driver.cs                ← the driver and its binding: matching, probing, the node tree
+    DeviceBinding.cs
+    Resources/               ← what a binding hands out: RegisterWindow, DeviceRegion, DmaBuffer
+    Interrupts/              ← InterruptSource, InterruptHandle, InterruptHandler, InterruptContext
+    Threading/               ← DeviceLock, DeviceEvent, DriverThread, WorkItem
+    Buses/
+      Pci/                   ← PciIdentity, PciMatch, PciAccess, PciLineInterruptSource, …
+      Usb/
+    Engine/                  ← internal: DeviceRegistry, DriverEngine, Arbitration, DriverLog
+</code></pre>
+<p><code>Devices/</code> 下的每个设备类别都包含与该类设备相关的一切：驱动程序实现的契约、它的能力接口（facet）和词汇、驱动程序用来报告的接收器（块设备没有接收器），以及受支持层的内部消费者，后者获知每个设备的到达与离开，并接收设备的报告。这些类别就是 <code>Cosmos.Kernel.Drivers</code> 用来归档驱动程序的类别（<a href="#driver-folders">驱动程序文件夹</a>），只是少了 <code>Bus</code>。<code>Display/</code> 还包含 <code>FirmwareDisplay</code>，即引擎基于 Core 的 <code>BootFirmware</code> 所读取的启动帧缓冲区而发布的显示设备。HAL 没有固件文件夹：读取引导加载程序和固件交出的内容需要使用指针，因此这属于 Core 的职责（<a href="#unsafe-code">不安全代码</a>）。</p>
+<p><code>DriverKit/</code> 根目录包含驱动程序及其绑定：<code>Driver</code> 及其特性、注册表、<code>DeviceBinding</code>、带有标识与匹配基类的节点树，以及探测与分离相关的词汇。绑定交给驱动程序的东西位于下一级文件夹，按关注点划分：<code>Resources/</code> 存放访问硬件的方式（资源、寄存器窗口、映射区域、DMA 缓冲区），<code>Interrupts/</code> 存放中断源和处理程序契约，<code>Threading/</code> 存放驱动程序用于同步的锁、事件、线程和工作项。驱动程序先引用根目录，再引用它用到的文件夹。</p>
+<p><code>DriverKit/Buses/</code> 下的每个总线种类在每个文件夹中为同一角色使用相同的名称：<code>&lt;Bus&gt;Identity</code>、<code>&lt;Bus&gt;Match</code>；当驱动程序通过总线访问设备时有 <code>&lt;Bus&gt;Access</code>（平台总线没有：平台驱动程序映射其节点的资源，只有 PCI 主机节点带有访问对象，即 PCI 文件夹中的 <code>PciHostAccess</code>）；当总线自行投递中断时有 <code>&lt;Bus&gt;InterruptSource</code>（在 PCI 和平台总线上，名称还说明了投递方式：<code>PciLineInterruptSource</code>、<code>PciMessageInterruptSource</code>、<code>PlatformLineInterruptSource</code>）；旁边则是该总线自身的词汇。总线主机为工具包实现的基类沿用其规范所用的名称（<code>Ps2Controller</code>、<code>UsbHostController</code>、<code>VirtioTransport</code>），而不使用各总线共用的后缀；平台总线的基类是 <code>PlatformLineRouting</code>，由机器描述实现。</p>
+<p>稳定性标记在每个类型上，而不是按文件夹划分。除了两个稳定契约 <code>IBlockDevice</code> 和 <code>MacAddress</code> 之外，每个公共 HAL 类型都带有 <code>[Experimental(Experimentals.DriverKitSeamDiagId)]</code>；只要有其他公共类型丢失该特性，HAL 项目中的 <code>CosmosGuardHalPromotion</code> 目标就会使构建失败（<a href="public-api.html#the-policy">公共 API 跟踪</a>）。</p>
+<p><a id="member-order"></a></p>
+<h3 id="成员顺序">成员顺序</h3>
+<p>没有需要遵循的分隔符约定。垃圾回收器的四个文件带有 <code>// --- Section Name ---</code> 标题，这些标题比本页早三周写成，之后 <code>Cosmos.Kernel.Drivers</code> 中的显示驱动程序文件也照此编写。四个受跟踪程序集中其余 353 个非第三方文件都没有这样做，从来没有文件被转换过，也没有分析器检查这一点。同样也不存在可以描述的成员顺序：在拥有三种或更多种成员的 131 个类型中，共有 93 种不同的顺序，最吻合的单一顺序也只覆盖其中 43 个。</p>
+<p>有两种顺序仍然值得遵循，因为读者在一屏之内就能检查它们：</p>
+<ul>
+<li>字段和常量放在读取它们的成员之前，而不是放在第一个方法之后。</li>
+<li>构造函数放在字段和属性之后、方法之前；静态工厂方法与它所替代的构造函数放在一起。</li>
+</ul>
+<p>如果你想在新文件中参照完整的分隔符形式，<code>Cosmos.Kernel.Drivers/Virtio/Display/VirtioGpu/VirtioGpuDriver.cs</code> 就是演示它的文件。不要把现有文件转换成这种形式。</p>
+<p><a id="using-directives"></a></p>
+<h3 id="using-指令">using 指令</h3>
+<ul>
+<li>将 <code>using</code> 指令放在命名空间<strong>之外</strong>。</li>
+<li><code>System</code> 命名空间排在最前面。</li>
+<li>使用文件范围的命名空间（例如 <code>namespace Cosmos.Kernel.Core.Scheduler;</code>）。<code>ThirdParty/</code> 下引入的第三方代码树（BigGustave、SharpZipLib、LunarFonts）和 dotnet/runtime 镜像代码保留块形式，以便与上游进行差异比对；而 <code>Core/Runtime/Stdllib.cs</code> 根本无法采用文件范围形式：它声明了四个命名空间，其中一个是嵌套的，这会触发 CS8955。</li>
+</ul>
+<hr>
+<p><a id="4-class--type-design"></a></p>
+<h2 id="4-类与类型设计">4. 类与类型设计</h2>
+<p><a id="static-utility-classes"></a></p>
+<h3 id="静态工具类">静态工具类</h3>
+<p>对于没有任何实例状态的无状态内核工具，使用 <code>static class</code>。</p>
+<p><a id="managers"></a></p>
+<h3 id="管理器">管理器</h3>
+<p>使用 <code>static class</code>。管理器协调子系统的状态，无需实例。启动路径上的初始化是一个 <code>internal static void Initialize()</code> 方法，由 <code>LibraryInitializer</code> 调用，绝不由内核调用：</p>
+<pre><code class="lang-csharp">// Simple manager: no underlying instance to expose
+public static class TimerManager
+{
+    private static TickSource? s_tickSource;
+
+    public static bool IsInitialized =&gt; s_tickSource is not null;
+
+    internal static void RegisterTickSource(TickSource tickSource) { ... }
+    public static void Wait(uint ms) { ... }
+}
+
+// Manager wrapping a pluggable implementation: expose via Current
+public static class SchedulerManager
+{
+    private static IScheduler? s_currentScheduler;
+
+    public static IScheduler? Current =&gt; s_currentScheduler;
+
+    internal static void Initialize(uint cpuCount) { ... }
+}
+</code></pre>
+<p>只有当管理器包装了一个可插拔的实现时（例如支持多种调度算法的 <code>IScheduler</code>），才添加 <code>Current</code> 属性。大多数管理器都不需要它。</p>
+<p>不要在状态旁边另外维护一个代表该状态的 <code>_initialized</code> 标志。应从该状态推导出 <code>IsInitialized</code>，并让 <code>Initialize</code> 基于同一个字段防止重入，且最后才给该字段赋值，这样在其背后的状态存在之前，任何读取者都不会看到 <code>IsInitialized</code> 变为 true。</p>
+<p>当管理器位于功能开关之后时，其成员遵循<a href="public-api.html#behaviour-when-a-feature-is-compiled-out">公共 API 跟踪</a>中的规则：功能关闭时，读取类成员如实回答，操作类成员则抛出异常并指明开关。</p>
+<p><a id="structs-for-low-level-data"></a></p>
+<h3 id="用于底层数据的结构体">用于底层数据的结构体</h3>
+<p>对于映射到硬件或内存布局的数据，使用带 <code>[StructLayout(LayoutKind.Sequential)]</code> 的 <code>struct</code>：</p>
+<pre><code class="lang-csharp">[StructLayout(LayoutKind.Sequential)]
+internal struct FreeBlock
+{
+    public unsafe MethodTable* MethodTable;
+    public nuint Size;
+    public unsafe FreeBlock* Next;
+}
+</code></pre>
+<p><a id="enums"></a></p>
+<h3 id="枚举">枚举</h3>
+<p>使用 <code>enum</code> 表示状态机和标志。在合适的地方应用 <code>[Flags]</code>：</p>
+<pre><code class="lang-csharp">public enum ThreadState
+{
+    Ready,
+    Running,
+    Blocked,
+    Sleeping,
+    Dead
+}
+
+[Flags]
+public enum ThreadFlags
+{
+    None = 0,
+    IsIdle = 1 &lt;&lt; 0,
+    IsKernel = 1 &lt;&lt; 1
+}
+</code></pre>
+<p><a id="types-compared-by-value"></a></p>
+<h3 id="按值比较的类型">按值比较的类型</h3>
+<p>身份即内容的类型（<code>Address</code>、<code>MacAddress</code>、<code>Mode</code>）是 <code>sealed</code> 的，其状态保存在由构造函数设置的只读成员中，并在 <code>Equals(object?)</code> 和 <code>GetHashCode()</code> 之外实现 <code>IEquatable&lt;T&gt;</code>。三者保持一致：<code>Equals</code> 相等的两个实例哈希值相同，并且 <code>GetHashCode</code> 从不抛出异常。如果存在排序，则通过 <code>IComparable&lt;T&gt;</code> 实现，绝不使用非泛型的 <code>IComparable</code>。需要字节的调用者得到的是 <code>ReadOnlySpan&lt;byte&gt;</code>；底层数组绝不交出，因为能写入它的调用者会改变所有以该值为键的字典背后的身份。</p>
+<pre><code class="lang-csharp">public sealed class Address : IComparable&lt;Address&gt;, IEquatable&lt;Address&gt;
+{
+    public ImmutableArray&lt;byte&gt; Parts { get; }
+
+    public Address(ReadOnlySpan&lt;byte&gt; buffer) { ... }
+
+    public ReadOnlySpan&lt;byte&gt; ToSpan()
+    {
+        return Parts.AsSpan();
+    }
+
+    public bool Equals(Address? other)
+    {
+        return other is not null &amp;&amp; Parts.SequenceEqual(other.Parts);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as Address);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Id);
+    }
+
+    public int CompareTo(Address? other)
+    {
+        return other is null ? 1 : Id.CompareTo(other.Id);
+    }
+}
+</code></pre>
+<p><a id="registered-instances"></a></p>
+<h3 id="注册的实例">注册的实例</h3>
+<p>当子系统必须看到每个存活实例时（<code>TcpConnection.Connections</code>），构造函数是私有的，由一个静态工厂方法创建并注册实例（<code>TcpConnection.CreateConnection</code>）。注册表保持私有，移除实例时会释放它，使它租用的资源归还到池中。</p>
+<hr>
+<p><a id="5-kernel-lifecycle"></a></p>
+<h2 id="5-内核生命周期">5. 内核生命周期</h2>
+<p><a id="user-kernel-pattern"></a></p>
+<h3 id="用户内核模式">用户内核模式</h3>
+<p>用户内核继承自 <code>Cosmos.Kernel.System.Kernel</code> 并重写生命周期方法：</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.System;
+
+namespace MyKernel;
+
+public class Kernel : Cosmos.Kernel.System.Kernel
+{
+    protected override void BeforeRun()
+    {
+        // One-time setup (after boot, before main loop)
+        Console.WriteLine(&quot;Booted!&quot;);
+    }
+
+    protected override void Run()
+    {
+        // Called in a loop until Stop() is called
+        string? input = Console.ReadLine();
+        ProcessCommand(input);
+    }
+
+    protected override void AfterRun()
+    {
+        // Cleanup (after main loop exits)
+    }
+}
+</code></pre>
+<p><strong>规则：</strong></p>
+<ul>
+<li>只有在需要自定义启动过程时才重写 <code>OnBoot()</code>（默认实现会启动 <code>KernelConsole</code>）。</li>
+<li>重写 <code>BeforeRun()</code>，在系统就绪后执行一次性初始化。</li>
+<li><code>Run()</code> 是主循环体，让它保持专注。</li>
+<li>调用 <code>Stop()</code> 以干净地退出主循环。</li>
+<li>应避免从内核返回：基类会在 <code>AfterRun()</code> 之后让 CPU 停机。</li>
+</ul>
+<hr>
+<p><a id="6-hal-architecture"></a></p>
+<h2 id="6-hal-架构">6. HAL 架构</h2>
+<p><a id="interface-driven-hal"></a></p>
+<h3 id="接口驱动的-hal">接口驱动的 HAL</h3>
+<p>平台服务通过接口提供。实现在启动时注册：</p>
+<pre><code class="lang-csharp">// Interface (Cosmos.Kernel.Core, internal: no kernel registers or obtains one)
+internal interface ICpuOps
+{
+    void Halt();
+    void DisableInterrupts();
+    void EnableInterrupts();
+}
+
+// Implementation (Cosmos.Kernel.HAL.X64)
+public class X64CpuOps : ICpuOps
+{
+    public void Halt()
+    {
+        Native.Cpu.Halt();
+    }
+
+    // ...
+}
+</code></pre>
+<p><a id="platform-initializer-pattern"></a></p>
+<h3 id="平台初始化器模式">平台初始化器模式</h3>
+<p>每种架构都提供一个工厂，用于创建所有平台相关组件。工厂、契约及其返回的一切都是 HAL 内部的：内核从不安装它们。初始化器也是机器描述：它根据平台已知的来源发布总线驱动程序所绑定的根平台节点，这些来源包括 ACPI 表、引导加载程序交出的设备树，或者针对每台机器的表；它不包含任何设备驱动程序。</p>
+<pre><code class="lang-csharp">internal class X64PlatformInitializer : IPlatformInitializer
+{
+    public string PlatformName =&gt; &quot;x86-64&quot;;
+    public PlatformArchitecture Architecture =&gt; PlatformArchitecture.X64;
+
+    public IPortIO CreatePortIO()
+    {
+        return new X64PortIO();
+    }
+
+    public ICpuOps CreateCpuOps()
+    {
+        return new X64CpuOps();
+    }
+
+    public IInterruptController CreateInterruptController()
+    {
+        return new X64InterruptController();
+    }
+
+    public TickSource CreateTickSource()
+    {
+        return new PIT();
+    }
+
+    public void PublishPlatformNodes()
+    {
+        // the 8042 and the PCI host, with their port ranges and lines
+    }
+
+    public uint GetCpuCount()
+    {
+        return /* ACPI/MADT */ 1;
+    }
+
+    public void InitializeHardware()
+    {
+        // ACPI, APIC, timers
+    }
+
+    public void StartSchedulerTimer(uint quantumMs)
+    {
+        // Configure PIT/APIC timer for preemptive scheduling
+    }
+}
+</code></pre>
+<p><a id="adding-a-new-device"></a></p>
+<h3 id="添加新设备">添加新设备</h3>
+<p>在 <code>Cosmos.Kernel.Drivers</code> 中基于工具包编写一个 <code>[Driver]</code> 类，并通过其绑定发布设备（<a href="../user/drivers.html">编写驱动程序</a>）。当设备位于工具包不认识的总线上时：</p>
+<ol>
+<li>将该总线种类添加到工具包中，放在 <code>DriverKit/Buses/</code> 下它自己的文件夹里：一个标识、一个匹配、驱动程序通过总线访问设备时所需的访问对象、总线自行投递中断时所需的中断源，以及一种路径格式（<a href="#hal-folders">HAL 文件夹</a>）。</li>
+<li>从机器描述（<code>PublishPlatformNodes</code>）或总线驱动程序（<code>PublishChild</code>）发布其节点。</li>
+<li>基于访问对象编写叶驱动程序。</li>
+</ol>
+<p>除平台代码外，任何东西都不放入 <code>Cosmos.Kernel.HAL.X64</code> 或 <code>Cosmos.Kernel.HAL.ARM64</code>。设备树解析器是 Core 代码，位于 <code>Cosmos.Kernel.Core/Firmware</code> 下，与读取固件交出内容的其他读取器放在一起；ARM64 描述只读取它。</p>
+<p><a id="hal-registration"></a></p>
+<h3 id="hal-注册">HAL 注册</h3>
+<pre><code class="lang-csharp">// At boot (from the library initializer, or from OnBoot):
+PlatformHAL.Initialize(new X64PlatformInitializer());
+</code></pre>
+<hr>
+<p><a id="7-plug-system"></a></p>
+<h2 id="7-plug-系统">7. Plug 系统</h2>
+<p>Plug 在 IL 层面替换 BCL 方法。patcher 在构建时重新连接调用。有关 plug 特性（<code>[Plug]</code>、<code>[PlugMember]</code>、<code>[PlatformSpecific]</code>）和 plug 模板的完整文档，请参见 <a href="plugs.html">Plug</a>。</p>
+<p><a id="when-to-use-plugs-vs-other-approaches"></a></p>
+<h3 id="何时使用-plug-而非其他方式">何时使用 Plug 而非其他方式</h3>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>替换 BCL 方法</td>
+<td>Plug</td>
+</tr>
+<tr>
+<td>添加内核级 API</td>
+<td>在 <code>Cosmos.Kernel.System</code> 中新建类</td>
+</tr>
+<tr>
+<td>提供运行时存根</td>
+<td>在 Core 中使用 <code>[RuntimeExport]</code></td>
+</tr>
+<tr>
+<td>调用原生代码</td>
+<td>在 Core 中使用 <code>[LibraryImport]</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a id="8-native-interop"></a></p>
+<h2 id="8-原生互操作">8. 原生互操作</h2>
+<p><a id="c-callable-from-native"></a></p>
+<h3 id="可从原生代码调用的-c">可从原生代码调用的 C#</h3>
+<p>根据调用者的不同，有两种模式：</p>
+<p><strong><code>[RuntimeExport]</code></strong>：用于 NativeAOT 运行时存根（由运行时本身调用）。它们与 <a href="https://github.com/dotnet/runtime/blob/main/src/coreclr/nativeaot/System.Private.CoreLib/src/System/Runtime/RuntimeImports.cs"><code>System.Private.CoreLib/RuntimeImports.cs</code></a> 中的 <code>[RuntimeImport]</code> 声明相对应：</p>
+<pre><code class="lang-csharp">[RuntimeExport(&quot;RhNewArray&quot;)]
+internal static unsafe void* RhNewArray(MethodTable* pEEType, int length)
+{
+    return GarbageCollector.AllocArray(pEEType, length);
+}
+</code></pre>
+<p><strong><code>[UnmanagedCallersOnly]</code></strong>：用于可从原生 C 代码调用的 C# 方法（桥接）：</p>
+<pre><code class="lang-csharp">[UnmanagedCallersOnly(EntryPoint = &quot;__cosmos_serial_write&quot;)]
+public static void CosmosSerialWrite(byte* str)
+{
+    // C code calls this via the symbol __cosmos_serial_write
+}
+</code></pre>
+<p>对于运行时或 ABI 要求的导出（例如 <code>Rh*</code> 存根，以及 <code>ceil</code>、<code>sqrt</code>、<code>memmove</code>、<code>memset</code> 等 libc/math 或内存符号），使用 <code>[RuntimeExport]</code>。对于其他从原生代码到托管代码的回调（中断处理程序、C 库桥接等），优先使用 <code>[UnmanagedCallersOnly]</code>。</p>
+<p><a id="native-callable-from-c"></a></p>
+<h3 id="可从-c-调用的原生代码">可从 C# 调用的原生代码</h3>
+<p>调用汇编例程的现代 P/Invoke 模式：</p>
+<pre><code class="lang-csharp">[LibraryImport(&quot;*&quot;, EntryPoint = &quot;_native_cpu_rdtsc&quot;)]
+[SuppressGCTransition]
+private static partial ulong NativeReadTSC();
+</code></pre>
+<p><strong>规则：</strong></p>
+<ul>
+<li>使用 <code>LibraryImport</code>（而不是 <code>DllImport</code>），它由源代码生成，且与 AOT 兼容。</li>
+<li>使用 <code>&quot;*&quot;</code> 作为库名（链接到内核二进制文件本身）。</li>
+<li>对不会触发 GC 的热路径调用添加 <code>[SuppressGCTransition]</code>。</li>
+<li>将原生互操作方法保持为 <code>private</code>，并用整洁的公共 API 包装它们。</li>
+<li>汇编入口点名称使用带类别前缀的 <code>_snake_case</code>：<code>_native_cpu_rdtsc</code>、<code>_native_io_write_byte</code>。</li>
+</ul>
+<hr>
+<p><a id="9-architecture-specific-code"></a></p>
+<h2 id="9-架构相关代码">9. 架构相关代码</h2>
+<p><a id="conditional-compilation"></a></p>
+<h3 id="条件编译">条件编译</h3>
+<p>对因架构而异的代码使用 <code>#if ARCH_X64</code> / <code>#if ARCH_ARM64</code>。目前这只在 <code>Cosmos.Kernel.Core</code> 中被容许，而且目标是将其消除。</p>
+<pre><code class="lang-csharp">public static void ComWrite(byte value)
+{
+#if ARCH_ARM64
+    while ((Native.MMIO.Read32(PL011_BASE + PL011_FR) &amp; FR_TXFF) != 0) ;
+    Native.MMIO.Write8(PL011_BASE + PL011_DR, value);
+#else
+    while ((Native.IO.Read8(COM1_BASE + REG_LSR) &amp; LSR_TX_EMPTY) == 0) ;
+    Native.IO.Write8(COM1_BASE + REG_DATA, value);
+#endif
+}
+</code></pre>
+<p><a id="when-to-use-what"></a></p>
+<h3 id="何时使用哪种方式">何时使用哪种方式</h3>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>#if ARCH_X64</code></td>
+<td>同一个类，代码差异小（例如串口驱动程序）</td>
+</tr>
+<tr>
+<td>独立文件（<code>*.X64.cs</code>）</td>
+<td>同一个类，每种架构的代码块较大（例如 ThreadContext）</td>
+</tr>
+<tr>
+<td>独立的 HAL 项目</td>
+<td>共享接口背后的不同实现</td>
+</tr>
+<tr>
+<td>独立的 Native 项目</td>
+<td>汇编代码（<code>.s</code>）</td>
+</tr>
+</tbody>
+</table>
+<p><a id="guard-rules"></a></p>
+<h3 id="守卫规则">守卫规则</h3>
+<ul>
+<li>默认的 <code>#else</code> 分支应为 x64（最常见的开发目标）。</li>
+<li>始终提供两条分支，不要出现缺少另一种架构的孤立 <code>#if</code>。</li>
+<li>考虑这段代码是否应该放在 HAL 实现中，而不是使用 <code>#if</code>。</li>
+</ul>
+<hr>
+<p><a id="10-memory--safety"></a></p>
+<h2 id="10-内存与安全">10. 内存与安全</h2>
+<p><a id="unsafe-code"></a></p>
+<h3 id="不安全代码">不安全代码</h3>
+<p>不安全代码位于 <code>Cosmos.Kernel.Core</code> 及其架构项目（<code>Cosmos.Kernel.Core.X64</code>、<code>Cosmos.Kernel.Core.ARM64</code>）中，以及层次之外的组件中（<code>Cosmos.Kernel.Boot.Limine</code>、<code>Cosmos.Kernel.Plugs</code>、<code>Cosmos.Kernel.Debug</code> 和 <code>Cosmos.Kernel</code> 聚合项目）。<code>Cosmos.Kernel.HAL</code>、其平台项目、<code>Cosmos.Kernel.System</code> 和 <code>Cosmos.Kernel.Drivers</code> 使用 <code>&lt;AllowUnsafeBlocks&gt;false&lt;/AllowUnsafeBlocks&gt;</code> 编译，因此编译器在这些地方拒绝任何指针。这些层需要的内存，由 Core 按地址提供：</p>
+<ul>
+<li><code>MemoryBlock</code>（<code>Core/Memory/</code>，gen2 的类型）是某个地址处内存的视图：通过 <code>Span</code> 和 <code>AsSpan&lt;T&gt;</code> 读写。<code>PageAllocator.AllocBlock</code> 以块的形式交出页，<code>PageAllocator.Free(MemoryBlock)</code> 将其收回。工具包资源（<code>DeviceRegion</code>、<code>DmaBuffer</code>）持有一个块，并在其绑定被拆除后拒绝提供 span。</li>
+<li><code>AddressSpace.HhdmOffset</code> 是 Limine 的高半区偏移量，只在一个地方读取。</li>
+<li><code>Core/Firmware/</code> 读取引导加载程序和固件交出的内容：帧缓冲区、设备树、启动时间、ACPI MCFG 条目和 EFI 时钟（<code>BootFirmware</code>、<code>DeviceTree</code>、<code>AcpiMcfg</code>、<code>EfiRtc</code>）。</li>
+</ul>
+<p>设备就地读取的结构（例如 virtqueue 环）通过在这种 span 上使用 <code>MemoryMarshal.Cast</code> 和 <code>MemoryMarshal.AsRef</code> 来访问，对设备写入的字段则使用 <code>Volatile.Read</code>。当 Core 之上的层需要只有指针才能提供的东西时，解决办法是在 Core 中添加入口点，而不是使用 <code>unsafe</code> 块。在 Core 内部，把 <code>unsafe</code> 限制在需要它的地方：</p>
+<pre><code class="lang-csharp">// Good: unsafe scoped to where needed
+public static unsafe void WriteString(string str)
+{
+    fixed (char* ptr = str)
+    {
+        for (int i = 0; i &lt; str.Length; i++)
+        {
+            ComWrite((byte)ptr[i]);
+        }
+    }
+}
+
+// Good: unsafe class for types that inherently work with pointers
+public unsafe class Thread : SchedulerExtensible
+{
+    public ThreadContext* GetContext()
+    {
+        return (ThreadContext*)StackPointer;
+    }
+}
+</code></pre>
+<p><a id="memory-allocation"></a></p>
+<h3 id="内存分配">内存分配</h3>
+<pre><code class="lang-csharp">// Kernel heap allocation (manual, non-GC)
+void* ptr = MemoryOp.Alloc(size);
+MemoryOp.Free(ptr);
+
+// GC-managed allocation (via RuntimeExport stubs)
+// Happens automatically through normal C# object creation
+List&lt;int&gt; list = new();  // uses RhAllocateNewArray under the hood
+</code></pre>
+<p><a id="pointer-safety"></a></p>
+<h3 id="指针安全">指针安全</h3>
+<ul>
+<li>在 GC 或扫描代码中，解引用前始终检查指针。</li>
+<li>地址使用 <code>nuint</code>（而不是 <code>uint</code>，以避免 64 位截断）。</li>
+<li>指针运算使用 <code>nint</code>/<code>nuint</code>，而不是 <code>int</code>/<code>uint</code>。</li>
+<li>小而短命的缓冲区使用 <code>stackalloc</code>，而不是堆分配。</li>
+</ul>
+<p><a id="buffers"></a></p>
+<h3 id="缓冲区">缓冲区</h3>
+<table>
+<thead>
+<tr>
+<th>缓冲区</th>
+<th>用法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>小、固定大小、仅限一次调用</td>
+<td><code>stackalloc</code></td>
+</tr>
+<tr>
+<td>大小可变、跨调用持有（例如接收缓冲区）</td>
+<td><code>ArrayPool&lt;T&gt;.Shared.Rent</code>，在 <code>Dispose()</code> 中归还</td>
+</tr>
+<tr>
+<td>只读输入</td>
+<td><code>ReadOnlySpan&lt;T&gt;</code> 参数，而不是 <code>byte[]</code></td>
+</tr>
+<tr>
+<td>复制</td>
+<td>在 span 上使用 <code>source.CopyTo(destination)</code>，而不是 <code>Buffer.BlockCopy</code></td>
+</tr>
+</tbody>
+</table>
+<p>租用的数组至少与请求的长度一样长，而不是恰好一样长，因此所有者要跟踪自己使用的长度和偏移量，并以 <code>ReadOnlySpan&lt;T&gt;</code> 的形式暴露有效部分，绝不暴露数组本身。<code>TcpConnection</code> 就是范例：<code>_data</code>、<code>_dataOffset</code> 和 <code>_dataLength</code> 位于 <code>Data =&gt; _data.AsSpan().Slice(_dataOffset, _dataLength)</code> 背后，<code>AppendToData</code> 在租用数组还有空间时就地写入，<code>Dispose</code> 则归还数组。</p>
+<p><a id="critical-sections"></a></p>
+<h3 id="临界区">临界区</h3>
+<pre><code class="lang-csharp">// Preferred: scoped interrupt disable
+using (InternalCpu.DisableInterruptsScope())
+{
+    // Interrupts disabled here
+    // Re-enabled automatically at scope exit
+}
+</code></pre>
+<hr>
+<p><a id="11-error-handling"></a></p>
+<h2 id="11-错误处理">11. 错误处理</h2>
+<p><a id="kernel-panic"></a></p>
+<h3 id="内核恐慌">内核恐慌</h3>
+<p>对于不可恢复的错误，使用 <code>Panic.Halt()</code>。它会禁用中断，打印消息以及调用者的方法、文件和行号，然后让 CPU 停机：</p>
+<pre><code class="lang-csharp">if (ptr == null)
+    Panic.Halt(&quot;Memory allocation failed&quot;);
+</code></pre>
+<p>调用者信息由编译器填入，因此只需传入消息，不要传入其他参数。<code>Panic.Halt</code> 标有 <code>[DoesNotReturn]</code>，正因如此，null 检查之后的代码才可以解引用它刚刚拒绝的值。</p>
+<p><a id="exceptions"></a></p>
+<h3 id="异常">异常</h3>
+<p>异常可以正常工作，但要谨慎使用：</p>
+<pre><code class="lang-csharp">// Good: validate at API boundaries
+public static void RescanPartitions(IBlockDevice device)
+{
+    ArgumentNullException.ThrowIfNull(device);
+    // ...
+}
+
+// Good: feature guards
+private static void ThrowIfKeyboardDisabled()
+{
+    if (!CosmosFeatures.KeyboardEnabled)
+        throw new InvalidOperationException(&quot;Console input requires keyboard feature.&quot;);
+}
+
+// Bad: exceptions in interrupt handlers, GC, or scheduler hot paths
+// These paths cannot allocate (exception objects are heap-allocated)
+</code></pre>
+<p><a id="argument-checks"></a></p>
+<h3 id="参数检查">参数检查</h3>
+<p>当检查只是一次比较时，用抛出辅助方法替代手写的 <code>if</code> 和 <code>throw</code>。指明的参数是值所来源的那个参数，这样阅读异常的调用者就能找到需要修正的参数：</p>
+<pre><code class="lang-csharp">ArgumentNullException.ThrowIfNull(device);
+ArgumentOutOfRangeException.ThrowIfNegative(width);
+ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, MaxPartitions);
+ArgumentOutOfRangeException.ThrowIfNotEqual(buffer.Length, 4, nameof(buffer));
+ArgumentOutOfRangeException.ThrowIfGreaterThan(blockCount, (ulong)data.Length / sector, nameof(blockCount));
+ObjectDisposedException.ThrowIf(_disposed, this);
+</code></pre>
+<p>一个范围使用两个辅助方法，每个边界一个（先 <code>ThrowIfLessThan</code> 后 <code>ThrowIfGreaterThan</code>），而不是一个手写的 <code>||</code>。没有辅助方法能表达的条件（<code>sectorCount &gt; host.BlockCount - startSector</code>）保留显式的 <code>throw</code>，必须在抛出前记录日志的检查也是如此。参数名始终使用 <code>nameof(x)</code>，绝不使用字符串字面量，也绝不使用消息：<code>new ArgumentOutOfRangeException(&quot;Invalid offset or size&quot;)</code> 指明的是一个名为 <code>Invalid offset or size</code> 的参数。</p>
+<p><a id="when-to-panic-vs-throw"></a></p>
+<h3 id="何时触发恐慌何时抛出异常">何时触发恐慌，何时抛出异常</h3>
+<table>
+<thead>
+<tr>
+<th>情形</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>硬件故障、状态损坏</td>
+<td><code>Panic.Halt()</code></td>
+</tr>
+<tr>
+<td>GC 或分配器内部错误</td>
+<td><code>Panic.Halt()</code></td>
+</tr>
+<tr>
+<td>API 使用不当</td>
+<td><code>throw</code> 相应的异常</td>
+</tr>
+<tr>
+<td>运行时缺少某项功能，且成员要对其执行操作</td>
+<td><code>throw InvalidOperationException</code> 并指明开关</td>
+</tr>
+<tr>
+<td>运行时缺少某项功能，且成员只回答一个问题</td>
+<td>返回 <code>0</code>/<code>null</code>/<code>false</code>/空</td>
+</tr>
+<tr>
+<td>内核 shell 中面向用户的错误</td>
+<td><code>try/catch</code> + 打印错误消息</td>
+</tr>
+</tbody>
+</table>
+<p>抛出的类型是调用者可以按名称捕获的类型：<code>InvalidOperationException</code>、<code>ArgumentException</code> 及其子类、<code>NotSupportedException</code>。不写裸的 <code>throw new Exception(...)</code>（CA2201）。受支持层的成员用哪种渠道报告失败，以及 <code>Try</code> 何时改为返回 <code>false</code>，参见<a href="public-api.html#how-a-member-reports-failure">公共 API 跟踪</a>。</p>
+<hr>
+<p><a id="12-nullable-reference-types"></a></p>
+<h2 id="12-可空引用类型">12. 可空引用类型</h2>
+<p>可空引用类型在整个解决方案中启用（<code>Directory.Build.props</code> 中的 <code>&lt;Nullable&gt;enable&lt;/Nullable&gt;</code>）。注解是 API 契约的一部分：不带 <code>?</code> 的引用类型承诺它永远不为 null。新代码和修改过的代码不得引入可空性警告：应如实注解，而不是压制警告。</p>
+<p><a id="rules"></a></p>
+<h3 id="规则">规则</h3>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>字段、参数、返回值上的 <code>T?</code></td>
+<td>任何可以合理为 null 的值</td>
+</tr>
+<tr>
+<td><code>?? throw</code></td>
+<td>将可空值转换为必需值</td>
+</tr>
+<tr>
+<td><code>ArgumentNullException.ThrowIfNull(arg)</code></td>
+<td>在 API 边界验证参数</td>
+</tr>
+<tr>
+<td><code>[MemberNotNull(...)]</code> 守卫辅助方法</td>
+<td>编译器能够跟踪的初始化检查</td>
+</tr>
+<tr>
+<td><code>is null</code> / <code>is not null</code></td>
+<td>所有 null 测试（不用 <code>== null</code> / <code>!= null</code>）。指针保留 <code>== null</code>：指针类型上不允许使用模式</td>
+</tr>
+<tr>
+<td>哨兵初始化（<code>= []</code>）</td>
+<td>null 与空含义相同的字段</td>
+</tr>
+<tr>
+<td><code>Try</code> 方法 <code>out</code> 参数上的 <code>[NotNullWhen(true)]</code></td>
+<td>返回 <code>true</code> 时填充的值；参见<a href="public-api.html#how-a-member-reports-failure">成员如何报告失败</a></td>
+</tr>
+<tr>
+<td><code>bool Initialize()</code> 上的 <code>[MemberNotNullWhen(true, ...)]</code></td>
+<td>能为调用者证明某个静态成员的 <code>true</code> 返回值（<code>KernelConsole.Initialize</code> 与 <code>Default</code>）</td>
+</tr>
+<tr>
+<td><code>T?[]</code></td>
+<td>槽位可以为空的数组（<code>IrqDelegate?[]</code>）</td>
+</tr>
+</tbody>
+</table>
+<p><a id="honest-annotations"></a></p>
+<h3 id="如实注解">如实注解</h3>
+<p>可能返回 <code>null</code> 的成员要用 <code>?</code> 声明：绝不要为了保留旧签名而用 <code>!</code> 掩盖它。反过来，不要为注解已经保证的值添加运行时 null 检查：不要在不可空参数上写 <code>if (buffer == null) throw</code>，也不要在不可空返回值上写 <code>?? &quot;fallback&quot;</code>。</p>
+<pre><code class="lang-csharp">// Declare what can actually be null: callers are forced to handle it
+public static IScheduler? Current =&gt; _currentScheduler;
+
+public static PerCpuState? GetCpuState(uint cpuId)
+{
+    return _cpuStates?[cpuId];
+}
+
+// Prefer a sentinel over a nullable field when null and empty mean the same thing
+private byte[] _window = [];                 // not: private byte[]? _window;
+</code></pre>
+<p><a id="guard-helpers"></a></p>
+<h3 id="守卫辅助方法">守卫辅助方法</h3>
+<p>延迟初始化的管理器公开带有 <code>[MemberNotNull(...)]</code> 注解的 <code>ThrowIf*NotInitialized()</code> 守卫方法，并在公共入口点的开头调用它们（参见<a href="#4-class--type-design">管理器</a>）。一次调用即可证明该字段在方法的其余部分中非 null，既不需要 <code>!</code>，也不需要逐行检查：</p>
+<pre><code class="lang-csharp">private static PerCpuState[]? s_cpuStates;
+
+[MemberNotNull(nameof(s_cpuStates))]
+private static void ThrowIfCpuStateNotInitialized()
+{
+    if (s_cpuStates is null)
+    {
+        throw new InvalidOperationException($&quot;{nameof(SchedulerManager)} not initialized&quot;);
+    }
+}
+
+public static void CreateThread(uint cpuId, Thread thread)
+{
+    ThrowIfCpuStateNotInitialized();
+
+    PerCpuState state = s_cpuStates[cpuId];   // no warning, no !
+    // ...
+}
+</code></pre>
+<p>同一系列特性也适用于 <code>bool</code> 初始化方法：<code>KernelConsole.Initialize()</code> 上的 <code>[MemberNotNullWhen(true, nameof(Default))]</code> 让调用者可以在 <code>if (KernelConsole.Initialize())</code> 内读取 <code>KernelConsole.Default</code>，而无需自己再加守卫。</p>
+<p><a id="callers-of-a-try"></a></p>
+<h3 id="try-的调用者"><code>Try</code> 的调用者</h3>
+<p>带注解的 <code>Try</code> 返回 <code>true</code> 之后，其 <code>out</code> 非 null，任何调用点都不再重复测试它：<code>if (!TryOpen(path, out handle) || handle == null)</code> 应写作 <code>if (!TryOpen(path, out handle))</code>。BCL 以同样的方式注解了 <code>Dictionary&lt;TKey, TValue&gt;.TryGetValue</code>，因此当 <code>TValue</code> 不可空时，跟在它后面的 <code>&amp;&amp; value != null</code> 什么也没有守卫。多余的测试并非无害：它会掩盖真正需要守卫的那一处。</p>
+<p><a id="required-values"></a></p>
+<h3 id="必需值">必需值</h3>
+<p>在 null 结果属于编程错误的地方使用 <code>?? throw</code>：</p>
+<pre><code class="lang-csharp">Address source = IPConfig.FindNetwork(destination)
+    ?? throw new InvalidOperationException(&quot;No network route to destination&quot;);
+
+public MacAddress MacAddress
+{
+    get
+    {
+        return _macAddress ?? throw new InvalidOperationException($&quot;{nameof(_macAddress)} is null&quot;);
+    }
+}
+</code></pre>
+<p><a id="constructors"></a></p>
+<h3 id="构造函数">构造函数</h3>
+<p>每个构造函数都必须让所有不可空成员完成初始化。删除未使用的无参构造函数，而不是任由它们污染类型：</p>
+<pre><code class="lang-csharp">// Bad: leaves RawData null and forces nullable noise on every user of the class
+internal IcmpPacket()
+{
+}
+</code></pre>
+<p><a id="the--operator"></a></p>
+<h3 id="-运算符"><code>!</code> 运算符</h3>
+<p>null 包容运算符 <code>!</code> 是最后的手段，用于流分析无法看到的不变量（例如守卫标志为 <code>true</code> 时保证非 null 的字段）。如果不变量可以用 <code>[MemberNotNull]</code> 或 <code>[NotNullWhen]</code> 表达，请改用特性。</p>
+<p><a id="enforcement"></a></p>
+<h3 id="强制执行">强制执行</h3>
+<p>格式检查 CI（<code>dotnet format --severity error</code>）强制执行 <code>.editorconfig</code> 中的 null 处理风格规则：<code>csharp_style_throw_expression</code>、<code>dotnet_style_coalesce_expression</code>、<code>dotnet_style_null_propagation</code>、<code>csharp_style_prefer_null_check_over_type_check</code>、<code>csharp_style_pattern_matching_over_as_with_null_check</code>、<code>dotnet_style_prefer_is_null_check_over_reference_equality_method</code> 和 <code>csharp_style_conditional_delegate_call</code>。</p>
+<p>可空性警告（<code>CS86xx</code>）目前还不是错误：不要引入新的此类警告。</p>
+<hr>
+<p><a id="13-modern-c--net-10-idioms"></a></p>
+<h2 id="13-现代-c--net-10-惯用法">13. 现代 C# / .NET 10 惯用法</h2>
+<p>项目以 <code>&lt;LangVersion&gt;latest&lt;/LangVersion&gt;</code> 和 .NET 10 为目标。请全面使用现代语言特性。</p>
+<p><a id="modern-patterns"></a></p>
+<h3 id="现代模式">现代模式</h3>
+<pre><code class="lang-csharp">// File-scoped namespaces
+namespace Cosmos.Kernel.Core.Scheduler;
+
+// Expression bodies for a property, indexer or accessor that fits on one line
+public string PlatformName =&gt; &quot;x86-64&quot;;
+
+// Pattern matching
+switch (args[i])
+{
+    case null:
+        WriteString(&quot;null&quot;);
+        break;
+    case string s:
+        WriteString(s);
+        break;
+    case int n:
+        WriteNumber(n);
+        break;
+}
+
+// Null-conditional and coalescing
+IBlockDevice? device = StorageManager.PrimaryDevice;
+if (device?.BlockSize is not &gt; 0)
+{
+    return;
+}
+
+Address ip = config?.Address ?? defaultAddress;
+
+// Collection expressions
+DeviceResource[] resources = [DeviceResource.PortRange(0x60, 1), DeviceResource.PortRange(0x64, 1)];
+
+// Target-typed new
+Thread thread = new();
+List&lt;int&gt; items = new();
+
+// Numeric separators for readability
+public const nuint DefaultStackSize = 64 * 1024;
+public static long TscFrequency { get; set; } = 1_000_000_000;
+
+// stackalloc for small buffers (no heap allocation)
+Span&lt;byte&gt; buffer = stackalloc byte[64];
+
+// field keyword: auto-property with validation without a manual backing field
+public int Priority
+{
+    get =&gt; field;
+    set =&gt; field = value &gt;= 0 ? value : throw new ArgumentOutOfRangeException();
+}
+
+// Interpolation, not concatenation
+Serial.WriteString($&quot;[{Table[(int)Status]}] {packet}\n&quot;);
+
+// required members for state the constructor cannot take; derive what follows from it
+public sealed class DhcpOption
+{
+    public required byte Type { get; init; }
+    public required byte[] Data { get; init; }
+    public byte Length =&gt; (byte)Data.Length;
+}
+
+// One dictionary call carries the answer
+if (!s_clients.TryGetValue(port, out UdpClient? client))
+{
+    return;
+}
+s_registeredTypes.TryAdd(name, fileSystemType);
+cache[id] = mac;                        // upsert: no ContainsKey first
+
+// readonly on every field assigned only at its declaration or in a constructor
+private readonly Canvas _canvas;
+private static readonly ArrayPool&lt;byte&gt; s_arrayPool = ArrayPool&lt;byte&gt;.Shared;
+
+// Auto-property over a field behind a pass-through accessor
+public static KernelConsole? Default { get; private set; }
+</code></pre>
+<p>最后两项有三条限制。在可变结构体类型（<code>SpinLock</code>）的字段上使用 <code>readonly</code> 是错误的：每次方法调用都会作用于一个防御性副本，锁永远不会被获取。<code>dotnet_style_readonly_field</code> 背后的分析器不知道哪些结构体方法会修改状态，因此只对引用类型和没有修改性成员的结构体采纳它的建议。plug 按名称访问的字段（<code>[FieldAccess]</code>）保持为字段：自动属性的后备字段名称由编译器生成。此外，执行分配的静态初始化器就是类构造函数，它在首次访问时通过一个需要当前线程的锁运行：设备启动过程中可能访问到的类型（<code>MacAddress</code>，任何驱动程序都可能读取它的 <code>None</code> 和 <code>Broadcast</code>）保留延迟填充的静态成员，并附上注释说明原因。</p>
+<p><a id="avoid-1"></a></p>
+<h3 id="避免-1">避免</h3>
+<pre><code class="lang-csharp">// Don't use var when type isn't obvious
+var x = GetValue();           // Bad: what type is x?
+int count = GetValue();       // Good: explicit type
+
+// Don't use var for built-in types
+var i = 0;                    // Bad
+int i = 0;                    // Good
+
+// Don't use this. qualification
+this._field = value;          // Bad
+_field = value;               // Good
+
+// Don't allocate arrays in hot paths when Span works
+byte[] temp = new byte[16];       // Bad in hot path: heap allocation
+Span&lt;byte&gt; temp = stackalloc byte[16]; // Good: stack allocation
+
+// Always use braces, no single-line if/for/while without braces
+if (ptr == null) return;          // Bad
+if (ptr == null)                  // Bad
+    return;
+
+if (ptr == null)                  // Good
+{
+    return;
+}
+
+// Don't give a method, constructor, operator or local function an expression body
+public void Halt() =&gt; Native.Cpu.Halt();     // Bad
+
+public void Halt()                           // Good
+{
+    Native.Cpu.Halt();
+}
+
+// Don't wrap an expression body: past one line, a property takes a get block
+public bool IsFixedRoot =&gt;                   // Bad
+    Parent is null &amp;&amp; Superblock.Boot.Type != FatType.Fat32;
+
+public bool IsFixedRoot                      // Good
+{
+    get
+    {
+        return Parent is null &amp;&amp; Superblock.Boot.Type != FatType.Fat32;
+    }
+}
+
+// Don't compare a bool to a literal
+if (applied == false)             // Bad
+if (!applied)                     // Good
+
+// Don't test a key, then index; the lookup answers once
+if (map.ContainsKey(key))         // Bad: two lookups
+{
+    device = map[key];
+}
+
+// Don't loop on a literal; the condition says what ends the loop
+while (true)                      // Bad: nothing in the header bounds it
+{
+    if (pos &gt;= end)
+    {
+        break;
+    }
+    pos += Step(pos);
+}
+
+while (pos &lt; end)                 // Good: the bound is the condition
+{
+    pos += Step(pos);
+}
+</code></pre>
+<blockquote>
+<p>大括号由 <code>.editorconfig</code>（<code>csharp_prefer_braces = true:error</code>）和 CI（<code>dotnet format style --severity error</code>）强制执行。</p>
+</blockquote>
+<p>方法、构造函数、运算符和局部函数使用块体，即使只有一条语句也是如此：换行的 <code>=&gt;</code> 会掩盖方法体的起点。属性、索引器或访问器只有在整个成员能放在一行内时才使用 <code>=&gt;</code>，而 lambda 保留其 <code>=&gt;</code>。<code>ThirdParty/</code> 下引入的第三方代码树同样遵循这条规则，每个代码树的 README 都列出了它修改过的成员。<code>.editorconfig</code> 在 <code>csharp_style_expression_bodied_*</code> 选项中以 <code>silent</code> 级别记录了这条规则，因此 CI 不会强制执行它。</p>
+<p><a id="bounded-loops"></a></p>
+<h3 id="有界循环">有界循环</h3>
+<p>不写 <code>while (true)</code>。循环的头部要说明是什么让它结束：一个计数、一个索引的上界、一个截止时间，或者循环体在找到目标时设置的标志。边界写在头部时，读者只需在一处检查每条路径是否都朝它推进；使用 <code>while (true)</code> 时，出口就在 <code>break</code> 或 <code>return</code> 碰巧所在的地方，一个因修改而丢失出口的循环，读起来与一个从未有过出口的循环一模一样。三类看似无界的循环各有其要说明的边界：</p>
+<table>
+<thead>
+<tr>
+<th>循环</th>
+<th>头部</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>遍历缓冲区的解析</td>
+<td><code>while (pos &lt; end &amp;&amp; !closed)</code>，以解析的终点为边界，并用一个标志表示结束解析的那条记录</td>
+</tr>
+<tr>
+<td>等待硬件或其他线程</td>
+<td><code>while (!ready &amp;&amp; Stopwatch.GetTimestamp() &lt; deadline)</code> 或 <code>while (!ready &amp;&amp; attempts++ &lt; MaxAttempts)</code>；没有预算的轮询正是 <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/365">#365</a> 所跟踪的卡死问题</td>
+</tr>
+<tr>
+<td>内核主循环，或永不返回的停机</td>
+<td>前者使用 <code>while (!_stopped)</code>；后者在循环体中让 CPU 停机，所以自旋正是其目的，<code>while (true) { Halt(); }</code> 予以保留</td>
+</tr>
+</tbody>
+</table>
+<p>最后一行是唯一的豁免：一个永不返回、且循环体会让 CPU 停机的方法，例如 <code>Power.Reboot</code> 和 <code>Power.Shutdown</code> 在平台两者都无法完成时所回退到的方法，以及 <code>Kernel.Start</code> 在 <code>AfterRun</code> 之后的做法。循环体为空的循环不属于这一豁免；它白白消耗 CPU 而毫无进展，应改为停机。其他所有循环都要说明其边界。<code>src/</code> 中现有的 <code>while (true)</code> 循环早于这条规则，会在修改其周边代码时一并转换，而不是集中清理；没有分析器检查这一点。</p>
+<p><a id="feature-switches"></a></p>
+<h3 id="功能开关">功能开关</h3>
+<p>使用 <code>[FeatureSwitchDefinition]</code> 进行编译时的功能切换（由 NativeAOT 链接器裁剪）。所有功能标志都位于 <code>Cosmos.Kernel.Core.CosmosFeatures</code> 中：</p>
+<pre><code class="lang-csharp">// In CosmosFeatures.cs: one property per feature
+[FeatureSwitchDefinition(&quot;Cosmos.Kernel.HAL.Interrupts.Enabled&quot;)]
+public static bool InterruptsEnabled
+{
+    get
+    {
+        return AppContext.TryGetSwitch(&quot;Cosmos.Kernel.HAL.Interrupts.Enabled&quot;, out bool enabled) ? enabled : true;
+    }
+}
+
+// The ILC linker trims the dead branch entirely
+if (CosmosFeatures.KeyboardEnabled)
+{
+    // This code is removed from the binary when keyboard is disabled
+}
+</code></pre>
+<hr>
+<p><a id="14-aot-constraints"></a></p>
+<h2 id="14-aot-约束">14. AOT 约束</h2>
+<p>NativeAOT 施加了严格的限制。<strong>所有内核代码都必须与 AOT 兼容。</strong></p>
+<p>.NET 10 改进了 NativeAOT，生成的二进制文件更小，支持的平台更广，但根本性的约束依然存在。</p>
+<p><a id="forbidden"></a></p>
+<h3 id="禁止">禁止</h3>
+<ul>
+<li><code>System.Reflection.Emit</code>（不能在运行时生成代码）。</li>
+<li><code>dynamic</code> 关键字。</li>
+<li>在运行时使用 <code>Assembly.Load</code>。</li>
+<li>在运行时按字符串调用 <code>Type.GetType(&quot;...&quot;)</code>（类型必须是静态可达的）。</li>
+<li>在运行时使用 <code>MakeGenericType</code> / <code>MakeGenericMethod</code>（泛型实例化必须在编译时已知）。</li>
+</ul>
+<p><a id="use-with-caution"></a></p>
+<h3 id="谨慎使用">谨慎使用</h3>
+<ul>
+<li><strong>泛型虚方法</strong>：NativeAOT 必须在编译时生成所有可能的实例化。避免深度嵌套或开放式的泛型虚分派。</li>
+<li><strong>LINQ</strong>：许多 LINQ 运算符会分配迭代器和闭包。避免在热路径（GC、调度器、中断处理程序）中使用。</li>
+</ul>
+<hr>
+<p><a id="15-documentation"></a></p>
+<h2 id="15-文档">15. 文档</h2>
+<p><a id="license-header"></a></p>
+<h3 id="许可证头">许可证头</h3>
+<p>每个 <code>.cs</code> 文件都必须以许可证头开始（由 <code>.editorconfig</code> 强制执行）：</p>
+<pre><code class="lang-csharp">// This code is licensed under the BSD 3-Clause license (see LICENSE for details)
+</code></pre>
+<p><a id="xml-documentation"></a></p>
+<h3 id="xml-文档">XML 文档</h3>
+<p>用 <code>&lt;summary&gt;</code> 为所有<strong>公共</strong> API 编写文档。保持简洁：</p>
+<pre><code class="lang-csharp">/// &lt;summary&gt;
+/// Triggers a kernel panic with the specified message.
+/// Disables interrupts and halts the CPU.
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;message&quot;&gt;The panic message describing the error.&lt;/param&gt;
+public static void Halt(string message) { ... }
+</code></pre>
+<p><strong>规则：</strong></p>
+<ul>
+<li>为公共类、接口、方法和属性编写文档。</li>
+<li>显而易见的成员无需文档（属性名称本身足以说明含义的 <code>get</code>/<code>set</code>）。</li>
+<li>对不明显的参数使用 <code>&lt;param&gt;</code>。</li>
+<li>当返回值需要解释时使用 <code>&lt;returns&gt;</code>。</li>
+<li>使用 <code>&lt;see cref=&quot;...&quot;/&gt;</code> 引用相关类型。</li>
+<li>除非逻辑复杂，否则不要为私有实现细节编写文档。</li>
+</ul>
+<p><a id="inline-comments"></a></p>
+<h3 id="行内注释">行内注释</h3>
+<p>谨慎使用，仅在代码无法自我说明时添加：</p>
+<pre><code class="lang-csharp">// Stack layout (growing downward from top):
+// [StackBase + stackSize] = Top of usable stack
+// [contextAddr] = Start of ThreadContext (where StackPointer points)
+// [StackBase] = Bottom of stack
+
+// Align context to 16 bytes (required for XMM operations)
+contextAddr = (contextAddr + 0xF) &amp; ~(nuint)0xF;
+</code></pre>
+<p>被注释掉的代码应当删除；历史记录会保留它。<code>TODO</code> 要写明缺少什么以及为什么可以推迟；对代码的疑问（<code>// is this correct?</code>）应当是一个 issue，而不是一条注释。主体为空的成员不是占位符：在它真正做事之前不要写它。</p>
+<p><a id="16-testing"></a></p>
+<h2 id="16-测试">16. 测试</h2>
+<p>完整的测试指南（单元测试、内核集成测试、UART 协议、CI、编写测试内核）请参见<a href="testing.html">测试</a>。</p>
+<p>不需要硬件的逻辑（<code>TcpConnection</code> 的接收缓冲区运算、地址解析）在主机进程中由 <code>tests/Cosmos.Kernel.Tests.System</code>（NUnit）进行单元测试：每个被测成员对应一个以其命名的嵌套测试夹具（fixture），测试名称采用 <code>WhenX_AndY_ResultZ</code> 的形式，值表使用 <code>[TestCase(..., ExpectedResult = ...)]</code>。该项目获得了 <code>Cosmos.Kernel.System</code> 授予的 <code>InternalsVisibleTo</code> 权限。</p>
+<p><strong>代码覆盖率</strong>：给拉取请求添加 <code>run-coverage</code> 标签即可触发覆盖率 CI。它会运行内核测试套件，并输出集成测试覆盖了哪些代码路径。</p>
+<hr>
+<p><a id="17-public-api-surface"></a></p>
+<h2 id="17-公共-api-面">17. 公共 API 面</h2>
+<p>有三条规则决定什么是 <code>public</code>（完整的策略及其机制见<a href="public-api.html">公共 API 跟踪</a>）：</p>
+<ol>
+<li><strong>一个受支持层</strong>。<code>Cosmos.Kernel.System</code> 是内核编程所面向的 API，外加其签名所暴露的契约类型（HAL 的设备契约 <code>IBlockDevice</code> 和 <code>MacAddress</code>，以及 Core 的平台接口）。只有这一 API 面会被跟踪、编写文档，并纳入弃用周期。</li>
+<li><strong>精心选择的实验性扩展点</strong>。受支持层之外的扩展点是有意开放的，并标记为 <code>[Experimental(&quot;COSMOSxxxx&quot;)]</code>：现在即可使用，不作兼容性承诺，移除该特性即完成转正。绝不要仅仅通过把某样东西设为 public 来开放扩展点。</li>
+<li><strong>其余一切都是 <code>internal</code></strong>。可见性不是扩展机制。第一方程序集和白盒测试内核使用 <code>InternalsVisibleTo</code>；外部代码使用 <code>[UnsafeAccessor]</code>（<a href="accessing-internals.html">访问内部成员</a>），风险自负。</li>
+</ol>
+<p>由此得出的实践规则：</p>
+<pre><code class="lang-csharp">// Good: new user-facing capability lands as a Cosmos.Kernel.System facade
+public static class MemoryDiagnostics { public static ulong FreePages =&gt; PageAllocator.FreePageCount; }
+
+// Bad: making the Core type public so a kernel can reach it
+public static class PageAllocator { ... }
+</code></pre>
+<ul>
+<li><strong>新类型默认为 <code>internal</code></strong>。在受跟踪的项目中将符号设为 <code>public</code> 是需要评审的决定：在 <code>make api</code> 将其记录到 <code>PublicAPI.Unshipped.txt</code> 之前，构建会失败（<code>RS0016</code>），而 txt 文件的差异应放在同一次提交中。</li>
+<li><strong>由 DevKernel 负责强制检验</strong>。<code>examples/DevKernel</code> 在没有任何 <code>InternalsVisibleTo</code> 授权的情况下编译；它需要的一切都必须来自受支持层。</li>
+<li><strong>受跟踪的 API 面必须有文档</strong>。启用 <code>CosmosTrackPublicApi</code> 会把缺失的 XML 文档（<code>CS1591</code>）变成该项目公共符号的构建错误。</li>
+<li><strong>白盒测试内核获得 <code>InternalsVisibleTo</code> 授权</strong>，并在授予权限的 <code>.csproj</code> 中附上注释，说明它观察的内容；它绝不强迫某个符号变为 public。</li>
+</ul>
+<hr>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/dev/coding-guidelines.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

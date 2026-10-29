@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>翻译文档 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="翻译文档 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/dev/translations.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="translating-the-docs"></a></p>
+<h1 id="翻译文档">翻译文档</h1>
+<p>文档以英文、法文和简体中文发布，英文页面是另外两种语言遵循的参考。本页说明翻译页面如何组织和构建、其标题如何保留英文锚点、它如何记录自己所依据的英文页面、文档构建如何报告落后于英文的翻译，以及英文页面变更时贡献者要做什么。</p>
+<hr>
+<p><a id="how-the-languages-are-laid-out"></a></p>
+<h2 id="各语言的组织方式">各语言的组织方式</h2>
+<p>每种语言是 <code>docs/</code> 下的一个文件夹，镜像英文目录树：<code>docs/fr/articles/user/timers.md</code> 是 <code>docs/articles/user/timers.md</code> 的法文翻译，<code>docs/zh/</code> 在相同的相对路径下存放中文翻译。由于路径相同，<code>drivers.md#platform-nodes</code> 这样的相对链接在每种语言中写法都一样，并且会落到其自身语言的页面上。</p>
+<p>每个语言文件夹都是一个独立的 docfx 项目，有自己的 <code>docfx.json</code>，把它构建到英文站点的一个子文件夹中，即 <code>_site/fr/</code> 和 <code>_site/zh/</code>；根目录的 <code>docs/docfx.json</code> 排除这些文件夹，使英文站点不会再发布它们一次。语言使用英文目录树中的图片和视频，因此翻译引用 <code>images/mouse-paint.mp4</code> 的方式与英文页面完全相同；语言也使用 <code>docs/api/</code> 中生成的 API 参考，它在每种语言中都以英文发布，因为它来自源代码的 XML 文档。在共享的 <code>templates/custom</code> 层之上，语言还会添加 <code>templates/&lt;folder&gt;/token.json</code>，即该语言的主题字符串（搜索框、“本文内容”、注意和警告标签），并设置 <code>_lang</code>，docfx 会把它写到 <code>&lt;html&gt;</code> 元素上。</p>
+<p>与英文目录树共享文件带来两个后果，因为 docfx 在把文件映射到站点之前，会先在磁盘上、在页面或 toc 旁边查找它们所指的文件。翻译版根 <code>toc.yml</code> 的 API 条目写作 <code>../api/</code>，而英文版写作 <code>api/</code>。此外，在翻译版的构建中，每张图片和每个视频都只存在于英文目录树中，因此会被报告为 <code>InvalidFileLink</code>，尽管构建会把它们复制到站点中的正确位置；所以语言的 <code>docfx.json</code> 把这条规则降为 <code>info</code>。这条规则不再报告的内容由 <code>docs-i18n.py check</code> 负责：它要求翻译的链接目标与其英文页面完全一致，而英文构建会校验这些目标；它要求翻译版 <code>toc.yml</code> 的每个条目都指向其自身语言的页面，或通过 <code>../api/</code> 指向 API 参考；它还会报告每个尚无翻译的英文页面。</p>
+<p><code>templates/custom/public/main.js</code> 正是通过 <code>lang</code> 属性得知页面所用的语言。它在导航栏旁添加一个语言下拉菜单，用所选语言打开同一页面，当该页面在那种语言中不存在时则回退到那种语言的首页；它还在每篇翻译文章的顶部放置一个提示横幅，说明英文页面才是参考，并附上指向英文页面的链接。当所选版本具备当前页面、章节和语言时，版本下拉菜单会保留它们。在某种语言出现之前冻结的版本没有该语言的文件夹：在这个版本的页面上，语言下拉菜单会禁用该语言，而翻译页面的版本下拉菜单会落到该版本的英文页面。</p>
+<p>每种语言还有自己的搜索索引，由 docfx 根据该语言自己的页面构建。主题使用 lunr 搜索该索引，lunr 按空白和标点把文本切分成词；法文站点通过 <code>main.js</code> 中的 <code>lunrLanguages</code>，在英文词干提取器之外加上 lunr 的法文词干提取器。中文词与词之间没有空格，因此 lunr 会把整个中文句子索引为一个词，永远找不到其中的某个词。为此，中文站点用 <code>templates/zh/public/search-worker.min.js</code> 替换主题的搜索 worker，它按子串匹配，并使用主题搜索框所期望的协议。这个协议属于 docfx 的 modern 模板，任何一个 docfx 版本都可能改变它，因此 <code>build-docs.yml</code>、<code>release.yml</code> 和 <code>Makefile</code> 安装的是固定版本的 docfx。当构建出的主题不再提到该 worker 的文件名或其消息时，<code>check</code> 会发出警告；升级版本之前，请先在本地构建上测试中文搜索。</p>
+<p>保留英文的是读者会复制的内容或生成的内容：代码块（包括其中的注释）、SVG 图表和 API 参考。页面上的其他一切都要翻译，包括标题、表格、链接文本和图片描述。</p>
+<p><a id="headings-keep-their-english-anchors"></a></p>
+<h2 id="标题保留英文锚点">标题保留英文锚点</h2>
+<p>docfx 根据标题文本生成标题的 id，因此翻译后的标题会得到与英文标题不同的 id，中文标题得到的 id 甚至是用中文写的。这样，每个按英文标题写成的 <code>page.md#anchor</code> 形式的链接都会找不到对应章节，语言下拉菜单也无法让读者停留在同一位置。因此翻译同时带有英文 id：<code>.github/scripts/docs-i18n.py stamp</code> 会在每个自身 id 与英文 id 不同的翻译标题前插入一行 <code>&lt;a id=&quot;english-id&quot;&gt;&lt;/a&gt;</code>，页面标题也包括在内。</p>
+<p>页面加载时，<code>main.js</code> 会把每个这样的 id 移到其后的标题上并删除该锚点，这一步发生在主题构建“本文内容”列表和标题链接之前。这样，翻译页面的 id 就与英文页面完全相同；没有 JavaScript 时，仅靠这些锚点也能让链接到达其章节。如果没有这一步，该列表会链接到翻译后的 id，而语言下拉菜单无法把这些 id 带到另一种语言中；翻译标题自身的 id 还可能遮蔽另一个标题的英文 id：plug 页面的中文标题 <code>Plug</code> 得到的 id 是 <code>plug</code>，而这正是其 <code>[Plug]</code> 章节的英文 id。</p>
+<p><code>stamp</code> 按位置配对标题，因此翻译必须与英文页面的标题完全一致：数量相同、级别相同、顺序相同。译者从不手写这些锚点。对文件再次运行 <code>stamp</code> 会替换它之前写入的锚点，即带有英文标题 id 的那些锚点，其他锚点则保持不变。</p>
+<p><code>stamp</code> 按照 docfx 的方式计算英文 id，而不是从构建出的站点中读取，这样它在构建之前也能工作。英文站点构建完成后，<code>check</code> 会把它计算出的 id 与 docfx 写出的 id 进行比较；如果某个页面的标题使用了脚本未遵循的语法，它会在错误的锚点进入翻译之前报告该页面。</p>
+<p><a id="the-source-hash"></a></p>
+<h2 id="源哈希">源哈希</h2>
+<p><code>stamp</code> 还会记录翻译所依据的英文页面。它把英文页面的 git blob 哈希作为 <code>source_hash</code> 写入翻译的前置元数据（front matter），对于翻译版的 <code>toc.yml</code>，则写在文件顶部的一行 <code># source_hash:</code> 注释中。英文页面的任何修改都会改变这个哈希，因此将它与当前英文页面比较，就能知道翻译是否仍与英文页面同步。</p>
+<p>仓库的 README 也有翻译，即与它放在一起的 <code>README_FR.md</code> 和 <code>README_CN.md</code>，每个 README 徽章下方的语言链接行都指向它们。README 的翻译逐段对应 <code>README.md</code>，但它的链接指向其自身语言的文档（<code>https://cosmosos.github.io/fr/...</code>），徽章标签也经过翻译，因此 <code>check</code> 不会把它的结构与 <code>README.md</code> 比较。<code>stamp README_FR.md</code> 会把 <code>README.md</code> 的哈希写入其第一行的 <code>&lt;!-- source_hash: ... --&gt;</code> 注释中，GitHub 不会显示这条注释；<code>check</code> 会报告缺失、未打标记或过时的 README 翻译。README 发生变化时，文档工作流也会运行，这样过时的 README 翻译就会出现在它的摘要中。</p>
+<p><a id="checking-the-translations"></a></p>
+<h2 id="检查翻译">检查翻译</h2>
+<p><code>python3 .github/scripts/docs-i18n.py check</code> 遍历每个英文页面，并针对每种语言报告以下几类翻译：缺失的、过时的（其 <code>source_hash</code> 与英文页面不再匹配）、孤立的（英文页面已不存在），以及结构与英文页面不再一致的，即标题、代码块、链接目标、行内代码、表格行或段落不同，有一行与六个词或更多词的英文行完全相同，使用了文档风格规范禁止的破折号，或者有 toc 条目指向该语言文件夹之外。它无法读取的文件，例如未以 UTF-8 保存的文件，会像其他发现一样被报告。</p>
+<p>文档工作流在构建完三个站点后运行它。每个有发现的页面都会成为工作流运行上的一条警告注释，完整列表则写入该运行的摘要，因为 GitHub 只显示一个步骤的前十条注释。这一步从不让构建失败，因为英文的修改不应等待能写法文和中文的人；过时的翻译会继续在其提示横幅下发布，直到有人更新它。在本地，<code>--strict</code> 让它以错误状态退出，<code>--lang fr</code> 将它限制在一种语言，而一组英文路径（相对于 <code>docs/</code>，或者 <code>README.md</code>）则将它限制在这些页面。</p>
+<p><a id="when-you-change-an-english-page"></a></p>
+<h2 id="修改英文页面时">修改英文页面时</h2>
+<p>你不必在同一个拉取请求中更新翻译。如果可以，请修改两份翻译，使其内容与英文页面现在的内容一致，并保持标题与英文页面同步，然后为它们打上标记：</p>
+<pre><code class="lang-bash">python3 .github/scripts/docs-i18n.py stamp docs/fr/articles/user/timers.md docs/zh/articles/user/timers.md
+python3 .github/scripts/docs-i18n.py check articles/user/timers.md
+</code></pre>
+<p>新的英文页面照常加入其所在文件夹的 <code>toc.yml</code>。在它被翻译之前，<code>check</code> 会在每种语言中把它报告为缺失，并报告翻译版的 <code>toc.yml</code> 与英文版不同；翻译版的目录只有在翻译存在后才会列出它，因为翻译版的构建只会以 <code>info</code> 级别报告缺失的页面，并会把该条目作为失效链接发布（<code>check</code> 会报告这样的条目）。页面被重命名或删除时，其翻译也要随之重命名或删除，否则 <code>check</code> 会把它们报告为孤立翻译。</p>
+<p>部署会保留已经发布的文件，因为已发布的各个版本与开发版站点一起存放在 Pages 仓库中。因此，被删除的翻译仍会留在线上，而语言下拉菜单通过请求页面的 URL 来查找页面，仍然会打开它；请同时把它从 Pages 仓库中删除。</p>
+<p><a id="adding-a-language"></a></p>
+<h2 id="添加语言">添加语言</h2>
+<p>新增一种语言需要：</p>
+<ul>
+<li><code>docs/</code> 下的一个文件夹及其 <code>docfx.json</code>（复制 <code>docs/fr/docfx.json</code>，修改输出文件夹、模板层和 <code>_lang</code>）。文件夹名称不能像版本文件夹（<code>v1.2.3</code>、<code>latest</code>），否则 <code>main.js</code> 会把它当作一个已发布版本；</li>
+<li>在根目录 <code>docs/docfx.json</code> 的 <code>exclude</code> 列表中加入其文件夹；</li>
+<li>一个根 <code>toc.yml</code>，其 API 条目写作 <code>../api/</code>；</li>
+<li>一个包含主题字符串的 <code>templates/&lt;folder&gt;/token.json</code>；</li>
+<li>在 <code>main.js</code> 中，在 <code>languages</code> 列表里加入一个条目，添加提示横幅文本，并在 lunr 有该语言的词干提取器时把它加入 <code>lunrLanguages</code>；</li>
+<li>对于词与词之间不加空格的语言，需要一个按子串匹配的搜索 worker，例如 <code>templates/zh/public/search-worker.min.js</code>，并在 <code>docs-i18n.py</code> 中加入检查页面是否包含该文字的规则，就像中文的那条一样；</li>
+<li>与 <code>README.md</code> 放在一起的一份 README 翻译，在 <code>docs-i18n.py</code> 的 <code>READMES</code> 中加入其文件名，并在每个 README 的语言行中加入指向它的链接。</li>
+</ul>
+<p><code>Makefile</code>、<code>build-docs.yml</code> 和 <code>release.yml</code> 通过 <code>docs/&lt;folder&gt;/docfx.json</code> 找到各种语言，<code>docs-i18n.py</code> 对页面也是如此，因此它们无需其他修改。</p>
+<p><a id="terms"></a></p>
+<h2 id="术语">术语</h2>
+<p>翻译在所有页面中对同一概念使用同一个术语。下表列出了已确定的术语，使新的或更新后的翻译读起来与周围的页面一致。</p>
+<table>
+<thead>
+<tr>
+<th>English</th>
+<th>Français</th>
+<th>简体中文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>kernel</td>
+<td>noyau</td>
+<td>内核</td>
+</tr>
+<tr>
+<td>driver</td>
+<td>pilote</td>
+<td>驱动程序</td>
+</tr>
+<tr>
+<td>device</td>
+<td>périphérique</td>
+<td>设备</td>
+</tr>
+<tr>
+<td>driver kit</td>
+<td>kit de pilotes</td>
+<td>驱动工具包</td>
+</tr>
+<tr>
+<td>binding (a driver to a device)</td>
+<td>liaison</td>
+<td>绑定</td>
+</tr>
+<tr>
+<td>match, matching</td>
+<td>correspondance</td>
+<td>匹配</td>
+</tr>
+<tr>
+<td>probe</td>
+<td>sonder</td>
+<td>探测</td>
+</tr>
+<tr>
+<td>hot-plug</td>
+<td>branchement à chaud</td>
+<td>热插拔</td>
+</tr>
+<tr>
+<td>host controller</td>
+<td>contrôleur hôte</td>
+<td>主机控制器</td>
+</tr>
+<tr>
+<td>register</td>
+<td>registre</td>
+<td>寄存器</td>
+</tr>
+<tr>
+<td>descriptor ring</td>
+<td>anneau de descripteurs</td>
+<td>描述符环</td>
+</tr>
+<tr>
+<td>interrupt</td>
+<td>interruption</td>
+<td>中断</td>
+</tr>
+<tr>
+<td>interrupt context</td>
+<td>contexte d'interruption</td>
+<td>中断上下文</td>
+</tr>
+<tr>
+<td>interrupt handler</td>
+<td>gestionnaire d'interruption</td>
+<td>中断处理程序</td>
+</tr>
+<tr>
+<td>kind (device kind, bus kind)</td>
+<td>type (type de périphérique, type de bus)</td>
+<td>种类（设备种类，总线种类）</td>
+</tr>
+<tr>
+<td>thread</td>
+<td>thread</td>
+<td>线程</td>
+</tr>
+<tr>
+<td>scheduler</td>
+<td>ordonnanceur</td>
+<td>调度器</td>
+</tr>
+<tr>
+<td>scheduling policy</td>
+<td>politique d'ordonnancement</td>
+<td>调度策略</td>
+</tr>
+<tr>
+<td>run queue</td>
+<td>file d'exécution</td>
+<td>运行队列</td>
+</tr>
+<tr>
+<td>preemption</td>
+<td>préemption</td>
+<td>抢占</td>
+</tr>
+<tr>
+<td>tick source</td>
+<td>source de ticks</td>
+<td>节拍源</td>
+</tr>
+<tr>
+<td>context switch</td>
+<td>changement de contexte</td>
+<td>上下文切换</td>
+</tr>
+<tr>
+<td>lock, spinlock</td>
+<td>verrou, spinlock</td>
+<td>锁，自旋锁</td>
+</tr>
+<tr>
+<td>timer, alarm</td>
+<td>minuteur, alarme</td>
+<td>定时器，闹钟</td>
+</tr>
+<tr>
+<td>callback</td>
+<td>callback</td>
+<td>回调</td>
+</tr>
+<tr>
+<td>garbage collector</td>
+<td>ramasse-miettes</td>
+<td>垃圾回收器</td>
+</tr>
+<tr>
+<td>heap, stack</td>
+<td>tas, pile</td>
+<td>堆，栈</td>
+</tr>
+<tr>
+<td>GC root</td>
+<td>racine</td>
+<td>根</td>
+</tr>
+<tr>
+<td>safepoint</td>
+<td>point sûr</td>
+<td>安全点</td>
+</tr>
+<tr>
+<td>write barrier</td>
+<td>barrière d'écriture</td>
+<td>写屏障</td>
+</tr>
+<tr>
+<td>finalizer</td>
+<td>finaliseur</td>
+<td>终结器</td>
+</tr>
+<tr>
+<td>plug, patcher</td>
+<td>plug, patcher</td>
+<td>plug，patcher</td>
+</tr>
+<tr>
+<td>feature switch</td>
+<td>commutateur de fonctionnalité</td>
+<td>功能开关</td>
+</tr>
+<tr>
+<td>public API surface</td>
+<td>surface d'API publique</td>
+<td>公共 API 面</td>
+</tr>
+<tr>
+<td>experimental seam</td>
+<td>point d'extension expérimental</td>
+<td>实验性扩展点</td>
+</tr>
+<tr>
+<td>framebuffer</td>
+<td>framebuffer</td>
+<td>帧缓冲区</td>
+</tr>
+<tr>
+<td>block device</td>
+<td>périphérique bloc</td>
+<td>块设备</td>
+</tr>
+<tr>
+<td>filesystem</td>
+<td>système de fichiers</td>
+<td>文件系统</td>
+</tr>
+<tr>
+<td>test kernel, test suite</td>
+<td>noyau de test, suite de tests</td>
+<td>测试内核，测试套件</td>
+</tr>
+</tbody>
+</table>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/dev/translations.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

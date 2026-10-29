@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>PCI (interconnexion de composants p&#233;riph&#233;riques) | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="PCI (interconnexion de composants p&#233;riph&#233;riques) | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/user/driver-concepts/pci.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="pci-peripheral-component-interconnect"></a></p>
+<h1 id="pci-interconnexion-de-composants-périphériques">PCI (interconnexion de composants périphériques)</h1>
+<p>PCI, et après lui PCI Express, qui garde le même modèle logiciel, relie la plupart des périphériques d'un PC et de nombreuses machines ARM. Le logiciel désigne un périphérique par l'endroit où il se trouve : un segment (un groupe de bus), un numéro de bus, un numéro de périphérique sur ce bus (de 0 à 31) et un numéro de fonction (de 0 à 7). La fonction est l'unité à laquelle un pilote se lie, car un même périphérique physique peut contenir jusqu'à huit fonctions indépendantes, comme une carte graphique et son contrôleur audio.</p>
+<p>Chaque fonction possède un espace de configuration, de 256 octets en PCI classique et de 4 Kio en PCI Express, qui commence par un en-tête standard. Son identifiant de fabricant et son identifiant de périphérique désignent la puce exacte, et trois octets de classe (classe, sous-classe et interface de programmation) indiquent de quel type de périphérique il s'agit. Les fonctionnalités optionnelles comme MSI-X (<a href="interrupt-delivery.html">acheminement des interruptions</a>) sont annoncées dans une liste de capacités, une chaîne d'entrées qui contiennent chacune un identifiant et le décalage de la suivante. L'en-tête contient aussi le registre de commande, dont les bits décident si la fonction répond aux accès mémoire, si elle répond aux accès aux ports d'E/S, et si elle peut lancer d'elle-même des accès DMA (<a href="dma.html">bus mastering</a>).</p>
+<p>Les registres d'une fonction n'ont pas d'adresse fixe. Chacun de ses six registres d'adresse de base (BAR) demande une fenêtre mémoire ou une plage de ports d'E/S de taille fixe, et un BAR mémoire 64 bits occupe deux des six emplacements. Il faut que quelque chose donne une adresse à chaque BAR, et c'est le firmware qui le fait pendant le démarrage (<a href="firmware-handoff.html">passage de relais du firmware</a>), ce qui laisse sans adresse un périphérique branché plus tard (<a href="hot-plug.html">branchement à chaud</a>).</p>
+<p>On atteint l'espace de configuration de l'une de deux façons. Le mécanisme hérité de x86 écrit l'adresse d'une fonction sur le port 0xCF8, fait passer les données par le port 0xCFC, et n'atteint que les 256 premiers octets. ECAM (mécanisme d'accès amélioré à la configuration) projette les 4 Kio complets de chaque fonction dans une fenêtre mémoire, dont ACPI ou le device tree donne la base.</p>
+<p>Le piège est une correspondance sur la seule classe. Une classe dit ce que fait un périphérique, pas comment il se programme : tout contrôleur réseau est de classe 0x02, quel que soit son fabricant, si bien qu'un pilote qui établit la correspondance sur cette classe se voit proposer des puces dont il n'a jamais vu les registres. Les octets de classe ne fixent un modèle de programmation que là où un standard en définit un, comme xHCI, EHCI, OHCI, AHCI, NVMe ou HD Audio.</p>
+<p>Dans le kit de pilotes, <code>PciMatch</code> teste les champs d'en-tête d'une <code>PciIdentity</code>, dont le chemin de nœud est <code>pci:&lt;segment&gt;:&lt;bus&gt;:&lt;device&gt;.&lt;function&gt;</code> (<a href="../drivers.html#pci-identity-and-match">Identité et correspondance PCI</a>), et <code>PciAccess</code> offre <code>FindCapability</code> ainsi que les bits du registre de commande sous les noms <code>EnableMemorySpace</code>, <code>EnableIoSpace</code> et <code>EnableBusMastering</code> (<a href="../drivers.html#the-pci-access-object">L'objet d'accès PCI</a>). <code>Node.Resources</code> contient les BAR tels que le firmware les a attribués, ou tels que le kit les a placés derrière un emplacement de branchement à chaud, <code>None</code> marquant un emplacement non attribué ou la moitié haute d'un BAR 64 bits (<a href="../drivers.html#bar-resources">Ressources BAR</a>). L'hôte x64 est <code>pci-host-legacy</code>, où un accès à la configuration au-delà du décalage 255 lève une exception, et l'hôte ARM64 est <code>pci-host-ecam-generic</code> (<a href="../drivers.html#platform-nodes">Nœuds de plateforme</a>).</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/user/driver-concepts/pci.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

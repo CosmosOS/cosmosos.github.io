@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>Nombres al&#233;atoires | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Nombres al&#233;atoires | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/user/random.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="random-numbers"></a></p>
+<h1 id="nombres-aléatoires">Nombres aléatoires</h1>
+<p>Dans cet article, nous verrons d'où viennent les nombres aléatoires sur Cosmos Gen3 : quelles API .NET sont cryptographiquement sûres, ce qui les alimente, et l'avertissement qu'un noyau affiche lorsque la machine n'offre aucune véritable entropie.</p>
+<p>Si vous trouvez des bugs ou quelque chose d'anormal, merci de <a href="https://github.com/CosmosOS/Cosmos/issues/new/choose">soumettre une issue</a> sur notre dépôt.</p>
+<hr>
+<p><a id="which-api-to-use"></a></p>
+<h2 id="quelle-api-utiliser">Quelle API utiliser</h2>
+<p>Utilisez les API .NET standard ; rien de spécifique à Cosmos n'est nécessaire.</p>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Alimentée par</th>
+<th>À utiliser pour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>System.Security.Cryptography.RandomNumberGenerator</code> (<code>Fill</code>, <code>GetBytes</code>, <code>GetInt32</code>, <code>GetNonZeroBytes</code>, <code>Create()</code>)</td>
+<td>Le CSPRNG du noyau</td>
+<td>Clés, nonces, jetons, tout ce qui est secret</td>
+</tr>
+<tr>
+<td><code>Guid.NewGuid()</code></td>
+<td>Le CSPRNG du noyau</td>
+<td>Identifiants uniques</td>
+</tr>
+<tr>
+<td><code>System.Random</code>, <code>Random.Shared</code>, <code>HashCode</code> et les graines du hachage des chaînes</td>
+<td>Les générateurs propres à CoreLib, dont la graine provient d'un xorshift sur le compteur de cycles</td>
+<td>Jeux, mélanges, tout ce qui n'est pas secret</td>
+</tr>
+</tbody>
+</table>
+<p>Les bibliothèques qui s'appuient sur <code>RandomNumberGenerator</code> fonctionnent sans modification. BouncyCastle en tire la graine de chaque <code>SecureRandom</code>, si bien que son client TLS génère ses clés à partir du CSPRNG du noyau.</p>
+<pre><code class="lang-csharp">using System.Security.Cryptography;
+
+byte[] key = new byte[32];
+RandomNumberGenerator.Fill(key);
+
+int die = RandomNumberGenerator.GetInt32(1, 7);
+Guid id = Guid.NewGuid();
+</code></pre>
+<p>Les graines de <code>System.Random</code>, de <code>HashCode</code> et du hachage des chaînes restent volontairement sur un xorshift peu coûteux : le runtime prend les graines de <code>HashCode</code> et du hachage des chaînes à leur première utilisation, qui peut survenir avant que quoi que ce soit d'autre ne soit prêt, et ce chemin doit donc fonctionner à tout moment du démarrage. N'utilisez jamais <code>System.Random</code> pour des secrets.</p>
+<hr>
+<p><a id="how-the-kernel-csprng-works"></a></p>
+<h2 id="comment-fonctionne-le-csprng-du-noyau">Comment fonctionne le CSPRNG du noyau</h2>
+<p>Le générateur se trouve dans <code>Cosmos.Kernel.Core/Security</code> et reprend la conception du pilote random de Linux :</p>
+<ul>
+<li><strong>Un pool d'entropie haché avec BLAKE2s-256.</strong> Y entrent :
+<ul>
+<li>l'instruction de nombres aléatoires du CPU, lorsque le CPU en annonce une : RDSEED, sinon RDRAND, sur x64 (CPUID) ; RNDRRS, sinon RNDR, sur ARM64 (FEAT_RNG, lu dans <code>ID_AA64ISAR0_EL1</code>). Une instruction que le CPU n'annonce pas n'est jamais exécutée. Chaque mot passe un contrôle de santé : zéro, tous les bits à un (une défaillance connue de RDRAND sur certaines puces AMD) et la répétition d'un mot que la même lecture a déjà renvoyé sont rejetés, et une instruction qui échoue de façon répétée n'est plus utilisée ;</li>
+<li>la gigue de timing du CPU, toujours : 4096 mesures de la durée d'un petit parcours mémoire sur le compteur de cycles (RDTSC sur x64, <code>CNTPCT_EL0</code> sur ARM64, chaque lecture étant sérialisée pour que deux lectures encadrent le parcours), chaque échantillon étant crédité de 1/8 de bit. Les mesures passent trois tests de santé : les tests de nombre de répétitions et de proportion adaptative de la norme NIST SP 800-90B, qui détectent une durée bloquée ou dominante, et un test de prédiction avec décalage, qui détecte un motif de durées qui se répète. Le crédit est une hypothèse plutôt qu'une mesure propre à chaque machine, et la réussite des tests ne prouve pas qu'un minuteur est imprévisible ;</li>
+<li>des valeurs propres à chaque démarrage, qui ne sont pas créditées : l'heure de démarrage fournie par le chargeur d'amorçage, le décalage HHDM et une adresse de pile.</li>
+</ul>
+</li>
+<li><strong>Une sortie ChaCha20 avec effacement rapide de la clé.</strong> Une clé de 32 octets est extraite du pool. Chaque requête déroule le flux de clé ChaCha20 de cette clé : les 32 premiers octets deviennent la clé suivante et ne sont jamais renvoyés, la requête reçoit le reste, et l'ancienne clé disparaît. Capturer plus tard l'état du générateur ne révèle rien de ce qui a déjà été distribué.</li>
+<li><strong>Réensemencement.</strong> Toutes les 256 requêtes ou tous les 1 Mio de sortie, de nouveaux mots matériels et de nouvelles mesures entrent dans le pool et une nouvelle clé est extraite. Lorsque le matériel ne fournit pas ses 256 bits, le réensemencement prend les 4096 mesures complètes au lieu de quelques-unes, afin que chaque nouvelle clé repose sur autant d'entropie créditée que la première.</li>
+</ul>
+<p>Le générateur s'initialise à sa première utilisation, ce qui prend quelques millisecondes ; sans instruction de nombres aléatoires fonctionnelle, chaque réensemencement prend à peu près autant de temps. Il ne lève jamais d'exception et n'échoue jamais, il peut donc être appelé sans risque depuis des constructeurs statiques ; il peut être appelé depuis n'importe quel thread, mais pas depuis un gestionnaire d'interruption, car le premier appel et chaque réensemencement font plus de travail qu'un gestionnaire d'interruption ne devrait en faire.</p>
+<p>Sur QEMU, x64 tourne sous le CPU <code>host</code> de KVM ou le <code>max</code> de TCG, qui disposent tous deux de RDSEED et de RDRAND. Le modèle <code>qemu64</code> n'a ni l'un ni l'autre, et le <code>cortex-a72</code> par défaut d'ARM64 (comme le <code>cortex-a53</code>) n'a pas FEAT_RNG : ces machines reposent uniquement sur la gigue. Le CPU <code>max</code> d'ARM64 dispose de RNDR.</p>
+<hr>
+<p><a id="the-serial-log"></a></p>
+<h2 id="le-journal-série">Le journal série</h2>
+<p>Le premier ensemencement écrit une ligne dans le journal série, qui indique ce qu'il a utilisé :</p>
+<pre><code>[Random] Kernel CSPRNG seeded: RDSEED (512 bits) + 4096 jitter samples, health tests passed
+</code></pre>
+<p>Chaque mot matériel compte pour 64 bits et les mesures, lorsqu'elles passent leurs tests de santé, pour 512. Lorsque le premier ensemencement est crédité de moins de 256 bits, parce que le CPU n'a pas d'instruction de nombres aléatoires fonctionnelle <strong>et</strong> que le minuteur échoue aux tests de santé de la gigue (un compteur qui n'avance pas, ou qui répète un motif, comme le fait souvent celui de QEMU sous <code>-icount</code>), le générateur s'initialise quand même avec ce dont il dispose, mais affiche une seule fois un avertissement :</p>
+<pre><code>[Random] WARNING: NO SECURE ENTROPY. This CPU has no working random
+[Random] number instruction (RDSEED/RDRAND, RNDRRS/RNDR) and its timer
+[Random] failed the jitter health tests: less than 256 bits of the seed
+[Random] are credited. ...
+</code></pre>
+<p>Sur une telle machine, <code>RandomNumberGenerator</code>, <code>Guid.NewGuid</code> et les clés TLS peuvent être prévisibles : n'en dépendez pas pour la sécurité sur cette machine. Utilisez un modèle de CPU doté d'une instruction de nombres aléatoires, ou un matériel dont le compteur avance.</p>
+<p>Lorsqu'il n'y a pas d'instruction de nombres aléatoires mais que les mesures passent les tests, la graine repose uniquement sur la gigue du minuteur, et un avertissement plus court l'indique :</p>
+<pre><code>[Random] WARNING: no CPU random number instruction; the seed rests on
+[Random] timer jitter alone. ...
+</code></pre>
+<p>Les tests de santé détectent un minuteur bloqué ou qui répète un motif court, mais pas tous les minuteurs prévisibles : une machine qui s'exécute de façon déterministe, comme QEMU sous <code>-icount</code> ou en mode enregistrement/rejeu, peut les réussir et produire malgré tout la même sortie à chaque démarrage.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/user/random.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

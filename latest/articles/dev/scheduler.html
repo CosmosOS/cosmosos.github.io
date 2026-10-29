@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
       <title> | Cosmos Gen 3 </title>
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.95/docs/articles/dev/scheduler.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/articles/dev/scheduler.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -292,7 +292,7 @@
 </ul>
 <h3 id="creation-and-first-run">Creation and first run</h3>
 <p>Kernel code creates threads through one seam: the <code>SystemNative_CreateThread</code> export in <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Bridge/Interop/libSystemNative.cs"><code>libSystemNative.cs</code></a>, which backs CoreLib's <code>Interop.Sys.CreateThread</code> P/Invoke. So <code>new System.Threading.Thread(...).Start()</code> in kernel code flows through CoreLib into this export, which rounds the requested stack size up to a page multiple (floor 64 KiB), builds a <code>SchedulerThread</code> flagged <code>Managed</code>, points its context at the <code>ThreadNative.EntryPointStub</code> trampoline, and calls <code>CreateThread</code> plus <code>ReadyThread</code>. (<code>System.Threading.Thread</code> carries no plug: <code>Thread.CreateThread</code> runs CoreLib's unmodified body, and <code>Thread.Yield</code> reaches the runtime's <code>RhYield</code>.)</p>
-<p>The driver kit's threads (its worker, and a driver's <code>TryStartThread</code> thread such as the USB host controller drivers' hot-plug threads or the PCI Express root port driver's slot thread) do not go through CoreLib: <code>Thread.Start</code> returns only once the new thread has run, so on a machine where nothing ever switches to it (a timer that never ticks, or a boot CPU whose APIC ID is not 0, whose ticks never schedule) it spins forever. <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/KernelThread.cs"><code>KernelThread.TryStart</code></a> builds the <code>SchedulerThread</code> itself, without the <code>Managed</code> flag and with a <code>GCHandle&lt;Action&gt;</code> as its parameter, then waits for the thread to flip a handshake word from pending to started. It waits as long as the scheduler works, and ends only on the two failures it exists for: no tick for <code>KernelThread.NoTickTimeoutMs</code> (1 s) of <code>Stopwatch</code> time, a timer that stopped, or <code>KernelThread.NoSwitchTicks</code> (10) of <code>SchedulerManager.TickCount</code> without <code>SchedulerManager.SwitchCount</code> moving, ticks that switch nothing. While ticks switch threads, the policy gives the new thread its turn however many quanta the threads it ranks first take: a woken stride thread can sit two quanta behind the global pass, so several ticks can pass before a new thread runs. Neither bound is measured against the new thread's own start, and neither is time alone: under emulation the TSC or the generic timer's counter runs on host time, so a descheduled virtual CPU sees milliseconds pass while it takes no tick. When the wait ends it flips the word to abandoned instead; the two compare-exchanges decide the race, and a thread that loses it returns without running its entry. A thread that never ran is also taken off the run queue at once with <code>ExitThread</code>: left queued, the next device interrupt would still switch to it, and its exit would park the CPU until a timer tick that such a machine never delivers.</p>
+<p>The driver kit's threads (its worker, and a driver's <code>TryStartThread</code> thread such as the USB host controller drivers' hot-plug threads or the PCI Express root port driver's slot thread), and the collector's finalizer thread while <code>GarbageCollector.ThreadedFinalizer</code> is on, do not go through CoreLib: <code>Thread.Start</code> returns only once the new thread has run, so on a machine where nothing ever switches to it (a timer that never ticks, or a boot CPU whose APIC ID is not 0, whose ticks never schedule) it spins forever. <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Scheduler/KernelThread.cs"><code>KernelThread.TryStart</code></a> builds the <code>SchedulerThread</code> itself, without the <code>Managed</code> flag and with a <code>GCHandle&lt;Action&gt;</code> as its parameter, then waits for the thread to flip a handshake word from pending to started. It waits as long as the scheduler works, and ends only on the two failures it exists for: no tick for <code>KernelThread.NoTickTimeoutMs</code> (1 s) of <code>Stopwatch</code> time, a timer that stopped, or <code>KernelThread.NoSwitchTicks</code> (10) of <code>SchedulerManager.TickCount</code> without <code>SchedulerManager.SwitchCount</code> moving, ticks that switch nothing. While ticks switch threads, the policy gives the new thread its turn however many quanta the threads it ranks first take: a woken stride thread can sit two quanta behind the global pass, so several ticks can pass before a new thread runs. Neither bound is measured against the new thread's own start, and neither is time alone: under emulation the TSC or the generic timer's counter runs on host time, so a descheduled virtual CPU sees milliseconds pass while it takes no tick. When the wait ends it flips the word to abandoned instead; the two compare-exchanges decide the race, and a thread that loses it returns without running its entry. A thread that never ran is also taken off the run queue at once with <code>ExitThread</code>: left queued, the next device interrupt would still switch to it, and its exit would park the CPU until a timer tick that such a machine never delivers.</p>
 <p>The first run of a <code>Created</code> thread cannot end in <code>iretq</code>, because there is no interrupted frame to return into. Instead the IRQ exit path is told (via a flag staged from C#) to take the new-thread tail: it loads the entry point and the fabricated initial stack pointer from the context, re-enabling interrupts along the way, and jumps. The landing point is always <code>EntryPointStub</code>, which forwards to <code>SchedulerManager.InvokeCurrentThreadStart</code>: it decodes the parameter (CoreLib <code>Thread.StartThread</code> for <code>Managed</code> threads, a <code>GCHandle&lt;Action&gt;</code> otherwise), runs it inside a catch-all so a throwing thread exits with code 1 instead of taking down the kernel, and ends in <code>ExitThread</code> followed by a halt loop. After that first entry, the thread is indistinguishable from any preempted thread.</p>
 <hr>
 <h2 id="preemption">Preemption</h2>
@@ -311,7 +311,7 @@
 <tr>
 <td>x64</td>
 <td>LAPIC timer, vector 239, periodic, 10 ms</td>
-<td>PIT on IRQ 0, one-shot re-armed per interrupt</td>
+<td>PIT on IRQ 0, one-shot re-armed per interrupt, 10 ms</td>
 </tr>
 <tr>
 <td>ARM64</td>
@@ -635,10 +635,11 @@
 </ul>
 <hr>
 <h2 id="tests">Tests</h2>
-<p>Two kernel test suites cover this article. <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/tests/Kernels/Cosmos.Kernel.Tests.Threading/Kernel.cs"><code>Cosmos.Kernel.Tests.Threading</code></a> runs 80 tests (<code>make test KERNEL=Threading</code>):</p>
+<p>Two kernel test suites cover this article. <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/tests/Kernels/Cosmos.Kernel.Tests.Threading/Kernel.cs"><code>Cosmos.Kernel.Tests.Threading</code></a> runs 89 tests (<code>make test KERNEL=Threading</code>):</p>
 <ul>
-<li>thread lifecycle and concurrency (<code>Thread_Start_ExecutesDelegate</code>, <code>Thread_Multiple_CanRunConcurrently</code>),</li>
+<li>thread lifecycle and concurrency (<code>Thread_Start_ExecutesDelegate</code>, <code>Thread_Multiple_CanRunConcurrently</code>), and thread ids handed out from two creating threads at once (<code>Thread_Ids_UniqueAcrossConcurrentStarts</code>),</li>
 <li>exception dispatch on several threads at once (<code>Thread_Throw_TwoThreadsUnhandled_BothJoin</code>, <code>Thread_Throw_ConcurrentCatchRethrow_OwnExceptions</code>),</li>
+<li>the reference form of <code>Interlocked.CompareExchange</code> (the runtime's <code>RhpCheckedLockCmpXchg</code>, assembly since it has to be atomic against a tick) raced from two threads (<code>Interlocked_ReferenceExchange_TwoThreads</code>),</li>
 <li>stack sizing and the #433 floor (<code>Thread_MaxStackSize_IsHonored</code>, <code>Thread_MaxStackSize_TinyRequestIsFloored</code>, <code>Thread_EnsureSufficientExecutionStack_Passes</code>),</li>
 <li>thread statics (<code>Thread_ThreadStatics</code>),</li>
 <li>mutex contention, hand-off, and idle accounting (<code>Mutex_ThreeContenders_AllAcquire</code>, <code>Mutex_ReleaseHandsOffToParkedWaiter</code>, <code>Mutex_IdleThreadContention_KeepsTicketAccounting</code>),</li>
@@ -646,7 +647,7 @@
 <li>interrupt events (<code>InterruptEvent_TwoWaiters_BothWake</code>),</li>
 <li>the BCL surface above it all: delegates, <code>Task</code>, <code>async</code>/<code>await</code>, <code>ThreadPool</code>.</li>
 </ul>
-<p><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/tests/Kernels/Cosmos.Kernel.Tests.Timer/Kernel.cs"><code>Cosmos.Kernel.Tests.Timer</code></a> runs 24 tests on x64 and 18 on ARM64 (<code>make test KERNEL=Timer</code>), covering both deferred-work tiers (<code>TimerManager_Schedule_*</code>, <code>AlarmSystem_*</code>), the BCL <code>System.Threading.Timer</code> on top of them, <code>Stopwatch</code>, <code>DateTime</code>, and the per-architecture timer hardware (PIT and LAPIC on x64).</p>
+<p><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/tests/Kernels/Cosmos.Kernel.Tests.Timer/Kernel.cs"><code>Cosmos.Kernel.Tests.Timer</code></a> runs 27 tests on x64 and 21 on ARM64 (<code>make test KERNEL=Timer</code>), covering both deferred-work tiers (<code>TimerManager_Schedule_*</code>, <code>AlarmSystem_*</code>), the BCL <code>System.Threading.Timer</code> on top of them, <code>Stopwatch</code>, <code>DateTime</code>, and the per-architecture timer hardware (PIT and LAPIC on x64).</p>
 <hr>
 <h2 id="source-files">Source files</h2>
 <table>
@@ -735,7 +736,7 @@
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.95/docs/articles/dev/scheduler.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/articles/dev/scheduler.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

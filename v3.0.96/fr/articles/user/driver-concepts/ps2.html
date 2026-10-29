@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>PS/2 et le contr&#244;leur 8042 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="PS/2 et le contr&#244;leur 8042 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/user/driver-concepts/ps2.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="ps2-and-the-8042-controller"></a></p>
+<h1 id="ps2-et-le-contrôleur-8042">PS/2 et le contrôleur 8042</h1>
+<p>PS/2 est l'interface clavier et souris des PC compatibles IBM. Chaque périphérique dialogue par une ligne série avec un contrôleur de la carte mère, le 8042, qui doit son nom au microcontrôleur Intel du PC/AT ; beaucoup de PC en fournissent encore un, parfois émulé par le firmware. Son premier port sert au clavier et son second, le port auxiliaire, à une souris ; le CPU l'atteint par deux <a href="registers.html">ports d'E/S</a> : <code>0x60</code> transporte les octets de données dans les deux sens, et <code>0x64</code> est le registre d'état en lecture et reçoit les commandes du contrôleur en écriture. Le port clavier lève l'IRQ 1, le port souris l'IRQ 12.</p>
+<p>Les commandes se situent à deux niveaux. Celles du contrôleur lui-même, écrites sur <code>0x64</code>, lisent et écrivent son octet de configuration, lancent son auto-test et testent ou activent chaque port. Les commandes d'un périphérique s'écrivent comme des données sur <code>0x60</code>, à destination du second port après un <code>0xD4</code> écrit sur <code>0x64</code> : réinitialiser, identifier, régler les voyants du clavier, activer le balayage. Le périphérique acquitte chaque octet de commande par <code>0xFA</code>, ou le redemande par <code>0xFE</code>, puis envoie sa réponse éventuelle ; une réinitialisation reçoit la réponse <code>0xAA</code> une fois que le périphérique a réussi son auto-test.</p>
+<p>Une fois le balayage activé, le clavier envoie un code pour chaque appui de touche et un autre pour chaque relâchement, dans l'un des trois jeux de scancodes, et le contrôleur peut traduire le jeu 2 dans l'ancien jeu 1. Une souris, une fois qu'elle signale ses mouvements, envoie des paquets de mouvement de trois octets, quatre pour une souris à molette. Le piège est le port de données partagé : les acquittements et les réponses d'une commande arrivent sans étiquette au milieu du flux, si bien qu'un pilote qui envoie une commande pendant que l'utilisateur tape doit trier les octets qu'il lit.</p>
+<p>Dans le kit de pilotes, <code>I8042Driver</code> possède le contrôleur : il le teste ainsi que ses deux ports, active la traduction pour que le port clavier délivre des codes du jeu 1, connecte l'IRQ 1 et l'IRQ 12 ou scrute à la place, et publie un nœud par port fonctionnel. Un pilote de classe dialogue à travers <code>Ps2Access</code>, dont <code>TryCommand</code> attend chaque <code>Acknowledge</code>, renvoie à chaque <code>Resend</code> jusqu'à <code>MaxResends</code> fois et recueille la réponse ; tout autre octet rejoint le flux que le gestionnaire d'interruption vide avec <code>TryReceive</code>. Voir <a href="../drivers.html#ps2-devices">Périphériques PS/2</a> et <a href="../drivers.html#the-ps2-access-object">L'objet d'accès PS/2</a>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/user/driver-concepts/ps2.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

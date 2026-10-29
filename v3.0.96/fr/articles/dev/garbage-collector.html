@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title> | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content=" | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/garbage-collector.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><img src="images/orion-gc.jpg" alt="Une pose de 212 heures de la constellation d'Orion"></p>
+<p><em>L'origine du nom d'OrionGC. Crédit et copyright de l'image : <a href="https://apod.nasa.gov/apod/ap151123.html">Stanislav Volskiy</a>, APOD du 23 novembre 2015.</em></p>
+<p><a id="overview"></a></p>
+<h2 id="vue-densemble">Vue d'ensemble</h2>
+<p>Le ramasse-miettes (qui s'identifie sous le nom <strong>OrionGC</strong> dans la table de configuration du runtime) est un collecteur <a href="gc-concepts/stop-the-world.html">stop-the-world</a>, <a href="gc-concepts/non-moving.html">non déplaçant</a>, de type <a href="gc-concepts/mark-and-sweep.html">marquage-balayage</a>, avec une <a href="gc-concepts/gc-generations.html">génération unique</a>. Chaque collecte met en pause tous les threads, marque les objets encore atteignables, libère les autres sur place et ne change jamais l'adresse d'un objet vivant. Chaque terme lié dispose d'une courte note de contexte dans le <a href="garbage-collector-glossary.html">glossaire</a>. Le ramasse-miettes gère quatre types de mémoire :</p>
+<ul>
+<li>le <a href="#regular-heap">tas GC ordinaire</a>, où chaque <code>new</code> alloue,</li>
+<li>le <a href="#pinned-heap">tas d'objets épinglés</a>, pour les objets dont l'adresse ne doit jamais changer,</li>
+<li>le <a href="#handle-store">magasin de handles GC</a>, des références vers des objets du tas détenues depuis l'extérieur du tas,</li>
+<li>les <a href="#frozen-segments">segments gelés</a>, des objets en lecture seule intégrés au binaire du noyau, jamais collectés.</li>
+</ul>
+<p>Le GC fonctionne habituellement dans un noyau multithread, mais n'en a pas besoin. Lorsque l'<a href="scheduler.html">ordonnanceur</a> tourne, il préempte les threads depuis l'interruption du minuteur, conserve chaque thread vivant dans un registre global des threads à partir duquel le GC effectue son parcours, et stocke l'état d'allocation de chaque thread dans son bloc de contrôle <code>SchedulerThread</code> ; les gestionnaires d'interruption allouent aussi (le tick de l'ordonnanceur, les pilotes d'entrée). Avant le démarrage de l'ordonnanceur, ou dans les noyaux qui l'excluent de la compilation, le GC fonctionne de la même manière avec un unique contexte d'allocation statique et la pile courante comme seule racine de pile. Dans les deux modes, il n'existe pas de thread dédié au GC : une collecte s'exécute sur le thread qui l'a déclenchée, quel qu'il soit, à l'intérieur de <code>InternalCpu.DisableInterruptsScope()</code>, de sorte qu'aucun changement de thread ni aucun gestionnaire d'interruption ne peut observer le tas en pleine collecte.</p>
+<p>Comme chaque thread et chaque gestionnaire d'interruption peut allouer, l'allocation passe par des <a href="gc-concepts/tlab.html">TLAB</a> par thread (thread-local allocation buffers, tampons d'allocation locaux au thread) : chaque thread incrémente un pointeur dans son propre tampon et, hormis un compteur global d'octets alloués, ne touche à l'état partagé que lorsque le tampon est épuisé et doit être rechargé. La collecte est un dernier recours. Lorsqu'une recharge échoue, le ramasse-miettes agrandit d'abord le tas ; <code>Collect()</code> ne s'exécute que lorsque l'allocateur de pages lui-même n'a plus rien à donner, ou lorsqu'on l'appelle explicitement.</p>
+<p>Le marquage part des <a href="gc-concepts/gc-roots.html">racines</a>, les emplacements situés hors du tas qui contiennent des références. OrionGC parcourt trois groupes : la pile du thread qui a déclenché la collecte, parcourue de façon <a href="gc-concepts/conservative-vs-precise.html">précise</a> à partir du GCInfo de NativeAOT (voir <a href="garbage-collector-gcinfo.html">Parcours précis de la pile (GCInfo)</a>) ; les piles et les registres sauvegardés de tous les autres threads enregistrés, parcourus de façon conservatrice ; et les handles GC forts (les types de handle qui maintiennent leur cible en vie). Les champs statiques n'ont pas besoin d'un parcours séparé : pendant l'initialisation des modules, les objets qui contiennent les champs statiques de chaque module sont rassemblés dans des tableaux formant une épine dorsale, maintenus en vie par un handle fort, si bien que le parcours des handles atteint transitivement chaque champ statique.</p>
+<p>Cette répartition des parcours contraint toute la conception. Un thread préempté peut être arrêté sur n'importe quelle instruction, sa pile ne peut donc être parcourue que de façon conservatrice, et une référence conservatrice épingle sa cible : un mot qui ressemble simplement à un pointeur vers le tas peut être un entier, si bien que le ramasse-miettes ne doit jamais déplacer l'objet vers lequel il semble pointer. En retour, le caractère non déplaçant garde le reste simple : les adresses des objets sont stables pour toute leur vie, et l'épinglage ne coûte rien. Une génération unique signifie qu'il n'y a ni <a href="gc-concepts/gc-generations.html">barrières d'écriture ni ensembles mémorisés (remembered sets)</a> ; les écritures de références se compilent en simples écritures. Le compromis récurrent cède du débit en échange de simplicité et de vérifiabilité : chaque collecte parcourt tout le tas, mais chaque structure peut être parcourue à la main et la comptabilité est exacte, jusqu'aux nombres d'objets libérés que vérifie la <a href="#tests">suite de tests</a>. Ce à quoi la conception renonce est rassemblé dans <a href="#limitations-and-evolution">Limites et évolution</a>.</p>
+<p>Le code se trouve dans <code>src/Cosmos.Kernel.Core/Memory/GarbageCollector/</code>. La classe <code>GarbageCollector</code> elle-même est une classe partielle statique découpée par phase (<code>.Alloc</code>, <code>.Tlab</code>, <code>.Mark</code>, <code>.Sweep</code>, etc.) ; les segments, les handles et la structure TLAB ont leurs propres types, et le dossier <code>GcInfo/</code> contient le décodeur du parcours précis de la pile. La liste complète des fichiers se trouve dans <a href="#source-files">Fichiers source</a>, à la fin de cet article.</p>
+<hr>
+<p><a id="core-structures"></a></p>
+<h2 id="structures-fondamentales">Structures fondamentales</h2>
+<p>Quatre formes de données sous-tendent tout le reste de cet article : le descripteur de type que le compilateur émet pour chaque type managé, l'objet tel que le GC le voit, le bloc libre qui décrit l'espace mort, et l'état d'allocation par thread. Chaque section suivante s'appuie sur elles.</p>
+<h3 id="methodtable">MethodTable</h3>
+<p>Chaque type managé compilé par ILC (le compilateur ahead-of-time de NativeAOT ; voir <a href="build/kernel-compilation-steps.html">Étapes de compilation du noyau</a>) possède une <code>MethodTable</code>, un descripteur de type qui réside dans les sections de données du noyau, jamais sur le tas GC. Le GC lit quelques-uns de ses champs :</p>
+<table>
+<thead>
+<tr>
+<th>Champ</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RawBaseSize</code></td>
+<td>Taille en octets d'un objet de taille fixe</td>
+</tr>
+<tr>
+<td><code>BaseSize</code> / <code>ComponentSize</code></td>
+<td>Taille de base plus taille par élément, pour les tableaux et les chaînes</td>
+</tr>
+<tr>
+<td><code>HasComponentSize</code></td>
+<td>Vrai pour les tableaux et les chaînes</td>
+</tr>
+<tr>
+<td><code>ContainsGCPointers</code></td>
+<td>Vrai si les instances contiennent des références que le GC doit suivre</td>
+</tr>
+</tbody>
+</table>
+<p>Comme les pointeurs de <code>MethodTable</code> résident toujours dans l'espace noyau, hors du tas, le GC s'en sert comme filtre de validité : un objet candidat dont le premier mot est nul, pointe à l'intérieur du tas GC ou se situe sous <code>AddressSpace.KernelSpaceStart</code> ne peut pas être un véritable objet.</p>
+<p>La seule chose que ces champs ne décrivent pas, c'est l'emplacement des références à l'intérieur d'une instance. Cette disposition se trouve dans le GCDesc stocké juste avant la <code>MethodTable</code> (voir <a href="#gcdesc">GCDesc</a>).</p>
+<p><a id="object-header"></a></p>
+<h3 id="en-tête-dobjet">En-tête d'objet</h3>
+<p>Chaque objet du tas GC commence par un en-tête <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GCObject.cs"><code>GCObject</code></a> :</p>
+<table>
+<thead>
+<tr>
+<th>Décalage</th>
+<th>Taille (x64)</th>
+<th>Contenu</th>
+<th>Remarques</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>8 octets</td>
+<td><code>MethodTable*</code></td>
+<td>Le bit 0 sert aussi de bit de marquage</td>
+</tr>
+<tr>
+<td>8</td>
+<td>4 octets</td>
+<td><code>Length</code></td>
+<td>Nombre d'éléments ; seuls les tableaux et les chaînes ont cet emplacement</td>
+</tr>
+<tr>
+<td>8, 12 ou 16</td>
+<td>reste de l'objet</td>
+<td>Champs ou éléments</td>
+<td>Les champs commencent à 8 pour les objets de taille fixe ; les caractères d'une chaîne à 12 ; les éléments d'un tableau à 16 (4 octets de remplissage après <code>Length</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Les pointeurs de <code>MethodTable</code> sont alignés, le bit 0 vaut donc normalement zéro. <code>Mark()</code> le positionne, <code>Unmark()</code> l'efface, et <code>GetMethodTable()</code> le masque avant de déréférencer. <code>ComputeSize()</code> renvoie <code>BaseSize + Length * ComponentSize</code> pour les tableaux et les chaînes, <code>RawBaseSize</code> pour tout le reste.</p>
+<h3 id="freeblock">FreeBlock</h3>
+<p>L'espace mort est décrit par des entrées <code>FreeBlock</code> chaînées dans des listes de blocs libres par classe de taille. Un <code>FreeBlock</code> est disposé de façon que le balayage puisse le parcourir comme un objet, avec la <code>MethodTable</code> marqueur au décalage 0 et <code>Size</code> là où se trouve <code>GCObject.Length</code> :</p>
+<table>
+<thead>
+<tr>
+<th>Décalage</th>
+<th>Taille (x64)</th>
+<th>Contenu</th>
+<th>Remarques</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>8 octets</td>
+<td><code>MethodTable*</code></td>
+<td>Pointe vers le marqueur <code>s_freeMethodTable</code> qui identifie les blocs libres</td>
+</tr>
+<tr>
+<td>8</td>
+<td>4 octets</td>
+<td><code>Size</code></td>
+<td>Taille totale de ce bloc libre (suivie de 4 octets de remplissage)</td>
+</tr>
+<tr>
+<td>16</td>
+<td>8 octets</td>
+<td><code>Next*</code></td>
+<td>Bloc libre suivant dans la même classe de taille</td>
+</tr>
+</tbody>
+</table>
+<p>L'en-tête fait 24 octets, c'est pourquoi <code>MinBlockSize</code> vaut 24 : chaque allocation est arrondie à au moins cette taille, si bien que n'importe quel objet peut plus tard être transformé sur place en bloc libre.</p>
+<h3 id="alloccontext-tlab">AllocContext (TLAB)</h3>
+<p><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/AllocContext.cs"><code>AllocContext</code></a> est l'état d'allocation par thread (le <a href="gc-concepts/tlab.html">TLAB</a> lui-même), stocké directement dans chaque <code>SchedulerThread</code>, sous forme de champ incorporé (avec un contexte statique de repli utilisé avant que l'ordonnanceur ne tourne, et pendant toute la vie du noyau lorsque l'ordonnanceur est exclu de la compilation) :</p>
+<table>
+<thead>
+<tr>
+<th>Champ</th>
+<th>Signification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AllocPtr</code></td>
+<td>Pointeur d'allocation courant, avance vers <code>AllocLimit</code></td>
+</tr>
+<tr>
+<td><code>AllocLimit</code></td>
+<td>Fin du TLAB ; l'atteindre force une recharge</td>
+</tr>
+<tr>
+<td><code>AllocBytes</code></td>
+<td>Octets cumulés alloués par ce thread sur le tas ordinaire</td>
+</tr>
+<tr>
+<td><code>AllocBytesUoh</code></td>
+<td>Octets cumulés alloués par ce thread sur le tas épinglé</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a id="memory-layout"></a></p>
+<h2 id="organisation-de-la-mémoire">Organisation de la mémoire</h2>
+<p>Cette section explique où réside la mémoire managée et comment le GC s'y retrouve : l'anatomie d'un segment et de sa table de briques, la façon dont les segments s'enchaînent pour former les deux tas, puis les deux structures qui se trouvent à côté des tas (le magasin de handles et les segments gelés), et enfin ce qui reste volontairement hors de portée du GC.</p>
+<h3 id="segments">Segments</h3>
+<p>Un segment est une plage contiguë de pages provenant de l'allocateur de pages (<code>PageType.GCHeap</code>). L'en-tête <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GCSegment.cs"><code>GCSegment</code></a> se trouve à la base de l'allocation, suivi de la table de briques du segment, puis de 8 octets réservés, puis de la région utilisable :</p>
+<div style="overflow-x:auto">
+<img src="images/diagrams/gc-segment-layout.svg" alt="Disposition mémoire d'un segment GC : l'en-tête GCSegment, la table de briques, 8 octets réservés, puis la région utilisable. Start pointe sur le premier octet utilisable, Bump sur la frontière entre les objets alloués et l'espace libre, End un octet après le dernier, Next sur le segment suivant." style="width:100%;min-width:620px;max-width:760px">
+</div>
+<p>La bande représente une seule allocation contiguë dans l'ordre des adresses, avec à gauche la base alignée sur une page. <code>Start</code> pointe sur le premier octet après l'emplacement réservé, <code>Bump</code> sur la frontière où atterrira la prochaine allocation (il avance vers <code>End</code>, situé un octet après le dernier octet du segment), et <code>Next</code> relie les segments dans les chaînes présentées plus bas. <code>TotalSize</code> vaut <code>End - Start</code> ; <code>UsedSize</code> compte les octets utilisés avant le balayage.</p>
+<ul>
+<li>De <code>Start</code> à <code>Bump</code> se trouvent les objets alloués et les blocs libres laissés par les collectes précédentes.</li>
+<li>De <code>Bump</code> à <code>End</code> s'étend un espace encore jamais touché ; l'<a href="gc-concepts/bump-allocation.html">allocation par incrément de pointeur</a> distribue la mémoire à partir de <code>Bump</code> et le fait avancer.</li>
+<li>Les 8 octets réservés avant <code>Start</code> existent parce que le runtime écrit un <a href="gc-concepts/object-header.html">en-tête d'objet du runtime</a> (hachage d'identité ou verrou léger) à <code>objRef - 4</code>. Pour le premier objet d'un segment, cette écriture doit tomber dans un remplissage réservé plutôt que dans les métadonnées propres du segment.</li>
+</ul>
+<p>L'allocation des segments se trouve dans <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GCSegmentManager.cs"><code>GCSegmentManager</code></a>. <code>AllocateSegment(requestedSize)</code> relève la demande à au moins une page, dimensionne la table de briques, arrondit le total à un nombre entier de pages et ajoute le nouveau segment à la liste chaînée de son gestionnaire. Le surplus dû à l'arrondi aux pages est attribué à la région utilisable, si bien que <code>TotalSize</code> est généralement un peu plus grand que la demande.</p>
+<p><a id="brick-table"></a></p>
+<h3 id="table-de-briques">Table de briques</h3>
+<p>Pendant le marquage, le GC détient parfois une adresse qui pointe au milieu d'un objet plutôt que sur son début : une <code>ref</code> vers un élément de tableau, ou la référence contenue dans un <code>Span&lt;T&gt;</code> (voir <a href="#interior-pointers">Pointeurs intérieurs</a>). Pour marquer l'objet, il doit d'abord trouver où celui-ci commence, et la mémoire du tas n'offre aucun chemin de retour : les objets se suivent bout à bout sans pointeurs arrière, si bien que le seul moyen garanti de trouver un début à partir d'une adresse intérieure quelconque est de parcourir le segment depuis <code>Start</code>, objet par objet, jusqu'à atteindre celui qui contient l'adresse.</p>
+<p>La table de briques devait raccourcir ce parcours : un index grossier, propre à chaque segment, des débuts d'objets, pour qu'une recherche puisse sauter près de la cible et n'avancer ensuite que sur une courte distance. Le GC .NET standard conserve une table de briques pour la même tâche, d'où le nom.</p>
+<p>Le mécanisme : la région utilisable est divisée en tranches de 255 emplacements de la taille d'un pointeur (environ 2 Kio, une taille choisie pour qu'un indice d'emplacement tienne dans un octet), et la table stocke un octet par tranche, qui contient l'indice (compté à partir de 1) de l'emplacement du dernier début d'objet enregistré dans cette tranche (0 signifie aucun). <code>GCSegment.MarkObject(addr)</code> enregistre les débuts au moment de l'allocation : sur le tas épinglé, cela concerne chaque objet, mais sur le tas ordinaire seulement chaque tampon alloué par incrément de pointeur depuis le segment, c'est-à-dire en pratique chaque TLAB.</p>
+<p>La table est actuellement écrite mais jamais lue, car ses entrées ne constituent pas un point de départ sûr pour un parcours. Elles sont incomplètes : les objets qui suivent le premier à l'intérieur d'un TLAB ne sont jamais enregistrés, et un TLAB recyclé depuis la liste de blocs libres n'ajoute aucune entrée. Elles sont aussi périmées : rien n'efface une entrée lorsqu'un balayage ramène <code>Bump</code> en arrière ou qu'une recharge depuis la liste de blocs libres réutilise l'espace, et <code>MarkObject</code> ne fait jamais qu'augmenter une entrée, si bien qu'une ancienne entrée peut pointer au milieu d'un objet vivant, où un parcours lirait des données d'objet comme des en-têtes. La recherche d'un pointeur intérieur part donc toujours de <code>Start</code>. Cela reste peu coûteux parce que les segments sont petits : un nouveau segment est dimensionné pour la demande qui l'a rendu nécessaire, soit au moins une page, 8 Kio pour une recharge de TLAB, ou un grand objet.</p>
+<p><a id="segment-chains"></a></p>
+<h3 id="chaînes-de-segments">Chaînes de segments</h3>
+<p><a id="regular-heap"></a></p>
+<h4 id="tas-ordinaire">Tas ordinaire</h4>
+<p>La chaîne ordinaire est le tas managé, la mémoire derrière chaque <code>new</code> du code C# du noyau. Les instances de classe, les tableaux, les chaînes et les valeurs boxées commencent tous leur vie dans l'un de ses segments ; le code utilisateur ne choisit jamais un segment, c'est l'allocateur qui s'en charge. Agrandir le tas revient à ajouter un segment à la chaîne ; le réduire revient à rendre un segment vide à l'allocateur de pages. Le GC .NET standard organise son tas de la même façon, en segments ou en régions découpés dans des réservations plus grandes.</p>
+<div class="NOTE">
+<h5>Remarque</h5>
+<p>Documentation officielle : <a href="https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/fundamentals">Principes fondamentaux du ramasse-miettes</a>.</p>
+</div>
+<p><a id="pinned-heap"></a></p>
+<h4 id="tas-épinglé">Tas épinglé</h4>
+<p>La chaîne épinglée existe parce que l'adresse d'un objet échappe parfois au monde du GC : un tampon confié à un périphérique pour un DMA, une structure passée à du code natif, un pointeur obtenu avec <code>fixed</code>. En .NET standard, où le ramasse-miettes compacte le tas, de tels objets doivent être épinglés pour ne pas être déplacés en pleine opération, soit temporairement (l'instruction <code>fixed</code>, <code>GCHandle.Alloc</code> avec <code>GCHandleType.Pinned</code>), soit pour toute leur vie en les allouant sur un tas d'objets épinglés dédié (<code>GC.AllocateArray&lt;T&gt;(length, pinned: true)</code>), ce qui évite que les objets épinglés à longue durée de vie fragmentent le tas principal. Dans OrionGC, rien ne bouge jamais, l'épinglage n'ajoute donc aucune contrainte ; la chaîne épinglée respecte l'indicateur de tas épinglé du runtime avec une liste de segments qui lui est propre (voir <a href="#pinned-allocation">Allocation épinglée</a> pour le mécanisme).</p>
+<div class="NOTE">
+<h5>Remarque</h5>
+<p>Documentation officielle : <a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/fixed">l'instruction fixed</a>, <a href="https://learn.microsoft.com/en-us/dotnet/api/system.gc.allocatearray">GC.AllocateArray</a>, <a href="https://devblogs.microsoft.com/dotnet/internals-of-the-poh/">Fonctionnement interne du tas d'objets épinglés</a>.</p>
+</div>
+<p>Les deux tas conservent leurs segments dans une liste simplement chaînée, chacune gérée par sa propre instance de <code>GCSegmentManager</code> (<code>s_segmentManager</code> pour le tas ordinaire, <code>s_pinnedSegmentManager</code> pour le tas épinglé) :</p>
+<div style="overflow-x:auto">
+<img src="images/diagrams/gc-segment-chains.svg" alt="Les deux chaînes de segments, dessinées de façon identique. Tas ordinaire : Segments pointe sur Seg 0 (FULL), les liens Next mènent à Seg 1 (SEMIFULL) puis, après d'autres segments omis, à Seg N (FREE), puis à null ; TailSegment pointe sur Seg N ; s_lastSegment et s_currentSegment pointent sur Seg 1. Tas épinglé : la même forme avec Pin 0 (FULL) et Pin 1 (SEMIFULL) jusqu'à Pin N (FREE), puis null ; TailSegment pointe sur Pin N et s_currentPinnedSegment sur Pin 1." style="width:100%;min-width:620px;max-width:760px">
+</div>
+<p><code>s_lastSegment</code> est le segment où commence la prochaine tentative d'allocation par incrément de pointeur ; <code>s_currentSegment</code> en est le reflet (chaque site de mise à jour leur affecte le même segment). Les objets alloués avec l'indicateur <code>GC_ALLOC_PINNED_OBJECT_HEAP</code> vont plutôt dans la chaîne épinglée.</p>
+<p>Après chaque collecte, les segments des deux chaînes sont regroupés dans l'ordre FULL, SEMIFULL, FREE, et les segments vides qui s'étendent sur plus d'une page sont rendus à l'allocateur de pages (voir <a href="#segment-reordering">Réordonnancement des segments</a>).</p>
+<p>Pour rejeter rapidement des valeurs arbitraires, le GC met en cache une boîte englobante (<code>s_gcHeapMin</code> / <code>s_gcHeapMax</code>) couvrant les segments ordinaires. <code>IsInGCHeap</code> vérifie d'abord la boîte, puis parcourt la liste des segments ; tout ce qui se trouve hors de la boîte, ou dans la boîte mais entre deux segments, est comparé à la chaîne épinglée par un simple parcours linéaire (<code>IsInPinnedHeap</code>). La boîte est recalculée paresseusement chaque fois qu'une modification de segment positionne <code>s_heapRangeDirty</code>.</p>
+<p><a id="handle-store"></a></p>
+<h3 id="magasin-de-handles">Magasin de handles</h3>
+<p>Un handle GC est une référence vers un objet managé qui échappe au parcours normal des racines et dont la durée de vie est explicite : le code alloue le handle, l'utilise, puis le libère. Le code C# rencontre les handles sous trois formes principales. <code>GCHandle.Alloc</code> maintient un objet en vie (et éventuellement épinglé) pendant que du code natif détient un pointeur brut vers lui : c'est le schéma de l'interopérabilité. <code>WeakReference</code> observe un objet sans le maintenir en vie : c'est le schéma du cache. <code>DependentHandle</code>, le mécanisme derrière <code>ConditionalWeakTable</code>, lie la durée de vie d'un objet à celle d'un autre, ce qui permet d'attacher un état supplémentaire à des objets qu'on ne peut pas modifier. Le runtime du noyau en est aussi client : ses caches internes et l'épine dorsale des statiques décrite dans la vue d'ensemble résident derrière des handles.</p>
+<div class="NOTE">
+<h5>Remarque</h5>
+<p>Documentation officielle : <a href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.gchandle">GCHandle</a>, <a href="https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/weak-references">Références faibles</a>, <a href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.dependenthandle">DependentHandle</a>.</p>
+</div>
+<p>Le magasin appartient à un unique <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GCHandleManager.cs"><code>GCHandleManager</code></a> (l'instance <code>s_gCHandleManager</code>) et il est organisé par type de handle : un <code>GCHandleSegmentStore</code> par type de handle, plus un magasin séparé pour les handles dépendants.</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Valeur</th>
+<th>Maintient la cible en vie ?</th>
+<th>Remarques</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Weak</code></td>
+<td>0</td>
+<td>Non</td>
+<td>Effacé dès que le marquage trouve la cible morte, avant que la <a href="gc-concepts/finalization.html">finalisation</a> ne puisse la ranimer</td>
+</tr>
+<tr>
+<td><code>WeakTrackResurrection</code></td>
+<td>1</td>
+<td>Non</td>
+<td>Effacé seulement lorsque la cible est encore morte après la finalisation</td>
+</tr>
+<tr>
+<td><code>Normal</code></td>
+<td>2</td>
+<td>Oui</td>
+<td>Parcouru comme racine forte</td>
+</tr>
+<tr>
+<td><code>Pinned</code></td>
+<td>3</td>
+<td>Oui</td>
+<td>Parcouru comme racine forte ; la cible se trouve de toute façon sur le tas non déplaçant</td>
+</tr>
+<tr>
+<td>dépendant</td>
+<td>6</td>
+<td>Sous condition</td>
+<td>Primaire dans <code>Object</code>, secondaire dans <code>ExtraInfo</code> ; correspond au <code>HNDTYPE_DEPENDENT</code> du runtime. Aucun membre nommé de l'énumération ne lui correspond</td>
+</tr>
+</tbody>
+</table>
+<p>Chaque magasin est une liste chaînée de pages <code>GCHandleSegment</code>. Un segment est une page de 4 Kio : un en-tête de 16 octets suivi de 170 emplacements de handle de 24 octets chacun :</p>
+<div style="overflow-x:auto">
+<img src="images/diagrams/gc-handle-store.svg" alt="Le magasin de handles. En haut : un GCHandleSegmentStore est une liste chaînée de pages GCHandleSegment, _head pointant sur Page 0, les liens Next menant à Page 1 puis, après d'autres pages omises, à Page N et enfin à null ; _tail pointe sur Page N et l'allocation essaie d'abord la queue. En bas : à l'intérieur d'une page de 4 Kio, un en-tête de 16 octets (Next et le mot compacté _freeHead) suivi de 170 emplacements GCHandle de 24 octets ; _freeHead contient l'indice du premier emplacement libre et les emplacements libres sont chaînés à l'indice libre suivant via ExtraInfo." style="width:100%;min-width:620px;max-width:760px">
+</div>
+<p>Un emplacement <code>GCHandle</code> est <code>{ GCObject* Object; nint ExtraInfo; GCHandleType Type; }</code>. Les emplacements libres sont estampillés avec le type sentinelle <code>(GCHandleType)(-1)</code> et chaînés via <code>ExtraInfo</code> dans une liste d'emplacements libres interne au segment. La tête de liste, le nombre de handles vivants et une étiquette de version <a href="gc-concepts/aba-problem.html">ABA</a> sont regroupés dans un seul mot de 64 bits mis à jour avec <code>Interlocked.CompareExchange</code>, si bien que l'allocation et la libération d'un emplacement se font sans verrou au sein d'un segment. Lorsque tous les segments d'un magasin sont pleins, le magasin alloue une page de plus et l'ajoute sous son spinlock sûr vis-à-vis des IRQ : sans lui, deux threads agrandissant le magasin en même temps relieraient chacun un segment à la même queue, et le second lien rendrait orphelin le premier, dont aucune collecte ne parcourrait ni n'effacerait les handles. La chaîne ne fait que grandir, si bien que la recherche d'un segment ayant de la place la lit sans le verrou ; le ramasse-miettes prend le verrou pour parcourir un magasin en effaçant les cibles mortes.</p>
+<p>Une valeur de handle remise au runtime est simplement l'adresse de son emplacement. L'allocation, <code>RhHandleSet</code>, l'accès au secondaire d'un handle dépendant et la libération reconvertissent tous l'<code>IntPtr</code> en <code>GCHandle*</code>.</p>
+<p>Pendant une collecte, les magasins <code>Normal</code> et <code>Pinned</code> sont parcourus comme racines, les handles dépendants sont traités par une boucle de convergence, et les handles faibles ne sont jamais parcourus ; voir <a href="#handles-during-marking">Les handles pendant le marquage</a>.</p>
+<p><a id="frozen-segments"></a></p>
+<h3 id="segments-gelés">Segments gelés</h3>
+<p>Les objets dont le contenu est connu au moment du build n'ont pas besoin d'être construits à l'exécution. ILC dispose les littéraux de chaîne, les tableaux gelés et les données statiques préinitialisées sous forme d'objets tout prêts dans les sections de données du binaire du noyau, si bien qu'ils existent dès la première instruction à des adresses qui ne changent jamais, n'occupent aucun espace de tas et ne coûtent rien au ramasse-miettes. Il n'existe pas d'API C# pour cela ; le code en bénéficie automatiquement dès qu'il utilise des littéraux de chaîne et des données statiques que le compilateur peut évaluer à l'avance. Le .NET amont appelle cela le tas non GC.</p>
+<div class="NOTE">
+<h5>Remarque</h5>
+<p>Documentation officielle : <a href="https://github.com/dotnet/runtime/blob/main/docs/design/features/NonGC-Heap.md">Notes de conception du tas non GC</a>.</p>
+</div>
+<p>Le runtime enregistre chacune de ces régions au démarrage via <code>RhRegisterFrozenSegment</code>, et <code>ManagedModule</code> enregistre directement la <code>FrozenObjectRegion</code> de chaque module. Le GC les consigne dans une liste chaînée de nœuds <code>FrozenSegmentInfo</code> découpés dans une page de métadonnées allouée par incrément de pointeur :</p>
+<div style="overflow-x:auto">
+<img src="images/diagrams/gc-frozen-segments.svg" alt="Le registre des segments gelés. s_frozenSegments pointe sur Info 0, le premier nœud FrozenSegmentInfo ; les liens Next mènent à Info 1, puis à null. Le Start de chaque nœud pointe vers une région d'objets en lecture seule, comme des littéraux de chaîne et des tableaux gelés. Les nœuds sont découpés dans une page de métadonnées allouée par incrément de pointeur." style="width:100%;min-width:620px;max-width:760px">
+</div>
+<p>Les segments gelés ne participent ni au marquage ni au balayage. <code>IsInFrozenSegment</code> répond aux requêtes d'appartenance (bornées par <code>AllocSize</code>), et <code>GetObjectGeneration</code> signale les objets gelés comme étant hors des générations du GC. Rester hors de la phase de marquage repose sur une hypothèse que le noyau ne vérifie pas : un objet gelé ne doit jamais détenir la seule référence vers un objet du tas ordinaire (voir <a href="#limitations-and-evolution">Limites et évolution</a>).</p>
+<p><a id="what-the-gc-does-not-touch"></a></p>
+<h3 id="ce-que-le-gc-ne-touche-pas">Ce que le GC ne touche pas</h3>
+<p>Les tas de style malloc du noyau (SmallHeap, MediumHeap, LargeHeap dans <code>Memory/Heap/</code>) ne font pas partie du GC. Les objets managés n'y résident jamais, et le balayage ne les parcourt délibérément jamais : un bloc non managé vivant dont le premier mot contiendrait par hasard un pointeur vers le tas GC serait indiscernable d'un en-tête d'objet non marqué, et le balayer libérerait de la mémoire vivante (issue <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/386">#386</a>, couverte par le test <code>GC_MallocHeapNotSwept</code>). Leur unique point d'entrée, <code>Heap</code> (<code>Alloc</code>, <code>Free</code>, <code>Realloc</code>, et l'élagage des pages vides du petit tas après une collecte), prend son propre spinlock sûr vis-à-vis des IRQ autour des chaînes des sous-tas, comme le fait <code>PageAllocator</code> autour de sa table des pages : les piles des threads, les blocs non managés du runtime et <code>NativeMemory</code> y allouent depuis n'importe quel thread.</p>
+<hr>
+<h2 id="allocation">Allocation</h2>
+<p>Cette section explique comment un <code>new</code> devient un pointeur en une poignée d'instructions, et ce qui se passe lorsque le chemin rapide est épuisé. La demande part des fonctions d'aide exportées par le runtime, passe par le TLAB du thread et, si le TLAB ne suffit pas, se replie sur les listes de blocs libres, l'allocation par incrément de pointeur dans les segments, de nouveaux segments, et seulement ensuite une collecte.</p>
+<p><a id="runtime-bridge"></a></p>
+<h3 id="pont-avec-le-runtime">Pont avec le runtime</h3>
+<p>Le runtime NativeAOT appelle des fonctions exportées dans <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Runtime/Memory.cs"><code>Memory.cs</code></a>. Les exports d'allocation convergent vers <code>GarbageCollector.AllocObject(size, flags)</code> ; avant l'initialisation du GC, ils se replient sur l'allocateur de démarrage (<code>MemoryOp.Alloc</code> plus une mise à zéro explicite).</p>
+<table>
+<thead>
+<tr>
+<th>Export du runtime</th>
+<th>Correspond à</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RhpNewFast</code></td>
+<td><code>AllocObject(RawBaseSize)</code></td>
+<td>Objet de taille fixe</td>
+</tr>
+<tr>
+<td><code>RhpNewArray</code>, <code>RhpNewArrayFast</code>, <code>RhpNewPtrArrayFast</code></td>
+<td><code>AllocObject(BaseSize + length * ComponentSize)</code></td>
+<td>Tableaux ; une longueur négative renvoie null</td>
+</tr>
+<tr>
+<td><code>RhNewArray</code></td>
+<td><code>RhAllocateNewArray</code> sans indicateur</td>
+<td>Tableaux</td>
+</tr>
+<tr>
+<td><code>RhAllocateNewArray</code></td>
+<td><code>AllocObject(size, flags)</code></td>
+<td>Tableaux, avec indicateurs d'allocation</td>
+</tr>
+<tr>
+<td><code>RhAllocateNewObject</code></td>
+<td><code>AllocObject(RawBaseSize, flags)</code></td>
+<td>Objet avec indicateurs (utilisé avec l'indicateur épinglé pour les statiques GC)</td>
+</tr>
+<tr>
+<td><code>RhNewString</code>, <code>RhNewVariableSizeObject</code></td>
+<td><code>RhpNewArray</code></td>
+<td>Chaînes et autres objets de taille variable</td>
+</tr>
+</tbody>
+</table>
+<p>Les exports des handles et des segments gelés :</p>
+<table>
+<thead>
+<tr>
+<th>Export du runtime</th>
+<th>Correspond à</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RhpHandleAlloc</code></td>
+<td><code>AllocateHandler(obj, type, IntPtr.Zero)</code></td>
+<td>Allouer un handle d'un type donné</td>
+</tr>
+<tr>
+<td><code>RhpHandleAllocDependent</code></td>
+<td><code>AllocateHandler(primary, (GCHandleType)6, secondary)</code></td>
+<td>Allouer un handle dépendant pour une paire primaire/secondaire</td>
+</tr>
+<tr>
+<td><code>RhHandleSet</code></td>
+<td><code>HandleSetPrimary</code></td>
+<td>Faire pointer un handle existant vers une nouvelle cible</td>
+</tr>
+<tr>
+<td><code>RhHandleFree</code></td>
+<td><code>FreeHandle</code></td>
+<td>Rendre l'emplacement à la liste d'emplacements libres de son segment</td>
+</tr>
+<tr>
+<td><code>RhRegisterFrozenSegment</code></td>
+<td><code>RegisterFrozenSegment</code></td>
+<td>Enregistrer une région gelée au démarrage</td>
+</tr>
+<tr>
+<td><code>RhUpdateFrozenSegment</code></td>
+<td><code>UpdateFrozenSegment</code></td>
+<td>Mettre à jour les bornes d'une région gelée enregistrée</td>
+</tr>
+</tbody>
+</table>
+<p>Les exports de finalisation se trouvent dans <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Runtime/GC.cs"><code>GC.cs</code></a> à côté de <code>RhGetMaxGcGeneration</code>, et sous-tendent les méthodes de la classe <code>GC</code> liées aux finaliseurs ainsi que <code>GC.MaxGeneration</code> ; <a href="#finalization">Finalisation</a> décrit ce sur quoi ils agissent :</p>
+<table>
+<thead>
+<tr>
+<th>Export du runtime</th>
+<th>Correspond à</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RhSuppressFinalize</code></td>
+<td><code>SuppressFinalize</code></td>
+<td><code>GC.SuppressFinalize</code> : annule chaque inscription de l'objet</td>
+</tr>
+<tr>
+<td><code>RhReRegisterForFinalize</code></td>
+<td><code>TryRegisterForFinalize</code></td>
+<td><code>GC.ReRegisterForFinalize</code> : inscrit l'objet une fois de plus ; false conduit CoreLib à lever <code>OutOfMemoryException</code></td>
+</tr>
+<tr>
+<td><code>RhWaitForPendingFinalizers</code></td>
+<td><code>WaitPendingFinalizers</code></td>
+<td><code>GC.WaitForPendingFinalizers</code> : attend une passe du thread de finalisation, ou exécute la file sur le thread appelant lorsque ce thread est désactivé</td>
+</tr>
+<tr>
+<td><code>RhGetMaxGcGeneration</code></td>
+<td>renvoie <code>0</code></td>
+<td><code>GC.MaxGeneration</code> : le ramasse-miettes n'a qu'une seule génération</td>
+</tr>
+</tbody>
+</table>
+<p>Parmi les indicateurs d'allocation, <code>GC_ALLOC_PINNED_OBJECT_HEAP</code> et <code>GC_ALLOC_FINALIZE</code> sont respectés. L'indicateur de finalisation est la demande d'inscrire l'objet pour la finalisation, comme en .NET : <code>RhpNewFinalizable</code>, la fonction d'aide qu'ILC appelle pour chaque <code>new</code> d'un type doté d'un finaliseur, le transmet, et <code>RhNewObject</code>, le chemin lent que CoreLib emprunte pour <code>MemberwiseClone</code>, <code>GetUninitializedObject</code> et la réflexion, fait passer un type finalisable par cette fonction d'aide ; une allocation d'un tel type sans l'indicateur (<code>RhAllocateNewObject</code> depuis un appelant qui ne le positionne pas) n'est pas inscrite, et elle est récupérée sans que son finaliseur s'exécute. Les indicateurs d'alignement et de mise à zéro facultative sont acceptés et ignorés, et les allocations sur le tas ordinaire sont toujours fournies remplies de zéros.</p>
+<p><a id="allocation-flow"></a></p>
+<h3 id="déroulement-dune-allocation">Déroulement d'une allocation</h3>
+<p><code>AllocObject</code> s'exécute entièrement à l'intérieur de <code>DisableInterruptsScope</code> : les gestionnaires d'interruption allouent aussi (tick de l'ordonnanceur, entrées), et une recharge entrelacée sur le même contexte mélangerait des pointeurs issus de deux TLAB différents (issue <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/382">#382</a>).</p>
+<pre><code class="lang-mermaid">flowchart TD
+    REQ[&quot;AllocObject(size, flags)&quot;] --&gt; PINNED{Pinned flag?}
+    PINNED --&gt;|yes| PIN[&quot;AllocPinnedObject:
+    bump in current pinned segment,
+    or allocate a new pinned segment&quot;]
+    PINNED --&gt;|no| ALIGN[&quot;Align size, enforce 24-byte minimum&quot;]
+    ALIGN --&gt; TLAB{&quot;Fits in the thread's TLAB?&quot;}
+    TLAB --&gt;|yes| RET[&quot;Advance AllocPtr, return&quot;]
+    TLAB --&gt;|no| REFILL[&quot;RefillAllocContext&quot;]
+    REFILL --&gt;|success| RET
+    REFILL --&gt;|failure| GC[&quot;Collect()&quot;]
+    GC --&gt; REFILL2[&quot;RefillAllocContext (retry)&quot;]
+    REFILL2 --&gt;|success| RET
+    REFILL2 --&gt;|failure| NULL[&quot;return null&quot;]
+</code></pre>
+<p>Le chemin rapide se résume à deux opérations sur des pointeurs : si <code>AllocPtr + size &lt;= AllocLimit</code>, incrémenter et retourner. Tout le reste se passe pendant la recharge.</p>
+<p><a id="tlab-refill"></a></p>
+<h3 id="recharge-du-tlab">Recharge du TLAB</h3>
+<p><code>RefillAllocContext</code> (dans <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.Tlab.cs"><code>GarbageCollector.Tlab.cs</code></a>) remplace un TLAB épuisé en essayant les sources bon marché avant les sources coûteuses : d'abord l'espace recyclé des <a href="#free-lists">listes de blocs libres</a>, puis l'espace de segment jamais touché, puis de nouvelles pages, et une collecte seulement lorsque tout le reste a échoué.</p>
+<pre><code class="lang-mermaid">flowchart TD
+    REF[&quot;RefillAllocContext(size)&quot;] --&gt; STAMP[&quot;Stamp the old TLAB's unused
+    tail back to the free list&quot;]
+    STAMP --&gt; S1{&quot;1. Free-list block of
+    max(size, TlabSize)?&quot;}
+    S1 --&gt;|found| OK[&quot;New TLAB, object
+    carved from its start&quot;]
+    S1 --&gt;|none| S2{&quot;2. Bump that size
+    in s_lastSegment?&quot;}
+    S2 --&gt;|fits| OK
+    S2 --&gt;|full| S3{&quot;3. Largest free-list block
+    that still fits the object?
+    (AllocLargestFromFreeListRaw)&quot;}
+    S3 --&gt;|&quot;found: taken whole as a
+    smaller-than-usual TLAB&quot;| OK
+    S3 --&gt;|none| S4{&quot;4. Walk all segments from
+    s_lastSegment (wrapping once),
+    else a new segment
+    (AllocateObjectSlowRaw)&quot;}
+    S4 --&gt;|space found| OK
+    S4 --&gt;|none| Q{&quot;5. Request smaller
+    than TlabSize?&quot;}
+    Q --&gt;|yes| S5{&quot;Exact-size retry:
+    free list, then segment
+    walk / new segment&quot;}
+    Q --&gt;|no| FAIL[&quot;Refill failed:
+    AllocObjectSlow runs Collect()
+    and retries the refill once&quot;]
+    S5 --&gt;|found| OK
+    S5 --&gt;|none| FAIL
+</code></pre>
+<p><code>TlabSize</code> vaut 8 Kio. L'étape 3 est ce qui garde utilisable un segment partiellement vivant : après un balayage, les objets survivants découpent l'espace libre en blocs de moins de 8 Kio, si bien qu'une recharge qui exigerait un TLAB de taille normale échouerait toujours à cet endroit et agrandirait le tas à la place ; prendre le plus grand bloc entier comme TLAB plus petit que d'habitude recycle cet espace.</p>
+<p>Notez l'ordre général : le tas grandit avant toute tentative de collecte. <code>Collect</code> ne s'exécute qu'une fois que l'allocateur de pages lui-même n'a plus rien à donner, et si la nouvelle tentative de recharge qui la suit échoue aussi, l'allocation renvoie null.</p>
+<p><a id="free-lists"></a></p>
+<h3 id="listes-de-blocs-libres">Listes de blocs libres</h3>
+<p>Dans un ramasse-miettes non déplaçant, l'espace que le balayage récupère reste où il est, dispersé entre les objets survivants, et l'allocation par incrément de pointeur ne peut pas l'atteindre : le curseur <code>Bump</code> n'avance que dans l'espace jamais touché. Les listes de blocs libres sont le moyen de réutiliser cet espace dispersé. Chaque trou que trouve le balayage, et chaque fin de TLAB restituée, est classé comme <a href="#freeblock">FreeBlock</a>, et les recharges de TLAB puisent dans ces listes avant de toucher à l'espace neuf des segments.</p>
+<p>Trouver un trou adapté doit être rapide, c'est pourquoi les blocs sont répartis en 12 classes de taille, des puissances de deux de 16 à 32768 octets ; une recherche saute directement à la plus petite classe capable de satisfaire la demande au lieu de parcourir une seule longue liste. Elle remonte les classes et prend le premier bloc qui convient exactement ou qui laisse un reste d'au moins 24 octets ; ce reste devient un bloc libre à part entière et il est reclassé. Le plancher de 24 octets est <code>MinBlockSize</code>, le plus petit espace pouvant encore contenir un en-tête <code>FreeBlock</code>. Les blocs de plus de 32768 octets sont classés dans la dernière classe.</p>
+<p>Les listes ne survivent jamais à une collecte : elles sont vidées au début de celle-ci et reconstruites par le balayage. Le balayage fusionne l'espace mort voisin en plages neuves et plus grandes, si bien que les entrées enregistrées avant lui décriraient des blocs qui n'existent plus ; reconstruire à partir de zéro garde les listes fiables sans comptabilité supplémentaire.</p>
+<p>Une règle protège les voisins : lorsqu'une plage d'espace mort est classée comme bloc libre, ses 8 derniers octets (<code>ReservedHeaderSlotSize</code>) sont laissés hors du bloc. Ces octets se trouvent juste devant l'objet qui suit la plage, exactement là où le runtime écrit l'<a href="gc-concepts/object-header.html">en-tête d'objet du runtime</a> de cet objet (le hachage d'identité ou le verrou léger, à <code>objRef - 4</code>) ; les recycler permettrait à une nouvelle allocation d'écraser l'en-tête d'un voisin vivant. Le classement exige donc une plage d'au moins 32 octets : <code>MinBlockSize</code> (24) pour le bloc plus la fin de 8 octets. Un bloc déjà présent dans les listes est entièrement allouable, c'est pourquoi en scinder un ne demande qu'un reste de 24 octets.</p>
+<p><a id="returning-tlabs"></a></p>
+<h3 id="restitution-des-tlab">Restitution des TLAB</h3>
+<p><code>Collect</code> commence par restituer chaque contexte d'allocation : le TLAB de chaque thread enregistré et le contexte statique de repli (<code>ReturnAllAllocContexts</code>). Un trou d'au moins 32 octets (le minimum de classement vu dans <a href="#free-lists">Listes de blocs libres</a>) est estampillé sur place comme <code>FreeBlock</code> et poussé dans la liste de blocs libres ; les trous plus petits sont simplement mis à zéro pour que le balayage ne bute pas sur des données périmées. Ensuite, chaque contexte vaut <code>null</code>/<code>null</code> et se recharge à sa prochaine utilisation.</p>
+<p><a id="pinned-allocation"></a></p>
+<h3 id="allocation-épinglée">Allocation épinglée</h3>
+<p>Les objets épinglés contournent entièrement les TLAB : <code>AllocPinnedObject</code> alloue par incrément de pointeur dans le segment épinglé courant, et alloue un nouveau segment épinglé lorsque celui-ci est plein. L'allocation épinglée ne puise jamais dans les listes de blocs libres (même si l'espace libre épinglé découvert par le balayage y afflue bien). Le tas épinglé existe pour les objets dont l'adresse doit rester stable, comme les objets de base des statiques GC que <code>ManagedModule.InitializeStatics</code> alloue avec l'indicateur épinglé.</p>
+<hr>
+<p><a id="collection"></a></p>
+<h2 id="collecte">Collecte</h2>
+<p>Une collecte marque tout ce qui est atteignable, puis récupère tout ce qui ne l'est pas. L'ordre des phases ci-dessous est imposé par des dépendances : les TLAB doivent être restitués avant que quoi que ce soit ne parcoure le tas, les handles faibles ne peuvent être jugés qu'une fois le marquage terminé, les objets morts dotés d'un finaliseur sont ranimés entre l'effacement des deux sortes de handles faibles, les listes de blocs libres sont reconstruites par le balayage qui les vide, et les chaînes de segments sont rangées en dernier pour que la prochaine allocation tombe au bon endroit. Les finaliseurs eux-mêmes s'exécutent hors de la section masquée : <code>SignalPendingFinalizers</code> les exécute ou réveille le thread de finalisation, et les laisse à la prochaine allocation lorsque l'appelant a encore les interruptions masquées. <code>Collect()</code> renvoie le nombre d'objets libérés :</p>
+<pre><code class="lang-mermaid">sequenceDiagram
+    participant App as Caller
+    participant GC as GarbageCollector
+    participant PA as PageAllocator
+
+    App-&gt;&gt;GC: Collect()
+    activate GC
+    Note over GC: Interrupts disabled
+    GC-&gt;&gt;GC: ReturnAllAllocContexts (stamp TLAB gaps)
+    GC-&gt;&gt;GC: Clear all free lists
+    GC-&gt;&gt;GC: MarkPhase (stacks, finalizer queue, handles)
+    GC-&gt;&gt;GC: ClearShortWeakHandles
+    GC-&gt;&gt;GC: MarkFinalizableObjects (queue and revive the dead finalizable objects)
+    GC-&gt;&gt;GC: ScanDependentHandles (secondaries of the revived)
+    GC-&gt;&gt;GC: ClearLongWeakHandles (resurrection-tracking, dependent)
+    GC-&gt;&gt;GC: SweepPhase (rebuild free lists)
+    GC-&gt;&gt;GC: Reorder regular segments, free empty ones
+    GC-&gt;&gt;GC: Reorder pinned segments, free empty ones
+    GC-&gt;&gt;PA: Free(empty multi-page segments)
+    GC-&gt;&gt;GC: RecomputeHeapRange
+    Note over GC: Interrupts enabled
+    GC-&gt;&gt;GC: SignalPendingFinalizers
+    deactivate GC
+    GC--&gt;&gt;App: freed object count
+</code></pre>
+<p>La taille et la fragmentation de la génération 0 sont relevées avant et après les phases, et la durée alimente <code>GetLastGCPercentTimeInGC</code>.</p>
+<p><a id="mark-phase"></a></p>
+<h3 id="phase-de-marquage">Phase de marquage</h3>
+<p>La phase de marquage trouve tous les objets atteignables à l'aide d'une liste de travail. <code>MarkPhase</code> réinitialise la pile de marquage, parcourt les racines de pile, marque les objets qui attendent encore dans la file de finalisation (ils restent vivants jusqu'à ce que leur finaliseur se soit exécuté, voir <a href="#finalization">Finalisation</a>), puis parcourt les handles GC.</p>
+<p>Le parcours des piles est hybride :</p>
+<ul>
+<li>Le <strong>thread qui déclenche le GC</strong> est parcouru <strong>précisément</strong>. Il a atteint le ramasse-miettes par une chaîne d'appels managés, si bien que chaque adresse de retour remontant sa pile est un <a href="gc-concepts/safepoint.html">point sûr</a> de site d'appel où le GCInfo est valide. <code>PreciseScanCurrentThread</code> parcourt ses cadres un par un et signale exactement les emplacements que le compilateur déclare vivants, y compris les cadres de <a href="gc-concepts/funclet.html">funclet</a> d'exception. Le mécanisme a son propre article : <a href="garbage-collector-gcinfo.html">Parcours précis de la pile (GCInfo)</a>.</li>
+<li><strong>Tous les autres threads enregistrés</strong> ont été préemptés sur une instruction arbitraire, où une recherche dans le GCInfo n'aurait aucun sens. Ces threads font l'objet d'un parcours <strong>conservateur</strong> : chaque registre sauvegardé et chaque mot de leur pile de la taille d'un pointeur est traité comme une référence potentielle. Remplacer ce dernier chemin conservateur nécessite le détournement d'adresse de retour, suivi dans l'issue <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/385">#385</a>. Les threads morts sont ignorés.</li>
+</ul>
+<p>Les deux parcours doivent savoir où se termine une pile, et le thread de démarrage, le thread principal du noyau, n'a pas de pile allouée par l'ordonnanceur : il s'exécute sur la pile du chargeur d'amorçage, si bien que son parcours s'arrête au sommet enregistré par <code>kmain</code> (<code>BootStack.Top</code>). Sur ARM64, il s'exécute en EL1t, sur <code>SP_EL0</code>, tandis qu'une interruption sauvegarde son contexte sur la pile <code>SP_EL1</code>. Le stub d'interruption sauvegarde donc <code>SP_EL0</code> dans l'emplacement du pointeur de pile du contexte, et lorsque le <code>SPSR</code> sauvegardé indique EL1t, le parcours conservateur part de cette valeur. Partir plutôt du contexte sauvegardé reviendrait à parcourir la mémoire depuis la pile <code>SP_EL1</code> jusqu'à <code>BootStack.Top</code>, à travers la majeure partie de l'espace d'adressage.</p>
+<p>Il n'y a pas de passe dédiée aux racines statiques. <code>ManagedModule.InitializeStatics</code> stocke les objets de base des statiques GC de chaque module dans un tableau épine dorsale atteignable depuis un handle GC fort (<code>Normal</code>), si bien que le parcours des magasins de handles couvre transitivement tous les champs statiques (le test <code>GC_StaticOnlyReachability</code> le démontre).</p>
+<p>Chaque pointeur candidat, quelle que soit la racine qui l'a produit, passe par <code>TryMarkRoot(value)</code> : un test d'appartenance peu coûteux, puis la boucle de marquage standard qui vide la liste de travail :</p>
+<pre><code class="lang-mermaid">flowchart TD
+    ROOT[&quot;TryMarkRoot(value)&quot;] --&gt; INHEAP{&quot;IsInGCHeap(value)?
+    (regular or pinned segments)&quot;}
+    INHEAP --&gt;|no| DROP[&quot;Rejected: not a heap object&quot;]
+    INHEAP --&gt;|yes| PUSH[&quot;PushMarkStack(value)&quot;]
+    PUSH --&gt; POP{&quot;Mark stack empty?&quot;}
+    POP --&gt;|yes| DONE[&quot;Done, next root&quot;]
+    POP --&gt;|no| READ[&quot;PopMarkStack(),
+    GetMethodTable() masks
+    off the mark bit&quot;]
+    READ --&gt; MT{&quot;Plausible MethodTable?
+    (not null, not inside the GC heap,
+    not below KernelSpaceStart)&quot;}
+    MT --&gt;|no| POP
+    MT --&gt;|yes| MARKED{&quot;IsMarked?&quot;}
+    MARKED --&gt;|yes| POP
+    MARKED --&gt;|no| SET[&quot;Mark(): set bit 0
+    of the MethodTable word&quot;]
+    SET --&gt; PTRS{&quot;ContainsGCPointers?&quot;}
+    PTRS --&gt;|no| POP
+    PTRS --&gt;|yes| ENUM[&quot;EnumerateReferences():
+    PushMarkStack() for
+    each child reference&quot;]
+    ENUM --&gt; POP
+</code></pre>
+<p>Les deux étapes de validation sont ce qui rend le parcours conservateur sûr : un candidat peut être n'importe quel motif de bits qui se trouvait par hasard dans un registre ou un emplacement de pile, donc avant d'être traité comme un objet, il doit à la fois tomber dans un segment du tas et porter un pointeur de <code>MethodTable</code> plausible (le filtre de validité vu dans <a href="#methodtable">MethodTable</a>). Les racines précises passent par les mêmes vérifications et n'y échouent simplement jamais.</p>
+<p>La pile de marquage commence à une page (512 entrées) et, lorsqu'elle est pleine, grandit par copie dans une allocation de pages plus grande. Si l'agrandissement échoue, le ramasse-miettes journalise un avertissement et abandonne le pointeur, si bien qu'un échec d'allocation à ce moment peut conduire à un sous-marquage ; il n'y a pas de solution de repli.</p>
+<h4 id="gcdesc">GCDesc</h4>
+<p><code>EnumerateReferences</code> décode le <strong>GCDesc</strong> qu'ILC stocke immédiatement avant chaque <code>MethodTable</code>. Le mot situé à <code>MT[-1]</code> est <code>numSeries</code> et sélectionne l'une de deux dispositions.</p>
+<p>Séries normales (<code>numSeries &gt; 0</code>), pour les objets ordinaires et les tableaux de références. Les lignes du tableau suivent l'ordre en mémoire, adresses basses en premier ; le GCDesc croît vers le bas à partir de la <code>MethodTable</code> :</p>
+<table>
+<thead>
+<tr>
+<th>Emplacement</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sous <code>MT[-1]</code>, en s'étendant vers le bas</td>
+<td>De <code>GCDescSeries[numSeries-1]</code> jusqu'à <code>GCDescSeries[0]</code>, chacune contenant <code>SeriesSize</code> et <code>StartOffset</code> ; l'entrée 0 se trouve au plus près du mot de comptage</td>
+</tr>
+<tr>
+<td><code>MT[-1]</code></td>
+<td><code>numSeries</code> (positif)</td>
+</tr>
+<tr>
+<td><code>MT[0]</code>, <code>MT[1]</code>, ...</td>
+<td>Les champs de la <code>MethodTable</code> elle-même</td>
+</tr>
+</tbody>
+</table>
+<p>Chaque <code>GCDescSeries</code> décrit une plage contiguë de références. <code>SeriesSize</code> est stocké avec un biais égal à la taille de l'objet, si bien que le parcours calcule <code>SeriesSize + objectSize</code> pour obtenir le nombre d'octets et parcourt autant de mots à partir de <code>obj + StartOffset</code>.</p>
+<p>Séries de valeurs (<code>numSeries &lt; 0</code>), pour les tableaux de structures qui contiennent des références, disposées de la même façon :</p>
+<table>
+<thead>
+<tr>
+<th>Emplacement</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sous <code>MT[-2]</code>, en s'étendant vers le bas</td>
+<td>Les entrées <code>ValSerieItem</code>, chacune contenant <code>Nptrs</code> (nombre de pointeurs) et <code>Skip</code> (octets à sauter) ; l'élément 0 se trouve au plus près du mot de décalage</td>
+</tr>
+<tr>
+<td><code>MT[-2]</code></td>
+<td><code>startOffset</code> des données des éléments</td>
+</tr>
+<tr>
+<td><code>MT[-1]</code></td>
+<td><code>numSeries</code> (négatif ; le nombre d'entrées est sa valeur absolue)</td>
+</tr>
+<tr>
+<td><code>MT[0]</code>, <code>MT[1]</code>, ...</td>
+<td>Les champs de la <code>MethodTable</code> elle-même</td>
+</tr>
+</tbody>
+</table>
+<p>Le parcours place un curseur à <code>obj + startOffset</code> et, pour chaque élément du tableau, parcourt les entrées <code>ValSerieItem</code> : lire <code>Nptrs</code> pointeurs, puis sauter <code>Skip</code> octets, <code>|numSeries|</code> fois par élément.</p>
+<p><a id="interior-pointers"></a></p>
+<h3 id="pointeurs-intérieurs">Pointeurs intérieurs</h3>
+<p>Une <code>ref</code> vers un élément de tableau, le <code>_reference</code> d'un <code>Span&lt;T&gt;</code> ou tout autre byref peut être la seule référence vivante vers un objet. Un tel pointeur ne pointe pas sur l'en-tête de l'objet, si bien que la vérification de MethodTable de <code>TryMarkRoot</code> l'écarterait et que l'objet serait collecté alors qu'il est encore utilisé (issue <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/384">#384</a>, corrigée pour les cadres parcourus précisément par la prise en charge des pointeurs intérieurs introduite par <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/376">#376</a> ; les threads parcourus de façon conservatrice les manquent toujours, voir <a href="#limitations-and-evolution">Limites et évolution</a>).</p>
+<p>Le parcours précis de la pile corrige cela pour le thread qui déclenche le GC. Le GCInfo marque les emplacements byref avec <code>GC_CALL_INTERIOR</code>, et le callback de racine du parcours les résout en leur objet conteneur avec <code>GetParentObject</code> avant de marquer :</p>
+<pre><code class="lang-mermaid">flowchart TD
+    BYREF[&quot;Byref slot tagged GC_CALL_INTERIOR&quot;] --&gt; SEG[&quot;Find the segment containing
+    the address: regular chain,
+    then pinned chain&quot;]
+    SEG --&gt; FOUND{&quot;Segment found, and
+    address below its Bump?&quot;}
+    FOUND --&gt;|no| NONE[&quot;Mark nothing&quot;]
+    FOUND --&gt;|yes| WALK[&quot;Walk from Start with the sweep's rules:
+    free block by its Size, filler word
+    by one word, object by its aligned size&quot;]
+    WALK --&gt; HIT{&quot;Address inside
+    an object?&quot;}
+    HIT --&gt;|&quot;no (free block or filler)&quot;| NONE
+    HIT --&gt;|yes| MARK[&quot;TryMarkRoot on that object&quot;]
+</code></pre>
+<p>Trois choix de cette recherche sont délibérés :</p>
+<ul>
+<li><strong>Les deux chaînes, par adresse.</strong> L'indicateur <code>GC_CALL_PINNED</code> d'un emplacement décrit l'emplacement de pile (une variable locale épinglée, ce que crée une instruction <code>fixed</code>), et non le tas d'où provient l'objet : un pointeur <code>fixed</code> vers un tableau du tas ordinaire et un simple <code>Span&lt;T&gt;</code> sur un tableau <code>GC.AllocateArray&lt;T&gt;(n, pinned: true)</code> sont tous deux ordinaires. Les plages libres du balayage épinglé alimentent aussi les listes de blocs libres partagées, si bien qu'un TLAB du tas ordinaire peut se trouver à l'intérieur d'un segment épinglé.</li>
+<li><strong>Depuis <code>Start</code>.</strong> La <a href="#brick-table">table de briques</a> n'est pas un point de départ sûr pour un parcours, si bien que chaque recherche parcourt son segment depuis le premier objet.</li>
+<li><strong>Les règles d'avancement du <a href="#sweep-phase">balayage</a>.</strong> Le parcours classe chaque mot comme le fait <code>SweepSegment</code> et enjambe les objets de <code>Align(ComputeSize())</code>, la taille que l'allocateur a réservée, si bien que l'objet trouvé est un objet que <code>SweepSegment</code> visite aussi comme début d'objet et démarque pour le cycle suivant. <code>ComputeSize()</code> seul ne constitue pas un pas valide : les chaînes et les tableaux d'éléments de 1 ou 2 octets ont des tailles qui ne sont pas des multiples de la taille d'un pointeur.</li>
+</ul>
+<p>Une adresse qui tombe dans un bloc libre, dans du remplissage ou au-delà de <code>Bump</code> ne marque rien, plutôt que d'être remise à <code>TryMarkRoot</code> comme s'il s'agissait d'un en-tête.</p>
+<p>Le parcours conservateur n'accepte toujours que les pointeurs qui tombent exactement sur un en-tête d'objet. <code>GC_InteriorPointerRoot</code> est le test d'acceptation : un <code>int[2100]</code> atteignable uniquement par une <code>ref int</code> vers l'élément 8 doit survivre à une collecte suivie d'une rafale d'allocations. Les deux premiers choix ont leurs propres cellules : <code>GC_InteriorPointerRootMidTlab</code> enracine un tableau situé derrière un autre objet dans son TLAB, dont le début n'a donc jamais été enregistré dans la table de briques ; <code>GC_InteriorPointerRootPinnedHeap</code> enracine un tableau du tas épinglé par un simple byref ; et <code>GC_InteriorPointerRootFixed</code> enracine un tableau du tas ordinaire uniquement par un pointeur <code>fixed</code>.</p>
+<p><a id="handles-during-marking"></a></p>
+<h3 id="les-handles-pendant-le-marquage">Les handles pendant le marquage</h3>
+<p>Le parcours des handles a lieu après celui des piles, en deux passes :</p>
+<ol>
+<li>Tous les handles <code>Normal</code>, puis tous les handles <code>Pinned</code>, sont marqués comme racines fortes.</li>
+<li>Les handles dépendants sont traités jusqu'à un point fixe : chaque fois que le primaire d'un handle est marqué et que son secondaire ne l'est pas, le secondaire est marqué, et la boucle se répète jusqu'à ce qu'une passe ne marque plus rien de nouveau. Cela gère les chaînes où le secondaire d'un handle dépendant est le primaire d'un autre.</li>
+</ol>
+<p>Les handles faibles ne sont jamais parcourus. Une fois le marquage terminé, le ramasse-miettes efface la cible de chaque handle faible dont la cible n'est pas marquée, en deux étapes de part et d'autre de la finalisation. <code>ClearShortWeakHandles</code> efface d'abord le magasin <code>Weak</code>, si bien qu'une référence faible courte lit null dès que sa cible est trouvée morte, même si un finaliseur la ranime. Les objets morts dotés d'un finaliseur sont ensuite mis en file et marqués, avec ce qu'ils référencent, et la boucle des handles dépendants s'exécute une fois de plus pour les secondaires qui s'y rattachent. <code>ClearLongWeakHandles</code> efface enfin le magasin <code>WeakTrackResurrection</code> et les handles dépendants dont le primaire n'est toujours pas marqué, en mettant aussi leur secondaire à zéro, puisque le handle ne le maintient plus en vie. Un handle effacé reste alloué, puisque son propriétaire le détient toujours, y lit null, puis le libère ou lui donne plus tard une nouvelle cible.</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Parcouru comme racine ?</th>
+<th>Nettoyage après le marquage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Weak</code></td>
+<td>Non</td>
+<td>Effacé si la cible n'est pas marquée, avant la finalisation</td>
+</tr>
+<tr>
+<td><code>WeakTrackResurrection</code></td>
+<td>Non</td>
+<td>Effacé si la cible n'est pas marquée après la finalisation</td>
+</tr>
+<tr>
+<td><code>Normal</code></td>
+<td>Oui</td>
+<td>Aucun</td>
+</tr>
+<tr>
+<td><code>Pinned</code></td>
+<td>Oui</td>
+<td>Aucun</td>
+</tr>
+<tr>
+<td>dépendant (6)</td>
+<td>Le secondaire, si le primaire est marqué</td>
+<td>Effacé si le primaire n'est pas marqué après la finalisation</td>
+</tr>
+</tbody>
+</table>
+<p><a id="sweep-phase"></a></p>
+<h3 id="phase-de-balayage">Phase de balayage</h3>
+<pre><code class="lang-mermaid">flowchart TD
+    SWEEP[&quot;SweepPhase()&quot;] --&gt; SEG[&quot;SweepSegment() for each regular segment&quot;]
+    SWEEP --&gt; PIN[&quot;SweepPinnedHeap()&quot;]
+
+    SEG --&gt; WALK[&quot;Linear walk from Start to Bump&quot;]
+    WALK --&gt; READ{Classify word at ptr}
+    READ --&gt;|&quot;MT == s_freeMethodTable&quot;| ACCUM[&quot;Old free block:
+    fold into free run, advance by Size&quot;]
+    READ --&gt;|&quot;implausible MethodTable&quot;| FILLER[&quot;Filler word:
+    fold into free run, advance one word&quot;]
+    READ --&gt;|marked object| LIVE[&quot;Unmark, flush free run
+    to the free list&quot;]
+    READ --&gt;|unmarked object| DEAD[&quot;Dead: extend free run,
+    advance by object size&quot;]
+    ACCUM --&gt; READ
+    FILLER --&gt; READ
+    LIVE --&gt; READ
+    DEAD --&gt; READ
+</code></pre>
+<p>Le balayage parcourt chaque segment linéairement de <code>Start</code> à <code>Bump</code>, en accumulant l'espace mort consécutif dans une plage libre. Trois sortes de mots non vivants sont intégrées à la plage :</p>
+<ul>
+<li>les blocs libres des collectes précédentes (premier mot égal à la <code>MethodTable</code> marqueur des blocs libres), enjambés selon leur taille stockée ;</li>
+<li>les mots de remplissage dont le premier mot ne peut pas être une <code>MethodTable</code> (nul, sous l'espace noyau ou à l'intérieur du tas GC). Ils proviennent de trous de TLAB mis à zéro trop petits pour être estampillés, de l'en-tête du runtime écrit à <code>objRef - 4</code> à côté d'un trou, ou de données périmées. Ils sont sautés un mot de la taille d'un pointeur à la fois ;</li>
+<li>les objets non marqués, comptés comme libérés.</li>
+</ul>
+<p>Lorsqu'un objet marqué est atteint, il est démarqué pour le cycle suivant et la plage en cours est déposée comme <code>FreeBlock</code> (moins la fin réservée de 8 octets, qui est assainie au lieu d'être recyclée). Les plages de moins de 32 octets (le minimum de classement vu dans <a href="#free-lists">Listes de blocs libres</a>) sont abandonnées et deviennent du remplissage pour le balayage suivant. Une plage qui atteint <code>Bump</code> est récupérée en ramenant plutôt <code>Bump</code> en arrière, ce qui permet de rendre un segment vidé à l'allocateur de pages.</p>
+<p>Le tas épinglé est balayé avec le même parcours, sans la branche des blocs libres ; ses plages libres vont elles aussi dans les listes de blocs libres partagées. Si le balayage rencontre une taille impossible (zéro, ou dépassant la fin du segment), il abandonne ce segment pour cette collecte plutôt que de s'avancer dans une zone corrompue.</p>
+<p><a id="segment-reordering"></a></p>
+<h3 id="réordonnancement-des-segments">Réordonnancement des segments</h3>
+<p>Après le balayage, chaque chaîne est regroupée en une seule passe : d'abord les segments FULL, puis SEMIFULL, puis FREE. Les segments vides de plus d'une page sont rendus à l'allocateur de pages ; les segments vides d'une seule page sont conservés comme capacité disponible. <code>s_lastSegment</code> (et <code>s_currentPinnedSegment</code> pour la chaîne épinglée) est dirigé vers le premier segment à moitié plein, ou à défaut le premier segment libre, pour que la prochaine allocation tombe dans de l'espace disponible. Les deux réordonnancements marquent la plage du tas comme modifiée, et <code>Collect</code> recalcule la boîte englobante à la fin.</p>
+<hr>
+<p><a id="finalization"></a></p>
+<h2 id="finalisation">Finalisation</h2>
+<p>Un type doté d'un finaliseur (<code>~ClassName</code>) demande au ramasse-miettes d'exécuter ce code avant que la mémoire de l'objet ne soit récupérée, et la <a href="gc-concepts/finalization.html">page de concept</a> explique pourquoi cela oblige à conserver un objet mort pendant une collecte de plus. L'implémentation se trouve dans <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.Finalizer.cs"><code>GarbageCollector.Finalizer.cs</code></a> et repose sur deux tableaux de pointeurs d'objets, conservés dans des pages qui leur sont propres, si bien qu'ajouter une entrée n'alloue jamais sur le tas GC et que le ramasse-miettes ne les parcourt jamais par accident.</p>
+<p>Le registre, <code>s_finalizable</code>, contient chaque objet vivant dont le finaliseur reste à exécuter. <code>AllocObject</code> y ajoute chaque objet dont l'allocation porte <code>GC_ALLOC_FINALIZE</code> (l'indicateur que <code>RhpNewFinalizable</code> transmet pour chaque <code>new</code> d'un type doté d'un finaliseur, voir <a href="#runtime-bridge">Pont avec le runtime</a>), et <code>GC.ReRegisterForFinalize</code> ajoute une entrée de plus pour un objet dont la finalisation n'est pas annulée ; comme en .NET, un objet inscrit deux fois est finalisé deux fois. Lorsque le registre ne peut pas grandir, l'allocation réussit quand même, le ramasse-miettes journalise un avertissement, et cet objet n'est jamais finalisé ; seul <code>GC.ReRegisterForFinalize</code> signale l'échec, que CoreLib transforme en <code>OutOfMemoryException</code>. Le registre n'est pas une racine. Pendant une collecte, une fois les racines marquées et les handles faibles courts effacés, <code>MarkFinalizableObjects</code> déplace chaque objet inscrit que rien n'a atteint vers la file, <code>s_finalizerQueue</code>, et ce n'est qu'ensuite qu'il marque les objets mis en file et ce qu'ils référencent. Les mettre tous en file avant d'en marquer un seul signifie qu'un objet référencé uniquement par un autre objet finalisable mort est finalisé par cette même collecte, comme le fait .NET. La file est une racine à partir de ce moment : <code>MarkPhase</code> marque ses entrées à chaque collecte ultérieure, si bien qu'un objet et tout ce qu'il référence restent vivants jusqu'à ce que son finaliseur se soit exécuté, et sa mémoire est récupérée par la première collecte suivante qui le trouve de nouveau mort. Si la file ne peut pas grandir, les objets morts restent inscrits et vivants, et la collecte suivante réessaie.</p>
+<p><code>GC.SuppressFinalize</code> positionne un indicateur dans l'<a href="gc-concepts/object-header.html">en-tête d'objet du runtime</a> de l'objet, les 4 octets situés avant l'objet où CoreLib conserve le code de hachage d'identité et le verrou léger, dans l'un des trois bits que CoreLib réserve au ramasse-miettes (le <code>BIT_SBLK_FINALIZER_RUN</code> de .NET) ; le registre et la file ne sont pas touchés, si bien que l'appel coûte un seul OU atomique. Une collecte qui trouve mort un objet portant cet indicateur le retire du registre au lieu de le mettre en file, et il est balayé ; une passe qui rencontre dans la file une entrée portant l'indicateur, dont la finalisation a été annulée après qu'une collecte l'a mise en file (depuis un autre finaliseur mort en même temps que lui, ou via une référence faible qui suit la résurrection), l'ignore et efface l'indicateur, comme le fait .NET. <code>GC.ReRegisterForFinalize</code> sur un objet portant l'indicateur efface celui-ci, et les inscriptions de l'objet redeviennent valables ; sur un objet que la collecte a déjà retiré, maintenu en vie depuis par un autre finaliseur, il rajoute une inscription, après un parcours linéaire du registre et de la file que seul ce chemin rare paie. L'allocateur efface l'indicateur sur chaque objet finalisable qu'il fournit : il ne met pas à zéro le mot d'en-tête, et un bloc recyclé commence là où un objet dont la finalisation avait été annulée a pu mourir.</p>
+<p>Les finaliseurs ne s'exécutent jamais à l'intérieur de la collecte, qui a les interruptions masquées, ni à aucun autre endroit où les interruptions sont masquées : un finaliseur est du code arbitraire, et il peut allouer, prendre des verrous ou lancer une collecte. L'endroit où ils s'exécutent dépend de <code>GarbageCollector.ThreadedFinalizer</code>. <code>Kernel.Start</code> l'active, juste après avoir activé les interruptions, lorsque le commutateur <code>CosmosEnableFinalizerThread</code> est activé, ce qui est le cas par défaut dans tout noyau doté d'un ordonnanceur (<code>Sdk.targets</code> le désactive en même temps que l'ordonnanceur) ; un noyau compilé avec le commutateur désactivé, ou qui redéfinit <code>Start</code>, la laisse désactivée. Seuls Core et l'anneau supporté peuvent atteindre la propriété, puisque <code>GarbageCollector</code> est interne.</p>
+<p>Tant qu'elle est désactivée, les finaliseurs s'exécutent sur le thread qui a effectué la collecte, juste après celle-ci. Lorsque la collecte s'est exécutée avec les interruptions masquées, ce que fait <code>Heap.Collect</code> et ce que fait aussi une collecte lancée par l'allocateur lorsqu'il manque de mémoire, ils s'exécutent plutôt sur le prochain thread qui alloue. L'allocateur vérifie la file avant d'allouer plutôt qu'après, si bien que le nouvel objet ne peut pas être balayé pendant que les finaliseurs s'exécutent. <code>GC.WaitForPendingFinalizers</code> exécute la file sur le thread appelant.</p>
+<p>Activer <code>ThreadedFinalizer</code> démarre un thread noyau qui exécute les finaliseurs par passes. Cela n'a aucun effet lorsque l'ordonnanceur est exclu de la compilation, et si le thread ne peut pas démarrer, un avertissement est journalisé et la propriété reste désactivée. Une collecte, ou une allocation qui trouve la file non vide, se contente alors de prendre le moniteur du thread pour demander une passe, et ne le fait même pas lorsqu'une demande est en attente ou qu'une passe est en cours ; elle n'attend jamais la passe. <code>GC.WaitForPendingFinalizers</code> demande une passe et attend la fin d'une passe commencée après sa demande. Il retourne immédiatement lorsque les interruptions sont masquées, lorsque rien n'est en attente, ou lorsqu'un finaliseur l'appelle, puisque le thread s'attendrait lui-même. Désactiver <code>ThreadedFinalizer</code> arrête le thread une fois sa passe en cours terminée, et le thread qui collecte exécute de nouveau les finaliseurs ; une attente en cours, ou une attente qui commence pendant l'arrêt, dure jusqu'à ce que le thread se soit terminé, puisque la file appartient au thread jusque-là, puis exécute sur le thread appelant ce que sa dernière passe a laissé. Un finaliseur ne peut pas désactiver la propriété, puisque le thread attendrait sa propre fin : l'appel est donc journalisé et ignoré.</p>
+<p>Une seule passe s'exécute à la fois : <code>RunPendingFinalizers</code> revendique un indicateur avec les interruptions masquées, et retourne immédiatement lorsqu'une autre passe le détient, y compris dans le cas d'un finaliseur qui lance une collecte. La passe prend les entrées de la file une par une et ne se termine que lorsqu'elle trouve la file vide, en libérant l'indicateur dans la même étape masquée, si bien que ce qu'une collecte met en file pendant une passe est exécuté par cette passe. Une exception qu'un finaliseur laisse s'échapper est journalisée et la passe continue avec le finaliseur suivant, là où .NET mettrait fin au processus.</p>
+<p><code>GCMemoryInfo.FinalizationPendingCount</code> indique combien d'objets la dernière collecte a laissés dans la file. Il tombe rarement à zéro : le <code>Gen2GcCallback</code> de CoreLib, que <code>ArrayPool</code> utilise pour se réduire, se réinscrit depuis son propre finaliseur pour être rappelé après chaque collecte, si bien que chaque collecte le trouve de nouveau mort.</p>
+<hr>
+<p><a id="statistics-and-memory-info"></a></p>
+<h2 id="statistiques-et-informations-mémoire">Statistiques et informations mémoire</h2>
+<p><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.Info.cs"><code>GarbageCollector.Info.cs</code></a> sous-tend les requêtes mémoire du runtime :</p>
+<ul>
+<li><code>GetStats(out totalCollections, out totalObjectsFreed)</code> expose les deux compteurs cumulés. La valeur de retour de <code>Collect()</code> et ces compteurs sont exacts : la suite de tests vérifie que les écarts correspondent.</li>
+<li><code>GetSimpleMemoryInfo()</code> remplit l'instantané derrière <code>RhGetMemoryInfo</code>, qui est ce que lit <code>GC.GetGCMemoryInfo()</code> : taille du tas (plage occupée des segments ordinaires et épinglés), octets fragmentés (somme de tous les blocs inscrits dans les listes de blocs libres), octets validés (segments, segments gelés, pile de marquage, page des listes de blocs libres, pages du magasin de handles), nombre d'objets épinglés (objets du tas épinglé plus handles <code>Pinned</code>), indice de collecte, et <a href="gc-concepts/gc-generations.html">génération condamnée</a> (toujours 0 ; le ramasse-miettes n'est pas générationnel, si bien que les octets promus valent toujours 0 eux aussi). <code>RhGetMemoryInfo</code> ajoute à côté de l'instantané le nombre d'objets en attente de finalisation, lu depuis <code>GetFinalizationPendingCount()</code> : le nombre d'objets que la dernière collecte a laissés dans la file de finalisation.</li>
+<li><code>GetTotalAllocatedBytes()</code> / <code>GetTotalAllocatedBytesPrecise()</code> sous-tendent <code>GC.GetTotalAllocatedBytes()</code> ; la variante précise soustrait la fin inutilisée de chaque TLAB vivant.</li>
+<li><code>GetLastGCPercentTimeInGC()</code> est dérivé de la durée de la dernière collecte et de l'intervalle écoulé depuis la précédente.</li>
+<li><code>Variables</code> est la table de configuration du runtime ; elle indique <code>GCName = &quot;OrionGC&quot;</code>, avec le GC serveur, le GC concurrent et les grandes pages tous désactivés.</li>
+</ul>
+<hr>
+<p><a id="limitations-and-evolution"></a></p>
+<h2 id="limites-et-évolution">Limites et évolution</h2>
+<p>Chaque choix ci-dessus sacrifie quelque chose. Cette section rassemble les points délicats en un seul endroit, avec la voie de sortie lorsqu'elle existe.</p>
+<ul>
+<li><strong>Pauses sur tout le tas.</strong> Une génération unique et l'absence de concurrence signifient que chaque collecte parcourt chaque objet vivant avec les interruptions désactivées. C'est le bon compromis tant que les tas sont petits ; des tas plus grands nécessiteraient des générations (avec leurs barrières d'écriture et leurs ensembles mémorisés) ou un marquage incrémental.</li>
+<li><strong>Le stop-the-world repose sur un seul CPU.</strong> L'ordonnanceur exécute actuellement tout sur le CPU 0 (<code>SchedulerManager.GetCurrentCpuId()</code> renvoie 0), si bien que désactiver les interruptions arrête chaque mutateur. Un noyau multicœur aurait besoin d'un rendez-vous entre CPU avant que cette garantie ne tienne de nouveau.</li>
+<li><strong>Le parcours conservateur retient trop et interdit le déplacement.</strong> Sur les threads préemptés, un entier qui ressemble par hasard à une adresse du tas maintient en vie un objet mort, et rien de ce que ces piles semblent référencer ne peut jamais être déplacé. La sortie est le détournement d'adresse de retour (<a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/385">#385</a>), qui permettrait de parcourir précisément chaque thread.</li>
+<li><strong>Les pointeurs intérieurs ne sont résolus que sur le chemin précis.</strong> Un byref maintenu en vie uniquement par la pile d'un thread préempté doit tomber exactement sur un en-tête d'objet pour être trouvé (<a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/376">#376</a>, <a href="https://github.com/valentinbreiz/nativeaot-patcher/issues/384">#384</a>).</li>
+<li><strong>Les segments gelés ne sont pas suivis.</strong> Un objet gelé qui détiendrait la seule référence vers un objet du tas ordinaire ne le maintiendrait pas en vie. Les objets gelés ne référencent normalement que d'autres données gelées, si bien qu'une telle référence ne devrait pas exister, mais rien ne le vérifie dans un sens ou dans l'autre.</li>
+<li><strong>La <a href="#finalization">finalisation</a> repose elle aussi sur un seul CPU.</strong> L'exécution d'une seule passe à la fois est garantie par un indicateur revendiqué avec les interruptions masquées, ce qui n'exclut que les threads partageant le CPU.</li>
+<li><strong>Sans le thread de finalisation, les finaliseurs s'exécutent sur des threads empruntés.</strong> Avec <code>CosmosEnableFinalizerThread</code> désactivé, ou sans ordonnanceur, les finaliseurs s'exécutent sur le thread qui a collecté ou alloué ensuite, quel qu'il soit, sous n'importe quel <code>SpinLock</code> ordinaire que ce thread détient : <code>KernelConsole</code> alloue sous son verrou, si bien qu'un finaliseur qui écrit sur la console depuis cet endroit met le CPU en attente active sur lui-même. C'est pour cette raison que le thread est activé par défaut ; les finaliseurs livrés avec le noyau (<code>Monitor</code>, <code>WeakReference</code>, <code>ConditionalWeakTable</code>, <code>SafeHandle</code>) prennent des verrous sûrs vis-à-vis des IRQ, ou aucun verrou.</li>
+<li><strong>Un échec d'agrandissement de la pile de marquage peut conduire à un sous-marquage.</strong> Si la pile de marquage ne peut pas grandir en pleine collecte, des pointeurs sont abandonnés avec un avertissement journalisé, et un objet vivant non marqué serait balayé. Il n'existe pas encore de solution de repli en cas de débordement.</li>
+<li><strong>Un échec d'allocation renvoie null.</strong> Lorsque même une collecte ne peut pas libérer assez de mémoire, les fonctions d'aide à l'allocation renvoient null ; il n'existe pas de chemin <code>OutOfMemoryException</code> depuis l'allocateur.</li>
+</ul>
+<p>Retirer le chemin conservateur est la clé de voûte : une fois que chaque thread pourra être parcouru précisément, le déplacement cessera d'être impossible, et le compactage ou les générations deviendront des options de conception plutôt que des impasses.</p>
+<hr>
+<h2 id="tests">Tests</h2>
+<p>La suite de tests du noyau dans <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/tests/Kernels/Cosmos.Kernel.Tests.GarbageCollector/Kernel.cs"><code>tests/Kernels/Cosmos.Kernel.Tests.GarbageCollector</code></a> exécute 96 tests (<code>make test KERNEL=GarbageCollector</code>). Points saillants :</p>
+<ul>
+<li>comptabilité exacte des collectes (<code>GC_CollectBasic</code>, <code>GC_UnreachableExactCount</code>),</li>
+<li>comportement des handles faibles et dépendants (<code>GC_WeakReference</code>, <code>GC_DependentHandle</code>, <code>GC_DependentHandleCleanup</code>), et magasin de handles qui grandit sous deux threads à la fois (<code>GC_HandleStore_ConcurrentSegmentGrowth</code>),</li>
+<li>racines par pointeur intérieur (<code>GC_InteriorPointerRoot</code>, le test d'acceptation de #384, ainsi que <code>GC_InteriorPointerRootMidTlab</code>, <code>GC_InteriorPointerRootPinnedHeap</code>, <code>GC_InteriorPointerRootFixed</code>),</li>
+<li>atteignabilité des statiques via l'épine dorsale de handles (<code>GC_StaticOnlyReachability</code>),</li>
+<li>parcours précis de la pile et cadres de funclet (<code>GC_PreciseStackScan</code>, <code>GC_FuncletNoFalseRoot</code>, <code>GC_FuncletNoCrashOnAllocInCatch</code>, <code>GC_StackScanPaddingStress</code>),</li>
+<li>tas malloc laissés intacts (<code>GC_MallocHeapNotSwept</code>),</li>
+<li>allocation multithread sous des collectes répétées (<code>GC_MultithreadChurnUnderCollect</code>),</li>
+<li>une collecte lancée par un thread de travail pendant que le thread principal, sur la pile du chargeur d'amorçage, n'est pas en cours d'exécution (<code>GC_CollectFromWorkerThread</code>),</li>
+<li>comptabilité des TLAB et estampillage des trous (<code>GC_TLAB_*</code>),</li>
+<li>câblage des informations mémoire (<code>GC_Info_*</code>),</li>
+<li>finalisation sur le thread qui collecte (<code>GC_Finalizer_*</code>, dans <code>FinalizerTests.cs</code>) : finaliseurs exécutés une fois par inscription et seulement pour les objets inatteignables, résurrection, annulation et réinscription (l'indicateur d'annulation à côté du verrou léger, laissé périmé dans un mot d'en-tête recyclé, et sur un objet qu'une collecte a retiré), l'ordre par rapport aux handles faibles et dépendants, les finaliseurs qui allouent, lancent une collecte ou lèvent une exception, les allocations effectuées avec les interruptions masquées, ainsi que le nombre d'objets en attente et <code>GC.MaxGeneration</code>,</li>
+<li>le thread de finalisation (<code>GC_FinalizerThread_*</code>, dans <code>FinalizerThreadTests.cs</code>, et avant tout <code>GC_FinalizerThread_OnByDefault</code>, qui vérifie que <code>Kernel.Start</code> l'a activé et le désactive pour les cellules qui testent le thread qui collecte) : son démarrage, son arrêt et son redémarrage, l'attente de ses passes, y compris une passe interrompue par un arrêt, et le même comportement des finaliseurs exécuté depuis ce thread.</li>
+</ul>
+<hr>
+<p><a id="source-files"></a></p>
+<h2 id="fichiers-source">Fichiers source</h2>
+<table>
+<thead>
+<tr>
+<th>Domaine</th>
+<th>Chemin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cœur du GC</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.cs"><code>src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.cs</code></a></td>
+</tr>
+<tr>
+<td>Allocation d'objets</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.Alloc.cs"><code>GarbageCollector.Alloc.cs</code></a>, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.Tlab.cs"><code>GarbageCollector.Tlab.cs</code></a></td>
+</tr>
+<tr>
+<td>Phase de marquage</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.Mark.cs"><code>GarbageCollector.Mark.cs</code></a>, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.PreciseStack.cs"><code>GarbageCollector.PreciseStack.cs</code></a></td>
+</tr>
+<tr>
+<td>Décodeur GCInfo (parcours précis)</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/tree/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GcInfo"><code>GcInfo/</code></a>, voir <a href="garbage-collector-gcinfo.html">Parcours précis de la pile</a></td>
+</tr>
+<tr>
+<td>Phase de balayage</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.Sweep.cs"><code>GarbageCollector.Sweep.cs</code></a></td>
+</tr>
+<tr>
+<td>Segments du tas</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GCSegment.cs"><code>GCSegment.cs</code></a>, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GCSegmentManager.cs"><code>GCSegmentManager.cs</code></a></td>
+</tr>
+<tr>
+<td>Handles GC</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GCHandle.cs"><code>GCHandle.cs</code></a>, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GCHandleSegment.cs"><code>GCHandleSegment.cs</code></a>, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GCHandleManager.cs"><code>GCHandleManager.cs</code></a>, <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.GCHandler.cs"><code>GarbageCollector.GCHandler.cs</code></a></td>
+</tr>
+<tr>
+<td>Finalisation</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.Finalizer.cs"><code>GarbageCollector.Finalizer.cs</code></a></td>
+</tr>
+<tr>
+<td>Tas épinglé</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.PinnedHeap.cs"><code>GarbageCollector.PinnedHeap.cs</code></a></td>
+</tr>
+<tr>
+<td>Segments gelés</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.Frozen.cs"><code>GarbageCollector.Frozen.cs</code></a></td>
+</tr>
+<tr>
+<td>Statistiques</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GarbageCollector.Info.cs"><code>GarbageCollector.Info.cs</code></a></td>
+</tr>
+<tr>
+<td>En-tête d'objet</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/GCObject.cs"><code>GCObject.cs</code></a></td>
+</tr>
+<tr>
+<td>Structure TLAB</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/GarbageCollector/AllocContext.cs"><code>AllocContext.cs</code></a></td>
+</tr>
+<tr>
+<td>Exports du runtime</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Runtime/Memory.cs"><code>src/Cosmos.Kernel.Core/Runtime/Memory.cs</code></a></td>
+</tr>
+<tr>
+<td>Configuration des modules et des statiques</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Runtime/ManagedModule.cs"><code>src/Cosmos.Kernel.Core/Runtime/ManagedModule.cs</code></a></td>
+</tr>
+<tr>
+<td>Allocateur de pages</td>
+<td><a href="https://github.com/CosmosOS/Cosmos/blob/gen3/src/Cosmos.Kernel.Core/Memory/PageAllocator.cs"><code>src/Cosmos.Kernel.Core/Memory/PageAllocator.cs</code></a></td>
+</tr>
+</tbody>
+</table>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/dev/garbage-collector.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

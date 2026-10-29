@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>Guide d&#39;installation | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Guide d&#39;installation | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/user/install.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="installation-guide"></a></p>
+<h1 id="guide-dinstallation">Guide d'installation</h1>
+<p><a id="prerequisites"></a></p>
+<h2 id="prérequis">Prérequis</h2>
+<ul>
+<li><a href="https://dotnet.microsoft.com/download">.NET SDK 10.0</a> ou une version ultérieure</li>
+<li>Un IDE avec son extension Cosmos : <a href="https://code.visualstudio.com/">Visual Studio Code</a>, <a href="https://visualstudio.microsoft.com/">Visual Studio</a> ou <a href="https://www.jetbrains.com/rider/">JetBrains Rider</a> (voir <a href="#ide-extensions">Extensions pour IDE</a>)</li>
+<li><a href="https://brew.sh/">Homebrew</a> sous macOS</li>
+</ul>
+<h2 id="windows">Windows</h2>
+<p>Téléchargez et lancez le dernier installateur depuis la page <a href="https://github.com/CosmosOS/Cosmos/releases">Releases</a> :</p>
+<pre><code>CosmosSetup-&lt;version&gt;-windows.exe
+</code></pre>
+<p>L'installateur recherche VS Code, Visual Studio et Rider, et propose d'installer l'extension Cosmos dans chacun de ceux qu'il trouve (voir <a href="#ide-extensions">Extensions pour IDE</a>). Visual Studio doit être fermé, et l'extension Visual Studio demande les droits d'administrateur, car elle s'installe pour tous les utilisateurs. Rider n'est détecté qu'après avoir été lancé au moins une fois.</p>
+<p>Après l'installation, ouvrez un nouveau terminal et vérifiez :</p>
+<pre><code class="lang-powershell">cosmos check
+</code></pre>
+<p>Pour désinstaller, utilisez <strong>Ajouter ou supprimer des programmes</strong> dans les Paramètres de Windows.</p>
+<h2 id="linux--macos">Linux / macOS</h2>
+<p>Installez la CLI Cosmos et toutes ses dépendances :</p>
+<pre><code class="lang-bash">dotnet tool install -g Cosmos.Tools
+cosmos install
+</code></pre>
+<p>Cette commande télécharge les bundles précompilés de la chaîne d'outils (Clang et LLD, xorriso, QEMU, GDB) depuis la release GitHub <code>tools-latest</code> vers <code>~/.cosmos/tools/</code>, puis installe le patcher Cosmos, les modèles de projet et l'extension VS Code. Un outil déjà présent dans le <code>PATH</code> est utilisé à la place du bundle lorsque sa version correspond à celle du bundle.</p>
+<p>Vérifiez l'installation :</p>
+<pre><code class="lang-bash">cosmos check
+</code></pre>
+<p>Pour désinstaller :</p>
+<pre><code class="lang-bash">cosmos uninstall
+dotnet tool uninstall -g Cosmos.Tools
+</code></pre>
+<p>Pour mettre à jour :</p>
+<pre><code class="lang-bash">cosmos update
+</code></pre>
+<p>Exécutez cette commande dans le dossier d'un projet de noyau pour faire aussi passer les versions de Cosmos épinglées par le projet (l'attribut <code>Sdk=&quot;Cosmos.Sdk/...&quot;</code> et les références de package <code>Cosmos.*</code>) à la dernière version. Options supplémentaires :</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Effet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cosmos update --check</code></td>
+<td>Signale les mises à jour disponibles sans rien installer</td>
+</tr>
+<tr>
+<td><code>cosmos update --no-project</code></td>
+<td>Met à jour les outils sans toucher aux fichiers du projet</td>
+</tr>
+<tr>
+<td><code>cosmos update --version &lt;VERSION&gt;</code></td>
+<td>Fait passer la CLI, le patcher, les modèles et les versions épinglées du projet à une version précise (les outils système suivent toujours les bundles <code>tools-latest</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><a id="macos-on-apple-silicon"></a></p>
+<h2 id="macos-sur-apple-silicon">macOS sur Apple Silicon</h2>
+<p>Les bundles d'outils sont compilés uniquement pour Apple Silicon (<code>darwin-arm64</code>) ; il n'existe pas de bundle Intel. Un Mac Apple Silicon nécessite les étapes suivantes en plus de celles de Linux / macOS. <code>cosmos check</code> ne signale pas l'absence de Rosetta 2 ou de SDL 3.</p>
+<table>
+<thead>
+<tr>
+<th>Étape</th>
+<th>Pourquoi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Installer Rosetta 2</td>
+<td>Le SDK exécute l'ILCompiler x64 (<code>runtime.osx-x64.Microsoft.DotNet.ILCompiler</code>) sur tout hôte macOS. Sans Rosetta 2, <code>cosmos build</code> échoue avec <code>error MSB3073</code> et le code de sortie 126 d'ILC.</td>
+</tr>
+<tr>
+<td>Installer SDL 3 avec Homebrew</td>
+<td>Le QEMU du bundle charge SDL 3 depuis Homebrew pour sa fenêtre d'affichage et plante au démarrage lorsque la bibliothèque est absente. <code>cosmos run --headless</code> n'en a pas besoin.</td>
+</tr>
+<tr>
+<td>Signer à nouveau le QEMU du bundle</td>
+<td>macOS tue le binaire du bundle à son lancement lorsque sa signature de code est absente ou invalide. Il en va de même pour <code>qemu-system-x86_64.real</code> lorsque vous exécutez des noyaux x64.</td>
+</tr>
+<tr>
+<td>Passer <code>-a arm64</code> à <code>cosmos run</code></td>
+<td><code>cosmos build</code> cible arm64 par défaut sur Apple Silicon, mais <code>cosmos run</code> cible x64 par défaut et cherche l'ISO dans <code>output-x64/</code>.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="lang-bash">softwareupdate --install-rosetta
+brew install sdl3
+codesign --force --deep --sign - ~/.cosmos/tools/qemu/qemu-system-aarch64.real
+codesign --force --deep --sign - ~/.cosmos/tools/qemu/qemu-system-x86_64.real
+</code></pre>
+<p>Ensuite, compilez et lancez :</p>
+<pre><code class="lang-bash">cosmos build
+cosmos run -a arm64
+</code></pre>
+<p>Si un build a échoué avant l'installation de Rosetta 2, supprimez le dossier <code>obj/</code> du projet avant de relancer le build.</p>
+<p><a id="ide-extensions"></a></p>
+<h2 id="extensions-pour-ide">Extensions pour IDE</h2>
+<p>Chaque extension crée, compile, lance et débogue un noyau depuis l'IDE, et peut vérifier et installer elle-même la chaîne d'outils.</p>
+<table>
+<thead>
+<tr>
+<th>IDE</th>
+<th>Extension</th>
+<th>Installation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Visual Studio Code</td>
+<td><a href="https://github.com/CosmosOS/CosmosVsCodeExtension">CosmosVsCodeExtension</a></td>
+<td>L'installateur Windows ou <code>cosmos install</code></td>
+</tr>
+<tr>
+<td>Visual Studio 2026 (ou 2022 17.14+)</td>
+<td><a href="https://github.com/CosmosOS/CosmosVsExtension">CosmosVsExtension</a></td>
+<td>L'installateur Windows, ou le <code>.vsix</code> de la <a href="https://github.com/CosmosOS/CosmosVsExtension/releases">page Releases</a></td>
+</tr>
+<tr>
+<td>JetBrains Rider 2025.3+</td>
+<td><a href="https://github.com/CosmosOS/CosmosRiderExtension">CosmosRiderExtension</a></td>
+<td>L'installateur Windows, ou le plugin de la <a href="https://github.com/CosmosOS/CosmosRiderExtension/releases">page Releases</a></td>
+</tr>
+</tbody>
+</table>
+<p><a id="quick-start"></a></p>
+<h2 id="démarrage-rapide">Démarrage rapide</h2>
+<p>Une fois l'installation terminée, consultez <a href="startup.html">Démarrage du noyau</a> pour créer votre premier noyau et découvrir le déroulement du démarrage.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/user/install.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

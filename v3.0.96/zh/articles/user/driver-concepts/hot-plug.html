@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>热插拔 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="热插拔 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../../images/favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/user/driver-concepts/hot-plug.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="hot-plug"></a></p>
+<h1 id="热插拔">热插拔</h1>
+<p>热插拔是指设备可以在机器运行期间接入或离开。接入是较容易的那一半：总线驱动程序发现新设备，像在启动时那样描述它，然后内核把它提供给驱动程序。移除则更难，因为绑定到该设备的驱动程序可能正在使用它。有序移除会先征询：在 PCI Express 插槽上，用户按下插槽的注意按钮，操作系统停止设备并切断插槽电源，然后才拔出卡。意外移除不会征询，卡或线缆在任何软件得知之前就已经不在了。</p>
+<p>意外移除之后，触碰设备就是陷阱。从一个已经不存在的 PCI 设备读取会返回全 1，驱动程序可能把它当成所有位都已置位的状态寄存器，或者永远等待某一位被清除。写入可能引发故障，或者落到这段地址范围接下来分配给的某个设备上。因此，驱动程序的拆除过程必须先知道硬件是否仍然存在，再去停止它。</p>
+<p>PCI Express 还带来第二个问题。固件只为启动时存在的设备分配了地址，因此之后才接入的功能，其 BAR 处于未分配状态，必须把它们放进插槽上方的端口所转发的地址窗口内（<a href="pci.html">PCI</a>）。</p>
+<p><a href="usb.html">USB</a> 和 <a href="ps2.html">PS/2</a> 处在两个极端。USB 是为热插拔而设计的：集线器会上报每一次连接和断开，主机会枚举每个新设备。PS/2 则不是，它的键盘和鼠标只在启动时被发现一次。</p>
+<p>在驱动工具包中，<code>OnDetach</code> 会收到一个 <code>DetachReason</code>，设备消失后其 <code>HardwarePresent</code> 为 <code>false</code>，此时驱动程序不能触碰它的寄存器（<a href="../drivers.html#teardown-and-ondetach">拆除与 OnDetach</a>）。<code>PcieRootPortDriver</code> 会发布接入热插拔插槽的功能，并把它未分配的 BAR 放进该端口的窗口内，在功能移除时再将其撤回（<a href="../drivers.html#hot-plug-slots">热插拔插槽</a>）。设备被拔出后，USB 接口的 <code>UsbAccess.IsDisconnected</code> 会变为真（<a href="../drivers.html#the-usb-access-object">USB 访问对象</a>），而 PS/2 端口只在启动时发布（<a href="../drivers.html#the-ps2-class-drivers">PS/2 类驱动程序</a>）。</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/user/driver-concepts/hot-plug.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
