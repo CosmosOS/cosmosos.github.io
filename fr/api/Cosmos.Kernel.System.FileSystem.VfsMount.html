@@ -150,6 +150,76 @@ Class VfsMount
 </h2>
 
 
+  <a id="Cosmos_Kernel_System_FileSystem_VfsMount_Flags_" data-uid="Cosmos.Kernel.System.FileSystem.VfsMount.Flags*"></a>
+
+  <h3 id="Cosmos_Kernel_System_FileSystem_VfsMount_Flags" data-uid="Cosmos.Kernel.System.FileSystem.VfsMount.Flags">
+  Flags
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The flags this mount runs under: the ones <a class="xref" href="Cosmos.Kernel.System.FileSystem.VfsManager.html#Cosmos_Kernel_System_FileSystem_VfsManager_TryMount_System_String_System_ReadOnlySpan_System_Char__Cosmos_Kernel_System_FileSystem_MountFlags_System_String_Cosmos_Kernel_System_FileSystem_VfsMount__">TryMount(string, ReadOnlySpan&lt;char&gt;, MountFlags, string, out VfsMount?)</a>
+was given, plus <a class="xref" href="Cosmos.Kernel.System.FileSystem.MountFlags.html#Cosmos_Kernel_System_FileSystem_MountFlags_ReadOnly">ReadOnly</a> when the superblock
+reports <a class="xref" href="Cosmos.Kernel.System.FileSystem.IVfsSuperblock.html#Cosmos_Kernel_System_FileSystem_IVfsSuperblock_IsReadOnly">IsReadOnly</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MountFlags Flags { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Valeur de la propri&#233;t&#233;</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Cosmos.Kernel.System.FileSystem.MountFlags.html">MountFlags</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Cosmos_Kernel_System_FileSystem_VfsMount_IsReadOnly_" data-uid="Cosmos.Kernel.System.FileSystem.VfsMount.IsReadOnly*"></a>
+
+  <h3 id="Cosmos_Kernel_System_FileSystem_VfsMount_IsReadOnly" data-uid="Cosmos.Kernel.System.FileSystem.VfsMount.IsReadOnly">
+  IsReadOnly
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>True when nothing under this mount can be created, written, renamed,
+removed or have its attributes changed: the mount was made with
+<a class="xref" href="Cosmos.Kernel.System.FileSystem.MountFlags.html#Cosmos_Kernel_System_FileSystem_MountFlags_ReadOnly">ReadOnly</a>, or the volume itself cannot be
+written. <code>System.IO</code> reports such a mutation as
+<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.io.ioexception">IOException</a> (&quot;Read-only file system&quot;).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsReadOnly { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Valeur de la propri&#233;t&#233;</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Cosmos_Kernel_System_FileSystem_VfsMount_MountPoint_" data-uid="Cosmos.Kernel.System.FileSystem.VfsMount.MountPoint*"></a>
 
   <h3 id="Cosmos_Kernel_System_FileSystem_VfsMount_MountPoint" data-uid="Cosmos.Kernel.System.FileSystem.VfsMount.MountPoint">

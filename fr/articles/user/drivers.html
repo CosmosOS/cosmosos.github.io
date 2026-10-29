@@ -1261,14 +1261,14 @@ public void OnInterrupt(InterruptContext context)
 <tr>
 <th>Pilote</th>
 <th>Matériel</th>
-<th>Noms de disque</th>
+<th>Noms de périphérique</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>AhciDriver</code></td>
-<td>Contrôleurs SATA en mode AHCI (disques uniquement, pas de CD-ROM)</td>
-<td><code>sata&lt;n&gt;</code></td>
+<td>Contrôleurs SATA en mode AHCI : disques, et lecteurs de CD-ROM ou de DVD (ATAPI), en lecture seule</td>
+<td><code>sata&lt;n&gt;</code>, <code>cdrom&lt;n&gt;</code></td>
 </tr>
 <tr>
 <td><code>NvmeDriver</code></td>
@@ -1283,6 +1283,7 @@ public void OnInterrupt(InterruptContext context)
 </tbody>
 </table>
 <p>Un espace de noms NVMe est l'un des disques qu'expose un contrôleur, d'où le second nombre dans le nom d'un disque NVMe. Une clé USB est prise en charge par <code>UsbMassStorageDriver</code> (<a href="#the-usb-class-drivers">Les pilotes de classe USB</a>). Chaque disque est enregistré auprès de <code>StorageManager</code> quand il est publié.</p>
+<p>Un lecteur de CD-ROM est publié de la même façon, comme un périphérique bloc à secteurs de 2048 octets dont <code>WriteBlock</code> lève <code>IOException</code> et dont <code>Flush</code> n'a rien à faire, et il dit ce qu'il est par une seconde interface sur le même objet, <code>IRemovableMedia</code> : <code>IsReadOnly</code>, <code>IsRemovable</code> et <code>HasMedia</code>, trouvée par un test de type comme <code>IHardwareCursor</code> l'est sur un affichage ; le kit appelle une telle interface une facette. <code>AhciDriver</code> ne met un lecteur en service que lorsqu'un disque s'y trouve et que le lecteur le déclare prêt, si bien que <code>HasMedia</code> est vrai pour chaque lecteur qu'il publie ; un lecteur sans disque est journalisé et ignoré, parce que le pilote ne guette pas un disque inséré plus tard et qu'un lecteur publié vide resterait vide pour le noyau. Le gestionnaire de stockage lit cette facette pour porter le disque comme une seule partition couvrant tout le support sans le scanner à la recherche d'une table, puisqu'un support en lecture seule n'en porte aucune qu'un noyau pourrait écrire et que le MBR protecteur d'une ISO compte en unités de 512 octets qu'un périphérique à secteurs de 2048 octets lirait de travers, et pour garder le lecteur après tous les disques inscriptibles dans son ordre, si bien que <code>StorageManager.PrimaryDevice</code> n'est le CD que sur une machine sans disque. Le pilote ISO 9660 le monte (<a href="filesystem.html#read-a-cd-rom-or-an-iso-image">Lire un CD-ROM ou une image ISO</a>).</p>
 <p><a id="the-audio-driver"></a></p>
 <h3 id="le-pilote-audio">Le pilote audio</h3>
 <p><code>HdAudioDriver</code> se lie à tout contrôleur PCI qui annonce l'interface de programmation HD Audio, en établissant la correspondance par classe plutôt que par identifiant de périphérique, car la spécification fixe la disposition des registres, et publie une sortie audio auprès d'<code>AudioManager</code> (<a href="audio.html">Audio</a>). Il n'est enregistré que si <code>CosmosEnableAudio</code> est activé.</p>

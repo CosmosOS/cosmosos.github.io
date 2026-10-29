@@ -1262,14 +1262,14 @@ public void OnInterrupt(InterruptContext context)
 <tr>
 <th>驱动程序</th>
 <th>硬件</th>
-<th>磁盘名称</th>
+<th>设备名称</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>AhciDriver</code></td>
-<td>AHCI 模式下的 SATA 控制器（仅限磁盘，不支持 CD-ROM）</td>
-<td><code>sata&lt;n&gt;</code></td>
+<td>AHCI 模式下的 SATA 控制器：磁盘，以及 CD-ROM 或 DVD 驱动器（ATAPI），只读</td>
+<td><code>sata&lt;n&gt;</code>、<code>cdrom&lt;n&gt;</code></td>
 </tr>
 <tr>
 <td><code>NvmeDriver</code></td>
@@ -1284,6 +1284,7 @@ public void OnInterrupt(InterruptContext context)
 </tbody>
 </table>
 <p>NVMe 命名空间是控制器公开的磁盘之一，这就是 NVMe 磁盘名称中第二个数字的由来。U 盘由 <code>UsbMassStorageDriver</code> 处理（<a href="#the-usb-class-drivers">USB 类驱动程序</a>）。每个磁盘在发布时都会注册到 <code>StorageManager</code>。</p>
+<p>CD-ROM 驱动器以同样的方式发布，作为一个 2048 字节扇区的块设备，其 <code>WriteBlock</code> 会抛出 <code>IOException</code>，<code>Flush</code> 则无事可做；它通过同一对象上的第二个接口 <code>IRemovableMedia</code> 表明自己是什么：<code>IsReadOnly</code>、<code>IsRemovable</code> 和 <code>HasMedia</code>，像显示器上的 <code>IHardwareCursor</code> 一样通过类型测试找到，工具包把这样的接口称为侧面。<code>AhciDriver</code> 只在驱动器中有光盘且驱动器报告就绪时才启用它，因此它发布的每个驱动器的 <code>HasMedia</code> 都为真；没有光盘的驱动器会被记录日志并跳过，因为该驱动程序不会监视之后插入的光盘，一个空着发布的驱动器对内核来说会一直是空的。存储管理器读取这个侧面，把光盘作为一个覆盖整个介质的分区来承载而不扫描分区表，因为只读介质上没有内核可以写入的分区表，而 ISO 的保护性 MBR 以 512 字节为单位计数，2048 字节扇区的设备会读错；并在其排序中把驱动器放在所有可写磁盘之后，因此只有在没有磁盘的机器上 <code>StorageManager.PrimaryDevice</code> 才是 CD。ISO 9660 驱动程序负责挂载它（<a href="filesystem.html#read-a-cd-rom-or-an-iso-image">读取 CD-ROM 或 ISO 镜像</a>）。</p>
 <p><a id="the-audio-driver"></a></p>
 <h3 id="音频驱动程序">音频驱动程序</h3>
 <p><code>HdAudioDriver</code> 绑定任何报告 HD Audio 编程接口的 PCI 控制器，它按类别而不是按设备 ID 匹配，因为该规范固定了寄存器布局；它向 <code>AudioManager</code> 发布一个音频输出（<a href="audio.html">音频</a>）。只有当 <code>CosmosEnableAudio</code> 打开时，它才会被注册。</p>

@@ -1873,6 +1873,51 @@ references:
   isSpec: "True"
   fullName: Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice.WriteBlock
   nameWithType: IBlockDevice.WriteBlock
+- uid: Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia
+  name: IRemovableMedia
+  href: api/Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.html
+  commentId: T:Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia
+  fullName: Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia
+  nameWithType: IRemovableMedia
+- uid: Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.HasMedia
+  name: HasMedia
+  href: api/Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.html#Cosmos_Kernel_HAL_Devices_Storage_IRemovableMedia_HasMedia
+  commentId: P:Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.HasMedia
+  fullName: Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.HasMedia
+  nameWithType: IRemovableMedia.HasMedia
+- uid: Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.HasMedia*
+  name: HasMedia
+  href: api/Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.html#Cosmos_Kernel_HAL_Devices_Storage_IRemovableMedia_HasMedia_
+  commentId: Overload:Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.HasMedia
+  isSpec: "True"
+  fullName: Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.HasMedia
+  nameWithType: IRemovableMedia.HasMedia
+- uid: Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.IsReadOnly
+  name: IsReadOnly
+  href: api/Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.html#Cosmos_Kernel_HAL_Devices_Storage_IRemovableMedia_IsReadOnly
+  commentId: P:Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.IsReadOnly
+  fullName: Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.IsReadOnly
+  nameWithType: IRemovableMedia.IsReadOnly
+- uid: Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.IsReadOnly*
+  name: IsReadOnly
+  href: api/Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.html#Cosmos_Kernel_HAL_Devices_Storage_IRemovableMedia_IsReadOnly_
+  commentId: Overload:Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.IsReadOnly
+  isSpec: "True"
+  fullName: Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.IsReadOnly
+  nameWithType: IRemovableMedia.IsReadOnly
+- uid: Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.IsRemovable
+  name: IsRemovable
+  href: api/Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.html#Cosmos_Kernel_HAL_Devices_Storage_IRemovableMedia_IsRemovable
+  commentId: P:Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.IsRemovable
+  fullName: Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.IsRemovable
+  nameWithType: IRemovableMedia.IsRemovable
+- uid: Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.IsRemovable*
+  name: IsRemovable
+  href: api/Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.html#Cosmos_Kernel_HAL_Devices_Storage_IRemovableMedia_IsRemovable_
+  commentId: Overload:Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.IsRemovable
+  isSpec: "True"
+  fullName: Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.IsRemovable
+  nameWithType: IRemovableMedia.IsRemovable
 - uid: Cosmos.Kernel.HAL.DriverKit
   name: Cosmos.Kernel.HAL.DriverKit
   href: api/Cosmos.Kernel.HAL.DriverKit.html
@@ -12488,6 +12533,19 @@ references:
   isSpec: "True"
   fullName: Cosmos.Kernel.System.FileSystem.IVfsSuperblock.BlockSize
   nameWithType: IVfsSuperblock.BlockSize
+- uid: Cosmos.Kernel.System.FileSystem.IVfsSuperblock.IsReadOnly
+  name: IsReadOnly
+  href: api/Cosmos.Kernel.System.FileSystem.IVfsSuperblock.html#Cosmos_Kernel_System_FileSystem_IVfsSuperblock_IsReadOnly
+  commentId: P:Cosmos.Kernel.System.FileSystem.IVfsSuperblock.IsReadOnly
+  fullName: Cosmos.Kernel.System.FileSystem.IVfsSuperblock.IsReadOnly
+  nameWithType: IVfsSuperblock.IsReadOnly
+- uid: Cosmos.Kernel.System.FileSystem.IVfsSuperblock.IsReadOnly*
+  name: IsReadOnly
+  href: api/Cosmos.Kernel.System.FileSystem.IVfsSuperblock.html#Cosmos_Kernel_System_FileSystem_IVfsSuperblock_IsReadOnly_
+  commentId: Overload:Cosmos.Kernel.System.FileSystem.IVfsSuperblock.IsReadOnly
+  isSpec: "True"
+  fullName: Cosmos.Kernel.System.FileSystem.IVfsSuperblock.IsReadOnly
+  nameWithType: IVfsSuperblock.IsReadOnly
 - uid: Cosmos.Kernel.System.FileSystem.IVfsSuperblock.MaxNameLength
   name: MaxNameLength
   href: api/Cosmos.Kernel.System.FileSystem.IVfsSuperblock.html#Cosmos_Kernel_System_FileSystem_IVfsSuperblock_MaxNameLength
@@ -12527,6 +12585,94 @@ references:
   isSpec: "True"
   fullName: Cosmos.Kernel.System.FileSystem.IVfsSuperblock.SuperOperations
   nameWithType: IVfsSuperblock.SuperOperations
+- uid: Cosmos.Kernel.System.FileSystem.Iso9660
+  name: Cosmos.Kernel.System.FileSystem.Iso9660
+  href: api/Cosmos.Kernel.System.FileSystem.Iso9660.html
+  commentId: N:Cosmos.Kernel.System.FileSystem.Iso9660
+  fullName: Cosmos.Kernel.System.FileSystem.Iso9660
+  nameWithType: Cosmos.Kernel.System.FileSystem.Iso9660
+- uid: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType
+  name: Iso9660FileSystemType
+  href: api/Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.html
+  commentId: T:Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType
+  fullName: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType
+  nameWithType: Iso9660FileSystemType
+- uid: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.#ctor
+  name: Iso9660FileSystemType()
+  href: api/Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.html#Cosmos_Kernel_System_FileSystem_Iso9660_Iso9660FileSystemType__ctor
+  commentId: M:Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.#ctor
+  name.vb: New()
+  fullName: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.Iso9660FileSystemType()
+  fullName.vb: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.New()
+  nameWithType: Iso9660FileSystemType.Iso9660FileSystemType()
+  nameWithType.vb: Iso9660FileSystemType.New()
+- uid: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.#ctor(Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice)
+  name: Iso9660FileSystemType(IBlockDevice)
+  href: api/Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.html#Cosmos_Kernel_System_FileSystem_Iso9660_Iso9660FileSystemType__ctor_Cosmos_Kernel_HAL_Devices_Storage_IBlockDevice_
+  commentId: M:Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.#ctor(Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice)
+  name.vb: New(IBlockDevice)
+  fullName: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.Iso9660FileSystemType(Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice)
+  fullName.vb: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.New(Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice)
+  nameWithType: Iso9660FileSystemType.Iso9660FileSystemType(IBlockDevice)
+  nameWithType.vb: Iso9660FileSystemType.New(IBlockDevice)
+- uid: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.#ctor*
+  name: Iso9660FileSystemType
+  href: api/Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.html#Cosmos_Kernel_System_FileSystem_Iso9660_Iso9660FileSystemType__ctor_
+  commentId: Overload:Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.Iso9660FileSystemType
+  fullName.vb: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.New
+  nameWithType: Iso9660FileSystemType.Iso9660FileSystemType
+  nameWithType.vb: Iso9660FileSystemType.New
+- uid: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.TryDestroy(System.ReadOnlySpan{System.Char})
+  name: TryDestroy(ReadOnlySpan<char>)
+  href: api/Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.html#Cosmos_Kernel_System_FileSystem_Iso9660_Iso9660FileSystemType_TryDestroy_System_ReadOnlySpan_System_Char__
+  commentId: M:Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.TryDestroy(System.ReadOnlySpan{System.Char})
+  name.vb: TryDestroy(ReadOnlySpan(Of Char))
+  fullName: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.TryDestroy(System.ReadOnlySpan<char>)
+  fullName.vb: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.TryDestroy(System.ReadOnlySpan(Of Char))
+  nameWithType: Iso9660FileSystemType.TryDestroy(ReadOnlySpan<char>)
+  nameWithType.vb: Iso9660FileSystemType.TryDestroy(ReadOnlySpan(Of Char))
+- uid: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.TryDestroy*
+  name: TryDestroy
+  href: api/Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.html#Cosmos_Kernel_System_FileSystem_Iso9660_Iso9660FileSystemType_TryDestroy_
+  commentId: Overload:Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.TryDestroy
+  isSpec: "True"
+  fullName: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.TryDestroy
+  nameWithType: Iso9660FileSystemType.TryDestroy
+- uid: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.TryFormat(System.ReadOnlySpan{System.Char},Cosmos.Kernel.System.FileSystem.IVfsFormatOptions)
+  name: TryFormat(ReadOnlySpan<char>, IVfsFormatOptions?)
+  href: api/Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.html#Cosmos_Kernel_System_FileSystem_Iso9660_Iso9660FileSystemType_TryFormat_System_ReadOnlySpan_System_Char__Cosmos_Kernel_System_FileSystem_IVfsFormatOptions_
+  commentId: M:Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.TryFormat(System.ReadOnlySpan{System.Char},Cosmos.Kernel.System.FileSystem.IVfsFormatOptions)
+  name.vb: TryFormat(ReadOnlySpan(Of Char), IVfsFormatOptions)
+  fullName: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.TryFormat(System.ReadOnlySpan<char>, Cosmos.Kernel.System.FileSystem.IVfsFormatOptions?)
+  fullName.vb: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.TryFormat(System.ReadOnlySpan(Of Char), Cosmos.Kernel.System.FileSystem.IVfsFormatOptions)
+  nameWithType: Iso9660FileSystemType.TryFormat(ReadOnlySpan<char>, IVfsFormatOptions?)
+  nameWithType.vb: Iso9660FileSystemType.TryFormat(ReadOnlySpan(Of Char), IVfsFormatOptions)
+- uid: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.TryFormat*
+  name: TryFormat
+  href: api/Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.html#Cosmos_Kernel_System_FileSystem_Iso9660_Iso9660FileSystemType_TryFormat_
+  commentId: Overload:Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.TryFormat
+  isSpec: "True"
+  fullName: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.TryFormat
+  nameWithType: Iso9660FileSystemType.TryFormat
+- uid: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.TryMount(System.ReadOnlySpan{System.Char},Cosmos.Kernel.System.FileSystem.MountFlags,Cosmos.Kernel.System.FileSystem.IVfsSuperblock@)
+  name: TryMount(ReadOnlySpan<char>, MountFlags, out IVfsSuperblock?)
+  href: api/Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.html#Cosmos_Kernel_System_FileSystem_Iso9660_Iso9660FileSystemType_TryMount_System_ReadOnlySpan_System_Char__Cosmos_Kernel_System_FileSystem_MountFlags_Cosmos_Kernel_System_FileSystem_IVfsSuperblock__
+  commentId: M:Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.TryMount(System.ReadOnlySpan{System.Char},Cosmos.Kernel.System.FileSystem.MountFlags,Cosmos.Kernel.System.FileSystem.IVfsSuperblock@)
+  name.vb: TryMount(ReadOnlySpan(Of Char), MountFlags, IVfsSuperblock)
+  fullName: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.TryMount(System.ReadOnlySpan<char>, Cosmos.Kernel.System.FileSystem.MountFlags, out Cosmos.Kernel.System.FileSystem.IVfsSuperblock?)
+  fullName.vb: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.TryMount(System.ReadOnlySpan(Of Char), Cosmos.Kernel.System.FileSystem.MountFlags, Cosmos.Kernel.System.FileSystem.IVfsSuperblock)
+  nameWithType: Iso9660FileSystemType.TryMount(ReadOnlySpan<char>, MountFlags, out IVfsSuperblock?)
+  nameWithType.vb: Iso9660FileSystemType.TryMount(ReadOnlySpan(Of Char), MountFlags, IVfsSuperblock)
+- uid: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.TryMount*
+  name: TryMount
+  href: api/Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.html#Cosmos_Kernel_System_FileSystem_Iso9660_Iso9660FileSystemType_TryMount_
+  commentId: Overload:Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.TryMount
+  isSpec: "True"
+  fullName: Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.TryMount
+  nameWithType: Iso9660FileSystemType.TryMount
 - uid: Cosmos.Kernel.System.FileSystem.MountFlags
   name: MountFlags
   href: api/Cosmos.Kernel.System.FileSystem.MountFlags.html
@@ -13056,6 +13202,32 @@ references:
   commentId: T:Cosmos.Kernel.System.FileSystem.VfsMount
   fullName: Cosmos.Kernel.System.FileSystem.VfsMount
   nameWithType: VfsMount
+- uid: Cosmos.Kernel.System.FileSystem.VfsMount.Flags
+  name: Flags
+  href: api/Cosmos.Kernel.System.FileSystem.VfsMount.html#Cosmos_Kernel_System_FileSystem_VfsMount_Flags
+  commentId: P:Cosmos.Kernel.System.FileSystem.VfsMount.Flags
+  fullName: Cosmos.Kernel.System.FileSystem.VfsMount.Flags
+  nameWithType: VfsMount.Flags
+- uid: Cosmos.Kernel.System.FileSystem.VfsMount.Flags*
+  name: Flags
+  href: api/Cosmos.Kernel.System.FileSystem.VfsMount.html#Cosmos_Kernel_System_FileSystem_VfsMount_Flags_
+  commentId: Overload:Cosmos.Kernel.System.FileSystem.VfsMount.Flags
+  isSpec: "True"
+  fullName: Cosmos.Kernel.System.FileSystem.VfsMount.Flags
+  nameWithType: VfsMount.Flags
+- uid: Cosmos.Kernel.System.FileSystem.VfsMount.IsReadOnly
+  name: IsReadOnly
+  href: api/Cosmos.Kernel.System.FileSystem.VfsMount.html#Cosmos_Kernel_System_FileSystem_VfsMount_IsReadOnly
+  commentId: P:Cosmos.Kernel.System.FileSystem.VfsMount.IsReadOnly
+  fullName: Cosmos.Kernel.System.FileSystem.VfsMount.IsReadOnly
+  nameWithType: VfsMount.IsReadOnly
+- uid: Cosmos.Kernel.System.FileSystem.VfsMount.IsReadOnly*
+  name: IsReadOnly
+  href: api/Cosmos.Kernel.System.FileSystem.VfsMount.html#Cosmos_Kernel_System_FileSystem_VfsMount_IsReadOnly_
+  commentId: Overload:Cosmos.Kernel.System.FileSystem.VfsMount.IsReadOnly
+  isSpec: "True"
+  fullName: Cosmos.Kernel.System.FileSystem.VfsMount.IsReadOnly
+  nameWithType: VfsMount.IsReadOnly
 - uid: Cosmos.Kernel.System.FileSystem.VfsMount.MountPoint
   name: MountPoint
   href: api/Cosmos.Kernel.System.FileSystem.VfsMount.html#Cosmos_Kernel_System_FileSystem_VfsMount_MountPoint

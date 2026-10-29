@@ -121,8 +121,13 @@ Unlike Gen2, where you talked to <code>CosmosVFS</code> and a plugged subset of 
 </tr>
 <tr>
 <td>Filesystems</td>
-<td>FAT32 (FAT12/16 partial)</td>
-<td>FAT12/16/32</td>
+<td>FAT32 (FAT12/16 partial), ISO 9660</td>
+<td>FAT12/16/32, ext2, ISO 9660 with Rock Ridge (read-only)</td>
+</tr>
+<tr>
+<td>Files on the ISO</td>
+<td>An <code>isoFiles</code> folder in the project</td>
+<td>The same <code>isoFiles</code> folder, plus <code>CosmosIsoFile</code> items (<a href="#ship-files-on-the-boot-iso">Ship files on the boot ISO</a>)</td>
 </tr>
 </tbody>
 </table>
@@ -157,7 +162,7 @@ using Cosmos.Kernel.System.FileSystem;
 using Cosmos.Kernel.System.FileSystem.Fat;
 using Cosmos.Kernel.System.Storage;
 </code></pre>
-<p><code>Cosmos.Kernel.System.FileSystem</code> holds the whole VFS in one namespace: the manager and what it hands out (<code>VfsManager</code>, <code>VfsMount</code>, <code>IVfsNodeHandle</code>, <code>IVfsFileHandle</code> and <code>IVfsDirectoryHandle</code>), the contracts a filesystem driver implements (<code>IVfsFileSystemType</code>, <code>IVfsSuperblock</code>, <code>IVfsInode</code>, <code>IVfsOpenFile</code> and their operations interfaces), and the flag, mode and metadata types every mount, create and stat call names (<code>MountFlags</code>, <code>VfsMode</code>, <code>VfsStat</code>, <code>VfsStatFs</code>, <code>SetAttrFlags</code>, <code>SeekWhence</code>, <code>VfsTimespec</code>). That is why <code>MountFlags.None</code> appears in a kernel's <code>BeforeRun()</code> under the same <code>using</code> as <code>VfsManager</code>, and why the <code>IVfsInode</code> that <code>IVfsNodeHandle.Inode</code> gives you needs no other <code>using</code>. Filesystem drivers sit one level down, a namespace each: the FAT driver's <code>FatFileSystemType</code> and <code>FatFormatOptions</code> are in <code>Cosmos.Kernel.System.FileSystem.Fat</code>.</p>
+<p><code>Cosmos.Kernel.System.FileSystem</code> holds the whole VFS in one namespace: the manager and what it hands out (<code>VfsManager</code>, <code>VfsMount</code>, <code>IVfsNodeHandle</code>, <code>IVfsFileHandle</code> and <code>IVfsDirectoryHandle</code>), the contracts a filesystem driver implements (<code>IVfsFileSystemType</code>, <code>IVfsSuperblock</code>, <code>IVfsInode</code>, <code>IVfsOpenFile</code> and their operations interfaces), and the flag, mode and metadata types every mount, create and stat call names (<code>MountFlags</code>, <code>VfsMode</code>, <code>VfsStat</code>, <code>VfsStatFs</code>, <code>SetAttrFlags</code>, <code>SeekWhence</code>, <code>VfsTimespec</code>). That is why <code>MountFlags.None</code> appears in a kernel's <code>BeforeRun()</code> under the same <code>using</code> as <code>VfsManager</code>, and why the <code>IVfsInode</code> that <code>IVfsNodeHandle.Inode</code> gives you needs no other <code>using</code>. Filesystem drivers sit one level down, a namespace each: the FAT driver's <code>FatFileSystemType</code> and <code>FatFormatOptions</code> are in <code>Cosmos.Kernel.System.FileSystem.Fat</code>, the ext2 driver's <code>Ext2FileSystemType</code> in <code>Cosmos.Kernel.System.FileSystem.Ext2</code>, and the ISO 9660 driver's <code>Iso9660FileSystemType</code> in <code>Cosmos.Kernel.System.FileSystem.Iso9660</code>.</p>
 <p><code>Cosmos.Kernel.HAL.Devices.Storage</code> is needed only by the RAM-disk snippet further down, which implements <code>IBlockDevice</code>. Drop that and mounting a real partition takes the three <code>Cosmos.Kernel.System</code> ones.</p>
 <p>First, register a FAT driver under a name of your choice, then mount a partition at a mount point. Add this to your kernel's <code>BeforeRun()</code>:</p>
 <pre><code class="lang-csharp">FatFileSystemType fat = new();
@@ -225,6 +230,95 @@ if (!VfsManager.RegisterFileSystem(&quot;ramfat&quot;, fat)
     return;
 }
 </code></pre>
+<h3 id="read-a-cd-rom-or-an-iso-image">Read a CD-ROM or an ISO image</h3>
+<p><code>Iso9660FileSystemType</code>, in <code>Cosmos.Kernel.System.FileSystem.Iso9660</code>, reads the format of CD-ROMs and of the <code>.iso</code> images every CD tool and <code>cosmos build</code> produce: ISO 9660 with the Rock Ridge extension, which is what gives a volume its POSIX names (<code>hello.txt</code> rather than <code>HELLO.TXT;1</code>), its permissions, its time stamps and its symbolic links. A volume without Rock Ridge presents its plain identifiers without the version (<code>README</code>, <code>FILE.TXT</code>), matched without regard to case; a Joliet directory tree is ignored. The driver takes the same two sources as the others: a partition index, or an injected <code>IBlockDevice</code>, in any sector size, so the same image mounts from a CD (2048-byte sectors), from a USB stick it was written to (512-byte sectors), or from RAM:</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.System.FileSystem.Iso9660;
+
+Iso9660FileSystemType iso = new(cdrom);   // any IBlockDevice holding an ISO 9660 volume
+
+if (!VfsManager.RegisterFileSystem(&quot;iso&quot;, iso)
+    || !VfsManager.TryMount(&quot;iso&quot;, &quot;&quot;, MountFlags.None, &quot;/cd&quot;, out VfsMount? cd))
+{
+    Console.WriteLine(&quot;No ISO 9660 volume there.&quot;);
+    return;
+}
+
+Console.WriteLine(cd.IsReadOnly);                       // True
+foreach (string path in Directory.GetFiles(&quot;/cd/docs&quot;))
+{
+    Console.WriteLine(path + &quot;: &quot; + new FileInfo(path).Length + &quot; bytes&quot;);
+}
+string text = File.ReadAllText(&quot;/cd/hello.txt&quot;);
+</code></pre>
+<p><code>cdrom</code> is any <code>IBlockDevice</code> holding a volume. When the drive the kernel booted from sits behind a SATA controller in AHCI mode, it is one of <code>StorageManager.Devices</code>, the entry whose medium is read-only: a CD-ROM drive implements <code>IRemovableMedia</code> beside <code>IBlockDevice</code>, a driver kit seam type (<code>[Experimental(&quot;COSMOS0003&quot;)]</code>, so a kernel project that tests for it acknowledges the id with <code>&lt;NoWarn&gt;$(NoWarn);COSMOS0003&lt;/NoWarn&gt;</code>), with <code>IsReadOnly</code>, <code>IsRemovable</code> and <code>HasMedia</code>. Finding it is one loop over the list:</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.HAL.Devices.Storage;   // IBlockDevice, IRemovableMedia
+using Cosmos.Kernel.System.Storage;        // StorageManager
+
+IBlockDevice? cdrom = null;
+foreach (IBlockDevice device in StorageManager.Devices)
+{
+    if (device is IRemovableMedia { IsReadOnly: true })
+    {
+        cdrom = device;
+        break;
+    }
+}
+</code></pre>
+<p>The storage manager carries such a medium as one partition spanning the whole disc and never scans it for a partition table, since a read-only medium carries none a kernel could write and an ISO's protective MBR counts in 512-byte units that a 2048-byte-sector device would misread. It orders the medium after every writable disk, so <code>StorageManager.PrimaryDevice</code> stays a disk a kernel can format while one is attached and becomes the CD on a machine that has nothing else. A partition an image was written to, or a <code>MemoryBlockDevice</code> over the image's bytes, mounts the same way.</p>
+<p>The volume is read-only, and the VFS knows it: <code>VfsMount.IsReadOnly</code> is true and <code>VfsMount.Flags</code> carries <code>MountFlags.ReadOnly</code> whatever flags you mounted with, <code>FileInfo.IsReadOnly</code> is true for every file, and every mutation under the mount point fails the way it does on Linux, with a plain <code>IOException</code> (&quot;Read-only file system&quot;) rather than a not-found exception:</p>
+<table>
+<thead>
+<tr>
+<th>Call</th>
+<th>Result on an ISO 9660 mount</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>File.ReadAllText</code>, <code>File.ReadAllBytes</code>, <code>FileStream</code> opened for reading, <code>StreamReader</code>, <code>Directory.GetFiles</code>, <code>FileInfo</code></td>
+<td>Works</td>
+</tr>
+<tr>
+<td><code>File.Create</code>, <code>File.WriteAllText</code>, <code>File.AppendAllText</code>, <code>FileStream</code> opened for writing, <code>FileMode.Truncate</code></td>
+<td><code>IOException</code></td>
+</tr>
+<tr>
+<td><code>File.Delete</code>, <code>File.Move</code>, <code>File.Copy</code> onto the mount, <code>File.SetAttributes</code></td>
+<td><code>IOException</code></td>
+</tr>
+<tr>
+<td><code>Directory.CreateDirectory</code>, <code>Directory.Delete</code>, <code>Directory.Move</code></td>
+<td><code>IOException</code></td>
+</tr>
+<tr>
+<td><code>VfsManager.TryCreateFile</code>, <code>TryCreateDirectory</code>, <code>TryUnlink</code>, <code>TryRemoveDirectory</code>, <code>TryRename</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>VfsManager.TryFormat</code>, <code>TryDestroy</code></td>
+<td><code>false</code>: the driver writes no volume</td>
+</tr>
+</tbody>
+</table>
+<p>The same refusals apply to any driver when you mount with <code>MountFlags.ReadOnly</code>: a FAT partition mounted that way takes no writes through that mount point, while the same partition mounted elsewhere without the flag still does.</p>
+<p>What the driver does not read: a Joliet-only volume's long names (it presents the plain identifiers), a file past 4 GiB split over several extents (it is not listed), the later sessions of a multi-session disc, UDF, and El Torito, whose boot catalog is just a file. A SATA controller in AHCI mode is where QEMU's q35 machine puts its CD drive, and where VMware puts it when the virtual drive sits on the SATA controller rather than the IDE one; there the kit's <code>AhciDriver</code> publishes the drive as <code>cdrom&lt;n&gt;</code> (<a href="drivers.html#the-storage-drivers">The storage drivers</a>). A drive behind a USB, virtio-scsi or IDE controller is not a block device yet, so a kernel booted from one reads an image instead: from RAM, from a disk partition, or from a USB stick the image was written to.</p>
+<h3 id="ship-files-on-the-boot-iso">Ship files on the boot ISO</h3>
+<p>The ISO <code>cosmos build</code> produces holds the kernel and Limine under <code>/boot</code> and <code>/EFI</code>. A kernel ships its own files beside them as it did in Gen2: whatever sits in an <code>isoFiles</code> folder next to the kernel's <code>.csproj</code> goes to the root of the ISO with its folders, so <code>isoFiles/data/config.txt</code> is <code>/data/config.txt</code> on the disc. A file that lives elsewhere, or that should go under another name, is a <code>CosmosIsoFile</code> item in the <code>.csproj</code>, whose <code>IsoPath</code> metadata is its path on the ISO. An <code>IsoPath</code> ending in <code>/</code> names a folder and keeps the file's name, and a file without one goes to the root:</p>
+<pre><code class="lang-xml">&lt;ItemGroup&gt;
+  &lt;CosmosIsoFile Include=&quot;../assets/logo.bmp&quot; IsoPath=&quot;images/logo.bmp&quot; /&gt;
+  &lt;CosmosIsoFile Include=&quot;../assets/readme.txt&quot; IsoPath=&quot;docs/&quot; /&gt;
+&lt;/ItemGroup&gt;
+</code></pre>
+<p>The <code>CosmosIsoFilesDirectory</code> property points the folder elsewhere. What the folder holds is left out of the compilation, so a <code>.cs</code> file there is shipped rather than built into the kernel. The build fails on a file that would land under <code>/boot</code> or <code>/EFI</code>, since those hold the kernel and the bootloader the SDK writes; on a path with a <code>.</code> or <code>..</code> segment, since <code>..</code> could leave the root; and on two files with one path, compared without case, since on a Windows host the second copy would overwrite the first. The ISO's build cache covers the files and their paths, so adding, changing, renaming or removing one rebuilds the ISO without compiling the kernel again.</p>
+<p>The names on the disc are Rock Ridge names, case and spaces kept, and the kernel reads them once it has mounted the boot CD, found as above:</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.System.FileSystem;           // VfsManager, MountFlags
+using Cosmos.Kernel.System.FileSystem.Iso9660;   // Iso9660FileSystemType
+
+VfsManager.RegisterFileSystem(&quot;bootcd&quot;, new Iso9660FileSystemType(cdrom));
+VfsManager.TryMount(&quot;bootcd&quot;, &quot;&quot;, MountFlags.None, &quot;/cdrom&quot;, out _);
+string config = File.ReadAllText(&quot;/cdrom/data/config.txt&quot;);
+</code></pre>
+<p>That read needs the boot drive to be a block device, which it is behind an AHCI controller. Where it is not, on an arm64 machine booting from virtio-scsi for one, the files are on the disc but the kernel cannot reach them yet.</p>
 <h2 id="partition-a-disk">Partition a disk</h2>
 <p>Formatting needs a partition to format. <code>StorageManager.Partitions</code> lists the ones already on the disks the kernel found at boot; when there are none, or you want a different layout, <code>Gpt</code>, <code>Mbr</code> and <code>PartitionManager</code> write the partition table itself. They all take an <code>IBlockDevice</code>, which <code>StorageManager.PrimaryDevice</code> hands you.</p>
 <p>Start by asking what scheme the disk already carries:</p>
@@ -471,19 +565,21 @@ Directory.SetCurrentDirectory(&quot;/&quot;);
 <li>Opening a missing file whose parent exists → <code>FileNotFoundException</code></li>
 <li>Any path under a missing directory (or an unmounted prefix) → <code>DirectoryNotFoundException</code></li>
 <li>Creating a file directly in the virtual root <code>/</code> → <code>IOException</code> (read-only file system)</li>
+<li>Any mutation under a read-only mount (an ISO 9660 volume, or a mount made with <code>MountFlags.ReadOnly</code>) → <code>IOException</code> (read-only file system)</li>
 <li>Deleting a non-empty directory without <code>recursive: true</code> → <code>IOException</code></li>
 <li><code>File.Copy</code>/<code>File.Move</code> onto an existing file without overwrite → <code>IOException</code></li>
 </ul>
 <p>With <strong>nothing mounted at all</strong>, <code>System.IO</code> still degrades gracefully: <code>Directory.Exists(&quot;/&quot;)</code> is <code>true</code>, enumerating <code>/</code> returns an empty list, and every access to another path fails with one of the exceptions above, never a kernel fault.</p>
 <h2 id="current-limitations">Current limitations</h2>
 <ul>
-<li>Symbolic links and hard links are not supported (<code>ENOTSUP</code>/<code>EPERM</code> under the hood; the BCL surfaces <code>IOException</code>).</li>
+<li>Symbolic links cannot be created, and hard links are not supported (<code>ENOTSUP</code>/<code>EPERM</code> under the hood; the BCL surfaces <code>IOException</code>). The ext2 and ISO 9660 drivers resolve the symbolic links their volumes hold.</li>
 <li>File timestamps are not persisted yet (<code>File.SetLastWriteTime</code> is accepted but a FAT timestamp lands later).</li>
 <li><code>DriveInfo</code> is not wired up yet; use <code>VfsManager.TryStatFs</code> for free-space queries.</li>
-<li>FAT is the only filesystem driver the kernel suites cover; an ext2 driver, <code>Ext2FileSystemType</code> in <code>Cosmos.Kernel.System.FileSystem.Ext2</code>, ships beside it and is tested on the host only. The <code>IVfsFileSystemType</code> interface is what a new driver implements.</li>
+<li>FAT and ISO 9660 are the filesystem drivers the kernel suites cover; the ext2 driver, <code>Ext2FileSystemType</code> in <code>Cosmos.Kernel.System.FileSystem.Ext2</code>, ships beside them and is tested on the host only. The <code>IVfsFileSystemType</code> interface is what a new driver implements.</li>
+<li>The ISO 9660 driver reads a CD-ROM drive behind an AHCI controller, images, and the volumes images were written to; a drive behind a USB, virtio-scsi or IDE controller is not a block device yet.</li>
 </ul>
 <h2 id="how-it-works">How it works</h2>
-<p>Your code calls the stock BCL, which bottoms out in the Unix PAL (<code>Interop.Sys.*</code> P/Invokes). Those ~45 entry points are <a href="../dev/plugs.html">plugged</a> in <code>Cosmos.Kernel.Plugs</code>: a file-descriptor table adapts the PAL contract (fds, dir streams, PAL errnos) and delegates to <code>VfsManager</code>, which owns path resolution, the mount table, the current directory and open-handle semantics, and dispatches to the mounted filesystem driver, which reads and writes an <code>IBlockDevice</code> (a SATA disk, an NVMe namespace, a virtio-blk disk or a USB mass storage unit published by the driver kit's <code>AhciDriver</code>, <code>NvmeDriver</code>, <code>VirtioBlkDriver</code> or <code>UsbMassStorageDriver</code>, all via <code>StorageManager</code>; RAM via <code>MemoryBlockDevice</code>).</p>
+<p>Your code calls the stock BCL, which bottoms out in the Unix PAL (<code>Interop.Sys.*</code> P/Invokes). Those ~45 entry points are <a href="../dev/plugs.html">plugged</a> in <code>Cosmos.Kernel.Plugs</code>: a file-descriptor table adapts the PAL contract (fds, dir streams, PAL errnos) and delegates to <code>VfsManager</code>, which owns path resolution, the mount table with each mount's flags (a mutation under a read-only mount is refused there, and the plug reports it as <code>EROFS</code>), the current directory and open-handle semantics, and dispatches to the mounted filesystem driver (FAT, ext2 or ISO 9660), which reads and writes an <code>IBlockDevice</code> (a SATA disk, an NVMe namespace, a virtio-blk disk or a USB mass storage unit published by the driver kit's <code>AhciDriver</code>, <code>NvmeDriver</code>, <code>VirtioBlkDriver</code> or <code>UsbMassStorageDriver</code>, all via <code>StorageManager</code>; RAM via <code>MemoryBlockDevice</code>).</p>
 <pre><code>File / Directory / FileStream          (stock BCL)
         │
 Interop.Sys.* PAL calls                (stock BCL, plugged)
@@ -492,7 +588,7 @@ FileDescriptorTable                    (Cosmos.Kernel.Plugs: fds, dir streams, e
         │
 VfsManager                             (mounts, paths, CWD, open handles)
         │
-IVfsFileSystemType / IVfsSuperblock    (FAT driver)
+IVfsFileSystemType / IVfsSuperblock    (the FAT, ext2 and ISO 9660 drivers)
         │
 IBlockDevice                           (the kit's AHCI, NVMe, virtio-blk and USB mass storage drivers, MemoryBlockDevice)
 </code></pre>

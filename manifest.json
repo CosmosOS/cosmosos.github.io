@@ -461,6 +461,20 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia",
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.HAL.Devices.Storage.IRemovableMedia.yml\" sourcestartlinenumber=\"1\">A block device whose medium is read-only, removable, or both: a CD-ROM\ndrive, a write-protected card. Optional facet on an\n<xref href=\"Cosmos.Kernel.HAL.Devices.Storage.IBlockDevice\" data-throw-if-not-resolved=\"false\"></xref>, found by a type test on the published\nobject. The storage manager reads it to carry a read-only medium as one\nwhole-medium partition without scanning it for a table, and to order it\nafter every writable disk; a kernel reads it to tell a CD from a disk.\nAny context.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Cosmos.Kernel.HAL.Devices.Storage.yml",
       "output": {
         ".html": {
@@ -2362,6 +2376,34 @@
       "IsMRef": true,
       "Title": "Cosmos.Kernel.System.FileSystem.IVfsSuperblock",
       "Summary": "<p sourcefile=\"api/Cosmos.Kernel.System.FileSystem.IVfsSuperblock.yml\" sourcestartlinenumber=\"1\">Per-mount filesystem instance.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType",
+      "Summary": "<p sourcefile=\"api/Cosmos.Kernel.System.FileSystem.Iso9660.Iso9660FileSystemType.yml\" sourcestartlinenumber=\"1\">ISO 9660 driver entry point, for CD-ROM images and the volumes they are\nwritten to. Pluggable into the VFS via <xref href=\"Cosmos.Kernel.System.FileSystem.VfsManager.RegisterFileSystem(System.String%2cCosmos.Kernel.System.FileSystem.IVfsFileSystemType)\" data-throw-if-not-resolved=\"false\"></xref>;\nmirrors <xref href=\"Cosmos.Kernel.System.FileSystem.Fat.FatFileSystemType\" data-throw-if-not-resolved=\"false\"></xref> and <xref href=\"Cosmos.Kernel.System.FileSystem.Ext2.Ext2FileSystemType\" data-throw-if-not-resolved=\"false\"></xref>\nconstruction. The volume is read-only: a mount made through it refuses\nevery mutation, and formatting or destroying one is refused.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Cosmos.Kernel.System.FileSystem.Iso9660.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.System.FileSystem.Iso9660.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.System.FileSystem.Iso9660",
+      "Summary": null
     },
     {
       "type": "ManagedReference",

@@ -123,8 +123,13 @@ Contrairement à Gen2, où vous passiez par <code>CosmosVFS</code> et par un sou
 </tr>
 <tr>
 <td>Systèmes de fichiers</td>
-<td>FAT32 (FAT12/16 en partie)</td>
-<td>FAT12/16/32</td>
+<td>FAT32 (FAT12/16 en partie), ISO 9660</td>
+<td>FAT12/16/32, ext2, ISO 9660 avec Rock Ridge (lecture seule)</td>
+</tr>
+<tr>
+<td>Fichiers sur l'ISO</td>
+<td>Un dossier <code>isoFiles</code> dans le projet</td>
+<td>Le même dossier <code>isoFiles</code>, plus des éléments <code>CosmosIsoFile</code> (<a href="#ship-files-on-the-boot-iso">Livrer des fichiers sur l'ISO de démarrage</a>)</td>
 </tr>
 </tbody>
 </table>
@@ -161,7 +166,7 @@ using Cosmos.Kernel.System.FileSystem;
 using Cosmos.Kernel.System.FileSystem.Fat;
 using Cosmos.Kernel.System.Storage;
 </code></pre>
-<p><code>Cosmos.Kernel.System.FileSystem</code> contient tout le VFS dans un seul espace de noms : le gestionnaire et ce qu'il distribue (<code>VfsManager</code>, <code>VfsMount</code>, <code>IVfsNodeHandle</code>, <code>IVfsFileHandle</code> et <code>IVfsDirectoryHandle</code>), les contrats qu'implémente un pilote de système de fichiers (<code>IVfsFileSystemType</code>, <code>IVfsSuperblock</code>, <code>IVfsInode</code>, <code>IVfsOpenFile</code> et leurs interfaces d'opérations), ainsi que les types d'indicateurs, de modes et de métadonnées que nomme chaque appel de montage, de création et de stat (<code>MountFlags</code>, <code>VfsMode</code>, <code>VfsStat</code>, <code>VfsStatFs</code>, <code>SetAttrFlags</code>, <code>SeekWhence</code>, <code>VfsTimespec</code>). C'est pourquoi <code>MountFlags.None</code> apparaît dans le <code>BeforeRun()</code> d'un noyau sous le même <code>using</code> que <code>VfsManager</code>, et pourquoi l'<code>IVfsInode</code> que vous donne <code>IVfsNodeHandle.Inode</code> ne demande aucun autre <code>using</code>. Les pilotes de système de fichiers se trouvent un niveau plus bas, chacun dans son espace de noms : les types <code>FatFileSystemType</code> et <code>FatFormatOptions</code> du pilote FAT sont dans <code>Cosmos.Kernel.System.FileSystem.Fat</code>.</p>
+<p><code>Cosmos.Kernel.System.FileSystem</code> contient tout le VFS dans un seul espace de noms : le gestionnaire et ce qu'il distribue (<code>VfsManager</code>, <code>VfsMount</code>, <code>IVfsNodeHandle</code>, <code>IVfsFileHandle</code> et <code>IVfsDirectoryHandle</code>), les contrats qu'implémente un pilote de système de fichiers (<code>IVfsFileSystemType</code>, <code>IVfsSuperblock</code>, <code>IVfsInode</code>, <code>IVfsOpenFile</code> et leurs interfaces d'opérations), ainsi que les types d'indicateurs, de modes et de métadonnées que nomme chaque appel de montage, de création et de stat (<code>MountFlags</code>, <code>VfsMode</code>, <code>VfsStat</code>, <code>VfsStatFs</code>, <code>SetAttrFlags</code>, <code>SeekWhence</code>, <code>VfsTimespec</code>). C'est pourquoi <code>MountFlags.None</code> apparaît dans le <code>BeforeRun()</code> d'un noyau sous le même <code>using</code> que <code>VfsManager</code>, et pourquoi l'<code>IVfsInode</code> que vous donne <code>IVfsNodeHandle.Inode</code> ne demande aucun autre <code>using</code>. Les pilotes de système de fichiers se trouvent un niveau plus bas, chacun dans son espace de noms : les types <code>FatFileSystemType</code> et <code>FatFormatOptions</code> du pilote FAT sont dans <code>Cosmos.Kernel.System.FileSystem.Fat</code>, le <code>Ext2FileSystemType</code> du pilote ext2 dans <code>Cosmos.Kernel.System.FileSystem.Ext2</code>, et le <code>Iso9660FileSystemType</code> du pilote ISO 9660 dans <code>Cosmos.Kernel.System.FileSystem.Iso9660</code>.</p>
 <p><code>Cosmos.Kernel.HAL.Devices.Storage</code> n'est nécessaire qu'à l'extrait du disque RAM plus bas, qui implémente <code>IBlockDevice</code>. Sans lui, monter une vraie partition demande les trois espaces de noms de <code>Cosmos.Kernel.System</code>.</p>
 <p>Commencez par enregistrer un pilote FAT sous le nom de votre choix, puis montez une partition sur un point de montage. Ajoutez ceci au <code>BeforeRun()</code> de votre noyau :</p>
 <pre><code class="lang-csharp">FatFileSystemType fat = new();
@@ -230,6 +235,97 @@ if (!VfsManager.RegisterFileSystem(&quot;ramfat&quot;, fat)
     return;
 }
 </code></pre>
+<p><a id="read-a-cd-rom-or-an-iso-image"></a></p>
+<h3 id="lire-un-cd-rom-ou-une-image-iso">Lire un CD-ROM ou une image ISO</h3>
+<p><code>Iso9660FileSystemType</code>, dans <code>Cosmos.Kernel.System.FileSystem.Iso9660</code>, lit le format des CD-ROM et des images <code>.iso</code> que produisent tous les outils de gravure et <code>cosmos build</code> : ISO 9660 avec l'extension Rock Ridge, qui est ce qui donne à un volume ses noms POSIX (<code>hello.txt</code> plutôt que <code>HELLO.TXT;1</code>), ses permissions, ses horodatages et ses liens symboliques. Un volume sans Rock Ridge présente ses identifiants bruts sans la version (<code>README</code>, <code>FILE.TXT</code>), recherchés sans tenir compte de la casse ; une arborescence Joliet est ignorée. Le pilote accepte les deux mêmes sources que les autres : un index de partition, ou un <code>IBlockDevice</code> injecté, quelle que soit sa taille de secteur, si bien que la même image se monte depuis un CD (secteurs de 2048 octets), depuis une clé USB sur laquelle elle a été écrite (secteurs de 512 octets) ou depuis la RAM :</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.System.FileSystem.Iso9660;
+
+Iso9660FileSystemType iso = new(cdrom);   // any IBlockDevice holding an ISO 9660 volume
+
+if (!VfsManager.RegisterFileSystem(&quot;iso&quot;, iso)
+    || !VfsManager.TryMount(&quot;iso&quot;, &quot;&quot;, MountFlags.None, &quot;/cd&quot;, out VfsMount? cd))
+{
+    Console.WriteLine(&quot;No ISO 9660 volume there.&quot;);
+    return;
+}
+
+Console.WriteLine(cd.IsReadOnly);                       // True
+foreach (string path in Directory.GetFiles(&quot;/cd/docs&quot;))
+{
+    Console.WriteLine(path + &quot;: &quot; + new FileInfo(path).Length + &quot; bytes&quot;);
+}
+string text = File.ReadAllText(&quot;/cd/hello.txt&quot;);
+</code></pre>
+<p><code>cdrom</code> est n'importe quel <code>IBlockDevice</code> qui porte un volume. Quand le lecteur depuis lequel le noyau a démarré se trouve derrière un contrôleur SATA en mode AHCI, il est l'une des entrées de <code>StorageManager.Devices</code>, celle dont le support est en lecture seule : un lecteur de CD-ROM implémente <code>IRemovableMedia</code> à côté d'<code>IBlockDevice</code>, un type du seam du kit de pilotes (<code>[Experimental(&quot;COSMOS0003&quot;)]</code>, si bien qu'un projet de noyau qui le teste reconnaît l'identifiant avec <code>&lt;NoWarn&gt;$(NoWarn);COSMOS0003&lt;/NoWarn&gt;</code>), avec <code>IsReadOnly</code>, <code>IsRemovable</code> et <code>HasMedia</code>. Le trouver tient en une boucle sur la liste :</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.HAL.Devices.Storage;   // IBlockDevice, IRemovableMedia
+using Cosmos.Kernel.System.Storage;        // StorageManager
+
+IBlockDevice? cdrom = null;
+foreach (IBlockDevice device in StorageManager.Devices)
+{
+    if (device is IRemovableMedia { IsReadOnly: true })
+    {
+        cdrom = device;
+        break;
+    }
+}
+</code></pre>
+<p>Le gestionnaire de stockage porte un tel support comme une seule partition qui couvre tout le disque et ne le scanne jamais à la recherche d'une table de partitions, puisqu'un support en lecture seule n'en porte aucune qu'un noyau pourrait écrire et que le MBR protecteur d'une ISO compte en unités de 512 octets qu'un périphérique à secteurs de 2048 octets lirait de travers. Il classe le support après tous les disques inscriptibles, si bien que <code>StorageManager.PrimaryDevice</code> reste un disque que le noyau peut formater tant qu'un est attaché et devient le CD sur une machine qui n'a rien d'autre. Une partition sur laquelle une image a été écrite, ou un <code>MemoryBlockDevice</code> sur les octets de l'image, se monte de la même façon.</p>
+<p>Le volume est en lecture seule, et le VFS le sait : <code>VfsMount.IsReadOnly</code> vaut <code>true</code> et <code>VfsMount.Flags</code> porte <code>MountFlags.ReadOnly</code> quels que soient les indicateurs du montage, <code>FileInfo.IsReadOnly</code> vaut <code>true</code> pour chaque fichier, et toute modification sous le point de montage échoue comme sous Linux, avec une simple <code>IOException</code> (« Read-only file system ») et non une exception d'absence :</p>
+<table>
+<thead>
+<tr>
+<th>Appel</th>
+<th>Résultat sur un montage ISO 9660</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>File.ReadAllText</code>, <code>File.ReadAllBytes</code>, <code>FileStream</code> ouvert en lecture, <code>StreamReader</code>, <code>Directory.GetFiles</code>, <code>FileInfo</code></td>
+<td>Fonctionne</td>
+</tr>
+<tr>
+<td><code>File.Create</code>, <code>File.WriteAllText</code>, <code>File.AppendAllText</code>, <code>FileStream</code> ouvert en écriture, <code>FileMode.Truncate</code></td>
+<td><code>IOException</code></td>
+</tr>
+<tr>
+<td><code>File.Delete</code>, <code>File.Move</code>, <code>File.Copy</code> vers le montage, <code>File.SetAttributes</code></td>
+<td><code>IOException</code></td>
+</tr>
+<tr>
+<td><code>Directory.CreateDirectory</code>, <code>Directory.Delete</code>, <code>Directory.Move</code></td>
+<td><code>IOException</code></td>
+</tr>
+<tr>
+<td><code>VfsManager.TryCreateFile</code>, <code>TryCreateDirectory</code>, <code>TryUnlink</code>, <code>TryRemoveDirectory</code>, <code>TryRename</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>VfsManager.TryFormat</code>, <code>TryDestroy</code></td>
+<td><code>false</code> : le pilote n'écrit aucun volume</td>
+</tr>
+</tbody>
+</table>
+<p>Les mêmes refus s'appliquent à n'importe quel pilote quand vous montez avec <code>MountFlags.ReadOnly</code> : une partition FAT montée ainsi ne prend aucune écriture par ce point de montage, alors que la même partition montée ailleurs sans l'indicateur en prend toujours.</p>
+<p>Ce que le pilote ne lit pas : les noms longs d'un volume Joliet seul (il présente les identifiants bruts), un fichier de plus de 4 Gio réparti sur plusieurs extents (il n'est pas listé), les sessions suivantes d'un disque multisession, UDF, et El Torito, dont le catalogue de démarrage n'est qu'un fichier. Un contrôleur SATA en mode AHCI est l'endroit où la machine q35 de QEMU place son lecteur de CD, et où VMware le place quand le lecteur virtuel est sur le contrôleur SATA plutôt que sur le contrôleur IDE ; là, l'<code>AhciDriver</code> du kit publie le lecteur sous le nom <code>cdrom&lt;n&gt;</code> (<a href="drivers.html#the-storage-drivers">Les pilotes de stockage</a>). Un lecteur derrière un contrôleur USB, virtio-scsi ou IDE n'est pas encore un périphérique bloc, si bien qu'un noyau démarré depuis l'un d'eux lit plutôt une image : depuis la RAM, depuis une partition de disque ou depuis une clé USB sur laquelle l'image a été écrite.</p>
+<p><a id="ship-files-on-the-boot-iso"></a></p>
+<h3 id="livrer-des-fichiers-sur-liso-de-démarrage">Livrer des fichiers sur l'ISO de démarrage</h3>
+<p>L'ISO que produit <code>cosmos build</code> contient le noyau et Limine sous <code>/boot</code> et <code>/EFI</code>. Un noyau livre ses propres fichiers à côté comme il le faisait en Gen2 : tout ce qui se trouve dans un dossier <code>isoFiles</code> à côté du <code>.csproj</code> du noyau va à la racine de l'ISO avec ses sous-dossiers, si bien que <code>isoFiles/data/config.txt</code> devient <code>/data/config.txt</code> sur le disque. Un fichier qui se trouve ailleurs, ou qui doit porter un autre nom, est un élément <code>CosmosIsoFile</code> du <code>.csproj</code>, dont la métadonnée <code>IsoPath</code> est son chemin sur l'ISO. Un <code>IsoPath</code> qui se termine par <code>/</code> désigne un dossier et garde le nom du fichier, et un fichier qui n'en a pas va à la racine :</p>
+<pre><code class="lang-xml">&lt;ItemGroup&gt;
+  &lt;CosmosIsoFile Include=&quot;../assets/logo.bmp&quot; IsoPath=&quot;images/logo.bmp&quot; /&gt;
+  &lt;CosmosIsoFile Include=&quot;../assets/readme.txt&quot; IsoPath=&quot;docs/&quot; /&gt;
+&lt;/ItemGroup&gt;
+</code></pre>
+<p>La propriété <code>CosmosIsoFilesDirectory</code> désigne un autre dossier. Ce que contient le dossier reste hors de la compilation, si bien qu'un fichier <code>.cs</code> qui s'y trouve est livré sur l'ISO au lieu d'être compilé dans le noyau. La compilation échoue sur un fichier qui atterrirait sous <code>/boot</code> ou <code>/EFI</code>, puisque ces dossiers contiennent le noyau et le chargeur d'amorçage qu'écrit le SDK ; sur un chemin qui contient un segment <code>.</code> ou <code>..</code>, puisque <code>..</code> pourrait sortir de la racine ; et sur deux fichiers au même chemin, comparés sans tenir compte de la casse, puisque sur un hôte Windows la seconde copie écraserait la première. Le cache de compilation de l'ISO couvre les fichiers et leurs chemins, si bien qu'ajouter, modifier, renommer ou retirer l'un d'eux reconstruit l'ISO sans recompiler le noyau.</p>
+<p>Les noms sur le disque sont des noms Rock Ridge, casse et espaces conservées, et le noyau les lit une fois qu'il a monté le CD de démarrage, trouvé comme plus haut :</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.System.FileSystem;           // VfsManager, MountFlags
+using Cosmos.Kernel.System.FileSystem.Iso9660;   // Iso9660FileSystemType
+
+VfsManager.RegisterFileSystem(&quot;bootcd&quot;, new Iso9660FileSystemType(cdrom));
+VfsManager.TryMount(&quot;bootcd&quot;, &quot;&quot;, MountFlags.None, &quot;/cdrom&quot;, out _);
+string config = File.ReadAllText(&quot;/cdrom/data/config.txt&quot;);
+</code></pre>
+<p>Cette lecture suppose que le lecteur de démarrage soit un périphérique bloc, ce qu'il est derrière un contrôleur AHCI. Là où il ne l'est pas, par exemple sur une machine arm64 qui démarre depuis virtio-scsi, les fichiers sont sur le disque mais le noyau ne peut pas encore les atteindre.</p>
 <p><a id="partition-a-disk"></a></p>
 <h2 id="partitionner-un-disque">Partitionner un disque</h2>
 <p>Formater demande une partition à formater. <code>StorageManager.Partitions</code> liste celles qui existent déjà sur les disques que le noyau a trouvés au démarrage ; quand il n'y en a aucune, ou que vous voulez une autre organisation, <code>Gpt</code>, <code>Mbr</code> et <code>PartitionManager</code> écrivent la table de partitions elle-même. Tous prennent un <code>IBlockDevice</code>, que vous fournit <code>StorageManager.PrimaryDevice</code>.</p>
@@ -491,6 +587,7 @@ Directory.SetCurrentDirectory(&quot;/&quot;);
 <li>Ouvrir un fichier absent dont le parent existe → <code>FileNotFoundException</code></li>
 <li>Tout chemin sous un répertoire absent (ou sous un préfixe non monté) → <code>DirectoryNotFoundException</code></li>
 <li>Créer un fichier directement dans la racine virtuelle <code>/</code> → <code>IOException</code> (système de fichiers en lecture seule)</li>
+<li>Toute modification sous un montage en lecture seule (un volume ISO 9660, ou un montage fait avec <code>MountFlags.ReadOnly</code>) → <code>IOException</code> (système de fichiers en lecture seule)</li>
 <li>Supprimer un répertoire non vide sans <code>recursive: true</code> → <code>IOException</code></li>
 <li><code>File.Copy</code>/<code>File.Move</code> vers un fichier existant sans écrasement → <code>IOException</code></li>
 </ul>
@@ -498,14 +595,15 @@ Directory.SetCurrentDirectory(&quot;/&quot;);
 <p><a id="current-limitations"></a></p>
 <h2 id="limitations-actuelles">Limitations actuelles</h2>
 <ul>
-<li>Les liens symboliques et les liens physiques ne sont pas pris en charge (<code>ENOTSUP</code>/<code>EPERM</code> en interne ; la BCL remonte <code>IOException</code>).</li>
+<li>Les liens symboliques ne peuvent pas être créés, et les liens physiques ne sont pas pris en charge (<code>ENOTSUP</code>/<code>EPERM</code> en interne ; la BCL remonte <code>IOException</code>). Les pilotes ext2 et ISO 9660 résolvent les liens symboliques que portent leurs volumes.</li>
 <li>Les horodatages des fichiers ne sont pas encore persistés (<code>File.SetLastWriteTime</code> est accepté, mais l'horodatage FAT viendra plus tard).</li>
 <li><code>DriveInfo</code> n'est pas encore branché ; utilisez <code>VfsManager.TryStatFs</code> pour connaître l'espace libre.</li>
-<li>FAT est le seul pilote de système de fichiers que couvrent les suites du noyau ; un pilote ext2, <code>Ext2FileSystemType</code> dans <code>Cosmos.Kernel.System.FileSystem.Ext2</code>, est livré à côté et n'est testé que sur l'hôte. L'interface <code>IVfsFileSystemType</code> est ce qu'implémente un nouveau pilote.</li>
+<li>FAT et ISO 9660 sont les pilotes de système de fichiers que couvrent les suites du noyau ; le pilote ext2, <code>Ext2FileSystemType</code> dans <code>Cosmos.Kernel.System.FileSystem.Ext2</code>, est livré à côté et n'est testé que sur l'hôte. L'interface <code>IVfsFileSystemType</code> est ce qu'implémente un nouveau pilote.</li>
+<li>Le pilote ISO 9660 lit un lecteur de CD-ROM derrière un contrôleur AHCI, les images, et les volumes sur lesquels des images ont été écrites ; un lecteur derrière un contrôleur USB, virtio-scsi ou IDE n'est pas encore un périphérique bloc.</li>
 </ul>
 <p><a id="how-it-works"></a></p>
 <h2 id="fonctionnement">Fonctionnement</h2>
-<p>Votre code appelle la BCL standard, qui aboutit au PAL Unix (les P/Invoke <code>Interop.Sys.*</code>). Ces quelque 45 points d'entrée sont <a href="../dev/plugs.html">remplacés par des plugs</a> dans <code>Cosmos.Kernel.Plugs</code> : une table de descripteurs de fichiers adapte le contrat du PAL (descripteurs de fichiers, flux de répertoires, errno du PAL) et délègue à <code>VfsManager</code>, qui gère la résolution des chemins, la table des montages, le répertoire courant et la sémantique des handles ouverts, et qui transmet l'appel au pilote de système de fichiers monté, lequel lit et écrit un <code>IBlockDevice</code> (un disque SATA, un namespace NVMe, un disque virtio-blk ou une unité de stockage de masse USB publiés par les <code>AhciDriver</code>, <code>NvmeDriver</code>, <code>VirtioBlkDriver</code> ou <code>UsbMassStorageDriver</code> du kit de pilotes, tous via <code>StorageManager</code> ; la RAM via <code>MemoryBlockDevice</code>).</p>
+<p>Votre code appelle la BCL standard, qui aboutit au PAL Unix (les P/Invoke <code>Interop.Sys.*</code>). Ces quelque 45 points d'entrée sont <a href="../dev/plugs.html">remplacés par des plugs</a> dans <code>Cosmos.Kernel.Plugs</code> : une table de descripteurs de fichiers adapte le contrat du PAL (descripteurs de fichiers, flux de répertoires, errno du PAL) et délègue à <code>VfsManager</code>, qui gère la résolution des chemins, la table des montages avec les indicateurs de chacun (une modification sous un montage en lecture seule y est refusée, et le plug la signale par <code>EROFS</code>), le répertoire courant et la sémantique des handles ouverts, et qui transmet l'appel au pilote de système de fichiers monté (FAT, ext2 ou ISO 9660), lequel lit et écrit un <code>IBlockDevice</code> (un disque SATA, un namespace NVMe, un disque virtio-blk ou une unité de stockage de masse USB publiés par les <code>AhciDriver</code>, <code>NvmeDriver</code>, <code>VirtioBlkDriver</code> ou <code>UsbMassStorageDriver</code> du kit de pilotes, tous via <code>StorageManager</code> ; la RAM via <code>MemoryBlockDevice</code>).</p>
 <pre><code>File / Directory / FileStream          (stock BCL)
         │
 Interop.Sys.* PAL calls                (stock BCL, plugged)
@@ -514,7 +612,7 @@ FileDescriptorTable                    (Cosmos.Kernel.Plugs: fds, dir streams, e
         │
 VfsManager                             (mounts, paths, CWD, open handles)
         │
-IVfsFileSystemType / IVfsSuperblock    (FAT driver)
+IVfsFileSystemType / IVfsSuperblock    (the FAT, ext2 and ISO 9660 drivers)
         │
 IBlockDevice                           (the kit's AHCI, NVMe, virtio-blk and USB mass storage drivers, MemoryBlockDevice)
 </code></pre>

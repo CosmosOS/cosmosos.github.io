@@ -1203,14 +1203,14 @@ public void OnInterrupt(InterruptContext context)
 <tr>
 <th>Driver</th>
 <th>Hardware</th>
-<th>Disk names</th>
+<th>Device names</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>AhciDriver</code></td>
-<td>SATA controllers in AHCI mode (disks only, no CD-ROM)</td>
-<td><code>sata&lt;n&gt;</code></td>
+<td>SATA controllers in AHCI mode: disks, and CD-ROM or DVD drives (ATAPI), read-only</td>
+<td><code>sata&lt;n&gt;</code>, <code>cdrom&lt;n&gt;</code></td>
 </tr>
 <tr>
 <td><code>NvmeDriver</code></td>
@@ -1225,6 +1225,7 @@ public void OnInterrupt(InterruptContext context)
 </tbody>
 </table>
 <p>An NVMe namespace is one of the disks a controller exposes, hence the second number in an NVMe disk's name. A USB stick is handled by <code>UsbMassStorageDriver</code> (<a href="#the-usb-class-drivers">The USB class drivers</a>). Every disk is registered with <code>StorageManager</code> when it is published.</p>
+<p>A CD-ROM drive is published the same way, as a block device of 2048-byte sectors whose <code>WriteBlock</code> throws <code>IOException</code> and whose <code>Flush</code> has nothing to do, and it says what it is through a second interface on the same object, <code>IRemovableMedia</code>: <code>IsReadOnly</code>, <code>IsRemovable</code> and <code>HasMedia</code>, found by a type test as <code>IHardwareCursor</code> is on a display; the kit calls such an interface a facet. <code>AhciDriver</code> brings a drive up only when a disc is in it and the drive reports it ready, so <code>HasMedia</code> is true for every drive it publishes; a drive with no disc is logged and skipped, because the driver does not watch for a disc inserted later and a drive published empty would stay empty for the kernel. The storage manager reads the facet to carry the disc as one whole-medium partition without scanning it for a table, since a read-only medium carries none a kernel could write and an ISO's protective MBR counts in 512-byte units that a 2048-byte-sector device would misread, and to keep the drive after every writable disk in its order, so <code>StorageManager.PrimaryDevice</code> is the CD only on a machine with no disk. The ISO 9660 driver mounts it (<a href="filesystem.html#read-a-cd-rom-or-an-iso-image">Read a CD-ROM or an ISO image</a>).</p>
 <h3 id="the-audio-driver">The audio driver</h3>
 <p><code>HdAudioDriver</code> binds any PCI controller that reports the HD Audio programming interface, matching by class rather than by device id because the specification fixes the register layout, and publishes one audio output to <code>AudioManager</code> (<a href="audio.html">Audio</a>). It is registered only when <code>CosmosEnableAudio</code> is on.</p>
 <hr>
