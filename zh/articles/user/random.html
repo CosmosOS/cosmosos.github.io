@@ -166,6 +166,47 @@ Guid id = Guid.NewGuid();
 [Random] timer jitter alone. ...
 </code></pre>
 <p>健康测试能发现卡住或重复短模式的定时器，但不能发现所有可预测的定时器：以确定性方式运行的机器，例如处于 <code>-icount</code> 或记录/回放（record/replay）模式下的 QEMU，可能通过这些测试，却在每次启动时都产生相同的输出。</p>
+<hr>
+<p><a id="summary"></a></p>
+<h2 id="总结">总结</h2>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>用安全随机字节填充缓冲区</td>
+<td><code>RandomNumberGenerator.Fill(data)</code></td>
+</tr>
+<tr>
+<td>以新数组获取安全随机字节</td>
+<td><code>RandomNumberGenerator.GetBytes(count)</code></td>
+</tr>
+<tr>
+<td>在某个范围内选取安全随机整数</td>
+<td><code>RandomNumberGenerator.GetInt32(fromInclusive, toExclusive)</code></td>
+</tr>
+<tr>
+<td>用不含零的安全随机字节填充缓冲区</td>
+<td><code>RandomNumberGenerator.Create().GetNonZeroBytes(data)</code></td>
+</tr>
+<tr>
+<td>获取生成器实例</td>
+<td><code>RandomNumberGenerator.Create()</code></td>
+</tr>
+<tr>
+<td>生成唯一标识符</td>
+<td><code>Guid.NewGuid()</code></td>
+</tr>
+<tr>
+<td>为游戏或洗牌获取随机数</td>
+<td><code>System.Random</code>、<code>Random.Shared</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 

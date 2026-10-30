@@ -256,6 +256,49 @@ MouseManager ── Sensitivity, screen clamping, ScrollDelta accumulation
         │
 PS/2 mouse over the driver kit (the 8042, IRQ 12, x64)  /  virtio-mouse over the driver kit (PCI, MMIO)  /  USB mouse over the driver kit (xHCI, EHCI, OHCI)
 </code></pre>
+<h2 id="summary">Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Call</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Read the pointer position</td>
+<td><code>MouseManager.X</code>, <code>MouseManager.Y</code></td>
+</tr>
+<tr>
+<td>Read the buttons</td>
+<td><code>MouseManager.LeftButton</code>, <code>MouseManager.RightButton</code>, <code>MouseManager.MiddleButton</code></td>
+</tr>
+<tr>
+<td>Draw a cursor at the pointer</td>
+<td><code>canvas.DrawFilledCircle(color, MouseManager.X, MouseManager.Y, radius)</code></td>
+</tr>
+<tr>
+<td>Clamp the pointer to the screen</td>
+<td><code>MouseManager.SetScreenSize(width, height)</code></td>
+</tr>
+<tr>
+<td>Read the wheel movement</td>
+<td><code>MouseManager.ScrollDelta</code></td>
+</tr>
+<tr>
+<td>Clear it once applied</td>
+<td><code>MouseManager.ResetScrollDelta()</code></td>
+</tr>
+<tr>
+<td>Slow down or speed up the pointer</td>
+<td><code>MouseManager.Sensitivity</code></td>
+</tr>
+<tr>
+<td>Move the pointer</td>
+<td><code>MouseManager.SetPosition(x, y)</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 

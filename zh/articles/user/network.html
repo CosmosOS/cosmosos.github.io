@@ -526,6 +526,78 @@ IPv4 / ARP and IPv6 / Neighbor Discovery / Ethernet
         │
 Network device                                          (e1000e or virtio-net, over the driver kit)
 </code></pre>
+<p><a id="summary"></a></p>
+<h2 id="总结">总结</h2>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>检查网卡是否就绪</td>
+<td><code>NetworkManager.DeviceCount</code>、<code>NetworkManager.Ready</code></td>
+</tr>
+<tr>
+<td>列出适配器</td>
+<td><code>NetworkManager.GetAdapter(index)</code></td>
+</tr>
+<tr>
+<td>选择主适配器</td>
+<td><code>NetworkManager.Primary</code></td>
+</tr>
+<tr>
+<td>通过 DHCP 配置 IPv4</td>
+<td><code>DhcpClient.SendDiscoverPacket()</code></td>
+</tr>
+<tr>
+<td>手动配置 IPv4</td>
+<td><code>IPConfig.Enable(address, subnetMask, defaultGateway)</code></td>
+</tr>
+<tr>
+<td>读取适配器的配置</td>
+<td><code>NetworkAdapter.IPConfig</code></td>
+</tr>
+<tr>
+<td>读取 IPv6 链路本地地址</td>
+<td><code>NetworkAdapter.LinkLocalAddress</code></td>
+</tr>
+<tr>
+<td>Ping 一个 IPv6 地址</td>
+<td><code>Icmpv6Client.Connect(dest)</code>、<code>SendEcho()</code>、<code>Receive(ref source, timeout)</code></td>
+</tr>
+<tr>
+<td>发送和接收 UDP 数据报</td>
+<td><code>System.Net.Sockets.UdpClient</code></td>
+</tr>
+<tr>
+<td>连接到 TCP 服务器</td>
+<td><code>TcpClient.Connect(address, port)</code>、<code>TcpClient.GetStream()</code></td>
+</tr>
+<tr>
+<td>接受 TCP 连接</td>
+<td><code>TcpListener.Start()</code>、<code>Pending()</code>、<code>AcceptTcpClient()</code></td>
+</tr>
+<tr>
+<td>注册域名服务器</td>
+<td><code>DnsConfig.Add(nameserver)</code></td>
+</tr>
+<tr>
+<td>解析名称</td>
+<td><code>Dns.GetHostAddresses(hostNameOrAddress)</code></td>
+</tr>
+<tr>
+<td>读取一个名称的全部地址记录</td>
+<td><code>DnsClient.SendQuery(url)</code>、<code>DnsClient.ReceiveAll(timeout)</code></td>
+</tr>
+<tr>
+<td>发送自己构造的数据包</td>
+<td><code>NetworkStack.Send(packet)</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 

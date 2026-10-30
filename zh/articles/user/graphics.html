@@ -502,6 +502,94 @@ Back buffer ──── Display() ────▶ the primary display's framebu
                      driver kit: the firmware display &quot;framebuffer&quot; (Limine, x64 &amp; ARM64)
                                  or a driver's display (virtio-gpu, vmware-svga, amd-dcn, intel-graphics)
 </code></pre>
+<p><a id="summary"></a></p>
+<h2 id="总结">总结</h2>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>获取屏幕的画布</td>
+<td><code>Canvas.GetFullScreen()</code></td>
+</tr>
+<tr>
+<td>切换视频模式</td>
+<td><code>Canvas.GetFullScreen(mode)</code></td>
+</tr>
+<tr>
+<td>读取分辨率</td>
+<td><code>canvas.Width</code>、<code>canvas.Height</code></td>
+</tr>
+<tr>
+<td>显示完成的帧</td>
+<td><code>canvas.Display()</code></td>
+</tr>
+<tr>
+<td>清空画布</td>
+<td><code>canvas.Clear(color)</code></td>
+</tr>
+<tr>
+<td>绘制形状</td>
+<td><code>canvas.DrawPoint</code>、<code>DrawLine</code>、<code>DrawRectangle</code>、<code>DrawCircle</code>、<code>DrawEllipse</code>、<code>DrawArc</code>、<code>DrawTriangle</code>、<code>DrawPolygon</code></td>
+</tr>
+<tr>
+<td>绘制填充形状</td>
+<td><code>canvas.DrawFilledRectangle</code>、<code>DrawFilledCircle</code></td>
+</tr>
+<tr>
+<td>获取 PSF 字体</td>
+<td><code>PCScreenFont.DefaultFont</code>、<code>PCScreenFont.LoadFont(fontData)</code></td>
+</tr>
+<tr>
+<td>绘制文本</td>
+<td><code>canvas.DrawString(text, font, color, x, y)</code></td>
+</tr>
+<tr>
+<td>以任意尺寸绘制 TrueType 文本</td>
+<td><code>new TrueTypeFont(path)</code>、<code>canvas.DrawString(text, font, size, color, x, y)</code></td>
+</tr>
+<tr>
+<td>测量文本</td>
+<td><code>font.MeasureString(text, size)</code>、<code>font.GetLineHeight(size)</code></td>
+</tr>
+<tr>
+<td>加载 BMP 或 PNG 文件</td>
+<td><code>new Bitmap(path)</code>、<code>new Png(path)</code></td>
+</tr>
+<tr>
+<td>绘制图像</td>
+<td><code>canvas.DrawImage(image, x, y)</code>、<code>canvas.DrawImage(image, x, y, width, height)</code></td>
+</tr>
+<tr>
+<td>创建离屏画布</td>
+<td><code>new Canvas(width, height)</code></td>
+</tr>
+<tr>
+<td>将画布绘制到另一个画布上</td>
+<td><code>canvas.DrawCanvas(tile, x, y)</code>、<code>canvas.DrawCanvas(tile, x, y, width, height)</code></td>
+</tr>
+<tr>
+<td>读回像素</td>
+<td><code>canvas.GetPointColor(x, y)</code>、<code>canvas.GetImage(x, y, width, height)</code></td>
+</tr>
+<tr>
+<td>获取 3D 画布</td>
+<td><code>Canvas.GetFullScreen() is Canvas3D canvas3D</code></td>
+</tr>
+<tr>
+<td>绘制 3D 场景</td>
+<td><code>canvas3D.Camera</code>、<code>ClearScene</code>、<code>DrawCube</code>、<code>DrawGrid</code></td>
+</tr>
+<tr>
+<td>绘制网格</td>
+<td><code>canvas3D.CreateMesh(positions, colors, indices)</code>、<code>canvas3D.DrawMesh(mesh, world)</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 

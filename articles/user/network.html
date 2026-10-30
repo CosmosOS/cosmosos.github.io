@@ -520,6 +520,77 @@ IPv4 / ARP and IPv6 / Neighbor Discovery / Ethernet
         │
 Network device                                          (e1000e or virtio-net, over the driver kit)
 </code></pre>
+<h2 id="summary">Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Call</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Check that a NIC is ready</td>
+<td><code>NetworkManager.DeviceCount</code>, <code>NetworkManager.Ready</code></td>
+</tr>
+<tr>
+<td>List the adapters</td>
+<td><code>NetworkManager.GetAdapter(index)</code></td>
+</tr>
+<tr>
+<td>Pick the primary adapter</td>
+<td><code>NetworkManager.Primary</code></td>
+</tr>
+<tr>
+<td>Configure IPv4 through DHCP</td>
+<td><code>DhcpClient.SendDiscoverPacket()</code></td>
+</tr>
+<tr>
+<td>Configure IPv4 by hand</td>
+<td><code>IPConfig.Enable(address, subnetMask, defaultGateway)</code></td>
+</tr>
+<tr>
+<td>Read an adapter's configuration</td>
+<td><code>NetworkAdapter.IPConfig</code></td>
+</tr>
+<tr>
+<td>Read the IPv6 link-local address</td>
+<td><code>NetworkAdapter.LinkLocalAddress</code></td>
+</tr>
+<tr>
+<td>Ping an IPv6 address</td>
+<td><code>Icmpv6Client.Connect(dest)</code>, <code>SendEcho()</code>, <code>Receive(ref source, timeout)</code></td>
+</tr>
+<tr>
+<td>Send and receive UDP datagrams</td>
+<td><code>System.Net.Sockets.UdpClient</code></td>
+</tr>
+<tr>
+<td>Connect to a TCP server</td>
+<td><code>TcpClient.Connect(address, port)</code>, <code>TcpClient.GetStream()</code></td>
+</tr>
+<tr>
+<td>Accept TCP connections</td>
+<td><code>TcpListener.Start()</code>, <code>Pending()</code>, <code>AcceptTcpClient()</code></td>
+</tr>
+<tr>
+<td>Register a nameserver</td>
+<td><code>DnsConfig.Add(nameserver)</code></td>
+</tr>
+<tr>
+<td>Resolve a name</td>
+<td><code>Dns.GetHostAddresses(hostNameOrAddress)</code></td>
+</tr>
+<tr>
+<td>Read every address record of a name</td>
+<td><code>DnsClient.SendQuery(url)</code>, <code>DnsClient.ReceiveAll(timeout)</code></td>
+</tr>
+<tr>
+<td>Send a packet you built</td>
+<td><code>NetworkStack.Send(packet)</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 

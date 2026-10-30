@@ -342,6 +342,69 @@ KeyboardManager ── KeyEvent queue ◀── active layout
         │                                    │
 PS/2 keyboard over the driver kit (the 8042, IRQ 1, x64)  /  virtio-keyboard over the driver kit (PCI, MMIO)  /  USB keyboard over the driver kit (xHCI, EHCI, OHCI)
 </code></pre>
+<h2 id="summary">Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Call</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Read a line</td>
+<td><code>Console.ReadLine()</code></td>
+</tr>
+<tr>
+<td>Wait for a key press</td>
+<td><code>KeyboardManager.ReadKey()</code></td>
+</tr>
+<tr>
+<td>Tell which key was pressed and what it typed</td>
+<td><code>KeyEvent.Key</code>, <code>KeyEvent.KeyChar</code>, <code>KeyEvent.Modifiers</code></td>
+</tr>
+<tr>
+<td>Read a key through the console, with or without echo</td>
+<td><code>Console.ReadKey()</code>, <code>Console.ReadKey(true)</code></td>
+</tr>
+<tr>
+<td>Poll for a key without blocking</td>
+<td><code>KeyboardManager.TryReadKey(out key)</code></td>
+</tr>
+<tr>
+<td>Check whether a key is waiting</td>
+<td><code>KeyboardManager.KeyAvailable</code>, <code>Console.KeyAvailable</code></td>
+</tr>
+<tr>
+<td>Look at the next key without taking it</td>
+<td><code>KeyboardManager.Peek()</code></td>
+</tr>
+<tr>
+<td>Check whether Shift, Control or Alt is held</td>
+<td><code>KeyboardManager.ShiftPressed</code>, <code>ControlPressed</code>, <code>AltPressed</code></td>
+</tr>
+<tr>
+<td>Read the lock key state</td>
+<td><code>KeyboardManager.CapsLock</code>, <code>NumLock</code>, <code>ScrollLock</code></td>
+</tr>
+<tr>
+<td>Switch the layout</td>
+<td><code>KeyboardManager.SetLayout(layout)</code></td>
+</tr>
+<tr>
+<td>Read the active layout</td>
+<td><code>KeyboardManager.GetLayout()</code></td>
+</tr>
+<tr>
+<td>Write a custom layout</td>
+<td><code>KeyboardLayout</code>, <code>InitializeKeys()</code>, <code>KeyMapping</code></td>
+</tr>
+<tr>
+<td>Make the right Alt an AltGr</td>
+<td><code>Keys.Add(new KeyMapping(0x60, Key.AltGr))</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 

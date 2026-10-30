@@ -299,6 +299,65 @@ public class Kernel : Sys.Kernel
 [Drivers] usb:1-1:0 offer UsbMassStorageDriver -&gt; bound
 </code></pre>
 <p>For interactive debugging on top of the serial log, see <a href="debugging.html">Debugging with VSCode and QEMU</a>.</p>
+<h2 id="summary">Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Call</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Set up once before the main loop</td>
+<td><code>BeforeRun()</code></td>
+</tr>
+<tr>
+<td>Write the main loop body</td>
+<td><code>Run()</code></td>
+</tr>
+<tr>
+<td>Clean up after the loop ends</td>
+<td><code>AfterRun()</code></td>
+</tr>
+<tr>
+<td>Park the CPU until an interrupt</td>
+<td><code>Power.Halt()</code></td>
+</tr>
+<tr>
+<td>Restart the machine</td>
+<td><code>Power.Reboot()</code></td>
+</tr>
+<tr>
+<td>Power the machine off</td>
+<td><code>Power.Shutdown()</code></td>
+</tr>
+<tr>
+<td>End the main loop</td>
+<td><code>Stop()</code></td>
+</tr>
+<tr>
+<td>Reach the running kernel from static code</td>
+<td><code>Kernel.Current</code></td>
+</tr>
+<tr>
+<td>Run early setup before the console exists</td>
+<td><code>OnBoot()</code></td>
+</tr>
+<tr>
+<td>Bring the console up on a headless kernel</td>
+<td><code>KernelConsole.Initialize()</code></td>
+</tr>
+<tr>
+<td>Take over the whole lifecycle</td>
+<td><code>Start()</code></td>
+</tr>
+<tr>
+<td>Read the kernel command line</td>
+<td><code>Environment.GetCommandLineArgs()</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 

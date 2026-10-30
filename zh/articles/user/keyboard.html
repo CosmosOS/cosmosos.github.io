@@ -352,6 +352,70 @@ KeyboardManager ── KeyEvent queue ◀── active layout
         │                                    │
 PS/2 keyboard over the driver kit (the 8042, IRQ 1, x64)  /  virtio-keyboard over the driver kit (PCI, MMIO)  /  USB keyboard over the driver kit (xHCI, EHCI, OHCI)
 </code></pre>
+<p><a id="summary"></a></p>
+<h2 id="总结">总结</h2>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>读取一行</td>
+<td><code>Console.ReadLine()</code></td>
+</tr>
+<tr>
+<td>等待按键</td>
+<td><code>KeyboardManager.ReadKey()</code></td>
+</tr>
+<tr>
+<td>查看按下的键及其产生的字符</td>
+<td><code>KeyEvent.Key</code>、<code>KeyEvent.KeyChar</code>、<code>KeyEvent.Modifiers</code></td>
+</tr>
+<tr>
+<td>通过控制台读取按键，带或不带回显</td>
+<td><code>Console.ReadKey()</code>、<code>Console.ReadKey(true)</code></td>
+</tr>
+<tr>
+<td>非阻塞轮询按键</td>
+<td><code>KeyboardManager.TryReadKey(out key)</code></td>
+</tr>
+<tr>
+<td>检查是否有按键在等待</td>
+<td><code>KeyboardManager.KeyAvailable</code>、<code>Console.KeyAvailable</code></td>
+</tr>
+<tr>
+<td>查看下一个按键但不取出</td>
+<td><code>KeyboardManager.Peek()</code></td>
+</tr>
+<tr>
+<td>检查是否按住了 Shift、Control 或 Alt</td>
+<td><code>KeyboardManager.ShiftPressed</code>、<code>ControlPressed</code>、<code>AltPressed</code></td>
+</tr>
+<tr>
+<td>读取锁定键状态</td>
+<td><code>KeyboardManager.CapsLock</code>、<code>NumLock</code>、<code>ScrollLock</code></td>
+</tr>
+<tr>
+<td>切换布局</td>
+<td><code>KeyboardManager.SetLayout(layout)</code></td>
+</tr>
+<tr>
+<td>读取当前布局</td>
+<td><code>KeyboardManager.GetLayout()</code></td>
+</tr>
+<tr>
+<td>编写自定义布局</td>
+<td><code>KeyboardLayout</code>、<code>InitializeKeys()</code>、<code>KeyMapping</code></td>
+</tr>
+<tr>
+<td>让右 Alt 成为 AltGr</td>
+<td><code>Keys.Add(new KeyMapping(0x60, Key.AltGr))</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 

@@ -502,6 +502,94 @@ Back buffer ──── Display() ────▶ the primary display's framebu
                      driver kit: the firmware display &quot;framebuffer&quot; (Limine, x64 &amp; ARM64)
                                  or a driver's display (virtio-gpu, vmware-svga, amd-dcn, intel-graphics)
 </code></pre>
+<p><a id="summary"></a></p>
+<h2 id="résumé">Résumé</h2>
+<table>
+<thead>
+<tr>
+<th>Tâche</th>
+<th>Appel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Obtenir le canvas de l'écran</td>
+<td><code>Canvas.GetFullScreen()</code></td>
+</tr>
+<tr>
+<td>Changer de mode vidéo</td>
+<td><code>Canvas.GetFullScreen(mode)</code></td>
+</tr>
+<tr>
+<td>Lire la résolution</td>
+<td><code>canvas.Width</code>, <code>canvas.Height</code></td>
+</tr>
+<tr>
+<td>Afficher l'image terminée</td>
+<td><code>canvas.Display()</code></td>
+</tr>
+<tr>
+<td>Effacer le canvas</td>
+<td><code>canvas.Clear(color)</code></td>
+</tr>
+<tr>
+<td>Dessiner une forme</td>
+<td><code>canvas.DrawPoint</code>, <code>DrawLine</code>, <code>DrawRectangle</code>, <code>DrawCircle</code>, <code>DrawEllipse</code>, <code>DrawArc</code>, <code>DrawTriangle</code>, <code>DrawPolygon</code></td>
+</tr>
+<tr>
+<td>Dessiner une forme pleine</td>
+<td><code>canvas.DrawFilledRectangle</code>, <code>DrawFilledCircle</code></td>
+</tr>
+<tr>
+<td>Obtenir une police PSF</td>
+<td><code>PCScreenFont.DefaultFont</code>, <code>PCScreenFont.LoadFont(fontData)</code></td>
+</tr>
+<tr>
+<td>Dessiner du texte</td>
+<td><code>canvas.DrawString(text, font, color, x, y)</code></td>
+</tr>
+<tr>
+<td>Dessiner du texte TrueType à n'importe quelle taille</td>
+<td><code>new TrueTypeFont(path)</code>, <code>canvas.DrawString(text, font, size, color, x, y)</code></td>
+</tr>
+<tr>
+<td>Mesurer du texte</td>
+<td><code>font.MeasureString(text, size)</code>, <code>font.GetLineHeight(size)</code></td>
+</tr>
+<tr>
+<td>Charger un fichier BMP ou PNG</td>
+<td><code>new Bitmap(path)</code>, <code>new Png(path)</code></td>
+</tr>
+<tr>
+<td>Dessiner une image</td>
+<td><code>canvas.DrawImage(image, x, y)</code>, <code>canvas.DrawImage(image, x, y, width, height)</code></td>
+</tr>
+<tr>
+<td>Créer un canvas hors écran</td>
+<td><code>new Canvas(width, height)</code></td>
+</tr>
+<tr>
+<td>Dessiner un canvas sur un autre</td>
+<td><code>canvas.DrawCanvas(tile, x, y)</code>, <code>canvas.DrawCanvas(tile, x, y, width, height)</code></td>
+</tr>
+<tr>
+<td>Relire les pixels</td>
+<td><code>canvas.GetPointColor(x, y)</code>, <code>canvas.GetImage(x, y, width, height)</code></td>
+</tr>
+<tr>
+<td>Obtenir un canvas 3D</td>
+<td><code>Canvas.GetFullScreen() is Canvas3D canvas3D</code></td>
+</tr>
+<tr>
+<td>Dessiner une scène 3D</td>
+<td><code>canvas3D.Camera</code>, <code>ClearScene</code>, <code>DrawCube</code>, <code>DrawGrid</code></td>
+</tr>
+<tr>
+<td>Dessiner un maillage</td>
+<td><code>canvas3D.CreateMesh(positions, colors, indices)</code>, <code>canvas3D.DrawMesh(mesh, world)</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 

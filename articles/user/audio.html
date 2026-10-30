@@ -480,6 +480,73 @@ driver kit: IAudioOutput &quot;hda&quot;                                        
         │  16 KiB cyclic DMA buffer, drained on the codec's clock
 HD Audio controller → codec converter → pin → speakers (or QEMU's audio backend)
 </code></pre>
+<h2 id="summary">Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Call</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Check that audio is compiled in</td>
+<td><code>AudioManager.IsEnabled</code></td>
+</tr>
+<tr>
+<td>Get the primary output</td>
+<td><code>AudioManager.Primary</code></td>
+</tr>
+<tr>
+<td>List the outputs</td>
+<td><code>AudioManager.Count</code>, <code>AudioManager.TryGet(index, out device)</code></td>
+</tr>
+<tr>
+<td>Play on another output</td>
+<td><code>new AudioPlayer(device).Play(stream)</code>, <code>AudioPlayback.TryStart(device, stream, owned, out playback)</code></td>
+</tr>
+<tr>
+<td>Play a tone</td>
+<td><code>Console.Beep()</code>, <code>Console.Beep(frequency, duration)</code></td>
+</tr>
+<tr>
+<td>Read a WAV file held in memory</td>
+<td><code>MemoryAudioStream.FromWave(file)</code></td>
+</tr>
+<tr>
+<td>Play a stream and wait for its end</td>
+<td><code>AudioManager.Play(stream)</code></td>
+</tr>
+<tr>
+<td>Stream a WAV file off a volume</td>
+<td><code>VfsManager.TryOpenFile(path, out file)</code>, <code>WaveAudioStream.TryOpen(file, out stream)</code></td>
+</tr>
+<tr>
+<td>Play a stream in the background</td>
+<td><code>AudioManager.TryStartPlayback(stream, owned, out playback)</code></td>
+</tr>
+<tr>
+<td>Follow a background playback</td>
+<td><code>AudioPlayback.IsPlaying</code>, <code>AudioPlayback.State</code></td>
+</tr>
+<tr>
+<td>Stop a playback early</td>
+<td><code>AudioPlayback.Stop()</code></td>
+</tr>
+<tr>
+<td>Play a buffer of samples</td>
+<td><code>new MemoryAudioStream(format, sampleRate, data)</code></td>
+</tr>
+<tr>
+<td>Compute a sound as it is read</td>
+<td><code>AudioStream.Format</code>, <code>SampleRate</code>, <code>Depleted</code>, <code>Read(destination)</code></td>
+</tr>
+<tr>
+<td>Write frames to an output yourself</td>
+<td><code>AudioDevice.TrySetFormat(format, sampleRate)</code>, <code>Start()</code>, <code>Write(frames)</code>, <code>Stop()</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 

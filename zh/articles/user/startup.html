@@ -309,6 +309,66 @@ public class Kernel : Sys.Kernel
 [Drivers] usb:1-1:0 offer UsbMassStorageDriver -&gt; bound
 </code></pre>
 <p>如需在串口日志之外进行交互式调试，请参阅<a href="debugging.html">使用 VSCode 和 QEMU 调试</a>。</p>
+<p><a id="summary"></a></p>
+<h2 id="总结">总结</h2>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>在主循环之前进行一次性初始化</td>
+<td><code>BeforeRun()</code></td>
+</tr>
+<tr>
+<td>编写主循环的循环体</td>
+<td><code>Run()</code></td>
+</tr>
+<tr>
+<td>循环结束后进行清理</td>
+<td><code>AfterRun()</code></td>
+</tr>
+<tr>
+<td>让 CPU 停下等待中断</td>
+<td><code>Power.Halt()</code></td>
+</tr>
+<tr>
+<td>重启机器</td>
+<td><code>Power.Reboot()</code></td>
+</tr>
+<tr>
+<td>关闭机器电源</td>
+<td><code>Power.Shutdown()</code></td>
+</tr>
+<tr>
+<td>结束主循环</td>
+<td><code>Stop()</code></td>
+</tr>
+<tr>
+<td>从静态代码访问正在运行的内核</td>
+<td><code>Kernel.Current</code></td>
+</tr>
+<tr>
+<td>在控制台存在之前进行早期初始化</td>
+<td><code>OnBoot()</code></td>
+</tr>
+<tr>
+<td>在无头内核上启动控制台</td>
+<td><code>KernelConsole.Initialize()</code></td>
+</tr>
+<tr>
+<td>接管整个生命周期</td>
+<td><code>Start()</code></td>
+</tr>
+<tr>
+<td>读取内核命令行</td>
+<td><code>Environment.GetCommandLineArgs()</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 

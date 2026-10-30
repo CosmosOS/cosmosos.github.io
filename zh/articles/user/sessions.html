@@ -235,6 +235,70 @@ $ telnet localhost 2323
 <h2 id="工作原理">工作原理</h2>
 <p>每个会话都把自己的屏幕保存为显示设备画布上的一个 <code>KernelConsole</code> 网格。只有活动会话的网格会绘制到画布上；其他会话保持各自单元格的最新状态，并在被显示时重绘整个显示设备。Telnet 会话还会在每次变化发生时就把它发送给客户端：每个字符，以及每次光标移动和颜色变化对应的转义序列，这些都取自网格。因此两者对每一行在何处换行的判断是一致的：网格在一行写满时立即换行，而会话会在客户端上显式结束该行。</p>
 <p>会话的读取者阻塞在一个 <code>InterruptEvent</code> 上，当有按键为该会话入队时，这个事件就会被触发。按键要么来自键盘解码器（它把按键加入活动会话的队列，可能是在中断上下文中），要么来自远程会话的服务器：Telnet 服务器的线程在连接空闲时每 10 ms 检查一次这些连接，并把客户端发送的按键加入队列。切换键会唤醒一个原本处于阻塞状态的线程。主控制台的读取者运行在调度器的空闲线程上，因此它等待下一次中断而不是阻塞，键盘一直以来都是这样做的。</p>
+<p><a id="summary"></a></p>
+<h2 id="总结">总结</h2>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>打开虚拟控制台</td>
+<td><code>SessionManager.CreateVirtualConsole()</code></td>
+</tr>
+<tr>
+<td>在会话上运行线程</td>
+<td><code>SessionManager.Start(session, body)</code></td>
+</tr>
+<tr>
+<td>在会话的线程上读写该会话</td>
+<td><code>Console.ReadLine()</code>、<code>Console.WriteLine()</code></td>
+</tr>
+<tr>
+<td>列出已打开的会话</td>
+<td><code>SessionManager.GetSessions()</code></td>
+</tr>
+<tr>
+<td>查找显示设备上的会话</td>
+<td><code>SessionManager.Active</code></td>
+</tr>
+<tr>
+<td>在显示设备上显示会话</td>
+<td><code>SessionManager.Switch(id)</code></td>
+</tr>
+<tr>
+<td>通过 Telnet 提供 shell</td>
+<td><code>new TelnetServer(shell)</code>、<code>server.Start()</code>、<code>server.Stop()</code></td>
+</tr>
+<tr>
+<td>为远程终端编写会话类</td>
+<td><code>ConsoleSession(cols, rows)</code>、<code>Name</code>、<code>IsRemote</code></td>
+</tr>
+<tr>
+<td>将终端发送的按键加入队列</td>
+<td><code>EnqueueInput(key)</code></td>
+</tr>
+<tr>
+<td>跟随终端窗口的大小</td>
+<td><code>Resize(cols, rows)</code></td>
+</tr>
+<tr>
+<td>获知需要发送给终端的变化</td>
+<td><code>OnWritten</code>、<code>OnCleared</code>、<code>OnCursorMoved</code>、<code>OnCursorVisibilityChanged</code>、<code>OnColorsChanged</code></td>
+</tr>
+<tr>
+<td>读取光标位置和颜色</td>
+<td><code>CursorLeft</code>、<code>CursorTop</code>、<code>ExplicitForeground</code>、<code>ExplicitBackground</code></td>
+</tr>
+<tr>
+<td>将远程会话加入列表并启动其线程</td>
+<td><code>SessionManager.TryRegister(session)</code>、<code>SessionManager.Start(session, body)</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 

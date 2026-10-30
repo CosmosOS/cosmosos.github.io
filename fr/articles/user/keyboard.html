@@ -352,6 +352,70 @@ KeyboardManager ── KeyEvent queue ◀── active layout
         │                                    │
 PS/2 keyboard over the driver kit (the 8042, IRQ 1, x64)  /  virtio-keyboard over the driver kit (PCI, MMIO)  /  USB keyboard over the driver kit (xHCI, EHCI, OHCI)
 </code></pre>
+<p><a id="summary"></a></p>
+<h2 id="résumé">Résumé</h2>
+<table>
+<thead>
+<tr>
+<th>Tâche</th>
+<th>Appel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lire une ligne</td>
+<td><code>Console.ReadLine()</code></td>
+</tr>
+<tr>
+<td>Attendre l'appui d'une touche</td>
+<td><code>KeyboardManager.ReadKey()</code></td>
+</tr>
+<tr>
+<td>Connaître la touche appuyée et le caractère qu'elle produit</td>
+<td><code>KeyEvent.Key</code>, <code>KeyEvent.KeyChar</code>, <code>KeyEvent.Modifiers</code></td>
+</tr>
+<tr>
+<td>Lire une touche par la console, avec ou sans écho</td>
+<td><code>Console.ReadKey()</code>, <code>Console.ReadKey(true)</code></td>
+</tr>
+<tr>
+<td>Scruter les touches sans bloquer</td>
+<td><code>KeyboardManager.TryReadKey(out key)</code></td>
+</tr>
+<tr>
+<td>Savoir si un appui de touche attend</td>
+<td><code>KeyboardManager.KeyAvailable</code>, <code>Console.KeyAvailable</code></td>
+</tr>
+<tr>
+<td>Regarder la touche suivante sans la retirer de la file</td>
+<td><code>KeyboardManager.Peek()</code></td>
+</tr>
+<tr>
+<td>Savoir si Maj, Ctrl ou Alt est maintenue</td>
+<td><code>KeyboardManager.ShiftPressed</code>, <code>ControlPressed</code>, <code>AltPressed</code></td>
+</tr>
+<tr>
+<td>Lire l'état des touches de verrouillage</td>
+<td><code>KeyboardManager.CapsLock</code>, <code>NumLock</code>, <code>ScrollLock</code></td>
+</tr>
+<tr>
+<td>Changer de disposition</td>
+<td><code>KeyboardManager.SetLayout(layout)</code></td>
+</tr>
+<tr>
+<td>Lire la disposition active</td>
+<td><code>KeyboardManager.GetLayout()</code></td>
+</tr>
+<tr>
+<td>Écrire une disposition personnalisée</td>
+<td><code>KeyboardLayout</code>, <code>InitializeKeys()</code>, <code>KeyMapping</code></td>
+</tr>
+<tr>
+<td>Faire de la touche Alt droite une touche AltGr</td>
+<td><code>Keys.Add(new KeyMapping(0x60, Key.AltGr))</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 

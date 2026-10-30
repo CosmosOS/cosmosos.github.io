@@ -491,6 +491,74 @@ driver kit: IAudioOutput &quot;hda&quot;                                        
         │  16 KiB cyclic DMA buffer, drained on the codec's clock
 HD Audio controller → codec converter → pin → speakers (or QEMU's audio backend)
 </code></pre>
+<p><a id="summary"></a></p>
+<h2 id="总结">总结</h2>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>检查音频是否已编译进内核</td>
+<td><code>AudioManager.IsEnabled</code></td>
+</tr>
+<tr>
+<td>获取主输出</td>
+<td><code>AudioManager.Primary</code></td>
+</tr>
+<tr>
+<td>列出输出</td>
+<td><code>AudioManager.Count</code>、<code>AudioManager.TryGet(index, out device)</code></td>
+</tr>
+<tr>
+<td>在其他输出上播放</td>
+<td><code>new AudioPlayer(device).Play(stream)</code>、<code>AudioPlayback.TryStart(device, stream, owned, out playback)</code></td>
+</tr>
+<tr>
+<td>播放音调</td>
+<td><code>Console.Beep()</code>、<code>Console.Beep(frequency, duration)</code></td>
+</tr>
+<tr>
+<td>读取已在内存中的 WAV 文件</td>
+<td><code>MemoryAudioStream.FromWave(file)</code></td>
+</tr>
+<tr>
+<td>播放流并等待其结束</td>
+<td><code>AudioManager.Play(stream)</code></td>
+</tr>
+<tr>
+<td>从卷中流式读取 WAV 文件</td>
+<td><code>VfsManager.TryOpenFile(path, out file)</code>、<code>WaveAudioStream.TryOpen(file, out stream)</code></td>
+</tr>
+<tr>
+<td>在后台播放流</td>
+<td><code>AudioManager.TryStartPlayback(stream, owned, out playback)</code></td>
+</tr>
+<tr>
+<td>跟踪后台播放的进度</td>
+<td><code>AudioPlayback.IsPlaying</code>、<code>AudioPlayback.State</code></td>
+</tr>
+<tr>
+<td>提前结束播放</td>
+<td><code>AudioPlayback.Stop()</code></td>
+</tr>
+<tr>
+<td>播放样本缓冲区</td>
+<td><code>new MemoryAudioStream(format, sampleRate, data)</code></td>
+</tr>
+<tr>
+<td>在读取时即时计算声音</td>
+<td><code>AudioStream.Format</code>、<code>SampleRate</code>、<code>Depleted</code>、<code>Read(destination)</code></td>
+</tr>
+<tr>
+<td>直接向输出写入帧</td>
+<td><code>AudioDevice.TrySetFormat(format, sampleRate)</code>、<code>Start()</code>、<code>Write(frames)</code>、<code>Stop()</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 

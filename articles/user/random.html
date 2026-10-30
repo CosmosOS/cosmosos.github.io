@@ -161,6 +161,46 @@ Guid id = Guid.NewGuid();
 [Random] timer jitter alone. ...
 </code></pre>
 <p>The health tests catch a timer that is stuck or repeats a short pattern, not every predictable one: a machine that runs deterministically, such as QEMU under <code>-icount</code> or record/replay, can pass them and still produce the same output on every boot.</p>
+<hr>
+<h2 id="summary">Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Call</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fill a buffer with secure random bytes</td>
+<td><code>RandomNumberGenerator.Fill(data)</code></td>
+</tr>
+<tr>
+<td>Get secure random bytes in a new array</td>
+<td><code>RandomNumberGenerator.GetBytes(count)</code></td>
+</tr>
+<tr>
+<td>Pick a secure random integer in a range</td>
+<td><code>RandomNumberGenerator.GetInt32(fromInclusive, toExclusive)</code></td>
+</tr>
+<tr>
+<td>Fill a buffer with secure random bytes that are never zero</td>
+<td><code>RandomNumberGenerator.Create().GetNonZeroBytes(data)</code></td>
+</tr>
+<tr>
+<td>Get a generator instance</td>
+<td><code>RandomNumberGenerator.Create()</code></td>
+</tr>
+<tr>
+<td>Make a unique identifier</td>
+<td><code>Guid.NewGuid()</code></td>
+</tr>
+<tr>
+<td>Get random numbers for a game or a shuffle</td>
+<td><code>System.Random</code>, <code>Random.Shared</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 

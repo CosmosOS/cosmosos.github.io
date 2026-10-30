@@ -489,6 +489,74 @@ driver kit: IAudioOutput &quot;hda&quot;                                        
         │  16 KiB cyclic DMA buffer, drained on the codec's clock
 HD Audio controller → codec converter → pin → speakers (or QEMU's audio backend)
 </code></pre>
+<p><a id="summary"></a></p>
+<h2 id="résumé">Résumé</h2>
+<table>
+<thead>
+<tr>
+<th>Tâche</th>
+<th>Appel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Vérifier que l'audio est inclus dans la compilation</td>
+<td><code>AudioManager.IsEnabled</code></td>
+</tr>
+<tr>
+<td>Obtenir la sortie principale</td>
+<td><code>AudioManager.Primary</code></td>
+</tr>
+<tr>
+<td>Lister les sorties</td>
+<td><code>AudioManager.Count</code>, <code>AudioManager.TryGet(index, out device)</code></td>
+</tr>
+<tr>
+<td>Jouer sur une autre sortie</td>
+<td><code>new AudioPlayer(device).Play(stream)</code>, <code>AudioPlayback.TryStart(device, stream, owned, out playback)</code></td>
+</tr>
+<tr>
+<td>Jouer une tonalité</td>
+<td><code>Console.Beep()</code>, <code>Console.Beep(frequency, duration)</code></td>
+</tr>
+<tr>
+<td>Lire un fichier WAV déjà en mémoire</td>
+<td><code>MemoryAudioStream.FromWave(file)</code></td>
+</tr>
+<tr>
+<td>Jouer un flux et attendre sa fin</td>
+<td><code>AudioManager.Play(stream)</code></td>
+</tr>
+<tr>
+<td>Lire en flux un fichier WAV depuis un volume</td>
+<td><code>VfsManager.TryOpenFile(path, out file)</code>, <code>WaveAudioStream.TryOpen(file, out stream)</code></td>
+</tr>
+<tr>
+<td>Jouer un flux en arrière-plan</td>
+<td><code>AudioManager.TryStartPlayback(stream, owned, out playback)</code></td>
+</tr>
+<tr>
+<td>Suivre une lecture en arrière-plan</td>
+<td><code>AudioPlayback.IsPlaying</code>, <code>AudioPlayback.State</code></td>
+</tr>
+<tr>
+<td>Arrêter une lecture avant la fin</td>
+<td><code>AudioPlayback.Stop()</code></td>
+</tr>
+<tr>
+<td>Jouer un tampon d'échantillons</td>
+<td><code>new MemoryAudioStream(format, sampleRate, data)</code></td>
+</tr>
+<tr>
+<td>Calculer un son au fur et à mesure de sa lecture</td>
+<td><code>AudioStream.Format</code>, <code>SampleRate</code>, <code>Depleted</code>, <code>Read(destination)</code></td>
+</tr>
+<tr>
+<td>Écrire directement des trames sur une sortie</td>
+<td><code>AudioDevice.TrySetFormat(format, sampleRate)</code>, <code>Start()</code>, <code>Write(frames)</code>, <code>Stop()</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 

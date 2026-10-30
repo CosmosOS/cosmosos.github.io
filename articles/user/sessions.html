@@ -226,6 +226,69 @@ $ telnet localhost 2323
 <h2 id="how-it-works">How it works</h2>
 <p>Every session keeps its screen as a <code>KernelConsole</code> grid on the display's canvas. Only the grid of the active session paints the canvas; the others keep their cells up to date and repaint the whole display when shown. A Telnet session also sends every change to its client as it happens: each character, and the escape sequence for each cursor move and colour change, taken from the grid. The two therefore agree on where every line wraps: the grid wraps as soon as a line is full, and the session ends the line explicitly on the client.</p>
 <p>A session's reader blocks on an <code>InterruptEvent</code> that is signalled when a key is queued for it. Keys come either from the keyboard's decoder, which queues them on the active session, possibly in interrupt context, or from a remote session's server: the Telnet server's thread looks at its connections every 10 ms while they are idle, and queues the keys a client sent. A switch key wakes a thread that is otherwise blocked. The primary console's reader runs on the scheduler's idle thread, so it waits for the next interrupt instead of blocking, as the keyboard always did.</p>
+<h2 id="summary">Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Call</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open a virtual console</td>
+<td><code>SessionManager.CreateVirtualConsole()</code></td>
+</tr>
+<tr>
+<td>Run a thread on a session</td>
+<td><code>SessionManager.Start(session, body)</code></td>
+</tr>
+<tr>
+<td>Read and write the session from its thread</td>
+<td><code>Console.ReadLine()</code>, <code>Console.WriteLine()</code></td>
+</tr>
+<tr>
+<td>List the open sessions</td>
+<td><code>SessionManager.GetSessions()</code></td>
+</tr>
+<tr>
+<td>Find the session on the display</td>
+<td><code>SessionManager.Active</code></td>
+</tr>
+<tr>
+<td>Show a session on the display</td>
+<td><code>SessionManager.Switch(id)</code></td>
+</tr>
+<tr>
+<td>Serve a shell over Telnet</td>
+<td><code>new TelnetServer(shell)</code>, <code>server.Start()</code>, <code>server.Stop()</code></td>
+</tr>
+<tr>
+<td>Write a session class for a remote terminal</td>
+<td><code>ConsoleSession(cols, rows)</code>, <code>Name</code>, <code>IsRemote</code></td>
+</tr>
+<tr>
+<td>Queue a key the terminal sent</td>
+<td><code>EnqueueInput(key)</code></td>
+</tr>
+<tr>
+<td>Follow the terminal's window size</td>
+<td><code>Resize(cols, rows)</code></td>
+</tr>
+<tr>
+<td>Spot the changes to send to the terminal</td>
+<td><code>OnWritten</code>, <code>OnCleared</code>, <code>OnCursorMoved</code>, <code>OnCursorVisibilityChanged</code>, <code>OnColorsChanged</code></td>
+</tr>
+<tr>
+<td>Read the cursor position and the colours</td>
+<td><code>CursorLeft</code>, <code>CursorTop</code>, <code>ExplicitForeground</code>, <code>ExplicitBackground</code></td>
+</tr>
+<tr>
+<td>List a remote session and start its thread</td>
+<td><code>SessionManager.TryRegister(session)</code>, <code>SessionManager.Start(session, body)</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 

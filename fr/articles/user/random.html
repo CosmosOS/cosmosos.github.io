@@ -166,6 +166,47 @@ Guid id = Guid.NewGuid();
 [Random] timer jitter alone. ...
 </code></pre>
 <p>Les tests de santé détectent un minuteur bloqué ou qui répète un motif court, mais pas tous les minuteurs prévisibles : une machine qui s'exécute de façon déterministe, comme QEMU sous <code>-icount</code> ou en mode enregistrement/rejeu, peut les réussir et produire malgré tout la même sortie à chaque démarrage.</p>
+<hr>
+<p><a id="summary"></a></p>
+<h2 id="résumé">Résumé</h2>
+<table>
+<thead>
+<tr>
+<th>Tâche</th>
+<th>Appel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Remplir un tampon d'octets aléatoires sûrs</td>
+<td><code>RandomNumberGenerator.Fill(data)</code></td>
+</tr>
+<tr>
+<td>Obtenir des octets aléatoires sûrs dans un nouveau tableau</td>
+<td><code>RandomNumberGenerator.GetBytes(count)</code></td>
+</tr>
+<tr>
+<td>Tirer un entier aléatoire sûr dans un intervalle</td>
+<td><code>RandomNumberGenerator.GetInt32(fromInclusive, toExclusive)</code></td>
+</tr>
+<tr>
+<td>Remplir un tampon d'octets aléatoires sûrs dont aucun n'est nul</td>
+<td><code>RandomNumberGenerator.Create().GetNonZeroBytes(data)</code></td>
+</tr>
+<tr>
+<td>Obtenir une instance du générateur</td>
+<td><code>RandomNumberGenerator.Create()</code></td>
+</tr>
+<tr>
+<td>Créer un identifiant unique</td>
+<td><code>Guid.NewGuid()</code></td>
+</tr>
+<tr>
+<td>Obtenir des nombres aléatoires pour un jeu ou un mélange</td>
+<td><code>System.Random</code>, <code>Random.Shared</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 

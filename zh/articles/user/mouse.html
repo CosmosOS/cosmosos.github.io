@@ -265,6 +265,50 @@ MouseManager ── Sensitivity, screen clamping, ScrollDelta accumulation
         │
 PS/2 mouse over the driver kit (the 8042, IRQ 12, x64)  /  virtio-mouse over the driver kit (PCI, MMIO)  /  USB mouse over the driver kit (xHCI, EHCI, OHCI)
 </code></pre>
+<p><a id="summary"></a></p>
+<h2 id="总结">总结</h2>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>读取指针位置</td>
+<td><code>MouseManager.X</code>、<code>MouseManager.Y</code></td>
+</tr>
+<tr>
+<td>读取按键状态</td>
+<td><code>MouseManager.LeftButton</code>、<code>MouseManager.RightButton</code>、<code>MouseManager.MiddleButton</code></td>
+</tr>
+<tr>
+<td>在指针位置绘制光标</td>
+<td><code>canvas.DrawFilledCircle(color, MouseManager.X, MouseManager.Y, radius)</code></td>
+</tr>
+<tr>
+<td>将指针限制在屏幕范围内</td>
+<td><code>MouseManager.SetScreenSize(width, height)</code></td>
+</tr>
+<tr>
+<td>读取滚轮的移动</td>
+<td><code>MouseManager.ScrollDelta</code></td>
+</tr>
+<tr>
+<td>应用后将其清零</td>
+<td><code>MouseManager.ResetScrollDelta()</code></td>
+</tr>
+<tr>
+<td>让指针变慢或变快</td>
+<td><code>MouseManager.Sensitivity</code></td>
+</tr>
+<tr>
+<td>移动指针</td>
+<td><code>MouseManager.SetPosition(x, y)</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 

@@ -526,6 +526,78 @@ IPv4 / ARP and IPv6 / Neighbor Discovery / Ethernet
         │
 Network device                                          (e1000e or virtio-net, over the driver kit)
 </code></pre>
+<p><a id="summary"></a></p>
+<h2 id="résumé">Résumé</h2>
+<table>
+<thead>
+<tr>
+<th>Tâche</th>
+<th>Appel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Vérifier qu'une carte réseau est prête</td>
+<td><code>NetworkManager.DeviceCount</code>, <code>NetworkManager.Ready</code></td>
+</tr>
+<tr>
+<td>Lister les adaptateurs</td>
+<td><code>NetworkManager.GetAdapter(index)</code></td>
+</tr>
+<tr>
+<td>Choisir l'adaptateur principal</td>
+<td><code>NetworkManager.Primary</code></td>
+</tr>
+<tr>
+<td>Configurer IPv4 par DHCP</td>
+<td><code>DhcpClient.SendDiscoverPacket()</code></td>
+</tr>
+<tr>
+<td>Configurer IPv4 manuellement</td>
+<td><code>IPConfig.Enable(address, subnetMask, defaultGateway)</code></td>
+</tr>
+<tr>
+<td>Lire la configuration d'un adaptateur</td>
+<td><code>NetworkAdapter.IPConfig</code></td>
+</tr>
+<tr>
+<td>Lire l'adresse IPv6 lien-local</td>
+<td><code>NetworkAdapter.LinkLocalAddress</code></td>
+</tr>
+<tr>
+<td>Envoyer un ping à une adresse IPv6</td>
+<td><code>Icmpv6Client.Connect(dest)</code>, <code>SendEcho()</code>, <code>Receive(ref source, timeout)</code></td>
+</tr>
+<tr>
+<td>Envoyer et recevoir des datagrammes UDP</td>
+<td><code>System.Net.Sockets.UdpClient</code></td>
+</tr>
+<tr>
+<td>Se connecter à un serveur TCP</td>
+<td><code>TcpClient.Connect(address, port)</code>, <code>TcpClient.GetStream()</code></td>
+</tr>
+<tr>
+<td>Accepter des connexions TCP</td>
+<td><code>TcpListener.Start()</code>, <code>Pending()</code>, <code>AcceptTcpClient()</code></td>
+</tr>
+<tr>
+<td>Enregistrer un serveur de noms</td>
+<td><code>DnsConfig.Add(nameserver)</code></td>
+</tr>
+<tr>
+<td>Résoudre un nom</td>
+<td><code>Dns.GetHostAddresses(hostNameOrAddress)</code></td>
+</tr>
+<tr>
+<td>Lire tous les enregistrements d'adresse d'un nom</td>
+<td><code>DnsClient.SendQuery(url)</code>, <code>DnsClient.ReceiveAll(timeout)</code></td>
+</tr>
+<tr>
+<td>Envoyer un paquet fabriqué à la main</td>
+<td><code>NetworkStack.Send(packet)</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 

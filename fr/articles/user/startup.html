@@ -309,6 +309,66 @@ public class Kernel : Sys.Kernel
 [Drivers] usb:1-1:0 offer UsbMassStorageDriver -&gt; bound
 </code></pre>
 <p>Pour un débogage interactif en plus du journal série, consultez <a href="debugging.html">Déboguer avec VSCode et QEMU</a>.</p>
+<p><a id="summary"></a></p>
+<h2 id="résumé">Résumé</h2>
+<table>
+<thead>
+<tr>
+<th>Tâche</th>
+<th>Appel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Initialiser une fois avant la boucle principale</td>
+<td><code>BeforeRun()</code></td>
+</tr>
+<tr>
+<td>Écrire le corps de la boucle principale</td>
+<td><code>Run()</code></td>
+</tr>
+<tr>
+<td>Nettoyer une fois la boucle terminée</td>
+<td><code>AfterRun()</code></td>
+</tr>
+<tr>
+<td>Mettre le CPU en attente jusqu'à une interruption</td>
+<td><code>Power.Halt()</code></td>
+</tr>
+<tr>
+<td>Redémarrer la machine</td>
+<td><code>Power.Reboot()</code></td>
+</tr>
+<tr>
+<td>Éteindre la machine</td>
+<td><code>Power.Shutdown()</code></td>
+</tr>
+<tr>
+<td>Terminer la boucle principale</td>
+<td><code>Stop()</code></td>
+</tr>
+<tr>
+<td>Atteindre le noyau en cours d'exécution depuis du code statique</td>
+<td><code>Kernel.Current</code></td>
+</tr>
+<tr>
+<td>Faire des initialisations précoces avant que la console n'existe</td>
+<td><code>OnBoot()</code></td>
+</tr>
+<tr>
+<td>Faire apparaître la console sur un noyau headless</td>
+<td><code>KernelConsole.Initialize()</code></td>
+</tr>
+<tr>
+<td>Prendre en main tout le cycle de vie</td>
+<td><code>Start()</code></td>
+</tr>
+<tr>
+<td>Lire la ligne de commande du noyau</td>
+<td><code>Environment.GetCommandLineArgs()</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 

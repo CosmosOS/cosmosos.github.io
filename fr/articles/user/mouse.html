@@ -265,6 +265,50 @@ MouseManager ── Sensitivity, screen clamping, ScrollDelta accumulation
         │
 PS/2 mouse over the driver kit (the 8042, IRQ 12, x64)  /  virtio-mouse over the driver kit (PCI, MMIO)  /  USB mouse over the driver kit (xHCI, EHCI, OHCI)
 </code></pre>
+<p><a id="summary"></a></p>
+<h2 id="résumé">Résumé</h2>
+<table>
+<thead>
+<tr>
+<th>Tâche</th>
+<th>Appel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lire la position du pointeur</td>
+<td><code>MouseManager.X</code>, <code>MouseManager.Y</code></td>
+</tr>
+<tr>
+<td>Lire les boutons</td>
+<td><code>MouseManager.LeftButton</code>, <code>MouseManager.RightButton</code>, <code>MouseManager.MiddleButton</code></td>
+</tr>
+<tr>
+<td>Dessiner un curseur à la position du pointeur</td>
+<td><code>canvas.DrawFilledCircle(color, MouseManager.X, MouseManager.Y, radius)</code></td>
+</tr>
+<tr>
+<td>Limiter le pointeur à l'écran</td>
+<td><code>MouseManager.SetScreenSize(width, height)</code></td>
+</tr>
+<tr>
+<td>Lire le mouvement de la molette</td>
+<td><code>MouseManager.ScrollDelta</code></td>
+</tr>
+<tr>
+<td>Le remettre à zéro une fois appliqué</td>
+<td><code>MouseManager.ResetScrollDelta()</code></td>
+</tr>
+<tr>
+<td>Ralentir ou accélérer le pointeur</td>
+<td><code>MouseManager.Sensitivity</code></td>
+</tr>
+<tr>
+<td>Déplacer le pointeur</td>
+<td><code>MouseManager.SetPosition(x, y)</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 
