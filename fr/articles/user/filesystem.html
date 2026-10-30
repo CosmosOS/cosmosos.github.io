@@ -89,8 +89,8 @@
 
 <p><a id="file-system"></a></p>
 <h1 id="système-de-fichiers">Système de fichiers</h1>
-<p>Dans cet article, nous verrons comment utiliser le VFS (système de fichiers virtuel) de Cosmos Gen3.
-Contrairement à Gen2, où vous passiez par <code>CosmosVFS</code> et par un sous-ensemble de <code>System.IO</code> remplacé par des plugs, Gen3 vous donne l'<strong>API <code>System.IO</code> standard de .NET</strong> (<code>File</code>, <code>Directory</code>, <code>FileStream</code>, <code>StreamReader</code>/<code>StreamWriter</code>, <code>FileInfo</code>/<code>DirectoryInfo</code>), qui s'exécute sans modification au-dessus du VFS du noyau. Vous montez un système de fichiers sur un point de montage de style Unix et vous utilisez des chemins absolus ordinaires.</p>
+<p>Dans cet article, nous verrons les disques et les fichiers sur Cosmos Gen3 : donner un disque à votre noyau, y monter un système de fichiers, lire des CD-ROM et des images ISO, partitionner et formater un disque, et manipuler des fichiers une fois un volume monté.</p>
+<p>Lire et écrire des fichiers ne demande aucune API propre à Cosmos. Gen3 exécute sans modification le <code>System.IO</code> standard de .NET (<code>File</code>, <code>Directory</code>, <code>FileStream</code>, <code>StreamReader</code>, <code>FileInfo</code> et le reste), et le noyau répond aux appels système qu'il ferait sous Linux. La part de Cosmos est l'étape d'avant : votre noyau enregistre un pilote de système de fichiers et monte un volume sur un chemin de style Unix comme <code>/mnt</code>, et dès lors chaque chemin sous <code>/mnt</code> est servi par ce pilote.</p>
 <p>Les principales différences si vous venez de Gen2 :</p>
 <table>
 <thead>
@@ -114,12 +114,12 @@ Contrairement à Gen2, où vous passiez par <code>CosmosVFS</code> et par un sou
 <tr>
 <td>Surface d'API</td>
 <td>Sous-ensemble de <code>System.IO</code> remplacé par des plugs</td>
-<td><code>System.IO</code> complet (flux, motifs d'énumération, <code>FileInfo</code>, …)</td>
+<td><code>System.IO</code> complet (flux, motifs d'énumération, <code>FileInfo</code>, ...)</td>
 </tr>
 <tr>
 <td><code>File.Move</code></td>
 <td>Sans plug (copie + suppression)</td>
-<td>Fonctionne, y compris l'écrasement d'une destination existante</td>
+<td>Fonctionne, et peut écraser une destination existante</td>
 </tr>
 <tr>
 <td>Systèmes de fichiers</td>
@@ -133,8 +133,10 @@ Contrairement à Gen2, où vous passiez par <code>CosmosVFS</code> et par un sou
 </tr>
 </tbody>
 </table>
-<p><strong>Attention</strong> : formatez <strong>toujours</strong> votre disque avec Cosmos, et <strong>uniquement</strong> avec Cosmos, si vous comptez l'utiliser avec Cosmos. Des outils comme Parted ou FDisk sont bien plus avancés et peuvent organiser le disque autrement que ce qu'attend Cosmos.</p>
+<p><strong>Essayez d'abord dans une machine virtuelle.</strong> Partitionner et formater écrivent directement sur le disque, sans rien à confirmer ni rien à annuler, si bien que sur du vrai matériel un décalage en secteurs erroné détruit tout ce que contenait le disque. <code>cosmos run</code> donne à QEMU une image disque que vous pouvez jeter, et un disque virtuel VMware ou VirtualBox est tout aussi jetable.</p>
 <p><strong>AVERTISSEMENT</strong> : n'essayez <strong>pas</strong> ceci sur du vrai matériel ! Cela peut causer des <strong>DOMMAGES IRRÉPARABLES</strong> à vos données. Utilisez une machine virtuelle (QEMU via <code>cosmos run</code>, VMware, VirtualBox, …).</p>
+<p>Partitionnez et formatez les disques de votre noyau depuis Cosmos, avec les appels que montre cette page, plutôt qu'avec Parted ou fdisk. Cosmos est testé sur des disques qu'il a organisés lui-même, et un outil de l'hôte peut organiser un disque d'une façon que ces tests ne couvrent jamais.</p>
+<p>Si vous trouvez des bugs ou quelque chose d'anormal, merci de <a href="https://github.com/CosmosOS/Cosmos/issues/new/choose">soumettre une issue</a> sur notre dépôt.</p>
 <p><a id="enable-storage-in-your-kernel"></a></p>
 <h2 id="activer-le-stockage-dans-votre-noyau">Activer le stockage dans votre noyau</h2>
 <p>La prise en charge du stockage dépend d'un commutateur de fonctionnalité. Vérifiez que le <code>.csproj</code> de votre noyau ne la désactive pas (sa valeur par défaut est <code>true</code>) :</p>
@@ -142,23 +144,67 @@ Contrairement à Gen2, où vous passiez par <code>CosmosVFS</code> et par un sou
   &lt;CosmosEnableStorage&gt;true&lt;/CosmosEnableStorage&gt;
 &lt;/PropertyGroup&gt;
 </code></pre>
-<p>Au démarrage, le noyau initialise <code>StorageManager</code>, qui installe son consommateur des périphériques bloc du <a href="drivers.html">kit de pilotes</a>. Les pilotes AHCI, NVMe, virtio-blk et de stockage de masse USB du kit publient ensuite chaque disque SATA (<code>sata0</code>, <code>sata1</code>, ...), chaque namespace NVMe (<code>nvme0n1</code>, ...), chaque disque virtio-blk (<code>vblk0</code>, ...) et chaque clé USB (<code>usb0</code>, <code>usb1</code>, ...) qu'ils trouvent pendant l'étape des pilotes, et le gestionnaire enregistre chacun au moment où il est publié et analyse sa table de partitions MBR/GPT pour en remplir <code>StorageManager.Partitions</code> avant que la publication ne rende la main. Les clés USB nécessitent <code>CosmosEnableUsb</code>, activé par défaut dès que <code>CosmosEnableStorage</code> l'est ; le passer à <code>false</code> conserve les disques AHCI et NVMe et retire les disques USB en même temps que les pilotes de contrôleur hôte. Le gestionnaire tient ses tables dans un seul ordre, qui décide du périphérique principal : par chemin de nœud, <code>pci:</code> avant <code>usb:</code> avant <code>virtio:</code>, dans <code>Devices</code>, dans <code>Partitions</code> et pour <code>PrimaryDevice</code> ; un disque que le noyau a enregistré lui-même vient après tous les disques du kit ; puis l'ordre d'enregistrement. Ainsi, un disque interne sur un contrôleur PCI est le principal face à une clé USB présente au démarrage, quel que soit celui qui s'est enregistré en premier, et un disque du kit arrivé après une clé USB passe devant elle et renumérote <code>Partitions</code> : c'est pourquoi un montage par <code>Partition</code> (voir plus bas) est préférable à un montage par chaîne d'index.</p>
-<p>Les disques USB, ainsi que les disques virtio-blk derrière un emplacement PCI Express à branchement à chaud, peuvent aussi être branchés et retirés pendant que le noyau tourne. Un disque branché est publié par le kit, puis enregistré et analysé comme un disque trouvé au démarrage, sous le plus petit nom <code>usbN</code> ou <code>vblkN</code> libre. Un disque débranché est retiré : il quitte <code>StorageManager.Devices</code> et <code>StorageManager.Partitions</code>, les montages faits sur ses partitions avec la surcharge <code>Partition</code> de <code>TryMount</code> (voir plus bas) sont détachés, et les fichiers encore ouverts dessus échouent avec <code>IOException</code> (le pilote de stockage de masse USB lève <code>IOException(&quot;USB device detached&quot;)</code> et le pilote virtio-blk <code>IOException(&quot;virtio-blk device detached&quot;)</code>, de même que le pilote NVMe lève <code>IOException</code> pendant qu'il se détache) ; un disque dont le kit a libéré la mémoire du pilote échoue plutôt avec l'<code>InvalidOperationException</code> du kit, car l'anneau supporté n'enveloppe pas le périphérique du pilote. Un montage fait à partir d'une chaîne source ne désigne aucun disque : il reste donc en place, et ses E/S échouent de la même façon. Un montage détaché n'est pas vidé sur le disque, puisque le disque n'est plus là : appelez donc <code>VfsManager.TryUnmount</code> avant de retirer un disque. Les deux listes peuvent changer entre deux lectures pendant qu'un disque USB ou virtio-blk arrive ou s'en va, depuis le thread de travail du kit : lisez <code>Devices</code> ou <code>Partitions</code> une seule fois et indexez cette copie.</p>
-<p>Pour donner un disque à votre noyau dans QEMU, attachez une image avec <code>cosmos run</code> :</p>
+<p>Avec le commutateur activé, le noyau initialise ses pilotes de stockage au démarrage et remet chaque disque qu'ils trouvent à <code>StorageManager</code>. Le gestionnaire liste les disques dans <code>StorageManager.Devices</code>, lit la table de partitions MBR ou GPT de chacun et liste les partitions qu'il trouve dans <code>StorageManager.Partitions</code>, le tout avant que le <code>BeforeRun()</code> de votre noyau ne s'exécute. Chaque disque reçoit un nom, celui qu'affichent le journal de démarrage et <code>IBlockDevice.Name</code> :</p>
+<table>
+<thead>
+<tr>
+<th>Disque</th>
+<th>Noms</th>
+<th>L'attacher dans QEMU avec</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Un disque SATA, derrière un contrôleur AHCI</td>
+<td><code>sata0</code>, <code>sata1</code>, ...</td>
+<td><code>cosmos run --disk disk.img</code></td>
+</tr>
+<tr>
+<td>Un namespace NVMe</td>
+<td><code>nvme0n1</code>, ...</td>
+<td><code>cosmos run --disk disk.img,nvme</code></td>
+</tr>
+<tr>
+<td>Un disque virtio-blk</td>
+<td><code>vblk0</code>, ...</td>
+<td><code>cosmos run --disk disk.img,virtio-blk</code> (ou <code>virtio-blk-mmio</code> sur arm64)</td>
+</tr>
+<tr>
+<td>Une clé USB</td>
+<td><code>usb0</code>, <code>usb1</code>, ...</td>
+<td><code>cosmos run --disk disk.img,usb</code></td>
+</tr>
+<tr>
+<td>Un lecteur de CD-ROM, derrière un contrôleur AHCI</td>
+<td><code>cdrom0</code>, ...</td>
+<td>Rien : sur x64, <code>cosmos run</code> démarre depuis un tel lecteur</td>
+</tr>
+</tbody>
+</table>
+<p>Les clés USB demandent aussi <code>CosmosEnableUsb</code>, qui vaut <code>true</code> par défaut dès que <code>CosmosEnableStorage</code> est activé. Le passer à <code>false</code> retire les pilotes de contrôleur hôte USB, et les clés avec eux, tandis que les autres disques restent.</p>
+<p>Pour donner des disques à votre noyau dans QEMU, créez une image par lecteur et passez chacune à <code>cosmos run</code> avec son type, pris dans le tableau ci-dessus (une image sans type est un disque SATA) :</p>
 <pre><code class="lang-console">$ qemu-img create disk.img 64M
-$ cosmos run --disk disk.img            # attached as an AHCI disk (default)
-$ cosmos run --disk disk.img,nvme       # or as an NVMe namespace
-$ cosmos run --disk disk.img,usb        # or as a USB stick on an xHCI controller
-$ cosmos run --disk disk.img,virtio-blk # or as a virtio-blk-pci function
-$ cosmos run --disk disk.img,virtio-blk-mmio # or, on arm64, in the virt machine's virtio-mmio window
+$ qemu-img create stick.img 64M
+$ cosmos run --disk disk.img --disk stick.img,usb
 </code></pre>
-<p><code>--disk</code> peut être répété si vous voulez plusieurs disques. Un disque <code>usb</code> donne aussi à la machine son contrôleur xHCI, <code>usbxhci0</code> ; <code>--usb-controller ehci</code> ou <code>ehci-ohci</code> y place plutôt un EHCI, <code>usbehci0</code>, et <code>ohci</code> un OHCI, <code>usbohci0</code>, chacun rattachant chaque périphérique USB à l'un de ses ports racines. Le contrôleur vous permet de brancher une autre clé et de la retirer pendant que le noyau tourne, depuis le moniteur QEMU (Ctrl+Alt+2 dans la fenêtre QEMU) :</p>
+<p>Une image tout juste sortie de <code>qemu-img create</code> est vierge : elle ne porte ni table de partitions ni système de fichiers, si bien que le noyau liste le disque mais n'y trouve aucune partition. Écrivez une table et formatez une partition depuis votre noyau, comme le montrent <a href="#partition-a-disk">Partitionner un disque</a> et <a href="#format-a-partition">Formater une partition</a>, avant de la monter.</p>
+<p><a id="which-disk-comes-first"></a></p>
+<h3 id="quel-disque-vient-en-premier">Quel disque vient en premier</h3>
+<p><code>StorageManager.PrimaryDevice</code> est la première entrée de <code>Devices</code>, et le gestionnaire tient cette liste dans un ordre fixe plutôt que dans l'ordre d'arrivée des disques, si bien que le périphérique principal ne dépend pas du pilote qui a fini le premier. Les disques trouvés par les pilotes viennent d'abord, classés selon le bus et l'adresse du périphérique sur lequel le <a href="drivers.html">kit de pilotes</a> les a trouvés, ce qui place un disque SATA ou NVMe (<code>pci:</code>) avant une clé USB (<code>usb:</code>) et une clé USB avant un disque virtio-blk (<code>virtio:</code>). Les disques que votre noyau a enregistrés lui-même avec <code>StorageManager.RegisterDevice</code> suivent, dans l'ordre où il les a enregistrés. Les supports en lecture seule comme un CD viennent en dernier, si bien que le périphérique principal est un disque que vous pouvez formater dès que la machine en a un.</p>
+<p>Cet ordre a une conséquence à prévoir : un disque qui arrive plus tard prend sa place dans cet ordre, et non la fin de la liste. Une clé USB branchée alors qu'un disque virtio-blk est attaché passe devant lui, et chaque partition du disque virtio-blk recule dans <code>StorageManager.Partitions</code>. C'est pourquoi cette page monte une <code>Partition</code> plutôt qu'un index dans cette liste.</p>
+<p><a id="disks-that-come-and-go"></a></p>
+<h3 id="les-disques-qui-vont-et-viennent">Les disques qui vont et viennent</h3>
+<p>Les clés USB, ainsi que les disques virtio-blk derrière un emplacement de branchement à chaud PCI Express, peuvent être branchés et retirés pendant que le noyau tourne. Un disque branché est enregistré et analysé comme un disque trouvé au démarrage, sous le plus petit nom <code>usbN</code> ou <code>vblkN</code> libre.</p>
+<p>Un disque retiré quitte <code>Devices</code> et <code>Partitions</code>, et les montages faits dessus partent avec lui. Un montage fait avec la surcharge <code>Partition</code> de <code>TryMount</code> (montrée plus bas) est détaché sans être vidé sur le disque, puisque le disque ne peut plus prendre d'écriture : appelez donc <code>VfsManager.TryUnmount</code> avant de retirer un disque sur lequel vous avez écrit. Un montage fait à partir d'une chaîne source ne désigne aucun disque, si bien qu'il reste dans la table des montages. Dans les deux cas, un fichier encore ouvert sur le disque échoue à sa lecture ou à son écriture suivante avec l'<code>IOException</code> du pilote (<code>&quot;USB device detached&quot;</code> pour le pilote de stockage de masse USB, <code>&quot;virtio-blk device detached&quot;</code> pour le pilote virtio-blk, <code>&quot;NVMe device detached&quot;</code> pour le pilote NVMe), ou avec une <code>InvalidOperationException</code> une fois que le kit a libéré la mémoire du pilote.</p>
+<p>Quand un disque arrive ou s'en va, un thread du kit de pilotes remplace les deux listes en entier : une liste que vous tenez ne change donc jamais sous vos yeux, mais relire la propriété peut en donner une plus récente. Lisez <code>Devices</code> ou <code>Partitions</code> une seule fois et indexez cette copie.</p>
+<p>Pour essayer dans QEMU, démarrez avec au moins un disque <code>usb</code> : le premier donne à la machine un contrôleur xHCI, <code>usbxhci0</code>, et le nom du contrôleur est le bus sur lequel vous branchez une autre clé depuis le moniteur QEMU (Ctrl+Alt+2 dans la fenêtre QEMU). <code>--usb-controller ehci</code> ou <code>ehci-ohci</code> y place plutôt un contrôleur EHCI, <code>usbehci0</code>, et <code>ohci</code> un contrôleur OHCI, <code>usbohci0</code> ; tous deux rattachent chaque périphérique USB à l'un de leurs ports racines :</p>
 <pre><code class="lang-console">(qemu) drive_add 0 if=none,id=stick,file=stick.img,format=raw
 (qemu) device_add usb-storage,drive=stick,id=stick,bus=usbxhci0.0
 (qemu) device_del stick
 </code></pre>
 <p><a id="register-a-filesystem-driver-and-mount-it"></a></p>
 <h2 id="enregistrer-un-pilote-de-système-de-fichiers-et-le-monter">Enregistrer un pilote de système de fichiers et le monter</h2>
+<p>Une partition n'est qu'une plage de secteurs tant qu'un pilote de système de fichiers ne la lit pas. Cosmos fournit trois pilotes, chacun dans son espace de noms : FAT (FAT12, FAT16 et FAT32), ext2 et ISO 9660. Votre noyau enregistre ceux qu'il veut sous des noms de son choix, puis monte une partition avec l'un d'eux sur un point de montage.</p>
 <p>Voici les <code>using</code> sur lesquels s'appuient les extraits ci-dessous :</p>
 <pre><code class="lang-csharp">using System.IO;
 using Cosmos.Kernel.HAL.Devices.Storage;
@@ -166,9 +212,8 @@ using Cosmos.Kernel.System.FileSystem;
 using Cosmos.Kernel.System.FileSystem.Fat;
 using Cosmos.Kernel.System.Storage;
 </code></pre>
-<p><code>Cosmos.Kernel.System.FileSystem</code> contient tout le VFS dans un seul espace de noms : le gestionnaire et ce qu'il distribue (<code>VfsManager</code>, <code>VfsMount</code>, <code>IVfsNodeHandle</code>, <code>IVfsFileHandle</code> et <code>IVfsDirectoryHandle</code>), les contrats qu'implémente un pilote de système de fichiers (<code>IVfsFileSystemType</code>, <code>IVfsSuperblock</code>, <code>IVfsInode</code>, <code>IVfsOpenFile</code> et leurs interfaces d'opérations), ainsi que les types d'indicateurs, de modes et de métadonnées que nomme chaque appel de montage, de création et de stat (<code>MountFlags</code>, <code>VfsMode</code>, <code>VfsStat</code>, <code>VfsStatFs</code>, <code>SetAttrFlags</code>, <code>SeekWhence</code>, <code>VfsTimespec</code>). C'est pourquoi <code>MountFlags.None</code> apparaît dans le <code>BeforeRun()</code> d'un noyau sous le même <code>using</code> que <code>VfsManager</code>, et pourquoi l'<code>IVfsInode</code> que vous donne <code>IVfsNodeHandle.Inode</code> ne demande aucun autre <code>using</code>. Les pilotes de système de fichiers se trouvent un niveau plus bas, chacun dans son espace de noms : les types <code>FatFileSystemType</code> et <code>FatFormatOptions</code> du pilote FAT sont dans <code>Cosmos.Kernel.System.FileSystem.Fat</code>, le <code>Ext2FileSystemType</code> du pilote ext2 dans <code>Cosmos.Kernel.System.FileSystem.Ext2</code>, et le <code>Iso9660FileSystemType</code> du pilote ISO 9660 dans <code>Cosmos.Kernel.System.FileSystem.Iso9660</code>.</p>
-<p><code>Cosmos.Kernel.HAL.Devices.Storage</code> n'est nécessaire qu'à l'extrait du disque RAM plus bas, qui implémente <code>IBlockDevice</code>. Sans lui, monter une vraie partition demande les trois espaces de noms de <code>Cosmos.Kernel.System</code>.</p>
-<p>Commencez par enregistrer un pilote FAT sous le nom de votre choix, puis montez une partition sur un point de montage. Ajoutez ceci au <code>BeforeRun()</code> de votre noyau :</p>
+<p><code>Cosmos.Kernel.System.FileSystem</code> est le VFS lui-même : <code>VfsManager</code>, les entrées de la table des montages (<code>VfsMount</code>), les types d'indicateurs et de métadonnées que nomme un appel de montage ou de stat (<code>MountFlags</code>, <code>VfsMode</code>, <code>VfsStat</code>, <code>VfsStatFs</code>), et les interfaces qu'implémente un pilote de système de fichiers. C'est pourquoi <code>MountFlags.None</code> ne demande aucun <code>using</code> à lui. Les pilotes se trouvent un niveau plus bas : <code>FatFileSystemType</code> et <code>FatFormatOptions</code> dans <code>Cosmos.Kernel.System.FileSystem.Fat</code>, <code>Ext2FileSystemType</code> dans <code>Cosmos.Kernel.System.FileSystem.Ext2</code>, et <code>Iso9660FileSystemType</code> dans <code>Cosmos.Kernel.System.FileSystem.Iso9660</code>. <code>StorageManager</code> et les types de partition sont dans <code>Cosmos.Kernel.System.Storage</code>, et <code>Cosmos.Kernel.HAL.Devices.Storage</code> n'est là que pour <code>IBlockDevice</code>, le type d'un disque, qu'implémente le disque RAM plus bas et que manipulent les extraits de partitionnement.</p>
+<p>Enregistrez le pilote FAT, puis montez la première partition sur <code>/mnt</code>. Ceci va dans le <code>BeforeRun()</code> de votre noyau :</p>
 <pre><code class="lang-csharp">FatFileSystemType fat = new();
 
 if (!VfsManager.RegisterFileSystem(&quot;fat&quot;, fat))
@@ -185,19 +230,23 @@ if (StorageManager.Partitions.Count == 0)
 
 if (VfsManager.TryMount(&quot;fat&quot;, StorageManager.Partitions[0], MountFlags.None, &quot;/mnt&quot;, out VfsMount? mount))
 {
-    Console.WriteLine(&quot;Mounted &quot; + mount.Name + &quot; at &quot; + mount.MountPoint);
+    Console.WriteLine(&quot;Mounted &quot; + mount.Name + &quot; partition &quot; + mount.Source + &quot; at &quot; + mount.MountPoint);
+}
+else
+{
+    Console.WriteLine(&quot;No FAT volume on the first partition.&quot;);
 }
 </code></pre>
-<p><code>Partitions</code> est vide avant l'analyse du stockage, quand aucun disque n'est attaché et quand le stockage est exclu de la compilation : ne l'indexez donc qu'après avoir vérifié <code>Count</code>. Chaque appel ci-dessus indique s'il a réussi : <code>RegisterFileSystem</code> refuse un nom déjà utilisé, et <code>TryMount</code> refuse une source que le pilote ne reconnaît pas.</p>
-<p><code>StorageManager.GetPartitions(device)</code> liste les partitions d'un seul disque, numérotées comme un utilisateur les numérote ; <code>StorageManager.Partitions</code> est la liste à plat de tous les disques.</p>
-<p>Il existe une seconde forme, <code>VfsManager.TryMount(&quot;fat&quot;, &quot;0&quot;, ...)</code>, où <code>source</code> est une chaîne propre au pilote. Tout pilote en accepte une, et le pilote FAT la lit comme un index dans <code>StorageManager.Partitions</code>. Préférez la surcharge <code>Partition</code> : créer ou supprimer une partition renumérote cette liste, si bien qu'un index conservé par-delà une nouvelle analyse peut finir par désigner une autre partition.</p>
+<p>Chacun de ces appels signale un refus par sa valeur de retour plutôt que par une exception : <code>RegisterFileSystem</code> refuse un nom déjà utilisé, et <code>TryMount</code> refuse une partition sur laquelle le pilote ne trouve aucun volume. Un disque dont la lecture elle-même échoue lève toujours l'exception de son pilote. <code>Partitions</code> est vide quand le stockage est exclu de la compilation, ou quand aucun disque ne porte de table de partitions ni de volume FAT et qu'aucun CD n'est dans un lecteur, c'est pourquoi l'extrait vérifie <code>Count</code> avant de l'indexer. Sur x64, <code>cosmos run</code> démarre depuis un CD que le noyau liste aussi : quand aucun disque attaché n'a de partition, la première entrée est donc ce CD, et le pilote FAT n'y trouve aucun volume.</p>
+<p><code>StorageManager.GetPartitions(device)</code> donne les partitions d'un seul disque, numérotées comme un utilisateur les numérote, alors que <code>Partitions</code> est la liste à plat de tous les disques.</p>
+<p><code>TryMount</code> accepte aussi la source sous forme de chaîne, comme dans <code>VfsManager.TryMount(&quot;fat&quot;, &quot;0&quot;, ...)</code>, que chaque pilote lit à sa façon : le pilote FAT la lit comme un index dans <code>StorageManager.Partitions</code>. Préférez la surcharge <code>Partition</code>. Un index désigne la partition, quelle qu'elle soit, qui se trouve à cette position, et créer ou supprimer une partition, ou un disque qui arrive ou s'en va, les déplace.</p>
 <!-- screenshot: console du noyau juste après le démarrage, avec la ligne "Mounted fat partition 0 at /mnt" -->
 <p><img src="images/filesystem-mount.png" alt="Montage"></p>
-<p>À partir de là, tout ce qui se trouve sous <code>/mnt</code> est servi par le pilote FAT, et tout le reste de cet article n'est que du <code>System.IO</code> ordinaire.</p>
-<p><strong>Remarque</strong> : <code>/</code> lui-même est une <em>racine virtuelle</em>. Elle existe toujours, même quand rien n'est monté, et l'énumérer liste les points de montage. Vous ne pouvez pas y créer de fichiers directement (<code>IOException</code>, système de fichiers en lecture seule) ; créez-les sous un point de montage comme <code>/mnt</code>.</p>
-<p><a id="alternative-a-ram-disk"></a></p>
-<h3 id="alternative--un-disque-ram">Alternative : un disque RAM</h3>
-<p>Pour des essais rapides, vous n'avez même pas besoin d'image disque. Un périphérique bloc n'est qu'un <code>IBlockDevice</code> (de <code>Cosmos.Kernel.HAL.Devices.Storage</code>), et un périphérique adossé à la RAM tient en quelques lignes ; c'est exactement ce qu'utilisent les suites de tests du noyau :</p>
+<p>À partir de là, tout ce qui se trouve sous <code>/mnt</code> est servi par le pilote FAT.</p>
+<p>La racine, <code>/</code>, n'est pas un volume. Elle existe même quand rien n'est monté, et l'énumérer liste les points de montage, mais y créer un fichier directement échoue avec <code>IOException</code> (système de fichiers en lecture seule), puisqu'aucun pilote ne s'y trouve pour stocker le fichier. Créez les fichiers sous un point de montage comme <code>/mnt</code>.</p>
+<p><a id="try-it-on-a-ram-disk"></a></p>
+<h3 id="essayer-sur-un-disque-ram">Essayer sur un disque RAM</h3>
+<p>Pour des essais rapides, vous n'avez même pas besoin d'image disque. Un périphérique bloc est tout ce qui implémente <code>IBlockDevice</code>, et un périphérique adossé à un tableau tient en quelques lignes :</p>
 <pre><code class="lang-csharp">internal sealed class MemoryBlockDevice : IBlockDevice
 {
     private readonly byte[] _storage;
@@ -223,7 +272,7 @@ if (VfsManager.TryMount(&quot;fat&quot;, StorageManager.Partitions[0], MountFlag
     public void Flush() { }
 }
 </code></pre>
-<p>Le pilote FAT accepte directement un périphérique injecté. Enregistrez-le comme d'habitude et laissez <code>source</code> vide : avec un périphérique déjà en main, le pilote n'a rien à chercher.</p>
+<p>Le pilote FAT prend un tel périphérique dans son constructeur. Enregistrez-le comme d'habitude et passez une <code>source</code> vide, puisqu'un pilote qui tient déjà son périphérique n'a rien à chercher, puis formatez le périphérique et montez-le :</p>
 <pre><code class="lang-csharp">MemoryBlockDevice ramDisk = new(&quot;RAMDISK&quot;, 512, 65536);   // 32 MiB
 FatFileSystemType fat = new(ramDisk);
 
@@ -237,10 +286,12 @@ if (!VfsManager.RegisterFileSystem(&quot;ramfat&quot;, fat)
 </code></pre>
 <p><a id="read-a-cd-rom-or-an-iso-image"></a></p>
 <h3 id="lire-un-cd-rom-ou-une-image-iso">Lire un CD-ROM ou une image ISO</h3>
-<p><code>Iso9660FileSystemType</code>, dans <code>Cosmos.Kernel.System.FileSystem.Iso9660</code>, lit le format des CD-ROM et des images <code>.iso</code> que produisent tous les outils de gravure et <code>cosmos build</code> : ISO 9660 avec l'extension Rock Ridge, qui est ce qui donne à un volume ses noms POSIX (<code>hello.txt</code> plutôt que <code>HELLO.TXT;1</code>), ses permissions, ses horodatages et ses liens symboliques. Un volume sans Rock Ridge présente ses identifiants bruts sans la version (<code>README</code>, <code>FILE.TXT</code>), recherchés sans tenir compte de la casse ; une arborescence Joliet est ignorée. Le pilote accepte les deux mêmes sources que les autres : un index de partition, ou un <code>IBlockDevice</code> injecté, quelle que soit sa taille de secteur, si bien que la même image se monte depuis un CD (secteurs de 2048 octets), depuis une clé USB sur laquelle elle a été écrite (secteurs de 512 octets) ou depuis la RAM :</p>
+<p>Les lecteurs de CD ont presque disparu de nos ordinateurs, mais leur système de fichiers leur a survécu : on télécharge toujours les systèmes d'exploitation sous forme d'images <code>.iso</code>, et c'est aussi sous cette forme que <code>cosmos build</code> emballe votre propre noyau. <code>Iso9660FileSystemType</code>, dans <code>Cosmos.Kernel.System.FileSystem.Iso9660</code>, permet à votre noyau de lire un tel volume, qu'il se trouve sur un CD, sur une clé USB sur laquelle une image a été écrite, ou en mémoire.</p>
+<p>À lui seul, le standard ne connaît que des noms en majuscules terminés par un numéro de version, comme <code>HELLO.TXT;1</code>. C'est pourquoi les images faites sur les systèmes Unix portent en général l'extension Rock Ridge, et celle que fait <code>cosmos build</code> la porte : Rock Ridge donne à chaque fichier son vrai nom, <code>hello.txt</code>, avec ses permissions Unix, ses horodatages et ses liens symboliques, et le pilote lit tout cela quand le volume l'a. Sur un volume sans Rock Ridge, un fichier apparaît sous son identifiant brut sans la version (<code>README</code>, <code>FILE.TXT</code>), et vous pouvez taper ce nom dans n'importe quelle casse, car le standard n'y autorise que les majuscules. Le pilote ne lit pas Joliet, les noms longs qu'ajoutent les outils Windows, si bien qu'un volume qui n'a que Joliet présente lui aussi ses identifiants bruts.</p>
+<p>Le pilote se monte comme le pilote FAT, depuis une partition ou depuis un périphérique passé à son constructeur, et il accepte n'importe quelle taille de secteur, si bien que la même image se monte depuis un lecteur de CD (secteurs de 2048 octets), depuis une clé USB (secteurs de 512 octets) ou depuis un <code>MemoryBlockDevice</code> qui contient ses octets. Ici, <code>cdrom</code> est n'importe quel <code>IBlockDevice</code> qui contient un volume, et les paragraphes suivants montrent comment trouver le lecteur de CD parmi les disques :</p>
 <pre><code class="lang-csharp">using Cosmos.Kernel.System.FileSystem.Iso9660;
 
-Iso9660FileSystemType iso = new(cdrom);   // any IBlockDevice holding an ISO 9660 volume
+Iso9660FileSystemType iso = new(cdrom);
 
 if (!VfsManager.RegisterFileSystem(&quot;iso&quot;, iso)
     || !VfsManager.TryMount(&quot;iso&quot;, &quot;&quot;, MountFlags.None, &quot;/cd&quot;, out VfsMount? cd))
@@ -256,7 +307,7 @@ foreach (string path in Directory.GetFiles(&quot;/cd/docs&quot;))
 }
 string text = File.ReadAllText(&quot;/cd/hello.txt&quot;);
 </code></pre>
-<p><code>cdrom</code> est n'importe quel <code>IBlockDevice</code> qui porte un volume. Quand le lecteur depuis lequel le noyau a démarré se trouve derrière un contrôleur SATA en mode AHCI, il est l'une des entrées de <code>StorageManager.Devices</code>, celle dont le support est en lecture seule : un lecteur de CD-ROM implémente <code>IRemovableMedia</code> à côté d'<code>IBlockDevice</code>, un type du seam du kit de pilotes (<code>[Experimental(&quot;COSMOS0003&quot;)]</code>, si bien qu'un projet de noyau qui le teste reconnaît l'identifiant avec <code>&lt;NoWarn&gt;$(NoWarn);COSMOS0003&lt;/NoWarn&gt;</code>), avec <code>IsReadOnly</code>, <code>IsRemovable</code> et <code>HasMedia</code>. Le trouver tient en une boucle sur la liste :</p>
+<p>Le plus souvent, le volume est dans un lecteur de CD. Quand ce lecteur se trouve derrière un contrôleur SATA en mode AHCI, le noyau le liste dans <code>StorageManager.Devices</code> sous le nom <code>cdrom0</code>, à condition qu'un disque y ait été présent au démarrage : le pilote n'initialise un lecteur qu'une fois qu'il y trouve un disque, et il ne guette pas un disque inséré plus tard, si bien qu'un lecteur vide au démarrage n'apparaît jamais. Ce qui le distingue d'un disque est une seconde interface sur le même objet, <code>IRemovableMedia</code>, avec <code>IsReadOnly</code>, <code>IsRemovable</code> et <code>HasMedia</code>. Le kit de pilotes appelle une telle interface supplémentaire une facette. Celle-ci fait partie de la surface expérimentale du kit, marquée <code>[Experimental(&quot;COSMOS0003&quot;)]</code>, si bien qu'un noyau qui la teste reconnaît l'identifiant dans son <code>.csproj</code> avec <code>&lt;NoWarn&gt;$(NoWarn);COSMOS0003&lt;/NoWarn&gt;</code>. Trouver le lecteur tient alors en une boucle sur la liste :</p>
 <pre><code class="lang-csharp">using Cosmos.Kernel.HAL.Devices.Storage;   // IBlockDevice, IRemovableMedia
 using Cosmos.Kernel.System.Storage;        // StorageManager
 
@@ -270,54 +321,24 @@ foreach (IBlockDevice device in StorageManager.Devices)
     }
 }
 </code></pre>
-<p>Le gestionnaire de stockage porte un tel support comme une seule partition qui couvre tout le disque et ne le scanne jamais à la recherche d'une table de partitions, puisqu'un support en lecture seule n'en porte aucune qu'un noyau pourrait écrire et que le MBR protecteur d'une ISO compte en unités de 512 octets qu'un périphérique à secteurs de 2048 octets lirait de travers. Il classe le support après tous les disques inscriptibles, si bien que <code>StorageManager.PrimaryDevice</code> reste un disque que le noyau peut formater tant qu'un est attaché et devient le CD sur une machine qui n'a rien d'autre. Une partition sur laquelle une image a été écrite, ou un <code>MemoryBlockDevice</code> sur les octets de l'image, se monte de la même façon.</p>
-<p>Le volume est en lecture seule, et le VFS le sait : <code>VfsMount.IsReadOnly</code> vaut <code>true</code> et <code>VfsMount.Flags</code> porte <code>MountFlags.ReadOnly</code> quels que soient les indicateurs du montage, <code>FileInfo.IsReadOnly</code> vaut <code>true</code> pour chaque fichier, et toute modification sous le point de montage échoue comme sous Linux, avec une simple <code>IOException</code> (« Read-only file system ») et non une exception d'absence :</p>
-<table>
-<thead>
-<tr>
-<th>Appel</th>
-<th>Résultat sur un montage ISO 9660</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>File.ReadAllText</code>, <code>File.ReadAllBytes</code>, <code>FileStream</code> ouvert en lecture, <code>StreamReader</code>, <code>Directory.GetFiles</code>, <code>FileInfo</code></td>
-<td>Fonctionne</td>
-</tr>
-<tr>
-<td><code>File.Create</code>, <code>File.WriteAllText</code>, <code>File.AppendAllText</code>, <code>FileStream</code> ouvert en écriture, <code>FileMode.Truncate</code></td>
-<td><code>IOException</code></td>
-</tr>
-<tr>
-<td><code>File.Delete</code>, <code>File.Move</code>, <code>File.Copy</code> vers le montage, <code>File.SetAttributes</code></td>
-<td><code>IOException</code></td>
-</tr>
-<tr>
-<td><code>Directory.CreateDirectory</code>, <code>Directory.Delete</code>, <code>Directory.Move</code></td>
-<td><code>IOException</code></td>
-</tr>
-<tr>
-<td><code>VfsManager.TryCreateFile</code>, <code>TryCreateDirectory</code>, <code>TryUnlink</code>, <code>TryRemoveDirectory</code>, <code>TryRename</code></td>
-<td><code>false</code></td>
-</tr>
-<tr>
-<td><code>VfsManager.TryFormat</code>, <code>TryDestroy</code></td>
-<td><code>false</code> : le pilote n'écrit aucun volume</td>
-</tr>
-</tbody>
-</table>
-<p>Les mêmes refus s'appliquent à n'importe quel pilote quand vous montez avec <code>MountFlags.ReadOnly</code> : une partition FAT montée ainsi ne prend aucune écriture par ce point de montage, alors que la même partition montée ailleurs sans l'indicateur en prend toujours.</p>
-<p>Ce que le pilote ne lit pas : les noms longs d'un volume Joliet seul (il présente les identifiants bruts), un fichier de plus de 4 Gio réparti sur plusieurs extents (il n'est pas listé), les sessions suivantes d'un disque multisession, UDF, et El Torito, dont le catalogue de démarrage n'est qu'un fichier. Un contrôleur SATA en mode AHCI est l'endroit où la machine q35 de QEMU place son lecteur de CD, et où VMware le place quand le lecteur virtuel est sur le contrôleur SATA plutôt que sur le contrôleur IDE ; là, l'<code>AhciDriver</code> du kit publie le lecteur sous le nom <code>cdrom&lt;n&gt;</code> (<a href="drivers.html#the-storage-drivers">Les pilotes de stockage</a>). Un lecteur derrière un contrôleur USB, virtio-scsi ou IDE n'est pas encore un périphérique bloc, si bien qu'un noyau démarré depuis l'un d'eux lit plutôt une image : depuis la RAM, depuis une partition de disque ou depuis une clé USB sur laquelle l'image a été écrite.</p>
+<p>Le gestionnaire de stockage ne cherche pas de table de partitions sur un CD. Un disque en lecture seule ne porte aucune table de partitions qu'un noyau pourrait modifier, et le MBR protecteur au début d'une ISO amorçable compte en unités de 512 octets qu'un lecteur à secteurs de 2048 octets lirait de travers : le gestionnaire liste donc tout le disque comme une seule partition. Il range aussi le lecteur après tous les disques inscriptibles, comme l'explique <a href="#which-disk-comes-first">Quel disque vient en premier</a>, si bien que sur x64, où <code>cosmos run</code> démarre depuis un tel lecteur, le CD de démarrage est la dernière entrée de <code>Partitions</code>, et la première quand aucun disque n'a de partition à lui.</p>
+<p>Le volume est en lecture seule, et tout le VFS le sait. <code>VfsMount.IsReadOnly</code> est vrai et <code>VfsMount.Flags</code> porte <code>MountFlags.ReadOnly</code> quels que soient les indicateurs avec lesquels vous avez monté, <code>FileInfo.IsReadOnly</code> est vrai pour chaque fichier, et toute écriture échoue comme sous Linux, avec une simple <code>IOException</code> (« Read-only file system ») plutôt qu'avec une exception qui laisserait croire que le fichier est absent.</p>
+<p>N'importe quel pilote refuse les écritures de la même façon quand vous le montez avec <code>MountFlags.ReadOnly</code>. L'indicateur appartient au montage plutôt qu'au volume : le VFS le vérifie au point de montage, pas dans le pilote.</p>
+<p>Quelques éléments d'un disque restent hors de portée. Un fichier réparti sur plusieurs extents, la façon dont ISO 9660 stocke un fichier de plus de 4 Gio, n'est pas listé. Seule la première session d'un disque multisession est lue, et UDF n'est pas lu du tout. Le catalogue de démarrage El Torito, qui rend un CD amorçable, n'est pas interprété non plus : quand le disque le liste, il apparaît comme un fichier de plus.</p>
+<p>Le lecteur lui-même doit être un lecteur que le kit publie comme périphérique bloc, ce qui veut dire aujourd'hui un lecteur derrière un contrôleur SATA en mode AHCI (<a href="drivers.html#the-storage-drivers">Les pilotes de stockage</a>). C'est là que la machine q35 de QEMU place son lecteur de CD, si bien qu'un noyau que <code>cosmos run</code> démarre sur x64 peut lire son propre CD de démarrage, et c'est là que VMware le place quand le lecteur virtuel est sur le contrôleur SATA plutôt que sur le contrôleur IDE. Un lecteur derrière un contrôleur USB, virtio-scsi ou IDE n'est pas encore un périphérique bloc, et sur arm64 <code>cosmos run</code> attache l'ISO de démarrage par virtio-scsi. Sur cette architecture, un noyau lit plutôt une image : depuis la RAM, depuis une partition de disque dans laquelle l'image a été écrite, ou depuis une clé USB sur laquelle l'image a été écrite, passée entière au constructeur sous la forme <code>new Iso9660FileSystemType(stick)</code>.</p>
 <p><a id="ship-files-on-the-boot-iso"></a></p>
 <h3 id="livrer-des-fichiers-sur-liso-de-démarrage">Livrer des fichiers sur l'ISO de démarrage</h3>
-<p>L'ISO que produit <code>cosmos build</code> contient le noyau et Limine sous <code>/boot</code> et <code>/EFI</code>. Un noyau livre ses propres fichiers à côté comme il le faisait en Gen2 : tout ce qui se trouve dans un dossier <code>isoFiles</code> à côté du <code>.csproj</code> du noyau va à la racine de l'ISO avec ses sous-dossiers, si bien que <code>isoFiles/data/config.txt</code> devient <code>/data/config.txt</code> sur le disque. Un fichier qui se trouve ailleurs, ou qui doit porter un autre nom, est un élément <code>CosmosIsoFile</code> du <code>.csproj</code>, dont la métadonnée <code>IsoPath</code> est son chemin sur l'ISO. Un <code>IsoPath</code> qui se termine par <code>/</code> désigne un dossier et garde le nom du fichier, et un fichier qui n'en a pas va à la racine :</p>
+<p>Puisqu'un noyau peut lire son CD de démarrage, l'ISO est aussi un endroit pratique pour les fichiers dont il a besoin à l'exécution : un fichier de configuration, une police, une image. <code>cosmos build</code> place le noyau et Limine sous <code>/boot</code> et <code>/EFI</code>, et, comme en Gen2, tout ce qui se trouve dans un dossier <code>isoFiles</code> à côté du <code>.csproj</code> de votre noyau va à la racine de l'ISO avec ses dossiers, si bien que <code>isoFiles/data/config.txt</code> devient <code>/data/config.txt</code> sur le disque.</p>
+<p>Un fichier qui se trouve ailleurs, ou qui doit arriver sous un autre nom, est un élément <code>CosmosIsoFile</code> du <code>.csproj</code>. Sa métadonnée <code>IsoPath</code> est son chemin sur l'ISO. Un <code>IsoPath</code> qui se termine par <code>/</code> désigne un dossier et garde le nom propre du fichier, et un fichier qui n'en a pas va à la racine :</p>
 <pre><code class="lang-xml">&lt;ItemGroup&gt;
   &lt;CosmosIsoFile Include=&quot;../assets/logo.bmp&quot; IsoPath=&quot;images/logo.bmp&quot; /&gt;
   &lt;CosmosIsoFile Include=&quot;../assets/readme.txt&quot; IsoPath=&quot;docs/&quot; /&gt;
 &lt;/ItemGroup&gt;
 </code></pre>
-<p>La propriété <code>CosmosIsoFilesDirectory</code> désigne un autre dossier. Ce que contient le dossier reste hors de la compilation, si bien qu'un fichier <code>.cs</code> qui s'y trouve est livré sur l'ISO au lieu d'être compilé dans le noyau. La compilation échoue sur un fichier qui atterrirait sous <code>/boot</code> ou <code>/EFI</code>, puisque ces dossiers contiennent le noyau et le chargeur d'amorçage qu'écrit le SDK ; sur un chemin qui contient un segment <code>.</code> ou <code>..</code>, puisque <code>..</code> pourrait sortir de la racine ; et sur deux fichiers au même chemin, comparés sans tenir compte de la casse, puisque sur un hôte Windows la seconde copie écraserait la première. Le cache de compilation de l'ISO couvre les fichiers et leurs chemins, si bien qu'ajouter, modifier, renommer ou retirer l'un d'eux reconstruit l'ISO sans recompiler le noyau.</p>
-<p>Les noms sur le disque sont des noms Rock Ridge, casse et espaces conservées, et le noyau les lit une fois qu'il a monté le CD de démarrage, trouvé comme plus haut :</p>
+<p>La propriété <code>CosmosIsoFilesDirectory</code> dirige le build vers un autre dossier. Ce que contient ce dossier reste hors de la compilation, si bien qu'un fichier <code>.cs</code> qui s'y trouve est livré comme fichier au lieu d'être compilé dans le noyau.</p>
+<p>Le build s'arrête sur une erreur plutôt que d'écrire une ISO cassée. Il refuse un fichier qui atterrirait sous <code>/boot</code> ou <code>/EFI</code>, puisque ces dossiers contiennent le noyau et le chargeur d'amorçage qu'écrit le SDK. Il refuse un <code>IsoPath</code> qui contient un segment <code>.</code> ou <code>..</code>, puisque <code>..</code> pourrait sortir de la racine de l'ISO. Et il refuse deux fichiers au même chemin, comparés sans tenir compte de la casse, puisque sur un hôte Windows la seconde copie écraserait la première.</p>
+<p>Le cache de build de l'ISO couvre les fichiers et leurs chemins, si bien qu'ajouter, modifier, renommer ou retirer l'un d'eux reconstruit l'ISO sans recompiler le noyau.</p>
+<p>Sur le disque, les fichiers gardent leurs noms, casse et espaces compris, parce que Rock Ridge les porte. Le noyau les relit une fois qu'il a monté le CD de démarrage, trouvé comme dans la section précédente :</p>
 <pre><code class="lang-csharp">using Cosmos.Kernel.System.FileSystem;           // VfsManager, MountFlags
 using Cosmos.Kernel.System.FileSystem.Iso9660;   // Iso9660FileSystemType
 
@@ -325,11 +346,11 @@ VfsManager.RegisterFileSystem(&quot;bootcd&quot;, new Iso9660FileSystemType(cdro
 VfsManager.TryMount(&quot;bootcd&quot;, &quot;&quot;, MountFlags.None, &quot;/cdrom&quot;, out _);
 string config = File.ReadAllText(&quot;/cdrom/data/config.txt&quot;);
 </code></pre>
-<p>Cette lecture suppose que le lecteur de démarrage soit un périphérique bloc, ce qu'il est derrière un contrôleur AHCI. Là où il ne l'est pas, par exemple sur une machine arm64 qui démarre depuis virtio-scsi, les fichiers sont sur le disque mais le noyau ne peut pas encore les atteindre.</p>
+<p>Cette lecture suppose que le lecteur de démarrage soit un périphérique bloc, ce qu'il est derrière un contrôleur AHCI. Là où il ne l'est pas, comme sur une machine arm64 qui démarre depuis virtio-scsi, les fichiers sont sur le disque mais le noyau ne peut pas encore les atteindre.</p>
 <p><a id="partition-a-disk"></a></p>
 <h2 id="partitionner-un-disque">Partitionner un disque</h2>
-<p>Formater demande une partition à formater. <code>StorageManager.Partitions</code> liste celles qui existent déjà sur les disques que le noyau a trouvés au démarrage ; quand il n'y en a aucune, ou que vous voulez une autre organisation, <code>Gpt</code>, <code>Mbr</code> et <code>PartitionManager</code> écrivent la table de partitions elle-même. Tous prennent un <code>IBlockDevice</code>, que vous fournit <code>StorageManager.PrimaryDevice</code>.</p>
-<p>Commencez par demander quel schéma de partitionnement le disque porte déjà :</p>
+<p>Un disque tout juste sorti de <code>qemu-img create</code> ne porte aucune table de partitions, et formater demande une partition à formater. <code>StorageManager.Partitions</code> liste celles qui existent déjà sur les disques que le noyau a trouvés au démarrage ; quand il n'y en a aucune, ou que vous voulez une autre organisation, <code>Gpt</code>, <code>Mbr</code> et <code>PartitionManager</code> écrivent la table de partitions elle-même. Tous prennent un <code>IBlockDevice</code>, que vous fournit <code>StorageManager.PrimaryDevice</code>.</p>
+<p>Commencez par demander quel schéma le disque porte déjà :</p>
 <pre><code class="lang-csharp">IBlockDevice? disk = StorageManager.PrimaryDevice;
 if (disk is null)
 {
@@ -350,7 +371,7 @@ else
     Console.WriteLine(&quot;No partition table&quot;);
 }
 </code></pre>
-<p><code>Gpt.Create</code> et <code>Mbr.Create</code> écrivent une table vide de ce schéma, <strong>en détruisant tout ce qui s'y trouvait</strong>. <code>PartitionManager.Create</code> ajoute ensuite une partition, quel que soit le schéma que porte le disque, si bien que vous n'avez pas à distinguer les cas :</p>
+<p><code>Gpt.Create</code> et <code>Mbr.Create</code> écrivent une table vide de ce schéma, et les partitions que portait le disque disparaissent avec l'ancienne table. <code>PartitionManager.Create</code> ajoute ensuite une partition, quel que soit le schéma que porte le disque, si bien que vous n'avez pas à distinguer les cas :</p>
 <pre><code class="lang-csharp">Gpt.Create(disk);
 
 /* 64 MiB at LBA 2048, on a 512-byte-sector disk. The MBR system id and the
@@ -366,26 +387,26 @@ if (!PartitionManager.Create(disk, startSector: 2048, sectorCount: 131072,
 StorageManager.RescanPartitions(disk);
 </code></pre>
 <p>C'est <code>RescanPartitions</code> qui fait apparaître la nouvelle partition dans <code>StorageManager.Partitions</code>. Tant que vous ne l'avez pas appelé, la liste décrit encore l'ancienne table.</p>
-<p>Les partitions existantes sont désignées par un <code>PartitionLocation</code>, c'est-à-dire le secteur de début et la longueur plutôt qu'un index, si bien qu'une partition ne change pas d'identité quand la table est renumérotée :</p>
+<p>Les partitions existantes sont désignées par un <code>PartitionLocation</code>, le secteur de début et la longueur plutôt qu'un index, si bien qu'une partition garde son identité quand la table est renumérotée :</p>
 <pre><code class="lang-csharp">PartitionManager.PartitionLocation where = new(startSector: 2048, sectorCount: 131072);
 
 PartitionManager.Resize(disk, where, newSectorCount: 262144);
 PartitionManager.MoveWithData(disk, where, newStartSector: 4096);
 PartitionManager.Delete(disk, where);
 </code></pre>
-<p><code>MoveWithData</code> copie le contenu vers le nouvel emplacement avant de réécrire l'entrée ; <code>Resize</code> et <code>Delete</code> ne touchent qu'à la table, si bien que réduire une partition sous la taille de son système de fichiers fait perdre des données.</p>
-<p><strong>Tout index de partition est positionnel.</strong> En supprimer une renumérote les entrées qui la suivent, et <code>StorageManager.Partitions</code> est renumérotée avec elles : relisez donc la liste après chaque modification plutôt que de garder un index par-delà une modification.</p>
-<p>Les quatre emplacements primaires du MBR se prolongent par une chaîne de partitions logiques. <code>PartitionManager.TryCreateLogical</code> en ajoute une dans la partition étendue, et <code>Mbr.TryGetExtendedPartition</code> trouve celle-ci :</p>
+<p><code>MoveWithData</code> copie le contenu vers le nouvel emplacement avant de réécrire l'entrée. <code>Resize</code> et <code>Delete</code> ne touchent qu'à la table, si bien que réduire une partition sous la taille de son système de fichiers fait perdre des données.</p>
+<p><strong>Tout index de partition est positionnel.</strong> Supprimer une partition renumérote les entrées qui la suivent, et <code>StorageManager.Partitions</code> est renumérotée avec elles : relisez donc la liste après chaque modification plutôt que de garder un index d'un côté à l'autre d'une modification.</p>
+<p>Le MBR a quatre emplacements primaires, et une chaîne de partitions logiques dans une partition étendue permet d'aller au-delà. <code>Mbr.TryGetExtendedPartition</code> trouve la partition étendue, et <code>PartitionManager.TryCreateLogical</code> y ajoute une partition logique :</p>
 <pre><code class="lang-csharp">if (Mbr.TryGetExtendedPartition(disk, out ulong extendedStart, out ulong extendedCount)
     &amp;&amp; PartitionManager.TryCreateLogical(disk, systemId: 0x0C, sectorCount: 65536, out ulong logicalStart))
 {
     Console.WriteLine(&quot;logical partition at LBA &quot; + logicalStart);
 }
 </code></pre>
-<p><code>Gpt</code>, <code>Mbr</code> et <code>Ebr</code> forment la couche inférieure, un type par schéma, pour les cas où vous devez écrire des entrées que le gestionnaire n'expose pas.</p>
-<p><a id="format-a-disk"></a></p>
-<h2 id="formater-un-disque">Formater un disque</h2>
-<p>Pour formater (mkfs) une partition par le VFS, utilisez <code>VfsManager.TryFormat</code> avec le nom du pilote, la partition et le type d'options du pilote. Le formateur FAT choisit une géométrie raisonnable à partir des options que vous lui donnez :</p>
+<p><code>Gpt</code>, <code>Mbr</code> et <code>Ebr</code> forment la couche inférieure, un type par schéma, pour les entrées que <code>PartitionManager</code> n'expose pas.</p>
+<p><a id="format-a-partition"></a></p>
+<h2 id="formater-une-partition">Formater une partition</h2>
+<p><code>VfsManager.TryFormat</code> formate (mkfs) une partition par le VFS. Il prend le nom du pilote, la partition et le type d'options du pilote, et chaque option FAT que vous laissez vide (la taille de cluster, le nombre de copies de la FAT, les secteurs réservés) est choisie par le formateur à partir du type de FAT et de la taille de la partition :</p>
 <pre><code class="lang-csharp">FatFormatOptions options = new()
 {
     Type = FatType.Fat32,
@@ -398,10 +419,10 @@ if (StorageManager.Partitions.Count == 0
     Console.WriteLine(&quot;Format failed&quot;);
 }
 </code></pre>
-<p>Le formatage est refusé tant que la source est montée : démontez-la d'abord avec <code>VfsManager.TryUnmount(&quot;/mnt&quot;)</code>.</p>
+<p><code>TryFormat</code> refuse une partition montée : démontez-la donc d'abord avec <code>VfsManager.TryUnmount(&quot;/mnt&quot;)</code>.</p>
 <p><a id="list-mounted-volumes"></a></p>
 <h2 id="lister-les-volumes-montés">Lister les volumes montés</h2>
-<p><code>VfsManager.Mounts</code> est la table des montages. Chaque entrée vous donne le nom du pilote, la source sous-jacente et le point de montage :</p>
+<p><code>VfsManager.Mounts</code> est la table des montages. Chaque entrée donne le nom sous lequel le pilote a été enregistré, la source depuis laquelle il a été monté et le point de montage :</p>
 <pre><code class="lang-csharp">foreach (VfsMount m in VfsManager.Mounts)
 {
     Console.WriteLine(m.MountPoint + &quot; -&gt; &quot; + m.Name + &quot; (source &quot; + m.Source + &quot;)&quot;);
@@ -409,7 +430,7 @@ if (StorageManager.Partitions.Count == 0
 </code></pre>
 <!-- screenshot: sortie console de la boucle sur la table des montages, par exemple "/mnt -> fat (source 0)" -->
 <p><img src="images/filesystem-mounts.png" alt="Montages"></p>
-<p><code>m.Partition</code> est la partition elle-même, pour les montages faits avec la surcharge <code>Partition</code>. Préférez-la à une reconversion de <code>m.Source</code> en index : elle continue de désigner la même plage sur le même disque après qu'une nouvelle analyse a renuméroté <code>StorageManager.Partitions</code>.</p>
+<p><code>m.Partition</code> est la partition elle-même, pour un montage fait avec la surcharge <code>Partition</code>. Préférez-la à une reconversion de <code>m.Source</code> en index : elle continue de désigner la même plage du même disque après qu'une nouvelle analyse a renuméroté <code>StorageManager.Partitions</code>.</p>
 <p><a id="check-free-space"></a></p>
 <h2 id="vérifier-lespace-libre">Vérifier l'espace libre</h2>
 <p><code>VfsManager.TryStatFs</code> rapporte le décompte des blocs d'un montage. L'espace libre est le nombre de blocs disponibles multiplié par la taille de bloc :</p>
@@ -420,40 +441,31 @@ if (StorageManager.Partitions.Count == 0
     Console.WriteLine(freeBytes + &quot; of &quot; + totalBytes + &quot; bytes free&quot;);
 }
 </code></pre>
-<p><a id="get-a-list-of-files"></a></p>
-<h2 id="obtenir-une-liste-de-fichiers">Obtenir une liste de fichiers</h2>
-<p>Nous commençons par obtenir une liste de fichiers, avec :</p>
-<pre><code class="lang-csharp">string[] files = Directory.GetFiles(&quot;/mnt&quot;);
-
-foreach (string file in files)
+<p>Un montage ISO 9660 rapporte sa taille sans aucun bloc libre, puisque rien ne peut y être écrit. <code>DriveInfo</code> n'est pas encore branché, c'est donc ainsi que l'on lit l'espace libre.</p>
+<p><a id="list-a-directory"></a></p>
+<h2 id="lister-un-répertoire">Lister un répertoire</h2>
+<p>À partir d'ici, tout est du <code>System.IO</code> standard, et les chemins sont ceux qui se trouvent sous votre point de montage. <code>Directory.GetFiles</code> liste les fichiers d'un répertoire :</p>
+<pre><code class="lang-csharp">foreach (string file in Directory.GetFiles(&quot;/mnt&quot;))
 {
     Console.WriteLine(file);
 }
-</code></pre>
-<p>Les motifs de recherche fonctionnent aussi ; c'est le moteur d'énumération standard de la BCL :</p>
-<pre><code class="lang-csharp">string[] logs = Directory.GetFiles(&quot;/mnt&quot;, &quot;*.txt&quot;);
 </code></pre>
 <!-- screenshot: console listant quelques fichiers sous /mnt -->
 <p><img src="images/filesystem-files-list.png" alt="Liste des fichiers"></p>
-<p><a id="get-a-directory-listing-files-and-other-directories"></a></p>
-<h2 id="obtenir-le-contenu-dun-répertoire-fichiers-et-autres-répertoires">Obtenir le contenu d'un répertoire (fichiers et autres répertoires)</h2>
-<pre><code class="lang-csharp">string[] files = Directory.GetFiles(&quot;/mnt&quot;);
-string[] directories = Directory.GetDirectories(&quot;/mnt&quot;);
-
-foreach (string file in files)
-{
-    Console.WriteLine(file);
-}
-foreach (string directory in directories)
+<p>Les motifs de recherche fonctionnent aussi, puisque c'est le code d'énumération standard de .NET :</p>
+<pre><code class="lang-csharp">string[] logs = Directory.GetFiles(&quot;/mnt&quot;, &quot;*.txt&quot;);
+</code></pre>
+<p><code>Directory.GetDirectories</code> liste les sous-répertoires de la même façon :</p>
+<pre><code class="lang-csharp">foreach (string directory in Directory.GetDirectories(&quot;/mnt&quot;))
 {
     Console.WriteLine(directory);
 }
 </code></pre>
 <!-- screenshot: console listant les fichiers et les répertoires sous /mnt -->
 <p><img src="images/filesystem-directory-listing.png" alt="Contenu du répertoire"></p>
-<p><a id="read-all-the-files-in-a-directory"></a></p>
-<h2 id="lire-tous-les-fichiers-dun-répertoire">Lire tous les fichiers d'un répertoire</h2>
-<p>Nous obtenons la liste des fichiers et affichons le contenu de chacun. Comme dans Gen2, gardez le code de système de fichiers dans un <code>try</code>/<code>catch</code> : les exceptions sont celles de <code>System.IO</code> standard et elles peuvent être interceptées :</p>
+<p><a id="read-a-file"></a></p>
+<h2 id="lire-un-fichier">Lire un fichier</h2>
+<p><code>File.ReadAllText</code> lit un fichier entier sous forme de chaîne. Un appel de système de fichiers qui échoue lève l'exception <code>System.IO</code> standard, comme en Gen2, et vous l'interceptez comme sur n'importe quelle autre plateforme .NET, si bien que cette boucle affiche chaque fichier sous <code>/mnt</code> et signale une lecture qui échoue au lieu d'arrêter le noyau :</p>
 <pre><code class="lang-csharp">try
 {
     foreach (string file in Directory.GetFiles(&quot;/mnt&quot;))
@@ -472,78 +484,40 @@ catch (Exception e)
 </code></pre>
 <!-- screenshot: console affichant le nom, la taille et le contenu d'un fichier -->
 <p><img src="images/filesystem-read-all-files.png" alt="Lire tous les fichiers"></p>
-<p><a id="create-a-new-file"></a></p>
-<h2 id="créer-un-nouveau-fichier">Créer un nouveau fichier</h2>
-<pre><code class="lang-csharp">try
-{
-    using FileStream stream = File.Create(&quot;/mnt/testing.txt&quot;);
-}
-catch (Exception e)
-{
-    Console.WriteLine(e.ToString());
-}
-</code></pre>
-<p><a id="create-a-new-directory"></a></p>
-<h2 id="créer-un-nouveau-répertoire">Créer un nouveau répertoire</h2>
-<p><code>Directory.CreateDirectory</code> crée toute la chaîne des parents manquants en un seul appel :</p>
-<pre><code class="lang-csharp">try
-{
-    Directory.CreateDirectory(&quot;/mnt/documents/reports&quot;);
-}
-catch (Exception e)
-{
-    Console.WriteLine(e.ToString());
-}
-</code></pre>
-<p><a id="write-to-a-file"></a></p>
-<h2 id="écrire-dans-un-fichier">Écrire dans un fichier</h2>
-<pre><code class="lang-csharp">try
-{
-    File.WriteAllText(&quot;/mnt/testing.txt&quot;, &quot;Learning how to use the Gen3 VFS!&quot;);
-}
-catch (Exception e)
-{
-    Console.WriteLine(e.ToString());
-}
-</code></pre>
-<p><code>File.AppendAllText</code>, <code>File.WriteAllBytes</code> et <code>File.WriteAllLines</code> fonctionnent de la même façon.</p>
-<p><a id="read-a-specific-file"></a></p>
-<h2 id="lire-un-fichier-précis">Lire un fichier précis</h2>
-<pre><code class="lang-csharp">try
-{
-    Console.WriteLine(File.ReadAllText(&quot;/mnt/testing.txt&quot;));
-}
-catch (Exception e)
-{
-    Console.WriteLine(e.ToString());
-}
+<p><code>File.ReadAllBytes</code> lit un fichier sous forme d'octets. Les extraits qui suivent omettent le <code>try</code>/<code>catch</code> pour rester courts :</p>
+<pre><code class="lang-csharp">Console.WriteLine(File.ReadAllText(&quot;/mnt/testing.txt&quot;));
+
+byte[] data = File.ReadAllBytes(&quot;/mnt/testing.txt&quot;);
+Console.WriteLine(&quot;Read &quot; + data.Length + &quot; bytes&quot;);
 </code></pre>
 <!-- screenshot: console affichant le contenu du fichier écrit à l'étape précédente -->
 <p><img src="images/filesystem-read-specific-file.png" alt="Lire un fichier précis"></p>
-<p>Et pour des données binaires :</p>
-<pre><code class="lang-csharp">byte[] data = File.ReadAllBytes(&quot;/mnt/testing.txt&quot;);
-Console.WriteLine(&quot;Read &quot; + data.Length + &quot; bytes&quot;);
-</code></pre>
-<p><a id="copy-move-delete"></a></p>
-<h2 id="copier-déplacer-supprimer">Copier, déplacer, supprimer</h2>
-<p>Contrairement à Gen2, <code>File.Move</code> est entièrement pris en charge, sans contournement par copie puis suppression. Un déplacement vers une destination existante lève <code>IOException</code> à moins que vous ne passiez <code>overwrite: true</code> ; l'écrasement résiste aux plantages (la destination est conservée comme sauvegarde jusqu'à ce que le renommage aboutisse).</p>
-<pre><code class="lang-csharp">try
+<p><a id="create-and-write-files"></a></p>
+<h2 id="créer-et-écrire-des-fichiers">Créer et écrire des fichiers</h2>
+<p><code>File.Create</code> crée un fichier vide, ou vide un fichier existant, et renvoie le flux qu'il a ouvert, que le <code>using</code> ferme. <code>Directory.CreateDirectory</code> crée un répertoire avec tous les parents manquants, en un seul appel :</p>
+<pre><code class="lang-csharp">using (FileStream stream = File.Create(&quot;/mnt/testing.txt&quot;))
 {
-    File.Copy(&quot;/mnt/testing.txt&quot;, &quot;/mnt/copy.txt&quot;);
-    File.Move(&quot;/mnt/copy.txt&quot;, &quot;/mnt/renamed.txt&quot;);
-    File.Delete(&quot;/mnt/renamed.txt&quot;);
+}
 
-    Directory.Delete(&quot;/mnt/documents&quot;, recursive: true);
-}
-catch (Exception e)
-{
-    Console.WriteLine(e.ToString());
-}
+Directory.CreateDirectory(&quot;/mnt/documents/reports&quot;);
 </code></pre>
-<p>Supprimer un fichier encore ouvert n'échoue pas : la suppression passe <em>en attente</em> et l'entrée disparaît quand le dernier handle se ferme, ce qu'attend la sémantique <code>DeleteOnClose</code> de la BCL.</p>
+<p><code>File.WriteAllText</code> remplace le contenu d'un fichier, en créant le fichier s'il n'existe pas encore, et <code>File.WriteAllBytes</code> et <code>File.WriteAllLines</code> font de même avec des octets et des lignes. <code>File.AppendAllText</code> ajoute plutôt à la fin du fichier, et le crée aussi quand il est absent :</p>
+<pre><code class="lang-csharp">File.WriteAllText(&quot;/mnt/testing.txt&quot;, &quot;Learning how to use the Gen3 VFS!&quot;);
+</code></pre>
+<p><a id="copy-move-and-delete"></a></p>
+<h2 id="copier-déplacer-et-supprimer">Copier, déplacer et supprimer</h2>
+<p><code>File.Copy</code>, <code>File.Move</code>, <code>File.Delete</code> et <code>Directory.Delete</code> fonctionnent comme sur n'importe quelle autre plateforme .NET :</p>
+<pre><code class="lang-csharp">File.Copy(&quot;/mnt/testing.txt&quot;, &quot;/mnt/copy.txt&quot;);
+File.Move(&quot;/mnt/copy.txt&quot;, &quot;/mnt/renamed.txt&quot;);
+File.Delete(&quot;/mnt/renamed.txt&quot;);
+
+Directory.Delete(&quot;/mnt/documents&quot;, recursive: true);
+</code></pre>
+<p>Contrairement à Gen2, un <code>File.Move</code> à l'intérieur d'un même montage est un vrai renommage plutôt qu'une copie suivie d'une suppression. Un déplacement vers un fichier existant lève <code>IOException</code> à moins que vous ne passiez <code>overwrite: true</code>, et l'écrasement ne perd rien s'il s'arrête à mi-chemin : la destination est mise de côté comme sauvegarde et n'est supprimée qu'une fois le renommage abouti. Un déplacement entre deux montages est une copie suivie d'une suppression, comme sous Linux, puisqu'un renommage ne peut pas passer d'un volume à un autre.</p>
+<p>Supprimer un fichier encore ouvert n'échoue pas. Le VFS retient la suppression jusqu'à ce que le dernier handle sur le fichier se ferme, et seulement alors retire l'entrée : le pilote FAT libère les clusters d'un fichier dès que son entrée disparaît, si bien qu'un handle qui les lit encore lirait ce qui y serait écrit ensuite. C'est aussi ce qui fait fonctionner <code>FileOptions.DeleteOnClose</code>.</p>
 <p><a id="streams"></a></p>
 <h2 id="flux">Flux</h2>
-<p>Toute la pile des flux est disponible, y compris le positionnement, la troncature (<code>SetLength</code>) et les E/S texte avec tampon :</p>
+<p>Toute la pile des flux est disponible, avec le positionnement, la troncature (<code>SetLength</code>) et les E/S texte avec tampon :</p>
 <pre><code class="lang-csharp">using (FileStream stream = new(&quot;/mnt/log.bin&quot;, FileMode.Create, FileAccess.ReadWrite))
 {
     stream.Write(new byte[] { 1, 2, 3, 4 });
@@ -570,7 +544,7 @@ using (StreamReader reader = new(&quot;/mnt/notes.txt&quot;))
 <p><img src="images/filesystem-streams.png" alt="Flux"></p>
 <p><a id="current-directory-and-relative-paths"></a></p>
 <h2 id="répertoire-courant-et-chemins-relatifs">Répertoire courant et chemins relatifs</h2>
-<p>Le noyau tient un répertoire courant (qui commence à <code>/</code>), si bien que les chemins relatifs et <code>Path.GetFullPath</code> se comportent comme sur n'importe quel système Unix :</p>
+<p>Le noyau tient un répertoire courant, qui commence à <code>/</code>, si bien que les chemins relatifs et <code>Path.GetFullPath</code> se comportent comme sur n'importe quel système Unix :</p>
 <pre><code class="lang-csharp">Directory.CreateDirectory(&quot;/mnt/work&quot;);
 Directory.SetCurrentDirectory(&quot;/mnt/work&quot;);
 
@@ -582,33 +556,55 @@ Directory.SetCurrentDirectory(&quot;/&quot;);
 </code></pre>
 <p><a id="error-handling"></a></p>
 <h2 id="gestion-des-erreurs">Gestion des erreurs</h2>
-<p>Le contrat d'exceptions standard de <code>System.IO</code> s'applique, vous pouvez donc intercepter précisément :</p>
-<ul>
-<li>Ouvrir un fichier absent dont le parent existe → <code>FileNotFoundException</code></li>
-<li>Tout chemin sous un répertoire absent (ou sous un préfixe non monté) → <code>DirectoryNotFoundException</code></li>
-<li>Créer un fichier directement dans la racine virtuelle <code>/</code> → <code>IOException</code> (système de fichiers en lecture seule)</li>
-<li>Toute modification sous un montage en lecture seule (un volume ISO 9660, ou un montage fait avec <code>MountFlags.ReadOnly</code>) → <code>IOException</code> (système de fichiers en lecture seule)</li>
-<li>Supprimer un répertoire non vide sans <code>recursive: true</code> → <code>IOException</code></li>
-<li><code>File.Copy</code>/<code>File.Move</code> vers un fichier existant sans écrasement → <code>IOException</code></li>
-</ul>
-<p>Quand <strong>rien du tout n'est monté</strong>, <code>System.IO</code> se dégrade quand même proprement : <code>Directory.Exists(&quot;/&quot;)</code> vaut <code>true</code>, énumérer <code>/</code> renvoie une liste vide, et tout accès à un autre chemin échoue avec l'une des exceptions ci-dessus, jamais par un plantage du noyau.</p>
+<p>Un échec lève l'exception que la documentation de <code>System.IO</code> prévoit pour lui, si bien que vous pouvez intercepter exactement le cas que vous attendez :</p>
+<table>
+<thead>
+<tr>
+<th>Ce qui a échoué</th>
+<th>Exception</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ouvrir un fichier qui n'existe pas, dans un répertoire qui existe</td>
+<td><code>FileNotFoundException</code></td>
+</tr>
+<tr>
+<td>Tout chemin sous un répertoire absent, ou sous un chemin où rien n'est monté</td>
+<td><code>DirectoryNotFoundException</code></td>
+</tr>
+<tr>
+<td>Créer un fichier directement dans la racine, <code>/</code></td>
+<td><code>IOException</code> (système de fichiers en lecture seule)</td>
+</tr>
+<tr>
+<td>Toute écriture sous un montage en lecture seule : un volume ISO 9660, ou un montage fait avec <code>MountFlags.ReadOnly</code></td>
+<td><code>IOException</code> (système de fichiers en lecture seule)</td>
+</tr>
+<tr>
+<td>Supprimer un répertoire non vide sans <code>recursive: true</code></td>
+<td><code>IOException</code></td>
+</tr>
+<tr>
+<td><code>File.Copy</code> ou <code>File.Move</code> vers un fichier existant sans <code>overwrite: true</code></td>
+<td><code>IOException</code></td>
+</tr>
+</tbody>
+</table>
+<p>Cela vaut même quand rien du tout n'est monté. <code>Directory.Exists(&quot;/&quot;)</code> vaut alors <code>true</code> et énumérer <code>/</code> donne une liste vide, et tout autre chemin échoue avec l'une des exceptions ci-dessus plutôt que de faire planter le noyau.</p>
 <p><a id="current-limitations"></a></p>
 <h2 id="limitations-actuelles">Limitations actuelles</h2>
-<ul>
-<li>Les liens symboliques ne peuvent pas être créés, et les liens physiques ne sont pas pris en charge (<code>ENOTSUP</code>/<code>EPERM</code> en interne ; la BCL remonte <code>IOException</code>). Les pilotes ext2 et ISO 9660 résolvent les liens symboliques que portent leurs volumes.</li>
-<li>Les horodatages des fichiers ne sont pas encore persistés (<code>File.SetLastWriteTime</code> est accepté, mais l'horodatage FAT viendra plus tard).</li>
-<li><code>DriveInfo</code> n'est pas encore branché ; utilisez <code>VfsManager.TryStatFs</code> pour connaître l'espace libre.</li>
-<li>FAT et ISO 9660 sont les pilotes de système de fichiers que couvrent les suites du noyau ; le pilote ext2, <code>Ext2FileSystemType</code> dans <code>Cosmos.Kernel.System.FileSystem.Ext2</code>, est livré à côté et n'est testé que sur l'hôte. L'interface <code>IVfsFileSystemType</code> est ce qu'implémente un nouveau pilote.</li>
-<li>Le pilote ISO 9660 lit un lecteur de CD-ROM derrière un contrôleur AHCI, les images, et les volumes sur lesquels des images ont été écrites ; un lecteur derrière un contrôleur USB, virtio-scsi ou IDE n'est pas encore un périphérique bloc.</li>
-</ul>
+<p>Les liens symboliques ne peuvent pas être créés : <code>File.CreateSymbolicLink</code> est refusé avec « Operation not permitted », que .NET lève sous forme d'<code>UnauthorizedAccessException</code>. Les pilotes ext2 et ISO 9660 suivent bien les liens symboliques que portent déjà leurs volumes, mais la cible d'un lien ne peut pas être relue : <code>FileSystemInfo.LinkTarget</code> vaut null.</p>
+<p>Les horodatages ne peuvent pas non plus être définis : <code>File.SetLastWriteTime</code> et ses semblables sont acceptés et ne changent rien. Leur lecture dépend du volume : les pilotes ext2 et ISO 9660 rapportent ceux que portent leurs volumes, alors que le pilote FAT ne les stocke ni ne les lit, si bien que chaque fichier d'un volume FAT rapporte l'époque Unix, le 1970-01-01.</p>
+<p>FAT et ISO 9660 sont les pilotes que Cosmos teste dans un noyau en cours d'exécution. Le pilote ext2, <code>Ext2FileSystemType</code>, est livré à côté d'eux mais n'est testé pour l'instant que sur l'hôte. Un lecteur de CD n'est accessible que derrière un contrôleur AHCI, comme le décrit <a href="#read-a-cd-rom-or-an-iso-image">Lire un CD-ROM ou une image ISO</a>. Le gestionnaire de stockage prend au plus huit disques, et ceux qui viennent ensuite ne sont pas listés.</p>
 <p><a id="how-it-works"></a></p>
 <h2 id="fonctionnement">Fonctionnement</h2>
-<p>Votre code appelle la BCL standard, qui aboutit au PAL Unix (les P/Invoke <code>Interop.Sys.*</code>). Ces quelque 45 points d'entrée sont <a href="../dev/plugs.html">remplacés par des plugs</a> dans <code>Cosmos.Kernel.Plugs</code> : une table de descripteurs de fichiers adapte le contrat du PAL (descripteurs de fichiers, flux de répertoires, errno du PAL) et délègue à <code>VfsManager</code>, qui gère la résolution des chemins, la table des montages avec les indicateurs de chacun (une modification sous un montage en lecture seule y est refusée, et le plug la signale par <code>EROFS</code>), le répertoire courant et la sémantique des handles ouverts, et qui transmet l'appel au pilote de système de fichiers monté (FAT, ext2 ou ISO 9660), lequel lit et écrit un <code>IBlockDevice</code> (un disque SATA, un namespace NVMe, un disque virtio-blk ou une unité de stockage de masse USB publiés par les <code>AhciDriver</code>, <code>NvmeDriver</code>, <code>VirtioBlkDriver</code> ou <code>UsbMassStorageDriver</code> du kit de pilotes, tous via <code>StorageManager</code> ; la RAM via <code>MemoryBlockDevice</code>).</p>
-<pre><code>File / Directory / FileStream          (stock BCL)
+<p>Votre code appelle les bibliothèques .NET standard, qui aboutissent à la couche de plateforme Unix, les P/Invoke <code>Interop.Sys.*</code> que .NET fait sous Linux. Cosmos remplace ces appels par des <a href="../dev/plugs.html">plugs</a> dans <code>Cosmos.Kernel.Plugs</code>, où une table de descripteurs de fichiers les traduit pour <code>VfsManager</code>. <code>VfsManager</code> détient les chemins, le répertoire courant, les handles ouverts et la table des montages avec les indicateurs de chaque montage, et c'est là qu'une écriture sous un montage en lecture seule est refusée ; il transmet tout le reste au pilote de système de fichiers monté. Le pilote lit et écrit un <code>IBlockDevice</code> : un disque que le kit de pilotes a publié et que <code>StorageManager</code> a enregistré, ou un périphérique que votre noyau a construit, comme le disque RAM plus haut. Un pilote de système de fichiers à vous implémente <code>IVfsFileSystemType</code> et s'enregistre comme les pilotes fournis. De votre appel jusqu'au disque, les couches s'empilent ainsi :</p>
+<pre><code>File / Directory / FileStream          (stock .NET)
         │
-Interop.Sys.* PAL calls                (stock BCL, plugged)
+Interop.Sys.* PAL calls                (stock .NET, plugged)
         │
-FileDescriptorTable                    (Cosmos.Kernel.Plugs: fds, dir streams, errno)
+file descriptor table                  (Cosmos.Kernel.Plugs: fds, dir streams, errno)
         │
 VfsManager                             (mounts, paths, CWD, open handles)
         │
@@ -616,6 +612,70 @@ IVfsFileSystemType / IVfsSuperblock    (the FAT, ext2 and ISO 9660 drivers)
         │
 IBlockDevice                           (the kit's AHCI, NVMe, virtio-blk and USB mass storage drivers, MemoryBlockDevice)
 </code></pre>
+<p><a id="summary"></a></p>
+<h2 id="résumé">Résumé</h2>
+<table>
+<thead>
+<tr>
+<th>Tâche</th>
+<th>Appel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lister les disques</td>
+<td><code>StorageManager.Devices</code></td>
+</tr>
+<tr>
+<td>Lister les partitions</td>
+<td><code>StorageManager.Partitions</code>, <code>StorageManager.GetPartitions(device)</code></td>
+</tr>
+<tr>
+<td>Enregistrer un pilote de système de fichiers</td>
+<td><code>VfsManager.RegisterFileSystem(name, driver)</code></td>
+</tr>
+<tr>
+<td>Monter une partition</td>
+<td><code>VfsManager.TryMount(name, partition, flags, mountPoint, out mount)</code></td>
+</tr>
+<tr>
+<td>Monter un périphérique que tient le pilote</td>
+<td><code>VfsManager.TryMount(name, &quot;&quot;, flags, mountPoint, out mount)</code></td>
+</tr>
+<tr>
+<td>Démonter</td>
+<td><code>VfsManager.TryUnmount(mountPoint)</code></td>
+</tr>
+<tr>
+<td>Écrire une table de partitions</td>
+<td><code>Gpt.Create(disk)</code>, <code>Mbr.Create(disk)</code></td>
+</tr>
+<tr>
+<td>Ajouter, redimensionner, déplacer ou supprimer une partition</td>
+<td><code>PartitionManager.Create</code>, <code>Resize</code>, <code>MoveWithData</code>, <code>Delete</code></td>
+</tr>
+<tr>
+<td>Prendre en compte une nouvelle table de partitions</td>
+<td><code>StorageManager.RescanPartitions(disk)</code></td>
+</tr>
+<tr>
+<td>Formater une partition</td>
+<td><code>VfsManager.TryFormat(name, partition, options)</code></td>
+</tr>
+<tr>
+<td>Lister les montages</td>
+<td><code>VfsManager.Mounts</code></td>
+</tr>
+<tr>
+<td>Lire l'espace libre</td>
+<td><code>VfsManager.TryStatFs(mountPoint, out stats)</code></td>
+</tr>
+<tr>
+<td>Manipuler des fichiers</td>
+<td><code>File</code>, <code>Directory</code>, <code>FileStream</code>, <code>StreamReader</code>, <code>StreamWriter</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 

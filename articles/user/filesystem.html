@@ -2,9 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-      <title>File System | Cosmos Gen 3 </title>
+      <title>File system | Cosmos Gen 3 </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="File System | Cosmos Gen 3 ">
+      <meta name="title" content="File system | Cosmos Gen 3 ">
       
       
       <link rel="icon" href="../../images/favicon.ico">
@@ -85,10 +85,10 @@
         </div>
 
         <article data-uid="">
-<h1 id="file-system">File System</h1>
+<h1 id="file-system">File system</h1>
 
-<p>In this article, we will discuss using the Cosmos Gen3 VFS (virtual file system).
-Unlike Gen2, where you talked to <code>CosmosVFS</code> and a plugged subset of <code>System.IO</code>, Gen3 gives you the <strong>standard .NET <code>System.IO</code> API</strong> (<code>File</code>, <code>Directory</code>, <code>FileStream</code>, <code>StreamReader</code>/<code>StreamWriter</code>, <code>FileInfo</code>/<code>DirectoryInfo</code>) running unmodified on top of the kernel's VFS. You mount a filesystem at a Unix-style mount point and use ordinary rooted paths.</p>
+<p>In this article, we will discuss disks and files on Cosmos Gen3: giving your kernel a disk, mounting a filesystem on it, reading CD-ROMs and ISO images, partitioning and formatting a disk, and working with files once a volume is mounted.</p>
+<p>Reading and writing files needs no Cosmos-specific API. Gen3 runs the standard .NET <code>System.IO</code> unmodified (<code>File</code>, <code>Directory</code>, <code>FileStream</code>, <code>StreamReader</code>, <code>FileInfo</code> and the rest), and the kernel answers the system calls it would make on Linux. The Cosmos part is the step before: your kernel registers a filesystem driver and mounts a volume at a Unix-style path such as <code>/mnt</code>, and from then on every path under <code>/mnt</code> is served by that driver.</p>
 <p>The main differences if you come from Gen2:</p>
 <table>
 <thead>
@@ -112,12 +112,12 @@ Unlike Gen2, where you talked to <code>CosmosVFS</code> and a plugged subset of 
 <tr>
 <td>API surface</td>
 <td>Plugged subset of <code>System.IO</code></td>
-<td>Full <code>System.IO</code> (streams, enumeration patterns, <code>FileInfo</code>, …)</td>
+<td>Full <code>System.IO</code> (streams, enumeration patterns, <code>FileInfo</code>, ...)</td>
 </tr>
 <tr>
 <td><code>File.Move</code></td>
 <td>Not plugged (copy + delete)</td>
-<td>Works, including onto-existing overwrite semantics</td>
+<td>Works, and can overwrite an existing destination</td>
 </tr>
 <tr>
 <td>Filesystems</td>
@@ -131,30 +131,74 @@ Unlike Gen2, where you talked to <code>CosmosVFS</code> and a plugged subset of 
 </tr>
 </tbody>
 </table>
-<p><strong>Attention</strong>: <strong>Always</strong> format your drive with Cosmos and <strong>only</strong> Cosmos if you plan to use it with Cosmos. Tools like Parted or FDisk are much more advanced and may lay the disk out differently than Cosmos expects.</p>
+<p><strong>Try this in a virtual machine first.</strong> Partitioning and formatting write straight to the disk, with nothing to confirm and nothing to undo, so on real hardware a wrong sector offset destroys whatever the disk held. <code>cosmos run</code> gives QEMU a disk image you can throw away, and a VMware or VirtualBox virtual disk is just as disposable.</p>
 <p><strong>WARNING!</strong>: Please do <strong>not</strong> try this on actual hardware! It may cause <strong>IRREPARABLE DAMAGE</strong> to your data. Use a virtual machine (QEMU via <code>cosmos run</code>, VMware, VirtualBox, …).</p>
+<p>Partition and format your kernel's disks from Cosmos, with the calls this page shows, rather than with Parted or fdisk. Cosmos is tested on disks it laid out itself, and a host tool can lay a disk out in ways those tests never cover.</p>
+<p>If you find bugs or something abnormal, please <a href="https://github.com/CosmosOS/Cosmos/issues/new/choose">submit an issue</a> on our repository.</p>
 <h2 id="enable-storage-in-your-kernel">Enable storage in your kernel</h2>
 <p>Storage support is behind a feature switch. Make sure your kernel's <code>.csproj</code> does not turn it off (it defaults to <code>true</code>):</p>
 <pre><code class="lang-xml">&lt;PropertyGroup&gt;
   &lt;CosmosEnableStorage&gt;true&lt;/CosmosEnableStorage&gt;
 &lt;/PropertyGroup&gt;
 </code></pre>
-<p>At boot the kernel initializes <code>StorageManager</code>, which installs its consumer of the <a href="drivers.html">driver kit</a>'s block devices. The kit's AHCI, NVMe, virtio-blk and USB mass storage drivers then publish every SATA disk (<code>sata0</code>, <code>sata1</code>, ...), every NVMe namespace (<code>nvme0n1</code>, ...), every virtio-blk disk (<code>vblk0</code>, ...) and every USB stick (<code>usb0</code>, <code>usb1</code>, ...) they find during the driver stage, and the manager registers each one as it is published and scans its MBR/GPT partition table into <code>StorageManager.Partitions</code> before the publish returns. USB sticks need <code>CosmosEnableUsb</code>, which is on by default whenever <code>CosmosEnableStorage</code> is, and setting it to <code>false</code> keeps AHCI and NVMe disks and drops USB ones along with the host controller drivers. The manager keeps its tables in one order, which decides the primary device: by node path, <code>pci:</code> before <code>usb:</code> before <code>virtio:</code>, in <code>Devices</code>, in <code>Partitions</code> and as <code>PrimaryDevice</code>; a disk the kernel registered itself after every kit disk; then registration order. So an internal disk on a PCI controller is the primary over a USB stick present at boot whichever registered first, and a kit disk arriving after a USB stick moves ahead of it and renumbers <code>Partitions</code>, which is why a mount by <code>Partition</code> (below) is preferred to one by index string.</p>
-<p>USB disks, and virtio-blk disks behind a PCI Express hot-plug slot, can also be plugged in and pulled out while the kernel runs. One plugged in is published by the kit and registered and scanned like a disk found at boot, under the lowest <code>usbN</code> or <code>vblkN</code> name free. One pulled out is withdrawn: it leaves <code>StorageManager.Devices</code> and <code>StorageManager.Partitions</code>, the mounts made on its partitions with the <code>Partition</code> overload of <code>TryMount</code> (below) are detached, and files still open on it fail with <code>IOException</code> (the USB mass storage driver throws <code>IOException(&quot;USB device detached&quot;)</code> and the virtio-blk driver <code>IOException(&quot;virtio-blk device detached&quot;)</code>, as the NVMe driver throws <code>IOException</code> while it detaches); a disk whose driver's memory the kit has released fails with the kit's <code>InvalidOperationException</code> instead, since the ring does not wrap the driver's device. A mount made from a source string names no disk, so it stays, and fails its I/O the same way. A detached mount is not flushed, since the disk is gone, so call <code>VfsManager.TryUnmount</code> before pulling a disk out. Both lists can change between two reads while a USB or virtio-blk disk comes or goes, from the kit worker: read <code>Devices</code> or <code>Partitions</code> once and index that copy.</p>
-<p>To give your kernel a disk in QEMU, attach an image with <code>cosmos run</code>:</p>
+<p>With the switch on, the kernel brings its storage drivers up during boot and hands every disk they find to <code>StorageManager</code>. The manager lists the disks in <code>StorageManager.Devices</code>, reads each one's MBR or GPT partition table, and lists the partitions it finds in <code>StorageManager.Partitions</code>, all before your kernel's <code>BeforeRun()</code> runs. Each disk gets a name, which is what the boot log and <code>IBlockDevice.Name</code> show:</p>
+<table>
+<thead>
+<tr>
+<th>Disk</th>
+<th>Names</th>
+<th>Attach one in QEMU with</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A SATA disk, behind an AHCI controller</td>
+<td><code>sata0</code>, <code>sata1</code>, ...</td>
+<td><code>cosmos run --disk disk.img</code></td>
+</tr>
+<tr>
+<td>An NVMe namespace</td>
+<td><code>nvme0n1</code>, ...</td>
+<td><code>cosmos run --disk disk.img,nvme</code></td>
+</tr>
+<tr>
+<td>A virtio-blk disk</td>
+<td><code>vblk0</code>, ...</td>
+<td><code>cosmos run --disk disk.img,virtio-blk</code> (or <code>virtio-blk-mmio</code> on arm64)</td>
+</tr>
+<tr>
+<td>A USB stick</td>
+<td><code>usb0</code>, <code>usb1</code>, ...</td>
+<td><code>cosmos run --disk disk.img,usb</code></td>
+</tr>
+<tr>
+<td>A CD-ROM drive, behind an AHCI controller</td>
+<td><code>cdrom0</code>, ...</td>
+<td>Nothing: on x64, <code>cosmos run</code> boots from one</td>
+</tr>
+</tbody>
+</table>
+<p>USB sticks also need <code>CosmosEnableUsb</code>, which defaults to <code>true</code> whenever <code>CosmosEnableStorage</code> is on. Setting it to <code>false</code> drops the USB host controller drivers, and the sticks with them, while the other disks stay.</p>
+<p>To give your kernel disks in QEMU, create an image per drive and pass each one to <code>cosmos run</code> with its kind from the table above (a bare image is a SATA disk):</p>
 <pre><code class="lang-console">$ qemu-img create disk.img 64M
-$ cosmos run --disk disk.img            # attached as an AHCI disk (default)
-$ cosmos run --disk disk.img,nvme       # or as an NVMe namespace
-$ cosmos run --disk disk.img,usb        # or as a USB stick on an xHCI controller
-$ cosmos run --disk disk.img,virtio-blk # or as a virtio-blk-pci function
-$ cosmos run --disk disk.img,virtio-blk-mmio # or, on arm64, in the virt machine's virtio-mmio window
+$ qemu-img create stick.img 64M
+$ cosmos run --disk disk.img --disk stick.img,usb
 </code></pre>
-<p><code>--disk</code> is repeatable if you want several drives. A <code>usb</code> disk also gives the machine its xHCI controller, <code>usbxhci0</code>; <code>--usb-controller ehci</code> or <code>ehci-ohci</code> puts an EHCI there instead, <code>usbehci0</code>, and <code>ohci</code> an OHCI, <code>usbohci0</code>, each pinning every USB device to one of its root ports. The controller lets you plug another stick in and pull it out while the kernel runs, from the QEMU monitor (Ctrl+Alt+2 in the QEMU window):</p>
+<p>An image fresh from <code>qemu-img create</code> is blank: it carries no partition table and no filesystem, so the kernel lists the disk but finds no partition on it. Lay a table down and format a partition from your kernel, as <a href="#partition-a-disk">Partition a disk</a> and <a href="#format-a-partition">Format a partition</a> show, before you mount it.</p>
+<h3 id="which-disk-comes-first">Which disk comes first</h3>
+<p><code>StorageManager.PrimaryDevice</code> is the first entry of <code>Devices</code>, and the manager keeps that list in a fixed order rather than in the order the disks came up, so the primary device does not depend on which driver finished first. Disks the drivers found come first, ordered by the bus and address of the device the <a href="drivers.html">driver kit</a> found them on, which puts a SATA or NVMe disk (<code>pci:</code>) before a USB stick (<code>usb:</code>) and a USB stick before a virtio-blk disk (<code>virtio:</code>). Disks your kernel registered itself with <code>StorageManager.RegisterDevice</code> follow, in the order it registered them. Read-only media such as a CD come last, so the primary device is a disk you can format whenever the machine has one.</p>
+<p>The order has one consequence to plan for: a disk that arrives later takes its place in that order, not the end of the list. A USB stick plugged in while a virtio-blk disk is attached goes ahead of it, and every partition of the virtio-blk disk moves down in <code>StorageManager.Partitions</code>. That is why this page mounts a <code>Partition</code> rather than an index into that list.</p>
+<h3 id="disks-that-come-and-go">Disks that come and go</h3>
+<p>USB sticks, and virtio-blk disks behind a PCI Express hot-plug slot, can be plugged in and pulled out while the kernel runs. A disk plugged in is registered and scanned like one found at boot, under the lowest <code>usbN</code> or <code>vblkN</code> name that is free.</p>
+<p>A disk pulled out leaves <code>Devices</code> and <code>Partitions</code>, and the mounts on it go with it. A mount made with the <code>Partition</code> overload of <code>TryMount</code> (shown below) is detached without a flush, since the disk can take no more writes, so call <code>VfsManager.TryUnmount</code> before you pull out a disk you wrote to. A mount made from a source string names no disk, so it stays in the mount table. Either way, a file still open on the disk fails its next read or write with the driver's <code>IOException</code> (<code>&quot;USB device detached&quot;</code> from the USB mass storage driver, <code>&quot;virtio-blk device detached&quot;</code> from the virtio-blk one, <code>&quot;NVMe device detached&quot;</code> from the NVMe one), or with an <code>InvalidOperationException</code> once the kit has released the driver's memory.</p>
+<p>When a disk comes or goes, a driver kit thread replaces both lists whole, so a list you hold never changes under you, but reading the property again may give a newer one. Read <code>Devices</code> or <code>Partitions</code> once and index that copy.</p>
+<p>To try this in QEMU, start with at least one <code>usb</code> disk: the first gives the machine an xHCI controller, <code>usbxhci0</code>, and the controller's name is the bus you plug another stick into from the QEMU monitor (Ctrl+Alt+2 in the QEMU window). <code>--usb-controller ehci</code> or <code>ehci-ohci</code> puts an EHCI controller there instead, <code>usbehci0</code>, and <code>ohci</code> an OHCI one, <code>usbohci0</code>; both pin every USB device to one of their root ports:</p>
 <pre><code class="lang-console">(qemu) drive_add 0 if=none,id=stick,file=stick.img,format=raw
 (qemu) device_add usb-storage,drive=stick,id=stick,bus=usbxhci0.0
 (qemu) device_del stick
 </code></pre>
 <h2 id="register-a-filesystem-driver-and-mount-it">Register a filesystem driver and mount it</h2>
+<p>A partition is a range of sectors until a filesystem driver reads it. Cosmos ships three drivers, one namespace each: FAT (FAT12, FAT16 and FAT32), ext2, and ISO 9660. Your kernel registers the ones it wants under names of its choice, then mounts a partition with one of them at a mount point.</p>
 <p>These are the <code>using</code>s the snippets below rely on:</p>
 <pre><code class="lang-csharp">using System.IO;
 using Cosmos.Kernel.HAL.Devices.Storage;
@@ -162,9 +206,8 @@ using Cosmos.Kernel.System.FileSystem;
 using Cosmos.Kernel.System.FileSystem.Fat;
 using Cosmos.Kernel.System.Storage;
 </code></pre>
-<p><code>Cosmos.Kernel.System.FileSystem</code> holds the whole VFS in one namespace: the manager and what it hands out (<code>VfsManager</code>, <code>VfsMount</code>, <code>IVfsNodeHandle</code>, <code>IVfsFileHandle</code> and <code>IVfsDirectoryHandle</code>), the contracts a filesystem driver implements (<code>IVfsFileSystemType</code>, <code>IVfsSuperblock</code>, <code>IVfsInode</code>, <code>IVfsOpenFile</code> and their operations interfaces), and the flag, mode and metadata types every mount, create and stat call names (<code>MountFlags</code>, <code>VfsMode</code>, <code>VfsStat</code>, <code>VfsStatFs</code>, <code>SetAttrFlags</code>, <code>SeekWhence</code>, <code>VfsTimespec</code>). That is why <code>MountFlags.None</code> appears in a kernel's <code>BeforeRun()</code> under the same <code>using</code> as <code>VfsManager</code>, and why the <code>IVfsInode</code> that <code>IVfsNodeHandle.Inode</code> gives you needs no other <code>using</code>. Filesystem drivers sit one level down, a namespace each: the FAT driver's <code>FatFileSystemType</code> and <code>FatFormatOptions</code> are in <code>Cosmos.Kernel.System.FileSystem.Fat</code>, the ext2 driver's <code>Ext2FileSystemType</code> in <code>Cosmos.Kernel.System.FileSystem.Ext2</code>, and the ISO 9660 driver's <code>Iso9660FileSystemType</code> in <code>Cosmos.Kernel.System.FileSystem.Iso9660</code>.</p>
-<p><code>Cosmos.Kernel.HAL.Devices.Storage</code> is needed only by the RAM-disk snippet further down, which implements <code>IBlockDevice</code>. Drop that and mounting a real partition takes the three <code>Cosmos.Kernel.System</code> ones.</p>
-<p>First, register a FAT driver under a name of your choice, then mount a partition at a mount point. Add this to your kernel's <code>BeforeRun()</code>:</p>
+<p><code>Cosmos.Kernel.System.FileSystem</code> is the VFS itself: <code>VfsManager</code>, the mount table's entries (<code>VfsMount</code>), the flag and metadata types a mount or a stat call names (<code>MountFlags</code>, <code>VfsMode</code>, <code>VfsStat</code>, <code>VfsStatFs</code>), and the interfaces a filesystem driver implements. That is why <code>MountFlags.None</code> needs no <code>using</code> of its own. The drivers sit one level down: <code>FatFileSystemType</code> and <code>FatFormatOptions</code> in <code>Cosmos.Kernel.System.FileSystem.Fat</code>, <code>Ext2FileSystemType</code> in <code>Cosmos.Kernel.System.FileSystem.Ext2</code>, and <code>Iso9660FileSystemType</code> in <code>Cosmos.Kernel.System.FileSystem.Iso9660</code>. <code>StorageManager</code> and the partition types are in <code>Cosmos.Kernel.System.Storage</code>, and <code>Cosmos.Kernel.HAL.Devices.Storage</code> is there only for <code>IBlockDevice</code>, the type of a disk, which the RAM disk further down implements and the partitioning snippets hold.</p>
+<p>Register the FAT driver, then mount the first partition at <code>/mnt</code>. This goes in your kernel's <code>BeforeRun()</code>:</p>
 <pre><code class="lang-csharp">FatFileSystemType fat = new();
 
 if (!VfsManager.RegisterFileSystem(&quot;fat&quot;, fat))
@@ -181,18 +224,22 @@ if (StorageManager.Partitions.Count == 0)
 
 if (VfsManager.TryMount(&quot;fat&quot;, StorageManager.Partitions[0], MountFlags.None, &quot;/mnt&quot;, out VfsMount? mount))
 {
-    Console.WriteLine(&quot;Mounted &quot; + mount.Name + &quot; at &quot; + mount.MountPoint);
+    Console.WriteLine(&quot;Mounted &quot; + mount.Name + &quot; partition &quot; + mount.Source + &quot; at &quot; + mount.MountPoint);
+}
+else
+{
+    Console.WriteLine(&quot;No FAT volume on the first partition.&quot;);
 }
 </code></pre>
-<p><code>Partitions</code> is empty before storage is scanned, when no disk is attached, and when storage is compiled out, so index it only after checking <code>Count</code>. Every call above returns whether it worked: <code>RegisterFileSystem</code> refuses a name already in use, and <code>TryMount</code> refuses a source the driver does not recognize.</p>
-<p><code>StorageManager.GetPartitions(device)</code> lists the partitions of one disk, numbered the way a user numbers them; <code>StorageManager.Partitions</code> is the flat list across every disk.</p>
-<p>There is a second spelling, <code>VfsManager.TryMount(&quot;fat&quot;, &quot;0&quot;, ...)</code>, where <code>source</code> is a driver-specific string. Every driver accepts one, and the FAT driver reads it as an index into <code>StorageManager.Partitions</code>. Prefer the <code>Partition</code> overload: creating or deleting a partition renumbers that list, so an index held across a rescan can come to name a different partition.</p>
+<p>Each of these calls reports a refusal through its return value rather than an exception: <code>RegisterFileSystem</code> refuses a name already in use, and <code>TryMount</code> refuses a partition the driver finds no volume on. A disk that fails the read itself still throws its driver's exception. <code>Partitions</code> is empty when storage is compiled out, or when no disk carries a partition table or a FAT volume and no CD is in a drive, which is why the snippet checks <code>Count</code> before indexing it. On x64, <code>cosmos run</code> boots from a CD the kernel lists too, so when no attached disk has a partition, the first entry is that CD and the FAT driver finds no volume on it.</p>
+<p><code>StorageManager.GetPartitions(device)</code> gives the partitions of one disk, numbered the way a user numbers them, where <code>Partitions</code> is the flat list across every disk.</p>
+<p><code>TryMount</code> also takes the source as a string, as in <code>VfsManager.TryMount(&quot;fat&quot;, &quot;0&quot;, ...)</code>, which each driver reads its own way: the FAT driver reads it as an index into <code>StorageManager.Partitions</code>. Prefer the <code>Partition</code> overload. An index names whatever partition sits at that position, and creating or deleting a partition, or a disk arriving or leaving, moves them.</p>
 <!-- screenshot: kernel console right after boot showing the "Mounted fat partition 0 at /mnt" line -->
 <p><img src="images/filesystem-mount.png" alt="Mount"></p>
-<p>From this point on, everything under <code>/mnt</code> is served by the FAT driver, and everything in this article is plain <code>System.IO</code>.</p>
-<p><strong>Note</strong>: <code>/</code> itself is a <em>virtual root</em>. It always exists, even with nothing mounted, and enumerating it lists the mount points. You cannot create files directly in it (<code>IOException</code>, read-only file system); create them under a mount point like <code>/mnt</code>.</p>
-<h3 id="alternative-a-ram-disk">Alternative: a RAM disk</h3>
-<p>For quick experiments you don't need a disk image at all. A block device is just an <code>IBlockDevice</code> (from <code>Cosmos.Kernel.HAL.Devices.Storage</code>), and a RAM-backed one fits in a few lines; this is exactly what the kernel test suites use:</p>
+<p>From this point on, everything under <code>/mnt</code> is served by the FAT driver.</p>
+<p>The root, <code>/</code>, is not a volume. It exists with nothing mounted, and enumerating it lists the mount points, but creating a file directly in it fails with <code>IOException</code> (read-only file system), since no driver sits there to store the file. Create files under a mount point such as <code>/mnt</code>.</p>
+<h3 id="try-it-on-a-ram-disk">Try it on a RAM disk</h3>
+<p>For quick experiments you do not need a disk image at all. A block device is anything that implements <code>IBlockDevice</code>, and one backed by an array fits in a few lines:</p>
 <pre><code class="lang-csharp">internal sealed class MemoryBlockDevice : IBlockDevice
 {
     private readonly byte[] _storage;
@@ -218,7 +265,7 @@ if (VfsManager.TryMount(&quot;fat&quot;, StorageManager.Partitions[0], MountFlag
     public void Flush() { }
 }
 </code></pre>
-<p>The FAT driver accepts an injected device directly. Register it as usual and leave <code>source</code> empty: with a device already in hand the driver has nothing to look up.</p>
+<p>The FAT driver takes such a device in its constructor. Register it as usual and pass an empty <code>source</code>, since a driver that already holds its device has nothing to look up, then format the device and mount it:</p>
 <pre><code class="lang-csharp">MemoryBlockDevice ramDisk = new(&quot;RAMDISK&quot;, 512, 65536);   // 32 MiB
 FatFileSystemType fat = new(ramDisk);
 
@@ -231,10 +278,12 @@ if (!VfsManager.RegisterFileSystem(&quot;ramfat&quot;, fat)
 }
 </code></pre>
 <h3 id="read-a-cd-rom-or-an-iso-image">Read a CD-ROM or an ISO image</h3>
-<p><code>Iso9660FileSystemType</code>, in <code>Cosmos.Kernel.System.FileSystem.Iso9660</code>, reads the format of CD-ROMs and of the <code>.iso</code> images every CD tool and <code>cosmos build</code> produce: ISO 9660 with the Rock Ridge extension, which is what gives a volume its POSIX names (<code>hello.txt</code> rather than <code>HELLO.TXT;1</code>), its permissions, its time stamps and its symbolic links. A volume without Rock Ridge presents its plain identifiers without the version (<code>README</code>, <code>FILE.TXT</code>), matched without regard to case; a Joliet directory tree is ignored. The driver takes the same two sources as the others: a partition index, or an injected <code>IBlockDevice</code>, in any sector size, so the same image mounts from a CD (2048-byte sectors), from a USB stick it was written to (512-byte sectors), or from RAM:</p>
+<p>CD drives have mostly disappeared from our computers, but their filesystem lives on: operating systems are still downloaded as <code>.iso</code> images, and <code>cosmos build</code> packs your own kernel into one. <code>Iso9660FileSystemType</code>, in <code>Cosmos.Kernel.System.FileSystem.Iso9660</code>, lets your kernel read such a volume, whether it sits on a CD, on a USB stick an image was written to, or in memory.</p>
+<p>On its own, the standard only knows upper-case names that end in a version number, such as <code>HELLO.TXT;1</code>. That is why images made on Unix systems usually carry the Rock Ridge extension, and the one <code>cosmos build</code> makes does: Rock Ridge gives each file its real name, <code>hello.txt</code>, along with its Unix permissions, its time stamps and its symbolic links, and the driver reads all of them when the volume has it. On a volume without Rock Ridge, a file shows up under its plain identifier without the version (<code>README</code>, <code>FILE.TXT</code>), and you can type that name in any case, because the standard allows only upper case there. The driver does not read Joliet, the long names Windows tools add, so a volume that has only Joliet shows its plain identifiers too.</p>
+<p>The driver mounts like the FAT one, from a partition or from a device handed to its constructor, and it accepts any sector size, so the same image mounts from a CD drive (2048-byte sectors), from a USB stick (512-byte sectors) or from a <code>MemoryBlockDevice</code> holding its bytes. Here <code>cdrom</code> is any <code>IBlockDevice</code> that holds a volume, and the next paragraphs show how to find the CD drive among the disks:</p>
 <pre><code class="lang-csharp">using Cosmos.Kernel.System.FileSystem.Iso9660;
 
-Iso9660FileSystemType iso = new(cdrom);   // any IBlockDevice holding an ISO 9660 volume
+Iso9660FileSystemType iso = new(cdrom);
 
 if (!VfsManager.RegisterFileSystem(&quot;iso&quot;, iso)
     || !VfsManager.TryMount(&quot;iso&quot;, &quot;&quot;, MountFlags.None, &quot;/cd&quot;, out VfsMount? cd))
@@ -250,7 +299,7 @@ foreach (string path in Directory.GetFiles(&quot;/cd/docs&quot;))
 }
 string text = File.ReadAllText(&quot;/cd/hello.txt&quot;);
 </code></pre>
-<p><code>cdrom</code> is any <code>IBlockDevice</code> holding a volume. When the drive the kernel booted from sits behind a SATA controller in AHCI mode, it is one of <code>StorageManager.Devices</code>, the entry whose medium is read-only: a CD-ROM drive implements <code>IRemovableMedia</code> beside <code>IBlockDevice</code>, a driver kit seam type (<code>[Experimental(&quot;COSMOS0003&quot;)]</code>, so a kernel project that tests for it acknowledges the id with <code>&lt;NoWarn&gt;$(NoWarn);COSMOS0003&lt;/NoWarn&gt;</code>), with <code>IsReadOnly</code>, <code>IsRemovable</code> and <code>HasMedia</code>. Finding it is one loop over the list:</p>
+<p>Most often the volume is in a CD drive. When that drive sits behind a SATA controller in AHCI mode, the kernel lists it in <code>StorageManager.Devices</code> as <code>cdrom0</code>, provided a disc was in it at boot: the driver brings a drive up only once it finds a disc in it, and it does not watch for one inserted later, so a drive that was empty at boot never appears. What tells it apart from a disk is a second interface on the same object, <code>IRemovableMedia</code>, with <code>IsReadOnly</code>, <code>IsRemovable</code> and <code>HasMedia</code>. The driver kit calls such an extra interface a facet. This one is part of the kit's experimental surface, marked <code>[Experimental(&quot;COSMOS0003&quot;)]</code>, so a kernel that tests for it acknowledges the id in its <code>.csproj</code> with <code>&lt;NoWarn&gt;$(NoWarn);COSMOS0003&lt;/NoWarn&gt;</code>. Finding the drive is then one loop over the list:</p>
 <pre><code class="lang-csharp">using Cosmos.Kernel.HAL.Devices.Storage;   // IBlockDevice, IRemovableMedia
 using Cosmos.Kernel.System.Storage;        // StorageManager
 
@@ -264,53 +313,23 @@ foreach (IBlockDevice device in StorageManager.Devices)
     }
 }
 </code></pre>
-<p>The storage manager carries such a medium as one partition spanning the whole disc and never scans it for a partition table, since a read-only medium carries none a kernel could write and an ISO's protective MBR counts in 512-byte units that a 2048-byte-sector device would misread. It orders the medium after every writable disk, so <code>StorageManager.PrimaryDevice</code> stays a disk a kernel can format while one is attached and becomes the CD on a machine that has nothing else. A partition an image was written to, or a <code>MemoryBlockDevice</code> over the image's bytes, mounts the same way.</p>
-<p>The volume is read-only, and the VFS knows it: <code>VfsMount.IsReadOnly</code> is true and <code>VfsMount.Flags</code> carries <code>MountFlags.ReadOnly</code> whatever flags you mounted with, <code>FileInfo.IsReadOnly</code> is true for every file, and every mutation under the mount point fails the way it does on Linux, with a plain <code>IOException</code> (&quot;Read-only file system&quot;) rather than a not-found exception:</p>
-<table>
-<thead>
-<tr>
-<th>Call</th>
-<th>Result on an ISO 9660 mount</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>File.ReadAllText</code>, <code>File.ReadAllBytes</code>, <code>FileStream</code> opened for reading, <code>StreamReader</code>, <code>Directory.GetFiles</code>, <code>FileInfo</code></td>
-<td>Works</td>
-</tr>
-<tr>
-<td><code>File.Create</code>, <code>File.WriteAllText</code>, <code>File.AppendAllText</code>, <code>FileStream</code> opened for writing, <code>FileMode.Truncate</code></td>
-<td><code>IOException</code></td>
-</tr>
-<tr>
-<td><code>File.Delete</code>, <code>File.Move</code>, <code>File.Copy</code> onto the mount, <code>File.SetAttributes</code></td>
-<td><code>IOException</code></td>
-</tr>
-<tr>
-<td><code>Directory.CreateDirectory</code>, <code>Directory.Delete</code>, <code>Directory.Move</code></td>
-<td><code>IOException</code></td>
-</tr>
-<tr>
-<td><code>VfsManager.TryCreateFile</code>, <code>TryCreateDirectory</code>, <code>TryUnlink</code>, <code>TryRemoveDirectory</code>, <code>TryRename</code></td>
-<td><code>false</code></td>
-</tr>
-<tr>
-<td><code>VfsManager.TryFormat</code>, <code>TryDestroy</code></td>
-<td><code>false</code>: the driver writes no volume</td>
-</tr>
-</tbody>
-</table>
-<p>The same refusals apply to any driver when you mount with <code>MountFlags.ReadOnly</code>: a FAT partition mounted that way takes no writes through that mount point, while the same partition mounted elsewhere without the flag still does.</p>
-<p>What the driver does not read: a Joliet-only volume's long names (it presents the plain identifiers), a file past 4 GiB split over several extents (it is not listed), the later sessions of a multi-session disc, UDF, and El Torito, whose boot catalog is just a file. A SATA controller in AHCI mode is where QEMU's q35 machine puts its CD drive, and where VMware puts it when the virtual drive sits on the SATA controller rather than the IDE one; there the kit's <code>AhciDriver</code> publishes the drive as <code>cdrom&lt;n&gt;</code> (<a href="drivers.html#the-storage-drivers">The storage drivers</a>). A drive behind a USB, virtio-scsi or IDE controller is not a block device yet, so a kernel booted from one reads an image instead: from RAM, from a disk partition, or from a USB stick the image was written to.</p>
+<p>The storage manager does not look for a partition table on a CD. A read-only disc holds no partition table a kernel could change, and the protective MBR at the start of a bootable ISO counts in 512-byte units that a 2048-byte-sector drive would misread, so the manager lists the whole disc as one partition. It also keeps the drive after every writable disk, as <a href="#which-disk-comes-first">Which disk comes first</a> explains, so on x64, where <code>cosmos run</code> boots from such a drive, the boot CD is the last entry of <code>Partitions</code>, and the first one when no disk has a partition of its own.</p>
+<p>The volume is read-only, and the whole VFS knows it. <code>VfsMount.IsReadOnly</code> is true and <code>VfsMount.Flags</code> carries <code>MountFlags.ReadOnly</code> whatever flags you mounted with, <code>FileInfo.IsReadOnly</code> is true for every file, and every write fails the way it does on Linux, with a plain <code>IOException</code> (&quot;Read-only file system&quot;) rather than an exception that would suggest the file is missing.</p>
+<p>Any driver refuses writes the same way when you mount it with <code>MountFlags.ReadOnly</code>. The flag belongs to the mount rather than the volume: the VFS checks it at the mount point, not in the driver.</p>
+<p>A few things on a disc stay out of reach. A file split over several extents, which is how ISO 9660 stores one larger than 4 GiB, is not listed. Only the first session of a multi-session disc is read, and UDF is not read at all. The El Torito boot catalog, which makes a CD bootable, is not interpreted either: when the disc lists it, it shows up as one more file.</p>
+<p>The drive itself has to be one the kit publishes as a block device, which today means a drive behind a SATA controller in AHCI mode (<a href="drivers.html#the-storage-drivers">The storage drivers</a>). That is where QEMU's q35 machine puts its CD drive, so a kernel that <code>cosmos run</code> boots on x64 can read its own boot CD, and where VMware puts it when the virtual drive is on the SATA controller rather than the IDE one. A drive behind a USB, virtio-scsi or IDE controller is not a block device yet, and <code>cosmos run</code> attaches the boot ISO through virtio-scsi on arm64. A kernel there reads an image instead: from RAM, from a disk partition the image was written into, or from a USB stick the image was written to, handed whole to the constructor as <code>new Iso9660FileSystemType(stick)</code>.</p>
 <h3 id="ship-files-on-the-boot-iso">Ship files on the boot ISO</h3>
-<p>The ISO <code>cosmos build</code> produces holds the kernel and Limine under <code>/boot</code> and <code>/EFI</code>. A kernel ships its own files beside them as it did in Gen2: whatever sits in an <code>isoFiles</code> folder next to the kernel's <code>.csproj</code> goes to the root of the ISO with its folders, so <code>isoFiles/data/config.txt</code> is <code>/data/config.txt</code> on the disc. A file that lives elsewhere, or that should go under another name, is a <code>CosmosIsoFile</code> item in the <code>.csproj</code>, whose <code>IsoPath</code> metadata is its path on the ISO. An <code>IsoPath</code> ending in <code>/</code> names a folder and keeps the file's name, and a file without one goes to the root:</p>
+<p>Since a kernel can read its boot CD, the ISO is also a handy place for the files it needs at run time: a configuration file, a font, a picture. <code>cosmos build</code> puts the kernel and Limine under <code>/boot</code> and <code>/EFI</code>, and, as in Gen2, whatever sits in an <code>isoFiles</code> folder next to your kernel's <code>.csproj</code> goes to the root of the ISO with its folders, so <code>isoFiles/data/config.txt</code> becomes <code>/data/config.txt</code> on the disc.</p>
+<p>A file that lives elsewhere, or that should land under another name, is a <code>CosmosIsoFile</code> item in the <code>.csproj</code>. Its <code>IsoPath</code> metadata is its path on the ISO. An <code>IsoPath</code> ending in <code>/</code> names a folder and keeps the file's own name, and a file without one goes to the root:</p>
 <pre><code class="lang-xml">&lt;ItemGroup&gt;
   &lt;CosmosIsoFile Include=&quot;../assets/logo.bmp&quot; IsoPath=&quot;images/logo.bmp&quot; /&gt;
   &lt;CosmosIsoFile Include=&quot;../assets/readme.txt&quot; IsoPath=&quot;docs/&quot; /&gt;
 &lt;/ItemGroup&gt;
 </code></pre>
-<p>The <code>CosmosIsoFilesDirectory</code> property points the folder elsewhere. What the folder holds is left out of the compilation, so a <code>.cs</code> file there is shipped rather than built into the kernel. The build fails on a file that would land under <code>/boot</code> or <code>/EFI</code>, since those hold the kernel and the bootloader the SDK writes; on a path with a <code>.</code> or <code>..</code> segment, since <code>..</code> could leave the root; and on two files with one path, compared without case, since on a Windows host the second copy would overwrite the first. The ISO's build cache covers the files and their paths, so adding, changing, renaming or removing one rebuilds the ISO without compiling the kernel again.</p>
-<p>The names on the disc are Rock Ridge names, case and spaces kept, and the kernel reads them once it has mounted the boot CD, found as above:</p>
+<p>The <code>CosmosIsoFilesDirectory</code> property points the build at another folder. Whatever that folder holds is left out of the compilation, so a <code>.cs</code> file in it is shipped as a file rather than built into the kernel.</p>
+<p>The build stops with an error rather than write a broken ISO. It refuses a file that would land under <code>/boot</code> or <code>/EFI</code>, since those hold the kernel and the bootloader the SDK writes. It refuses an <code>IsoPath</code> with a <code>.</code> or <code>..</code> segment, since <code>..</code> could climb out of the ISO's root. And it refuses two files with the same path, compared without case, since on a Windows host the second copy would overwrite the first.</p>
+<p>The ISO's build cache covers the files and their paths, so adding, changing, renaming or removing one rebuilds the ISO without compiling the kernel again.</p>
+<p>On the disc the files keep their names, case and spaces included, because Rock Ridge carries them. The kernel reads them back once it has mounted the boot CD, found as in the previous section:</p>
 <pre><code class="lang-csharp">using Cosmos.Kernel.System.FileSystem;           // VfsManager, MountFlags
 using Cosmos.Kernel.System.FileSystem.Iso9660;   // Iso9660FileSystemType
 
@@ -318,9 +337,9 @@ VfsManager.RegisterFileSystem(&quot;bootcd&quot;, new Iso9660FileSystemType(cdro
 VfsManager.TryMount(&quot;bootcd&quot;, &quot;&quot;, MountFlags.None, &quot;/cdrom&quot;, out _);
 string config = File.ReadAllText(&quot;/cdrom/data/config.txt&quot;);
 </code></pre>
-<p>That read needs the boot drive to be a block device, which it is behind an AHCI controller. Where it is not, on an arm64 machine booting from virtio-scsi for one, the files are on the disc but the kernel cannot reach them yet.</p>
+<p>That read needs the boot drive to be a block device, which it is behind an AHCI controller. Where it is not, as on an arm64 machine booting from virtio-scsi, the files are on the disc but the kernel cannot reach them yet.</p>
 <h2 id="partition-a-disk">Partition a disk</h2>
-<p>Formatting needs a partition to format. <code>StorageManager.Partitions</code> lists the ones already on the disks the kernel found at boot; when there are none, or you want a different layout, <code>Gpt</code>, <code>Mbr</code> and <code>PartitionManager</code> write the partition table itself. They all take an <code>IBlockDevice</code>, which <code>StorageManager.PrimaryDevice</code> hands you.</p>
+<p>A disk fresh from <code>qemu-img create</code> holds no partition table, and formatting needs a partition to format. <code>StorageManager.Partitions</code> lists the ones already on the disks the kernel found at boot; when there are none, or you want a different layout, <code>Gpt</code>, <code>Mbr</code> and <code>PartitionManager</code> write the partition table itself. They all take an <code>IBlockDevice</code>, which <code>StorageManager.PrimaryDevice</code> hands you.</p>
 <p>Start by asking what scheme the disk already carries:</p>
 <pre><code class="lang-csharp">IBlockDevice? disk = StorageManager.PrimaryDevice;
 if (disk is null)
@@ -342,7 +361,7 @@ else
     Console.WriteLine(&quot;No partition table&quot;);
 }
 </code></pre>
-<p><code>Gpt.Create</code> and <code>Mbr.Create</code> lay down an empty table of that scheme, <strong>destroying whatever was there</strong>. <code>PartitionManager.Create</code> then adds a partition, working on whichever scheme the disk carries so you do not have to branch:</p>
+<p><code>Gpt.Create</code> and <code>Mbr.Create</code> lay down an empty table of that scheme, and the partitions the disk held go with the old table. <code>PartitionManager.Create</code> then adds a partition, on whichever scheme the disk carries, so you do not have to branch:</p>
 <pre><code class="lang-csharp">Gpt.Create(disk);
 
 /* 64 MiB at LBA 2048, on a 512-byte-sector disk. The MBR system id and the
@@ -357,26 +376,26 @@ if (!PartitionManager.Create(disk, startSector: 2048, sectorCount: 131072,
 
 StorageManager.RescanPartitions(disk);
 </code></pre>
-<p><code>RescanPartitions</code> is what makes the new partition show up in <code>StorageManager.Partitions</code>. Until you call it the list still describes the old table.</p>
-<p>Existing partitions are addressed by a <code>PartitionLocation</code>, which is the start sector and length rather than an index, so a partition does not change identity when the table is renumbered:</p>
+<p><code>RescanPartitions</code> is what makes the new partition show up in <code>StorageManager.Partitions</code>. Until you call it, the list still describes the old table.</p>
+<p>Existing partitions are addressed by a <code>PartitionLocation</code>, the start sector and the length rather than an index, so a partition keeps its identity when the table is renumbered:</p>
 <pre><code class="lang-csharp">PartitionManager.PartitionLocation where = new(startSector: 2048, sectorCount: 131072);
 
 PartitionManager.Resize(disk, where, newSectorCount: 262144);
 PartitionManager.MoveWithData(disk, where, newStartSector: 4096);
 PartitionManager.Delete(disk, where);
 </code></pre>
-<p><code>MoveWithData</code> copies the contents to the new location before rewriting the entry; <code>Resize</code> and <code>Delete</code> only touch the table, so shrinking a partition below its filesystem's size loses data.</p>
-<p><strong>Every partition index is positional.</strong> Deleting one renumbers the entries after it, and <code>StorageManager.Partitions</code> renumbers with them, so re-read the list after any change rather than holding an index across one.</p>
-<p>MBR's four primary slots are extended with a chain of logical partitions. <code>PartitionManager.TryCreateLogical</code> adds one inside the extended partition, and <code>Mbr.TryGetExtendedPartition</code> finds it:</p>
+<p><code>MoveWithData</code> copies the contents to the new location before it rewrites the entry. <code>Resize</code> and <code>Delete</code> only touch the table, so shrinking a partition below the size of its filesystem loses data.</p>
+<p><strong>Every partition index is positional.</strong> Deleting a partition renumbers the entries after it, and <code>StorageManager.Partitions</code> renumbers with them, so read the list again after any change rather than holding an index across one.</p>
+<p>MBR has four primary slots, and a chain of logical partitions inside an extended one goes past them. <code>Mbr.TryGetExtendedPartition</code> finds the extended partition, and <code>PartitionManager.TryCreateLogical</code> adds a logical one inside it:</p>
 <pre><code class="lang-csharp">if (Mbr.TryGetExtendedPartition(disk, out ulong extendedStart, out ulong extendedCount)
     &amp;&amp; PartitionManager.TryCreateLogical(disk, systemId: 0x0C, sectorCount: 65536, out ulong logicalStart))
 {
     Console.WriteLine(&quot;logical partition at LBA &quot; + logicalStart);
 }
 </code></pre>
-<p><code>Gpt</code>, <code>Mbr</code> and <code>Ebr</code> are the lower layer, one type per scheme, for when you need to write entries the manager does not expose.</p>
-<h2 id="format-a-disk">Format a disk</h2>
-<p>To format (mkfs) a partition through the VFS, use <code>VfsManager.TryFormat</code> with the driver name, the partition and the driver's option type. The FAT formatter picks sane geometry from the options you give it:</p>
+<p><code>Gpt</code>, <code>Mbr</code> and <code>Ebr</code> are the lower layer, one type per scheme, for the entries <code>PartitionManager</code> does not expose.</p>
+<h2 id="format-a-partition">Format a partition</h2>
+<p><code>VfsManager.TryFormat</code> formats (mkfs) a partition through the VFS. It takes the driver name, the partition and the driver's option type, and every FAT option you leave unset (the cluster size, the number of FAT copies, the reserved sectors) is picked by the formatter from the FAT type and the partition's size:</p>
 <pre><code class="lang-csharp">FatFormatOptions options = new()
 {
     Type = FatType.Fat32,
@@ -389,9 +408,9 @@ if (StorageManager.Partitions.Count == 0
     Console.WriteLine(&quot;Format failed&quot;);
 }
 </code></pre>
-<p>Formatting is refused while the source is mounted: unmount first with <code>VfsManager.TryUnmount(&quot;/mnt&quot;)</code>.</p>
+<p><code>TryFormat</code> refuses a partition that is mounted, so unmount it first with <code>VfsManager.TryUnmount(&quot;/mnt&quot;)</code>.</p>
 <h2 id="list-mounted-volumes">List mounted volumes</h2>
-<p><code>VfsManager.Mounts</code> is the mount table. Each entry tells you the driver name, the backing source and the mount point:</p>
+<p><code>VfsManager.Mounts</code> is the mount table. Each entry gives the name the driver was registered under, the source it was mounted from and the mount point:</p>
 <pre><code class="lang-csharp">foreach (VfsMount m in VfsManager.Mounts)
 {
     Console.WriteLine(m.MountPoint + &quot; -&gt; &quot; + m.Name + &quot; (source &quot; + m.Source + &quot;)&quot;);
@@ -399,7 +418,7 @@ if (StorageManager.Partitions.Count == 0
 </code></pre>
 <!-- screenshot: console output of the mount-table loop, e.g. "/mnt -> fat (source 0)" -->
 <p><img src="images/filesystem-mounts.png" alt="Mounts"></p>
-<p><code>m.Partition</code> is the partition itself, for mounts made with the <code>Partition</code> overload. Prefer it to parsing <code>m.Source</code> back into an index: it keeps naming the same range on the same disk after a rescan renumbers <code>StorageManager.Partitions</code>.</p>
+<p><code>m.Partition</code> is the partition itself, for a mount made with the <code>Partition</code> overload. Prefer it to parsing <code>m.Source</code> back into an index: it keeps naming the same range of the same disk after a rescan renumbers <code>StorageManager.Partitions</code>.</p>
 <h2 id="check-free-space">Check free space</h2>
 <p><code>VfsManager.TryStatFs</code> reports a mount's block accounting. Free space is the available block count times the block size:</p>
 <pre><code class="lang-csharp">if (VfsManager.TryStatFs(&quot;/mnt&quot;, out VfsStatFs stats))
@@ -409,37 +428,29 @@ if (StorageManager.Partitions.Count == 0
     Console.WriteLine(freeBytes + &quot; of &quot; + totalBytes + &quot; bytes free&quot;);
 }
 </code></pre>
-<h2 id="get-a-list-of-files">Get a list of files</h2>
-<p>We start by getting a list of files, using:</p>
-<pre><code class="lang-csharp">string[] files = Directory.GetFiles(&quot;/mnt&quot;);
-
-foreach (string file in files)
+<p>An ISO 9660 mount reports its size with no free blocks at all, since nothing can be written to it. <code>DriveInfo</code> is not wired up yet, so this is the way to read free space.</p>
+<h2 id="list-a-directory">List a directory</h2>
+<p>From here on, everything is the standard <code>System.IO</code>, and the paths are the ones under your mount point. <code>Directory.GetFiles</code> lists the files of a directory:</p>
+<pre><code class="lang-csharp">foreach (string file in Directory.GetFiles(&quot;/mnt&quot;))
 {
     Console.WriteLine(file);
 }
-</code></pre>
-<p>Search patterns work too; this is the stock BCL enumeration engine:</p>
-<pre><code class="lang-csharp">string[] logs = Directory.GetFiles(&quot;/mnt&quot;, &quot;*.txt&quot;);
 </code></pre>
 <!-- screenshot: console listing a few files under /mnt -->
 <p><img src="images/filesystem-files-list.png" alt="Files List"></p>
-<h2 id="get-a-directory-listing-files-and-other-directories">Get a directory listing (files and other directories)</h2>
-<pre><code class="lang-csharp">string[] files = Directory.GetFiles(&quot;/mnt&quot;);
-string[] directories = Directory.GetDirectories(&quot;/mnt&quot;);
-
-foreach (string file in files)
-{
-    Console.WriteLine(file);
-}
-foreach (string directory in directories)
+<p>Search patterns work too, since this is the stock .NET enumeration code:</p>
+<pre><code class="lang-csharp">string[] logs = Directory.GetFiles(&quot;/mnt&quot;, &quot;*.txt&quot;);
+</code></pre>
+<p><code>Directory.GetDirectories</code> lists the subdirectories the same way:</p>
+<pre><code class="lang-csharp">foreach (string directory in Directory.GetDirectories(&quot;/mnt&quot;))
 {
     Console.WriteLine(directory);
 }
 </code></pre>
 <!-- screenshot: console listing files and directories under /mnt -->
 <p><img src="images/filesystem-directory-listing.png" alt="Directory Listing"></p>
-<h2 id="read-all-the-files-in-a-directory">Read all the files in a directory</h2>
-<p>We get the file list and print the content of each file. As in Gen2, keep filesystem code inside <code>try</code>/<code>catch</code>: the exceptions are the standard <code>System.IO</code> ones and they are catchable:</p>
+<h2 id="read-a-file">Read a file</h2>
+<p><code>File.ReadAllText</code> reads a whole file as a string. A failing filesystem call throws the standard <code>System.IO</code> exception, as in Gen2, and you catch it as on any other .NET platform, so this loop prints every file under <code>/mnt</code> and reports a failed read instead of stopping the kernel:</p>
 <pre><code class="lang-csharp">try
 {
     foreach (string file in Directory.GetFiles(&quot;/mnt&quot;))
@@ -458,72 +469,37 @@ catch (Exception e)
 </code></pre>
 <!-- screenshot: console showing a file's name, size and content -->
 <p><img src="images/filesystem-read-all-files.png" alt="Read All Files"></p>
-<h2 id="create-a-new-file">Create a new file</h2>
-<pre><code class="lang-csharp">try
-{
-    using FileStream stream = File.Create(&quot;/mnt/testing.txt&quot;);
-}
-catch (Exception e)
-{
-    Console.WriteLine(e.ToString());
-}
-</code></pre>
-<h2 id="create-a-new-directory">Create a new directory</h2>
-<p><code>Directory.CreateDirectory</code> creates the whole chain of missing parents in one call:</p>
-<pre><code class="lang-csharp">try
-{
-    Directory.CreateDirectory(&quot;/mnt/documents/reports&quot;);
-}
-catch (Exception e)
-{
-    Console.WriteLine(e.ToString());
-}
-</code></pre>
-<h2 id="write-to-a-file">Write to a file</h2>
-<pre><code class="lang-csharp">try
-{
-    File.WriteAllText(&quot;/mnt/testing.txt&quot;, &quot;Learning how to use the Gen3 VFS!&quot;);
-}
-catch (Exception e)
-{
-    Console.WriteLine(e.ToString());
-}
-</code></pre>
-<p><code>File.AppendAllText</code>, <code>File.WriteAllBytes</code> and <code>File.WriteAllLines</code> work the same way.</p>
-<h2 id="read-a-specific-file">Read a specific file</h2>
-<pre><code class="lang-csharp">try
-{
-    Console.WriteLine(File.ReadAllText(&quot;/mnt/testing.txt&quot;));
-}
-catch (Exception e)
-{
-    Console.WriteLine(e.ToString());
-}
+<p><code>File.ReadAllBytes</code> reads a file as bytes. The snippets from here on leave the <code>try</code>/<code>catch</code> out to stay short:</p>
+<pre><code class="lang-csharp">Console.WriteLine(File.ReadAllText(&quot;/mnt/testing.txt&quot;));
+
+byte[] data = File.ReadAllBytes(&quot;/mnt/testing.txt&quot;);
+Console.WriteLine(&quot;Read &quot; + data.Length + &quot; bytes&quot;);
 </code></pre>
 <!-- screenshot: console printing the file content written in the previous step -->
 <p><img src="images/filesystem-read-specific-file.png" alt="Read Specific File"></p>
-<p>And for binary data:</p>
-<pre><code class="lang-csharp">byte[] data = File.ReadAllBytes(&quot;/mnt/testing.txt&quot;);
-Console.WriteLine(&quot;Read &quot; + data.Length + &quot; bytes&quot;);
-</code></pre>
-<h2 id="copy-move-delete">Copy, move, delete</h2>
-<p>Unlike Gen2, <code>File.Move</code> is fully supported, no copy-and-delete workaround needed. A move onto an existing destination throws <code>IOException</code> unless you pass <code>overwrite: true</code>; the overwrite is crash-safe (the destination is kept as a backup until the rename lands).</p>
-<pre><code class="lang-csharp">try
+<h2 id="create-and-write-files">Create and write files</h2>
+<p><code>File.Create</code> creates an empty file, or empties an existing one, and hands back the stream it opened, which the <code>using</code> closes. <code>Directory.CreateDirectory</code> creates a directory along with every missing parent, in one call:</p>
+<pre><code class="lang-csharp">using (FileStream stream = File.Create(&quot;/mnt/testing.txt&quot;))
 {
-    File.Copy(&quot;/mnt/testing.txt&quot;, &quot;/mnt/copy.txt&quot;);
-    File.Move(&quot;/mnt/copy.txt&quot;, &quot;/mnt/renamed.txt&quot;);
-    File.Delete(&quot;/mnt/renamed.txt&quot;);
+}
 
-    Directory.Delete(&quot;/mnt/documents&quot;, recursive: true);
-}
-catch (Exception e)
-{
-    Console.WriteLine(e.ToString());
-}
+Directory.CreateDirectory(&quot;/mnt/documents/reports&quot;);
 </code></pre>
-<p>Deleting a file that is still open does not fail: the delete goes <em>pending</em> and the entry disappears when the last handle closes, which is what the BCL's <code>DeleteOnClose</code> semantics expect.</p>
+<p><code>File.WriteAllText</code> replaces a file's content, creating the file if it does not exist yet, and <code>File.WriteAllBytes</code> and <code>File.WriteAllLines</code> do the same with bytes and lines. <code>File.AppendAllText</code> adds to the end of the file instead, and creates it too when it is missing:</p>
+<pre><code class="lang-csharp">File.WriteAllText(&quot;/mnt/testing.txt&quot;, &quot;Learning how to use the Gen3 VFS!&quot;);
+</code></pre>
+<h2 id="copy-move-and-delete">Copy, move and delete</h2>
+<p><code>File.Copy</code>, <code>File.Move</code>, <code>File.Delete</code> and <code>Directory.Delete</code> work as they do on any other .NET platform:</p>
+<pre><code class="lang-csharp">File.Copy(&quot;/mnt/testing.txt&quot;, &quot;/mnt/copy.txt&quot;);
+File.Move(&quot;/mnt/copy.txt&quot;, &quot;/mnt/renamed.txt&quot;);
+File.Delete(&quot;/mnt/renamed.txt&quot;);
+
+Directory.Delete(&quot;/mnt/documents&quot;, recursive: true);
+</code></pre>
+<p>Unlike Gen2, a <code>File.Move</code> within one mount is a real rename rather than a copy followed by a delete. A move onto an existing file throws <code>IOException</code> unless you pass <code>overwrite: true</code>, and the overwrite loses nothing if it stops halfway: the destination is moved aside as a backup and only deleted once the rename has landed. A move between two mounts is a copy followed by a delete, as on Linux, since a rename cannot cross from one volume to another.</p>
+<p>Deleting a file that is still open does not fail. The VFS holds the delete back until the last handle on the file closes, and only then removes the entry: the FAT driver frees a file's clusters the moment its entry goes, so a handle still reading them would read whatever is written there next. This is also what makes <code>FileOptions.DeleteOnClose</code> work.</p>
 <h2 id="streams">Streams</h2>
-<p>The full stream stack is available, including seeking, truncation (<code>SetLength</code>) and buffered text I/O:</p>
+<p>The whole stream stack is available, with seeking, truncation (<code>SetLength</code>) and buffered text I/O:</p>
 <pre><code class="lang-csharp">using (FileStream stream = new(&quot;/mnt/log.bin&quot;, FileMode.Create, FileAccess.ReadWrite))
 {
     stream.Write(new byte[] { 1, 2, 3, 4 });
@@ -549,7 +525,7 @@ using (StreamReader reader = new(&quot;/mnt/notes.txt&quot;))
 <!-- screenshot: console printing the two lines read back through StreamReader -->
 <p><img src="images/filesystem-streams.png" alt="Streams"></p>
 <h2 id="current-directory-and-relative-paths">Current directory and relative paths</h2>
-<p>The kernel keeps a current directory (it starts at <code>/</code>), so relative paths and <code>Path.GetFullPath</code> behave like on any Unix system:</p>
+<p>The kernel keeps a current directory, which starts at <code>/</code>, so relative paths and <code>Path.GetFullPath</code> behave as on any Unix system:</p>
 <pre><code class="lang-csharp">Directory.CreateDirectory(&quot;/mnt/work&quot;);
 Directory.SetCurrentDirectory(&quot;/mnt/work&quot;);
 
@@ -560,31 +536,53 @@ Console.WriteLine(Path.GetFullPath(&quot;sub/../file.txt&quot;));        // /mnt
 Directory.SetCurrentDirectory(&quot;/&quot;);
 </code></pre>
 <h2 id="error-handling">Error handling</h2>
-<p>The standard <code>System.IO</code> exception contract applies, so you can catch precisely:</p>
-<ul>
-<li>Opening a missing file whose parent exists → <code>FileNotFoundException</code></li>
-<li>Any path under a missing directory (or an unmounted prefix) → <code>DirectoryNotFoundException</code></li>
-<li>Creating a file directly in the virtual root <code>/</code> → <code>IOException</code> (read-only file system)</li>
-<li>Any mutation under a read-only mount (an ISO 9660 volume, or a mount made with <code>MountFlags.ReadOnly</code>) → <code>IOException</code> (read-only file system)</li>
-<li>Deleting a non-empty directory without <code>recursive: true</code> → <code>IOException</code></li>
-<li><code>File.Copy</code>/<code>File.Move</code> onto an existing file without overwrite → <code>IOException</code></li>
-</ul>
-<p>With <strong>nothing mounted at all</strong>, <code>System.IO</code> still degrades gracefully: <code>Directory.Exists(&quot;/&quot;)</code> is <code>true</code>, enumerating <code>/</code> returns an empty list, and every access to another path fails with one of the exceptions above, never a kernel fault.</p>
+<p>A failure throws the exception the <code>System.IO</code> documentation names for it, so you can catch exactly the case you expect:</p>
+<table>
+<thead>
+<tr>
+<th>What went wrong</th>
+<th>Exception</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Opening a file that does not exist, in a directory that does</td>
+<td><code>FileNotFoundException</code></td>
+</tr>
+<tr>
+<td>Any path under a missing directory, or under a path nothing is mounted at</td>
+<td><code>DirectoryNotFoundException</code></td>
+</tr>
+<tr>
+<td>Creating a file directly in the root, <code>/</code></td>
+<td><code>IOException</code> (read-only file system)</td>
+</tr>
+<tr>
+<td>Any write under a read-only mount: an ISO 9660 volume, or a mount made with <code>MountFlags.ReadOnly</code></td>
+<td><code>IOException</code> (read-only file system)</td>
+</tr>
+<tr>
+<td>Deleting a directory that is not empty without <code>recursive: true</code></td>
+<td><code>IOException</code></td>
+</tr>
+<tr>
+<td><code>File.Copy</code> or <code>File.Move</code> onto an existing file without <code>overwrite: true</code></td>
+<td><code>IOException</code></td>
+</tr>
+</tbody>
+</table>
+<p>This holds with nothing mounted at all. <code>Directory.Exists(&quot;/&quot;)</code> is then <code>true</code> and enumerating <code>/</code> gives an empty list, and every other path fails with one of the exceptions above rather than faulting the kernel.</p>
 <h2 id="current-limitations">Current limitations</h2>
-<ul>
-<li>Symbolic links cannot be created, and hard links are not supported (<code>ENOTSUP</code>/<code>EPERM</code> under the hood; the BCL surfaces <code>IOException</code>). The ext2 and ISO 9660 drivers resolve the symbolic links their volumes hold.</li>
-<li>File timestamps are not persisted yet (<code>File.SetLastWriteTime</code> is accepted but a FAT timestamp lands later).</li>
-<li><code>DriveInfo</code> is not wired up yet; use <code>VfsManager.TryStatFs</code> for free-space queries.</li>
-<li>FAT and ISO 9660 are the filesystem drivers the kernel suites cover; the ext2 driver, <code>Ext2FileSystemType</code> in <code>Cosmos.Kernel.System.FileSystem.Ext2</code>, ships beside them and is tested on the host only. The <code>IVfsFileSystemType</code> interface is what a new driver implements.</li>
-<li>The ISO 9660 driver reads a CD-ROM drive behind an AHCI controller, images, and the volumes images were written to; a drive behind a USB, virtio-scsi or IDE controller is not a block device yet.</li>
-</ul>
+<p>Symbolic links cannot be created: <code>File.CreateSymbolicLink</code> is refused as &quot;Operation not permitted&quot;, which .NET throws as <code>UnauthorizedAccessException</code>. The ext2 and ISO 9660 drivers do follow the symbolic links their volumes already hold, but a link's target cannot be read back: <code>FileSystemInfo.LinkTarget</code> is null.</p>
+<p>Time stamps cannot be set either: <code>File.SetLastWriteTime</code> and its siblings are accepted and change nothing. Reading them depends on the volume: the ext2 and ISO 9660 drivers report the ones their volumes hold, while the FAT driver neither stores nor reads them, so every file on a FAT volume reports the Unix epoch, 1970-01-01.</p>
+<p>FAT and ISO 9660 are the drivers Cosmos tests inside a running kernel. The ext2 driver, <code>Ext2FileSystemType</code>, ships beside them but is only tested on the host so far. A CD drive is reachable only behind an AHCI controller, as described in <a href="#read-a-cd-rom-or-an-iso-image">Read a CD-ROM or an ISO image</a>. The storage manager takes at most eight disks, and any after that are not listed.</p>
 <h2 id="how-it-works">How it works</h2>
-<p>Your code calls the stock BCL, which bottoms out in the Unix PAL (<code>Interop.Sys.*</code> P/Invokes). Those ~45 entry points are <a href="../dev/plugs.html">plugged</a> in <code>Cosmos.Kernel.Plugs</code>: a file-descriptor table adapts the PAL contract (fds, dir streams, PAL errnos) and delegates to <code>VfsManager</code>, which owns path resolution, the mount table with each mount's flags (a mutation under a read-only mount is refused there, and the plug reports it as <code>EROFS</code>), the current directory and open-handle semantics, and dispatches to the mounted filesystem driver (FAT, ext2 or ISO 9660), which reads and writes an <code>IBlockDevice</code> (a SATA disk, an NVMe namespace, a virtio-blk disk or a USB mass storage unit published by the driver kit's <code>AhciDriver</code>, <code>NvmeDriver</code>, <code>VirtioBlkDriver</code> or <code>UsbMassStorageDriver</code>, all via <code>StorageManager</code>; RAM via <code>MemoryBlockDevice</code>).</p>
-<pre><code>File / Directory / FileStream          (stock BCL)
+<p>Your code calls the stock .NET libraries, which end in the Unix platform layer, the <code>Interop.Sys.*</code> P/Invokes .NET makes on Linux. Cosmos <a href="../dev/plugs.html">plugs</a> those calls in <code>Cosmos.Kernel.Plugs</code>, where a file descriptor table translates them for <code>VfsManager</code>. <code>VfsManager</code> owns the paths, the current directory, the open handles and the mount table with each mount's flags, which is where a write under a read-only mount is refused, and it passes everything else to the mounted filesystem driver. The driver reads and writes an <code>IBlockDevice</code>: a disk the driver kit published and <code>StorageManager</code> registered, or a device your kernel built, such as the RAM disk above. A filesystem driver of your own implements <code>IVfsFileSystemType</code> and is registered like the shipped ones. From your call down to the disk, the layers stack like this:</p>
+<pre><code>File / Directory / FileStream          (stock .NET)
         │
-Interop.Sys.* PAL calls                (stock BCL, plugged)
+Interop.Sys.* PAL calls                (stock .NET, plugged)
         │
-FileDescriptorTable                    (Cosmos.Kernel.Plugs: fds, dir streams, errno)
+file descriptor table                  (Cosmos.Kernel.Plugs: fds, dir streams, errno)
         │
 VfsManager                             (mounts, paths, CWD, open handles)
         │
@@ -592,6 +590,69 @@ IVfsFileSystemType / IVfsSuperblock    (the FAT, ext2 and ISO 9660 drivers)
         │
 IBlockDevice                           (the kit's AHCI, NVMe, virtio-blk and USB mass storage drivers, MemoryBlockDevice)
 </code></pre>
+<h2 id="summary">Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Call</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>List the disks</td>
+<td><code>StorageManager.Devices</code></td>
+</tr>
+<tr>
+<td>List the partitions</td>
+<td><code>StorageManager.Partitions</code>, <code>StorageManager.GetPartitions(device)</code></td>
+</tr>
+<tr>
+<td>Register a filesystem driver</td>
+<td><code>VfsManager.RegisterFileSystem(name, driver)</code></td>
+</tr>
+<tr>
+<td>Mount a partition</td>
+<td><code>VfsManager.TryMount(name, partition, flags, mountPoint, out mount)</code></td>
+</tr>
+<tr>
+<td>Mount a device the driver holds</td>
+<td><code>VfsManager.TryMount(name, &quot;&quot;, flags, mountPoint, out mount)</code></td>
+</tr>
+<tr>
+<td>Unmount</td>
+<td><code>VfsManager.TryUnmount(mountPoint)</code></td>
+</tr>
+<tr>
+<td>Write a partition table</td>
+<td><code>Gpt.Create(disk)</code>, <code>Mbr.Create(disk)</code></td>
+</tr>
+<tr>
+<td>Add, resize, move or delete a partition</td>
+<td><code>PartitionManager.Create</code>, <code>Resize</code>, <code>MoveWithData</code>, <code>Delete</code></td>
+</tr>
+<tr>
+<td>Pick up a new partition table</td>
+<td><code>StorageManager.RescanPartitions(disk)</code></td>
+</tr>
+<tr>
+<td>Format a partition</td>
+<td><code>VfsManager.TryFormat(name, partition, options)</code></td>
+</tr>
+<tr>
+<td>List the mounts</td>
+<td><code>VfsManager.Mounts</code></td>
+</tr>
+<tr>
+<td>Read the free space</td>
+<td><code>VfsManager.TryStatFs(mountPoint, out stats)</code></td>
+</tr>
+<tr>
+<td>Work with files</td>
+<td><code>File</code>, <code>Directory</code>, <code>FileStream</code>, <code>StreamReader</code>, <code>StreamWriter</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 
