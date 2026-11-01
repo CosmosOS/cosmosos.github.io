@@ -121,7 +121,7 @@ dotnet tool uninstall -g Cosmos.Tools
 <p>Pour mettre à jour :</p>
 <pre><code class="lang-bash">cosmos update
 </code></pre>
-<p>Exécutez cette commande dans le dossier d'un projet de noyau pour faire aussi passer les versions de Cosmos épinglées par le projet (l'attribut <code>Sdk=&quot;Cosmos.Sdk/...&quot;</code> et les références de package <code>Cosmos.*</code>) à la dernière version. Options supplémentaires :</p>
+<p>Exécutez cette commande dans le dossier d'un projet de noyau pour faire aussi passer les versions de Cosmos épinglées par le projet (l'attribut <code>Sdk=&quot;Cosmos.Sdk/...&quot;</code> et les références de package <code>Cosmos.Kernel*</code> et <code>Cosmos.Build.*</code>) à la dernière version. Les autres packages <code>Cosmos.*</code>, comme <code>Cosmos.Executable.Lua</code>, gardent leur propre version. Options supplémentaires :</p>
 <table>
 <thead>
 <tr>
