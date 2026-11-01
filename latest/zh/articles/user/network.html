@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/user/network.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.97/docs/zh/articles/user/network.md/#L1">
       <meta name="loc:inThisArticle" content="本文内容">
       <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
       <meta name="loc:searchNoResults" content="没有“{query}”的结果">
@@ -515,7 +515,7 @@ icmp.Close();
 </ul>
 <p><a id="how-it-works"></a></p>
 <h2 id="工作原理">工作原理</h2>
-<p>你的代码调用标准的 .NET 套接字类，其 PAL 最终落到 <code>Cosmos.Kernel.Plugs</code> 中 <code>Socket</code> 层级的 <a href="../dev/plugs.html">plug</a>（<code>SocketPlug</code>、<code>TcpClientPlug</code>、<code>TcpListenerPlug</code>、<code>UdpClientPlug</code>、<code>NetworkStreamPlug</code>，以及用于 <code>Dns</code> 的 <code>NameResolutionPalPlug</code>）。这些 plug 再委托给 Cosmos 网络协议栈（基于两个 IP 版本的 TCP 状态机和 UDP 层，IPv4 之下是 ARP 和以太网，IPv6 之下是 ICMPv6 和邻居发现），协议栈通过注册到 <code>NetworkManager</code> 的网络设备收发帧：即某个驱动工具包驱动程序发布的接口，E1000E 的或 virtio-net 的。工具包驱动程序收到的帧会在工具包的工作线程上交给协议栈，在处理程序执行期间中断处于禁用状态。Cosmos 的 <code>DhcpClient</code> 和 <code>DnsClient</code> 直接建立在 Cosmos 的 UDP 层之上，其中 <code>DhcpClient</code> 只支持 IPv4。</p>
+<p>你的代码调用标准的 .NET 套接字类，其 PAL 最终落到 <code>Cosmos.Kernel.Plugs</code> 中 <code>Socket</code> 层级的 <a href="../dev/plugs.html">plug</a>（<code>SocketPlug</code>、<code>TcpClientPlug</code>、<code>TcpListenerPlug</code>、<code>UdpClientPlug</code>、<code>NetworkStreamPlug</code>，以及用于 <code>Dns</code> 的 <code>NameResolutionPalPlug</code>）。这些 plug 再委托给 Cosmos 网络协议栈（基于两个 IP 版本的 TCP 状态机和 UDP 层，IPv4 之下是 ARP 和以太网，IPv6 之下是 ICMPv6 和邻居发现），协议栈通过注册到 <code>NetworkManager</code> 的网络设备收发帧：即某个驱动工具包驱动程序发布的接口，E1000E 的或 virtio-net 的。工具包驱动程序收到的帧会在工具包的工作线程上交给协议栈，此时中断保持开启。协议栈用自己的一把锁来保证串行：接收路径在处理一帧期间持有它，其他所有入口（各个客户端、套接字 plug）在访问与接收路径共享的状态时也会获取它。这是一把会阻塞的锁，协议栈等待网络时从不持有它：在它之下碰到一个已被占用的锁，只是一次普通的等待。Cosmos 的 <code>DhcpClient</code> 和 <code>DnsClient</code> 直接建立在 Cosmos 的 UDP 层之上，其中 <code>DhcpClient</code> 只支持 IPv4。</p>
 <pre><code>TcpClient / TcpListener / UdpClient / NetworkStream     (stock BCL)
         │
 Socket plugs                                            (Cosmos.Kernel.Plugs)
@@ -526,11 +526,83 @@ IPv4 / ARP and IPv6 / Neighbor Discovery / Ethernet
         │
 Network device                                          (e1000e or virtio-net, over the driver kit)
 </code></pre>
+<p><a id="summary"></a></p>
+<h2 id="总结">总结</h2>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>检查网卡是否就绪</td>
+<td><code>NetworkManager.DeviceCount</code>、<code>NetworkManager.Ready</code></td>
+</tr>
+<tr>
+<td>列出适配器</td>
+<td><code>NetworkManager.GetAdapter(index)</code></td>
+</tr>
+<tr>
+<td>选择主适配器</td>
+<td><code>NetworkManager.Primary</code></td>
+</tr>
+<tr>
+<td>通过 DHCP 配置 IPv4</td>
+<td><code>DhcpClient.SendDiscoverPacket()</code></td>
+</tr>
+<tr>
+<td>手动配置 IPv4</td>
+<td><code>IPConfig.Enable(address, subnetMask, defaultGateway)</code></td>
+</tr>
+<tr>
+<td>读取适配器的配置</td>
+<td><code>NetworkAdapter.IPConfig</code></td>
+</tr>
+<tr>
+<td>读取 IPv6 链路本地地址</td>
+<td><code>NetworkAdapter.LinkLocalAddress</code></td>
+</tr>
+<tr>
+<td>Ping 一个 IPv6 地址</td>
+<td><code>Icmpv6Client.Connect(dest)</code>、<code>SendEcho()</code>、<code>Receive(ref source, timeout)</code></td>
+</tr>
+<tr>
+<td>发送和接收 UDP 数据报</td>
+<td><code>System.Net.Sockets.UdpClient</code></td>
+</tr>
+<tr>
+<td>连接到 TCP 服务器</td>
+<td><code>TcpClient.Connect(address, port)</code>、<code>TcpClient.GetStream()</code></td>
+</tr>
+<tr>
+<td>接受 TCP 连接</td>
+<td><code>TcpListener.Start()</code>、<code>Pending()</code>、<code>AcceptTcpClient()</code></td>
+</tr>
+<tr>
+<td>注册域名服务器</td>
+<td><code>DnsConfig.Add(nameserver)</code></td>
+</tr>
+<tr>
+<td>解析名称</td>
+<td><code>Dns.GetHostAddresses(hostNameOrAddress)</code></td>
+</tr>
+<tr>
+<td>读取一个名称的全部地址记录</td>
+<td><code>DnsClient.SendQuery(url)</code>、<code>DnsClient.ReceiveAll(timeout)</code></td>
+</tr>
+<tr>
+<td>发送自己构造的数据包</td>
+<td><code>NetworkStack.Send(packet)</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/user/network.md/#L1" class="edit-link">编辑此页</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.97/docs/zh/articles/user/network.md/#L1" class="edit-link">编辑此页</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

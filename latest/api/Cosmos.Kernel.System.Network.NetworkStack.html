@@ -163,7 +163,10 @@ Class NetworkStack
   <div class="markdown level1 summary"><p>Injects a received Ethernet frame into the stack: the frame is
 dispatched to the ARP, IPv4 or IPv6 handler by EtherType, exactly as a
 frame arriving from a network device would be. This is the receive
-entry point registered on every configured device.</p>
+entry point registered on every configured device. The frame is
+handled under the stack's lock (<span class="xref">Cosmos.Kernel.System.Network.NetworkStackLock</span>), with
+interrupts on: on the kit worker, a contended lock anywhere below
+blocks it until the holder lets go.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 

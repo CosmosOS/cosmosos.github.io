@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/articles/user/network.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.97/docs/articles/user/network.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -509,7 +509,7 @@ icmp.Close();
 <li>On the Cosmos <code>UdpClient</code> and <code>IcmpClient</code>, <code>Close()</code> and <code>Dispose()</code> are not the same door. <code>Close()</code> stops delivery to the client and an <code>IcmpClient</code> reopens with another <code>Connect()</code>; <code>Dispose()</code> (including the one a <code>using</code> block runs) retires the client for good, and every other member throws <code>ObjectDisposedException</code> afterwards.</li>
 </ul>
 <h2 id="how-it-works">How it works</h2>
-<p>Your code calls the standard .NET socket classes, whose PAL bottoms out in <code>Socket</code>-level <a href="../dev/plugs.html">plugs</a> in <code>Cosmos.Kernel.Plugs</code> (<code>SocketPlug</code>, <code>TcpClientPlug</code>, <code>TcpListenerPlug</code>, <code>UdpClientPlug</code>, <code>NetworkStreamPlug</code>, and <code>NameResolutionPalPlug</code> for <code>Dns</code>). Those delegate to the Cosmos network stack (the TCP state machine and UDP layer over both IP versions, with ARP and Ethernet under IPv4 and ICMPv6 and Neighbor Discovery under IPv6), which sends and receives frames through the network device registered with <code>NetworkManager</code>: an interface a driver kit driver published, the E1000E's or the virtio-net's. A frame the kit driver receives is handed to the stack on the kit's worker thread, with interrupts disabled for the handler's duration. The Cosmos <code>DhcpClient</code> and <code>DnsClient</code> sit directly on the Cosmos UDP layer, <code>DhcpClient</code> over IPv4 only.</p>
+<p>Your code calls the standard .NET socket classes, whose PAL bottoms out in <code>Socket</code>-level <a href="../dev/plugs.html">plugs</a> in <code>Cosmos.Kernel.Plugs</code> (<code>SocketPlug</code>, <code>TcpClientPlug</code>, <code>TcpListenerPlug</code>, <code>UdpClientPlug</code>, <code>NetworkStreamPlug</code>, and <code>NameResolutionPalPlug</code> for <code>Dns</code>). Those delegate to the Cosmos network stack (the TCP state machine and UDP layer over both IP versions, with ARP and Ethernet under IPv4 and ICMPv6 and Neighbor Discovery under IPv6), which sends and receives frames through the network device registered with <code>NetworkManager</code>: an interface a driver kit driver published, the E1000E's or the virtio-net's. A frame the kit driver receives is handed to the stack on the kit's worker thread, with interrupts on. The stack serializes itself with a lock of its own, which the receive path holds while it handles a frame and which every other entry point (the clients, the socket plugs) takes around what it shares with that path. It is a blocking lock, and it is never held while the stack waits for the network: a lock contended under it is an ordinary wait. The Cosmos <code>DhcpClient</code> and <code>DnsClient</code> sit directly on the Cosmos UDP layer, <code>DhcpClient</code> over IPv4 only.</p>
 <pre><code>TcpClient / TcpListener / UdpClient / NetworkStream     (stock BCL)
         │
 Socket plugs                                            (Cosmos.Kernel.Plugs)
@@ -520,11 +520,82 @@ IPv4 / ARP and IPv6 / Neighbor Discovery / Ethernet
         │
 Network device                                          (e1000e or virtio-net, over the driver kit)
 </code></pre>
+<h2 id="summary">Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Call</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Check that a NIC is ready</td>
+<td><code>NetworkManager.DeviceCount</code>, <code>NetworkManager.Ready</code></td>
+</tr>
+<tr>
+<td>List the adapters</td>
+<td><code>NetworkManager.GetAdapter(index)</code></td>
+</tr>
+<tr>
+<td>Pick the primary adapter</td>
+<td><code>NetworkManager.Primary</code></td>
+</tr>
+<tr>
+<td>Configure IPv4 through DHCP</td>
+<td><code>DhcpClient.SendDiscoverPacket()</code></td>
+</tr>
+<tr>
+<td>Configure IPv4 by hand</td>
+<td><code>IPConfig.Enable(address, subnetMask, defaultGateway)</code></td>
+</tr>
+<tr>
+<td>Read an adapter's configuration</td>
+<td><code>NetworkAdapter.IPConfig</code></td>
+</tr>
+<tr>
+<td>Read the IPv6 link-local address</td>
+<td><code>NetworkAdapter.LinkLocalAddress</code></td>
+</tr>
+<tr>
+<td>Ping an IPv6 address</td>
+<td><code>Icmpv6Client.Connect(dest)</code>, <code>SendEcho()</code>, <code>Receive(ref source, timeout)</code></td>
+</tr>
+<tr>
+<td>Send and receive UDP datagrams</td>
+<td><code>System.Net.Sockets.UdpClient</code></td>
+</tr>
+<tr>
+<td>Connect to a TCP server</td>
+<td><code>TcpClient.Connect(address, port)</code>, <code>TcpClient.GetStream()</code></td>
+</tr>
+<tr>
+<td>Accept TCP connections</td>
+<td><code>TcpListener.Start()</code>, <code>Pending()</code>, <code>AcceptTcpClient()</code></td>
+</tr>
+<tr>
+<td>Register a nameserver</td>
+<td><code>DnsConfig.Add(nameserver)</code></td>
+</tr>
+<tr>
+<td>Resolve a name</td>
+<td><code>Dns.GetHostAddresses(hostNameOrAddress)</code></td>
+</tr>
+<tr>
+<td>Read every address record of a name</td>
+<td><code>DnsClient.SendQuery(url)</code>, <code>DnsClient.ReceiveAll(timeout)</code></td>
+</tr>
+<tr>
+<td>Send a packet you built</td>
+<td><code>NetworkStack.Send(packet)</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/articles/user/network.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.97/docs/articles/user/network.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

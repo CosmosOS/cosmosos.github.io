@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/user/network.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.97/docs/fr/articles/user/network.md/#L1">
       <meta name="loc:inThisArticle" content="Dans cet article">
       <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
       <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
@@ -515,7 +515,7 @@ icmp.Close();
 </ul>
 <p><a id="how-it-works"></a></p>
 <h2 id="fonctionnement">Fonctionnement</h2>
-<p>Votre code appelle les classes de socket .NET standard, dont la PAL aboutit à des <a href="../dev/plugs.html">plugs</a> au niveau de <code>Socket</code> dans <code>Cosmos.Kernel.Plugs</code> (<code>SocketPlug</code>, <code>TcpClientPlug</code>, <code>TcpListenerPlug</code>, <code>UdpClientPlug</code>, <code>NetworkStreamPlug</code>, et <code>NameResolutionPalPlug</code> pour <code>Dns</code>). Ceux-ci délèguent à la pile réseau de Cosmos (la machine à états TCP et la couche UDP sur les deux versions d'IP, avec ARP et Ethernet sous IPv4, et ICMPv6 et Neighbor Discovery sous IPv6), qui envoie et reçoit les trames par le périphérique réseau enregistré auprès de <code>NetworkManager</code> : une interface publiée par un pilote du kit de pilotes, celle de l'E1000E ou celle du virtio-net. Une trame que reçoit le pilote du kit est remise à la pile sur le thread de travail du kit, avec les interruptions désactivées pendant tout le traitement de la trame. Les <code>DhcpClient</code> et <code>DnsClient</code> de Cosmos reposent directement sur la couche UDP de Cosmos, <code>DhcpClient</code> sur IPv4 uniquement.</p>
+<p>Votre code appelle les classes de socket .NET standard, dont la PAL aboutit à des <a href="../dev/plugs.html">plugs</a> au niveau de <code>Socket</code> dans <code>Cosmos.Kernel.Plugs</code> (<code>SocketPlug</code>, <code>TcpClientPlug</code>, <code>TcpListenerPlug</code>, <code>UdpClientPlug</code>, <code>NetworkStreamPlug</code>, et <code>NameResolutionPalPlug</code> pour <code>Dns</code>). Ceux-ci délèguent à la pile réseau de Cosmos (la machine à états TCP et la couche UDP sur les deux versions d'IP, avec ARP et Ethernet sous IPv4, et ICMPv6 et Neighbor Discovery sous IPv6), qui envoie et reçoit les trames par le périphérique réseau enregistré auprès de <code>NetworkManager</code> : une interface publiée par un pilote du kit de pilotes, celle de l'E1000E ou celle du virtio-net. Une trame que reçoit le pilote du kit est remise à la pile sur le thread de travail du kit, interruptions actives. La pile se protège avec un verrou à elle, que le chemin de réception tient pendant le traitement d'une trame et que tous les autres points d'entrée (les clients, les plugs de socket) prennent autour de ce qu'ils partagent avec ce chemin. C'est un verrou bloquant, jamais tenu pendant que la pile attend le réseau : un verrou déjà pris sous lui donne une attente ordinaire. Les <code>DhcpClient</code> et <code>DnsClient</code> de Cosmos reposent directement sur la couche UDP de Cosmos, <code>DhcpClient</code> sur IPv4 uniquement.</p>
 <pre><code>TcpClient / TcpListener / UdpClient / NetworkStream     (stock BCL)
         │
 Socket plugs                                            (Cosmos.Kernel.Plugs)
@@ -526,11 +526,83 @@ IPv4 / ARP and IPv6 / Neighbor Discovery / Ethernet
         │
 Network device                                          (e1000e or virtio-net, over the driver kit)
 </code></pre>
+<p><a id="summary"></a></p>
+<h2 id="résumé">Résumé</h2>
+<table>
+<thead>
+<tr>
+<th>Tâche</th>
+<th>Appel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Vérifier qu'une carte réseau est prête</td>
+<td><code>NetworkManager.DeviceCount</code>, <code>NetworkManager.Ready</code></td>
+</tr>
+<tr>
+<td>Lister les adaptateurs</td>
+<td><code>NetworkManager.GetAdapter(index)</code></td>
+</tr>
+<tr>
+<td>Choisir l'adaptateur principal</td>
+<td><code>NetworkManager.Primary</code></td>
+</tr>
+<tr>
+<td>Configurer IPv4 par DHCP</td>
+<td><code>DhcpClient.SendDiscoverPacket()</code></td>
+</tr>
+<tr>
+<td>Configurer IPv4 manuellement</td>
+<td><code>IPConfig.Enable(address, subnetMask, defaultGateway)</code></td>
+</tr>
+<tr>
+<td>Lire la configuration d'un adaptateur</td>
+<td><code>NetworkAdapter.IPConfig</code></td>
+</tr>
+<tr>
+<td>Lire l'adresse IPv6 lien-local</td>
+<td><code>NetworkAdapter.LinkLocalAddress</code></td>
+</tr>
+<tr>
+<td>Envoyer un ping à une adresse IPv6</td>
+<td><code>Icmpv6Client.Connect(dest)</code>, <code>SendEcho()</code>, <code>Receive(ref source, timeout)</code></td>
+</tr>
+<tr>
+<td>Envoyer et recevoir des datagrammes UDP</td>
+<td><code>System.Net.Sockets.UdpClient</code></td>
+</tr>
+<tr>
+<td>Se connecter à un serveur TCP</td>
+<td><code>TcpClient.Connect(address, port)</code>, <code>TcpClient.GetStream()</code></td>
+</tr>
+<tr>
+<td>Accepter des connexions TCP</td>
+<td><code>TcpListener.Start()</code>, <code>Pending()</code>, <code>AcceptTcpClient()</code></td>
+</tr>
+<tr>
+<td>Enregistrer un serveur de noms</td>
+<td><code>DnsConfig.Add(nameserver)</code></td>
+</tr>
+<tr>
+<td>Résoudre un nom</td>
+<td><code>Dns.GetHostAddresses(hostNameOrAddress)</code></td>
+</tr>
+<tr>
+<td>Lire tous les enregistrements d'adresse d'un nom</td>
+<td><code>DnsClient.SendQuery(url)</code>, <code>DnsClient.ReceiveAll(timeout)</code></td>
+</tr>
+<tr>
+<td>Envoyer un paquet fabriqué à la main</td>
+<td><code>NetworkStack.Send(packet)</code></td>
+</tr>
+</tbody>
+</table>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/fr/articles/user/network.md/#L1" class="edit-link">Modifier cette page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.97/docs/fr/articles/user/network.md/#L1" class="edit-link">Modifier cette page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

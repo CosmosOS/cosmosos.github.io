@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>文件系统 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="文件系统 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.97/docs/zh/articles/user/filesystem.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="file-system"></a></p>
+<h1 id="文件系统">文件系统</h1>
+<p>本文将介绍 Cosmos Gen3 上的磁盘和文件：为内核提供磁盘、在磁盘上挂载文件系统、读取 CD-ROM 和 ISO 镜像、为磁盘分区并格式化，以及在卷挂载之后操作文件。</p>
+<p>读写文件不需要任何 Cosmos 专用的 API。Gen3 原样运行标准的 .NET <code>System.IO</code>（<code>File</code>、<code>Directory</code>、<code>FileStream</code>、<code>StreamReader</code>、<code>FileInfo</code> 等等），由内核来响应它在 Linux 上会发出的系统调用。Cosmos 负责的是在此之前的那一步：你的内核注册一个文件系统驱动程序，并把一个卷挂载到 <code>/mnt</code> 这样的 Unix 风格路径上，此后 <code>/mnt</code> 下的每个路径都由该驱动程序提供服务。</p>
+<p>如果你是从 Gen2 过来的，主要区别如下：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Gen2</th>
+<th>Gen3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>路径</td>
+<td>DOS 驱动器号（<code>0:\file.txt</code>）</td>
+<td>Unix 路径（<code>/mnt/file.txt</code>）</td>
+</tr>
+<tr>
+<td>初始化</td>
+<td><code>CosmosVFS</code> + <code>VFSManager.RegisterVFS</code></td>
+<td><code>VfsManager.RegisterFileSystem</code> + <code>VfsManager.TryMount</code></td>
+</tr>
+<tr>
+<td>API 面</td>
+<td>经 plug 实现的 <code>System.IO</code> 子集</td>
+<td>完整的 <code>System.IO</code>（流、枚举模式、<code>FileInfo</code> 等）</td>
+</tr>
+<tr>
+<td><code>File.Move</code></td>
+<td>没有 plug（先复制再删除）</td>
+<td>可用，并且可以覆盖已有的目标</td>
+</tr>
+<tr>
+<td>文件系统</td>
+<td>FAT32（FAT12/16 部分支持）、ISO 9660</td>
+<td>FAT12/16/32、ext2、带 Rock Ridge 的 ISO 9660（只读）</td>
+</tr>
+<tr>
+<td>ISO 上的文件</td>
+<td>项目中的 <code>isoFiles</code> 文件夹</td>
+<td>同样的 <code>isoFiles</code> 文件夹，外加 <code>CosmosIsoFile</code> 项（<a href="#ship-files-on-the-boot-iso">在启动 ISO 上随附文件</a>）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>请先在虚拟机中尝试</strong>。分区和格式化会直接写入磁盘，既不需要确认，也无法撤销，因此在真实硬件上，一个错误的扇区偏移就会毁掉磁盘上原有的一切。<code>cosmos run</code> 交给 QEMU 的是一个可以随手丢弃的磁盘镜像，VMware 或 VirtualBox 的虚拟磁盘也同样可以随时丢弃。</p>
+<p><strong>警告</strong>：请<strong>不要</strong>在真实硬件上尝试！这可能对你的数据造成<strong>无法挽回的损害</strong>。请使用虚拟机（通过 <code>cosmos run</code> 运行的 QEMU、VMware、VirtualBox 等）。</p>
+<p>请在 Cosmos 中用本页介绍的调用为内核的磁盘分区和格式化，而不要用 Parted 或 fdisk。Cosmos 是在它自己布局的磁盘上测试的，而主机上的工具可能以这些测试从未覆盖的方式来布局磁盘。</p>
+<p>如果你发现 bug 或任何异常，请在我们的仓库中<a href="https://github.com/CosmosOS/Cosmos/issues/new/choose">提交 issue</a>。</p>
+<p><a id="enable-storage-in-your-kernel"></a></p>
+<h2 id="在内核中启用存储">在内核中启用存储</h2>
+<p>存储支持由一个功能开关控制。请确保内核的 <code>.csproj</code> 没有将其关闭（默认值为 <code>true</code>）：</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;CosmosEnableStorage&gt;true&lt;/CosmosEnableStorage&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p>开关打开时，内核会在启动过程中初始化它的存储驱动程序，并把这些驱动程序找到的每个磁盘交给 <code>StorageManager</code>。管理器把这些磁盘列在 <code>StorageManager.Devices</code> 中，读取每个磁盘的 MBR 或 GPT 分区表，再把找到的分区列在 <code>StorageManager.Partitions</code> 中，这一切都发生在内核的 <code>BeforeRun()</code> 运行之前。每个磁盘都有一个名称，启动日志和 <code>IBlockDevice.Name</code> 显示的就是它：</p>
+<table>
+<thead>
+<tr>
+<th>磁盘</th>
+<th>名称</th>
+<th>在 QEMU 中的附加方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>位于 AHCI 控制器之后的 SATA 磁盘</td>
+<td><code>sata0</code>、<code>sata1</code>……</td>
+<td><code>cosmos run --disk disk.img</code></td>
+</tr>
+<tr>
+<td>NVMe 命名空间</td>
+<td><code>nvme0n1</code>……</td>
+<td><code>cosmos run --disk disk.img,nvme</code></td>
+</tr>
+<tr>
+<td>virtio-blk 磁盘</td>
+<td><code>vblk0</code>……</td>
+<td><code>cosmos run --disk disk.img,virtio-blk</code>（在 arm64 上为 <code>virtio-blk-mmio</code>）</td>
+</tr>
+<tr>
+<td>U 盘</td>
+<td><code>usb0</code>、<code>usb1</code>……</td>
+<td><code>cosmos run --disk disk.img,usb</code></td>
+</tr>
+<tr>
+<td>位于 AHCI 控制器之后的 CD-ROM 光驱</td>
+<td><code>cdrom0</code>……</td>
+<td>无需附加：在 x64 上，<code>cosmos run</code> 就是从这样一个光驱启动的</td>
+</tr>
+</tbody>
+</table>
+<p>U 盘还需要 <code>CosmosEnableUsb</code>，只要 <code>CosmosEnableStorage</code> 开启，它的默认值就是 <code>true</code>。把它设为 <code>false</code> 会去掉 USB 主机控制器驱动程序，U 盘也随之消失，而其他磁盘仍然保留。</p>
+<p>要在 QEMU 中为内核提供磁盘，请为每个驱动器创建一个镜像，并把每个镜像连同上表中它的种类一起传给 <code>cosmos run</code>（不带种类的镜像就是 SATA 磁盘）：</p>
+<pre><code class="lang-console">$ qemu-img create disk.img 64M
+$ qemu-img create stick.img 64M
+$ cosmos run --disk disk.img --disk stick.img,usb
+</code></pre>
+<p>刚由 <code>qemu-img create</code> 创建的镜像是空白的：它既没有分区表也没有文件系统，因此内核会列出这个磁盘，却在上面找不到任何分区。在挂载之前，请先在内核中写入分区表并格式化一个分区，做法见<a href="#partition-a-disk">为磁盘分区</a>和<a href="#format-a-partition">格式化分区</a>。</p>
+<p><a id="which-disk-comes-first"></a></p>
+<h3 id="哪个磁盘排在最前">哪个磁盘排在最前</h3>
+<p><code>StorageManager.PrimaryDevice</code> 是 <code>Devices</code> 的第一个条目，管理器让这个列表保持固定的顺序，而不是按磁盘就绪的先后排列，因此主设备不取决于哪个驱动程序先完成。驱动程序找到的磁盘排在最前，按<a href="drivers.html">驱动工具包</a>在其上找到它们的那个设备的总线和地址排序，这样 SATA 或 NVMe 磁盘（<code>pci:</code>）排在 U 盘（<code>usb:</code>）之前，U 盘又排在 virtio-blk 磁盘（<code>virtio:</code>）之前。随后是内核自己用 <code>StorageManager.RegisterDevice</code> 注册的磁盘，按注册顺序排列。CD 这样的只读介质排在最后，因此只要机器上有可以格式化的磁盘，主设备就是这样一个磁盘。</p>
+<p>这种顺序有一个需要预先考虑的后果：后到的磁盘会插到它在顺序中应在的位置，而不是排到列表末尾。在已接有 virtio-blk 磁盘时插入的 U 盘会排到它前面，virtio-blk 磁盘的每个分区在 <code>StorageManager.Partitions</code> 中都会向后移。这就是本页挂载的是一个 <code>Partition</code>，而不是该列表中的某个索引的原因。</p>
+<p><a id="disks-that-come-and-go"></a></p>
+<h3 id="可随时插拔的磁盘">可随时插拔的磁盘</h3>
+<p>U 盘，以及位于 PCI Express 热插拔插槽之后的 virtio-blk 磁盘，可以在内核运行时插入和拔出。插入的磁盘会像启动时找到的磁盘一样被注册和扫描，名称取空闲的编号最小的 <code>usbN</code> 或 <code>vblkN</code>。</p>
+<p>拔出的磁盘会离开 <code>Devices</code> 和 <code>Partitions</code>，它上面的挂载也随之而去。通过 <code>TryMount</code> 的 <code>Partition</code> 重载（见下文）建立的挂载会在不刷新的情况下被分离，因为磁盘已无法再接受写入，所以在拔出写入过的磁盘之前，请先调用 <code>VfsManager.TryUnmount</code>。由源字符串建立的挂载并不指向任何磁盘，因此它会留在挂载表中。无论哪种情况，仍在该磁盘上打开的文件都会在下一次读写时失败，抛出驱动程序的 <code>IOException</code>（USB 大容量存储驱动程序抛出 <code>&quot;USB device detached&quot;</code>，virtio-blk 驱动程序抛出 <code>&quot;virtio-blk device detached&quot;</code>，NVMe 驱动程序抛出 <code>&quot;NVMe device detached&quot;</code>），或者在工具包释放了驱动程序的内存之后抛出 <code>InvalidOperationException</code>。</p>
+<p>磁盘接入或移除时，驱动工具包的一个线程会整体替换这两个列表，因此你持有的列表永远不会在你手中发生变化，但再次读取该属性可能得到一个更新的列表。请只读取一次 <code>Devices</code> 或 <code>Partitions</code>，然后对这份副本进行索引。</p>
+<p>要在 QEMU 中尝试，请至少带一个 <code>usb</code> 磁盘启动：第一个这样的磁盘会为机器提供 xHCI 控制器 <code>usbxhci0</code>，而这个控制器的名称就是你从 QEMU 监视器（在 QEMU 窗口中按 Ctrl+Alt+2）插入另一个 U 盘时所用的总线。<code>--usb-controller ehci</code> 或 <code>ehci-ohci</code> 会改为放置一个 EHCI 控制器 <code>usbehci0</code>，<code>ohci</code> 则放置一个 OHCI 控制器 <code>usbohci0</code>；这两种控制器都会把每个 USB 设备固定到自己的某个根端口上：</p>
+<pre><code class="lang-console">(qemu) drive_add 0 if=none,id=stick,file=stick.img,format=raw
+(qemu) device_add usb-storage,drive=stick,id=stick,bus=usbxhci0.0
+(qemu) device_del stick
+</code></pre>
+<p><a id="register-a-filesystem-driver-and-mount-it"></a></p>
+<h2 id="注册文件系统驱动程序并挂载">注册文件系统驱动程序并挂载</h2>
+<p>在文件系统驱动程序读取它之前，分区只是一段扇区。Cosmos 随附三个驱动程序，每个一个命名空间：FAT（FAT12、FAT16 和 FAT32）、ext2 和 ISO 9660。你的内核以自己选择的名称注册需要的驱动程序，然后用其中一个把分区挂载到挂载点上。</p>
+<p>下面的代码片段依赖以下 <code>using</code>：</p>
+<pre><code class="lang-csharp">using System.IO;
+using Cosmos.Kernel.HAL.Devices.Storage;
+using Cosmos.Kernel.System.FileSystem;
+using Cosmos.Kernel.System.FileSystem.Fat;
+using Cosmos.Kernel.System.Storage;
+</code></pre>
+<p><code>Cosmos.Kernel.System.FileSystem</code> 就是 VFS 本身：<code>VfsManager</code>、挂载表的表项（<code>VfsMount</code>）、挂载或 stat 调用所用的标志和元数据类型（<code>MountFlags</code>、<code>VfsMode</code>、<code>VfsStat</code>、<code>VfsStatFs</code>），以及文件系统驱动程序要实现的接口。这就是 <code>MountFlags.None</code> 不需要单独的 <code>using</code> 的原因。驱动程序位于下一级：<code>FatFileSystemType</code> 和 <code>FatFormatOptions</code> 在 <code>Cosmos.Kernel.System.FileSystem.Fat</code> 中，<code>Ext2FileSystemType</code> 在 <code>Cosmos.Kernel.System.FileSystem.Ext2</code> 中，<code>Iso9660FileSystemType</code> 在 <code>Cosmos.Kernel.System.FileSystem.Iso9660</code> 中。<code>StorageManager</code> 和分区相关的类型在 <code>Cosmos.Kernel.System.Storage</code> 中，而 <code>Cosmos.Kernel.HAL.Devices.Storage</code> 只是为了 <code>IBlockDevice</code> 才出现在这里：它是磁盘的类型，下文的 RAM 磁盘实现了它，分区代码片段也持有它。</p>
+<p>注册 FAT 驱动程序，然后把第一个分区挂载到 <code>/mnt</code>。这段代码放在内核的 <code>BeforeRun()</code> 中：</p>
+<pre><code class="lang-csharp">FatFileSystemType fat = new();
+
+if (!VfsManager.RegisterFileSystem(&quot;fat&quot;, fat))
+{
+    Console.WriteLine(&quot;The name \&quot;fat\&quot; is already registered.&quot;);
+    return;
+}
+
+if (StorageManager.Partitions.Count == 0)
+{
+    Console.WriteLine(&quot;No partitions found.&quot;);
+    return;
+}
+
+if (VfsManager.TryMount(&quot;fat&quot;, StorageManager.Partitions[0], MountFlags.None, &quot;/mnt&quot;, out VfsMount? mount))
+{
+    Console.WriteLine(&quot;Mounted &quot; + mount.Name + &quot; partition &quot; + mount.Source + &quot; at &quot; + mount.MountPoint);
+}
+else
+{
+    Console.WriteLine(&quot;No FAT volume on the first partition.&quot;);
+}
+</code></pre>
+<p>这些调用都通过返回值而不是异常来报告拒绝：<code>RegisterFileSystem</code> 拒绝已被占用的名称，<code>TryMount</code> 拒绝驱动程序在其上找不到卷的分区。读取本身失败的磁盘仍会抛出其驱动程序的异常。存储被编译排除时，或者没有任何磁盘带有分区表或 FAT 卷、光驱中也没有 CD 时，<code>Partitions</code> 是空的，这就是代码片段先检查 <code>Count</code> 再进行索引的原因。在 x64 上，<code>cosmos run</code> 从一张内核同样会列出的 CD 启动，因此当附加的磁盘都没有分区时，第一个条目就是这张 CD，而 FAT 驱动程序在上面找不到卷。</p>
+<p><code>StorageManager.GetPartitions(device)</code> 给出单个磁盘的分区，编号方式与用户的习惯一致，而 <code>Partitions</code> 是跨所有磁盘的扁平列表。</p>
+<p><code>TryMount</code> 也接受字符串形式的源，例如 <code>VfsManager.TryMount(&quot;fat&quot;, &quot;0&quot;, ...)</code>，每个驱动程序以自己的方式解读它：FAT 驱动程序把它解读为 <code>StorageManager.Partitions</code> 中的索引。请优先使用 <code>Partition</code> 重载。索引指向的是恰好位于该位置的分区，而创建或删除分区，或者磁盘的接入和移除，都会让分区挪动位置。</p>
+<!-- screenshot: 内核刚启动后的控制台，显示 "Mounted fat partition 0 at /mnt" 这一行 -->
+<p><img src="images/filesystem-mount.png" alt="挂载"></p>
+<p>从这里开始，<code>/mnt</code> 下的一切都由 FAT 驱动程序提供服务。</p>
+<p>根目录 <code>/</code> 不是一个卷。即使什么都没有挂载，它也存在，枚举它会列出各个挂载点，但直接在其中创建文件会以 <code>IOException</code>（只读文件系统）失败，因为那里没有驱动程序来存储文件。请在 <code>/mnt</code> 这样的挂载点下创建文件。</p>
+<p><a id="try-it-on-a-ram-disk"></a></p>
+<h3 id="在-ram-磁盘上尝试">在 RAM 磁盘上尝试</h3>
+<p>做快速实验时，你根本不需要磁盘镜像。块设备就是任何实现了 <code>IBlockDevice</code> 的东西，一个以数组为后备的块设备只需几行代码：</p>
+<pre><code class="lang-csharp">internal sealed class MemoryBlockDevice : IBlockDevice
+{
+    private readonly byte[] _storage;
+
+    public MemoryBlockDevice(string name, ulong blockSize, ulong blockCount)
+    {
+        Name = name;
+        BlockSize = blockSize;
+        BlockCount = blockCount;
+        _storage = new byte[blockSize * blockCount];
+    }
+
+    public string Name { get; }
+    public ulong BlockSize { get; }
+    public ulong BlockCount { get; }
+
+    public void ReadBlock(ulong blockNo, ulong blockCount, Span&lt;byte&gt; data)
+        =&gt; _storage.AsSpan((int)(blockNo * BlockSize), (int)(blockCount * BlockSize)).CopyTo(data);
+
+    public void WriteBlock(ulong blockNo, ulong blockCount, ReadOnlySpan&lt;byte&gt; data)
+        =&gt; data.Slice(0, (int)(blockCount * BlockSize)).CopyTo(_storage.AsSpan((int)(blockNo * BlockSize)));
+
+    public void Flush() { }
+}
+</code></pre>
+<p>FAT 驱动程序的构造函数可以接受这样的设备。像往常一样注册它，并传入空的 <code>source</code>，因为已经持有设备的驱动程序无需再查找什么，然后格式化该设备并挂载它：</p>
+<pre><code class="lang-csharp">MemoryBlockDevice ramDisk = new(&quot;RAMDISK&quot;, 512, 65536);   // 32 MiB
+FatFileSystemType fat = new(ramDisk);
+
+if (!VfsManager.RegisterFileSystem(&quot;ramfat&quot;, fat)
+    || !VfsManager.TryFormat(&quot;ramfat&quot;, &quot;&quot;, new FatFormatOptions { Type = FatType.Fat16 })
+    || !VfsManager.TryMount(&quot;ramfat&quot;, &quot;&quot;, MountFlags.None, &quot;/mnt&quot;, out _))
+{
+    Console.WriteLine(&quot;RAM disk setup failed.&quot;);
+    return;
+}
+</code></pre>
+<p><a id="read-a-cd-rom-or-an-iso-image"></a></p>
+<h3 id="读取-cd-rom-或-iso-镜像">读取 CD-ROM 或 ISO 镜像</h3>
+<p>光驱在我们的电脑上已经不多见了，它的文件系统却一直活跃着：操作系统至今仍以 <code>.iso</code> 镜像的形式下载，<code>cosmos build</code> 也会把你自己的内核打包成这样一个镜像。<code>Iso9660FileSystemType</code> 位于 <code>Cosmos.Kernel.System.FileSystem.Iso9660</code> 中，它让内核能够读取这样的卷，无论卷是在 CD 上、在写入了镜像的 U 盘上，还是在内存中。</p>
+<p>标准本身只认识以版本号结尾的大写名称，例如 <code>HELLO.TXT;1</code>。这就是在 Unix 系统上制作的镜像通常带有 Rock Ridge 扩展的原因，<code>cosmos build</code> 制作的镜像也带有它：Rock Ridge 为每个文件提供它真正的名称 <code>hello.txt</code>，以及它的 Unix 权限、时间戳和符号链接，卷带有这一扩展时，驱动程序会读取所有这些信息。在没有 Rock Ridge 的卷上，文件以去掉版本号的原始标识符出现（<code>README</code>、<code>FILE.TXT</code>），你可以用任意大小写输入这个名称，因为标准在这里只允许大写。驱动程序不读取 Joliet，也就是 Windows 工具添加的长文件名，因此只有 Joliet 的卷同样显示原始标识符。</p>
+<p>该驱动程序的挂载方式与 FAT 驱动程序相同，可以从分区挂载，也可以从交给其构造函数的设备挂载，而且它接受任意扇区大小，因此同一个镜像既可以从光驱（2048 字节扇区）挂载，也可以从 U 盘（512 字节扇区）或存放着其字节的 <code>MemoryBlockDevice</code> 挂载。这里的 <code>cdrom</code> 是任何承载着卷的 <code>IBlockDevice</code>，接下来的几段会介绍如何在磁盘中找到光驱：</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.System.FileSystem.Iso9660;
+
+Iso9660FileSystemType iso = new(cdrom);
+
+if (!VfsManager.RegisterFileSystem(&quot;iso&quot;, iso)
+    || !VfsManager.TryMount(&quot;iso&quot;, &quot;&quot;, MountFlags.None, &quot;/cd&quot;, out VfsMount? cd))
+{
+    Console.WriteLine(&quot;No ISO 9660 volume there.&quot;);
+    return;
+}
+
+Console.WriteLine(cd.IsReadOnly);                       // True
+foreach (string path in Directory.GetFiles(&quot;/cd/docs&quot;))
+{
+    Console.WriteLine(path + &quot;: &quot; + new FileInfo(path).Length + &quot; bytes&quot;);
+}
+string text = File.ReadAllText(&quot;/cd/hello.txt&quot;);
+</code></pre>
+<p>这样的卷大多放在光驱里。当光驱位于 AHCI 模式的 SATA 控制器之后时，内核会以 <code>cdrom0</code> 的名称把它列在 <code>StorageManager.Devices</code> 中，前提是启动时光驱里有光盘：驱动程序只有在光驱中找到光盘时才会初始化它，并且不会监视之后放入的光盘，因此启动时为空的光驱永远不会出现。它与磁盘的区别在于同一个对象上的第二个接口 <code>IRemovableMedia</code>，带有 <code>IsReadOnly</code>、<code>IsRemovable</code> 和 <code>HasMedia</code>。驱动工具包把这样的附加接口称为能力接口（facet）。这个能力接口属于工具包的实验性 API 面，标有 <code>[Experimental(&quot;COSMOS0003&quot;)]</code>，因此对它做类型测试的内核要在其 <code>.csproj</code> 中用 <code>&lt;NoWarn&gt;$(NoWarn);COSMOS0003&lt;/NoWarn&gt;</code> 确认该标识符。随后找到光驱只需对列表做一次循环：</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.HAL.Devices.Storage;   // IBlockDevice, IRemovableMedia
+using Cosmos.Kernel.System.Storage;        // StorageManager
+
+IBlockDevice? cdrom = null;
+foreach (IBlockDevice device in StorageManager.Devices)
+{
+    if (device is IRemovableMedia { IsReadOnly: true })
+    {
+        cdrom = device;
+        break;
+    }
+}
+</code></pre>
+<p>存储管理器不会在 CD 上查找分区表。只读光盘上没有内核可以修改的分区表，而可启动 ISO 开头的保护性 MBR 以 512 字节为单位计数，2048 字节扇区的光驱会读错，因此管理器把整张光盘列为一个分区。它还把光驱排在所有可写磁盘之后，正如<a href="#which-disk-comes-first">哪个磁盘排在最前</a>所说明的，因此在 x64 上（<code>cosmos run</code> 从这样的光驱启动），启动光盘是 <code>Partitions</code> 的最后一个条目，而在没有任何磁盘带有自己的分区时，它是第一个条目。</p>
+<p>该卷是只读的，整个 VFS 都知道这一点。无论你挂载时传入什么标志，<code>VfsMount.IsReadOnly</code> 都为 true，<code>VfsMount.Flags</code> 都带有 <code>MountFlags.ReadOnly</code>；每个文件的 <code>FileInfo.IsReadOnly</code> 都为 true；每次写入都像在 Linux 上一样失败，抛出普通的 <code>IOException</code>（&quot;Read-only file system&quot;），而不是暗示文件不存在的异常。</p>
+<p>用 <code>MountFlags.ReadOnly</code> 挂载任何驱动程序时，它都会以同样的方式拒绝写入。这个标志属于挂载而不属于卷：VFS 在挂载点上检查它，而不是在驱动程序中。</p>
+<p>光盘上有几样东西仍然无法读取。分布在多个 extent 上的文件（ISO 9660 正是这样存储超过 4 GiB 的文件）不会被列出。多会话光盘只读取第一个会话，UDF 则完全不读取。让 CD 可以启动的 El Torito 启动目录也不会被解析：当光盘列出它时，它只是又一个文件。</p>
+<p>光驱本身必须是工具包以块设备形式发布的那种，目前这意味着位于 AHCI 模式的 SATA 控制器之后的光驱（<a href="drivers.html#the-storage-drivers">存储驱动程序</a>）。QEMU 的 q35 机器正是把它的光驱放在那里，因此由 <code>cosmos run</code> 在 x64 上启动的内核可以读取自己的启动光盘；VMware 在虚拟驱动器接在 SATA 控制器而不是 IDE 控制器上时，也把光驱放在那里。位于 USB、virtio-scsi 或 IDE 控制器之后的光驱还不是块设备，而在 arm64 上，<code>cosmos run</code> 通过 virtio-scsi 附加启动 ISO。那里的内核改为读取镜像：从 RAM、从写入了镜像的磁盘分区，或者从写入了镜像的 U 盘读取，后者整个交给构造函数，写作 <code>new Iso9660FileSystemType(stick)</code>。</p>
+<p><a id="ship-files-on-the-boot-iso"></a></p>
+<h3 id="在启动-iso-上随附文件">在启动 ISO 上随附文件</h3>
+<p>既然内核可以读取它的启动光盘，ISO 也就成了存放它运行时所需文件的便利之处：配置文件、字体、图片。<code>cosmos build</code> 把内核和 Limine 放在 <code>/boot</code> 和 <code>/EFI</code> 下，并且和 Gen2 一样，内核 <code>.csproj</code> 旁边的 <code>isoFiles</code> 文件夹中的所有内容都会连同其子文件夹一起放到 ISO 的根目录，因此 <code>isoFiles/data/config.txt</code> 在光盘上就是 <code>/data/config.txt</code>。</p>
+<p>位于别处的文件，或者需要换一个名称的文件，在 <code>.csproj</code> 中写成 <code>CosmosIsoFile</code> 项。它的 <code>IsoPath</code> 元数据就是它在 ISO 上的路径。以 <code>/</code> 结尾的 <code>IsoPath</code> 表示一个文件夹，并保留文件原来的名称；没有 <code>IsoPath</code> 的文件放在根目录：</p>
+<pre><code class="lang-xml">&lt;ItemGroup&gt;
+  &lt;CosmosIsoFile Include=&quot;../assets/logo.bmp&quot; IsoPath=&quot;images/logo.bmp&quot; /&gt;
+  &lt;CosmosIsoFile Include=&quot;../assets/readme.txt&quot; IsoPath=&quot;docs/&quot; /&gt;
+&lt;/ItemGroup&gt;
+</code></pre>
+<p><code>CosmosIsoFilesDirectory</code> 属性让构建改用另一个文件夹。该文件夹中的内容都不参与编译，因此放在里面的 <code>.cs</code> 文件会作为文件随附，而不会被编译进内核。</p>
+<p>构建宁可报错停止，也不会写出一个损坏的 ISO。它拒绝会落到 <code>/boot</code> 或 <code>/EFI</code> 之下的文件，因为那里存放着 SDK 写入的内核和引导加载程序。它拒绝含有 <code>.</code> 或 <code>..</code> 段的 <code>IsoPath</code>，因为 <code>..</code> 可能爬出 ISO 的根目录。它还拒绝路径相同（比较时不区分大小写）的两个文件，因为在 Windows 主机上，第二次复制会覆盖第一次。</p>
+<p>ISO 的构建缓存涵盖这些文件及其路径，因此添加、修改、重命名或删除其中一个文件都会重新生成 ISO，而无需重新编译内核。</p>
+<p>在光盘上，这些文件保留它们的名称，包括大小写和空格，因为 Rock Ridge 承载着这些名称。内核按上一节的方法找到启动光盘并挂载之后，就可以把它们读回来：</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.System.FileSystem;           // VfsManager, MountFlags
+using Cosmos.Kernel.System.FileSystem.Iso9660;   // Iso9660FileSystemType
+
+VfsManager.RegisterFileSystem(&quot;bootcd&quot;, new Iso9660FileSystemType(cdrom));
+VfsManager.TryMount(&quot;bootcd&quot;, &quot;&quot;, MountFlags.None, &quot;/cdrom&quot;, out _);
+string config = File.ReadAllText(&quot;/cdrom/data/config.txt&quot;);
+</code></pre>
+<p>这种读取要求启动驱动器是块设备，它位于 AHCI 控制器之后时正是如此。在不满足这一点的地方，例如从 virtio-scsi 启动的 arm64 机器上，文件虽然在光盘上，内核却还无法访问它们。</p>
+<p><a id="partition-a-disk"></a></p>
+<h2 id="为磁盘分区">为磁盘分区</h2>
+<p>刚由 <code>qemu-img create</code> 创建的磁盘没有分区表，而格式化需要一个可供格式化的分区。<code>StorageManager.Partitions</code> 列出内核启动时找到的磁盘上已有的分区；如果一个分区都没有，或者你想要不同的布局，<code>Gpt</code>、<code>Mbr</code> 和 <code>PartitionManager</code> 可以写入分区表本身。它们都接受一个 <code>IBlockDevice</code>，你可以从 <code>StorageManager.PrimaryDevice</code> 获得。</p>
+<p>先查询磁盘上已有的分区方案：</p>
+<pre><code class="lang-csharp">IBlockDevice? disk = StorageManager.PrimaryDevice;
+if (disk is null)
+{
+    Console.WriteLine(&quot;No disk&quot;);
+    return;
+}
+
+if (Gpt.IsGpt(disk))
+{
+    Console.WriteLine(&quot;GPT, &quot; + Gpt.Parse(disk).Count + &quot; partition(s)&quot;);
+}
+else if (Mbr.IsMbr(disk))
+{
+    Console.WriteLine(&quot;MBR, &quot; + Mbr.Parse(disk).Count + &quot; partition(s)&quot;);
+}
+else
+{
+    Console.WriteLine(&quot;No partition table&quot;);
+}
+</code></pre>
+<p><code>Gpt.Create</code> 和 <code>Mbr.Create</code> 会写入一个对应方案的空分区表，磁盘原有的分区随旧分区表一起消失。随后 <code>PartitionManager.Create</code> 添加一个分区，它适用于磁盘所采用的任何方案，因此你无需分情况处理：</p>
+<pre><code class="lang-csharp">Gpt.Create(disk);
+
+/* 64 MiB at LBA 2048, on a 512-byte-sector disk. The MBR system id and the
+   GPT type GUID are both given; only the one matching the disk's scheme is
+   used. */
+if (!PartitionManager.Create(disk, startSector: 2048, sectorCount: 131072,
+                             mbrSystemId: 0x0C, gptType: Gpt.BasicDataPartitionType))
+{
+    Console.WriteLine(&quot;Create failed&quot;);
+    return;
+}
+
+StorageManager.RescanPartitions(disk);
+</code></pre>
+<p>正是 <code>RescanPartitions</code> 让新分区出现在 <code>StorageManager.Partitions</code> 中。在调用它之前，该列表描述的仍然是旧的分区表。</p>
+<p>已有分区通过 <code>PartitionLocation</code> 来寻址，它记录的是起始扇区和长度，而不是索引，因此分区表重新编号时，分区的身份不会改变：</p>
+<pre><code class="lang-csharp">PartitionManager.PartitionLocation where = new(startSector: 2048, sectorCount: 131072);
+
+PartitionManager.Resize(disk, where, newSectorCount: 262144);
+PartitionManager.MoveWithData(disk, where, newStartSector: 4096);
+PartitionManager.Delete(disk, where);
+</code></pre>
+<p><code>MoveWithData</code> 会先把内容复制到新位置，再重写分区表项。<code>Resize</code> 和 <code>Delete</code> 只修改分区表，因此把分区缩小到其文件系统大小以下会丢失数据。</p>
+<p><strong>每个分区索引都由位置决定</strong>。删除一个分区会使其后的表项重新编号，<code>StorageManager.Partitions</code> 也会随之重新编号，因此每次修改后都请重新读取列表，而不要跨越修改保留索引。</p>
+<p>MBR 有四个主分区槽位，而扩展分区内的一串逻辑分区可以超出这个数量。<code>Mbr.TryGetExtendedPartition</code> 用于找到扩展分区，<code>PartitionManager.TryCreateLogical</code> 则在其中添加一个逻辑分区：</p>
+<pre><code class="lang-csharp">if (Mbr.TryGetExtendedPartition(disk, out ulong extendedStart, out ulong extendedCount)
+    &amp;&amp; PartitionManager.TryCreateLogical(disk, systemId: 0x0C, sectorCount: 65536, out ulong logicalStart))
+{
+    Console.WriteLine(&quot;logical partition at LBA &quot; + logicalStart);
+}
+</code></pre>
+<p><code>Gpt</code>、<code>Mbr</code> 和 <code>Ebr</code> 是更底层的一层，每种方案一个类型，用于 <code>PartitionManager</code> 没有公开的那些表项。</p>
+<p><a id="format-a-partition"></a></p>
+<h2 id="格式化分区">格式化分区</h2>
+<p><code>VfsManager.TryFormat</code> 通过 VFS 格式化（mkfs）一个分区。它接受驱动程序名称、分区和该驱动程序的选项类型，你没有设置的每个 FAT 选项（簇大小、FAT 副本数、保留扇区）都由格式化程序根据 FAT 类型和分区大小来选择：</p>
+<pre><code class="lang-csharp">FatFormatOptions options = new()
+{
+    Type = FatType.Fat32,
+    VolumeLabel = &quot;COSMOS     &quot;,
+};
+
+if (StorageManager.Partitions.Count == 0
+    || !VfsManager.TryFormat(&quot;fat&quot;, StorageManager.Partitions[0], options))
+{
+    Console.WriteLine(&quot;Format failed&quot;);
+}
+</code></pre>
+<p><code>TryFormat</code> 拒绝已挂载的分区，因此请先用 <code>VfsManager.TryUnmount(&quot;/mnt&quot;)</code> 卸载它。</p>
+<p><a id="list-mounted-volumes"></a></p>
+<h2 id="列出已挂载的卷">列出已挂载的卷</h2>
+<p><code>VfsManager.Mounts</code> 是挂载表。每个表项给出驱动程序注册时所用的名称、挂载时所用的源以及挂载点：</p>
+<pre><code class="lang-csharp">foreach (VfsMount m in VfsManager.Mounts)
+{
+    Console.WriteLine(m.MountPoint + &quot; -&gt; &quot; + m.Name + &quot; (source &quot; + m.Source + &quot;)&quot;);
+}
+</code></pre>
+<!-- screenshot: 挂载表循环的控制台输出，例如 "/mnt -> fat (source 0)" -->
+<p><img src="images/filesystem-mounts.png" alt="挂载列表"></p>
+<p>对于通过 <code>Partition</code> 重载建立的挂载，<code>m.Partition</code> 就是分区本身。请优先使用它，而不是把 <code>m.Source</code> 解析回索引：在重新扫描使 <code>StorageManager.Partitions</code> 重新编号之后，它仍然指向同一磁盘上的同一范围。</p>
+<p><a id="check-free-space"></a></p>
+<h2 id="检查可用空间">检查可用空间</h2>
+<p><code>VfsManager.TryStatFs</code> 报告一个挂载的块统计信息。可用空间等于可用块数乘以块大小：</p>
+<pre><code class="lang-csharp">if (VfsManager.TryStatFs(&quot;/mnt&quot;, out VfsStatFs stats))
+{
+    ulong freeBytes = stats.AvailableBlocks * stats.BlockSize;
+    ulong totalBytes = stats.Blocks * stats.BlockSize;
+    Console.WriteLine(freeBytes + &quot; of &quot; + totalBytes + &quot; bytes free&quot;);
+}
+</code></pre>
+<p>ISO 9660 挂载会报告它的大小，但可用块数为零，因为无法向其中写入任何内容。<code>DriveInfo</code> 尚未接入，因此这是读取可用空间的方式。</p>
+<p><a id="list-a-directory"></a></p>
+<h2 id="列出目录">列出目录</h2>
+<p>从这里开始，一切都是标准的 <code>System.IO</code>，路径就是挂载点下的那些路径。<code>Directory.GetFiles</code> 列出一个目录中的文件：</p>
+<pre><code class="lang-csharp">foreach (string file in Directory.GetFiles(&quot;/mnt&quot;))
+{
+    Console.WriteLine(file);
+}
+</code></pre>
+<!-- screenshot: 控制台列出 /mnt 下的几个文件 -->
+<p><img src="images/filesystem-files-list.png" alt="文件列表"></p>
+<p>搜索模式同样可用，因为这就是 .NET 原有的枚举代码：</p>
+<pre><code class="lang-csharp">string[] logs = Directory.GetFiles(&quot;/mnt&quot;, &quot;*.txt&quot;);
+</code></pre>
+<p><code>Directory.GetDirectories</code> 以同样的方式列出子目录：</p>
+<pre><code class="lang-csharp">foreach (string directory in Directory.GetDirectories(&quot;/mnt&quot;))
+{
+    Console.WriteLine(directory);
+}
+</code></pre>
+<!-- screenshot: 控制台列出 /mnt 下的文件和目录 -->
+<p><img src="images/filesystem-directory-listing.png" alt="目录列表"></p>
+<p><a id="read-a-file"></a></p>
+<h2 id="读取文件">读取文件</h2>
+<p><code>File.ReadAllText</code> 把整个文件读成一个字符串。失败的文件系统调用会抛出标准的 <code>System.IO</code> 异常，这一点与 Gen2 相同，你可以像在任何其他 .NET 平台上一样捕获它，因此下面的循环会打印 <code>/mnt</code> 下的每个文件，并在读取失败时报告错误，而不是让内核停下来：</p>
+<pre><code class="lang-csharp">try
+{
+    foreach (string file in Directory.GetFiles(&quot;/mnt&quot;))
+    {
+        string content = File.ReadAllText(file);
+
+        Console.WriteLine(&quot;File name: &quot; + file);
+        Console.WriteLine(&quot;File size: &quot; + content.Length);
+        Console.WriteLine(&quot;Content: &quot; + content);
+    }
+}
+catch (Exception e)
+{
+    Console.WriteLine(e.ToString());
+}
+</code></pre>
+<!-- screenshot: 控制台显示一个文件的名称、大小和内容 -->
+<p><img src="images/filesystem-read-all-files.png" alt="读取所有文件"></p>
+<p><code>File.ReadAllBytes</code> 以字节形式读取文件。为了保持简短，从这里开始的代码片段都省略了 <code>try</code>/<code>catch</code>：</p>
+<pre><code class="lang-csharp">Console.WriteLine(File.ReadAllText(&quot;/mnt/testing.txt&quot;));
+
+byte[] data = File.ReadAllBytes(&quot;/mnt/testing.txt&quot;);
+Console.WriteLine(&quot;Read &quot; + data.Length + &quot; bytes&quot;);
+</code></pre>
+<!-- screenshot: 控制台打印上一步写入的文件内容 -->
+<p><img src="images/filesystem-read-specific-file.png" alt="读取指定文件"></p>
+<p><a id="create-and-write-files"></a></p>
+<h2 id="创建和写入文件">创建和写入文件</h2>
+<p><code>File.Create</code> 创建一个空文件，或者清空已有的文件，并交回它打开的流，由 <code>using</code> 负责关闭。<code>Directory.CreateDirectory</code> 一次调用即可创建一个目录及其所有缺失的父目录：</p>
+<pre><code class="lang-csharp">using (FileStream stream = File.Create(&quot;/mnt/testing.txt&quot;))
+{
+}
+
+Directory.CreateDirectory(&quot;/mnt/documents/reports&quot;);
+</code></pre>
+<p><code>File.WriteAllText</code> 替换文件的内容，文件尚不存在时会创建它，<code>File.WriteAllBytes</code> 和 <code>File.WriteAllLines</code> 对字节和文本行做同样的事。<code>File.AppendAllText</code> 则把内容添加到文件末尾，文件不存在时同样会创建它：</p>
+<pre><code class="lang-csharp">File.WriteAllText(&quot;/mnt/testing.txt&quot;, &quot;Learning how to use the Gen3 VFS!&quot;);
+</code></pre>
+<p><a id="copy-move-and-delete"></a></p>
+<h2 id="复制移动和删除">复制、移动和删除</h2>
+<p><code>File.Copy</code>、<code>File.Move</code>、<code>File.Delete</code> 和 <code>Directory.Delete</code> 的行为与在任何其他 .NET 平台上相同：</p>
+<pre><code class="lang-csharp">File.Copy(&quot;/mnt/testing.txt&quot;, &quot;/mnt/copy.txt&quot;);
+File.Move(&quot;/mnt/copy.txt&quot;, &quot;/mnt/renamed.txt&quot;);
+File.Delete(&quot;/mnt/renamed.txt&quot;);
+
+Directory.Delete(&quot;/mnt/documents&quot;, recursive: true);
+</code></pre>
+<p>与 Gen2 不同，同一挂载内的 <code>File.Move</code> 是真正的重命名，而不是先复制再删除。移动到已有文件上时会抛出 <code>IOException</code>，除非你传入 <code>overwrite: true</code>，而且覆盖操作即使中途停止也不会丢失任何内容：目标会先被移到一旁作为备份，只有在重命名完成之后才会被删除。在两个挂载之间移动则是先复制再删除，这与 Linux 相同，因为重命名无法从一个卷跨到另一个卷。</p>
+<p>删除仍处于打开状态的文件不会失败。VFS 会把删除推迟到该文件的最后一个句柄关闭时，到那时才移除表项：FAT 驱动程序在文件的表项消失的那一刻就会释放它的簇，因此仍在读取这些簇的句柄会读到接下来写在那里的任何内容。这也是 <code>FileOptions.DeleteOnClose</code> 能够工作的原因。</p>
+<p><a id="streams"></a></p>
+<h2 id="流">流</h2>
+<p>完整的流栈均可使用，包括定位、截断（<code>SetLength</code>）和带缓冲的文本 I/O：</p>
+<pre><code class="lang-csharp">using (FileStream stream = new(&quot;/mnt/log.bin&quot;, FileMode.Create, FileAccess.ReadWrite))
+{
+    stream.Write(new byte[] { 1, 2, 3, 4 });
+    stream.Seek(0, SeekOrigin.Begin);
+    int first = stream.ReadByte();          // 1
+}
+
+using (StreamWriter writer = new(&quot;/mnt/notes.txt&quot;))
+{
+    writer.WriteLine(&quot;first line&quot;);
+    writer.WriteLine(&quot;second line&quot;);
+}
+
+using (StreamReader reader = new(&quot;/mnt/notes.txt&quot;))
+{
+    string? line;
+    while ((line = reader.ReadLine()) != null)
+    {
+        Console.WriteLine(line);
+    }
+}
+</code></pre>
+<!-- screenshot: 控制台打印通过 StreamReader 读回的两行 -->
+<p><img src="images/filesystem-streams.png" alt="流"></p>
+<p><a id="current-directory-and-relative-paths"></a></p>
+<h2 id="当前目录与相对路径">当前目录与相对路径</h2>
+<p>内核维护一个当前目录，它的初始值为 <code>/</code>，因此相对路径和 <code>Path.GetFullPath</code> 的行为与在任何 Unix 系统上一样：</p>
+<pre><code class="lang-csharp">Directory.CreateDirectory(&quot;/mnt/work&quot;);
+Directory.SetCurrentDirectory(&quot;/mnt/work&quot;);
+
+File.WriteAllText(&quot;relative.txt&quot;, &quot;resolved against the CWD&quot;);
+Console.WriteLine(File.Exists(&quot;/mnt/work/relative.txt&quot;));      // True
+Console.WriteLine(Path.GetFullPath(&quot;sub/../file.txt&quot;));        // /mnt/work/file.txt
+
+Directory.SetCurrentDirectory(&quot;/&quot;);
+</code></pre>
+<p><a id="error-handling"></a></p>
+<h2 id="错误处理">错误处理</h2>
+<p>失败时抛出的是 <code>System.IO</code> 文档为该情况指定的异常，因此你可以精确地捕获预期的那种情况：</p>
+<table>
+<thead>
+<tr>
+<th>出了什么问题</th>
+<th>异常</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>在存在的目录中打开不存在的文件</td>
+<td><code>FileNotFoundException</code></td>
+</tr>
+<tr>
+<td>位于不存在的目录之下，或位于没有挂载任何东西的路径之下的任何路径</td>
+<td><code>DirectoryNotFoundException</code></td>
+</tr>
+<tr>
+<td>直接在根目录 <code>/</code> 中创建文件</td>
+<td><code>IOException</code>（只读文件系统）</td>
+</tr>
+<tr>
+<td>在只读挂载（ISO 9660 卷，或用 <code>MountFlags.ReadOnly</code> 建立的挂载）下进行的任何写入</td>
+<td><code>IOException</code>（只读文件系统）</td>
+</tr>
+<tr>
+<td>不带 <code>recursive: true</code> 删除非空目录</td>
+<td><code>IOException</code></td>
+</tr>
+<tr>
+<td>不带 <code>overwrite: true</code> 用 <code>File.Copy</code> 或 <code>File.Move</code> 写到已有文件上</td>
+<td><code>IOException</code></td>
+</tr>
+</tbody>
+</table>
+<p>即使完全没有挂载任何东西，这些规则也成立。此时 <code>Directory.Exists(&quot;/&quot;)</code> 为 <code>true</code>，枚举 <code>/</code> 得到空列表，其他任何路径都会以上述异常之一失败，而不会让内核出错。</p>
+<p><a id="current-limitations"></a></p>
+<h2 id="当前限制">当前限制</h2>
+<p>不能创建符号链接：<code>File.CreateSymbolicLink</code> 会以 &quot;Operation not permitted&quot; 被拒绝，.NET 将其作为 <code>UnauthorizedAccessException</code> 抛出。ext2 和 ISO 9660 驱动程序确实会跟随其卷上已有的符号链接，但无法读回链接的目标：<code>FileSystemInfo.LinkTarget</code> 为 null。</p>
+<p>时间戳也无法设置：<code>File.SetLastWriteTime</code> 及其同类方法会被接受，却不改变任何东西。读取时间戳则取决于卷：ext2 和 ISO 9660 驱动程序报告其卷上保存的时间戳，而 FAT 驱动程序既不存储也不读取时间戳，因此 FAT 卷上的每个文件报告的都是 Unix 纪元 1970-01-01。</p>
+<p>FAT 和 ISO 9660 是 Cosmos 在运行中的内核里测试的驱动程序。ext2 驱动程序 <code>Ext2FileSystemType</code> 与它们一起随附，但目前只在主机上测试。光驱只有位于 AHCI 控制器之后时才能访问，详见<a href="#read-a-cd-rom-or-an-iso-image">读取 CD-ROM 或 ISO 镜像</a>。存储管理器最多接受八个磁盘，超出的磁盘不会被列出。</p>
+<p><a id="how-it-works"></a></p>
+<h2 id="工作原理">工作原理</h2>
+<p>你的代码调用原有的 .NET 库，它们最终落到 Unix 平台层，也就是 .NET 在 Linux 上发出的 <code>Interop.Sys.*</code> P/Invoke。Cosmos 在 <code>Cosmos.Kernel.Plugs</code> 中<a href="../dev/plugs.html">通过 plug 替换</a>这些调用，由一个文件描述符表把它们转换给 <code>VfsManager</code>。<code>VfsManager</code> 掌管路径、当前目录、打开的句柄以及带有各挂载标志的挂载表，只读挂载下的写入正是在这里被拒绝的，其他一切则交给已挂载的文件系统驱动程序。驱动程序读写一个 <code>IBlockDevice</code>：由驱动工具包发布并由 <code>StorageManager</code> 注册的磁盘，或者由你的内核构建的设备，例如上文的 RAM 磁盘。你自己编写的文件系统驱动程序要实现 <code>IVfsFileSystemType</code>，并像随附的驱动程序一样注册。从你的调用一直到磁盘，各层的堆叠方式如下：</p>
+<pre><code>File / Directory / FileStream          (stock .NET)
+        │
+Interop.Sys.* PAL calls                (stock .NET, plugged)
+        │
+file descriptor table                  (Cosmos.Kernel.Plugs: fds, dir streams, errno)
+        │
+VfsManager                             (mounts, paths, CWD, open handles)
+        │
+IVfsFileSystemType / IVfsSuperblock    (the FAT, ext2 and ISO 9660 drivers)
+        │
+IBlockDevice                           (the kit's AHCI, NVMe, virtio-blk and USB mass storage drivers, MemoryBlockDevice)
+</code></pre>
+<p><a id="summary"></a></p>
+<h2 id="总结">总结</h2>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>列出磁盘</td>
+<td><code>StorageManager.Devices</code></td>
+</tr>
+<tr>
+<td>列出分区</td>
+<td><code>StorageManager.Partitions</code>、<code>StorageManager.GetPartitions(device)</code></td>
+</tr>
+<tr>
+<td>注册文件系统驱动程序</td>
+<td><code>VfsManager.RegisterFileSystem(name, driver)</code></td>
+</tr>
+<tr>
+<td>挂载分区</td>
+<td><code>VfsManager.TryMount(name, partition, flags, mountPoint, out mount)</code></td>
+</tr>
+<tr>
+<td>挂载驱动程序持有的设备</td>
+<td><code>VfsManager.TryMount(name, &quot;&quot;, flags, mountPoint, out mount)</code></td>
+</tr>
+<tr>
+<td>卸载</td>
+<td><code>VfsManager.TryUnmount(mountPoint)</code></td>
+</tr>
+<tr>
+<td>写入分区表</td>
+<td><code>Gpt.Create(disk)</code>、<code>Mbr.Create(disk)</code></td>
+</tr>
+<tr>
+<td>添加、调整大小、移动或删除分区</td>
+<td><code>PartitionManager.Create</code>、<code>Resize</code>、<code>MoveWithData</code>、<code>Delete</code></td>
+</tr>
+<tr>
+<td>读取新的分区表</td>
+<td><code>StorageManager.RescanPartitions(disk)</code></td>
+</tr>
+<tr>
+<td>格式化分区</td>
+<td><code>VfsManager.TryFormat(name, partition, options)</code></td>
+</tr>
+<tr>
+<td>列出挂载</td>
+<td><code>VfsManager.Mounts</code></td>
+</tr>
+<tr>
+<td>读取可用空间</td>
+<td><code>VfsManager.TryStatFs(mountPoint, out stats)</code></td>
+</tr>
+<tr>
+<td>操作文件</td>
+<td><code>File</code>、<code>Directory</code>、<code>FileStream</code>、<code>StreamReader</code>、<code>StreamWriter</code></td>
+</tr>
+</tbody>
+</table>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.97/docs/zh/articles/user/filesystem.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

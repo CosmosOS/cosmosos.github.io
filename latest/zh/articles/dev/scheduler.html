@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/dev/scheduler.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.97/docs/zh/articles/dev/scheduler.md/#L1">
       <meta name="loc:inThisArticle" content="本文内容">
       <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
       <meta name="loc:searchNoResults" content="没有“{query}”的结果">
@@ -397,6 +397,7 @@
 </tbody>
 </table>
 <p>随后 <code>Park</code> 等待状态离开 <code>Blocked</code> 或 <code>Sleeping</code>：当一次唤醒使线程就绪、且调度器再次运行了它时就会如此；如果唤醒在切换之前就已到达，则会立即如此。以前改用停机的做法，每当有线程阻塞，都会让 CPU 在该节拍剩余的时间里空闲。在控制器能够触发该中断之前就挂起的线程仍然会停机；空闲线程则从不挂起（见下文的原语），而是在检查条件变量的间隙停机。</p>
+<p>线程不能在中断被屏蔽时挂起。那样重新调度中断和节拍都会一直处于挂起状态，没有任何东西能把它从 CPU 上换下或唤醒它，CPU 会在定时器关闭的情况下一直空转，直到外部把机器停掉。因此 <code>Park</code> 会先检查中断标志，遇到这种情况就触发内核恐慌，并给出发起挂起的成员（<code>Mutex.Acquire</code>、<code>ConditionVariable.Wait</code>、<code>InterruptEvent.WaitCore</code> 等）：从屏蔽中断的代码段中，或在以 IRQ 安全方式持有的自旋锁之下，碰到一个会阻塞的锁时，内核会停下并指出位置，而不是一声不响地卡死（<a href="https://github.com/CosmosOS/Cosmos/issues/3387">#3387</a>：网络协议栈的接收路径曾在屏蔽中断的情况下运行，卡在一个已被占用的 CoreLib 锁上）。</p>
 <p><a id="what-there-is-not-a-voluntary-switch"></a></p>
 <h3 id="不存在的东西主动切换">不存在的东西：主动切换</h3>
 <p><code>SchedulerManager.Schedule</code> 和 <code>ContextSwitch.Switch</code> 存在于代码树中，但没有任何调用者，而且两者都无法完成同步切换：它们只是<em>暂存</em>一个目标栈指针，暂存的切换在中断退出时才被消费，而主动调用者并没有由中断保存的寄存器帧可供该退出路径恢复（<code>Schedule</code> 的辅助函数甚至不保存换出线程的栈指针）。唯一可用的主动让出入口，即 <code>Thread.Yield</code> 背后运行时的 <code>RhYield</code>，借用的是中断路径：<code>YieldThread</code> 设置 <code>_needReschedule</code>，使下一次硬件中断退出时即使时间片尚未用完也进行切换，然后立即返回。该切换先选出替代线程，之后再通过 <code>OnThreadYield</code> 把让出的线程重新入队，与抢占的做法完全相同，因此线程在仍在运行时永远不会位于队列中。调用者不等待切换，<code>Thread.Yield</code> 总是报告没有其他线程运行过：等待会让每次调用付出最多一个节拍的代价，而 CoreLib 在其“先自旋后阻塞”循环的每一轮都会调用一次 <code>Thread.Yield</code>（在单个 CPU 上，一个空闲的线程池工作线程在挂起前会自旋 70 次，<code>Thread.Start</code> 则会一直自旋，直到新线程报告已启动）。停机直到切换发生，会使这些循环持续 70 个节拍。真正的同步切换需要自己的保存路径（相当于 IRQ 桩代码的保存路径，但通过调用而非中断进入），而这条路径目前还不存在。</p>
@@ -764,7 +765,7 @@
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.96/docs/zh/articles/dev/scheduler.md/#L1" class="edit-link">编辑此页</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.97/docs/zh/articles/dev/scheduler.md/#L1" class="edit-link">编辑此页</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>
