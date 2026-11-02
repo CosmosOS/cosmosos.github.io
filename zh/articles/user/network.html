@@ -89,7 +89,7 @@
 
 <p><a id="network"></a></p>
 <h1 id="网络">网络</h1>
-<p>本文将介绍 Cosmos Gen3 上的网络：如何启动网络协议栈，以及如何发送和接收数据包。可用的协议有 <strong>ARP</strong>、<strong>IPv4</strong>、<strong>IPv6</strong>、<strong>UDP</strong>、<strong>TCP</strong>、<strong>DHCP</strong> 和 <strong>DNS</strong>。</p>
+<p>本文将介绍 Cosmos Gen3 上的网络：如何启动网络协议栈，以及如何发送和接收数据包。可用的协议有 <strong>ARP</strong>、<strong>IPv4</strong>、<strong>IPv6</strong>、<strong>UDP</strong>、<strong>TCP</strong>、<strong>DHCP</strong> 和 <strong>DNS</strong>，另有三个基于 TCP 构建的包：一个 <strong>Telnet</strong> 服务器、一个 <strong>FTP</strong> 服务器，以及一个 <strong>HTTP</strong> 客户端和服务器（包括 <code>https://</code>）。</p>
 <p>如果你来自 Gen2，主要区别如下：</p>
 <table>
 <thead>
@@ -381,6 +381,82 @@ FtpServer server = new(&quot;/mnt&quot;);
 new Thread(server.Listen).Start(); // Listen() serves every client until server.Close()
 </code></pre>
 <p>客户端会把 <code>/mnt</code> 视为 <code>/</code>，并且无法离开它。不设置 <code>Authenticate</code> 时，任何用户名配任何密码都能登录；设置它即可校验凭据。传输采用被动模式，默认使用 50000 到 50009 端口（<code>PassivePortMin</code> 和 <code>PassivePortMax</code>），因此在 QEMU 用户模式网络下，除了控制端口之外还要转发这些端口：<code>cosmos run --hostfwd tcp::2121-:21 --hostfwd tcp::50000-:50000 ...</code>，然后执行 <code>curl ftp://localhost:2121/</code>。<code>PASV</code> 应答中给出的是客户机自己的地址 10.0.2.15，主机无法访问该地址：curl 会忽略它，但 FileZilla 会连接它，因此请设置 <code>PassiveAddress = IPAddress.Loopback</code>，让 <code>PASV</code> 改为给出 127.0.0.1。</p>
+<p><a id="http-and-https"></a></p>
+<h2 id="http-和-https">HTTP 和 HTTPS</h2>
+<p>HTTP 是 Web 和大多数在线 API 所使用的协议，如今几乎所有 HTTP 流量都以 <code>https://</code> 的形式加密传输。<a href="https://github.com/CosmosOS/Cosmos.Network.Http">Cosmos.Network.Http</a> 包为你的内核提供了同时支持 HTTP 和 HTTPS 的 HTTP/1.1 客户端和服务器。它是移植到 Gen3 的 <a href="https://github.com/nanoframework/System.Net.Http">.NET nanoFramework 的 System.Net.Http</a>，因此它的 <code>HttpClient</code> 在 <code>Get</code>、<code>GetString</code> 等调用内部等待响应，这些调用在 nanoFramework 中对应桌面版的 <code>GetAsync</code> 和 <code>GetStringAsync</code>。</p>
+<p>添加该包时还要加上第二行，把 <code>System.Net.Http</code> 从隐式 using 中移除，因为 Cosmos SDK 会开启 <code>ImplicitUsings</code>，而该命名空间带来的 .NET <code>HttpClient</code> 会让对该包 <code>HttpClient</code> 的每一次使用都成为有歧义的引用（CS0104）：</p>
+<pre><code class="lang-xml">&lt;ItemGroup&gt;
+  &lt;PackageReference Include=&quot;Cosmos.Network.Http&quot; Version=&quot;3.0.0&quot; /&gt;
+  &lt;Using Remove=&quot;System.Net.Http&quot; /&gt;
+&lt;/ItemGroup&gt;
+</code></pre>
+<p>该包还声明了自己的 <code>HttpListener</code>、<code>HttpStatusCode</code> 以及其他在 <code>System.Net</code> 中也存在的类型，因此出于同样的原因，使用该包的文件不导入 <code>System.Net</code>，尽管本页开头列出的 <code>using</code> 指令中有它。</p>
+<p><a id="fetch-a-page"></a></p>
+<h3 id="获取网页">获取网页</h3>
+<p>使用主机名需要域名服务器，当 DHCP 服务器的确认消息中给出了域名服务器时，DHCP 会注册它；如果是手动配置，请按下面 <a href="#dns">DNS</a> 一节所示添加一个。网络配置完成后，客户端只需一次调用就能获取网页：</p>
+<pre><code class="lang-csharp">using Cosmos.Network.Http;
+
+using HttpClient client = new HttpClient { Timeout = TimeSpan.FromSeconds(30) };
+
+using HttpResponseMessage response = client.Get(&quot;https://example.com/&quot;);
+Console.WriteLine(&quot;GET https://example.com/: &quot; + (int)response.StatusCode + &quot; &quot; + response.ReasonPhrase);
+Console.WriteLine(&quot;Content-Type: &quot; + response.Content.Headers.ContentType);
+
+string html = response.Content.ReadAsString();
+int start = html.IndexOf(&quot;&lt;title&gt;&quot;) + &quot;&lt;title&gt;&quot;.Length;
+Console.WriteLine(&quot;Title: &quot; + html.Substring(start, html.IndexOf(&quot;&lt;/title&gt;&quot;) - start));
+</code></pre>
+<!-- screenshot: 控制台显示 "GET https://example.com/: 200 OK"、"Content-Type: text/html; charset=utf-8" 和 "Title: Example Domain" -->
+<p><img src="images/network-http.png" alt="HTTPS 客户端"></p>
+<p>无论状态如何，<code>Get</code> 都会返回响应，<code>Post</code>、<code>Put</code>、<code>Patch</code>、<code>Delete</code> 和 <code>Send</code> 也是如此，重定向也不例外：客户端不跟随任何重定向，因此 3xx 会作为响应返回，其 <code>Location</code> 位于响应头中。<code>GetString</code> 和 <code>GetByteArray</code> 只返回响应体，无从报告状态，因此遇到 404 这类错误状态时会抛出 <code>HttpRequestException</code>。请释放每个响应（就像 <code>using</code> 声明所做的那样），这样它的连接才会被关闭，或者回到连接池供下一个请求使用。</p>
+<p>其他所有失败也都表现为 <code>HttpRequestException</code>，无论请求是由哪个调用发出的：连接被拒绝、名称无法解析、证书被拒绝，或者响应被截断。它最内层的异常会说明原因。</p>
+<p><strong>请设置 <code>Timeout</code>。</strong> 它默认是无限的，与 nanoFramework 上一样，因此停止应答的服务器会占住调用线程，每次读取套接字最长都可能等上五分钟。<code>Timeout</code> 缩短每一次读取的等待时间，无论读取的是响应头部还是响应体，因此服务器一旦沉默，在这么长时间内收不到数据，调用就会以 <code>HttpRequestException</code> 失败。持续发送数据的服务器则不会被切断，无论它发送得多慢。</p>
+<p>对于 <code>https://</code> 地址，TLS 在包内部运行，由 BouncyCastle 的托管代码实现，因为 BCL 的 <code>SslStream</code> 会调用 OpenSSL，而内核中没有 OpenSSL。只有当服务器的证书链通向 Mozilla 的某个根证书（这些根证书内嵌在包中），并且其证书写明的主机名正是客户端所请求的那个时，客户端才会继续。第一次握手比之后的握手耗时更长，因为它要先解析这些根证书。</p>
+<p>客户端的三个属性会改变它提供的协议版本以及它信任的对象。<code>SslProtocols</code> 默认只有 TLS 1.2，与 nanoFramework 上一样，设为 <code>SslProtocols.None</code> 则还会提供 TLS 1.3；该属性使用的是 .NET 自己的 <code>SslProtocols</code> 枚举，因此文件需要 <code>using System.Security.Authentication;</code>。<code>HttpsAuthentCert</code> 接受你自己的证书颁发机构的证书，类型是该包的 <code>X509Certificate</code>（PEM 或 DER），此后该客户端信任由这个机构签发的服务器，而不再信任 Mozilla 的根证书。<code>SslVerification = SslVerification.NoVerification</code> 会完全跳过检查，这会让内核与服务器之间的任何人都能冒充服务器并读取流量，因此只应在测试中使用。</p>
+<p>无论如何设置，内核都要为这一交换过程提供两样东西。会话密钥来自 BouncyCastle 的生成器，它从 <code>RandomNumberGenerator</code> 获取种子，而后者在 Cosmos 中就是内核 CSPRNG（<a href="random.html">随机数</a>）。证书的日期与 <code>DateTime.UtcNow</code> 进行比较，因此内核的时钟必须准确。在 QEMU 下它是准确的，因为 QEMU 的 RTC 保存的是 UTC 时间。</p>
+<p><a id="serve-requests"></a></p>
+<h3 id="处理请求">处理请求</h3>
+<p><code>HttpListener</code> 是服务器端。<code>GetContext</code> 接受连接并交回下一个请求，在请求到达或监听器停止之前它不会返回，因此循环运行在自己的线程上，而不是在 <code>Run()</code> 中，否则只要没有请求到来，它就会一直占住 <code>Run()</code>：</p>
+<pre><code class="lang-csharp">using System.Text;
+using System.Threading;
+using Cosmos.Network.Http;
+
+HttpListener listener = new HttpListener(&quot;http&quot;, 8080);
+listener.Start();
+
+new Thread(() =&gt;
+{
+    while (listener.IsListening)
+    {
+        HttpListenerContext context = listener.GetContext();
+        if (context == null)
+        {
+            break; // Stop() or Close() was called from another thread
+        }
+
+        byte[] body = Encoding.UTF8.GetBytes(&quot;Hello from Cosmos! You asked for &quot; + context.Request.RawUrl + &quot;\n&quot;);
+        HttpListenerResponse response = context.Response;
+        response.ContentType = &quot;text/plain&quot;;
+        response.ContentLength64 = body.Length;
+        response.OutputStream.Write(body, 0, body.Length);
+        response.Close();
+    }
+}).Start();
+</code></pre>
+<p>调用 <code>GetContext</code> 的线程服务所有连接（包括 TLS 握手），而不会因等待某一个客户端而停住。请在同一个线程上处理它返回的每个请求，因为监听器的套接字只归为它服务的那个线程使用：关闭响应会把一个保持打开（keep-alive）的连接交还给 <code>GetContext</code> 所监视的列表。</p>
+<p><code>Stop()</code> 可以从另一个线程调用。此时，正在等待请求的 <code>GetContext</code> 会在 50 ms 内返回 <code>null</code>，而正在处理请求的线程在作出应答后会发现 <code>IsListening</code> 为 false，因此无论哪种情况，循环都会结束。</p>
+<p>要在 QEMU 用户模式网络下访问该服务器，请转发它的端口，然后从主机上发起请求：</p>
+<pre><code class="lang-console">$ cosmos run --hostfwd tcp::8080-:8080    # in one terminal
+$ curl http://localhost:8080/hello        # in another
+Hello from Cosmos! You asked for /hello
+</code></pre>
+<p>用 <code>&quot;https&quot;</code> 前缀创建的监听器，在 <code>HttpsCert</code> 持有证书及其私钥（PEM 或 DER）后即可提供 <code>https://</code> 服务，默认提供 TLS 1.3 和 1.2。当证书和私钥分别是两个 PEM 文本字符串时，可以像下面这样创建监听器，然后像上面一样启动它，并用同一个循环处理请求：</p>
+<pre><code class="lang-csharp">HttpListener listener = new HttpListener(&quot;https&quot;, 443)
+{
+    HttpsCert = new X509Certificate2(certificatePem, privateKeyPem, null),
+};
+</code></pre>
+<p>这里的 <code>X509Certificate2</code> 是该包的类，而不是 <code>System.Security.Cryptography.X509Certificates</code> 中的那个，因为 .NET 的那个同样通过 OpenSSL 解析证书。它的构造函数以私钥作为第二个参数，以私钥的密码作为第三个参数，私钥未加密时传 <code>null</code>。以同样的方式转发端口（<code>--hostfwd tcp::8443-:443</code>）后，当 <code>cert.pem</code> 是一个写明 <code>localhost</code> 的证书时，监听器会应答 <code>curl --cacert cert.pem https://localhost:8443/</code>。</p>
 <h2 id="dns">DNS</h2>
 <p>有两个 API 可以解析名称：标准的 <code>System.Net.Dns</code>，以及 Cosmos 的 <code>DnsClient</code>。无论使用哪一个，都要注册一个域名服务器，因为没有可供读取的 <code>resolv.conf</code>，而域名服务器通常由 DHCP 提供：</p>
 <pre><code class="lang-csharp">DnsConfig.Add(new Address4(1, 1, 1, 1));   // Cloudflare public DNS
@@ -507,7 +583,7 @@ icmp.Close();
 <li>不支持反向查找。<code>Dns.GetHostEntry(IPAddress)</code> 需要针对 <code>in-addr.arpa</code> 发出 PTR 查询，而解析器不会发送这种查询，因此它会抛出异常，而不是返回名称。</li>
 <li><code>Dns</code> 的异步重载未经验证。<code>GetHostAddressesAsync</code> 以及 <code>Begin</code>/<code>End</code> 方法对都会到达同一个 plug，但它们是通过把阻塞调用排入线程池来到达的，而这个内核尚未针对线程池进行过测试。阻塞重载才是经过测试的路径。</li>
 <li>IPv6 止步于链路。有链路本地地址、邻居发现、ICMPv6 回显，UDP 和 TCP 现在也通过与 IPv4 相同的数据包类在 IPv6 上传输，但没有路由表，因此每个目标都必须位于链路上。没有 SLAAC 或 DHCPv6，除链路本地地址外没有其他地址配置，而且在套接字 plug 中 <code>IPAddress</code> 仍然只支持 IPv4，因此标准的 .NET 套接字类只能访问 IPv4。</li>
-<li>没有 TLS，因此没有 <code>HttpClient</code>/HTTPS：只有原始 TCP。</li>
+<li>TLS 不属于内核，因为 BCL 的 <code>SslStream</code> 会调用 OpenSSL，而内核中没有 OpenSSL。<code>https://</code> 改由 Cosmos.Network.Http 包处理（<a href="#http-and-https">HTTP 和 HTTPS</a>），它只支持 HTTP/1.1，不检查证书吊销，并且与它所基于的标准套接字类一样只能访问 IPv4。</li>
 <li>多块网卡都会被注册和配置，出站数据包通过将源地址与每个接口的配置进行匹配来路由，因此 <code>NetworkManager.Primary</code> 只决定不经路由的辅助方法（<code>NetworkManager.Send</code>、不带句柄的 <code>IPConfig.Enable</code>）的去向。</li>
 <li>驱动工具包撤回的接口会离开管理器的表，但其 IP 配置不会被移除，而且 <code>NetworkAdapter</code> 句柄仍按位置索引，因此在撤回之前获取的句柄可能指向后来移入该位置的设备。</li>
 <li>不支持半关闭：在已建立的 TCP 连接上调用 <code>Close()</code> 时，会期望对端在 5 秒内响应 FIN 握手，如果对端保持连接打开则会抛出异常。</li>
@@ -579,6 +655,18 @@ Network device                                          (e1000e or virtio-net, o
 <tr>
 <td>接受 TCP 连接</td>
 <td><code>TcpListener.Start()</code>、<code>Pending()</code>、<code>AcceptTcpClient()</code></td>
+</tr>
+<tr>
+<td>通过 HTTP 或 HTTPS 获取网页</td>
+<td><code>HttpClient.Get(requestUri)</code>、<code>HttpClient.GetString(requestUri)</code></td>
+</tr>
+<tr>
+<td>处理 HTTP 请求</td>
+<td><code>new HttpListener(&quot;http&quot;, port)</code>、<code>Start()</code>、<code>GetContext()</code></td>
+</tr>
+<tr>
+<td>提供 HTTPS 服务</td>
+<td><code>new HttpListener(&quot;https&quot;, port)</code>、<code>HttpListener.HttpsCert</code></td>
 </tr>
 <tr>
 <td>注册域名服务器</td>
