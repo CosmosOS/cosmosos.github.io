@@ -167,7 +167,7 @@
 <td>网络接口</td>
 <td>✅</td>
 <td>✅</td>
-<td></td>
+<td>基于驱动工具包的 Intel E1000E（它同样会绑定 8254x e1000）和 virtio-net。通过标准的 <code>System.Net.Sockets</code> 和 <code>System.Net.Dns</code> 提供 ARP、IPv4、IPv6 链路本地地址、UDP、TCP、DHCP 和 DNS；Telnet、FTP 和 HTTP（客户端和服务器）以包的形式提供。</td>
 </tr>
 <tr>
 <td>定时器 / 时钟</td>
@@ -241,6 +241,11 @@
 <td><strong>USB 支持</strong></td>
 <td>✅</td>
 <td>xHCI、EHCI 和 OHCI 主机控制器，支持集线器和热插拔（x64 + ARM64），均以驱动工具包驱动程序的形式实现，并配有 HID 启动键盘、HID 启动鼠标和大容量存储（Bulk-Only Transport）类驱动程序。不支持 UHCI（Intel 通过端口 I/O 访问的 USB 1.1 配套控制器）。</td>
+</tr>
+<tr>
+<td><strong>HTTPS</strong></td>
+<td>✅</td>
+<td>由 BouncyCastle 以托管代码实现 TLS 1.3 和 1.2，通过 Cosmos.Network.Http 包提供（<a href="articles/user/network.html#http-and-https">HTTP 和 HTTPS</a>）：<code>HttpClient</code> 和 <code>HttpListener</code> 支持 <code>https://</code>，并根据 Mozilla 的根证书校验证书。</td>
 </tr>
 </tbody>
 </table>
