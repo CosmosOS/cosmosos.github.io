@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.97/docs/fr/articles/dev/coding-guidelines.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.98/docs/fr/articles/dev/coding-guidelines.md/#L1">
       <meta name="loc:inThisArticle" content="Dans cet article">
       <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
       <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
@@ -260,7 +260,7 @@ Cosmos.Kernel.Drivers (the shipped drivers, a driver assembly held to the User l
 <p>Ce n'est autorisé pour l'instant que dans <code>Cosmos.Kernel.Core</code>, mais cela pourrait changer à l'avenir.</p>
 <p><a id="namespaces-follow-folders"></a></p>
 <h3 id="les-espaces-de-noms-suivent-les-dossiers">Les espaces de noms suivent les dossiers</h3>
-<p>L'espace de noms d'un fichier est le nom de son projet suivi des dossiers situés entre le projet et le fichier : <code>Cosmos.Kernel.Core/Scheduler/SchedulerThread.cs</code> déclare <code>Cosmos.Kernel.Core.Scheduler</code>. Le build l'impose avec IDE0130 au niveau erreur pour chaque projet <code>src/Cosmos.Kernel*</code>, pour les noyaux de test, pour les tests unitaires côté hôte de <code>tests/Cosmos.Kernel.Tests.System</code> et pour <code>examples/DevKernel</code>, si bien que <code>dotnet build</code> échoue sur un fichier qui s'en écarte (la CI de formatage vérifie les projets de <code>nativeaot-patcher.slnx</code>, qui laisse de côté les noyaux de test). Déplacez le fichier ou corrigez l'espace de noms plutôt que d'ajouter une exemption. Les exemptions, chacune avec sa raison, terminent <code>.editorconfig</code> : les noms qu'ILC reconnaît par leur nom complet (chaque <code>LibraryInitializer</code>, <code>EagerStaticClassConstructionAttribute</code>, <code>Core/Runtime/Stdllib.cs</code>), le <code>IsExternalInit</code> des générateurs de source (le marqueur d'accesseur init du compilateur C#, qui doit se trouver dans <code>System.Runtime.CompilerServices</code>), les dossiers <code>Bridge/Import</code> et <code>Bridge/Export</code>, dont les fichiers partagent l'espace de noms <code>Bridge</code> du projet, le code tiers embarqué sous <code>Cosmos.Kernel.System/ThirdParty/</code> et les copies de dotnet/runtime sous <code>Cosmos.Kernel.Core/Runtime/Internal/</code>. IDE0130 ne vérifie ni un espace de noms qui contient un type partiel réparti sur plusieurs fichiers (chaque classe <code>[LibraryImport]</code>) ni un espace de noms imbriqué ; ceux-là suivent la règle sans vérification.</p>
+<p>L'espace de noms d'un fichier est le nom de son projet suivi des dossiers situés entre le projet et le fichier : <code>Cosmos.Kernel.Core/Scheduler/SchedulerThread.cs</code> déclare <code>Cosmos.Kernel.Core.Scheduler</code>. Le build l'impose avec IDE0130 au niveau erreur pour chaque projet <code>src/Cosmos.Kernel*</code>, pour les noyaux de test, pour les tests unitaires côté hôte de <code>tests/Cosmos.Kernel.Tests.System</code> et pour <code>examples/DevKernel</code>, si bien que <code>dotnet build</code> échoue sur un fichier qui s'en écarte (la CI de formatage vérifie les projets de <code>cosmos.slnx</code>, qui laisse de côté les noyaux de test). Déplacez le fichier ou corrigez l'espace de noms plutôt que d'ajouter une exemption. Les exemptions, chacune avec sa raison, terminent <code>.editorconfig</code> : les noms qu'ILC reconnaît par leur nom complet (chaque <code>LibraryInitializer</code>, <code>EagerStaticClassConstructionAttribute</code>, <code>Core/Runtime/Stdllib.cs</code>), le <code>IsExternalInit</code> des générateurs de source (le marqueur d'accesseur init du compilateur C#, qui doit se trouver dans <code>System.Runtime.CompilerServices</code>), les dossiers <code>Bridge/Import</code> et <code>Bridge/Export</code>, dont les fichiers partagent l'espace de noms <code>Bridge</code> du projet, le code tiers embarqué sous <code>Cosmos.Kernel.System/ThirdParty/</code> et les copies de dotnet/runtime sous <code>Cosmos.Kernel.Core/Runtime/Internal/</code>. IDE0130 ne vérifie ni un espace de noms qui contient un type partiel réparti sur plusieurs fichiers (chaque classe <code>[LibraryImport]</code>) ni un espace de noms imbriqué ; ceux-là suivent la règle sans vérification.</p>
 <p><a id="driver-folders"></a></p>
 <h3 id="dossiers-des-pilotes">Dossiers des pilotes</h3>
 <p><code>Cosmos.Kernel.Drivers</code> range chaque pilote à trois niveaux de profondeur, le type de bus, puis la catégorie, puis le pilote, et l'espace de noms de chaque fichier suit son dossier :</p>
@@ -1254,7 +1254,7 @@ public static class PageAllocator { ... }
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.97/docs/fr/articles/dev/coding-guidelines.md/#L1" class="edit-link">Modifier cette page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.98/docs/fr/articles/dev/coding-guidelines.md/#L1" class="edit-link">Modifier cette page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

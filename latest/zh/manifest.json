@@ -2995,6 +2995,20 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "../api/Cosmos.Kernel.System.Input.Layouts.ITStandardLayout.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cosmos.Kernel.System.Input.Layouts.ITStandardLayout.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Cosmos.Kernel.System.Input.Layouts.ITStandardLayout",
+      "Summary": "<p sourcefile=\"../api/Cosmos.Kernel.System.Input.Layouts.ITStandardLayout.yml\" sourcestartlinenumber=\"1\">Represents the standard Italian (IT) keyboard layout.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "../api/Cosmos.Kernel.System.Input.Layouts.TRStandardLayout.yml",
       "output": {
         ".html": {
@@ -4562,6 +4576,16 @@
       "output": {
         "resource": {
           "relative_path": "articles/user/images/network-dns.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "../articles/user/images/network-http.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/user/images/network-http.png"
         }
       },
       "version": ""

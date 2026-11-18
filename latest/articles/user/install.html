@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.97/docs/articles/user/install.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.98/docs/articles/user/install.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -102,6 +102,30 @@
 <pre><code class="lang-powershell">cosmos check
 </code></pre>
 <p>To uninstall, use <strong>Add or Remove Programs</strong> in Windows Settings.</p>
+<h2 id="windows-on-arm">Windows on ARM</h2>
+<p>A Windows machine with an ARM64 processor, such as a Snapdragon one, has an installer of its own on the same <a href="https://github.com/CosmosOS/Cosmos/releases">Releases</a> page:</p>
+<pre><code>CosmosSetup-&lt;version&gt;-windows-arm64.exe
+</code></pre>
+<p>It installs Clang, LLD, QEMU and GDB built for ARM64, and is used like the x64 installer. That one runs on an ARM64 machine too, with every tool under the x64 emulation of Windows. <code>cosmos install --tools</code> then replaces those tools with the ARM64 ones.</p>
+<p>The machine needs Windows 11, where the x64 emulation arrived, because two programs stay x64 on it:</p>
+<table>
+<thead>
+<tr>
+<th>Program</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>xorriso</td>
+<td>It is built on the MSYS2 runtime, which exists for x64 only, so the ARM64 installer carries the x64 build.</td>
+</tr>
+<tr>
+<td>ILCompiler</td>
+<td>The SDK runs the x64 one (<code>runtime.win-x64.Microsoft.DotNet.ILCompiler</code>) on every Windows host.</td>
+</tr>
+</tbody>
+</table>
 <h2 id="linux--macos">Linux / macOS</h2>
 <p>Install the Cosmos CLI and all dependencies:</p>
 <pre><code class="lang-bash">dotnet tool install -g Cosmos.Tools
@@ -213,7 +237,7 @@ cosmos run -a arm64
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.97/docs/articles/user/install.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.98/docs/articles/user/install.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>
