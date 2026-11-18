@@ -105,6 +105,31 @@
 <pre><code class="lang-powershell">cosmos check
 </code></pre>
 <p>Pour désinstaller, utilisez <strong>Ajouter ou supprimer des programmes</strong> dans les Paramètres de Windows.</p>
+<p><a id="windows-on-arm"></a></p>
+<h2 id="windows-sur-arm">Windows sur ARM</h2>
+<p>Une machine Windows à processeur ARM64, un Snapdragon par exemple, a son propre installateur sur la même page <a href="https://github.com/CosmosOS/Cosmos/releases">Releases</a> :</p>
+<pre><code>CosmosSetup-&lt;version&gt;-windows-arm64.exe
+</code></pre>
+<p>Il installe Clang, LLD, QEMU et GDB compilés pour ARM64 et s'utilise comme l'installateur x64. Ce dernier fonctionne aussi sur une machine ARM64, où tous ses outils passent par l'émulation x64 de Windows. <code>cosmos install --tools</code> remplace ensuite ces outils par ceux pour ARM64.</p>
+<p>La machine doit être sous Windows 11, où l'émulation x64 est apparue, car deux programmes y restent en x64 :</p>
+<table>
+<thead>
+<tr>
+<th>Programme</th>
+<th>Pourquoi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>xorriso</td>
+<td>Il repose sur le runtime MSYS2, qui n'existe que pour x64 : l'installateur ARM64 embarque donc la version x64.</td>
+</tr>
+<tr>
+<td>ILCompiler</td>
+<td>Le SDK exécute celui pour x64 (<code>runtime.win-x64.Microsoft.DotNet.ILCompiler</code>) sur tout hôte Windows.</td>
+</tr>
+</tbody>
+</table>
 <h2 id="linux--macos">Linux / macOS</h2>
 <p>Installez la CLI Cosmos et toutes ses dépendances :</p>
 <pre><code class="lang-bash">dotnet tool install -g Cosmos.Tools
