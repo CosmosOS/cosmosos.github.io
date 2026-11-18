@@ -126,7 +126,7 @@ dotnet test tests/Cosmos.Kernel.Tests.System      # the kernel library tests
 <li><code>FindPluggedAssemblies_ShouldReturnMatchingAssemblies</code></li>
 </ul>
 </li>
-<li><strong>Cosmos.Tests.SourceGenerators</strong>：在内存中的编译上运行 <code>CosmosEntryPointGenerator</code> 和 <code>DriverManifestGenerator</code>，并精确检查生成的入口点、驱动程序清单和 <code>COSMOSGEN</code> 诊断；<code>FeatureParityTests</code> 使 <code>DriverFeature</code>、<code>KernelFeatures</code> 和测试桩保持一致，<code>ReferencedDriverTests</code> 覆盖来自被引用程序集的驱动程序，包括公共驱动程序和通过 <code>InternalsVisibleTo</code> 授权访问的驱动程序，<code>CachingTests</code> 检查添加驱动程序后入口点仍保持缓存。</li>
+<li><strong>Cosmos.Tests.SourceGenerators</strong>：在内存中的编译上运行 <code>CosmosEntryPointGenerator</code> 和 <code>DriverManifestGenerator</code>，并精确检查生成的入口点、驱动程序清单和 <code>COSMOSGEN</code> 诊断；<code>FeatureParityTests</code> 使 <code>DriverFeature</code>、<code>KernelFeatures</code> 和测试桩保持一致，<code>ReferencedDriverTests</code> 覆盖来自被引用程序集的驱动程序，包括公共驱动程序和通过 <code>InternalsVisibleTo</code> 授权访问的驱动程序，<code>VisualBasicTests</code> 检查 Visual Basic 内核得到的 Visual Basic 文件，<code>CachingTests</code> 检查添加驱动程序后入口点仍保持缓存。</li>
 <li><strong>Cosmos.Tests.Patcher</strong>：确保 plug 被成功应用到目标方法和类型上。
 <ul>
 <li><code>PatchAssembly_ShouldSkipWhenNoMatchingPlugs</code></li>

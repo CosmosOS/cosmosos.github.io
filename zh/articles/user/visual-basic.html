@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+      <title>Visual Basic 内核 | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Visual Basic 内核 | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/user/visual-basic.md/#L1">
+      <meta name="loc:inThisArticle" content="本文内容">
+      <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
+      <meta name="loc:searchNoResults" content="没有“{query}”的结果">
+      <meta name="loc:tocFilter" content="按标题筛选">
+      <meta name="loc:nextArticle" content="下一篇">
+      <meta name="loc:prevArticle" content="上一篇">
+      <meta name="loc:themeLight" content="浅色">
+      <meta name="loc:themeDark" content="深色">
+      <meta name="loc:themeAuto" content="自动">
+      <meta name="loc:changeTheme" content="切换主题">
+      <meta name="loc:copy" content="复制">
+      <meta name="loc:downloadPdf" content="下载 PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="搜索" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="visual-basic-kernels"></a></p>
+<h1 id="visual-basic-内核">Visual Basic 内核</h1>
+<p>本文将介绍如何用 Visual Basic 编写 Cosmos Gen3 内核：创建项目、内核类、接受 span 的成员，以及需要用 C# 编写的类。</p>
+<p>Visual Basic 内核的构建方式与 C# 内核相同。它的 <code>.vbproj</code> 使用同一个 <code>Cosmos.Sdk</code>，支持同样的功能开关，<code>cosmos build</code> 把它构建成面向 x64 或 ARM64 的可启动 ISO，<code>cosmos run</code> 则在 QEMU 中启动这个 ISO。区别来自语言本身：Visual Basic 无法声明 <code>Span(Of T)</code> 或 <code>ReadOnlySpan(Of T)</code>。Visual Basic 内核仍然可以调用接受 span 的成员，但少数自身必须声明 span 的类需要用 C# 编写。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>C#</th>
+<th>Visual Basic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>创建命令</td>
+<td><code>cosmos new MyKernel</code></td>
+<td><code>cosmos new MyKernel -l vb</code></td>
+</tr>
+<tr>
+<td>项目文件</td>
+<td><code>MyKernel.csproj</code></td>
+<td><code>MyKernel.vbproj</code></td>
+</tr>
+<tr>
+<td>内核类所在文件</td>
+<td><code>Kernel.cs</code></td>
+<td><code>Kernel.vb</code></td>
+</tr>
+<tr>
+<td>调用接受 span 的成员</td>
+<td>可以</td>
+<td>可以，传入 <code>String</code> 或数组</td>
+</tr>
+<tr>
+<td>声明接受或返回 span 的成员</td>
+<td>可以</td>
+<td>不可以，构建错误（<code>BC30668</code>）</td>
+</tr>
+</tbody>
+</table>
+<p>如果你发现 bug 或任何异常，请在我们的仓库中<a href="https://github.com/CosmosOS/Cosmos/issues/new/choose">提交 issue</a>。</p>
+<hr>
+<p><a id="creating-the-kernel"></a></p>
+<h2 id="创建内核">创建内核</h2>
+<p><code>cosmos new</code> 会在一个以项目名命名的文件夹中创建内核项目。它的 <code>-l</code> 选项用来选择语言：<code>csharp</code>（默认）或 <code>vb</code>，而构建和运行内核的命令在两种语言下完全相同：</p>
+<pre><code class="lang-bash">cosmos new MyKernel -l vb
+cd MyKernel
+cosmos build
+cosmos run
+</code></pre>
+<p>VS Code、Visual Studio 和 Rider 的 Cosmos 扩展（<a href="install.html#ide-extensions">IDE 扩展</a>）在创建内核时会询问使用哪种语言。</p>
+<p>这个文件夹里的内容与 C# 内核的文件夹相同，只是 <code>MyKernel.csproj</code> 和 <code>Kernel.cs</code> 换成了 <code>MyKernel.vbproj</code> 和 <code>Kernel.vb</code>。本指南其他文章要求写进 <code>.csproj</code> 的属性（例如功能开关），在这里写进 <code>.vbproj</code>，写法不变。下面这个属性会把网络栈排除在内核之外：</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;CosmosEnableNetwork&gt;false&lt;/CosmosEnableNetwork&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<hr>
+<p><a id="the-kernel-class"></a></p>
+<h2 id="内核类">内核类</h2>
+<p><code>Kernel.vb</code> 中存放内核类。它派生自 <code>Cosmos.Kernel.System.Kernel</code>，并重写 <code>BeforeRun</code> 和 <code>Run</code>，与<a href="startup.html#a-minimal-kernel">内核启动</a>中的 C# 内核一样：</p>
+<pre><code class="lang-vb">Imports Sys = Cosmos.Kernel.System
+
+Public Class Kernel
+    Inherits Sys.Kernel
+
+    Protected Overrides Sub BeforeRun()
+        Console.WriteLine(&quot;Cosmos booted successfully!&quot;)
+    End Sub
+
+    Protected Overrides Sub Run()
+        Console.Write(&quot;Input: &quot;)
+        Dim input As String = Console.ReadLine()
+        Console.Write(&quot;Text typed: &quot;)
+        Console.WriteLine(input)
+    End Sub
+End Class
+</code></pre>
+<p>这个类声明在所有 <code>Namespace</code> 块之外，SDK 正是因此才能找到它。SDK 按 <code>&lt;RootNamespace&gt;.Kernel</code> 这个名称查找内核类，而 Visual Basic 会把声明在所有块之外的类放进项目的根命名空间，也就是项目名：这里的类就是 <code>MyKernel.Kernel</code>。<code>Namespace</code> 块会嵌套在根命名空间之下，因此声明在 <code>Namespace Boot</code> 中的类是 <code>MyKernel.Boot.Kernel</code>，此时构建会停在 <code>BC30002: Type 'Global.MyKernel.Kernel' is not defined</code>，直到 <code>.vbproj</code> 指明这个类：</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;CosmosKernelClass&gt;MyKernel.Boot.Kernel&lt;/CosmosKernelClass&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p>SDK 还会打开 <code>Option Strict</code>。后期绑定调用是指在 <code>Object</code> 上发起、由 Visual Basic 等到内核运行时才查找成员的调用，它依赖反射，而预先编译的内核无法指望反射，因此编译器在构建时就拒绝它（<code>BC30574</code>）。</p>
+<hr>
+<p><a id="members-that-take-a-span"></a></p>
+<h2 id="接受-span-的成员">接受 span 的成员</h2>
+<p>Cosmos API 和 .NET 中都有一些成员接受 span：<code>VfsManager.TryMount</code> 的一个重载以 <code>ReadOnlySpan(Of Char)</code> 接收挂载源，<code>IBlockDevice.ReadBlock</code> 则填充一个 <code>Span(Of Byte)</code>。调用它们时传入 <code>String</code> 或数组即可，编译器会转换参数，就像本页末尾那个内核中的这两个调用，其中 <code>&quot;&quot;</code> 是挂载源，<code>sector</code> 是一个 <code>Byte</code> 数组：</p>
+<pre><code class="lang-vb">VfsManager.TryMount(&quot;ramfat&quot;, &quot;&quot;, MountFlags.None, &quot;/mnt&quot;, mount)
+ramDisk.ReadBlock(0, 1, sector)
+</code></pre>
+<p>Visual Basic 做不到的是写出这个类型的名称。<code>Span(Of T)</code> 和 <code>ReadOnlySpan(Of T)</code> 是 ref struct，这类类型不受该语言支持，把参数、返回类型、字段或局部变量声明为其中之一都会导致构建错误：</p>
+<pre><code>error BC30668: 'Span(Of Byte)' is obsolete: 'Types with embedded references are not supported in this version of your compiler.'.
+</code></pre>
+<hr>
+<p><a id="classes-written-in-c"></a></p>
+<h2 id="用-c-编写的类">用 C# 编写的类</h2>
+<p>重写或实现一个成员就意味着要声明它的参数，因此，只要一个类必须重写或实现的成员接受或返回 span，这个类就无法用 Visual Basic 编写。在本指南让你编写的类当中，有三个属于这种情况：</p>
+<table>
+<thead>
+<tr>
+<th>要编写的内容</th>
+<th>类需要声明</th>
+<th>说明见</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>你自己的磁盘，例如 RAM 磁盘</td>
+<td><code>IBlockDevice.ReadBlock</code> 和 <code>IBlockDevice.WriteBlock</code></td>
+<td><a href="filesystem.html#try-it-on-a-ram-disk">在 RAM 磁盘上尝试</a></td>
+</tr>
+<tr>
+<td>在读取时即时计算的声音</td>
+<td><code>AudioStream.Read</code></td>
+<td><a href="audio.html#generating-sound">生成声音</a></td>
+</tr>
+<tr>
+<td>驱动程序</td>
+<td><code>Driver.Matches</code></td>
+<td><a href="drivers.html">编写驱动程序</a></td>
+</tr>
+</tbody>
+</table>
+<p>文件系统驱动程序所实现的接口也属于这种情况，例如其中的 <code>IFileOperations.Read</code>。</p>
+<p>请把这样的类写在一个 C# 类库中，并让内核引用该类库。以 RAM 磁盘为例，在包含 <code>MyKernel</code> 的文件夹中运行这三条命令：</p>
+<pre><code class="lang-bash">dotnet new classlib -lang &quot;C#&quot; -o MyKernel.Storage
+dotnet add MyKernel.Storage package Cosmos.Kernel.HAL --version &lt;version&gt;
+dotnet add MyKernel reference MyKernel.Storage
+</code></pre>
+<p><code>&lt;version&gt;</code> 是 <code>MyKernel.vbproj</code> 在 <code>Sdk=&quot;Cosmos.Sdk/...&quot;</code> 属性中写明的版本，这样类库和内核就是针对同一个 Cosmos 版本编译的。<code>Cosmos.Kernel.HAL</code> 是包含 <code>IBlockDevice</code> 的包；派生自 <code>AudioStream</code> 的类则需要改用 <code>Cosmos.Kernel.System</code>，而驱动程序库按<a href="drivers.html#a-driver-library">驱动程序库</a>所述搭建，其中包括项目用来确认实验性驱动工具包（<code>COSMOS0003</code>）的 <code>NoWarn</code> 行。内核旁边有了类库之后，请在同时包含两者的文件夹中运行 <code>cosmos update</code>：它会在那里找到每个项目的版本，并把两者一起更新。</p>
+<p>把模板创建的 <code>Class1.cs</code> 换成 <code>MemoryBlockDevice.cs</code>。它就是<a href="filesystem.html#try-it-on-a-ram-disk">在 RAM 磁盘上尝试</a>中的那个类，只是声明为 <code>public</code>，以便内核能看到它：</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.HAL.Devices.Storage;
+
+namespace MyKernel.Storage;
+
+public sealed class MemoryBlockDevice : IBlockDevice
+{
+    private readonly byte[] _storage;
+
+    public MemoryBlockDevice(string name, ulong blockSize, ulong blockCount)
+    {
+        Name = name;
+        BlockSize = blockSize;
+        BlockCount = blockCount;
+        _storage = new byte[blockSize * blockCount];
+    }
+
+    public string Name { get; }
+    public ulong BlockSize { get; }
+    public ulong BlockCount { get; }
+
+    public void ReadBlock(ulong blockNo, ulong blockCount, Span&lt;byte&gt; data)
+        =&gt; _storage.AsSpan((int)(blockNo * BlockSize), (int)(blockCount * BlockSize)).CopyTo(data);
+
+    public void WriteBlock(ulong blockNo, ulong blockCount, ReadOnlySpan&lt;byte&gt; data)
+        =&gt; data.Slice(0, (int)(blockCount * BlockSize)).CopyTo(_storage.AsSpan((int)(blockNo * BlockSize)));
+
+    public void Flush() { }
+}
+</code></pre>
+<p>内核创建这个磁盘，将其格式化并挂载，再通过 <code>System.IO</code> 使用它，凡是成员接受 span 的地方都传入 <code>String</code> 或数组：</p>
+<pre><code class="lang-vb">Imports System.IO
+Imports Cosmos.Kernel.System.FileSystem
+Imports Cosmos.Kernel.System.FileSystem.Fat
+Imports MyKernel.Storage
+Imports Sys = Cosmos.Kernel.System
+
+Public Class Kernel
+    Inherits Sys.Kernel
+
+    Protected Overrides Sub BeforeRun()
+        Dim ramDisk As New MemoryBlockDevice(&quot;RAMDISK&quot;, 512, 65536)
+        Dim fat As New FatFileSystemType(ramDisk)
+        Dim options As New FatFormatOptions With {.Type = FatType.Fat16}
+        Dim mount As VfsMount = Nothing
+
+        If Not VfsManager.RegisterFileSystem(&quot;ramfat&quot;, fat) OrElse
+           Not VfsManager.TryFormat(&quot;ramfat&quot;, &quot;&quot;, options) OrElse
+           Not VfsManager.TryMount(&quot;ramfat&quot;, &quot;&quot;, MountFlags.None, &quot;/mnt&quot;, mount) Then
+            Console.WriteLine(&quot;RAM disk setup failed.&quot;)
+            Return
+        End If
+
+        File.WriteAllText(&quot;/mnt/hello.txt&quot;, &quot;Hello from Visual Basic&quot;)
+        Console.WriteLine(File.ReadAllText(&quot;/mnt/hello.txt&quot;))
+
+        Dim sector(511) As Byte
+        ramDisk.ReadBlock(0, 1, sector)
+        Console.WriteLine(&quot;Boot sector ends with &quot; &amp; sector(510).ToString(&quot;X2&quot;) &amp; &quot; &quot; &amp; sector(511).ToString(&quot;X2&quot;))
+    End Sub
+
+    Protected Overrides Sub Run()
+        Sys.Power.Halt()
+    End Sub
+End Class
+</code></pre>
+<p>内核会打印它所写入文件的内容，然后是直接从磁盘读出的、位于 FAT 引导扇区末尾的两个字节：</p>
+<pre><code>Hello from Visual Basic
+Boot sector ends with 55 AA
+</code></pre>
+<hr>
+<p><a id="summary"></a></p>
+<h2 id="总结">总结</h2>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>创建 Visual Basic 内核</td>
+<td><code>cosmos new MyKernel -l vb</code></td>
+</tr>
+<tr>
+<td>构建并运行它</td>
+<td><code>cosmos build</code>、<code>cosmos run</code></td>
+</tr>
+<tr>
+<td>设置功能开关</td>
+<td>在 <code>.vbproj</code> 中写 <code>&lt;CosmosEnableNetwork&gt;false&lt;/CosmosEnableNetwork&gt;</code></td>
+</tr>
+<tr>
+<td>在 <code>Namespace</code> 块中声明内核类</td>
+<td>在 <code>.vbproj</code> 中写 <code>&lt;CosmosKernelClass&gt;MyKernel.Boot.Kernel&lt;/CosmosKernelClass&gt;</code></td>
+</tr>
+<tr>
+<td>向 <code>ReadOnlySpan(Of Char)</code> 参数传入文本</td>
+<td>一个 <code>String</code></td>
+</tr>
+<tr>
+<td>向 <code>Span(Of Byte)</code> 参数传入缓冲区</td>
+<td>一个 <code>Byte</code> 数组</td>
+</tr>
+<tr>
+<td>编写声明了 span 的类</td>
+<td>内核所引用的 C# 类库</td>
+</tr>
+</tbody>
+</table>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/gen3/docs/zh/articles/user/visual-basic.md/#L1" class="edit-link">编辑此页</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
