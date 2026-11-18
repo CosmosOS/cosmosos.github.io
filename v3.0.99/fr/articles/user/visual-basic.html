@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      <title>Noyaux en Visual Basic | Cosmos Gen 3 </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Noyaux en Visual Basic | Cosmos Gen 3 ">
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.99/docs/fr/articles/user/visual-basic.md/#L1">
+      <meta name="loc:inThisArticle" content="Dans cet article">
+      <meta name="loc:searchResultsCount" content="{count} r&#233;sultats pour &#171; {query} &#187;">
+      <meta name="loc:searchNoResults" content="Aucun r&#233;sultat pour &#171; {query} &#187;">
+      <meta name="loc:tocFilter" content="Filtrer par titre">
+      <meta name="loc:nextArticle" content="Suivant">
+      <meta name="loc:prevArticle" content="Pr&#233;c&#233;dent">
+      <meta name="loc:themeLight" content="Clair">
+      <meta name="loc:themeDark" content="Sombre">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Changer de th&#232;me">
+      <meta name="loc:copy" content="Copier">
+      <meta name="loc:downloadPdf" content="T&#233;l&#233;charger le PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="Cosmos Gen 3">
+            Cosmos Gen 3
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Rechercher" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p><a id="visual-basic-kernels"></a></p>
+<h1 id="noyaux-en-visual-basic">Noyaux en Visual Basic</h1>
+<p>Dans cet article, nous verrons comment écrire un noyau Cosmos Gen3 en Visual Basic : créer le projet, la classe du noyau, les membres qui prennent un span, et les classes qui s'écrivent en C#.</p>
+<p>Un noyau Visual Basic se construit comme un noyau C#. Son <code>.vbproj</code> utilise le même <code>Cosmos.Sdk</code> et accepte les mêmes commutateurs de fonctionnalité, <code>cosmos build</code> en fait une ISO amorçable pour x64 ou ARM64, et <code>cosmos run</code> démarre cette ISO dans QEMU. La différence vient du langage : Visual Basic ne peut pas déclarer un <code>Span(Of T)</code> ni un <code>ReadOnlySpan(Of T)</code>. Un noyau Visual Basic appelle quand même les membres qui en prennent un, mais les quelques classes qui doivent elles-mêmes en déclarer un s'écrivent en C#.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>C#</th>
+<th>Visual Basic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Création</td>
+<td><code>cosmos new MyKernel</code></td>
+<td><code>cosmos new MyKernel -l vb</code></td>
+</tr>
+<tr>
+<td>Fichier projet</td>
+<td><code>MyKernel.csproj</code></td>
+<td><code>MyKernel.vbproj</code></td>
+</tr>
+<tr>
+<td>Classe du noyau dans</td>
+<td><code>Kernel.cs</code></td>
+<td><code>Kernel.vb</code></td>
+</tr>
+<tr>
+<td>Appelle un membre qui prend un span</td>
+<td>Oui</td>
+<td>Oui, avec une <code>String</code> ou un tableau</td>
+</tr>
+<tr>
+<td>Déclare un membre qui prend ou renvoie un span</td>
+<td>Oui</td>
+<td>Non, erreur de build (<code>BC30668</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Si vous trouvez des bugs ou quelque chose d'anormal, merci de <a href="https://github.com/CosmosOS/Cosmos/issues/new/choose">soumettre une issue</a> sur notre dépôt.</p>
+<hr>
+<p><a id="creating-the-kernel"></a></p>
+<h2 id="créer-le-noyau">Créer le noyau</h2>
+<p><code>cosmos new</code> crée un projet de noyau dans un dossier qui porte son nom. Son option <code>-l</code> choisit le langage, <code>csharp</code> (par défaut) ou <code>vb</code>, et les commandes qui compilent et lancent le noyau sont les mêmes dans les deux cas :</p>
+<pre><code class="lang-bash">cosmos new MyKernel -l vb
+cd MyKernel
+cosmos build
+cosmos run
+</code></pre>
+<p>Les extensions Cosmos pour VS Code, Visual Studio et Rider (<a href="install.html#ide-extensions">Extensions pour IDE</a>) demandent le langage quand elles créent un noyau.</p>
+<p>Le dossier contient ce que contient celui d'un noyau C#, avec <code>MyKernel.vbproj</code> et <code>Kernel.vb</code> à la place de <code>MyKernel.csproj</code> et <code>Kernel.cs</code>. Une propriété qu'un autre article de ce guide place dans le <code>.csproj</code>, un commutateur de fonctionnalité par exemple, va dans le <code>.vbproj</code> et s'écrit de la même façon. Celle-ci retire la pile réseau du noyau :</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;CosmosEnableNetwork&gt;false&lt;/CosmosEnableNetwork&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<hr>
+<p><a id="the-kernel-class"></a></p>
+<h2 id="la-classe-du-noyau">La classe du noyau</h2>
+<p><code>Kernel.vb</code> contient la classe du noyau. Elle dérive de <code>Cosmos.Kernel.System.Kernel</code> et redéfinit <code>BeforeRun</code> et <code>Run</code>, comme le noyau C# de <a href="startup.html#a-minimal-kernel">Démarrage du noyau</a> :</p>
+<pre><code class="lang-vb">Imports Sys = Cosmos.Kernel.System
+
+Public Class Kernel
+    Inherits Sys.Kernel
+
+    Protected Overrides Sub BeforeRun()
+        Console.WriteLine(&quot;Cosmos booted successfully!&quot;)
+    End Sub
+
+    Protected Overrides Sub Run()
+        Console.Write(&quot;Input: &quot;)
+        Dim input As String = Console.ReadLine()
+        Console.Write(&quot;Text typed: &quot;)
+        Console.WriteLine(input)
+    End Sub
+End Class
+</code></pre>
+<p>La classe est déclarée hors de tout bloc <code>Namespace</code>, et c'est ce qui permet au SDK de la trouver. Le SDK cherche la classe du noyau sous le nom <code>&lt;RootNamespace&gt;.Kernel</code>, et Visual Basic range une classe déclarée hors de tout bloc dans l'espace de noms racine du projet, qui est le nom du projet : ici, la classe s'appelle <code>MyKernel.Kernel</code>. Un bloc <code>Namespace</code> s'imbrique sous l'espace de noms racine : une classe déclarée dans <code>Namespace Boot</code> s'appelle donc <code>MyKernel.Boot.Kernel</code>, et le build s'arrête sur <code>BC30002: Type 'Global.MyKernel.Kernel' is not defined</code> tant que le <code>.vbproj</code> ne nomme pas la classe :</p>
+<pre><code class="lang-xml">&lt;PropertyGroup&gt;
+  &lt;CosmosKernelClass&gt;MyKernel.Boot.Kernel&lt;/CosmosKernelClass&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p>Le SDK active aussi <code>Option Strict</code>. Un appel à liaison tardive, c'est-à-dire fait sur un <code>Object</code> dont Visual Basic ne cherche le membre qu'une fois le noyau lancé, passe par la réflexion, sur laquelle un noyau compilé à l'avance ne peut pas compter : le compilateur le refuse donc dès le build (<code>BC30574</code>).</p>
+<hr>
+<p><a id="members-that-take-a-span"></a></p>
+<h2 id="les-membres-qui-prennent-un-span">Les membres qui prennent un span</h2>
+<p>Certains membres de l'API de Cosmos, et de .NET, prennent un span : une surcharge de <code>VfsManager.TryMount</code> prend la source du montage sous forme de <code>ReadOnlySpan(Of Char)</code>, et <code>IBlockDevice.ReadBlock</code> remplit un <code>Span(Of Byte)</code>. Appelez-les avec une <code>String</code> ou un tableau et le compilateur convertit l'argument, comme dans ces deux appels du noyau présenté à la fin de cette page, où <code>&quot;&quot;</code> est la source du montage et <code>sector</code> un tableau de <code>Byte</code> :</p>
+<pre><code class="lang-vb">VfsManager.TryMount(&quot;ramfat&quot;, &quot;&quot;, MountFlags.None, &quot;/mnt&quot;, mount)
+ramDisk.ReadBlock(0, 1, sector)
+</code></pre>
+<p>Ce que Visual Basic ne sait pas faire, c'est nommer le type. <code>Span(Of T)</code> et <code>ReadOnlySpan(Of T)</code> sont des ref structs, une sorte de type que le langage ne prend pas en charge, et un paramètre, un type de retour, un champ ou une variable locale déclarés avec l'un d'eux provoquent une erreur de build :</p>
+<pre><code>error BC30668: 'Span(Of Byte)' is obsolete: 'Types with embedded references are not supported in this version of your compiler.'.
+</code></pre>
+<hr>
+<p><a id="classes-written-in-c"></a></p>
+<h2 id="les-classes-écrites-en-c">Les classes écrites en C#</h2>
+<p>Redéfinir ou implémenter un membre, c'est déclarer ses paramètres : une classe ne peut donc pas être écrite en Visual Basic quand un membre qu'elle doit redéfinir ou implémenter prend ou renvoie un span. Parmi les classes que ce guide vous fait écrire, trois sont dans ce cas :</p>
+<table>
+<thead>
+<tr>
+<th>À écrire</th>
+<th>La classe déclare</th>
+<th>Décrit dans</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Un disque à vous, un disque RAM par exemple</td>
+<td><code>IBlockDevice.ReadBlock</code> et <code>IBlockDevice.WriteBlock</code></td>
+<td><a href="filesystem.html#try-it-on-a-ram-disk">Essayer sur un disque RAM</a></td>
+</tr>
+<tr>
+<td>Un son calculé au fur et à mesure de sa lecture</td>
+<td><code>AudioStream.Read</code></td>
+<td><a href="audio.html#generating-sound">Générer du son</a></td>
+</tr>
+<tr>
+<td>Un pilote</td>
+<td><code>Driver.Matches</code></td>
+<td><a href="drivers.html">Écrire un pilote</a></td>
+</tr>
+</tbody>
+</table>
+<p>Les interfaces qu'implémente un pilote de système de fichiers sont dans le même cas, avec des membres comme <code>IFileOperations.Read</code>.</p>
+<p>Écrivez une telle classe dans une bibliothèque de classes C# et référencez la bibliothèque depuis le noyau. Pour le disque RAM, lancez ces trois commandes dans le dossier qui contient <code>MyKernel</code> :</p>
+<pre><code class="lang-bash">dotnet new classlib -lang &quot;C#&quot; -o MyKernel.Storage
+dotnet add MyKernel.Storage package Cosmos.Kernel.HAL --version &lt;version&gt;
+dotnet add MyKernel reference MyKernel.Storage
+</code></pre>
+<p><code>&lt;version&gt;</code> est la version que <code>MyKernel.vbproj</code> indique dans son attribut <code>Sdk=&quot;Cosmos.Sdk/...&quot;</code>, pour que la bibliothèque et le noyau soient compilés avec la même version de Cosmos. <code>Cosmos.Kernel.HAL</code> est le paquet qui contient <code>IBlockDevice</code> ; une classe dérivée de <code>AudioStream</code> a besoin de <code>Cosmos.Kernel.System</code> à la place, et une bibliothèque de pilotes se met en place comme le décrit <a href="drivers.html#a-driver-library">Une bibliothèque de pilotes</a>, avec la ligne <code>NoWarn</code> par laquelle le projet accepte le kit de pilotes expérimental (<code>COSMOS0003</code>). Une fois la bibliothèque posée à côté du noyau, lancez <code>cosmos update</code> depuis le dossier qui contient les deux : il y trouve la version de chaque projet et fait avancer les deux ensemble.</p>
+<p>Remplacez le <code>Class1.cs</code> que le modèle a créé par <code>MemoryBlockDevice.cs</code>. C'est la classe de la section <a href="filesystem.html#try-it-on-a-ram-disk">Essayer sur un disque RAM</a>, déclarée <code>public</code> pour que le noyau la voie :</p>
+<pre><code class="lang-csharp">using Cosmos.Kernel.HAL.Devices.Storage;
+
+namespace MyKernel.Storage;
+
+public sealed class MemoryBlockDevice : IBlockDevice
+{
+    private readonly byte[] _storage;
+
+    public MemoryBlockDevice(string name, ulong blockSize, ulong blockCount)
+    {
+        Name = name;
+        BlockSize = blockSize;
+        BlockCount = blockCount;
+        _storage = new byte[blockSize * blockCount];
+    }
+
+    public string Name { get; }
+    public ulong BlockSize { get; }
+    public ulong BlockCount { get; }
+
+    public void ReadBlock(ulong blockNo, ulong blockCount, Span&lt;byte&gt; data)
+        =&gt; _storage.AsSpan((int)(blockNo * BlockSize), (int)(blockCount * BlockSize)).CopyTo(data);
+
+    public void WriteBlock(ulong blockNo, ulong blockCount, ReadOnlySpan&lt;byte&gt; data)
+        =&gt; data.Slice(0, (int)(blockCount * BlockSize)).CopyTo(_storage.AsSpan((int)(blockNo * BlockSize)));
+
+    public void Flush() { }
+}
+</code></pre>
+<p>Le noyau crée le disque, le formate, le monte et s'en sert à travers <code>System.IO</code>, en passant une <code>String</code> ou un tableau partout où un membre prend un span :</p>
+<pre><code class="lang-vb">Imports System.IO
+Imports Cosmos.Kernel.System.FileSystem
+Imports Cosmos.Kernel.System.FileSystem.Fat
+Imports MyKernel.Storage
+Imports Sys = Cosmos.Kernel.System
+
+Public Class Kernel
+    Inherits Sys.Kernel
+
+    Protected Overrides Sub BeforeRun()
+        Dim ramDisk As New MemoryBlockDevice(&quot;RAMDISK&quot;, 512, 65536)
+        Dim fat As New FatFileSystemType(ramDisk)
+        Dim options As New FatFormatOptions With {.Type = FatType.Fat16}
+        Dim mount As VfsMount = Nothing
+
+        If Not VfsManager.RegisterFileSystem(&quot;ramfat&quot;, fat) OrElse
+           Not VfsManager.TryFormat(&quot;ramfat&quot;, &quot;&quot;, options) OrElse
+           Not VfsManager.TryMount(&quot;ramfat&quot;, &quot;&quot;, MountFlags.None, &quot;/mnt&quot;, mount) Then
+            Console.WriteLine(&quot;RAM disk setup failed.&quot;)
+            Return
+        End If
+
+        File.WriteAllText(&quot;/mnt/hello.txt&quot;, &quot;Hello from Visual Basic&quot;)
+        Console.WriteLine(File.ReadAllText(&quot;/mnt/hello.txt&quot;))
+
+        Dim sector(511) As Byte
+        ramDisk.ReadBlock(0, 1, sector)
+        Console.WriteLine(&quot;Boot sector ends with &quot; &amp; sector(510).ToString(&quot;X2&quot;) &amp; &quot; &quot; &amp; sector(511).ToString(&quot;X2&quot;))
+    End Sub
+
+    Protected Overrides Sub Run()
+        Sys.Power.Halt()
+    End Sub
+End Class
+</code></pre>
+<p>Le noyau affiche le contenu du fichier qu'il a écrit, puis les deux octets qui terminent un secteur de démarrage FAT, lus directement sur le disque :</p>
+<pre><code>Hello from Visual Basic
+Boot sector ends with 55 AA
+</code></pre>
+<hr>
+<p><a id="summary"></a></p>
+<h2 id="résumé">Résumé</h2>
+<table>
+<thead>
+<tr>
+<th>Tâche</th>
+<th>Appel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Créer un noyau Visual Basic</td>
+<td><code>cosmos new MyKernel -l vb</code></td>
+</tr>
+<tr>
+<td>Le compiler et le lancer</td>
+<td><code>cosmos build</code>, <code>cosmos run</code></td>
+</tr>
+<tr>
+<td>Régler un commutateur de fonctionnalité</td>
+<td><code>&lt;CosmosEnableNetwork&gt;false&lt;/CosmosEnableNetwork&gt;</code> dans le <code>.vbproj</code></td>
+</tr>
+<tr>
+<td>Déclarer la classe du noyau dans un bloc <code>Namespace</code></td>
+<td><code>&lt;CosmosKernelClass&gt;MyKernel.Boot.Kernel&lt;/CosmosKernelClass&gt;</code> dans le <code>.vbproj</code></td>
+</tr>
+<tr>
+<td>Passer du texte à un paramètre <code>ReadOnlySpan(Of Char)</code></td>
+<td>Une <code>String</code></td>
+</tr>
+<tr>
+<td>Passer un tampon à un paramètre <code>Span(Of Byte)</code></td>
+<td>Un tableau de <code>Byte</code></td>
+</tr>
+<tr>
+<td>Écrire une classe qui déclare un span</td>
+<td>Une bibliothèque de classes C# que le noyau référence</td>
+</tr>
+</tbody>
+</table>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.99/docs/fr/articles/user/visual-basic.md/#L1" class="edit-link">Modifier cette page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

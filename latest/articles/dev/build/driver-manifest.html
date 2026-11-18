@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.98/docs/articles/dev/build/driver-manifest.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.99/docs/articles/dev/build/driver-manifest.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -91,7 +91,7 @@
 <p>The manifest exists because nothing else can find a driver. A kernel is compiled ahead of time and kernel code does not use reflection, so the kernel cannot search its assemblies for driver classes when it boots, and <a href="../../user/driver-concepts/trimming.html">trimming</a> leaves any class that no code references out of the image. The manifest is the code that references each driver: a <a href="../../user/driver-concepts/source-generators.html">source generator</a> writes it at build time from the <code>[Driver]</code> classes it finds and the project's policy, and a driver it does not construct is not in the kernel. Its order matters too, as the last key when the kit <a href="../../user/driver-concepts/driver-matching.html">chooses between drivers</a> for a device. These concepts, and the hardware ones a driver builds on, have background notes in the <a href="../../user/driver-glossary.html">driver glossary</a>, and <a href="../../user/drivers.html">Writing a driver</a> covers the kit from the driver author's side.</p>
 <hr>
 <h2 id="what-is-generated">What is generated</h2>
-<p>Each file has its own generator. <code>CosmosEntryPointGenerator</code> writes the entry point from the <code>CosmosKernelClass</code> property alone, so editing the kernel's sources or its driver policy leaves it cached; <code>DriverManifestGenerator</code> writes the manifest from the drivers it finds and the policy. When the property is empty, neither file is generated. When it is set, the entry point always calls the manifest first. The call is explicit, not a module initializer, so the drivers are registered in manifest order, right before the kernel starts. Both files are shown here without their doc comments and <code>[GeneratedCode]</code> attributes:</p>
+<p>Each file has its own generator. <code>CosmosEntryPointGenerator</code> writes the entry point from the <code>CosmosKernelClass</code> property and the kernel's language alone, so editing the kernel's sources or its driver policy leaves it cached; <code>DriverManifestGenerator</code> writes the manifest from the drivers it finds and the policy. When the property is empty, neither file is generated. When it is set, the entry point always calls the manifest first. The call is explicit, not a module initializer, so the drivers are registered in manifest order, right before the kernel starts. Both files are shown here without their doc comments and <code>[GeneratedCode]</code> attributes:</p>
 <pre><code class="lang-csharp">// &lt;auto-generated/&gt; CosmosEntryPoint.g.cs
 namespace Cosmos.Kernel.System.Internal;
 
@@ -130,6 +130,7 @@ internal static class DriverManifest
     Cosmos.Kernel.SourceGenerators.DriverManifestGenerator/DriverManifest.g.cs
 </code></pre>
 <p>Reading <code>DriverManifest.g.cs</code> there is the quickest way to check which drivers a kernel carries.</p>
+<p>A Visual Basic kernel gets the same two files, <code>CosmosEntryPoint.g.vb</code> and <code>DriverManifest.g.vb</code>, declaring the same types: modules in place of static classes, <code>Global.</code> in place of <code>global::</code>, and <code>#Disable Warning COSMOS0003</code> in place of the pragma. A Visual Basic project puts every namespace it declares under its root namespace, so both files open with <code>Namespace Global.Cosmos.Kernel.System.Internal</code>, which keeps the entry point where the SDK's startup object names it. The generator finds drivers through symbols, not syntax, so a <code>[Driver]</code> class written in Visual Basic is found and ordered the way a C# one is. Such a class derives from a C# class that overrides <code>Matches</code>, and not from <code>Driver</code> directly, because <code>Driver.Matches</code> is abstract and returns a <code>ReadOnlySpan</code>, a type the Visual Basic compiler rejects (<code>BC30668</code>).</p>
 <hr>
 <h2 id="how-drivers-are-found">How drivers are found</h2>
 <p>A driver is a class marked <code>[Cosmos.Kernel.HAL.DriverKit.Driver]</code>. The generator looks in two places and keeps their order fixed, because manifest position is the last arbitration key when two drivers of equal priority and specificity match the same device (<a href="../../user/driver-concepts/driver-matching.html">driver matching</a>):</p>
@@ -291,7 +292,7 @@ internal static class DriverManifest
 <p>A kernel that declares no driver of its own needs no suppression. The generated manifest disables the id for itself, since its author did not write it, and it is the only place such a kernel names the kit; the suppression is for the driver code a kernel or a library declares. <a href="../../user/drivers.html">Writing a driver</a> covers the kit and the project lines from the driver author's side, and <a href="../public-api.html">Public API Tracking</a> covers what a driver assembly is held to.</p>
 <hr>
 <h2 id="testing">Testing</h2>
-<p><code>tests/Cosmos.Tests.SourceGenerators</code> runs both generators on the host against in-memory compilations, with stubs standing in for the kit and the ring, and checks the generated text and the diagnostics exactly. <code>CachingTests</code> checks that adding a driver regenerates the manifest and leaves the entry point cached. The suite runs on its own with:</p>
+<p><code>tests/Cosmos.Tests.SourceGenerators</code> runs both generators on the host against in-memory compilations, with stubs standing in for the kit and the ring, and checks the generated text and the diagnostics exactly. <code>VisualBasicTests</code> does the same for a Visual Basic kernel compiled under a root namespace. <code>CachingTests</code> checks that adding a driver regenerates the manifest and leaves the entry point cached. The suite runs on its own with:</p>
 <pre><code class="lang-bash">dotnet test tests/Cosmos.Tests.SourceGenerators -c Debug
 </code></pre>
 <p>CI runs it as the <code>source-generator-tests</code> job of <code>.github/workflows/dotnet.yml</code>.</p>
@@ -299,7 +300,7 @@ internal static class DriverManifest
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.98/docs/articles/dev/build/driver-manifest.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.99/docs/articles/dev/build/driver-manifest.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

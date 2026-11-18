@@ -1,0 +1,16 @@
+#logo {
+    height: 40px;
+    width: auto;
+}
+
+/* Version and language dropdowns injected by main.js next to #navbar */
+.navbar-selects {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin-left: .75rem;
+}
+
+.navbar-selects select {
+    width: auto;
+}

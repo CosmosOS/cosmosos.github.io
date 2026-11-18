@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.98/docs/zh/articles/dev/build/driver-manifest.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/CosmosOS/Cosmos/blob/v3.0.99/docs/zh/articles/dev/build/driver-manifest.md/#L1">
       <meta name="loc:inThisArticle" content="本文内容">
       <meta name="loc:searchResultsCount" content="“{query}”共有 {count} 个结果">
       <meta name="loc:searchNoResults" content="没有“{query}”的结果">
@@ -94,7 +94,7 @@
 <hr>
 <p><a id="what-is-generated"></a></p>
 <h2 id="生成的内容">生成的内容</h2>
-<p>每个文件都有自己的生成器。<code>CosmosEntryPointGenerator</code> 仅根据 <code>CosmosKernelClass</code> 属性写出入口点，因此修改内核的源代码或其驱动程序策略时，入口点仍保持缓存；<code>DriverManifestGenerator</code> 则根据它找到的驱动程序和策略写出清单。该属性为空时，两个文件都不会生成。属性已设置时，入口点总是先调用清单。这个调用是显式的，而不是模块初始化器，因此驱动程序会按清单顺序注册，紧接在内核启动之前。下面展示的两个文件都省略了文档注释和 <code>[GeneratedCode]</code> 特性：</p>
+<p>每个文件都有自己的生成器。<code>CosmosEntryPointGenerator</code> 仅根据 <code>CosmosKernelClass</code> 属性和内核所用的语言写出入口点，因此修改内核的源代码或其驱动程序策略时，入口点仍保持缓存；<code>DriverManifestGenerator</code> 则根据它找到的驱动程序和策略写出清单。该属性为空时，两个文件都不会生成。属性已设置时，入口点总是先调用清单。这个调用是显式的，而不是模块初始化器，因此驱动程序会按清单顺序注册，紧接在内核启动之前。下面展示的两个文件都省略了文档注释和 <code>[GeneratedCode]</code> 特性：</p>
 <pre><code class="lang-csharp">// &lt;auto-generated/&gt; CosmosEntryPoint.g.cs
 namespace Cosmos.Kernel.System.Internal;
 
@@ -133,6 +133,7 @@ internal static class DriverManifest
     Cosmos.Kernel.SourceGenerators.DriverManifestGenerator/DriverManifest.g.cs
 </code></pre>
 <p>在那里阅读 <code>DriverManifest.g.cs</code>，是检查一个内核带有哪些驱动程序的最快方式。</p>
+<p>Visual Basic 内核得到同样的两个文件，即 <code>CosmosEntryPoint.g.vb</code> 和 <code>DriverManifest.g.vb</code>，声明的类型也相同：用模块代替静态类，用 <code>Global.</code> 代替 <code>global::</code>，用 <code>#Disable Warning COSMOS0003</code> 代替 pragma 指令。Visual Basic 项目会把它声明的每个命名空间都放在其根命名空间之下，因此两个文件都以 <code>Namespace Global.Cosmos.Kernel.System.Internal</code> 开头，这样入口点的名称仍是 SDK 设置的启动对象所指的那一个。生成器通过符号而不是语法来查找驱动程序，因此用 Visual Basic 编写的 <code>[Driver]</code> 类会像 C# 类一样被找到并排序。这样的类派生自一个重写了 <code>Matches</code> 的 C# 类，而不是直接派生自 <code>Driver</code>，因为 <code>Driver.Matches</code> 是抽象成员，它返回的 <code>ReadOnlySpan</code> 是 Visual Basic 编译器不接受的类型（<code>BC30668</code>）。</p>
 <hr>
 <p><a id="how-drivers-are-found"></a></p>
 <h2 id="如何找到驱动程序">如何找到驱动程序</h2>
@@ -301,7 +302,7 @@ internal static class DriverManifest
 <hr>
 <p><a id="testing"></a></p>
 <h2 id="测试">测试</h2>
-<p><code>tests/Cosmos.Tests.SourceGenerators</code> 在主机上针对内存中的编译运行这两个生成器，用桩代码代替驱动工具包和受支持层，并逐字检查生成的文本和诊断。<code>CachingTests</code> 检查添加驱动程序会重新生成清单，同时入口点保持缓存。这个套件可以用以下命令单独运行：</p>
+<p><code>tests/Cosmos.Tests.SourceGenerators</code> 在主机上针对内存中的编译运行这两个生成器，用桩代码代替驱动工具包和受支持层，并逐字检查生成的文本和诊断。<code>VisualBasicTests</code> 对在根命名空间下编译的 Visual Basic 内核做同样的检查。<code>CachingTests</code> 检查添加驱动程序会重新生成清单，同时入口点保持缓存。这个套件可以用以下命令单独运行：</p>
 <pre><code class="lang-bash">dotnet test tests/Cosmos.Tests.SourceGenerators -c Debug
 </code></pre>
 <p>CI 将它作为 <code>.github/workflows/dotnet.yml</code> 中的 <code>source-generator-tests</code> 作业运行。</p>
@@ -309,7 +310,7 @@ internal static class DriverManifest
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.98/docs/zh/articles/dev/build/driver-manifest.md/#L1" class="edit-link">编辑此页</a>
+          <a href="https://github.com/CosmosOS/Cosmos/blob/v3.0.99/docs/zh/articles/dev/build/driver-manifest.md/#L1" class="edit-link">编辑此页</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>
